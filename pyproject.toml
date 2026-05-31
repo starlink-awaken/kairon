@@ -1,0 +1,61 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "kairon"
+version = "0.1.0"
+description = "Kairon — Knowledge & Research Operating Stack: ontology, research, MCP ecosystem"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [{name = "Workspace Team"}]
+readme = "README.md"
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+core-models = { workspace = true }
+codeanalyze = { workspace = true }
+kronos = { workspace = true }
+eidos = { workspace = true }
+minerva = { workspace = true }
+agora = { workspace = true }
+sophia = { workspace = true }
+ontoderive = { workspace = true }
+forge = { workspace = true }
+kos = { workspace = true }
+iris = { workspace = true }
+ssot-kernel = { workspace = true }
+agent-runtime = { workspace = true }
+wksp = { workspace = true }
+ecos = { workspace = true }
+metaos = { workspace = true }
+cron-service = { workspace = true }
+
+[tool.pytest.ini_options]
+testpaths = ["packages/*/tests"]
+minversion = "7.0"
+addopts = "-v --tb=short -q"
+
+[tool.coverage.run]
+source = ["packages"]
+omit = ["packages/*/tests/*"]
+
+[tool.coverage.report]
+fail_under = 70
+
+[tool.ruff]
+target-version = "py313"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "S", "PLE", "RUF100"]
+ignore = ["S101", "S603", "S607", "S108", "S110", "S314", "S608", "E402", "E501", "SIM115", "N813", "UP047"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/kairon"]
