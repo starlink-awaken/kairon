@@ -18,7 +18,6 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.repository == 'pypi' && 'pypi' || 'testpypi' }}
     steps:
       - uses: actions/checkout@v4
 
