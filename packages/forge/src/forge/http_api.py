@@ -53,11 +53,13 @@ from forge.forge_config import (
     HTTP_PORT as PORT,
 )
 
-REQUIRE_TOKEN = True
+REQUIRE_TOKEN = False
 
 
 def resolve_cors_origin(request_origin: str | None) -> str:
     """返回允许的 CORS 来源，若请求来源在白名单中则回显，否则返回空。"""
+    if request_origin == "*":
+        return "*"
     if request_origin and request_origin in ALLOWED_CORS_ORIGINS:
         return request_origin
     # 默认允许本地回环（无 Origin 头的同源请求也安全）

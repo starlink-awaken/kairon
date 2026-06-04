@@ -232,6 +232,21 @@ class DeliberationResult:
     decided_at: float = field(default_factory=time.time)
     consensus_level: float = 1.0  # 0.0-1.0
 
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "topic": self.item.question,
+            "decision": self.decision,
+            "outcome": self.decision,
+            "status": "pending" if not self.decision else "decided",
+            "rationale": self.rationale,
+        }
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.to_dict()
+
+    def __getitem__(self, key: str) -> object:
+        return self.to_dict()[key]
+
 
 @dataclass
 class CommitteeCharter:
@@ -263,7 +278,8 @@ class Committee:
 
     def __init__(
         self,
-        charter: CommitteeCharter | None = None,
+        charter: CommitteeCharter | str | None = None,
+        purpose_compat: str = "",
         *,
         name: str = "",
         purpose: str = "",
@@ -271,6 +287,10 @@ class Committee:
         roles: list[CommitteeRole] | None = None,
         metadata: dict[str, object] | None = None,
     ) -> None:
+        if isinstance(charter, str):
+            name = charter
+            purpose = purpose_compat or purpose
+            charter = None
         if charter is None:
             charter = CommitteeCharter(
                 name=name,
@@ -337,11 +357,22 @@ class Committee:
 
     def record_decision(
         self,
-        result: DeliberationResult,
-        decision: str,
-        rationale: str,
+        result: DeliberationResult | str,
+        decision: str | None = None,
+        rationale: str = "",
         perspectives: dict[str, str] | None = None,
+        voter: str | None = None,
+        approved: bool | None = None,
     ) -> None:
+        if isinstance(result, str):
+            synthetic = DeliberationResult(
+                item=DeliberationItem(question=result),
+                decision=result,
+                rationale=rationale or "",
+                perspectives={"voter": voter or "", "approved": approved},
+            )
+            self._deliberations.append(synthetic)
+            return
         result.decision = decision
         result.rationale = rationale
         result.perspectives = perspectives or {}
@@ -410,7 +441,7 @@ class Committee:
     def create_standard(cls, project_name: str, purpose: str = "") -> Committee:
         """Create the standard B-OS Product+Execution Committee (5 roles)."""
         charter = CommitteeCharter(
-            name=f"{project_name} Committee",
+            name=project_name,
             purpose=purpose or f"Drive {project_name} from requirements to delivery",
             domain="software_development",
             roles=[
@@ -435,6 +466,7 @@ def make_product_committee() -> Committee:
         name="Product Committee",
         purpose="Requirement review, feature scope, user story prioritization",
         roles=[
+            CommitteeRole.nyx(),
             CommitteeRole(
                 name="@CPO",
                 archetype="CPO",
@@ -522,7 +554,7 @@ def make_execution_committee() -> Committee:
 def make_advisory_committee(domain: str = "general") -> Committee:
     """Advisory committee for strategic review — pure advisory, no blockers."""
     return Committee(
-        name=f"Advisory Committee ({domain})",
+        name=f"{domain.title()} Advisory Committee",
         purpose=f"Strategic advisors for {domain} decisions — advisory only",
         roles=[
             CommitteeRole(
@@ -716,12 +748,32 @@ class CommitteeFactory:
     @classmethod
     def from_config(cls, config: dict[str, object]) -> Committee:
         """Build a committee from a dict config (e.g., loaded from YAML)."""
-        role_types = [RoleType(rt) for rt in config.get("roles", ["cto", "cpo", "qa_lead", "tech_lead"])]
-        return cls.for_domain(
+        raw_roles = config.get("roles", ["cto", "cpo", "qa_lead", "tech_lead"])
+        if raw_roles and isinstance(raw_roles[0], dict):
+            roles = [
+                CommitteeRole(
+                    name=role.get("name", "@Role"),
+                    archetype=role.get("archetype", ""),
+                )
+                for role in raw_roles
+            ]
+            return Committee(
+                name=config.get("name", "Config Committee"),
+                purpose=config.get("purpose", ""),
+                domain=config.get("domain", "software_development"),
+                roles=roles,
+            )
+        role_types = [RoleType(rt) for rt in raw_roles]
+        committee = cls.for_domain(
             domain=config.get("domain", "software_development"),
             goal=config.get("goal", ""),
             custom_roles=role_types,
         )
+        if config.get("name"):
+            committee.charter.name = config["name"]
+        if config.get("purpose"):
+            committee.charter.purpose = config["purpose"]
+        return committee
 
     @classmethod
     def list_domains(cls) -> list[str]:
@@ -770,7 +822,7 @@ class CommitteeFactory:
         execution = cls.from_template("execution")
         all_roles = product.roles + [r for r in execution.roles if r.name not in product.role_names()]
         return Committee(
-            name="Full Project Committee",
+            name="Full B-OS Committee",
             purpose="Joint product + execution oversight for major decisions",
             roles=all_roles,
         )

@@ -1,13 +1,7 @@
-"""Backward-compat re-export."""
-from kairon_lib.core.events import (  # noqa: F401
-    __all__,
-    BOSEvent,
-    BosEvent,
-    EventBusProtocol,
-    EventType,
-    _NullEventBus,
-    get_event_bus,
-    get_global_event_bus,
-    make_event,
-    register_global_event_bus,
-)
+"""Backward-compat module alias."""
+
+import sys
+
+from kairon_lib.core import events as _impl
+
+sys.modules[__name__] = _impl

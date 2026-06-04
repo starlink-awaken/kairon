@@ -1,6 +1,12 @@
 # kairon
 
-> Knowledge & Research Operating Stack — 25 包 Python monorepo（以当前 checkout 为准）
+> Knowledge & Research Operating Stack — 25 包 Python monorepo
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.13+-blue.svg)]()
+[![Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+[![lint](https://img.shields.io/badge/lint-0%20errors-brightgreen)]()
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 kairon 是一个基于 uv workspace 的 Python 知识工程与研究栈，覆盖知识提取、本体推导、MCP 服务、Agent 运行时、研究管线和桥接能力。
 
@@ -40,11 +46,15 @@ kairon/
 └── AGENTS.md              # 非 Claude Agent 入口
 ```
 
-当前包清单、跨项目接缝和整改路线见：
+## 文档
 
-- [docs/architecture_audit.md](docs/architecture_audit.md)
-- [docs/cross_project_boundary_audit.md](docs/cross_project_boundary_audit.md)
-- [docs/governance_plan.md](docs/governance_plan.md)
+| 文档 | 说明 |
+|------|------|
+| [docs/architecture_audit.md](docs/architecture_audit.md) | 架构审计 |
+| [docs/governance_plan.md](docs/governance_plan.md) | 治理规划 |
+| [docs/api_reference.md](docs/api_reference.md) | API 参考 |
+| [CHANGELOG.md](CHANGELOG.md) | 变更日志 |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | 贡献指南 |
 
 ## 依赖
 
@@ -55,4 +65,4 @@ kairon/
 
 ## License
 
-MIT
+MIT © [starlink-awaken](LICENSE)

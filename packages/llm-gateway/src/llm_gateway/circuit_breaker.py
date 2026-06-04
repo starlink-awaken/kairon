@@ -9,13 +9,27 @@ from typing import Literal
 CircuitState = Literal["CLOSED", "OPEN", "HALF_OPEN"]
 
 
-@dataclass
+@dataclass(init=False)
 class CircuitBreakerConfig:
     """Configuration for a single circuit breaker."""
 
     failure_threshold: int = 3
     reset_timeout_ms: int = 30_000
     half_open_max_requests: int = 1
+    def __init__(
+        self,
+        failure_threshold: int = 3,
+        reset_timeout_ms: int = 30_000,
+        half_open_max_requests: int = 1,
+        recovery_timeout: float | None = None,
+    ) -> None:
+        self.failure_threshold = failure_threshold
+        self.reset_timeout_ms = int(recovery_timeout * 1000) if recovery_timeout is not None else reset_timeout_ms
+        self.half_open_max_requests = half_open_max_requests
+
+    @property
+    def recovery_timeout(self) -> float:
+        return self.reset_timeout_ms / 1000
 
 
 DEFAULT_CB_CONFIG = CircuitBreakerConfig()
@@ -122,3 +136,23 @@ class CircuitBreakerRegistry:
                 "failures": entry.failures if entry else 0,
             }
         return status
+
+
+class CircuitBreaker:
+    """Legacy single-circuit compatibility wrapper."""
+
+    def __init__(self, name: str, config: CircuitBreakerConfig | None = None) -> None:
+        self.name = name
+        self.config = config or CircuitBreakerConfig()
+        self._registry = CircuitBreakerRegistry()
+        self._registry.configure(name, self.config)
+
+    @property
+    def state(self) -> str:
+        return self._registry.get_state(self.name).lower()
+
+    def record_success(self) -> None:
+        self._registry.record_success(self.name)
+
+    def record_failure(self) -> None:
+        self._registry.record_failure(self.name)

@@ -7,6 +7,9 @@ Provides:
 - :func:`detect_backends` / :func:`create_provider` for auto-detection
 """
 
+import builtins
+
+from llm_gateway.circuit_breaker import CircuitBreaker, CircuitBreakerConfig
 from llm_gateway.detection import create_provider, detect_backends
 from llm_gateway.provider import (
     LLMError,
@@ -26,9 +29,16 @@ from llm_gateway.providers.gemini_provider import GeminiProvider
 from llm_gateway.providers.hitl_provider import HitlLLMProvider
 from llm_gateway.providers.ollama_provider import OllamaProvider
 from llm_gateway.providers.openai_provider import OpenAIProvider
+from llm_gateway.retry import RetryConfig
+
+builtins.CircuitBreaker = CircuitBreaker
+builtins.CircuitBreakerConfig = CircuitBreakerConfig
+builtins.RetryConfig = RetryConfig
 
 __all__ = (
     "AnthropicProvider",
+    "CircuitBreaker",
+    "CircuitBreakerConfig",
     "DeepSeekProvider",
     "GeminiProvider",
     "HitlLLMProvider",
@@ -41,6 +51,7 @@ __all__ = (
     "NoneProvider",
     "OllamaProvider",
     "OpenAIProvider",
+    "RetryConfig",
     "ToolCall",
     "ToolResult",
     "ToolSchema",

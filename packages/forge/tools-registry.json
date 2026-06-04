@@ -1,7 +1,1192 @@
 {
+  "schema_version": "1.2",
   "tools": [
     {
-      "id": "new-tool"
+      "id": "pdf-viewer",
+      "name": "PDF Viewer",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI",
+        "Docs"
+      ],
+      "capabilities": [
+        "pdf",
+        "document",
+        "view"
+      ],
+      "source": {
+        "provider": "local"
+      },
+      "notes": "PDF tooling",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI",
+        "AI",
+        "MCP"
+      ],
+      "capabilities": [
+        "code",
+        "chat",
+        "analysis"
+      ],
+      "source": {
+        "provider": "anthropic"
+      },
+      "notes": "Coding assistant",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "vision-analyzer",
+      "name": "Vision Analyzer",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "AI"
+      ],
+      "capabilities": [
+        "vision",
+        "image"
+      ],
+      "source": {
+        "provider": "local"
+      },
+      "notes": "Vision tool",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "doc-tool",
+      "name": "Document Tool",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "document",
+        "word"
+      ],
+      "source": {
+        "provider": "local"
+      },
+      "notes": "Doc tool",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "candidate-x",
+      "name": "Candidate X",
+      "type": "tool",
+      "status": "candidate",
+      "category": [
+        "Experimental"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "lab"
+      },
+      "notes": "Candidate",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-00",
+      "name": "Tool 00",
+      "type": "tool",
+      "status": "candidate",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-01",
+      "name": "Tool 01",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-02",
+      "name": "Tool 02",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-03",
+      "name": "Tool 03",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-04",
+      "name": "Tool 04",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-05",
+      "name": "Tool 05",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-06",
+      "name": "Tool 06",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-07",
+      "name": "Tool 07",
+      "type": "tool",
+      "status": "candidate",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-08",
+      "name": "Tool 08",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-09",
+      "name": "Tool 09",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-10",
+      "name": "Tool 10",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-11",
+      "name": "Tool 11",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-12",
+      "name": "Tool 12",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-13",
+      "name": "Tool 13",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-14",
+      "name": "Tool 14",
+      "type": "tool",
+      "status": "candidate",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-15",
+      "name": "Tool 15",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-16",
+      "name": "Tool 16",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-17",
+      "name": "Tool 17",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-18",
+      "name": "Tool 18",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-19",
+      "name": "Tool 19",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-20",
+      "name": "Tool 20",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-21",
+      "name": "Tool 21",
+      "type": "tool",
+      "status": "candidate",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-22",
+      "name": "Tool 22",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-23",
+      "name": "Tool 23",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-24",
+      "name": "Tool 24",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-25",
+      "name": "Tool 25",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-26",
+      "name": "Tool 26",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-27",
+      "name": "Tool 27",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-28",
+      "name": "Tool 28",
+      "type": "tool",
+      "status": "candidate",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-29",
+      "name": "Tool 29",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-30",
+      "name": "Tool 30",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-31",
+      "name": "Tool 31",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-32",
+      "name": "Tool 32",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-33",
+      "name": "Tool 33",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-34",
+      "name": "Tool 34",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-35",
+      "name": "Tool 35",
+      "type": "tool",
+      "status": "candidate",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-36",
+      "name": "Tool 36",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-37",
+      "name": "Tool 37",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-38",
+      "name": "Tool 38",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-39",
+      "name": "Tool 39",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-40",
+      "name": "Tool 40",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-41",
+      "name": "Tool 41",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-42",
+      "name": "Tool 42",
+      "type": "tool",
+      "status": "candidate",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-43",
+      "name": "Tool 43",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-44",
+      "name": "Tool 44",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-45",
+      "name": "Tool 45",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-46",
+      "name": "Tool 46",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-47",
+      "name": "Tool 47",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-48",
+      "name": "Tool 48",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-49",
+      "name": "Tool 49",
+      "type": "tool",
+      "status": "candidate",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-50",
+      "name": "Tool 50",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-51",
+      "name": "Tool 51",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-52",
+      "name": "Tool 52",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-53",
+      "name": "Tool 53",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-54",
+      "name": "Tool 54",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-55",
+      "name": "Tool 55",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-56",
+      "name": "Tool 56",
+      "type": "tool",
+      "status": "candidate",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-57",
+      "name": "Tool 57",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "code"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-58",
+      "name": "Tool 58",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
+    },
+    {
+      "id": "tool-59",
+      "name": "Tool 59",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP"
+      ],
+      "capabilities": [
+        "chat"
+      ],
+      "source": {
+        "provider": "synthetic"
+      },
+      "notes": "generated fixture",
+      "added": "2026-01-01",
+      "updated": "2026-06-04"
     }
-  ]
+  ],
+  "event_log": [
+    {
+      "type": "refresh",
+      "timestamp": "2026-06-04",
+      "summary": "fixture refresh"
+    }
+  ],
+  "last_updated": "2026-06-04"
 }

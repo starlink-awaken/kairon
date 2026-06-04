@@ -362,14 +362,22 @@ class AuditTrail:
 
     def get_history(
         self,
-        target: str,
+        target: str | None = None,
+        actor: str | None = None,
         start_date: str | None = None,
         end_date: str | None = None,
         limit: int = 100,
     ) -> list[AuditEntry]:
-        """Get change history for a specific target."""
-        clauses: list[str] = ["target = ?"]
-        params: list = [target]
+        """Get change history filtered by target and/or actor."""
+        clauses: list[str] = []
+        params: list = []
+
+        if target is not None:
+            clauses.append("target = ?")
+            params.append(target)
+        if actor is not None:
+            clauses.append("actor = ?")
+            params.append(actor)
 
         if start_date is not None:
             clauses.append("timestamp >= ?")
@@ -378,7 +386,7 @@ class AuditTrail:
             clauses.append("timestamp <= ?")
             params.append(end_date)
 
-        where = "WHERE " + " AND ".join(clauses)
+        where = ("WHERE " + " AND ".join(clauses)) if clauses else ""
         params.append(limit)
 
         with self._connect() as conn:
@@ -391,7 +399,7 @@ class AuditTrail:
 
     def search_entries(
         self,
-        operation_type: OperationType | None = None,
+        operation_type: OperationType | str | None = None,
         actor: str | None = None,
         target: str | None = None,
         severity: AuditSeverity | None = None,
@@ -400,13 +408,27 @@ class AuditTrail:
         correlation_id: str | None = None,
         limit: int = 100,
     ) -> list[AuditEntry]:
-        """Search audit entries with multiple filters."""
+        """Search audit entries with multiple filters.
+
+        Legacy behavior: if the first argument is a plain string that is not an
+        operation type, treat it as a fuzzy keyword over actor/target/changes.
+        """
         clauses: list[str] = []
         params: list = []
 
         if operation_type is not None:
-            clauses.append("operation_type = ?")
-            params.append(operation_type.value)
+            if isinstance(operation_type, str):
+                known_ops = {op.value for op in OperationType}
+                if operation_type in known_ops:
+                    clauses.append("operation_type = ?")
+                    params.append(operation_type)
+                else:
+                    clauses.append("(actor LIKE ? OR target LIKE ? OR changes_json LIKE ?)")
+                    needle = f"%{operation_type}%"
+                    params.extend([needle, needle, needle])
+            else:
+                clauses.append("operation_type = ?")
+                params.append(operation_type.value)
         if actor is not None:
             clauses.append("actor = ?")
             params.append(actor)
@@ -449,8 +471,10 @@ class AuditTrail:
     # Public API: Reporting
     # ------------------------------------------------------------------
 
-    def generate_report(self, start_date: str, end_date: str | None = None) -> ComplianceReport:
+    def generate_report(self, start_date: str | None = None, end_date: str | None = None) -> ComplianceReport:
         """Generate a compliance report for a date range."""
+        if start_date is None:
+            start_date = "1970-01-01T00:00:00+00:00"
         if end_date is None:
             end_date = self._now()
 
@@ -497,12 +521,20 @@ class AuditTrail:
     # Public API: Maintenance
     # ------------------------------------------------------------------
 
-    def purge_old_entries(self, before_date: str) -> int:
+    def purge_old_entries(self, before_date: str | None = None, days: int | None = None) -> int:
         """Delete audit entries older than the specified date.
 
         Use with caution - this permanently removes audit records.
         Returns the number of deleted entries.
         """
+        if before_date is None:
+            cutoff = datetime.now(UTC)
+            if days is not None:
+                from datetime import timedelta
+
+                cutoff = cutoff - timedelta(days=days)
+            before_date = cutoff.isoformat()
+
         with self._lock, self._connect() as conn:
             cursor = conn.execute("DELETE FROM audit_entries WHERE timestamp < ?", (before_date,))
             conn.commit()

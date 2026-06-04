@@ -68,6 +68,10 @@ class ModelRegistry:
         """Return all discovered models."""
         return [entry[0] for entry in self._models.values()]
 
+    def list_models(self) -> list[ModelDescriptor]:
+        """Legacy alias for get_all()."""
+        return self.get_all()
+
     def get(self, model_id: str) -> ModelDescriptor | None:
         """Get a single model descriptor by ID."""
         entry = self._models.get(model_id)

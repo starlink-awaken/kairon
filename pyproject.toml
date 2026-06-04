@@ -8,6 +8,32 @@ version = "0.1.0"
 description = "Kairon — Knowledge & Research Operating Stack: ontology, research, MCP ecosystem"
 license = {text = "MIT"}
 requires-python = ">=3.10"
+authors = [
+    {name = "Workspace Team"},
+]
+maintainers = [
+    {name = "starlink-awaken"},
+]
+keywords = ["knowledge-engineering", "MCP", "research", "ontology", "agent", "LLM"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+readme = "README.md"
+
+[project.urls]
+Homepage = "https://github.com/starlink-awaken/omostation"
+Repository = "https://github.com/starlink-awaken/kairon"
+Documentation = "https://github.com/starlink-awaken/kairon/tree/main/docs"
+Changelog = "https://github.com/starlink-awaken/kairon/blob/main/CHANGELOG.md"
 authors = [{name = "Workspace Team"}]
 readme = "README.md"
 dependencies = [

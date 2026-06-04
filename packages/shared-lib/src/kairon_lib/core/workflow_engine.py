@@ -232,6 +232,10 @@ class WorkflowEngine:
     def get_phase(self, phase: WorkflowPhase) -> PhaseContext | None:
         return self._phases.get(phase)
 
+    def get_phase_context(self, phase: WorkflowPhase) -> PhaseContext | None:
+        """Legacy alias for get_phase()."""
+        return self.get_phase(phase)
+
     def add_gate_review(self, gate: GateReview) -> None:
         self._gate_reviews.append(gate)
 

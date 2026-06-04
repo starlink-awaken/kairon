@@ -3,6 +3,8 @@
 from forge.forge import (  # type: ignore[import-not-found]
     ALIASES,
     COMMANDS,
+    SCRIPTS,
+    SRC,
     TOOLBOX,
     VERIFY_COMMANDS,
     cmd_capture,
@@ -21,6 +23,8 @@ from forge.forge import (  # type: ignore[import-not-found]
 __all__ = (
     "ALIASES",
     "COMMANDS",
+    "SCRIPTS",
+    "SRC",
     "TOOLBOX",
     "VERIFY_COMMANDS",
     "cmd_capture",

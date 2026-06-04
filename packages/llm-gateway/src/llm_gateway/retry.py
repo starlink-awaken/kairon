@@ -11,7 +11,7 @@ from typing import TypeVar
 T = TypeVar("T")
 
 
-@dataclass
+@dataclass(init=False)
 class RetryConfig:
     """Configuration for retry behaviour."""
 
@@ -23,6 +23,27 @@ class RetryConfig:
     )
     call_timeout_ms: float = 30_000.0
     total_timeout_ms: float = 120_000.0
+
+    def __init__(
+        self,
+        max_retries: int = 3,
+        base_delay_ms: float = 500.0,
+        max_delay_ms: float = 10_000.0,
+        retryable_statuses: list[int] | None = None,
+        call_timeout_ms: float = 30_000.0,
+        total_timeout_ms: float = 120_000.0,
+        base_delay: float | None = None,
+    ) -> None:
+        self.max_retries = max_retries
+        self.base_delay_ms = base_delay * 1000 if base_delay is not None else base_delay_ms
+        self.max_delay_ms = max_delay_ms
+        self.retryable_statuses = retryable_statuses or [429, 500, 502, 503, 504]
+        self.call_timeout_ms = call_timeout_ms
+        self.total_timeout_ms = total_timeout_ms
+
+    @property
+    def base_delay(self) -> float:
+        return self.base_delay_ms / 1000
 
 
 DEFAULT_RETRY = RetryConfig()
