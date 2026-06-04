@@ -212,3 +212,10 @@ def detect_backend() -> tuple[str, str]:
     if os.environ.get("ANTHROPIC_API_KEY"):
         return "anthropic", ""
     return "none", ""
+
+
+# ── 向后兼容 ──────────────────────────────────────────
+# 新代码推荐使用 llm-gateway，旧代码通过此别名继续工作
+from llm_gateway.providers.legacy_ontoderive_adapter import (
+    OntoderiveProvider as BaseProvider,
+)
