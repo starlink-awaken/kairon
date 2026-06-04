@@ -7,13 +7,12 @@ class Planes:
     METHODOLOGY = "methodology"
     SYSTEM = "system"
 
-    def __init__(self):
-        self.MAP = {
-            self.KNOWLEDGE: "KOS index (knowledge entities, relations, provenance)",
-            self.EXPERIENCE: "gbrain memory (experience patterns, cases, lessons)",
-            self.METHODOLOGY: "ontoderive (derivation rules, methodology stages)",
-            self.SYSTEM: "ecos (health monitoring, entropy, alerts)",
-        }
+    MAP = {
+        KNOWLEDGE: "KOS index (knowledge entities, relations, provenance)",
+        EXPERIENCE: "gbrain memory (experience patterns, cases, lessons)",
+        METHODOLOGY: "ontoderive (derivation rules, methodology stages)",
+        SYSTEM: "ecos (health monitoring, entropy, alerts)",
+    }
 
 
 class Chains:
@@ -21,12 +20,11 @@ class Chains:
     METHOD = "method"
     EVOLUTION = "evolution"
 
-    def __init__(self):
-        self.MAP = {
-            self.DATA: "kronos -> eidos -> KOS",
-            self.METHOD: "minerva -> ontoderive -> KOS",
-            self.EVOLUTION: "KOS self (observe -> hypothesize -> experiment -> learn)",
-        }
+    MAP = {
+        DATA: "kronos -> eidos -> KOS",
+        METHOD: "minerva -> ontoderive -> KOS",
+        EVOLUTION: "KOS self (observe -> hypothesize -> experiment -> learn)",
+    }
 
 
 class Protocols:
@@ -34,12 +32,11 @@ class Protocols:
     PROCESS = "process"
     EVOLUTION = "evolution"
 
-    def __init__(self):
-        self.MAP = {
-            self.KNOWLEDGE: "eidos schema + validation rules",
-            self.PROCESS: "pipeline:json workflow definitions",
-            self.EVOLUTION: "KOS self adaptation rules + HITL gates",
-        }
+    MAP = {
+        KNOWLEDGE: "eidos schema + validation rules",
+        PROCESS: "pipeline:json workflow definitions",
+        EVOLUTION: "KOS self adaptation rules + HITL gates",
+    }
 
 
 class KemsRuntime:

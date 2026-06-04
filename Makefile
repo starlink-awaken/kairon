@@ -11,7 +11,7 @@ test:
 	for pkg in packages/*/; do \
 		name=$$(basename $$pkg); \
 		echo "--- [$$name] ---"; \
-		if ! (cd $$pkg && python3 -m pytest tests/ -q); then \
+		if ! (cd $$pkg && uv run python -m pytest tests/ -q 2>/dev/null); then \
 			fail=1; \
 		fi; \
 	done; \

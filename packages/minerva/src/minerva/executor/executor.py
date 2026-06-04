@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 _log = logging.getLogger(__name__)
@@ -9,8 +11,6 @@ Modes:
 - Scheduled: Register cron task, execute on schedule
 - Watch: Poll sources for new content, execute on detection
 """
-
-from __future__ import annotations  # noqa:
 
 import asyncio
 import json
