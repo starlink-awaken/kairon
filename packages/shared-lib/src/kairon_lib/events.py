@@ -1,5 +1,6 @@
 """Backward-compat re-export."""
 from kairon_lib.core.events import (  # noqa: F401
+    __all__,
     BOSEvent,
     BosEvent,
     EventBusProtocol,
