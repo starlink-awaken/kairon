@@ -7,9 +7,9 @@ from agora.tenant import Tenant, TenantManager
 
 
 def test_tenant_dataclass():
-    t = Tenant(name="test", token="sk-test", services=["minerva"], rate_limit=50)
+    t = Tenant(name="test", token="sk-test", services=["minerva"], rate_limit=50)  # noqa: S106
     assert t.name == "test"
-    assert t.token == "sk-test"
+    assert t.token == "sk-test"  # noqa: S105
     assert t.services == ["minerva"]
     assert t.rate_limit == 50
 
@@ -31,7 +31,7 @@ class TestTenantManager:
         tenant = tm.authenticate("sk-valid")
         assert tenant is not None
         assert tenant.name == "test"
-        assert tenant.token == "sk-valid"
+        assert tenant.token == "sk-valid"  # noqa: S105
 
     def test_authenticate_invalid(self):
         path = self._make_config(

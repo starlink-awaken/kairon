@@ -15,6 +15,7 @@ import argparse
 import json
 import sys
 from datetime import datetime
+from typing import Any
 
 from .alerting import AlertSeverity, IntelligentAlertingSystem
 from .architecture import get_monitoring_architecture
@@ -37,11 +38,11 @@ class MonitoringCLI:
         print("🚀 启动SSOT智能监控系统...")
 
         if args.duration:
-            self._run_with_duration(args.duration)
+            self._run_with_duration(args.duration, args)
         else:
             self._show_monitoring_status()
 
-    def _run_with_duration(self, duration: int):
+    def _run_with_duration(self, duration: int, args: Any | None = None):
         """运行指定时长的监控"""
         import time
 

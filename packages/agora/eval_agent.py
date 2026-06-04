@@ -26,7 +26,7 @@ from agora.mcp_registry.router import SmartRouter  # type: ignore[import-not-fou
 
 # 尝试导入 EmbeddingStore；如果不支持则跳过语义搜索测试
 try:
-    from sentence_transformers import SentenceTransformer
+    from sentence_transformers import SentenceTransformer  # noqa: F401
 
     _HAS_EMBEDDING = True
 except ImportError:
@@ -186,11 +186,11 @@ def test_manifest(report: EvalReport):
     registry = ProxyRegistry()
     tools_data = populate_proxy_registry(registry)
 
-    report.ok("ProxyRegistry 初始化并注入了 %d 个模拟工具" % len(tools_data))
+    report.ok("ProxyRegistry 初始化并注入了 %d 个模拟工具" % len(tools_data))  # noqa: UP031
 
     # 获取 manifest（通过 get_tool_schemas）
     manifest = registry.get_tool_schemas()
-    report.ok("通过 get_tool_schemas 获取到 %d 个工具的 manifest" % len(manifest))
+    report.ok("通过 get_tool_schemas 获取到 %d 个工具的 manifest" % len(manifest))  # noqa: UP031
 
     # 验证 manifest 格式
     first = manifest[0]
@@ -214,7 +214,7 @@ def test_manifest(report: EvalReport):
     )
     catalog.add_tool({"id": "ext.doc_parser", "name": "Document Parser", "description": "解析 PDF/Word 文档内容"})
     cat_tools = catalog.list_tools()
-    report.ok("ToolCatalog 返回 %d 个工具（独立于 Proxy 的工具生态）" % len(cat_tools))
+    report.ok("ToolCatalog 返回 %d 个工具（独立于 Proxy 的工具生态）" % len(cat_tools))  # noqa: UP031
 
     return registry
 
@@ -521,7 +521,7 @@ async def test_auto_registration(report: EvalReport):
         results = engine.discover_all()
         assert len(results) == 3, f"期望 3 个服务，实际 {len(results)}"
         assert results[0].confidence == 0.85, "应按 confidence 降序排列"
-        report.ok("7a: DiscoveryEngine 发现并排序 %d 个服务" % len(results))
+        report.ok("7a: DiscoveryEngine 发现并排序 %d 个服务" % len(results))  # noqa: UP031
         for s in results:
             report.info(f"  {s.name}: confidence={s.confidence}, endpoint={s.mcp_endpoint}")
 
@@ -541,7 +541,7 @@ async def test_auto_registration(report: EvalReport):
         ]
         with patch.object(engine2, "discover_all", return_value=mock_discovered):
             count = engine2.auto_register(registry)
-            report.ok("7b: auto_register 首次注册 %d 个服务" % count)
+            report.ok("7b: auto_register 首次注册 %d 个服务" % count)  # noqa: UP031
 
             # 重复运行验证不重复注册
             count2 = engine2.auto_register(registry)
@@ -630,7 +630,7 @@ async def test_auto_registration(report: EvalReport):
     with patch("agora.mcp_registry.orchestrator.search_all", new=AsyncMock(return_value=mock_tools)):
         saved = await orchestrator.discover_and_save(query="mcp-server", sources=["github"])
         assert len(saved) == len(mock_tools), f"应保存 {len(mock_tools)} 个工具，实际 {len(saved)}"
-        report.ok("7d: discover_and_save 发现+评分+保存 %d 个工具" % len(saved))
+        report.ok("7d: discover_and_save 发现+评分+保存 %d 个工具" % len(saved))  # noqa: UP031
         for s in saved:
             score = s.get("quality_score", "N/A")
             report.info(f"  {s['id']}: quality_score={score}")

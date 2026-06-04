@@ -204,7 +204,7 @@ def dispatch(
 
     # → KOS（通过 Python API）
     try:
-        import kos  # type: ignore[import-not-found]
+        import kos  # noqa: F401  # type: ignore[import-not-found]
 
         result["kos"] = True
     except ImportError:

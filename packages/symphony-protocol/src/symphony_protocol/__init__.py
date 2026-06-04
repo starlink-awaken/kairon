@@ -23,7 +23,7 @@ from .models import (
 from .state_machine import SymphonyStateMachine
 from .triggers import TriggerEngine, create_default_triggers, setup_trigger_engine
 
-__all__ = [
+__all__ = (
     "AgentCapability",
     "AgentMatcher",
     "AgentProfile",
@@ -43,4 +43,4 @@ __all__ = [
     "TriggerType",
     "create_default_triggers",
     "setup_trigger_engine",
-]
+)

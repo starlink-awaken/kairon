@@ -39,7 +39,7 @@ def _api_call(api_name: str, **params: Any) -> dict | None:
         return None
 
     body = {"api_name": api_name, "skill_version": SKILL_VERSION, **params}
-    req = urllib.request.Request(
+    req = urllib.request.Request(  # noqa: S310
         AGENT_GATEWAY,
         data=json.dumps(body).encode(),
         headers={
@@ -48,7 +48,7 @@ def _api_call(api_name: str, **params: Any) -> dict | None:
         },
     )
     try:
-        resp = urllib.request.urlopen(req, timeout=15)
+        resp = urllib.request.urlopen(req, timeout=15)  # noqa: S310
         data: dict = json.loads(resp.read())
         if data.get("errcode", 0) != 0:
             logger.warning("WeRead API error [%s]: %s", api_name, data.get("errmsg", ""))

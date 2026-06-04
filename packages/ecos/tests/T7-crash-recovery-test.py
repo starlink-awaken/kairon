@@ -32,7 +32,7 @@ def ssb_count():
 def file_hash(p):
     if os.path.exists(p):
         with open(p) as f:
-            return hashlib.md5(f.read().encode()).hexdigest()[:8]
+            return hashlib.md5(f.read().encode()).hexdigest()[:8]  # noqa: S324
     return "MISSING"
 
 
@@ -54,7 +54,7 @@ print("=" * 60)
 random.seed(42)
 
 N = 50
-crash_at = random.randint(15, 40)
+crash_at = random.randint(15, 40)  # noqa: S311
 
 events_written = []
 with open(SSB_DB, "a") as f:

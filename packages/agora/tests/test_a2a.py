@@ -13,7 +13,7 @@ import pytest
 os.environ["AGORA_API_KEY"] = "test-key-123"
 
 # Each test in TestTaskManager uses a unique temp file to avoid cross-test contamination
-_tm_path = lambda: tempfile.mktemp(suffix=".json")  # noqa: E731
+_tm_path = lambda: tempfile.mktemp(suffix=".json")  # noqa: E731, S306
 
 # 兜底：如果 app 模块已在其他 conftest 中被导入，强制重写其 API_KEY
 import agora.web.app as _app_module

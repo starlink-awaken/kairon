@@ -87,7 +87,7 @@ except ImportError:
 def _inject_factgraph(triples: list[dict[str, Any]]) -> None:
     """Inject email metadata triples into FactGraph. Fail silently."""
     try:
-        FactGraph = __import__(
+        FactGraph = __import__(  # noqa: N806
             "nucleus.D_Memory.fact_graph",
             fromlist=["FactGraph"],
         ).FactGraph
@@ -645,7 +645,7 @@ class MailTool(BaseTool):
                             "date": msg.get("Date", ""),
                         }
                     )
-                except Exception:
+                except Exception:  # noqa: S112
                     continue
 
             return emails

@@ -9,7 +9,6 @@ harvest jobs by urgency.
 
 import enum
 from dataclasses import dataclass, field
-from typing import Any
 
 
 class Priority(enum.IntEnum):

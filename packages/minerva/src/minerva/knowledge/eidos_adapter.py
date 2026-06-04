@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import subprocess
 import tempfile
 from pathlib import Path
@@ -114,8 +115,10 @@ def export_to_kos(cards: list[Any], kos_script: str | None = None) -> dict[str, 
         kos_script = shutil.which("kos") or "kos"
 
     data = [c.to_dict() for c in cards]
-    tmp = Path(tempfile.mktemp(suffix=".json"))  # noqa:
+    fd, tmp_path = tempfile.mkstemp(suffix=".json")
+    tmp = Path(tmp_path)
     tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    os.close(fd)
 
     try:
         result = subprocess.run(

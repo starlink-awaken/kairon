@@ -72,7 +72,7 @@ class VisionMetabolizer:
 
         # [Evolution] Integrate with D-Logos for alignment and refined decomposition
         try:
-            MetaEvolveEngine = __import__(  # cross-organ: invisible to AST topology checker
+            MetaEvolveEngine = __import__(  # cross-organ: invisible to AST topology checker  # noqa: N806
                 "organs.D_Logos.organs.meta_evolve", fromlist=["MetaEvolveEngine"]
             ).MetaEvolveEngine
             MetaEvolveEngine()

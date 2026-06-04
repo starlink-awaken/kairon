@@ -325,7 +325,7 @@ def probe_docker() -> list[dict]:
             text=True,
             timeout=30,
         )
-        lines = [l for l in r.stdout.strip().split("\n") if l]
+        lines = [l for l in r.stdout.strip().split("\n") if l]  # noqa: E741
     except Exception:
         return []
     candidates = []
@@ -354,7 +354,7 @@ def probe_docker() -> list[dict]:
                     confidence=0.4,
                 )
             )
-        except Exception:
+        except Exception:  # noqa: S112
             continue
     return candidates
 

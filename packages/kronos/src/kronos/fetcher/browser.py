@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import logging
 
+from ..fetch_router import FetchPlan, _classify
+from .classify import FetchLayer
+
 logger = logging.getLogger(__name__)
 
 

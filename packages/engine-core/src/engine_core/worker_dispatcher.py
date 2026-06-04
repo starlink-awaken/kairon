@@ -44,6 +44,7 @@ if TYPE_CHECKING:
     from engine_core.organs.engine.possession_multi_session import (  # type: ignore[import-not-found]
         PossessionMultiSession,
     )
+    from engine_core.organs.engine.result_bus import ResultBus
     from engine_core.organs.voice_session_particle_queue import QueuedSessionParticle  # type: ignore[import-not-found]
 
 try:
@@ -307,7 +308,7 @@ class WorkerDispatcher:
         if not tasks:
             return
         # Batch dispatch to avoid rate limit hammering
-        BATCH_SIZE = 50
+        BATCH_SIZE = 50  # noqa: N806
         sent_ok = 0
         for i in range(0, len(tasks), BATCH_SIZE):
             batch = tasks[i : i + BATCH_SIZE]

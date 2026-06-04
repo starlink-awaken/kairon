@@ -1,10 +1,9 @@
-from typing import Any
-
 """wksp.commands.mcp — workspace MCP server 命令。"""
 
 from __future__ import annotations
 
 import argparse
+from typing import Any
 
 from .base import _get_console, _get_err, _panel
 

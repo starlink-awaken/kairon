@@ -57,7 +57,7 @@ def rec_freq():
     print("推荐 (基于使用频率)")
     print()
     for t, c in tu[:5]:
-        print(" ", t["id"], "(%d次使用)" % c)
+        print(" ", t["id"], "(%d次使用)" % c)  # noqa: UP031
         aids = set()
         for e in g["edges"]:
             if e["source"] == t["id"]:

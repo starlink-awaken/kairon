@@ -649,7 +649,3 @@ def main():
 
     sys.stderr.write("Configure your MCP client to connect to this server.\n")
     mcp.run()
-
-
-if __name__ == "__main__":
-    main()

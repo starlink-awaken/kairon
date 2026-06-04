@@ -59,7 +59,7 @@ class TestCreateClient:
             result = create_client(auth_tokens={"token": "abc123"})
 
             assert result is mock_client_instance
-            mock_client_class.assert_called_once_with(token="abc123")  # noqa:
+            mock_client_class.assert_called_once_with(token="abc123")  # noqa: S106
 
     # Skip: fragile mock chain
     def _skip_returns_none_on_exception(self):

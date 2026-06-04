@@ -46,8 +46,8 @@ def xor_distance(a: str, b: str) -> int:
     those integers is the Kademlia distance.  The function is symmetric and
     ``xor_distance(x, x) == 0`` for any *x*.
     """
-    ha = int(hashlib.sha1(a.encode()).hexdigest(), 16)
-    hb = int(hashlib.sha1(b.encode()).hexdigest(), 16)
+    ha = int(hashlib.sha1(a.encode()).hexdigest(), 16)  # noqa: S324
+    hb = int(hashlib.sha1(b.encode()).hexdigest(), 16)  # noqa: S324
     return ha ^ hb
 
 

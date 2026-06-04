@@ -63,8 +63,8 @@ class SharedBrainIdentityProvider:
     def _query(self, path: str) -> Any:
         try:
             url = f"{self.sharedbrain}/api/v1{path}"
-            req = Request(url, method="GET")
-            resp = urlopen(req, timeout=self.timeout)
+            req = Request(url, method="GET")  # noqa: S310
+            resp = urlopen(req, timeout=self.timeout)  # noqa: S310
             return json.loads(resp.read().decode())
         except Exception as e:
             _log.error("SharedBrain identity query failed (%s): %s", path, e)
@@ -74,9 +74,9 @@ class SharedBrainIdentityProvider:
         try:
             url = f"{self.sharedbrain}/api/v1{path}"
             payload = json.dumps(data).encode()
-            req = Request(url, data=payload, method="POST")
+            req = Request(url, data=payload, method="POST")  # noqa: S310
             req.add_header("Content-Type", "application/json")
-            resp = urlopen(req, timeout=self.timeout)
+            resp = urlopen(req, timeout=self.timeout)  # noqa: S310
             return json.loads(resp.read().decode())
         except Exception as e:
             _log.error("SharedBrain identity mutation failed (%s): %s", path, e)

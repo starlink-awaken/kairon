@@ -159,7 +159,7 @@ class DiscoveryEngine:
             except Exception:
                 try:
                     content = pyproject.read_text()
-                except Exception:
+                except Exception:  # noqa: S112
                     continue
                 if "mcp" not in content.lower() and "fastmcp" not in content.lower():
                     continue
@@ -239,7 +239,7 @@ class DiscoveryEngine:
                             confidence=0.70,
                         )
                     )
-            except Exception:
+            except Exception:  # noqa: S112
                 continue
         return found
 
@@ -270,7 +270,7 @@ class DiscoveryEngine:
                     r = await client.get(url)
                     if r.status_code < 500:
                         return url
-            except Exception:
+            except Exception:  # noqa: S112
                 continue
         return ""
 
@@ -281,7 +281,7 @@ class DiscoveryEngine:
         for common MCP endpoints on open ports.
         """
         if hosts is None:
-            hosts = ["localhost", "127.0.0.1", "0.0.0.0"]
+            hosts = ["localhost", "127.0.0.1", "0.0.0.0"]  # noqa: S104
 
         found: list[DiscoveredService] = []
 

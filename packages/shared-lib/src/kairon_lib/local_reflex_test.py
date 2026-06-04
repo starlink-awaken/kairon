@@ -1,5 +1,2 @@
-from __future__ import annotations
-
-"""Local reflex system — local LLM client, grammar enforcement, prompt compression, idle processing.
-Migrated from agentmesh/packages/toolkit/src/local-reflex/.
-"""
+"""Backward-compat re-export."""
+from kairon_lib.core.local_reflex_test import *  # noqa: F403

@@ -33,7 +33,7 @@ class VetoRouter(BaseGovernanceRouter):
 
     async def _handler(self, uri: str, params: dict | None = None) -> dict[str, Any]:
         try:
-            from kairon_lib.organs.governance.review.user_veto import UserVeto  # type: ignore[import-not-found]
+            from kairon_lib.governance.user_veto import UserVeto  # type: ignore[import-not-found]
 
             veto = UserVeto()
             params = params or {}

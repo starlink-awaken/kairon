@@ -9500,43 +9500,1255 @@
       "type": "test:persist",
       "trace_id": "",
       "payload": {}
+    },
+    {
+      "id": "evt_1780551435_389a97",
+      "time": "2026-06-04T05:37:15Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "trans-test"
+      }
+    },
+    {
+      "id": "evt_1780551435_554aba",
+      "time": "2026-06-04T05:37:15Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "filter-a"
+      }
+    },
+    {
+      "id": "evt_1780551435_ef1716",
+      "time": "2026-06-04T05:37:15Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "filter-b"
+      }
+    },
+    {
+      "id": "evt_1780551435_28a4e7",
+      "time": "2026-06-04T05:37:15Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "clear-test"
+      }
+    },
+    {
+      "id": "evt_1780551435_80c81c",
+      "time": "2026-06-04T05:37:15Z",
+      "source": "test",
+      "type": "test:webhook",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780551435_e04943",
+      "time": "2026-06-04T05:37:15Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "mcp-card-test"
+      }
+    },
+    {
+      "id": "evt_1780551448_6a19ba",
+      "time": "2026-06-04T05:37:28Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "mcp-test"
+      }
+    },
+    {
+      "id": "evt_1780551448_2b657b",
+      "time": "2026-06-04T05:37:28Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "rest-test"
+      }
+    },
+    {
+      "id": "evt_1780551448_22303c",
+      "time": "2026-06-04T05:37:28Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "a2a-param-test"
+      }
+    },
+    {
+      "id": "evt_1780551448_a2d34a",
+      "time": "2026-06-04T05:37:28Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "list-test"
+      }
+    },
+    {
+      "id": "evt_1780551448_e6314e",
+      "time": "2026-06-04T05:37:28Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780551472_fa291f",
+      "time": "2026-06-04T05:37:52Z",
+      "source": "test",
+      "type": "test:unit",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780551472_ffba97",
+      "time": "2026-06-04T05:37:52Z",
+      "source": "dashboard",
+      "type": "test:persist",
+      "trace_id": "",
+      "payload": {}
+    },
+    {
+      "id": "evt_1780551667_abde63",
+      "time": "2026-06-04T05:41:07Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "trans-test"
+      }
+    },
+    {
+      "id": "evt_1780551668_619f61",
+      "time": "2026-06-04T05:41:08Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "filter-a"
+      }
+    },
+    {
+      "id": "evt_1780551668_46b310",
+      "time": "2026-06-04T05:41:08Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "filter-b"
+      }
+    },
+    {
+      "id": "evt_1780551668_9ba49d",
+      "time": "2026-06-04T05:41:08Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "clear-test"
+      }
+    },
+    {
+      "id": "evt_1780551668_ad789a",
+      "time": "2026-06-04T05:41:08Z",
+      "source": "test",
+      "type": "test:webhook",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780551668_e28990",
+      "time": "2026-06-04T05:41:08Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "mcp-card-test"
+      }
+    },
+    {
+      "id": "evt_1780551908_9eb9f1",
+      "time": "2026-06-04T05:45:08Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "mcp-test"
+      }
+    },
+    {
+      "id": "evt_1780551908_5ed870",
+      "time": "2026-06-04T05:45:08Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "rest-test"
+      }
+    },
+    {
+      "id": "evt_1780551908_1c4103",
+      "time": "2026-06-04T05:45:08Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "a2a-param-test"
+      }
+    },
+    {
+      "id": "evt_1780551908_171d23",
+      "time": "2026-06-04T05:45:08Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "list-test"
+      }
+    },
+    {
+      "id": "evt_1780551908_f99d3c",
+      "time": "2026-06-04T05:45:08Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780551912_8ddbaf",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:started",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "variables": {},
+        "step_count": 2,
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_81939c",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "step": 0,
+        "tool": "ontoderive.derive",
+        "output_as": "derive_result",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_819cc9",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "step": 1,
+        "tool": "ontoderive.check",
+        "output_as": "step_1",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_61ef31",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:completed",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_e94fa7",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:started",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "variables": {},
+        "step_count": 2,
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_443ab5",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "step": 0,
+        "tool": "ontoderive.derive",
+        "output_as": "derive_result",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_43416f",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "step": 1,
+        "tool": "ontoderive.check",
+        "output_as": "step_1",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_c99b4b",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:completed",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_adc62c",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:started",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "variables": {},
+        "step_count": 2,
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_ce36e1",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "step": 0,
+        "tool": "ontoderive.derive",
+        "output_as": "derive_result",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_1225d0",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "step": 1,
+        "tool": "ontoderive.check",
+        "output_as": "step_1",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_d86e59",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:completed",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_d55ae3",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:started",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "full-pipeline",
+        "variables": {},
+        "step_count": 4,
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_6ed24e",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "full-pipeline",
+        "step": 0,
+        "tool": "toolforge.match",
+        "output_as": "matched_tools",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_e66f99",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "full-pipeline",
+        "step": 1,
+        "tool": "minerva.research",
+        "output_as": "research_result",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_8ca926",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "full-pipeline",
+        "step": 2,
+        "tool": "ontoderive.derive",
+        "output_as": "derive_result",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_2115c5",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "full-pipeline",
+        "step": 3,
+        "tool": "ontoderive.check",
+        "output_as": "step_3",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551912_8ca3af",
+      "time": "2026-06-04T05:45:12Z",
+      "source": "pipeline",
+      "type": "pipeline:completed",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "full-pipeline",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551913_d35aa4",
+      "time": "2026-06-04T05:45:13Z",
+      "source": "pipeline",
+      "type": "pipeline:started",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "variables": {},
+        "step_count": 2,
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551913_3669d1",
+      "time": "2026-06-04T05:45:13Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "step": 0,
+        "tool": "ontoderive.derive",
+        "output_as": "derive_result",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551913_14bb5e",
+      "time": "2026-06-04T05:45:13Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "step": 1,
+        "tool": "ontoderive.check",
+        "output_as": "step_1",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551913_b10321",
+      "time": "2026-06-04T05:45:13Z",
+      "source": "pipeline",
+      "type": "pipeline:completed",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551914_4274a6",
+      "time": "2026-06-04T05:45:14Z",
+      "source": "pipeline",
+      "type": "pipeline:started",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "variables": {},
+        "step_count": 2,
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551914_e43a12",
+      "time": "2026-06-04T05:45:14Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "step": 0,
+        "tool": "ontoderive.derive",
+        "output_as": "derive_result",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551914_2f25d7",
+      "time": "2026-06-04T05:45:14Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "step": 1,
+        "tool": "ontoderive.check",
+        "output_as": "step_1",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551914_c7f329",
+      "time": "2026-06-04T05:45:14Z",
+      "source": "pipeline",
+      "type": "pipeline:completed",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "derive-check",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551914_0c4311",
+      "time": "2026-06-04T05:45:14Z",
+      "source": "pipeline",
+      "type": "pipeline:started",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "full-pipeline",
+        "variables": {},
+        "step_count": 4,
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551914_26b83e",
+      "time": "2026-06-04T05:45:14Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "full-pipeline",
+        "step": 0,
+        "tool": "toolforge.match",
+        "output_as": "matched_tools",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551914_013260",
+      "time": "2026-06-04T05:45:14Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "full-pipeline",
+        "step": 1,
+        "tool": "minerva.research",
+        "output_as": "research_result",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551914_71cde4",
+      "time": "2026-06-04T05:45:14Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "full-pipeline",
+        "step": 2,
+        "tool": "ontoderive.derive",
+        "output_as": "derive_result",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551914_379d67",
+      "time": "2026-06-04T05:45:14Z",
+      "source": "pipeline",
+      "type": "pipeline:step:ok",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "full-pipeline",
+        "step": 3,
+        "tool": "ontoderive.check",
+        "output_as": "step_3",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551914_7f219d",
+      "time": "2026-06-04T05:45:14Z",
+      "source": "pipeline",
+      "type": "pipeline:completed",
+      "trace_id": "",
+      "payload": {
+        "pipeline": "full-pipeline",
+        "identity": {
+          "subject_id": "unknown",
+          "subject_type": "legacy",
+          "issuer": "legacy",
+          "tenant": ""
+        }
+      }
+    },
+    {
+      "id": "evt_1780551937_e315cf",
+      "time": "2026-06-04T05:45:37Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "trans-test"
+      }
+    },
+    {
+      "id": "evt_1780551937_953ded",
+      "time": "2026-06-04T05:45:37Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "filter-a"
+      }
+    },
+    {
+      "id": "evt_1780551937_194088",
+      "time": "2026-06-04T05:45:37Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "filter-b"
+      }
+    },
+    {
+      "id": "evt_1780551937_35d2cd",
+      "time": "2026-06-04T05:45:37Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "clear-test"
+      }
+    },
+    {
+      "id": "evt_1780551937_ceb3ff",
+      "time": "2026-06-04T05:45:37Z",
+      "source": "test",
+      "type": "test:webhook",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780551937_242538",
+      "time": "2026-06-04T05:45:37Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "mcp-card-test"
+      }
+    },
+    {
+      "id": "evt_1780552113_5f09dc",
+      "time": "2026-06-04T05:48:33Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "mcp-test"
+      }
+    },
+    {
+      "id": "evt_1780552113_74a4b5",
+      "time": "2026-06-04T05:48:33Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "rest-test"
+      }
+    },
+    {
+      "id": "evt_1780552113_661390",
+      "time": "2026-06-04T05:48:33Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "a2a-param-test"
+      }
+    },
+    {
+      "id": "evt_1780552113_6c3070",
+      "time": "2026-06-04T05:48:33Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "list-test"
+      }
+    },
+    {
+      "id": "evt_1780552113_b17522",
+      "time": "2026-06-04T05:48:33Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780552144_9823f9",
+      "time": "2026-06-04T05:49:04Z",
+      "source": "test",
+      "type": "test:unit",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780552144_4cbb85",
+      "time": "2026-06-04T05:49:04Z",
+      "source": "dashboard",
+      "type": "test:persist",
+      "trace_id": "",
+      "payload": {}
+    },
+    {
+      "id": "evt_1780552336_db864f",
+      "time": "2026-06-04T05:52:16Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "trans-test"
+      }
+    },
+    {
+      "id": "evt_1780552336_03413d",
+      "time": "2026-06-04T05:52:16Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "filter-a"
+      }
+    },
+    {
+      "id": "evt_1780552336_9a2cd4",
+      "time": "2026-06-04T05:52:16Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "filter-b"
+      }
+    },
+    {
+      "id": "evt_1780552336_ec13a8",
+      "time": "2026-06-04T05:52:16Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "clear-test"
+      }
+    },
+    {
+      "id": "evt_1780552336_3b0d2c",
+      "time": "2026-06-04T05:52:16Z",
+      "source": "test",
+      "type": "test:webhook",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780552336_a20b09",
+      "time": "2026-06-04T05:52:16Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "mcp-card-test"
+      }
+    },
+    {
+      "id": "evt_1780552341_670b4e",
+      "time": "2026-06-04T05:52:21Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "mcp-test"
+      }
+    },
+    {
+      "id": "evt_1780552341_faeec1",
+      "time": "2026-06-04T05:52:21Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "rest-test"
+      }
+    },
+    {
+      "id": "evt_1780552341_c0e9de",
+      "time": "2026-06-04T05:52:21Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "a2a-param-test"
+      }
+    },
+    {
+      "id": "evt_1780552341_373bc8",
+      "time": "2026-06-04T05:52:21Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "list-test"
+      }
+    },
+    {
+      "id": "evt_1780552341_f0ea1d",
+      "time": "2026-06-04T05:52:21Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780552373_559ff3",
+      "time": "2026-06-04T05:52:53Z",
+      "source": "test",
+      "type": "test:unit",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780552373_328097",
+      "time": "2026-06-04T05:52:53Z",
+      "source": "dashboard",
+      "type": "test:persist",
+      "trace_id": "",
+      "payload": {}
+    },
+    {
+      "id": "evt_1780552396_8c6bea",
+      "time": "2026-06-04T05:53:16Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "trans-test"
+      }
+    },
+    {
+      "id": "evt_1780552396_ba0f53",
+      "time": "2026-06-04T05:53:16Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "filter-a"
+      }
+    },
+    {
+      "id": "evt_1780552396_cdfecb",
+      "time": "2026-06-04T05:53:16Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "filter-b"
+      }
+    },
+    {
+      "id": "evt_1780552396_cd2b31",
+      "time": "2026-06-04T05:53:16Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "clear-test"
+      }
+    },
+    {
+      "id": "evt_1780552396_2e51f7",
+      "time": "2026-06-04T05:53:16Z",
+      "source": "test",
+      "type": "test:webhook",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780552396_ea7ba8",
+      "time": "2026-06-04T05:53:16Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "mcp-card-test"
+      }
+    },
+    {
+      "id": "evt_1780552574_17b6b2",
+      "time": "2026-06-04T05:56:14Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "mcp-test"
+      }
+    },
+    {
+      "id": "evt_1780552574_205b36",
+      "time": "2026-06-04T05:56:14Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "rest-test"
+      }
+    },
+    {
+      "id": "evt_1780552575_a641d6",
+      "time": "2026-06-04T05:56:15Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "a2a-param-test"
+      }
+    },
+    {
+      "id": "evt_1780552575_2cf068",
+      "time": "2026-06-04T05:56:15Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "list-test"
+      }
+    },
+    {
+      "id": "evt_1780552575_ba512a",
+      "time": "2026-06-04T05:56:15Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780552607_59d180",
+      "time": "2026-06-04T05:56:47Z",
+      "source": "test",
+      "type": "test:unit",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780552607_852b23",
+      "time": "2026-06-04T05:56:47Z",
+      "source": "dashboard",
+      "type": "test:persist",
+      "trace_id": "",
+      "payload": {}
+    },
+    {
+      "id": "evt_1780552774_3ef435",
+      "time": "2026-06-04T05:59:34Z",
+      "source": {
+        "agent_id": "49ce8ff4089f48a7a812139a04c96bde"
+      },
+      "type": "test",
+      "trace_id": "",
+      "payload": "ping"
     }
   ],
   "subscriptions": [
     {
-      "id": "sub_7dbeeb28",
+      "id": "sub_d12b36f0",
       "service": "a2a-push",
       "pattern": "registry:*",
       "callback_url": "http://example.com/events",
-      "created": "2026-06-04T05:28:02Z"
+      "created": "2026-06-04T05:53:16Z"
     },
     {
-      "id": "sub_e9cd1933",
+      "id": "sub_44e1a5c9",
       "service": "a2a-push",
       "pattern": "route:call.failed",
       "callback_url": "http://example.com/events",
-      "created": "2026-06-04T05:28:02Z"
+      "created": "2026-06-04T05:53:16Z"
     },
     {
-      "id": "sub_b465ffc7",
+      "id": "sub_4b7d6428",
       "service": "a2a-push",
       "pattern": "*",
       "callback_url": "http://example.com/events",
-      "created": "2026-06-04T05:28:02Z"
+      "created": "2026-06-04T05:53:16Z"
     },
     {
-      "id": "sub_de772ea0",
+      "id": "sub_b05d4c36",
       "service": "a2a-push",
       "pattern": "*",
       "callback_url": "http://example.com/notify",
-      "created": "2026-06-04T05:28:02Z"
+      "created": "2026-06-04T05:53:16Z"
     },
     {
-      "id": "sub_9f9f29d9",
+      "id": "sub_337c7cd1",
       "service": "mcp-caller",
       "pattern": "test:*",
       "callback_url": "",
-      "created": "2026-06-04T05:28:09Z"
+      "created": "2026-06-04T05:56:15Z"
     }
   ],
   "max_events": 1000

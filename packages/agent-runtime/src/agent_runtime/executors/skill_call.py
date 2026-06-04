@@ -52,7 +52,7 @@ def _calc_skill_backoff(attempt: int, retry: RetryConfig) -> int:
     jitter = retry.jitter if retry.jitter is not None else DEFAULT_JITTER
     delay = min(base * (mult**attempt), max_delay)
     if jitter:
-        delay = delay * (0.5 + random.random() * 0.5)
+        delay = delay * (0.5 + random.random() * 0.5)  # noqa: S311
     return int(delay)
 
 

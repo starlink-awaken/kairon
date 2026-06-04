@@ -10,6 +10,7 @@ import json
 import os
 import sys
 import time
+
 import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -25,7 +26,7 @@ ECOS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # ═══════════════════════════════════════════
 
 
-class TestE2E_SSB_Lifecycle:
+class TestE2E_SSB_Lifecycle:  # noqa: N801
     """端到端: SSB 初始化→发布→订阅→查询→dump→验证"""
 
     @pytest.fixture
@@ -91,7 +92,7 @@ class TestE2E_SSB_Lifecycle:
 
     def test_dump_complete_fields(self):
         """ssb_dump 应输出完整字段 (修复 F4)"""
-        from ecos.ssb_dump as sd
+        from ecos import ssb_dump as sd
 
         code = open(sd.__file__).read()
         assert "payload_json" in code, "F4: must include payload_json"
@@ -111,12 +112,12 @@ class TestE2E_SSB_Lifecycle:
 # ═══════════════════════════════════════════
 
 
-class TestE2E_Auth:
+class TestE2E_Auth:  # noqa: N801
     """端到端: 密钥生成→签名→验证→篡改检测"""
 
     def test_sign_verify_roundtrip(self):
         """签名-验证往返"""
-        from ecos.ssb_auth as auth
+        from ecos import ssb_auth as auth
 
         sig = auth.compute_signature(1, "e1", "AGENT", '{"test":1}')
         assert sig is not None
@@ -132,13 +133,13 @@ class TestE2E_Auth:
 
     def test_verify_no_tampering(self):
         """最近事件应无篡改"""
-        from ecos.ssb_auth as auth
+        from ecos import ssb_auth as auth
 
         stats = auth.verify(limit=20)
         assert stats["mismatch"] == 0, f"Found {stats['mismatch']} tampered events"
 
     def test_key_exists(self):
-        from ecos.ssb_auth as auth
+        from ecos import ssb_auth as auth
 
         key = auth._load_key()
         assert key is not None, "SSB_KEY not configured"
@@ -149,7 +150,7 @@ class TestE2E_Auth:
 # ═══════════════════════════════════════════
 
 
-class TestE2E_Guard:
+class TestE2E_Guard:  # noqa: N801
     """端到端: realtime_guard 全部16条规则"""
 
     @pytest.fixture
@@ -201,7 +202,7 @@ class TestE2E_Guard:
 # ═══════════════════════════════════════════
 
 
-class TestE2E_State:
+class TestE2E_State:  # noqa: N801
     """端到端: STATE.yaml ↔ SSB ↔ HANDOFF 一致性"""
 
     def test_state_yaml_has_required_keys(self):
@@ -250,7 +251,7 @@ class TestE2E_State:
 # ═══════════════════════════════════════════
 
 
-class TestE2E_CrossDomain:
+class TestE2E_CrossDomain:  # noqa: N801
     """端到端: Integrate 管道 + cross_refs"""
 
     def test_cross_refs_valid(self):
@@ -269,7 +270,7 @@ class TestE2E_CrossDomain:
 
     def test_integrate_safe_execution(self):
         """integrate_pipeline 无代码注入风险 (F5 fix)"""
-        from ecos.integrate_pipeline as ip
+        from ecos import integrate_pipeline as ip
 
         code = open(ip.__file__).read()
         # Should pass query as argv, not f-string interpolation
@@ -281,12 +282,12 @@ class TestE2E_CrossDomain:
 # ═══════════════════════════════════════════
 
 
-class TestE2E_Metrics:
+class TestE2E_Metrics:  # noqa: N801
     """端到端: CRITIC + 涌现度量"""
 
     def test_emergence_metrics_compute(self):
         """涌现度量可计算"""
-        from ecos.critic_auto_trigger as cat
+        from ecos import critic_auto_trigger as cat
 
         metrics = cat.compute_emergence_metrics()
         assert "emergence_score" in metrics
@@ -296,7 +297,7 @@ class TestE2E_Metrics:
 
     def test_critic_assess_risk(self):
         """CRITIC 风险评估正确"""
-        from ecos.critic_auto_trigger as cat
+        from ecos import critic_auto_trigger as cat
 
         r = cat.assess_risk("修改 GENOME.md 公理")
         assert r["need_critic"]
@@ -312,7 +313,7 @@ class TestE2E_Metrics:
 # ═══════════════════════════════════════════
 
 
-class TestE2E_Common:
+class TestE2E_Common:  # noqa: N801
     """端到端: ecos_common 共享基础设施"""
 
     def test_ecos_common_imports(self):
@@ -348,7 +349,7 @@ class TestE2E_Common:
 # ═══════════════════════════════════════════
 
 
-class TestE2E_DatabaseIntegrity:
+class TestE2E_DatabaseIntegrity:  # noqa: N801
     """端到端: 数据库完整性校验"""
 
     def test_sqlite_integrity(self):

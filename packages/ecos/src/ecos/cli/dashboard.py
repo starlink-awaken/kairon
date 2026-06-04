@@ -129,8 +129,8 @@ def get_forge_stats() -> dict:
 def get_agentmesh_health() -> dict:
     """从 agentmesh health endpoint 获取代理在线状态"""
     try:
-        req = urllib.request.Request(AGENTMESH_HEALTH_URL, method="GET")
-        with urllib.request.urlopen(req, timeout=5) as resp:
+        req = urllib.request.Request(AGENTMESH_HEALTH_URL, method="GET")  # noqa: S310
+        with urllib.request.urlopen(req, timeout=5) as resp:  # noqa: S310
             data = json.loads(resp.read().decode("utf-8"))
             return data
     except Exception as e:
@@ -348,12 +348,12 @@ def main():
         print("  --port PORT  指定 HTTP 端口 (default: 9090)")
         return
 
-    PORT = int(sys.argv[sys.argv.index("--port") + 1]) if "--port" in sys.argv else 9090
+    PORT = int(sys.argv[sys.argv.index("--port") + 1]) if "--port" in sys.argv else 9090  # noqa: N806
 
     print(f"🔭 eCOS Dashboard → http://localhost:{PORT}")
     print("   面板: State · Watchdog · Agora · Forge · AgentMesh · SSB · Cron")
     print("   停止: Ctrl+C")
-    server = HTTPServer(("0.0.0.0", PORT), DashboardHandler)
+    server = HTTPServer(("0.0.0.0", PORT), DashboardHandler)  # noqa: S104
     try:
         server.serve_forever()
     except KeyboardInterrupt:

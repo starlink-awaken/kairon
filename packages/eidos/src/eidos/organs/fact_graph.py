@@ -5,9 +5,7 @@ TODO: implement full fact graph with SQLite persistence.
 
 from __future__ import annotations
 
-from typing import Any
-
-from ..fact_graph import FactGraph  # noqa: F401
+from ..fact_graph import FactGraph, get_fact_graph
 
 
 def get_graph() -> FactGraph:

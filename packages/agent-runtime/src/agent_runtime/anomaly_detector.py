@@ -17,27 +17,27 @@ ACTION_PRI: dict[str, int] = {"pause": 5, "rollback": 4, "scale": 3, "alert": 2,
 
 @dataclass
 class RuleCondition:
-    metric: str; operator: RuleOperator; value: Any; weight: float = 1.0
+    metric: str; operator: RuleOperator; value: Any; weight: float = 1.0  # noqa: E702
 
 
 @dataclass
 class AnomalyRule:
-    id: str; name: str; description: str; status: str; category: str
-    condition: RuleCondition; frequency: str; severity: Severity
-    intervention_action: InterventionAction; requires_confirmation: bool; cooldown_ms: float
-    window_size: int | None = None; burst_threshold: int | None = None
+    id: str; name: str; description: str; status: str; category: str  # noqa: E702
+    condition: RuleCondition; frequency: str; severity: Severity  # noqa: E702
+    intervention_action: InterventionAction; requires_confirmation: bool; cooldown_ms: float  # noqa: E702
+    window_size: int | None = None; burst_threshold: int | None = None  # noqa: E702
     metadata: dict[str, Any] = field(default_factory=dict)
-    created_at: float = 0.0; updated_at: float = 0.0
+    created_at: float = 0.0; updated_at: float = 0.0  # noqa: E702
 
 
 @dataclass
 class RuleResult:
-    rule_id: str; rule_name: str; triggered: bool; score: float; message: str; timestamp: float = 0.0
+    rule_id: str; rule_name: str; triggered: bool; score: float; message: str; timestamp: float = 0.0  # noqa: E702
 
 
 @dataclass
 class DetectionResult:
-    has_anomaly: bool; triggered: list[RuleResult]; max_severity: Severity | Literal["none"]; action: InterventionAction; summary: str; timestamp: float
+    has_anomaly: bool; triggered: list[RuleResult]; max_severity: Severity | Literal["none"]; action: InterventionAction; summary: str; timestamp: float  # noqa: E702
 
 
 class AnomalyRuleEngine:
@@ -56,7 +56,7 @@ class AnomalyRuleEngine:
         return [r for r in self._rules.values() if r.status == "active"]
 
     def evaluate(self, metrics: dict[str, Any]) -> DetectionResult:
-        now = time.time(); triggered = []
+        now = time.time(); triggered = []  # noqa: E702
         for rule in self.get_active_rules():
             last = self._last.get(rule.id)
             if last and (now - last) * 1000 < rule.cooldown_ms:
@@ -82,19 +82,19 @@ class AnomalyRuleEngine:
     def _get_metric(m: dict[str, Any], path: str) -> Any:
         for part in path.split("."):
             m = m.get(part) if isinstance(m, dict) else None  # type: ignore[assignment]
-            if m is None: return None
+            if m is None: return None  # noqa: E701
         return m
 
     @staticmethod
     def _compare(actual: Any, op: RuleOperator, expected: Any) -> bool:
-        if op == "eq": return actual == expected
-        if op == "ne": return actual != expected
-        if op == "gt": return isinstance(actual, (int, float)) and isinstance(expected, (int, float)) and actual > expected
-        if op == "gte": return isinstance(actual, (int, float)) and isinstance(expected, (int, float)) and actual >= expected
-        if op == "lt": return isinstance(actual, (int, float)) and isinstance(expected, (int, float)) and actual < expected
-        if op == "lte": return isinstance(actual, (int, float)) and isinstance(expected, (int, float)) and actual <= expected
-        if op == "contains": return isinstance(actual, str) and isinstance(expected, str) and expected in actual
-        if op == "matches": return isinstance(actual, str) and isinstance(expected, str) and bool(re.search(expected, actual))
-        if op == "in": return isinstance(expected, list) and actual in expected
-        if op == "not_in": return isinstance(expected, list) and actual not in expected
+        if op == "eq": return actual == expected  # noqa: E701
+        if op == "ne": return actual != expected  # noqa: E701
+        if op == "gt": return isinstance(actual, (int, float)) and isinstance(expected, (int, float)) and actual > expected  # noqa: E701
+        if op == "gte": return isinstance(actual, (int, float)) and isinstance(expected, (int, float)) and actual >= expected  # noqa: E701
+        if op == "lt": return isinstance(actual, (int, float)) and isinstance(expected, (int, float)) and actual < expected  # noqa: E701
+        if op == "lte": return isinstance(actual, (int, float)) and isinstance(expected, (int, float)) and actual <= expected  # noqa: E701
+        if op == "contains": return isinstance(actual, str) and isinstance(expected, str) and expected in actual  # noqa: E701
+        if op == "matches": return isinstance(actual, str) and isinstance(expected, str) and bool(re.search(expected, actual))  # noqa: E701
+        if op == "in": return isinstance(expected, list) and actual in expected  # noqa: E701
+        if op == "not_in": return isinstance(expected, list) and actual not in expected  # noqa: E701
         return False

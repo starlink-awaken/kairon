@@ -146,7 +146,7 @@ class WSServer:
     def __init__(
         self,
         oauth2_server: OAuth2Server,
-        host: str = "0.0.0.0",
+        host: str = "0.0.0.0",  # noqa: S104
         port: int = 8765,
         ping_interval: int = 30,
         ping_timeout: int = 10,

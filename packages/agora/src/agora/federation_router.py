@@ -243,7 +243,7 @@ class FederationRouter:
             # stdlib fallback
             import urllib.request
 
-            req = urllib.request.Request(f"{record.endpoint}/health", method="GET")
+            req = urllib.request.Request(f"{record.endpoint}/health", method="GET")  # noqa: S310
             with urllib.request.urlopen(req, timeout=self._timeout) as r:  # noqa: S310
                 return r.status == 200
         except Exception:
@@ -404,6 +404,6 @@ class FederationRouter:
         import urllib.request
 
         data = json.dumps(payload).encode() if method == "POST" else None
-        req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"}, method=method)
-        with urllib.request.urlopen(req, timeout=self._timeout) as resp:
+        req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"}, method=method)  # noqa: S310
+        with urllib.request.urlopen(req, timeout=self._timeout) as resp:  # noqa: S310
             return json.loads(resp.read().decode("utf-8"))

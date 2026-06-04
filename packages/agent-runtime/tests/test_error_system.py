@@ -22,8 +22,8 @@ class TestErrorCodes:
     """ErrorCode enum values are correct."""
 
     def test_syntax_error_codes(self):
-        assert ErrorCode.SYX001_UNEXPECTED_TOKEN == "SYX001"
-        assert ErrorCode.SYX002_MISSING_TOKEN == "SYX002"
+        assert ErrorCode.SYX001_UNEXPECTED_TOKEN == "SYX001"  # noqa: S105
+        assert ErrorCode.SYX002_MISSING_TOKEN == "SYX002"  # noqa: S105
         assert ErrorCode.SYX003_INVALID_SYNTAX == "SYX003"
 
     def test_lexical_error_codes(self):

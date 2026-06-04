@@ -122,7 +122,7 @@ class TaskDAG:
 
     def detect_cycles(self) -> list[list[str]]:
         """Detect and return all cycles in the graph using DFS."""
-        WHITE, GRAY, BLACK = 0, 1, 2
+        WHITE, GRAY, BLACK = 0, 1, 2  # noqa: N806
         color: dict[str, int] = dict.fromkeys(self._nodes, WHITE)
         path: list[str] = []
         cycles: list[list[str]] = []

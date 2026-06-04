@@ -4,10 +4,20 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sharedbrain-bridge"
-version = "0.1.0"
-description = "Bridge between kairon and SharedBrain — EU pricing, immune audit, batch sync"
+version = "0.2.0"
+description = "Bridge between kairon and SharedBrain — EU pricing, immune audit, batch sync, standalone server"
 requires-python = ">=3.10"
-dependencies = ["core-models"]
+dependencies = [
+    "core-models",
+    "fastapi",
+    "fastmcp",
+    "httpx",
+]
+
+[project.optional-dependencies]
+standalone = [
+    "uvicorn",
+]
 
 [project.scripts]
 sb-bridge = "sharedbrain_bridge.cli:main"

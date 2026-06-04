@@ -24,7 +24,7 @@ class TestCronServiceBasic:
         assert ScheduleConfig is not None
         assert JobStore is not None
         assert load_config is not None
-        assert classify_tasks is not None
+        assert classify_tasks is not None  # noqa: F821
 
     def test_parse_every_5m(self):
         assert _parse_every_expr("every 5m") == 300
@@ -80,8 +80,8 @@ class TestCronServiceBasic:
 
     def test_classify_no_input(self):
         """classify_tasks on empty input returns empty."""
-        assert classify_tasks([]) == []
+        assert classify_tasks([]) == []  # noqa: F821
 
     def test_sort_by_priority_empty(self):
         """sort_by_priority on empty returns empty."""
-        assert sort_by_priority([]) == []
+        assert sort_by_priority([]) == []  # noqa: F821

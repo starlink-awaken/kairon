@@ -272,8 +272,8 @@ class EventBus:
         """
         try:
             module = importlib.import_module("organs.D_Monitoring.organs.topology_graph")
-            TopologyGraph = module.TopologyGraph
-            PulseEventBridge = module.PulseEventBridge
+            TopologyGraph = module.TopologyGraph  # noqa: N806
+            PulseEventBridge = module.PulseEventBridge  # noqa: N806
         except Exception as exc:
             _log.debug("⚠️ [EventBus] TopologyGraph bridge unavailable: %s", exc)
             return

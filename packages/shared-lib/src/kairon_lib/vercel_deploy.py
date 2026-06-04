@@ -1,10 +1,2 @@
-"""Vercel deployment integration (toolkit skills/openai/vercel-deploy.ts)."""
-
-from __future__ import annotations
-
-
-class VercelDeploy:
-    """Vercel deployment integration stub."""
-
-    def deploy(self, project_path: str) -> dict:
-        return {"status": "not_implemented", "project": project_path}
+"""Backward-compat re-export."""
+from kairon_lib.core.vercel_deploy import *  # noqa: F403

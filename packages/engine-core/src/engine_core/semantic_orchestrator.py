@@ -121,7 +121,7 @@ class SemanticOrchestrator:
         self._parser = VisionParser()
 
         try:
-            RoleManager = __import__(  # cross-organ: invisible to AST topology checker
+            RoleManager = __import__(  # cross-organ: invisible to AST topology checker  # noqa: N806
                 "organs.D_Memory.organs.role_manager", fromlist=["RoleManager"]
             ).RoleManager
 
@@ -488,7 +488,7 @@ class SemanticOrchestrator:
             ``{task_id: [list of task_id strings this task depends on]}``.
             Tasks with no detected dependencies map to an empty list.
         """
-        _DEP_KEYWORDS = ("after", "depends on", "requires", "uses output from")
+        _DEP_KEYWORDS = ("after", "depends on", "requires", "uses output from")  # noqa: N806
 
         # Build a quick lookup of task_id → envelope for cross-referencing
         id_map: dict[str, TaskEnvelope] = {e.task_id: e for e in envelopes}
@@ -629,8 +629,8 @@ class SemanticOrchestrator:
         Returns:
             ``{completed: [...], failed: [...], pending: [...], summary: str}``
         """
-        _TERMINAL_OK = {"done", "completed"}
-        _TERMINAL_FAIL = {"failed", "error", "cancelled"}
+        _TERMINAL_OK = {"done", "completed"}  # noqa: N806
+        _TERMINAL_FAIL = {"failed", "error", "cancelled"}  # noqa: N806
 
         if not task_ids:
             return {

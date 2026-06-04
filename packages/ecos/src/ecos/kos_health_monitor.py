@@ -97,7 +97,7 @@ def check_known_docs(search_fn) -> dict:
                 found += 1
             else:
                 failed.append(doc_id)
-        except:
+        except:  # noqa: E722
             failed.append(doc_id)
     return {
         "found": found,

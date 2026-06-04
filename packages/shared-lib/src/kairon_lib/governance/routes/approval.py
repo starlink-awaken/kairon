@@ -24,12 +24,12 @@ import logging
 from dataclasses import asdict, is_dataclass
 from typing import Any
 
-from kairon_lib.organs.voting.approval_router import (  # type: ignore[import-not-found]
+from kairon_lib.governance.approval_router import (  # type: ignore[import-not-found]
     STATUS_APPROVED,
     STATUS_REJECTED,
     STATUS_ROUTED,
 )
-from kairon_lib.organs.voting.approval_router import (
+from kairon_lib.governance.approval_router import (
     ApprovalRouter as TruthApprovalRouter,
 )
 
@@ -170,7 +170,10 @@ class ApprovalRouter(BaseGovernanceRouter):
 
     async def _handler(self, uri: str, params: dict | None = None) -> dict[str, object]:
         try:
-            from kairon_lib.organs.voting.approval_queue import ApprovalQueue, RiskLevel  # type: ignore[import-not-found]
+            from kairon_lib.governance.approval_queue import (  # type: ignore[import-not-found]
+                ApprovalQueue,
+                RiskLevel,
+            )
 
             queue = ApprovalQueue.get_instance()
             truth_router = _get_truth_router()

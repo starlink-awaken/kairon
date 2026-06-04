@@ -27,7 +27,7 @@ class AgentStatus(StrEnum):
 
 
 class EvaluationResult(StrEnum):
-    PASS = "pass"
+    PASS = "pass"  # noqa: S105
     FAIL = "fail"
     WARN = "warn"
 

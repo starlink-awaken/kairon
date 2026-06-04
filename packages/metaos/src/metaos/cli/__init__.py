@@ -2,7 +2,6 @@
 
 import json
 import os
-import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -127,7 +126,7 @@ class CLI:
                 flag = "⏳" if d.outcome_pending_review else "✅"
                 print(f"  {flag} {d.timestamp.strftime('%m-%d %H:%M')} [{d.level}] {d.description[:40]}")
 
-    def status(self):
+    def status(self):  # noqa: F811
         """体系健康度——含后端信息"""
         health = self.engine.system_health()
         print("\n📊 体系健康度")
@@ -143,7 +142,7 @@ class CLI:
 
     def ssot_scan(self, base_dir: str = "") -> dict:
         """扫描文档目录的 SSOT 覆盖完整性"""
-        from cli.ssot_scan import format_markdown_table, scan_ssot  # type: ignore[import-not-found]
+        from cli.ssot_scan import scan_ssot  # type: ignore[import-not-found]
 
         base = base_dir or os.path.join(os.path.dirname(__file__), "..", "..")
         entries = scan_ssot(base)

@@ -1,7 +1,7 @@
 {
-  "tool_name": "Edit",
-  "tool_input_preview": "{\"file_path\":\"/Users/xiamingxing/Workspace/projects/kairon/packages/llm-gateway/tests/test_llm-gateway_basic.py\",\"old_string\":\"    def test_model_registry_init(self):\\n        \\\"\\\"\\\"ModelRegistry init...",
-  "error": "File content has changed since it was last read. This commonly happens when a linter or formatter run via Bash rewrites the file. Call Read on this file to refresh, then retry the edit.",
-  "timestamp": "2026-06-04T04:47:07.171Z",
-  "retry_count": 1
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"PYTHONPATH=/Users/xiamingxing/Workspace/projects/kairon/packages/shared-lib/src python3 -c \\\"\\nfrom kairon_lib import (\\n    CommitteeHall, AuditTrail, WorkflowEngine, EvolutionMetrics, Co...",
+  "error": "Exit code 1\nTraceback (most recent call last):\n  File \"<string>\", line 2, in <module>\n    from kairon_lib import (\n        CommitteeHall, AuditTrail, WorkflowEngine, EvolutionMetrics, ConsensusMechanism\n    )\n  File \"/Users/xiamingxing/Workspace/projects/kairon/packages/shared-lib/src/kairon_lib/__init__.py\", line 3, in <module>\n    from kairon_lib.events import (\n    ...<6 lines>...\n    )\n  File \"/Users/xiamingxing/Workspace/projects/kairon/packages/shared-lib/src/kairon_lib/events.py\", line 2,...",
+  "timestamp": "2026-06-04T06:34:40.173Z",
+  "retry_count": 5
 }

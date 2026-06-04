@@ -152,15 +152,15 @@ class TestAgentInfo:
         assert "identity_token" not in d
 
     def test_to_dict_includes_identity_token(self):
-        info = AgentInfo("agent-1", identity_token="tok_123")
+        info = AgentInfo("agent-1", identity_token="tok_123")  # noqa: S106
         d = info.to_dict()
-        assert d["identity_token"] == "tok_123"
+        assert d["identity_token"] == "tok_123"  # noqa: S105
 
     def test_round_trip_to_from_dict(self):
         info = AgentInfo(
             "agent-1",
             verification_key_b64="vk123",
-            identity_token="tok_abc",
+            identity_token="tok_abc",  # noqa: S106
             capabilities=["read", "write"],
             metadata={"version": "1.0"},
         )
@@ -168,7 +168,7 @@ class TestAgentInfo:
         restored = AgentInfo.from_dict(d)
         assert restored.agent_id == "agent-1"
         assert restored.verification_key_b64 == "vk123"
-        assert restored.identity_token == "tok_abc"
+        assert restored.identity_token == "tok_abc"  # noqa: S105
         assert restored.capabilities == ["read", "write"]
         assert restored.metadata == {"version": "1.0"}
 
@@ -210,7 +210,7 @@ class TestRegister:
         assert "identity_secret" not in result
 
     def test_register_with_custom_identity_token(self, registry):
-        result = registry.register("agent-1", identity_token="custom-token")
+        result = registry.register("agent-1", identity_token="custom-token")  # noqa: S106
         assert result["status"] == "registered"
 
     def test_register_with_capabilities(self, registry):
@@ -253,7 +253,7 @@ class TestRegister:
 
 class TestHeartbeat:
     def test_heartbeat_renews_status(self, registry):
-        registry.register("agent-1", identity_token="tok")
+        registry.register("agent-1", identity_token="tok")  # noqa: S106
         result = registry.heartbeat("agent-1")
         assert result["status"] == "renewed"
         assert "expires_at" in result
@@ -279,7 +279,7 @@ class TestHeartbeat:
 
     def test_heartbeat_with_wrong_agent_signature(self, registry):
         r1 = registry.register("agent-1")
-        registry.register("agent-2", identity_token="tok2")
+        registry.register("agent-2", identity_token="tok2")  # noqa: S106
         sig = sign_challenge("agent-2", r1["identity_secret"])
         hb_result = registry.heartbeat("agent-1", signature_b64=sig)
         assert hb_result["status"] == "error"
@@ -291,28 +291,28 @@ class TestHeartbeat:
         assert "signature required" in result["error"]
 
     def test_heartbeat_with_identity_token(self, registry):
-        registry.register("agent-1", identity_token="my-token")
-        result = registry.heartbeat("agent-1", identity_token="my-token")
+        registry.register("agent-1", identity_token="my-token")  # noqa: S106
+        result = registry.heartbeat("agent-1", identity_token="my-token")  # noqa: S106
         assert result["status"] == "renewed"
 
     def test_heartbeat_with_wrong_identity_token(self, registry):
-        registry.register("agent-1", identity_token="correct-token")
-        result = registry.heartbeat("agent-1", identity_token="wrong-token")
+        registry.register("agent-1", identity_token="correct-token")  # noqa: S106
+        result = registry.heartbeat("agent-1", identity_token="wrong-token")  # noqa: S106
         assert result["status"] == "error"
         assert "mismatch" in result["error"]
 
     def test_heartbeat_updates_last_heartbeat(self, registry):
-        registry.register("agent-1", identity_token="tok")
+        registry.register("agent-1", identity_token="tok")  # noqa: S106
         t1 = registry._agents["agent-1"].last_heartbeat
         time.sleep(0.01)
-        registry.heartbeat("agent-1", identity_token="tok")
+        registry.heartbeat("agent-1", identity_token="tok")  # noqa: S106
         t2 = registry._agents["agent-1"].last_heartbeat
         assert t2 > t1
 
     def test_heartbeat_resets_to_active(self, registry):
-        registry.register("agent-1", identity_token="tok")
+        registry.register("agent-1", identity_token="tok")  # noqa: S106
         registry._agents["agent-1"].status = "stale"
-        registry.heartbeat("agent-1", identity_token="tok")
+        registry.heartbeat("agent-1", identity_token="tok")  # noqa: S106
         assert registry._agents["agent-1"].status == "active"
 
 
@@ -339,7 +339,7 @@ class TestVerifyAgentIdentity:
         assert result["reason"] == "agent_not_found"
 
     def test_verify_identity_no_key(self, registry):
-        registry.register("agent-1", identity_token="tok")
+        registry.register("agent-1", identity_token="tok")  # noqa: S106
         result = registry.verify_agent_identity("agent-1", "some-sig")
         assert result["valid"] is False
         assert result["reason"] == "no_verification_key"
@@ -357,13 +357,13 @@ class TestQuery:
         assert registry.get_status("ghost") is None
 
     def test_get_status_stale(self, registry):
-        registry.register("agent-1", identity_token="tok")
+        registry.register("agent-1", identity_token="tok")  # noqa: S106
         registry._agents["agent-1"].last_heartbeat = time.time() - 300
         assert registry.get_status("agent-1") == "stale"
 
     def test_list_agents_with_status_filter(self, registry):
-        registry.register("agent-1", identity_token="tok")
-        registry.register("agent-2", identity_token="tok")
+        registry.register("agent-1", identity_token="tok")  # noqa: S106
+        registry.register("agent-2", identity_token="tok")  # noqa: S106
         registry._agents["agent-2"].last_heartbeat = time.time() - 7200
         active = registry.list_agents(status_filter="active")
         registry.list_agents(status_filter="stale")
@@ -376,8 +376,8 @@ class TestQuery:
         assert len(registry.list_agents()) == 2
 
     def test_get_active_count(self, registry):
-        registry.register("agent-1", identity_token="tok")
-        registry.register("agent-2", identity_token="tok")
+        registry.register("agent-1", identity_token="tok")  # noqa: S106
+        registry.register("agent-2", identity_token="tok")  # noqa: S106
         registry._agents["agent-2"].last_heartbeat = time.time() - 7200
         assert registry.get_active_count() == 1
         assert registry.get_zombie_count() == 1
@@ -388,27 +388,27 @@ class TestQuery:
 
 class TestReapZombies:
     def test_reap_detects_zombies(self, registry):
-        registry.register("agent-1", identity_token="tok")
+        registry.register("agent-1", identity_token="tok")  # noqa: S106
         registry._agents["agent-1"].last_heartbeat = time.time() - 7200
         zombies = registry.reap_zombies()
         assert "agent-1" in zombies
 
     def test_reap_returns_empty_for_active(self, registry):
-        registry.register("agent-1", identity_token="tok")
+        registry.register("agent-1", identity_token="tok")  # noqa: S106
         zombies = registry.reap_zombies()
         assert len(zombies) == 0
 
     def test_reap_with_custom_threshold(self, registry):
-        registry.register("agent-1", identity_token="tok")
+        registry.register("agent-1", identity_token="tok")  # noqa: S106
         registry._agents["agent-1"].last_heartbeat = time.time() - 180
         zombies = registry.reap_zombies(force_zombie_age=120)
         assert "agent-1" in zombies
 
     def test_reap_multiple_zombies(self, registry):
         for i in range(3):
-            registry.register(f"zombie-{i}", identity_token="tok")
+            registry.register(f"zombie-{i}", identity_token="tok")  # noqa: S106
             registry._agents[f"zombie-{i}"].last_heartbeat = time.time() - 7200
-        registry.register("live-agent", identity_token="tok")
+        registry.register("live-agent", identity_token="tok")  # noqa: S106
         zombies = registry.reap_zombies()
         assert len(zombies) == 3
         assert "live-agent" not in zombies
@@ -473,7 +473,7 @@ class TestBackupRegistry:
 
 class TestCachePersistence:
     def test_registry_survives_recreation(self, registry):
-        registry.register("agent-1", identity_token="tok")
+        registry.register("agent-1", identity_token="tok")  # noqa: S106
         cache = registry._cache_file
         backup = registry._backup_cache_file
 
@@ -531,10 +531,10 @@ class TestIntegration:
         sk = reg["identity_secret"]
         sig = sign_challenge("ed25519-agent", sk)
 
-        r.register("token-agent", identity_token="my-token")
+        r.register("token-agent", identity_token="my-token")  # noqa: S106
 
         hb1 = r.heartbeat("ed25519-agent", signature_b64=sig)
-        hb2 = r.heartbeat("token-agent", identity_token="my-token")
+        hb2 = r.heartbeat("token-agent", identity_token="my-token")  # noqa: S106
 
         assert hb1["status"] == "renewed"
         assert hb2["status"] == "renewed"
@@ -544,7 +544,7 @@ class TestIntegration:
     def test_backup_failover_scenario(self, registry):
         r = registry
         r.register("agent-1")
-        r.register("agent-2", identity_token="tok2")
+        r.register("agent-2", identity_token="tok2")  # noqa: S106
 
         os.remove(r._cache_file)
         assert not os.path.exists(r._cache_file)
@@ -563,6 +563,6 @@ class TestIntegration:
 
     def test_token_agent_heartbeat_works_without_signature(self, registry):
         """Token agent 不需要 Ed25519 签名即可心跳。"""
-        registry.register("agent-1", identity_token="tok")
-        result = registry.heartbeat("agent-1", identity_token="tok")
+        registry.register("agent-1", identity_token="tok")  # noqa: S106
+        result = registry.heartbeat("agent-1", identity_token="tok")  # noqa: S106
         assert result["status"] == "renewed"

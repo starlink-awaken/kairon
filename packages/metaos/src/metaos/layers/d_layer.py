@@ -377,7 +377,7 @@ class DLayer:
             "verification_h_ids": row[7].split(",") if row[7] else [],
             "rollback_snapshot_uri": row[8] or "",
             "status": row[9],
-            "logs": [{"event": l[0], "detail": l[1], "ts": l[2]} for l in logs],
+            "logs": [{"event": l[0], "detail": l[1], "ts": l[2]} for l in logs],  # noqa: E741
         }
 
     def count_decision_dependencies(self, asset_id: str) -> int:

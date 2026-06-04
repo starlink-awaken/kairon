@@ -26,7 +26,7 @@ LayeredLRUCache = _LayeredLRUCacheStub
 def _get_graph_class() -> type[object] | None:
     """Lazy-import Graph from D-Memory to avoid cross-organ direct import."""
     try:
-        Graph = __import__("organs.D_Memory.organs.fact_graph", fromlist=["Graph"]).Graph
+        Graph = __import__("organs.D_Memory.organs.fact_graph", fromlist=["Graph"]).Graph  # noqa: N806
         return Graph
     except (ImportError, AttributeError):
         return None

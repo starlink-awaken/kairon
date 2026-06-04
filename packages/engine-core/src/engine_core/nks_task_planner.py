@@ -222,8 +222,8 @@ class NKSTaskPlanner:
                     "organs.D_Memory.organs.nks.impact_analyzer",
                     fromlist=["ImpactAnalyzer", "ImpactReport"],
                 )
-                ImpactAnalyzer = _ia_mod.ImpactAnalyzer
-                ImpactReport = _ia_mod.ImpactReport
+                ImpactAnalyzer = _ia_mod.ImpactAnalyzer  # noqa: N806
+                ImpactReport = _ia_mod.ImpactReport  # noqa: N806
                 self.impact_analyzer = ImpactAnalyzer(graph_store=graph_store)
             except ImportError:
                 self.impact_analyzer = None
@@ -233,8 +233,8 @@ class NKSTaskPlanner:
                     "organs.D_Memory.organs.nks.impact_analyzer",
                     fromlist=["ImpactAnalyzer", "ImpactReport"],
                 )
-                ImpactAnalyzer = _ia_mod.ImpactAnalyzer
-                ImpactReport = _ia_mod.ImpactReport  # noqa: F841 – stored for subclass use
+                ImpactAnalyzer = _ia_mod.ImpactAnalyzer  # noqa: N806
+                ImpactReport = _ia_mod.ImpactReport  # noqa: F841, N806
                 self.impact_analyzer = ImpactAnalyzer(db_path=db_path)
             except ImportError:
                 self.impact_analyzer = None
@@ -244,7 +244,7 @@ class NKSTaskPlanner:
             self.query_engine: QueryEngineLike | None = query_engine
         elif graph_store is not None:
             try:
-                GraphQueryEngine = __import__(
+                GraphQueryEngine = __import__(  # noqa: N806
                     "organs.D_Memory.organs.nks.query_engine", fromlist=["GraphQueryEngine"]
                 ).GraphQueryEngine
                 self.query_engine = GraphQueryEngine(graph_store)
@@ -376,7 +376,7 @@ class NKSTaskPlanner:
     def _analyze_file(self, file_path: str, change_type: str) -> ImpactReportLike:
         """Run impact analysis for a single file; return empty ImpactReport on error."""
         try:
-            ImpactReport = __import__(
+            ImpactReport = __import__(  # noqa: N806
                 "organs.D_Memory.organs.nks.impact_analyzer", fromlist=["ImpactReport"]
             ).ImpactReport
         except (ImportError, AttributeError):
@@ -671,7 +671,7 @@ class NKSTaskPlanner:
 
             # Reconstruct a minimal ImpactReport-like object
             try:
-                ImpactReport = __import__(
+                ImpactReport = __import__(  # noqa: N806
                     "organs.D_Memory.organs.nks.impact_analyzer", fromlist=["ImpactReport"]
                 ).ImpactReport
                 report = ImpactReport(
@@ -720,7 +720,7 @@ class NKSTaskPlanner:
             # ----------------------------------------------------------------
             if requires_approval:
                 try:
-                    ApprovalRouter = __import__(
+                    ApprovalRouter = __import__(  # noqa: N806
                         "organs.D_Governance.organs.approval_router", fromlist=["ApprovalRouter"]
                     ).ApprovalRouter
                 except (ImportError, AttributeError) as approval_exc:

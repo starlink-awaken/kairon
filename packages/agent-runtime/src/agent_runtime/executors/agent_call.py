@@ -28,7 +28,7 @@ def _calc_agent_backoff(attempt: int, config: RetryConfig) -> int:
     delay = min(base * (mult**attempt), max_delay)
     if jitter:
         jitter_range = delay * 0.25
-        delay = delay - jitter_range + random.random() * jitter_range * 2
+        delay = delay - jitter_range + random.random() * jitter_range * 2  # noqa: S311
     return max(0, int(delay))
 
 

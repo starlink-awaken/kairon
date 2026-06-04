@@ -144,7 +144,3 @@ def main():
     """MCP server entry point (used by pyproject.scripts)."""
     logging.basicConfig(level=logging.ERROR)
     mcp.run(transport="stdio")
-
-
-if __name__ == "__main__":
-    main()

@@ -1,6 +1,6 @@
 [project]
 name = "sophia"
-version = "0.2.1"
+version = "0.3.0"
 description = "Sophia — Symbolic Research Paradigm Engine. Composable, dynamically programmable research methodology based on state machine formalism (Turing-machine-inspired)."
 readme = "README.md"
 license = {text = "MIT"}
@@ -31,7 +31,6 @@ Issues = "https://github.com/starlink-awaken/sophia/issues"
 
 [project.scripts]
 sophia = "sophia.cli:main"
-sophia-mcp = "sophia.server.mcp_server:main"
 sophia-tui = "sophia.tui.app:main"
 
 [project.optional-dependencies]

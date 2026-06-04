@@ -35,13 +35,13 @@ class TestEUMiddleware:
 
         from httpx import AsyncClient
 
-        # Inject mock eu_pricing module
+        # Inject mock kaironcloud_billing.pricing.eu_ledger module
         mock_ledger = MagicMock()
         mock_ledger.consume = MagicMock(return_value=MagicMock(success=True))
         mock_ledger_mod = MagicMock()
         mock_ledger_mod.EULedger = MagicMock(return_value=mock_ledger)
 
-        injected = {"eu_pricing": MagicMock(), "eu_pricing.ledger": mock_ledger_mod}
+        injected = {"kaironcloud_billing.pricing.eu_ledger": mock_ledger_mod}
         sentinel = {}
         try:
             for key, val in injected.items():

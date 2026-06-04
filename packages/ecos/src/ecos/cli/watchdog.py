@@ -96,8 +96,8 @@ def save_state(state):
 def check_url(url):
     """HTTP GET 健康检查"""
     try:
-        req = urllib.request.Request(url, method="GET")
-        with urllib.request.urlopen(req, timeout=5) as resp:
+        req = urllib.request.Request(url, method="GET")  # noqa: S310
+        with urllib.request.urlopen(req, timeout=5) as resp:  # noqa: S310
             body = resp.read().decode()
             return resp.status == 200, body[:200]
     except Exception as e:
@@ -136,7 +136,7 @@ def restart_daemon(name, cmd):
     """启动后台守护进程"""
     expanded = os.path.expanduser(cmd)
     try:
-        subprocess.Popen(
+        subprocess.Popen(  # noqa: S602
             expanded,
             shell=True,
             stdout=subprocess.DEVNULL,

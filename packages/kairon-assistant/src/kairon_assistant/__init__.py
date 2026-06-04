@@ -9,7 +9,7 @@ from kairon_assistant.context_manager import ContextManager, ConversationContext
 from kairon_assistant.session_manager import AssistantSession, SessionManager
 from kairon_assistant.types import CommandType
 
-__all__ = [
+__all__ = (
     "AssistantSession",
     "CommandParser",
     "CommandType",
@@ -18,6 +18,6 @@ __all__ = [
     "ConversationTurn",
     "ParsedCommand",
     "SessionManager",
-]
+)
 
 __version__ = "1.0.0"

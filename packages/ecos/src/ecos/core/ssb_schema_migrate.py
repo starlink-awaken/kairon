@@ -40,9 +40,9 @@ def migrate():
         except json.JSONDecodeError:
             events.append({"raw": line, "_corrupt": True})
 
-    T0 = datetime(2026, 5, 8, 0, 0, 0)
-    INTERVAL = timedelta(minutes=2)
-    BASE_SEQ = 1000
+    T0 = datetime(2026, 5, 8, 0, 0, 0)  # noqa: N806
+    INTERVAL = timedelta(minutes=2)  # noqa: N806
+    BASE_SEQ = 1000  # noqa: N806
 
     stats = {
         "total": len(events),

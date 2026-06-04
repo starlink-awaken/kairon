@@ -23,7 +23,7 @@ class StatsMetrics:
     p95: float = 0.0
     p99: float = 0.0
     samples: int = 0
-    stdDev: float = 0.0
+    stdDev: float = 0.0  # noqa: N815
 
 
 @dataclass

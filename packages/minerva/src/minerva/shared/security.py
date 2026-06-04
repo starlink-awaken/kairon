@@ -6,7 +6,7 @@ import ipaddress
 import socket
 from urllib.parse import urlparse
 
-BLOCKED_HOSTS = frozenset({"localhost", "127.0.0.1", "0.0.0.0", "::1", "metadata.google.internal"})  # noqa:
+BLOCKED_HOSTS = frozenset({"localhost", "127.0.0.1", "0.0.0.0", "::1", "metadata.google.internal"})  # noqa: S104
 
 BLOCKED_NETWORKS = [
     ipaddress.ip_network("10.0.0.0/8"),

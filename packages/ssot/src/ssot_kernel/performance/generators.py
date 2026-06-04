@@ -149,14 +149,14 @@ class TestDataGenerator:
             template = self.entity_templates[prefix]
 
             for i in range(count_for_type):
-                entity_type = random.choice(template["types"])
-                entity_id = f"{template['prefix']}-{random.randint(1, 10000):04d}"
+                entity_type = random.choice(template["types"])  # noqa: S311
+                entity_id = f"{template['prefix']}-{random.randint(1, 10000):04d}"  # noqa: S311
 
                 # 生成属性
                 attributes = {}
                 for attr_name in template["attributes"]:
                     if attr_name in self.vocabulary:
-                        attributes[attr_name] = random.choice(self.vocabulary[attr_name])
+                        attributes[attr_name] = random.choice(self.vocabulary[attr_name])  # noqa: S311
                     else:
                         attributes[attr_name] = self._generate_random_value(attr_name)
 
@@ -165,7 +165,7 @@ class TestDataGenerator:
                     name=f"测试{prefix}_{i + 1}",
                     meta_type=MetaType.DOMAIN,
                     entity_type=entity_type,
-                    status=random.choice(self.vocabulary["status"]),
+                    status=random.choice(self.vocabulary["status"]),  # noqa: S311
                     attributes=attributes,
                     confidence=Confidence.FACT,
                     source="performance_test_generator",
@@ -185,9 +185,9 @@ class TestDataGenerator:
             fact = Fact(
                 id=f"POL-P-{i + 1:03d}",
                 title=f"政策{i + 1}",
-                value=random.choice(["批准", "通过", "发布", "修订"]),
+                value=random.choice(["批准", "通过", "发布", "修订"]),  # noqa: S311
                 source="performance_test_generator",
-                date=(datetime.now() - timedelta(days=random.randint(0, 365))).isoformat(),
+                date=(datetime.now() - timedelta(days=random.randint(0, 365))).isoformat(),  # noqa: S311
                 tags=["policy"],
             )
             facts.append(fact)
@@ -200,10 +200,10 @@ class TestDataGenerator:
             fact = Fact(
                 id=f"DAT-D-{i + 1:03d}",
                 title=f"数据{i + 1}",
-                value=random.randint(1, 1000),
-                unit=random.choice(template["units"]),
+                value=random.randint(1, 1000),  # noqa: S311
+                unit=random.choice(template["units"]),  # noqa: S311
                 source="performance_test_generator",
-                date=(datetime.now() - timedelta(days=random.randint(0, 365))).isoformat(),
+                date=(datetime.now() - timedelta(days=random.randint(0, 365))).isoformat(),  # noqa: S311
                 tags=["data"],
             )
             facts.append(fact)
@@ -221,11 +221,11 @@ class TestDataGenerator:
             # 随机选择依赖的实体和事实
             derives_from = []
 
-            if entities and random.random() > 0.3:
+            if entities and random.random() > 0.3:  # noqa: S311
                 entity_refs = random.sample(entities, min(3, len(entities)))
                 derives_from.extend([e.id for e in entity_refs])
 
-            if facts and random.random() > 0.3:
+            if facts and random.random() > 0.3:  # noqa: S311
                 fact_refs = random.sample(facts, min(3, len(facts)))
                 derives_from.extend([f.id for f in fact_refs])
 
@@ -235,9 +235,9 @@ class TestDataGenerator:
                 derives_from=derives_from,
                 logic=f"基于{len(derives_from)}个前提的推论",
                 conclusion=f"推论结论{i + 1}",
-                theory=random.choice(["组织理论", "系统理论", "管理理论", "网络理论"]),
-                confidence=random.choice([Confidence.INFERENCE, Confidence.HYPOTHESIS]),
-                status=random.choice(["active", "needs_review", "deprecated"]),
+                theory=random.choice(["组织理论", "系统理论", "管理理论", "网络理论"]),  # noqa: S311
+                confidence=random.choice([Confidence.INFERENCE, Confidence.HYPOTHESIS]),  # noqa: S311
+                status=random.choice(["active", "needs_review", "deprecated"]),  # noqa: S311
             )
 
             inferences.append(inference)
@@ -250,32 +250,32 @@ class TestDataGenerator:
 
         for i in range(count):
             # 选择规则模式
-            pattern_info = random.choice(self.rule_patterns)
+            pattern_info = random.choice(self.rule_patterns)  # noqa: S311
             pattern = pattern_info["pattern"]
 
             # 生成前提条件
             premises = []
-            premise_count = random.randint(1, 3)
+            premise_count = random.randint(1, 3)  # noqa: S311
 
             for j in range(premise_count):
                 # 替换模板中的占位符
                 if entities:
-                    entity_id = random.choice(entities).id
+                    entity_id = random.choice(entities).id  # noqa: S311
                 else:
                     entity_id = "ORG-0001"
 
-                attr = random.choice(self.vocabulary["mechanism"])
-                value = random.choice(self.vocabulary["mechanism"])
+                attr = random.choice(self.vocabulary["mechanism"])  # noqa: S311
+                value = random.choice(self.vocabulary["mechanism"])  # noqa: S311
 
                 condition = pattern_info["condition_template"].format(
                     entity_id=entity_id,
                     attr=attr,
                     value=value,
                     prefix="ORG",
-                    keyword=random.choice(self.vocabulary["mechanism"]),
-                    fact_a=f"DAT-D-{random.randint(1, 99):03d}",
-                    fact_b=f"DAT-D-{random.randint(1, 99):03d}",
-                    threshold=str(random.random() * 0.5),
+                    keyword=random.choice(self.vocabulary["mechanism"]),  # noqa: S311
+                    fact_a=f"DAT-D-{random.randint(1, 99):03d}",  # noqa: S311
+                    fact_b=f"DAT-D-{random.randint(1, 99):03d}",  # noqa: S311
+                    threshold=str(random.random() * 0.5),  # noqa: S311
                     expected="双轨",
                 )
 
@@ -288,7 +288,7 @@ class TestDataGenerator:
                 name=f"测试规则{i + 1}",
                 premises=premises,
                 logic=self._generate_rule_logic(pattern_info, entity_id, attr, value),
-                params={"template": "通用模板", "severity": random.choice(["BLOCKER", "ERROR", "WARN"])},
+                params={"template": "通用模板", "severity": random.choice(["BLOCKER", "ERROR", "WARN"])},  # noqa: S311
             )
 
             rules.append(rule)
@@ -305,17 +305,17 @@ class TestDataGenerator:
         relation_types = ["part_of", "depends_on", "participates_in", "cites", "interlocks_with"]
 
         for i in range(count):
-            source = random.choice(entities)
-            target = random.choice(entities)
+            source = random.choice(entities)  # noqa: S311
+            target = random.choice(entities)  # noqa: S311
 
             # 确保不是自己引用自己
             while target.id == source.id:
-                target = random.choice(entities)
+                target = random.choice(entities)  # noqa: S311
 
             relation = Relation(
                 source_id=source.id,
                 target_id=target.id,
-                relation_type=random.choice(relation_types),
+                relation_type=random.choice(relation_types),  # noqa: S311
                 confidence=Confidence.FACT,
             )
 
@@ -344,7 +344,7 @@ class TestDataGenerator:
         if "prefix" in placeholders:
             params["prefix"] = "ORG"
         if "keyword" in placeholders:
-            params["keyword"] = random.choice(self.vocabulary["mechanism"])
+            params["keyword"] = random.choice(self.vocabulary["mechanism"])  # noqa: S311
 
         # 安全格式化
         try:
@@ -356,13 +356,13 @@ class TestDataGenerator:
     def _generate_random_value(self, field_name: str) -> str:
         """生成随机值"""
         if "count" in field_name.lower() or "number" in field_name.lower():
-            return str(random.randint(1, 1000))
+            return str(random.randint(1, 1000))  # noqa: S311
         elif "amount" in field_name.lower() or "budget" in field_name.lower():
-            return str(random.randint(100, 1000000))
+            return str(random.randint(100, 1000000))  # noqa: S311
         elif "date" in field_name.lower():
-            return (datetime.now() + timedelta(days=random.randint(-365, 365))).isoformat()
+            return (datetime.now() + timedelta(days=random.randint(-365, 365))).isoformat()  # noqa: S311
         else:
-            return f"random_value_{random.randint(1, 1000)}"
+            return f"random_value_{random.randint(1, 1000)}"  # noqa: S311
 
     def generate_contradiction_test_domain(self, rule_count: int) -> DomainConfig:
         """生成矛盾检测专用测试数据"""
@@ -403,7 +403,7 @@ class TestDataGenerator:
                 attributes={
                     "mechanism": mechanism,
                     "status": "running",
-                    "scale": random.choice(["大型", "中型", "小型"]),
+                    "scale": random.choice(["大型", "中型", "小型"]),  # noqa: S311
                 },
                 confidence=Confidence.FACT,
                 source="contradiction_test_generator",
@@ -419,8 +419,8 @@ class TestDataGenerator:
 
         # 生成用于比例计算的事实
         for i in range(count):
-            value_a = random.randint(10, 1000)
-            value_b = random.randint(10, 1000)
+            value_a = random.randint(10, 1000)  # noqa: S311
+            value_b = random.randint(10, 1000)  # noqa: S311
 
             fact = Fact(
                 id=f"DAT-CONT-{i + 1:03d}",
@@ -454,16 +454,16 @@ class TestDataGenerator:
 
         for i in range(count):
             # 生成不同类型的矛盾检测条件
-            condition_type = random.choice(["mechanism_check", "ratio_check", "existence_check"])
+            condition_type = random.choice(["mechanism_check", "ratio_check", "existence_check"])  # noqa: S311
 
             if condition_type == "mechanism_check" and entities:
-                entity = random.choice(entities)
+                entity = random.choice(entities)  # noqa: S311
                 condition = f'entity_attr("{entity.id}", "mechanism") == "双轨"'
                 logic = f"检测到{entity.name}采用双轨机制，可能导致资源冲突"
 
             elif condition_type == "ratio_check" and len(facts) >= 2:
-                fact_a = random.choice(facts)
-                fact_b = random.choice(facts)
+                fact_a = random.choice(facts)  # noqa: S311
+                fact_b = random.choice(facts)  # noqa: S311
                 condition = f'fact_ratio("{fact_a.id}", "{fact_b.id}") < 0.1'
                 logic = f"检测到{fact_a.title}与{fact_b.title}比例过低，可能存在问题"
 
@@ -480,7 +480,7 @@ class TestDataGenerator:
                 params={
                     "template": "矛盾检测模板",
                     "solutions": ["资源整合", "流程优化", "机制分离"],
-                    "severity": random.choice(["BLOCKER", "ERROR", "WARN"]),
+                    "severity": random.choice(["BLOCKER", "ERROR", "WARN"]),  # noqa: S311
                 },
             )
 
@@ -568,8 +568,8 @@ class TestDataGenerator:
 
         for i in range(count):
             # 生成跨链依赖检测规则
-            chain_a = random.randint(1, depth)
-            chain_b = random.randint(1, depth)
+            chain_a = random.randint(1, depth)  # noqa: S311
+            chain_b = random.randint(1, depth)  # noqa: S311
 
             if chain_a == chain_b:
                 chain_b = (chain_a % depth) + 1

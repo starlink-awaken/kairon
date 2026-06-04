@@ -486,7 +486,7 @@ class BM25Searcher:
         if self._cache_file.exists():
             try:
                 with open(self._cache_file, "rb") as f:
-                    data = pickle.load(f)  # noqa:
+                    data = pickle.load(f)  # noqa: S301
                     self.index = BM25Index.from_dict(data)
                     self._index_built = True
                     _log.info(f"[BM25Searcher] Loaded cached index: {self.index.get_stats()}")

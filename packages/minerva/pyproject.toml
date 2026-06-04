@@ -1,6 +1,6 @@
 [project]
 name = "minerva"
-version = "0.11.0"
+version = "0.15.0"
 description = "Minerva — A local-first deep research system with tiered pipelines, multi-source search, knowledge graphs, symbolic paradigm engine, and temporal reasoning."
 readme = "README.md"
 license = {text = "MIT"}
@@ -56,7 +56,6 @@ dev = [
 
 [project.scripts]
 minerva = "minerva.cli:main"
-minerva-mcp = "minerva.mcp_server.server:main"
 minerva-daemon = "minerva.executor.daemon:main"
 
 [project.urls]

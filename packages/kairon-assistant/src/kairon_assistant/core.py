@@ -256,7 +256,7 @@ class SmartAssistant:
         ]
         import random
 
-        return AssistantResponse(response_text=random.choice(greetings), confidence=1.0)
+        return AssistantResponse(response_text=random.choice(greetings), confidence=1.0)  # noqa: S311
 
     def _handle_unknown(
         self,

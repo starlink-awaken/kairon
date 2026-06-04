@@ -471,7 +471,3 @@ def main() -> None:
         except Exception as exc:
             resp["error"] = {"code": -1, "message": f"Internal error: {exc}"}
         print(json.dumps(resp, ensure_ascii=False), flush=True)
-
-
-if __name__ == "__main__":
-    main()

@@ -100,7 +100,7 @@ class HarvestSchedulerBridge:
             import importlib
 
             _gov_mod = importlib.import_module("organs.D_Governance.organs.harvest_scheduler")
-            HarvestScheduler = _gov_mod.HarvestScheduler
+            HarvestScheduler = _gov_mod.HarvestScheduler  # noqa: N806
             self._gov_scheduler = HarvestScheduler()
             _log.info("[HarvestSchedulerBridge] D_Governance.HarvestScheduler已连接")
         except (ImportError, AttributeError) as e:
@@ -113,7 +113,7 @@ class HarvestSchedulerBridge:
             import importlib
 
             _mem_mod = importlib.import_module("organs.D_Memory.organs.harvest_scheduler")
-            MemoryHarvestScheduler = _mem_mod.MemoryHarvestScheduler
+            MemoryHarvestScheduler = _mem_mod.MemoryHarvestScheduler  # noqa: N806
             self._mem_scheduler = MemoryHarvestScheduler()
             _log.info("[HarvestSchedulerBridge] D_Memory.MemoryHarvestScheduler已连接")
         except (ImportError, AttributeError) as e:

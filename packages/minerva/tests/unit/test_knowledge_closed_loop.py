@@ -335,7 +335,7 @@ class TestKnowledgeClosedLoopMCP:
 
     def test_import_knowledge_closed_loop(self):
         """Verify KnowledgeClosedLoop can be imported from the orchestator module."""
-        from minerva.knowledge_closed_loop import KnowledgeClosedLoop as KCL  # noqa:
+        from minerva.knowledge_closed_loop import KnowledgeClosedLoop as KCL  # noqa: N817
 
         assert KCL is not None
 

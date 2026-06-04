@@ -6,7 +6,6 @@ TODO: implement full graph store with persistence and querying.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
 
 
 @dataclass

@@ -200,7 +200,7 @@ def patch_cognitive_loop() -> bool:
         # 尝试导入 CognitiveLoop (lazy import to avoid cross-organ violation)
         try:
             mod = importlib.import_module("organs.D_Governance.organs.cognitive_loop")
-            CognitiveLoop = mod.CognitiveLoop
+            CognitiveLoop = mod.CognitiveLoop  # noqa: N806
         except ImportError:
             _log.warning("[CognitivePatch] CognitiveLoop not found, skipping patch")
             return False
@@ -232,7 +232,7 @@ def unpatch_cognitive_loop() -> bool:
     try:
         # Lazy import to avoid cross-organ violation
         mod = importlib.import_module("organs.D_Governance.organs.cognitive_loop")
-        CognitiveLoop = mod.CognitiveLoop
+        CognitiveLoop = mod.CognitiveLoop  # noqa: N806
 
         _patch_instance.uninstall(CognitiveLoop)
         _patch_instance = None

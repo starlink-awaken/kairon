@@ -88,7 +88,7 @@ class ElevenLabsAdapter(BaseVoiceOutput):
                 }
             ).encode("utf-8")
 
-            req = urllib.request.Request(
+            req = urllib.request.Request(  # noqa: S310
                 url,
                 data=payload,
                 headers={
@@ -99,7 +99,7 @@ class ElevenLabsAdapter(BaseVoiceOutput):
                 method="POST",
             )
 
-            with urllib.request.urlopen(req, timeout=self._config.timeout_seconds) as resp:
+            with urllib.request.urlopen(req, timeout=self._config.timeout_seconds) as resp:  # noqa: S310
                 return resp.read()
 
         except Exception as exc:
@@ -205,7 +205,7 @@ class AzureTTSAdapter(BaseVoiceOutput):
             payload = f"<speak version='1.0' xml:lang='en-US'><voice name='{self._voice_name}'>{text}</voice></speak>"
             payload_bytes = payload.encode("utf-8")
 
-            req = urllib.request.Request(
+            req = urllib.request.Request(  # noqa: S310
                 url,
                 data=payload_bytes,
                 headers={
@@ -216,7 +216,7 @@ class AzureTTSAdapter(BaseVoiceOutput):
                 method="POST",
             )
 
-            with urllib.request.urlopen(req, timeout=self._config.timeout_seconds) as resp:
+            with urllib.request.urlopen(req, timeout=self._config.timeout_seconds) as resp:  # noqa: S310
                 return resp.read()
 
         except Exception as exc:
@@ -243,15 +243,15 @@ def _register_defaults() -> None:
     _PROVIDER_REGISTRY["azure"] = _AzureFactory
 
 
-def _ElevenLabsFactory(config: VoiceConfig) -> VoiceOutputProvider:
+def _ElevenLabsFactory(config: VoiceConfig) -> VoiceOutputProvider:  # noqa: N802
     return ElevenLabsAdapter(config)
 
 
-def _GoogleFactory(config: VoiceConfig) -> VoiceOutputProvider:
+def _GoogleFactory(config: VoiceConfig) -> VoiceOutputProvider:  # noqa: N802
     return GoogleTTSAdapter(config)
 
 
-def _AzureFactory(config: VoiceConfig) -> VoiceOutputProvider:
+def _AzureFactory(config: VoiceConfig) -> VoiceOutputProvider:  # noqa: N802
     return AzureTTSAdapter(config)
 
 

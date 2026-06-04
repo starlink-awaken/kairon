@@ -52,7 +52,7 @@ class TestSignatureVerification:
         return f"t={timestamp},v1={expected}"
 
     def test_valid_signature(self):
-        secret = "whsec_test_12345"
+        secret = "whsec_test_12345"  # noqa: S105
         handler = WebhookHandler(webhook_secret=secret)
         payload = json.dumps({"type": "invoice.paid", "data": {"object": {}}})
         timestamp = "1234567890"
@@ -61,7 +61,7 @@ class TestSignatureVerification:
         assert handler.verify_signature(payload, signature) is True
 
     def test_invalid_signature(self):
-        secret = "whsec_test_12345"
+        secret = "whsec_test_12345"  # noqa: S105
         handler = WebhookHandler(webhook_secret=secret)
         payload = json.dumps({"type": "invoice.paid"})
         signature = "t=1234567890,v1=invalidhash12345"
@@ -75,13 +75,13 @@ class TestSignatureVerification:
             handler.verify_signature("payload", "t=123,v1=abc")
 
     def test_malformed_signature_header(self):
-        secret = "whsec_test"
+        secret = "whsec_test"  # noqa: S105
         handler = WebhookHandler(webhook_secret=secret)
         # Missing v1 part
         assert handler.verify_signature("payload", "t=123") is False
 
     def test_no_timestamp(self):
-        secret = "whsec_test"
+        secret = "whsec_test"  # noqa: S105
         handler = WebhookHandler(webhook_secret=secret)
         assert handler.verify_signature("payload", "v1=abc") is False
 
@@ -93,7 +93,7 @@ class TestHandleEvent:
         return f"t={timestamp},v1={expected}"
 
     def test_valid_event_dispatches(self):
-        secret = "whsec_test_12345"
+        secret = "whsec_test_12345"  # noqa: S105
         handler = WebhookHandler(webhook_secret=secret)
 
         handled_events = []
@@ -122,7 +122,7 @@ class TestHandleEvent:
         assert handled_events[0].event_id == "evt_123"
 
     def test_invalid_signature_raises(self):
-        secret = "whsec_test"
+        secret = "whsec_test"  # noqa: S105
         handler = WebhookHandler(webhook_secret=secret)
         payload = json.dumps({"type": "invoice.paid"})
         signature = "t=123,v1=badsignature"
@@ -131,7 +131,7 @@ class TestHandleEvent:
             handler.handle_event(payload, signature)
 
     def test_no_matching_handler(self):
-        secret = "whsec_test"
+        secret = "whsec_test"  # noqa: S105
         handler = WebhookHandler(webhook_secret=secret)
 
         payload = json.dumps(
@@ -150,7 +150,7 @@ class TestHandleEvent:
         assert result["results"] == []
 
     def test_multiple_handlers(self):
-        secret = "whsec_test"
+        secret = "whsec_test"  # noqa: S105
         handler = WebhookHandler(webhook_secret=secret)
 
         results = []
@@ -179,7 +179,7 @@ class TestHandleEvent:
         assert results == ["a", "b"]
 
     def test_handler_error_is_recorded(self):
-        secret = "whsec_test"
+        secret = "whsec_test"  # noqa: S105
         handler = WebhookHandler(webhook_secret=secret)
 
         def failing_handler(event):
@@ -205,7 +205,7 @@ class TestHandleEvent:
 
 class TestDefaultHandlers:
     def test_setup_default_handlers(self):
-        handler = WebhookHandler(webhook_secret="whsec_test")
+        handler = WebhookHandler(webhook_secret="whsec_test")  # noqa: S106
         handler.setup_default_handlers()
 
         assert StripeEventType.INVOICE_PAYMENT_FAILED in handler._handlers
@@ -216,23 +216,23 @@ class TestDefaultHandlers:
 
 class TestParseSignatureHeader:
     def test_valid_header(self):
-        handler = WebhookHandler(webhook_secret="whsec_test")
+        handler = WebhookHandler(webhook_secret="whsec_test")  # noqa: S106
         timestamp, sig_hash = handler._parse_signature_header("t=1234567890,v1=abcdef123456")
         assert timestamp == "1234567890"
         assert sig_hash == "abcdef123456"
 
     def test_with_spaces(self):
-        handler = WebhookHandler(webhook_secret="whsec_test")
+        handler = WebhookHandler(webhook_secret="whsec_test")  # noqa: S106
         timestamp, sig_hash = handler._parse_signature_header("t=1234567890, v1=abcdef123456")
         assert timestamp == "1234567890"
         assert sig_hash == "abcdef123456"
 
     def test_missing_timestamp_raises(self):
-        handler = WebhookHandler(webhook_secret="whsec_test")
+        handler = WebhookHandler(webhook_secret="whsec_test")  # noqa: S106
         with pytest.raises(ValueError, match="Invalid signature header format"):
             handler._parse_signature_header("v1=abcdef123456")
 
     def test_missing_v1_raises(self):
-        handler = WebhookHandler(webhook_secret="whsec_test")
+        handler = WebhookHandler(webhook_secret="whsec_test")  # noqa: S106
         with pytest.raises(ValueError, match="Invalid signature header format"):
             handler._parse_signature_header("t=1234567890")

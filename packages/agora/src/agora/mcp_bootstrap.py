@@ -80,48 +80,7 @@ migrate_legacy_data()
 
 KNOWN_SERVICES: dict[str, dict[str, Any]] = {
     # ── Kairon 工作空间 MCP 服务 ──────────────────────────────
-    "kronos": {
-        "command": "uv",
-        "args": ["run", "--package", "kronos", "kronos-mcp"],
-        "description": "知识摄取管线 — 文档摄取、分块、向量化",
-        "source": "kairon",
-    },
-    "iris": {
-        "command": "uv",
-        "args": ["run", "--package", "iris", "iris-mcp"],
-        "description": "Connector Hub — 外部数据源连接与同步",
-        "source": "kairon",
-    },
-    "eidos": {
-        "command": "uv",
-        "args": ["run", "--package", "eidos", "eidos-mcp"],
-        "description": "知识卡片引擎 — 卡片化知识管理与推理",
-        "source": "kairon",
-    },
-    "sophia": {
-        "command": "uv",
-        "args": ["run", "--package", "sophia", "sophia-mcp"],
-        "description": "智库系统 — 战略分析、决策支持、推理",
-        "source": "kairon",
-    },
-    "minerva": {
-        "command": "uv",
-        "args": ["run", "--package", "minerva", "minerva-mcp"],
-        "description": "深度研究系统 — 多步搜索、报告生成",
-        "source": "kairon",
-    },
-    "metaos": {
-        "command": "uv",
-        "args": ["run", "--package", "metaos", "metaos-mcp"],
-        "description": "编排/治理层 — 工作流编排、资源治理",
-        "source": "kairon",
-    },
-    "agent-runtime": {
-        "command": "uv",
-        "args": ["run", "--package", "agent-runtime", "agent-runtime-mcp"],
-        "description": "Agent 运行时 — 多 Agent 协作执行环境",
-        "source": "kairon",
-    },
+    # 通过 agora 代理由子进程加载的服务
     "codeanalyze": {
         "command": "uv",
         "args": ["run", "--package", "codeanalyze", "python", "-m", "codeanalyze.mcp"],

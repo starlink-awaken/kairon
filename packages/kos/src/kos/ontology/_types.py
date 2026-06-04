@@ -118,7 +118,7 @@ def infer_entity_type(entity_id: str) -> EntityType | None:
 
 def migrate_id(old_id: str) -> str:
     """将旧 ID 格式迁移到新标准"""
-    MIGRATION_MAP = {
+    MIGRATION_MAP = {  # noqa: N806
         "P:": "ROL-",
         "O:": "ORG-",
         "J:": "PRJ-",

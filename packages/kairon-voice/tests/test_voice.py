@@ -188,17 +188,17 @@ class TestWhisperAdapter:
 
 
 class TestSTTProviderFactory:
-    def test_create_whisper_returns_WhisperAdapter(self) -> None:
+    def test_create_whisper_returns_WhisperAdapter(self) -> None:  # noqa: N802
         factory = STTProviderFactory()
         provider = factory.create("whisper")
         assert isinstance(provider, WhisperAdapter)
 
-    def test_create_google_returns_BaseVoiceInput(self) -> None:
+    def test_create_google_returns_BaseVoiceInput(self) -> None:  # noqa: N802
         factory = STTProviderFactory()
         provider = factory.create("google")
         assert isinstance(provider, BaseVoiceInput)
 
-    def test_create_azure_returns_BaseVoiceInput(self) -> None:
+    def test_create_azure_returns_BaseVoiceInput(self) -> None:  # noqa: N802
         factory = STTProviderFactory()
         provider = factory.create("azure")
         assert isinstance(provider, BaseVoiceInput)

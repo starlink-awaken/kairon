@@ -301,8 +301,8 @@ class AuditSubscriber:
             # Hash string trace_id into a 16-byte hex for OTel spec
             import hashlib
 
-            trace_hex = hashlib.md5(trace_id.encode()).hexdigest()[:32]
-            span_id_hex = hashlib.md5((trace_id + ":span").encode()).hexdigest()[:16]
+            trace_hex = hashlib.md5(trace_id.encode()).hexdigest()[:32]  # noqa: S324
+            span_id_hex = hashlib.md5((trace_id + ":span").encode()).hexdigest()[:16]  # noqa: S324
 
             span = {
                 "name": entry.get("event_type", "unknown"),

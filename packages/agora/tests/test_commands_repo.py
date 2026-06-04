@@ -42,7 +42,7 @@ def _make_tool(tool_id: str, name: str = "", status: str = "discovered", **kwarg
 class TestCmdRepoList:
     def test_list_empty(self, capsys):
         """List with empty catalog should print 'No tools'."""
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:  # noqa: N806
             instance = MockCatalog.return_value
             instance.list_tools.return_value = []
 
@@ -52,7 +52,7 @@ class TestCmdRepoList:
             assert "No tools" in captured.out
 
     def test_list_with_tools(self, capsys):
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:  # noqa: N806
             instance = MockCatalog.return_value
             instance.list_tools.return_value = [
                 _make_tool("t1", name="Tool One", status="loaded", quality_score=0.85, stars=42),
@@ -68,7 +68,7 @@ class TestCmdRepoList:
             assert "idle" in captured.out
 
     def test_list_filtered_by_status(self, capsys):
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:  # noqa: N806
             instance = MockCatalog.return_value
             instance.list_tools.return_value = [
                 _make_tool("t1", name="Loaded Tool", status="loaded"),
@@ -79,7 +79,7 @@ class TestCmdRepoList:
             instance.list_tools.assert_called_with(status="loaded")
 
     def test_list_json(self, capsys):
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:  # noqa: N806
             instance = MockCatalog.return_value
             instance.list_tools.return_value = [
                 _make_tool("t1", name="Tool One", quality_score=0.85),
@@ -103,7 +103,7 @@ class TestCmdRepoSearch:
         assert "requires a query" in captured.out
 
     def test_search_no_results(self, capsys):
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:  # noqa: N806
             instance = MockCatalog.return_value
             instance.search_tools.return_value = []
 
@@ -113,7 +113,7 @@ class TestCmdRepoSearch:
             assert "No results" in captured.out
 
     def test_search_with_results(self, capsys):
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:  # noqa: N806
             instance = MockCatalog.return_value
             instance.search_tools.return_value = [
                 _make_tool("sqlite", name="sqlite", status="loaded", quality_score=0.9),
@@ -125,7 +125,7 @@ class TestCmdRepoSearch:
             assert "sqlite" in captured.out
 
     def test_search_json(self, capsys):
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:  # noqa: N806
             instance = MockCatalog.return_value
             instance.search_tools.return_value = [
                 _make_tool("t1", name="t1", quality_score=0.9),
@@ -143,7 +143,7 @@ class TestCmdRepoSearch:
 
 class TestCmdRepoStatus:
     def test_status_empty(self, capsys):
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:  # noqa: N806
             instance = MockCatalog.return_value
             instance.count_by_status.return_value = {}
 
@@ -153,7 +153,7 @@ class TestCmdRepoStatus:
             assert "Total tools:" in captured.out
 
     def test_status_with_counts(self, capsys):
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:  # noqa: N806
             instance = MockCatalog.return_value
             instance.count_by_status.return_value = {
                 "discovered": 5,
@@ -170,7 +170,7 @@ class TestCmdRepoStatus:
             assert "idle: 0" not in captured.out  # zero-count should not print
 
     def test_status_json(self, capsys):
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:  # noqa: N806
             instance = MockCatalog.return_value
             instance.count_by_status.return_value = {"discovered": 5}
 
@@ -186,7 +186,7 @@ class TestCmdRepoStatus:
 
 class TestCmdRepoInfo:
     def test_info_found(self, capsys):
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:  # noqa: N806
             instance = MockCatalog.return_value
             instance.get_tool.return_value = _make_tool("my-tool", name="my-tool", stars=100)
 
@@ -198,7 +198,7 @@ class TestCmdRepoInfo:
             assert output["stars"] == 100
 
     def test_info_not_found(self, capsys):
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:  # noqa: N806
             instance = MockCatalog.return_value
             instance.get_tool.return_value = None
 
@@ -247,7 +247,7 @@ class TestCmdRepoDiscover:
             captured = capsys.readouterr()
             # structlog may write to stdout; find and parse the JSON array
             lines = captured.out.strip().split("\n")
-            json_start = next((i for i, l in enumerate(lines) if l.strip().startswith("[")), None)
+            json_start = next((i for i, l in enumerate(lines) if l.strip().startswith("[")), None)  # noqa: E741
             if json_start is not None:
                 # Collect all lines from json_start to end
                 out = "\n".join(lines[json_start:])
@@ -268,7 +268,7 @@ class TestCmdRepoInstall:
         ):
             orchestrator_mock = AsyncMock()
 
-            with patch("agora.cli.commands_repo.Orchestrator") as MockOrch:
+            with patch("agora.cli.commands_repo.Orchestrator") as MockOrch:  # noqa: N806
                 MockOrch.return_value = orchestrator_mock
                 orchestrator_mock.install_tool.return_value = (True, "Tool 'my-tool' marked as installed.")
 
@@ -280,7 +280,7 @@ class TestCmdRepoInstall:
     def test_install_failure(self, capsys):
         with patch("agora.cli.commands_repo.ToolCatalog"):
             with patch("agora.cli.commands_repo.LifecycleManager"):
-                with patch("agora.cli.commands_repo.Orchestrator") as MockOrch:
+                with patch("agora.cli.commands_repo.Orchestrator") as MockOrch:  # noqa: N806
                     orch_instance = MockOrch.return_value
                     orch_instance.install_tool = AsyncMock(return_value=(False, "Tool 'ghost' not found in catalog."))
 
@@ -298,7 +298,7 @@ class TestCmdRepoLoad:
         with (
             patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
-            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
+            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,  # noqa: N806
         ):
             orch_instance = MockOrch.return_value
             orch_instance.load_tool = AsyncMock(return_value=(True, "Tool 'my-tool' loaded."))
@@ -312,7 +312,7 @@ class TestCmdRepoLoad:
         with (
             patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
-            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
+            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,  # noqa: N806
         ):
             orch_instance = MockOrch.return_value
             orch_instance.load_tool = AsyncMock(return_value=(False, "Failed to load tool 'broken'."))
@@ -331,7 +331,7 @@ class TestCmdRepoUnload:
         with (
             patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
-            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
+            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,  # noqa: N806
         ):
             orch_instance = MockOrch.return_value
             orch_instance.unload_tool = AsyncMock(return_value=(True, "Tool 'my-tool' unloaded."))
@@ -345,7 +345,7 @@ class TestCmdRepoUnload:
         with (
             patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
-            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
+            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,  # noqa: N806
         ):
             orch_instance = MockOrch.return_value
             orch_instance.unload_tool = AsyncMock(return_value=(False, "Failed to unload tool 'broken'."))
@@ -364,7 +364,7 @@ class TestCmdRepoLoadAll:
         with (
             patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
-            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
+            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,  # noqa: N806
         ):
             orch_instance = MockOrch.return_value
             orch_instance.load_all_idle = AsyncMock(return_value=0)
@@ -378,7 +378,7 @@ class TestCmdRepoLoadAll:
         with (
             patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
-            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
+            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,  # noqa: N806
         ):
             orch_instance = MockOrch.return_value
             orch_instance.load_all_idle = AsyncMock(return_value=3)
@@ -397,7 +397,7 @@ class TestCmdRepoUnloadAll:
         with (
             patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
-            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
+            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,  # noqa: N806
         ):
             orch_instance = MockOrch.return_value
             orch_instance.unload_all_loaded = AsyncMock(return_value=0)
@@ -411,7 +411,7 @@ class TestCmdRepoUnloadAll:
         with (
             patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
-            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
+            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,  # noqa: N806
         ):
             orch_instance = MockOrch.return_value
             orch_instance.unload_all_loaded = AsyncMock(return_value=5)
@@ -430,7 +430,7 @@ class TestCmdRepoPipeline:
         with (
             patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
-            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
+            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,  # noqa: N806
         ):
             orch_instance = MockOrch.return_value
             orch_instance.discover_install_load = AsyncMock(
@@ -452,7 +452,7 @@ class TestCmdRepoPipeline:
         with (
             patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
-            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
+            patch("agora.cli.commands_repo.Orchestrator") as MockOrch,  # noqa: N806
         ):
             orch_instance = MockOrch.return_value
             orch_instance.discover_install_load = AsyncMock(
@@ -475,7 +475,7 @@ class TestCmdRepoPipeline:
 
 class TestCmdRepoRemove:
     def test_remove_success(self, capsys):
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:  # noqa: N806
             instance = MockCatalog.return_value
             instance.remove_tool.return_value = True
 
@@ -485,7 +485,7 @@ class TestCmdRepoRemove:
             assert "removed" in captured.out
 
     def test_remove_not_found(self, capsys):
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:  # noqa: N806
             instance = MockCatalog.return_value
             instance.remove_tool.return_value = False
 

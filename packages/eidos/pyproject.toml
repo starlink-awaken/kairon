@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "eidos"
-version = "0.1.0"
+version = "0.5.0"
 description = "Schema definition and validation layer for the Workspace knowledge foundation"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -30,7 +30,6 @@ dependencies = [
 
 [project.scripts]
 eidos = "eidos.cli:main"
-eidos-mcp = "eidos.mcp_server:main"
 eidos-agent = "eidos.agent:main"
 
 [project.optional-dependencies]

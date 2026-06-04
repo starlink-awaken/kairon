@@ -24,7 +24,7 @@ from .tts import (
     TTSProviderFactory,
 )
 
-__all__ = [
+__all__ = (
     "AzureTTSAdapter",
     "BaseVoiceInput",
     "BaseVoiceOutput",
@@ -37,6 +37,6 @@ __all__ = [
     "VoiceOutputProvider",
     "VoiceResult",
     "WhisperAdapter",
-]
+)
 
 __version__ = "1.0.0"

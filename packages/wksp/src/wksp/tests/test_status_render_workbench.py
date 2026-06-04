@@ -9,7 +9,7 @@ import time
 from pathlib import Path
 
 from rich.console import Console
-from wksp.commands import status as S
+from wksp.commands import status as S  # noqa: N812
 
 # ── 保存原函数引用（避免递归）──
 _ORIG_STATUS_SERVICES = S._status_services

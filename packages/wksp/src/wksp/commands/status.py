@@ -691,7 +691,7 @@ def cmd_dashboard(args: argparse.Namespace) -> int:
         try:
             from urllib import request as urlrequest
 
-            r = urlrequest.urlopen(url, timeout=3)
+            r = urlrequest.urlopen(url, timeout=3)  # noqa: S310
             if getattr(r, "status", 200) != 200:
                 c.print(f"[red]Dashboard returned HTTP {r.status}[/]")
                 _print_dashboard_fixes()

@@ -24,7 +24,7 @@ class TestGraphConfig:
         config = GraphConfig(
             neo4j_uri="bolt://custom:9999",
             neo4j_user="admin",
-            neo4j_password="secret",  # noqa:
+            neo4j_password="secret",  # noqa: S106
             enabled=False,
         )
         assert config.neo4j_uri == "bolt://custom:9999"

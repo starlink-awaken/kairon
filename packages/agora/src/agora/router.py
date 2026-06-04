@@ -391,7 +391,7 @@ emit('AGORA_DEGRADE_ENTERED', {{"service": "agora", "reason": "{reason}"}})
             # ── EU cost tracking middleware ────────────────────────────────
             if result.get("status") != "error":
                 try:
-                    from eu_pricing.ledger import EULedger  # type: ignore[import-not-found]
+                    from kaironcloud_billing.pricing.eu_ledger import EULedger  # type: ignore[import-not-found]
 
                     # Map tool name to EU operation — fall back to tool prefix
                     eu_operation = tool_name.split(".")[0] if "." in tool_name else tool_name

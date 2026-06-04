@@ -480,7 +480,7 @@ class ExecutionScheduler:
                     "organs.workspace_sandbox",
                     fromlist=["SandboxSecurityError", "scan_input_file_content"],
                 )
-                SandboxSecurityError = _ws_mod.SandboxSecurityError  # type: ignore[no-redef]
+                SandboxSecurityError = _ws_mod.SandboxSecurityError  # type: ignore[no-redef]  # noqa: N806
                 scan_input_file_content = _ws_mod.scan_input_file_content  # type: ignore[no-redef]
 
             for filename in input_files:

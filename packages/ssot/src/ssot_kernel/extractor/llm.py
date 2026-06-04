@@ -58,8 +58,8 @@ class OllamaBackend(LLMBackend):
         import urllib.request
 
         try:
-            req = urllib.request.Request(f"{self.base_url}/api/tags")
-            urllib.request.urlopen(req, timeout=2)
+            req = urllib.request.Request(f"{self.base_url}/api/tags")  # noqa: S310
+            urllib.request.urlopen(req, timeout=2)  # noqa: S310
             return ""
         except urllib.error.URLError as e:
             if isinstance(e.reason, ConnectionRefusedError):
@@ -108,13 +108,13 @@ class OllamaBackend(LLMBackend):
 
         timeout = int(os.environ.get("OLLAMA_TIMEOUT", "120"))
 
-        req = urllib.request.Request(
+        req = urllib.request.Request(  # noqa: S310
             f"{self.base_url}/api/chat",
             data=payload,
             headers={"Content-Type": "application/json"},
         )
         try:
-            resp = urllib.request.urlopen(req, timeout=timeout)
+            resp = urllib.request.urlopen(req, timeout=timeout)  # noqa: S310
         except urllib.error.URLError as e:
             raise ConnectionError(
                 f"Ollama 请求失败 ({self.base_url}): {e.reason}\n  请确认 Ollama 正在运行 (ollama ps)"
@@ -157,7 +157,7 @@ class OpenAIBackend(LLMBackend):
             }
         ).encode()
 
-        req = urllib.request.Request(
+        req = urllib.request.Request(  # noqa: S310
             f"{self.base_url}/chat/completions",
             data=payload,
             headers={
@@ -166,7 +166,7 @@ class OpenAIBackend(LLMBackend):
             },
         )
         try:
-            resp = urllib.request.urlopen(req, timeout=30)
+            resp = urllib.request.urlopen(req, timeout=30)  # noqa: S310
         except urllib.error.URLError as e:
             raise ConnectionError(
                 f"无法连接到 OpenAI API ({self.base_url}): {e.reason}\n  请检查 API 地址和网络连接"
@@ -558,7 +558,7 @@ class LLMExtractor(Extractor):
             import urllib.request
 
             req = urllib.request.Request("http://localhost:11434/api/tags")
-            resp = urllib.request.urlopen(req, timeout=2)
+            resp = urllib.request.urlopen(req, timeout=2)  # noqa: S310
             data = json.loads(resp.read().decode())
             models = data.get("models", [])
             if models:

@@ -34,7 +34,7 @@ def _check_cli_tools() -> dict[str, bool]:
 def _check_ollama_running() -> bool:
     try:
         req = urlrequest.Request("http://localhost:11434/api/tags", method="GET")
-        resp = urlrequest.urlopen(req, timeout=3)
+        resp = urlrequest.urlopen(req, timeout=3)  # noqa: S310
         return resp.status == 200
     except Exception:
         return False
@@ -116,7 +116,7 @@ def _auto_fix(c: Console, args: argparse.Namespace) -> int:
             default_model = args.model or "llama3.2"
             try:
                 req = urlrequest.Request("http://localhost:11434/api/tags", method="GET")
-                resp = urlrequest.urlopen(req, timeout=5)
+                resp = urlrequest.urlopen(req, timeout=5)  # noqa: S310
                 import json as _json
 
                 tags = _json.loads(resp.read().decode())

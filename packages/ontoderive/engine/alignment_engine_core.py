@@ -88,8 +88,8 @@ class AlignmentEngine:
                 "organs.D_Immunity.organs.permission_guard",
                 fromlist=["PermissionGuard", "PermissionContext"],
             )
-            PermissionGuard = mod.PermissionGuard
-            PermissionContext = mod.PermissionContext
+            PermissionGuard = mod.PermissionGuard  # noqa: N806
+            PermissionContext = mod.PermissionContext  # noqa: N806
             guard = PermissionGuard()
             ctx = PermissionContext(
                 role_id=requesting_agent or "anonymous",

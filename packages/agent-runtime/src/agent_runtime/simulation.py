@@ -60,7 +60,7 @@ class SimulationProvider:
         start = time.monotonic()
         self._call_count += 1
         await asyncio.sleep(self._config.latency_ms / 1000)
-        if random.random() < self._config.error_rate:
+        if random.random() < self._config.error_rate:  # noqa: S311
             raise RuntimeError("Simulated API error")
         output = self._generate_output(prompt)
         input_tokens = self._estimate_tokens(prompt)

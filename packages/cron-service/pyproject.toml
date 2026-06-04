@@ -33,4 +33,5 @@ dev = [
 ]
 
 [project.scripts]
+# Registered via agora mcp_gateway (stdio transport, --mcp flag)
 cron-service = "cron_service.server:main"

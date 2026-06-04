@@ -364,19 +364,15 @@ packages:
     dependencies: []
 
   eu-pricing:
-    maturity: alpha
+    status: merged
+    merged_into: kaironcloud-billing
+    merged_at: "2026-06-04"
     version: 0.1.0
-    owner: null
-    description: 定价引擎 — 欧盟定价模型与策略
+    description: EU 虚拟资源记账 — 已合并至 kaironcloud-billing/pricing/
     test_files: 3
     test_passed: "10/10 (100%)"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: true
-    phase17_note: "D_Economy → energy_model.py"
     known_debts:
-      - "⚪ 需深度分析"
+      - "⚪ 已合并至 kaironcloud-billing，保留记录供追溯"
     dependencies: []
 
   symphony-protocol:
@@ -413,12 +409,13 @@ packages:
     maturity: alpha
     version: 0.1.0
     owner: null
-    description: 计费系统
+    description: 计费系统 + EU 虚拟资源记账（合并自 eu-pricing）
     test_files: 5
     test_passed: "114/114 (100%)"
     test_coverage_target: 60%
     ruff_unified: true
     llm_unified: n/a
-    phase17_migrated: false
+    phase17_migrated: true
+    phase17_note: "eu-pricing 已于 2026-06-04 合并为 pricing/ 子包"
     known_debts: []
     dependencies: []

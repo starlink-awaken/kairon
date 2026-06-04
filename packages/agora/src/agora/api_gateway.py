@@ -98,7 +98,7 @@ def clear_trace() -> None:
 # =============================================================================
 
 #: Default listen host for the API gateway.
-DEFAULT_HOST: str = "0.0.0.0"
+DEFAULT_HOST: str = "0.0.0.0"  # noqa: S104
 
 #: Default listen port for the API gateway.
 DEFAULT_PORT: int = 8080

@@ -40,7 +40,10 @@ _log = logging.getLogger(__name__)
 
 # Import from tree_sitter_extractor
 try:
-    from eidos.tree_sitter_extractor import TreeSitterExtractionResult, TreeSitterExtractor  # type: ignore[import-not-found]
+    from eidos.tree_sitter_extractor import (  # type: ignore[import-not-found]
+        TreeSitterExtractionResult,
+        TreeSitterExtractor,
+    )
 except ImportError:
     TreeSitterExtractor = None
     TreeSitterExtractionResult = None

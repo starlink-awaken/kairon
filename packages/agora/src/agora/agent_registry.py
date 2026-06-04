@@ -96,7 +96,7 @@ def verify_signature(agent_id: str, signature_b64: str, verification_key_b64: st
             try:
                 public_key.verify(signature, message)
                 return True
-            except Exception:
+            except Exception:  # noqa: S112
                 continue
         return False
     except Exception as e:

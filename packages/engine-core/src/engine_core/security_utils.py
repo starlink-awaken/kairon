@@ -190,7 +190,7 @@ def _build_safe_print(stdout_capture: io.StringIO | None) -> Callable[..., None]
 def get_safe_execution_globals(
     print_fn: Callable[..., None] | None = None,
 ) -> dict[str, object]:
-    _SAFE_BUILTINS_EXEC = dict(SAFE_BUILTINS)
+    _SAFE_BUILTINS_EXEC = dict(SAFE_BUILTINS)  # noqa: N806
     _SAFE_BUILTINS_EXEC["print"] = print_fn if print_fn else print
     _SAFE_BUILTINS_EXEC["__import__"] = safe_import
     return {

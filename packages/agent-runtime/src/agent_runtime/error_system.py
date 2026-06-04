@@ -6,8 +6,8 @@ from typing import Any
 
 
 class ErrorCode(StrEnum):
-    SYX001_UNEXPECTED_TOKEN = "SYX001"
-    SYX002_MISSING_TOKEN = "SYX002"
+    SYX001_UNEXPECTED_TOKEN = "SYX001"  # noqa: S105
+    SYX002_MISSING_TOKEN = "SYX002"  # noqa: S105
     SYX003_INVALID_SYNTAX = "SYX003"
     LEX101_UNCLOSED_STRING = "LEX101"
     LEX102_INVALID_ESCAPE = "LEX102"
@@ -81,7 +81,7 @@ class DSLError(Exception):
         return f"[{self.code}] {self.args[0] if self.args else ''} at {self.loc.file}:{self.loc.line}:{self.loc.column}"
 
 
-class SyntaxError_(DSLError):
+class SyntaxError_(DSLError):  # noqa: N801, N818
     def __init__(
         self,
         code: ErrorCode = ErrorCode.SYX003_INVALID_SYNTAX,
@@ -153,7 +153,7 @@ class LexicalError(DSLError):
         )
 
 
-class TypeError_(DSLError):
+class TypeError_(DSLError):  # noqa: N801, N818
     def __init__(
         self,
         code: ErrorCode = ErrorCode.TYP201_TYPE_MISMATCH,
@@ -227,7 +227,7 @@ class SemanticError(DSLError):
         )
 
 
-class RuntimeError_(DSLError):
+class RuntimeError_(DSLError):  # noqa: N801, N818
     @staticmethod
     def execution_failed(reason: str, loc: SourceLocation) -> RuntimeError_:
         return RuntimeError_(

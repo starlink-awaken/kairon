@@ -281,5 +281,5 @@ class TestEdgeCases:
         cmd_register([json.dumps(sample_asset)])
         cmd_remove(["test-agent"])
         lines = m.HISTORY_FILE.read_text().strip().split("\n")
-        actions = [json.loads(l)["action"] for l in lines]
+        actions = [json.loads(l)["action"] for l in lines]  # noqa: E741
         assert "remove" in actions

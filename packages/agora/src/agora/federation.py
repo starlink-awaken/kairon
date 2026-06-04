@@ -119,8 +119,8 @@ class FederationManager:
         import json as _json
         from urllib import request
 
-        req = request.Request(f"{endpoint}/agent-cards", method="GET")
-        resp = request.urlopen(req, timeout=10)
+        req = request.Request(f"{endpoint}/agent-cards", method="GET")  # noqa: S310
+        resp = request.urlopen(req, timeout=10)  # noqa: S310
         return _json.loads(resp.read().decode()).get("cards", [])
 
     def _update_peer_sync(self, instance_id: str):

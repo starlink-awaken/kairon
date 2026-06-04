@@ -8,7 +8,6 @@ items against configurable rules (content length, structure, language) and
 returns ``ValidationResult`` per item.
 """
 
-from typing import Any
 
 from kairon_lib.extractors.base import StructuredKnowledge
 

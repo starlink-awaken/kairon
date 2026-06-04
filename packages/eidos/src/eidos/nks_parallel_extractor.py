@@ -47,7 +47,7 @@ except ImportError:
     TQDM_AVAILABLE = False
 
     # Dummy tqdm class for when tqdm is not available
-    class tqdm:  # type: ignore[no-redef]  # noqa:
+    class tqdm:  # type: ignore[no-redef]  # noqa: N801
         """Dummy progress bar when tqdm is not available."""
 
         def __init__(self, total: int = 0, desc: str = "", **kwargs: Any) -> None:

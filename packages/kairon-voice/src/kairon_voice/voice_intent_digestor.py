@@ -102,7 +102,7 @@ class VoiceIntentDigestor:
         if self._digestor is not None:
             return
         try:
-            Digestor = __import__(
+            Digestor = __import__(  # noqa: N806
                 "organs.D_Execution.organs.intent_digestor",
                 fromlist=["IntentDigestor"],
             ).IntentDigestor

@@ -9,7 +9,6 @@ Provides ``MetricsCollector`` (counter/gauge/histogram tracking) and
 
 import time
 from collections import defaultdict
-from typing import Any
 
 
 class MetricsCollector:
@@ -105,6 +104,6 @@ class HarvestMetrics:
     ) -> None:
         """Record that a harvest cycle completed for *source_id*."""
         self.collector.increment("d_harvest_harvests_completed_total")
-        self.collector.increment(f"d_harvest_items_extracted_total", items_count)
+        self.collector.increment("d_harvest_items_extracted_total", items_count)
         self.collector.observe("d_harvest_harvest_duration_ms", duration_ms)
         self.collector.set_gauge(f"d_harvest_last_completed_{source_id}", time.time())

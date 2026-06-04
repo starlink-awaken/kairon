@@ -282,12 +282,12 @@ def _register_defaults() -> None:
     _PROVIDER_REGISTRY["azure"] = _AzureSTTStub
 
 
-def _GoogleSTTStub(config: VoiceConfig) -> VoiceInputProvider:
+def _GoogleSTTStub(config: VoiceConfig) -> VoiceInputProvider:  # noqa: N802
     """Stub for Google Cloud Speech-to-Text."""
     return BaseVoiceInput(config)
 
 
-def _AzureSTTStub(config: VoiceConfig) -> VoiceInputProvider:
+def _AzureSTTStub(config: VoiceConfig) -> VoiceInputProvider:  # noqa: N802
     """Stub for Azure Speech Services."""
     return BaseVoiceInput(config)
 

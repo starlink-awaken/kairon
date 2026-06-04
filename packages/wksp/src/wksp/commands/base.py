@@ -100,7 +100,7 @@ def _iso_time(ts: float) -> str:
 
 def _http_health(url: str, timeout: float = 3.0) -> bool:
     try:
-        with urlrequest.urlopen(url, timeout=timeout):
+        with urlrequest.urlopen(url, timeout=timeout):  # noqa: S310
             return True
     except (urlerror.URLError, TimeoutError, ValueError):
         return False
@@ -379,7 +379,7 @@ def _run_ollama(prompt: str, *, timeout: int = 60) -> str | None:
             data=body,
             headers={"Content-Type": "application/json"},
         )
-        resp = urlrequest.urlopen(req, timeout=timeout)
+        resp = urlrequest.urlopen(req, timeout=timeout)  # noqa: S310
         data = json.loads(resp.read())
         text = (data.get("response") or "").strip()
         if text:
@@ -403,7 +403,7 @@ def _discover_services() -> list[tuple[str, str, str | None, str, str]]:
     """通过 Agora /api/services 动态发现服务，失败则回退到硬编码列表。"""
     try:
         req = urlrequest.Request("http://localhost:7430/api/services", headers={"Accept": "application/json"})
-        resp = urlrequest.urlopen(req, timeout=3)
+        resp = urlrequest.urlopen(req, timeout=3)  # noqa: S310
         data = json.loads(resp.read())
         if isinstance(data, list) and data:
             svc: list[tuple[str, str, str | None, str, str]] = []

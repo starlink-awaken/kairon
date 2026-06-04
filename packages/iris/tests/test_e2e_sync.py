@@ -31,7 +31,7 @@ def _create_vault(files: dict[str, str]) -> Path:
 
 def _make_id_map_path() -> Path:
     """Create a unique temp path for id_map isolation per test."""
-    return Path(tempfile.mktemp(suffix="_id_map.json"))
+    return Path(tempfile.mktemp(suffix="_id_map.json"))  # noqa: S306
 
 
 def _cleanup(vault: Path, id_map_path: Path | None = None):

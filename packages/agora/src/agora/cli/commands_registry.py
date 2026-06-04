@@ -263,7 +263,7 @@ def _get_system_metrics() -> dict:
             "free_gb": round(psutil.disk_usage("/").free / (1024**3), 1),
             "total_gb": round(psutil.disk_usage("/").total / (1024**3), 1),
         }
-        metrics["load_avg"] = [round(l, 2) for l in psutil.getloadavg()]
+        metrics["load_avg"] = [round(l, 2) for l in psutil.getloadavg()]  # noqa: E741
     except ImportError:
         metrics["error"] = "psutil not installed — system metrics unavailable"
     except Exception as e:

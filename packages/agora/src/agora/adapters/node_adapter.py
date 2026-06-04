@@ -51,8 +51,8 @@ class FullNodeAdapter(NodeAdapter):
         from urllib import request
 
         payload = json.dumps({"tool": tool, "arguments": args}).encode()
-        req = request.Request(f"{self.endpoint}/api/call", data=payload, headers={"Content-Type": "application/json"})
-        return json.loads(request.urlopen(req, timeout=30).read().decode())
+        req = request.Request(f"{self.endpoint}/api/call", data=payload, headers={"Content-Type": "application/json"})  # noqa: S310
+        return json.loads(request.urlopen(req, timeout=30).read().decode())  # noqa: S310
 
     def submit_task(self, task_data: dict) -> dict:
         return self.call_tool(
@@ -93,7 +93,7 @@ class GitHubActionsAdapter(NodeAdapter):
         if tool == "github.dispatch_workflow":
             url = f"https://api.github.com/repos/{self.repo}/actions/workflows/{args['workflow_id']}/dispatches"
             payload = json.dumps({"ref": args.get("ref", "main")}).encode()
-            req = request.Request(
+            req = request.Request(  # noqa: S310
                 url,
                 data=payload,
                 method="POST",
@@ -102,7 +102,7 @@ class GitHubActionsAdapter(NodeAdapter):
                     "Accept": "application/vnd.github.v3+json",
                 },
             )
-            request.urlopen(req, timeout=30)
+            request.urlopen(req, timeout=30)  # noqa: S310
             return {"status": "dispatched"}
         return {"error": f"unknown tool: {tool}"}
 

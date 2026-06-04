@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "wksp"
-version = "0.2.0"
+version = "0.3.0"
 description = "Workspace — 统一用户入口：研究对象管理系统"
 readme = "README.md"
 requires-python = ">=3.10"

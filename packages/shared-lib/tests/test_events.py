@@ -230,7 +230,7 @@ class TestGlobalEventBusRegistry:
         bus.publish.assert_called_once_with(event)
 
         try:
-            from kairon_lib.events import __all__ as exports
+            from kairon_lib.events import __all__ as exports  # noqa: F401
         except ImportError:
             pytest.mark.skip(reason="test requires archived kairon_lib module")  # type: ignore[name-defined]
 class TestModuleExports:
@@ -243,7 +243,7 @@ class TestModuleExports:
         assert "BOSEvent" in exports
         assert "BosEvent" in exports
         try:
-            import kairon_lib
+            import kairon_lib  # noqa: F401
         except ImportError:
             pytest.mark.skip(reason="test requires archived kairon_lib module")  # type: ignore[name-defined]
         assert "EventType" in exports
@@ -263,7 +263,7 @@ class TestModuleExports:
         assert hasattr(kairon_lib, "make_event")
         assert hasattr(kairon_lib, "register_global_event_bus")
         try:
-            from kairon_lib.events import EventBusProtocol
+            from kairon_lib.events import EventBusProtocol  # noqa: F401
         except ImportError:
             pytest.mark.skip(reason="test requires archived kairon_lib module")  # type: ignore[name-defined]
         assert hasattr(kairon_lib, "get_event_bus")
@@ -288,7 +288,7 @@ class TestEventBusProtocol:
         mock_bus.MAX_QUEUE_SIZE = 500
         mock_bus.MAX_LISTENERS = 50
         try:
-            from kairon_lib.events import EventBusProtocol, _NullEventBus
+            from kairon_lib.events import EventBusProtocol, _NullEventBus  # noqa: F401
         except ImportError:
             pytest.mark.skip(reason="test requires archived kairon_lib module")  # type: ignore[name-defined]
 
@@ -304,7 +304,7 @@ class TestEventBusProtocol:
             MAX_LISTENERS = 50
 
         try:
-            from kairon_lib.events import _NullEventBus
+            from kairon_lib.events import _NullEventBus  # noqa: F401
         except ImportError:
             pytest.mark.skip(reason="test requires archived kairon_lib module")  # type: ignore[name-defined]
 

@@ -73,7 +73,7 @@ class TestLlmGatewayBasic:
 
     def test_circuit_breaker_defaults(self):
         """CircuitBreaker with default config."""
-        cb = CircuitBreaker(name="test")
+        cb = CircuitBreaker(name="test")  # noqa: F821
         assert cb.state == "closed"
         assert cb.name == "test"
 

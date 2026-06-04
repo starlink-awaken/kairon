@@ -140,11 +140,11 @@ class TestPromptBuilding:
         many = [_make_tool(f"tool_{i}", quality_score=0.5) for i in range(15)]
         prompt = router._build_selection_prompt("test", many)
         # Count numbered entries — should be 10
-        [l for l in prompt.splitlines() if l.strip().startswith(tuple(str(i) + "." for i in range(1, 11)))]
+        [l for l in prompt.splitlines() if l.strip().startswith(tuple(str(i) + "." for i in range(1, 11)))]  # noqa: E741
         # A simpler check: "Available tools" section should have at most 10 entries
         entries = [
             l
-            for l in prompt.splitlines()
+            for l in prompt.splitlines()  # noqa: E741
             if l.strip().startswith(("1.", "2.", "3.", "4.", "5.", "6.", "7.", "8.", "9.", "10."))
         ]
         assert len(entries) <= 10
@@ -383,7 +383,7 @@ def _real_llm_available() -> bool:
         import urllib.request
 
         req = urllib.request.Request("http://localhost:11434/api/tags", method="GET")
-        with urllib.request.urlopen(req, timeout=2) as resp:
+        with urllib.request.urlopen(req, timeout=2) as resp:  # noqa: S310
             return resp.status == 200
     except Exception:
         return False

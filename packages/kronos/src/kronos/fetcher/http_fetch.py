@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 import re
 
+from kronos.fetch_router import JINA_READER_URL, _classify
 from kronos.fetcher.classify import FetchLayer, FetchPlan  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
@@ -188,7 +189,7 @@ def build_cache_plan(url: str) -> FetchPlan:
 # ═══════════════════════════════════════════════════
 
 
-def build_cloakbrowser_plan(url: str) -> FetchPlan:
+def build_cloakbrowser_plan(url: str) -> FetchPlan:  # noqa: F811
     """通过 CloakBrowser 浏览器自动化抓取"""
     return FetchPlan(
         url=url,

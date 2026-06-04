@@ -36,7 +36,7 @@ class RetryConfig:
     def get_delay(self, attempt: int) -> float:
         """Get delay in seconds for a given attempt (0-indexed)."""
         base = self.base_delay_ms * (2**attempt)
-        jitter = 0.75 + random.random() * 0.5
+        jitter = 0.75 + random.random() * 0.5  # noqa: S311
         return min(base * jitter, self.max_delay_ms) / 1000.0
 
 

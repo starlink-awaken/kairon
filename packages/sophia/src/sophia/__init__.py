@@ -24,23 +24,23 @@ from sophia.symbols import (
     gate_quality_pass,
 )
 
-__all__ = [
-    "AtomicOp",
-    "ResearchState",
-    "TransitionRule",
-    "ParadigmProgram",
+__all__ = (
     "BASE_TRANSITIONS",
-    "gate_always",
-    "gate_has_sources",
-    "gate_has_entities",
-    "gate_has_contradictions",
-    "gate_quality_pass",
+    "AtomicOp",
+    "ParadigmLearner",
+    "ParadigmProgram",
+    "ResearchState",
+    "ResearchTrace",
+    "TransitionRule",
     "compile_paradigm",
     "compile_paradigm_sync",
+    "gate_always",
+    "gate_has_contradictions",
+    "gate_has_entities",
+    "gate_has_sources",
+    "gate_quality_pass",
     "recompile_from_dict",
-    "ParadigmLearner",
-    "ResearchTrace",
-]
+)
 """
 Sophia — 符号化研究范式引擎。
 

@@ -698,7 +698,7 @@ async def well_known_agent_card():
 def main():
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=7430, log_level="info")
+    uvicorn.run(app, host="0.0.0.0", port=7430, log_level="info")  # noqa: S104
 
 
 if __name__ == "__main__":

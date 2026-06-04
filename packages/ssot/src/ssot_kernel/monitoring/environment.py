@@ -100,7 +100,7 @@ class EnvironmentDetector:
 
         # 基于系统信息和环境类型生成唯一ID
         data_string = f"{system_info['platform']}_{system_info['python_version']}_{environment_type.value}"
-        return hashlib.md5(data_string.encode()).hexdigest()[:12]
+        return hashlib.md5(data_string.encode()).hexdigest()[:12]  # noqa: S324
 
 
 class EnvironmentAwareMonitor:
@@ -309,7 +309,7 @@ class EnvironmentAwareMonitor:
 
     def _should_sample(self) -> bool:
         """判断是否应该采样"""
-        return random.random() < self.config.sample_rate
+        return random.random() < self.config.sample_rate  # noqa: S311
 
     def get_environment_specific_config(self) -> dict[str, Any]:
         """获取环境特定配置"""

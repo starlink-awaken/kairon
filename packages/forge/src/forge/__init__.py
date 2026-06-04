@@ -17,3 +17,21 @@ from forge.forge import (  # type: ignore[import-not-found]
     cmd_verify,
     main,
 )
+
+__all__ = (
+    "ALIASES",
+    "COMMANDS",
+    "TOOLBOX",
+    "VERIFY_COMMANDS",
+    "cmd_capture",
+    "cmd_dashboard",
+    "cmd_health",
+    "cmd_help",
+    "cmd_install",
+    "cmd_routine",
+    "cmd_schedule",
+    "cmd_sniff",
+    "cmd_status",
+    "cmd_verify",
+    "main",
+)

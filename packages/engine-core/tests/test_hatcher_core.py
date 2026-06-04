@@ -39,7 +39,7 @@ SOURCE_TEXT = HATCHER_CORE_PATH.read_text(encoding="utf-8")
 class TestHatcherClassSignatures:
     """Verify Hatcher class and its methods exist in source."""
 
-    def test_class_Hatcher_exists(self):
+    def test_class_Hatcher_exists(self):  # noqa: N802
         assert "class Hatcher:" in SOURCE_TEXT
 
     def test_hatch_method_exists(self):

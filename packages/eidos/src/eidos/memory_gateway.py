@@ -45,7 +45,7 @@ _log = logging.getLogger(__name__)
 __all__ = ["MemoryGateway", "TokenIssuanceError"]
 
 # Token field separator — used when minting and when parsing tokens.
-_TOKEN_SEP = "."  # WARNING: changing this invalidates all existing tokens; requires full token rotation  # noqa:
+_TOKEN_SEP = "."  # WARNING: changing this invalidates all existing tokens; requires full token rotation  # noqa: S105
 
 
 class TokenIssuanceError(RuntimeError):

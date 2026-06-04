@@ -27,7 +27,7 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-AX01-10_holographic_metadata_axio
 
 import importlib
 import logging
-from pathlib import Path as P
+from pathlib import Path as P  # noqa: N817
 from typing import TYPE_CHECKING, Any
 
 _log = logging.getLogger(__name__)
@@ -44,10 +44,10 @@ def _lazy_nks_imports() -> tuple[Any | None, Any | None, Any | None, Any | None]
         graph_store_module = importlib.import_module("organs.D_Memory.organs.nks.graph_store")
         impact_analyzer_module = importlib.import_module("organs.D_Memory.organs.nks.impact_analyzer")
         query_engine_module = importlib.import_module("organs.D_Memory.organs.nks.query_engine")
-        GraphStore = graph_store_module.GraphStore
-        Entity = graph_store_module.Entity
-        ImpactAnalyzer = impact_analyzer_module.ImpactAnalyzer
-        GraphQueryEngine = query_engine_module.GraphQueryEngine
+        GraphStore = graph_store_module.GraphStore  # noqa: N806
+        Entity = graph_store_module.Entity  # noqa: N806
+        ImpactAnalyzer = impact_analyzer_module.ImpactAnalyzer  # noqa: N806
+        GraphQueryEngine = query_engine_module.GraphQueryEngine  # noqa: N806
         return GraphStore, Entity, GraphQueryEngine, ImpactAnalyzer
     except (ImportError, ModuleNotFoundError, AttributeError) as exc:
         _log.warning("NKS core modules unavailable via canonical import path: %s", exc)
@@ -108,7 +108,7 @@ class NKSMCPBridge:
         if self._initialized:
             return
 
-        GraphStore, _Entity, GraphQueryEngine, ImpactAnalyzer = _lazy_nks_imports()
+        GraphStore, _Entity, GraphQueryEngine, ImpactAnalyzer = _lazy_nks_imports()  # noqa: N806
 
         # Initialize GraphStore if not provided
         if self._graph_store is None:

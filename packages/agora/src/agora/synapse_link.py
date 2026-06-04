@@ -356,14 +356,14 @@ class SynapseLink:
     @staticmethod
     def _urllib_post_sync(url: str, payload: dict, timeout: float) -> dict:  # pragma: no cover
         data = json.dumps(payload).encode()
-        req = urllib.request.Request(
+        req = urllib.request.Request(  # noqa: S310
             url,
             data=data,
             headers={"Content-Type": "application/json"},
             method="POST",
         )
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:  # noqa: S310
                 return json.loads(resp.read().decode())
         except urllib.error.HTTPError as exc:
             body = exc.read().decode("utf-8", errors="replace")

@@ -34,13 +34,13 @@ from .sync import cmd_sync
 
 # 导入监控系统模块（可选）
 try:
-    from .monitoring.alerting import IntelligentAlertingSystem
-    from .monitoring.architecture import MonitoringArchitecture, get_monitoring_architecture
-    from .monitoring.cli import MonitoringCLI
-    from .monitoring.collectors import EnhancedMetricsCollector
-    from .monitoring.dashboard import MonitoringDashboard
-    from .monitoring.environment import EnvironmentAwareMonitor, get_environment_manager
-    from .monitoring.storage import InMemoryStorage, JSONStorage
+    from .monitoring.alerting import IntelligentAlertingSystem  # noqa: F401
+    from .monitoring.architecture import MonitoringArchitecture, get_monitoring_architecture  # noqa: F401
+    from .monitoring.cli import MonitoringCLI  # noqa: F401
+    from .monitoring.collectors import EnhancedMetricsCollector  # noqa: F401
+    from .monitoring.dashboard import MonitoringDashboard  # noqa: F401
+    from .monitoring.environment import EnvironmentAwareMonitor, get_environment_manager  # noqa: F401
+    from .monitoring.storage import InMemoryStorage, JSONStorage  # noqa: F401
 
     MONITORING_AVAILABLE = True
 except ImportError:
@@ -1058,7 +1058,7 @@ def main(argv: list[str] | None = None) -> int:
     debug = getattr(args, "debug", False)
 
     try:
-        return _dispatch(args)
+        return _dispatch(args, parser)
     except Exception as e:
         if debug:
             import traceback
@@ -1070,7 +1070,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
 
-def _dispatch(args: argparse.Namespace) -> int:
+def _dispatch(args: argparse.Namespace, parser: argparse.ArgumentParser) -> int:
     if args.command == "init":
         return cmd_init(args)
     elif args.command == "compile":

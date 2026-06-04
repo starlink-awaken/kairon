@@ -115,7 +115,7 @@ coverage_by_package:
   ecos: "2 collection errors (SyntaxError: from ... as 语法)"
   eidos: "147 passed, 3 failed (kos 依赖)"
   engine-core: "1 collection error (ModuleNotFound: engine_core)"
-  eu-pricing: "10 passed"
+  eu-pricing: "10 passed — 已合并至 kaironcloud-billing/pricing/ 子包"
   forge: "3 collection errors (ModuleNotFound: asset_cli, cron_utils, entropy)"
   iris: "178 passed, 2 failed (keychain)"
   kairon-assistant: "53 passed"

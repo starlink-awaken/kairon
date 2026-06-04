@@ -81,15 +81,15 @@ class GovernanceState:
         return GovernanceEvent(action=action, reason=reason, actor_id=actor_id)
 
     @classmethod
-    def NORMAL(cls) -> GovernanceState:
+    def NORMAL(cls) -> GovernanceState:  # noqa: N802
         return cls("NORMAL")
 
     @classmethod
-    def DEGRADED(cls) -> GovernanceState:
+    def DEGRADED(cls) -> GovernanceState:  # noqa: N802
         return cls("DEGRADED")
 
     @classmethod
-    def CRITICAL(cls) -> GovernanceState:
+    def CRITICAL(cls) -> GovernanceState:  # noqa: N802
         return cls("CRITICAL")
 
 class _GovernanceStatusEnum(StrEnum):

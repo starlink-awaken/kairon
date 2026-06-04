@@ -260,7 +260,3 @@ def main():
         return result
 
     mcp.run(transport="stdio")
-
-
-if __name__ == "__main__":
-    main()

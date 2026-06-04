@@ -263,7 +263,7 @@ class DefaultExpressionEvaluator(IExpressionEvaluator):
         raise ValueError(f"Undefined variable: {name}")
 
 
-class ExecutionDependencies:  # type: ignore[no-redef]
+class ExecutionDependencies:  # type: ignore[no-redef]  # noqa: F811
     def __init__(
         self,
         agent_runner: Any = None,

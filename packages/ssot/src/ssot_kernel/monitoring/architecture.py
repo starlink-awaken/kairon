@@ -374,7 +374,7 @@ class MonitoringArchitecture:
 
     def should_collect(self) -> bool:
         """是否应该收集指标"""
-        return random.random() < self.environment_config.sample_rate
+        return random.random() < self.environment_config.sample_rate  # noqa: S311
 
     def should_alert(self) -> bool:
         """是否应该发送告警"""

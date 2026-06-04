@@ -13,14 +13,14 @@ Usage:
 from __future__ import annotations
 
 __version__ = "0.1.0"
-__all__ = [
+__all__ = (
+    "CostGuard",
+    "ResearchExecutor",
+    "SearchEngine",
     "TriageRouter",
     "create_default_pipeline",
-    "ResearchExecutor",
-    "CostGuard",
     "create_knowledge_store",
-    "SearchEngine",
-]
+)
 """
 Minerva — 本地优先深度研究系统。
 

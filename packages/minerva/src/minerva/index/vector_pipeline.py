@@ -311,7 +311,7 @@ class VectorEmbeddingPipeline:
         """加载向量索引"""
         try:
             with open(self._index_file, "rb") as f:
-                return pickle.load(f)  # noqa:
+                return pickle.load(f)  # noqa: S301
         except FileNotFoundError:
             return {}
         except (OSError, pickle.PickleError, ValueError) as e:

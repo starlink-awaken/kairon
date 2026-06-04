@@ -360,7 +360,7 @@ def tool_get_metrics_snapshot(params: JSONDict, ctx: ToolContext) -> JSONDict:
     tasks_total = tasks_success = active_workers = p99_latency_ms = 0.0
     try:
         req = urllib.request.Request(f"http://localhost:{daemon_port}/metrics", headers={"Accept": "text/plain"})
-        with urllib.request.urlopen(req, timeout=2) as resp:
+        with urllib.request.urlopen(req, timeout=2) as resp:  # noqa: S310
             text = resp.read().decode("utf-8")
         for line in text.splitlines():
             if line.startswith("#") or not line.strip():

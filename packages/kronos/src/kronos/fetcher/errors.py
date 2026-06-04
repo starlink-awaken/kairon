@@ -6,6 +6,8 @@ import logging
 import re
 from typing import TYPE_CHECKING
 
+from kronos.fetch_router import execute_fallback_chain
+
 if TYPE_CHECKING:
     from kronos.fetch_router import FetchResult  # type: ignore[import-not-found]
 

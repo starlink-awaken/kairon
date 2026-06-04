@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "kronos"
-version = "0.5.0"
+version = "0.7.0"
 description = "Kronos — 知识摄取管线。L0原生HTTP / L2 Jina / L4 CloakBrowser / 5层自动抓取引擎"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -35,7 +35,6 @@ dependencies = [
 
 [project.scripts]
 kronos = "kronos.cli:main"
-kronos-mcp = "kronos.mcp_server:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/kronos"]

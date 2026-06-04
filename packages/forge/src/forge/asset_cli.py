@@ -218,7 +218,7 @@ def _find(assets: list[dict], name: str) -> int | None:
 
 
 def _port_check(port: int) -> tuple[bool, str]:
-    for host in ["127.0.0.1", "0.0.0.0"]:
+    for host in ["127.0.0.1", "0.0.0.0"]:  # noqa: S104
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(0.3)
@@ -226,7 +226,7 @@ def _port_check(port: int) -> tuple[bool, str]:
             s.close()
             if r == 0:
                 return True, host
-        except Exception:
+        except Exception:  # noqa: S112
             continue
     return False, ""
 
@@ -1110,7 +1110,7 @@ def cmd_import(args: list[str]) -> None:
                 "name": "agentmesh Gateway",
                 "type": "service",
                 "port": 3000,
-                "bind": "0.0.0.0",
+                "bind": "0.0.0.0",  # noqa: S104
                 "host": "localhost",
                 "tags": ["runtime", "gateway"],
             },
@@ -1123,22 +1123,22 @@ def cmd_import(args: list[str]) -> None:
                 "bind": "127.0.0.1",
                 "tags": ["agora", "mcp"],
             },
-            {"id": "agora-dashboard", "name": "Agora Dashboard", "type": "webapp", "port": 7430, "bind": "0.0.0.0"},
-            {"id": "minerva", "name": "Minerva", "type": "webapp", "port": 8765, "bind": "0.0.0.0"},
+            {"id": "agora-dashboard", "name": "Agora Dashboard", "type": "webapp", "port": 7430, "bind": "0.0.0.0"},  # noqa: S104
+            {"id": "minerva", "name": "Minerva", "type": "webapp", "port": 8765, "bind": "0.0.0.0"},  # noqa: S104
             {
                 "id": "bos-daemon",
                 "name": "B-OS Daemon",
                 "type": "service",
                 "port": 7420,
-                "bind": "0.0.0.0",
+                "bind": "0.0.0.0",  # noqa: S104
                 "tags": ["bos", "mcp"],
             },
-            {"id": "bos-web", "name": "B-OS Web", "type": "webapp", "port": 8082, "bind": "0.0.0.0"},
-            {"id": "bos-metrics", "name": "B-OS Metrics", "type": "service", "port": 9090, "bind": "0.0.0.0"},
+            {"id": "bos-web", "name": "B-OS Web", "type": "webapp", "port": 8082, "bind": "0.0.0.0"},  # noqa: S104
+            {"id": "bos-metrics", "name": "B-OS Metrics", "type": "service", "port": 9090, "bind": "0.0.0.0"},  # noqa: S104
             {"id": "agent-runtime", "name": "Agent Runtime", "type": "daemon", "port": 9876, "bind": "127.0.0.1"},
             {"id": "hermes-mcp", "name": "Hermes MCP", "type": "service", "port": 7423, "bind": "127.0.0.1"},
             {"id": "ollama", "name": "Ollama", "type": "service", "port": 11434, "bind": "127.0.0.1"},
-            {"id": "clash", "name": "Clash", "type": "service", "port": 7890, "bind": "0.0.0.0"},
+            {"id": "clash", "name": "Clash", "type": "service", "port": 7890, "bind": "0.0.0.0"},  # noqa: S104
         ]
         for s in services:
             idx = _find(assets, str(s["id"]))

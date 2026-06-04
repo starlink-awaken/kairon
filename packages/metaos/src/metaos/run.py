@@ -23,7 +23,7 @@ try:
     import urllib.request
 
     req = urllib.request.Request("http://localhost:11434/api/tags")
-    ollama_check = urllib.request.urlopen(req, timeout=3)
+    ollama_check = urllib.request.urlopen(req, timeout=3)  # noqa: S310
     if ollama_check.status == 200:
         models = json.loads(ollama_check.read()).get("models", [])
         if models:

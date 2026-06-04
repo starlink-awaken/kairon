@@ -400,7 +400,7 @@ class TestBuildGraph:
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(self.SAMPLE_REGISTRY, f)
             reg_path = f.name
-        graph_path = tempfile.mktemp(suffix=".json")
+        graph_path = tempfile.mktemp(suffix=".json")  # noqa: S306
 
         try:
             result = build(reg_path, graph_path, dry_run=True)
@@ -422,7 +422,7 @@ class TestBuildGraph:
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(self.SAMPLE_REGISTRY, f)
             reg_path = f.name
-        graph_path = tempfile.mktemp(suffix=".json")
+        graph_path = tempfile.mktemp(suffix=".json")  # noqa: S306
 
         try:
             result = build(reg_path, graph_path, dry_run=True)
@@ -446,7 +446,7 @@ class TestBuildGraph:
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(empty_reg, f)
             reg_path = f.name
-        graph_path = tempfile.mktemp(suffix=".json")
+        graph_path = tempfile.mktemp(suffix=".json")  # noqa: S306
 
         try:
             result = build(reg_path, graph_path, dry_run=True)
@@ -485,7 +485,7 @@ class TestGraphViz:
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(self.SAMPLE_GRAPH, f)
             graph_path = f.name
-        output_path = tempfile.mktemp(suffix=".html")
+        output_path = tempfile.mktemp(suffix=".html")  # noqa: S306
         try:
             generate_html(graph_path, output_path)
             html = Path(output_path).read_text()
@@ -504,7 +504,7 @@ class TestGraphViz:
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(self.SAMPLE_GRAPH, f)
             graph_path = f.name
-        output_path = tempfile.mktemp(suffix=".md")
+        output_path = tempfile.mktemp(suffix=".md")  # noqa: S306
         try:
             generate_mermaid(graph_path, output_path, max_nodes=10)
             mermaid = Path(output_path).read_text()

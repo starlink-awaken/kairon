@@ -93,7 +93,7 @@ class RaftConfigManager:
         node_id: str,
         peers: list[str],
         data_dir: str = "data/raft",
-        bind_address: str = "0.0.0.0",
+        bind_address: str = "0.0.0.0",  # noqa: S104
         port: int = 18000,
     ) -> None:
         self.status = "active"
@@ -297,7 +297,7 @@ class RaftConfigManager:
         # 实际应该基于日志比较决定是否投票
         import random
 
-        return random.random() > 0.3  # 70%概率投票
+        return random.random() > 0.3  # 70%概率投票  # noqa: S311
 
     async def _heartbeat_loop(self) -> None:
         """Leader心跳循环"""
@@ -335,7 +335,7 @@ class RaftConfigManager:
         await asyncio.sleep(0.01)
         import random
 
-        return random.random() > 0.2  # 80%成功率
+        return random.random() > 0.2  # 80%成功率  # noqa: S311
 
     async def _apply_loop(self) -> None:
         """应用已提交的日志条目"""

@@ -84,31 +84,31 @@ def _c(code: str, text: str) -> str:
     return f"\033[{code}m{text}\033[0m"
 
 
-def BOLD(t) -> str:  # type: ignore[no-untyped-def]  # noqa:
+def BOLD(t) -> str:  # type: ignore[no-untyped-def]  # noqa: N802  # noqa: N802
     return _c("1", t)
 
 
-def DIM(t) -> str:  # type: ignore[no-untyped-def]  # noqa:
+def DIM(t) -> str:  # type: ignore[no-untyped-def]  # noqa: N802  # noqa: N802
     return _c("2", t)
 
 
-def CYAN(t) -> str:  # type: ignore[no-untyped-def]  # noqa:
+def CYAN(t) -> str:  # type: ignore[no-untyped-def]  # noqa: N802  # noqa: N802
     return _c("36", t)
 
 
-def GREEN(t) -> str:  # type: ignore[no-untyped-def]  # noqa:
+def GREEN(t) -> str:  # type: ignore[no-untyped-def]  # noqa: N802  # noqa: N802
     return _c("32", t)
 
 
-def YELLOW(t) -> str:  # type: ignore[no-untyped-def]  # noqa:
+def YELLOW(t) -> str:  # type: ignore[no-untyped-def]  # noqa: N802  # noqa: N802
     return _c("33", t)
 
 
-def RED(t) -> str:  # type: ignore[no-untyped-def]  # noqa:
+def RED(t) -> str:  # type: ignore[no-untyped-def]  # noqa: N802  # noqa: N802
     return _c("31", t)
 
 
-def MAG(t) -> str:  # type: ignore[no-untyped-def]  # noqa:
+def MAG(t) -> str:  # type: ignore[no-untyped-def]  # noqa: N802  # noqa: N802
     return _c("35", t)
 
 

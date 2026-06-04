@@ -51,3 +51,10 @@ def list_documents(limit: int = 10) -> list[dict[str, Any]]:
         return []
     finally:
         c.close()
+
+
+__all__ = (
+    "list_documents",
+    "search",
+    "stats",
+)

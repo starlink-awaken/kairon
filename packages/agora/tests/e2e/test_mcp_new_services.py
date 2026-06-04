@@ -143,7 +143,7 @@ def main():
     tests_failed = 0
     failures = []
 
-    NEW_SERVICES = [
+    NEW_SERVICES = [  # noqa: N806
         "docker-mcp-gateway",
         "gitnexus",
         "zai-mcp-server",

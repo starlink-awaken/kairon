@@ -104,7 +104,7 @@ class AgentRuntime:
 
         url = f"{base_url}/chat/completions"
         data_bytes = json.dumps(payload).encode()
-        req = urllib.request.Request(
+        req = urllib.request.Request(  # noqa: S310
             url,
             data=data_bytes,
             headers={
@@ -114,7 +114,7 @@ class AgentRuntime:
             method="POST",
         )
         try:
-            with urllib.request.urlopen(req, timeout=180) as resp:
+            with urllib.request.urlopen(req, timeout=180) as resp:  # noqa: S310
                 data = json.loads(resp.read())
         except urllib.error.HTTPError as e:
             body = e.read().decode()[:500]

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# ---
+# ---  # noqa: N999
 # domain: workflows
 # layer: tool
 # status: active

@@ -41,6 +41,7 @@ Issues = "https://github.com/starlink-awaken/agora/issues"
 agora = "agora.cli:main"
 agora-mcp = "agora.server.mcp:main"
 agora-web = "agora.web.app:main"
+agora-mcp-gateway = "agora.mcp_gateway:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "pytest-asyncio>=0.24,<1.0", "ruff>=0.8", "mypy>=1.0"]

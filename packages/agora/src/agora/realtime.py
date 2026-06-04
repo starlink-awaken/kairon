@@ -141,8 +141,8 @@ class TaskSync:
                         "payload": payload,
                     }
                 ).encode()
-                req = request.Request(url, data=data, headers={"Content-Type": "application/json"})
-                request.urlopen(req, timeout=5)
+                req = request.Request(url, data=data, headers={"Content-Type": "application/json"})  # noqa: S310
+                request.urlopen(req, timeout=5)  # noqa: S310
                 pushed += 1
             except Exception:
                 pass
@@ -216,7 +216,7 @@ class CollaborativeEdit:
             }
 
         new_version = current_version + 1
-        checksum = hashlib.md5(content.encode()).hexdigest()[:12]
+        checksum = hashlib.md5(content.encode()).hexdigest()[:12]  # noqa: S324
 
         conn = self._get_conn()
         conn.execute(

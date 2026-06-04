@@ -22,7 +22,7 @@ def extract_frontmatter(text: str) -> dict:
     if m:
         try:
             return yaml.safe_load(m.group(1)) or {}
-        except:
+        except:  # noqa: E722
             return {}
     return {}
 

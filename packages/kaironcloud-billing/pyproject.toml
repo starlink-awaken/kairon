@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "kaironcloud-billing"
-version = "0.1.0"
+version = "0.2.0"
 description = "Billing subsystem extracted from SharedBrain D_Cloud — models, pricing, usage tracking, Stripe integration"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -12,6 +12,9 @@ license = {text = "MIT"}
 
 dependencies = [
 ]
+
+[project.scripts]
+kaironcloud-billing-pricing = "kaironcloud_billing.pricing.eu_cli:main"
 
 [project.optional-dependencies]
 stripe = ["stripe>=6.0"]

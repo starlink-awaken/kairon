@@ -7,8 +7,9 @@
 
 import json
 import os
-import sys
 import sqlite3
+import sys
+
 import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -55,7 +56,7 @@ class TestSSBAuth:
         db.close()
 
         # Monkeypatch 路径
-        from ecos.ssb_auth as auth
+        from ecos import ssb_auth as auth
 
         monkeypatch.setattr(auth, "KEY_FILE", key_file)
         monkeypatch.setattr(auth, "DB_PATH", db_file)
@@ -64,7 +65,7 @@ class TestSSBAuth:
 
     def test_keygen(self, tmp_path):
         """测试密钥生成"""
-        from ecos.ssb_auth as auth
+        from ecos import ssb_auth as auth
 
         tmp_path / "test_key"
         # 直接测试 _load_key 返回 None 当文件不存在
@@ -72,7 +73,7 @@ class TestSSBAuth:
 
     def test_compute_signature(self, temp_env):
         """测试签名计算"""
-        from ecos.ssb_auth as auth
+        from ecos import ssb_auth as auth
 
         sig1 = auth.compute_signature(1000, "e1", "SSB_CLIENT", '{"test":"event_0"}')
         sig2 = auth.compute_signature(1000, "e1", "SSB_CLIENT", '{"test":"event_0"}')
@@ -85,7 +86,7 @@ class TestSSBAuth:
 
     def test_verify_all_unsigned(self, temp_env):
         """测试verify: 所有事件无签名"""
-        from ecos.ssb_auth as auth
+        from ecos import ssb_auth as auth
 
         stats = auth.verify(limit=10)
         assert stats["total"] > 0
@@ -95,7 +96,7 @@ class TestSSBAuth:
 
     def test_sign_new_events(self, temp_env):
         """测试sign-new: 补充签名"""
-        from ecos.ssb_auth as auth
+        from ecos import ssb_auth as auth
 
         signed = auth.sign_new_events(limit=10)
         assert signed == 5, "应为5个事件签名"
@@ -107,7 +108,7 @@ class TestSSBAuth:
 
     def test_tampered_event_detected(self, temp_env, monkeypatch):
         """测试篡改检测"""
-        from ecos.ssb_auth as auth
+        from ecos import ssb_auth as auth
 
         # 先签名
         auth.sign_new_events(limit=10)
@@ -225,11 +226,11 @@ class TestIntegration:
 
     def test_auth_and_guard_independent(self):
         """ssb_auth 和 realtime_guard 可独立导入"""
-        from ecos.ssb_auth
-        from ecos.realtime_guard
+        import ecos.realtime_guard
+        import ecos.ssb_auth
 
-        assert hasattr(scripts.ssb_auth, "compute_signature")
-        assert hasattr(scripts.realtime_guard, "check")
+        assert hasattr(ecos.ssb_auth, "compute_signature")
+        assert hasattr(ecos.realtime_guard, "check")
 
     def test_state_yaml_exists(self):
         """STATE.yaml 存在且可解析"""

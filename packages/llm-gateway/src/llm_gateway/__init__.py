@@ -27,28 +27,23 @@ from llm_gateway.providers.hitl_provider import HitlLLMProvider
 from llm_gateway.providers.ollama_provider import OllamaProvider
 from llm_gateway.providers.openai_provider import OpenAIProvider
 
-__all__ = [
-    # Core
-    "LLMProvider",
-    "LLMRequest",
-    "LLMResponse",
-    "LLMError",
-    "LLMRetryExhaustedError",
-    # Concrete providers
+__all__ = (
     "AnthropicProvider",
     "DeepSeekProvider",
     "GeminiProvider",
     "HitlLLMProvider",
-    "OllamaProvider",
-    "OpenAIProvider",
-    # Testing / degradation
+    "LLMError",
+    "LLMProvider",
+    "LLMRequest",
+    "LLMResponse",
+    "LLMRetryExhaustedError",
     "MockLLMProvider",
     "NoneProvider",
-    # Tool classes (backward compat)
+    "OllamaProvider",
+    "OpenAIProvider",
     "ToolCall",
     "ToolResult",
     "ToolSchema",
-    # Detection
     "create_provider",
     "detect_backends",
-]
+)

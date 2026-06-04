@@ -594,7 +594,7 @@ class ExtensionGitIntegration:
         if "github.com" in url:
             env["GIT_ASKPASS"] = "echo"
             env["GIT_USERNAME"] = token
-            env["GIT_PASSWORD"] = "x-oauth-basic"
+            env["GIT_PASSWORD"] = "x-oauth-basic"  # noqa: S105
         elif "gitlab.com" in url:
             env["GIT_ASKPASS"] = "echo"
             env["GIT_USERNAME"] = "oauth2"

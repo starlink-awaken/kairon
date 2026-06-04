@@ -21,7 +21,6 @@ resolution-markers = [
 
 [manifest]
 members = [
-    "agent-hub",
     "agent-runtime",
     "agora",
     "codeanalyze",
@@ -30,9 +29,7 @@ members = [
     "ecos",
     "eidos",
     "engine-core",
-    "eu-pricing",
     "forge",
-    "gc-engine",
     "iris",
     "kairon",
     "kairon-assistant",
@@ -43,12 +40,9 @@ members = [
     "llm-gateway",
     "metaos",
     "minerva",
-    "observability",
     "ontoderive",
-    "pontus",
     "shared-lib",
     "sharedbrain-bridge",
-    "sharedbrain-standalone",
     "sophia",
     "ssot-kernel",
     "symphony-protocol",
@@ -56,13 +50,8 @@ members = [
 ]
 
 [[package]]
-name = "agent-hub"
-version = "0.1.0"
-source = { editable = "packages/agent-hub" }
-
-[[package]]
 name = "agent-runtime"
-version = "0.1.0"
+version = "0.5.0"
 source = { editable = "packages/agent-runtime" }
 dependencies = [
     { name = "fastmcp" },
@@ -968,7 +957,7 @@ wheels = [
 
 [[package]]
 name = "codeanalyze"
-version = "0.3.0"
+version = "0.5.0"
 source = { editable = "packages/codeanalyze" }
 dependencies = [
     { name = "click" },
@@ -1107,7 +1096,7 @@ wheels = [
 
 [[package]]
 name = "core-models"
-version = "0.1.0"
+version = "0.5.0"
 source = { editable = "packages/core-models" }
 dependencies = [
     { name = "aiohttp" },
@@ -1544,7 +1533,7 @@ wheels = [
 
 [[package]]
 name = "ecos"
-version = "0.6.0"
+version = "0.8.0"
 source = { editable = "packages/ecos" }
 dependencies = [
     { name = "beautifulsoup4" },
@@ -1563,7 +1552,7 @@ requires-dist = [
 
 [[package]]
 name = "eidos"
-version = "0.1.0"
+version = "0.5.0"
 source = { editable = "packages/eidos" }
 dependencies = [
     { name = "core-models" },
@@ -1598,7 +1587,7 @@ wheels = [
 
 [[package]]
 name = "engine-core"
-version = "0.1.0"
+version = "0.3.0"
 source = { editable = "packages/engine-core" }
 
 [[package]]
@@ -1609,17 +1598,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/d3/38/af70d7ab1ae9d4da4
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c1/8b/5fe2cc11fee489817272089c4203e679c63b570a5aaeb18d852ae3cbba6a/et_xmlfile-2.0.0-py3-none-any.whl", hash = "sha256:7a91720bc756843502c3b7504c77b8fe44217c85c537d85037f0f536151b2caa", size = 18059, upload-time = "2024-10-25T17:25:39.051Z" },
 ]
-
-[[package]]
-name = "eu-pricing"
-version = "0.1.0"
-source = { editable = "packages/eu-pricing" }
-dependencies = [
-    { name = "core-models" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "core-models", editable = "packages/core-models" }]
 
 [[package]]
 name = "exceptiongroup"
@@ -1980,24 +1958,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/d5/8d/1c51c094345df128c
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d5/0c/043d5e551459da400957a1395e0febbf771446ff34291afcbe3d8be2a279/fsspec-2026.4.0-py3-none-any.whl", hash = "sha256:11ef7bb35dab8a394fde6e608221d5cf3e8499401c249bebaeaad760a1a8dec2", size = 203402, upload-time = "2026-04-29T20:42:36.842Z" },
 ]
-
-[[package]]
-name = "gc-engine"
-version = "0.1.0"
-source = { editable = "packages/gc-engine" }
-
-[package.optional-dependencies]
-dev = [
-    { name = "pytest" },
-    { name = "pytest-cov" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0" },
-    { name = "pytest-cov", marker = "extra == 'dev'" },
-]
-provides-extras = ["dev"]
 
 [[package]]
 name = "gensim"
@@ -2625,7 +2585,7 @@ wheels = [
 
 [[package]]
 name = "iris"
-version = "0.1.0"
+version = "0.3.0"
 source = { editable = "packages/iris" }
 dependencies = [
     { name = "fastmcp" },
@@ -3002,7 +2962,7 @@ dev = [{ name = "pytest-cov", specifier = ">=7.1.0" }]
 
 [[package]]
 name = "kaironcloud-billing"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "packages/kaironcloud-billing" }
 
 [package.optional-dependencies]
@@ -3173,7 +3133,7 @@ requires-dist = [
 
 [[package]]
 name = "kronos"
-version = "0.5.0"
+version = "0.7.0"
 source = { editable = "packages/kronos" }
 dependencies = [
     { name = "click" },
@@ -3357,7 +3317,7 @@ wheels = [
 
 [[package]]
 name = "llm-gateway"
-version = "0.1.0"
+version = "0.3.0"
 source = { editable = "packages/llm-gateway" }
 dependencies = [
     { name = "pyyaml" },
@@ -3769,7 +3729,7 @@ provides-extras = ["dev"]
 
 [[package]]
 name = "minerva"
-version = "0.11.0"
+version = "0.15.0"
 source = { editable = "packages/minerva" }
 dependencies = [
     { name = "apscheduler" },
@@ -4519,11 +4479,6 @@ wheels = [
 ]
 
 [[package]]
-name = "observability"
-version = "0.1.0"
-source = { editable = "packages/observability" }
-
-[[package]]
 name = "onnxruntime"
 version = "1.26.0"
 source = { registry = "https://pypi.org/simple" }
@@ -5007,17 +4962,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/f9/e2/3e91f31a7d2b083fe
 wheels = [
     { url = "https://files.pythonhosted.org/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl", hash = "sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746", size = 20538, upload-time = "2025-05-15T12:30:06.134Z" },
 ]
-
-[[package]]
-name = "pontus"
-version = "0.1.0"
-source = { editable = "packages/pontus" }
-dependencies = [
-    { name = "pyyaml" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "pyyaml" }]
 
 [[package]]
 name = "pooch"
@@ -6523,7 +6467,7 @@ wheels = [
 
 [[package]]
 name = "shared-lib"
-version = "0.1.0"
+version = "0.4.0"
 source = { editable = "packages/shared-lib" }
 
 [package.dev-dependencies]
@@ -6542,24 +6486,18 @@ dev = [
 
 [[package]]
 name = "sharedbrain-bridge"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "packages/sharedbrain-bridge" }
-dependencies = [
-    { name = "core-models" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "core-models", editable = "packages/core-models" }]
-
-[[package]]
-name = "sharedbrain-standalone"
-version = "0.1.0"
-source = { editable = "packages/sharedbrain-standalone" }
 dependencies = [
     { name = "core-models" },
     { name = "fastapi" },
     { name = "fastmcp" },
     { name = "httpx" },
+]
+
+[package.optional-dependencies]
+standalone = [
+    { name = "uvicorn" },
 ]
 
 [package.metadata]
@@ -6568,7 +6506,9 @@ requires-dist = [
     { name = "fastapi" },
     { name = "fastmcp" },
     { name = "httpx" },
+    { name = "uvicorn", marker = "extra == 'standalone'" },
 ]
+provides-extras = ["standalone"]
 
 [[package]]
 name = "shellingham"
@@ -6629,7 +6569,7 @@ wheels = [
 
 [[package]]
 name = "sophia"
-version = "0.2.1"
+version = "0.3.0"
 source = { editable = "packages/sophia" }
 dependencies = [
     { name = "core-models" },
@@ -7731,7 +7671,7 @@ wheels = [
 
 [[package]]
 name = "wksp"
-version = "0.2.0"
+version = "0.3.0"
 source = { editable = "packages/wksp" }
 dependencies = [
     { name = "click" },

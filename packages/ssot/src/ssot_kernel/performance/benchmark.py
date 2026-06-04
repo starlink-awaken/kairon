@@ -17,6 +17,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 
 from ..engine import DerivationReport, RuleEngine
+from .generators import TestDataGenerator
 
 
 @dataclass

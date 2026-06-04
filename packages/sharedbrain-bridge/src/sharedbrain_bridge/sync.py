@@ -32,9 +32,9 @@ class SyncBridge:
         fp = hashlib.sha256(json.dumps(organs, sort_keys=True).encode()).hexdigest()
         try:
             payload = json.dumps({"organs": organs, "fingerprint": fp}).encode()
-            req = Request(f"{self.sb}/api/v1/memory/sync", data=payload, method="POST")
+            req = Request(f"{self.sb}/api/v1/memory/sync", data=payload, method="POST")  # noqa: S310
             req.add_header("Content-Type", "application/json")
-            resp = urlopen(req, timeout=10)
+            resp = urlopen(req, timeout=10)  # noqa: S310
             return {"synced": resp.status == 200, "count": len(organs), "fp": fp}
         except Exception as e:
             return {"synced": False, "error": str(e), "count": len(organs), "fp": fp}

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "iris"
-version = "0.1.0"
+version = "0.3.0"
 description = "Connector hub for personal knowledge platforms"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -33,7 +33,6 @@ dev = ["pytest>=7.0", "ruff>=0.6.0"]
 
 [project.scripts]
 iris = "iris.cli:main"
-iris-mcp = "iris.mcp_server:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/iris"]

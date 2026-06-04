@@ -119,11 +119,11 @@ class QLearningAgent:
         """
         # Lazy import to avoid circular dependency at module load time.
         try:
-            RLTrainingHistory = __import__(  # cross-organ: invisible to AST topology checker
+            RLTrainingHistory = __import__(  # cross-organ: invisible to AST topology checker  # noqa: N806
                 "organs.D_Monitoring.rl_dashboard", fromlist=["RLTrainingHistory"]
             ).RLTrainingHistory
         except (ImportError, AttributeError):
-            RLTrainingHistory = None
+            RLTrainingHistory = None  # noqa: N806
 
         agent = cls(**kwargs)
         if RLTrainingHistory is None:

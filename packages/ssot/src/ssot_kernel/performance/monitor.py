@@ -248,7 +248,7 @@ class MetricsCollector:
         """收集引擎指标"""
         try:
             pattern_count = len(engine.registry.list_patterns())
-        except:
+        except:  # noqa: E722
             pattern_count = 0
 
         return {
@@ -307,14 +307,14 @@ class MetricsCollector:
         """获取模式类型"""
         try:
             return engine.registry.list_patterns()
-        except:
+        except:  # noqa: E722
             return []
 
     def _get_registry_size(self, engine: RuleEngine) -> int:
         """获取注册表大小"""
         try:
             return len(engine.registry.list_patterns())
-        except:
+        except:  # noqa: E722
             return 0
 
     def _estimate_domain_size(self, domain: DomainConfig) -> float:

@@ -297,7 +297,7 @@ class Hatcher:
 
     def _build_command(self, template: str, task_prompt: str) -> list[str]:
         """Parse cli_command_template and inject task_prompt safely."""
-        _SENTINEL = "___TASK_PROMPT_SENTINEL___"
+        _SENTINEL = "___TASK_PROMPT_SENTINEL___"  # noqa: N806
         normalised = (
             template.replace("'{TASK_PROMPT}'", _SENTINEL)
             .replace('"{TASK_PROMPT}"', _SENTINEL)
@@ -357,7 +357,7 @@ class Hatcher:
             inject_soul_env(env, soul_context)
             logger.info(f"[Hatcher] Injecting soul context role_id={soul_context.get('role_id')!r} into worker env.")
         try:
-            HoloMemoryInjector = __import__(
+            HoloMemoryInjector = __import__(  # noqa: N806
                 "organs.D_Gateway.organs.holo_memory_injector", fromlist=["HoloMemoryInjector"]
             ).HoloMemoryInjector
 
@@ -372,7 +372,7 @@ class Hatcher:
             logger.debug("[Hatcher] HoloMemory injection skipped (non-fatal): %s", _exc)
 
         try:
-            KnowledgeInjector = __import__(
+            KnowledgeInjector = __import__(  # noqa: N806
                 "organs.D_Gateway.organs.knowledge_injector", fromlist=["KnowledgeInjector"]
             ).KnowledgeInjector
 
@@ -396,7 +396,7 @@ class Hatcher:
         import sqlite3
 
         try:
-            EnergyLedger = __import__(
+            EnergyLedger = __import__(  # noqa: N806
                 "organs.D_Economy.organs.energy_ledger",
                 fromlist=["EnergyLedger"],
             ).EnergyLedger

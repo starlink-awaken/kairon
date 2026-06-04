@@ -15,9 +15,9 @@ class ImmuneBridge:
     def audit(self, content: str, title: str = "", source: str = "") -> dict:
         try:
             payload = json.dumps({"content": content, "title": title, "source": source}).encode()
-            req = Request(f"{self.sb}/api/v1/immunity/audit", data=payload, method="POST")
+            req = Request(f"{self.sb}/api/v1/immunity/audit", data=payload, method="POST")  # noqa: S310
             req.add_header("Content-Type", "application/json")
-            resp = urlopen(req, timeout=10)
+            resp = urlopen(req, timeout=10)  # noqa: S310
             return json.loads(resp.read().decode())
         except Exception as e:
             return {"risk": "UNKNOWN", "error": str(e)}

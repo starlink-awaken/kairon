@@ -17,6 +17,7 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-AX01-10_holographic_metadata_axio
 # 功能 ⊢ {Api_Routing, Routing_Mixin, Mixin_Init}
 # =============================================================================
 
+import contextvars
 import json
 import logging
 import time as _time_module
@@ -30,6 +31,7 @@ _Tracing = cast(Any, None)
 _clear_trace_impl = None
 _start_trace_impl = None
 _TRACING_AVAILABLE = False
+_tc_var: contextvars.ContextVar[Any] = contextvars.ContextVar("trace_context", default=None)
 
 from .api_types import APIRequest, APIResponse, APIRoute, HTTPMethod  # noqa: F401
 from .auth_models import AuthenticationError

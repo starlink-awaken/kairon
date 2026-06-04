@@ -139,7 +139,7 @@ class EmbeddingStore:
                     continue
                 tool_ids.append(row["tool_id"])
                 embeddings.append(emb)
-            except Exception:
+            except Exception:  # noqa: S112
                 continue
         if embeddings:
             self._cache.load(tool_ids, np.array(embeddings, dtype=np.float32))

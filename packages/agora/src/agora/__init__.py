@@ -11,15 +11,26 @@ __version__ = "1.2.0"
 # These were migrated from SharedBrain/organs/D_Gateway/ and are self-contained
 # with no nucleus dependencies.  See each module's docstring for details.
 
-from . import (  # type: ignore[import-not-found]  # noqa: F401
-    api_types,
-    auth_models,
-    base_tool,
-    connection_pool,
-    tool_contract,
-    tools_template,
-    umbilical_protocol,
-    unified_protocol_adapter,
+from . import (
+    api_types,  # type: ignore[import-not-found]
+    auth_models,  # type: ignore[import-not-found]
+    base_tool,  # type: ignore[import-not-found]
+    connection_pool,  # type: ignore[import-not-found]
+    tool_contract,  # type: ignore[import-not-found]
+    tools_template,  # type: ignore[import-not-found]
+    umbilical_protocol,  # type: ignore[import-not-found]
+    unified_protocol_adapter,  # type: ignore[import-not-found]
+)
+
+__all__ = (
+    "api_types",
+    "auth_models",
+    "base_tool",
+    "connection_pool",
+    "tool_contract",
+    "tools_template",
+    "umbilical_protocol",
+    "unified_protocol_adapter",
 )
 
 """

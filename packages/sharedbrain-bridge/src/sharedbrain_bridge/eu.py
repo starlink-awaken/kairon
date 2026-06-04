@@ -30,7 +30,7 @@ class EUBridge:
     def check_balance(self, caller: str) -> dict:
         try:
             url = f"{self.sb}/api/v1/economy/balance?caller={caller}"
-            resp = urlopen(Request(url, method="GET"), timeout=5)
+            resp = urlopen(Request(url, method="GET"), timeout=5)  # noqa: S310
             data = json.loads(resp.read().decode())
             return {"balance": data.get("balance", 100), "limit": data.get("limit", 1000), "ok": True}
         except Exception as e:
@@ -43,9 +43,9 @@ class EUBridge:
             return {"success": False, "error": f"Insufficient EU: need {cost}, have {balance['balance']}"}
         try:
             payload = json.dumps({"caller": caller, "cost": cost, "operation": operation}).encode()
-            req = Request(f"{self.sb}/api/v1/economy/consume", data=payload, method="POST")
+            req = Request(f"{self.sb}/api/v1/economy/consume", data=payload, method="POST")  # noqa: S310
             req.add_header("Content-Type", "application/json")
-            resp = urlopen(req, timeout=5)
+            resp = urlopen(req, timeout=5)  # noqa: S310
             return {"success": resp.status == 200, "cost": cost, "balance_after": balance["balance"] - cost}
         except Exception as e:
             return {"success": False, "error": str(e)}

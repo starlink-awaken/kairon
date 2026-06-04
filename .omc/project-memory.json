@@ -27,7 +27,7 @@
   },
   "build": {
     "buildCommand": "make build",
-    "testCommand": "cat > \"/Users/xiamingxing/Workspace/.omc/plans/2026-06-04-architecture-iteration.md\" << 'PLANEOF'\n# kairon 架构迭代规划\n\n> 基于 31 包全面扫描，覆盖架构、能力、质量三方面迭代\n> 日期: 2026-06-04 | 状态: draft | 作者: architect\n\n---\n\n## 需求概要\n\n对 kairon monorepo 31 个包进行架构重整，解决 MCP 入口碎片化、瘦包泛滥、shared-lib 职责过载、测试缺失等 8 项问题。\n\n---\n\n## 接受标准 (AC)\n\n- [AC1] MCP 入口统一：所有 MCP 请求经过 agora 路由，其它包不再暴露独立 MCP 端口\n- [AC2] Wksp 测试覆盖率 ≥70%（当前 0）\n- [AC3] 10 个瘦包整合为 ≤5 个，包总数从 31 → ≤26\n- [AC4] shared-lib 拆分 ≤5 个子模块\n- [AC5] 跨包集成测试 ≥3 条链路\n- [AC6] 所有包 __init__.py 有显式 __all__\n- [AC7] 版本号符合 major.Minor.Patch 策略\n- [AC8] 根目录 5 个 _fix_*.py 清理\n\n---\n\n## 实施步骤\n\n### Wave 1: P0 快速修复（预计 1 天）\n\n#### W1-T1: 根目录清理\n**文件：**\n- Delete: `projects/kairon/_fix_imports.py`\n- Delete: `projects/kairon/_fix_merged.py`\n- Delete: `projects/kairon/_fix_object_annotations.py`\n- Delete: `projects/kairon/_fix_remaining.py`\n- Delete: `projects/kairon/_fix_remaining2.py`\n- Verify: `ruff check .` no errors\n\n**AC:** 根目录无残留修复脚本\n\n---\n\n#### W1-T2: Wksp 测试覆盖\n**文件：**\n- Create: `packages/wksp/tests/test_basic.py`\n- Create: `packages/wksp/tests/test_cli.py`\n- Create: `packages/wksp/tests/conftest.py`\n\n**步骤：**\n1. 创建 conftest.py 提供测试 fixture（临时目录环境）\n2. test_basic.py: 验证 import wksp, import 所有 commands 子模块\n3. test_cli.py: 验证 CLI 入口（help 输出、子命令解析）\n\n**AC:** `python3 -m pytest packages/wksp/tests/ -q` ≥10 个测试通过\n\n---\n\n#### W1-T3: API __all__ 标准化\n**文件：** 所有 31 个包 src/*/__init__.py\n\n**策略：** 每个包至少导出核心类/函数，无空 __all__\n\n**AC:** 所有 __init__.py 有非空 __all__\n\n---\n\n### Wave 2: 瘦包整合（预计 2 天）\n\n#### W2-T1: agent-hub → agent-runtime 合并\n**文件：**\n- Move: `packages/agent-hub/src/agent_hub/__init__.py → packages/agent-runtime/src/agent_runtime/agent_hub.py`\n- Delete: `packages/agent-hub/`\n- Update: `packages/agent-runtime/pyproject.toml`（移除 agent-hub 依赖）\n- Update: workspace pyproject.toml（移除 agent-hub 成员）\n\n**AC:** agent-runtime 能正常引用 AgentHub，`from agent_runtime.agent_hub import AgentHub`\n\n---\n\n#### W2-T2: sharedbrain-standalone → sharedbrain-bridge 合并\n**文件：**\n- Move: `packages/sharedbrain-standalone/src/` → `packages/sharedbrain-bridge/src/sharedbrain_bridge/standalone/`\n- Delete: `packages/sharedbrain-standalone/`\n- Update: workspace 配置\n\n**AC:** sharedbrain-bridge 能正常引用 standalone 模块\n\n---\n\n#### W2-T3: observability → shared-lib 合并\n**文件：**\n- Move: `packages/observability/src/observability/` → `packages/shared-lib/src/kairon_lib/observability/`\n- Delete: `packages/observability/`\n- Update: workspace 配置\n\n**AC:** `from kairon_lib.observability import MetricsCollector` 正常\n\n---\n\n#### W2-T4: gc-engine → eidos 合并\n**文件：**\n- Move: `packages/gc-engine/src/gc_engine/` → `packages/eidos/src/eidos/gc/`\n- Delete: `packages/gc-engine/`\n- Update: workspace 配置\n\n**AC:** `from eidos.gc import GCEngine` 正常\n\n---\n\n#### W2-T5: eu-pricing → kaironcloud-billing 合并\n**文件：**\n- Move: `packages/eu-pricing/src/eu_pricing/` → `packages/kaironcloud-billing/src/kaironcloud_billing/pricing/`\n- Delete: `packages/eu-pricing/`\n- Update: workspace 配置\n\n**AC:** `from kaironcloud_billing.pricing import EnergyLedger` 正常\n\n---\n\n#### W2-T6: pontus → minerva 合并\n**文件：**\n- Move: `packages/pontus/src/pontus/` → `packages/minerva/src/minerva/pipeline/pontus/`\n- Delete: `packages/pontus/`\n- Update: workspace 配置\n\n**AC:** `from minerva.pipeline.pontus import DAGScheduler` 正常\n\n---\n\n### Wave 3: 架构重构（预计 2 天）\n\n#### W3-T1: MCP 入口统一到 agora\n**分析：** 当前 10+ 包各自暴露 MCP server，绕过 agora 路由/断路器/认证体系。\n\n**方案：** \n- agora 作为唯一 MCP 暴露层（7430/7431）\n- 其他包注册为 agora backend（mcp_proxy 模式）\n- 通过 agora 的 ServiceRegistry 统一发现\n\n**文件：**\n- Modify: `packages/agora/src/agora/mcp_proxy/manager.py` — 增加 backend 注册流程\n- Modify: `packages/agora/src/agora/agent_registry.py` — 扩充 backend 描述字段\n- Create: `packages/agora/src/agora/mcp_unification.py` — MCP 统一注册管理\n- Modify: 各包 pyproject.toml — 移除独立 MCP 入口脚本\n- Modify: `packages/agora/pyproject.toml` — 增加统一 MCP CLI 入口\n\n**AC:** 所有 MCP 请求通过 agora 7430/7431，各包独立 MCP 入口移除\n\n---\n\n#### W3-T2: shared-lib 模块化拆分\n**分析：** 166 文件涵盖 governance/audit/cognitive/metrics/core 五个域，内部依赖混乱。\n\n**方案：** 目录结构重组：\n\n```\nshared-lib/src/kairon_lib/\n├── __init__.py        # 兼容导出\n├── _compat.py         # 保持\n├── governance/        # committee_hall, committee, consensus_mechanism, rfc_lifecycle, voting_framework, approval_queue, approval_router\n├── audit/             # audit_trail, audit_query, adr_storage, retrospective\n├── cognitive/         # cognitive_loop, workflow_engine, delivery_loop, thinking\n├── metrics/           # evolution_metrics, harvest_scheduler\n└── core/              # errors, capability_standardization, emergency_stop, human_in_the_loop\n```\n\n**AC:** 原有导入路径 `from kairon_lib.xxx import YYY` 保持兼容\n\n---\n\n### Wave 4: 质量提升（预计 2 天）\n\n#### W4-T1: 跨包集成测试\n**创建测试链路：**\n1. agora → agent-runtime: MCP 调用 → agent 执行\n2. agent-runtime → engine-core: agent 调度 → worker 分发\n3. engine-core → llm-gateway: 任务执行 → LLM 调用\n\n**文件：**\n- Create: `tests/integration/run-all.sh`\n- Create: `tests/integration/test_agora_agent_flow.py`\n- Create: `tests/integration/test_engine_llm_flow.py`\n\n**AC:** 3 条集成链路可通过 `bash tests/integration/run-all.sh` 运行\n\n---\n\n#### W4-T2: 版本号规范化\n**策略：**\n- major 升级走 gate review（架构变更）\n- minor 升级新增功能\n- patch 修复 bug\n- 当前 0.1.0 包根据实际成熟度重新定级\n\n**AC:** 所有包版本号符合统一策略\n\n---\n\n## 风险评估\n\n| 风险 | 概率 | 影响 | 缓解 |\n|------|------|------|------|\n| 瘦包合并破坏现有导入 | 中 | 高 | 保留兼容导入路径，逐步迁移 |\n| MCP 统一导致服务中断 | 中 | 高 | 分层灰度，先迁非核心包 |\n| shared-lib 拆分破坏依赖 | 高 | 中 | 保持向后兼容 __init__ 导出 |\n| Wksp 测试发现深层 Bug | 中 | 低 | 测试本身就是发现问题的目的 |\n\n---\n\n## 验证步骤\n\n1. `python3 -m pytest packages/ -q` 全部通过\n2. `ruff check packages/` 0 error\n3. 验证各包 __init__ 导入\n4. 验证 nova 统一 MCP 端口可达\n5. `bash tests/integration/run-all.sh` 通过\n\n---\n\n## 工作量估算\n\n| Wave | 任务 | 估算 |\n|------|------|------|\n| W1 | P0 快速修复 | ~0.5 天 |\n| W2 | 瘦包整合 ×6 | ~1 天 |\n| W3 | 架构重构 ×2 | ~2 天 |\n| W4 | 质量提升 ×2 | ~1.5 天 |\n| **总计** | | **~5 天** |\nPLANEOF\n\necho \"✅ Plan saved\"",
+    "testCommand": "cd packages/agora && python3 -m pytest tests/mcp_gateway_test.py -v 2>&1",
     "lintCommand": "ruff check",
     "devCommand": null,
     "scripts": {}
@@ -152,6 +152,12 @@
       "type": "file"
     },
     {
+      "path": "packages/engine-core/src/engine_core/task_context.py",
+      "accessCount": 9,
+      "lastAccessed": 1780553334183,
+      "type": "file"
+    },
+    {
       "path": "packages/shared-lib/src/kairon_lib/workflow_engine.py",
       "accessCount": 8,
       "lastAccessed": 1780547558155,
@@ -164,21 +170,45 @@
       "type": "file"
     },
     {
-      "path": "packages/engine-core/src/engine_core/task_context.py",
-      "accessCount": 6,
-      "lastAccessed": 1780547847804,
+      "path": "packages/engine-core/src/engine_core/__init__.py",
+      "accessCount": 8,
+      "lastAccessed": 1780552542350,
+      "type": "file"
+    },
+    {
+      "path": "packages/agent-hub/src/agent_hub/__init__.py",
+      "accessCount": 7,
+      "lastAccessed": 1780551863805,
+      "type": "file"
+    },
+    {
+      "path": "packages/agora/pyproject.toml",
+      "accessCount": 7,
+      "lastAccessed": 1780552637572,
       "type": "file"
     },
     {
       "path": "packages/shared-lib/src/kairon_lib/_compat.py",
-      "accessCount": 5,
-      "lastAccessed": 1780547483072,
+      "accessCount": 6,
+      "lastAccessed": 1780552513534,
       "type": "file"
     },
     {
       "path": "packages/engine-core/src/engine_core/auctioneer.py",
       "accessCount": 5,
       "lastAccessed": 1780547777021,
+      "type": "file"
+    },
+    {
+      "path": "packages/pontus/src/pontus/__init__.py",
+      "accessCount": 5,
+      "lastAccessed": 1780551872191,
+      "type": "file"
+    },
+    {
+      "path": "packages/gc-engine/src/gc_engine/__init__.py",
+      "accessCount": 5,
+      "lastAccessed": 1780551892465,
       "type": "file"
     },
     {
@@ -206,21 +236,33 @@
       "type": "file"
     },
     {
-      "path": "packages/agora/pyproject.toml",
-      "accessCount": 3,
-      "lastAccessed": 1780547449493,
+      "path": "packages/core-models/src/core_models/__init__.py",
+      "accessCount": 4,
+      "lastAccessed": 1780551604594,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/worker_abstraction.py",
+      "accessCount": 4,
+      "lastAccessed": 1780552572133,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/pyproject.toml",
+      "accessCount": 4,
+      "lastAccessed": 1780552591075,
+      "type": "file"
+    },
+    {
+      "path": "packages/agora/tests/conftest.py",
+      "accessCount": 4,
+      "lastAccessed": 1780552611904,
       "type": "file"
     },
     {
       "path": "packages/engine-core/src/engine_core/context_injector.py",
       "accessCount": 3,
       "lastAccessed": 1780547688726,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/worker_abstraction.py",
-      "accessCount": 3,
-      "lastAccessed": 1780547688970,
       "type": "file"
     },
     {
@@ -236,9 +278,27 @@
       "type": "file"
     },
     {
-      "path": "packages/agora/tests/conftest.py",
-      "accessCount": 2,
-      "lastAccessed": 1780547439099,
+      "path": "packages/agent-hub/tests/test_basic.py",
+      "accessCount": 3,
+      "lastAccessed": 1780551886750,
+      "type": "file"
+    },
+    {
+      "path": "packages/agent-hub/tests/test_agent_hub.py",
+      "accessCount": 3,
+      "lastAccessed": 1780551886804,
+      "type": "file"
+    },
+    {
+      "path": "packages/pontus/tests/test_pontus.py",
+      "accessCount": 3,
+      "lastAccessed": 1780552093437,
+      "type": "file"
+    },
+    {
+      "path": "packages/pontus/tests/test_basic.py",
+      "accessCount": 3,
+      "lastAccessed": 1780552093489,
       "type": "file"
     },
     {
@@ -296,12 +356,6 @@
       "type": "file"
     },
     {
-      "path": "packages/core-models/src/core_models/__init__.py",
-      "accessCount": 2,
-      "lastAccessed": 1780547607915,
-      "type": "file"
-    },
-    {
       "path": "packages/engine-core/src/engine_core/_compat.py",
       "accessCount": 2,
       "lastAccessed": 1780547610844,
@@ -350,69 +404,15 @@
       "type": "file"
     },
     {
-      "path": "packages/engine-core/pyproject.toml",
-      "accessCount": 1,
-      "lastAccessed": 1780547570594,
-      "type": "file"
-    },
-    {
-      "path": "packages/agent-hub/src/agent_hub/__init__.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547606988,
-      "type": "file"
-    },
-    {
       "path": "packages/gc-engine/tests/test_gc_engine.py",
       "accessCount": 1,
       "lastAccessed": 1780547607052,
       "type": "file"
     },
     {
-      "path": "packages/agent-hub/tests/test_agent_hub.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547607103,
-      "type": "file"
-    },
-    {
-      "path": "packages/agent-hub/tests/test_basic.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547607118,
-      "type": "file"
-    },
-    {
       "path": "packages/gc-engine/tests/test_basic.py",
       "accessCount": 1,
       "lastAccessed": 1780547607140,
-      "type": "file"
-    },
-    {
-      "path": "packages/gc-engine/src/gc_engine/__init__.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547607199,
-      "type": "file"
-    },
-    {
-      "path": "packages/pontus/tests/test_pontus.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547607335,
-      "type": "file"
-    },
-    {
-      "path": "packages/pontus/src/pontus/__init__.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547607401,
-      "type": "file"
-    },
-    {
-      "path": "packages/pontus/tests/test_basic.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547607468,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/__init__.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547610818,
       "type": "file"
     },
     {

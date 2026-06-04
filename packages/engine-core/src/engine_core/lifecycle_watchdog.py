@@ -138,8 +138,8 @@ class SwarmWatchdog:
         ) or not self._has_reward_engines_available():
             return
         try:
-            NectarEngine = self._load_nectar_engine()
-            CrystallizationGate = self._load_crystal_gate()
+            NectarEngine = self._load_nectar_engine()  # noqa: N806
+            CrystallizationGate = self._load_crystal_gate()  # noqa: N806
             if NectarEngine is not None:
                 self._nectar_engine = NectarEngine()
             if CrystallizationGate is not None:

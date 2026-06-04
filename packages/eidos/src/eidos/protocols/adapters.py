@@ -9,7 +9,12 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-from eidos.protocols import FactProtocol, KnowledgeCardProtocol, OntologyNodeProtocol, Validatable  # type: ignore[import-not-found]
+from eidos.protocols import (  # type: ignore[import-not-found]
+    FactProtocol,
+    KnowledgeCardProtocol,
+    OntologyNodeProtocol,
+    Validatable,
+)
 
 
 def safe_validate(obj: Any) -> list[str]:

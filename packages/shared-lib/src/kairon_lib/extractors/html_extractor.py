@@ -7,7 +7,6 @@ Provides ``HtmlContentExtractor`` which converts raw HTML into one or more
 ``StructuredKnowledge`` items.
 """
 
-from typing import Any
 
 from kairon_lib.extractors.base import StructuredKnowledge
 from kairon_lib.sources.connectors import RawContent
