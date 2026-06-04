@@ -1,8 +1,8 @@
 # kairon
 
-> Knowledge & Research Operating Stack — 31 包 Python monorepo
+> Knowledge & Research Operating Stack — 25 包 Python monorepo（以当前 checkout 为准）
 
-kairon 是一个基于 uv workspace 的 Python 知识工程与研究栈，包含知识提取、本体推导、MCP 服务、Agent 运行时、LLM 网关等能力。
+kairon 是一个基于 uv workspace 的 Python 知识工程与研究栈，覆盖知识提取、本体推导、MCP 服务、Agent 运行时、研究管线和桥接能力。
 
 ## 快速开始
 
@@ -25,7 +25,7 @@ make format
 
 ```
 kairon/
-├── packages/              # 31 个 Python 包
+├── packages/              # 25 个活跃 Python 包
 │   ├── eidos/             # 知识建模 (7 MCP tools)
 │   ├── kos/               # 搜索索引 (26 tools)
 │   ├── agora/             # MCP 服务发现 + 断路器
@@ -33,14 +33,18 @@ kairon/
 │   ├── agent-runtime/     # Agent 执行引擎
 │   ├── core-models/       # 核心数据模型（依赖基座）
 │   ├── shared-lib/        # 共享工具库 (~120 模块)
-│   └── ...                # 见 CLI 文档
+│   └── ...                # 详见 docs/architecture_audit.md
 ├── Makefile               # 构建/测试/格式化
 ├── pyproject.toml         # 项目配置和依赖
 ├── CLAUDE.md              # Claude Code 入口
 └── AGENTS.md              # 非 Claude Agent 入口
 ```
 
-详细包列表和架构说明见 [CLAUDE.md](CLAUDE.md)。
+当前包清单、跨项目接缝和整改路线见：
+
+- [docs/architecture_audit.md](docs/architecture_audit.md)
+- [docs/cross_project_boundary_audit.md](docs/cross_project_boundary_audit.md)
+- [docs/governance_plan.md](docs/governance_plan.md)
 
 ## 依赖
 

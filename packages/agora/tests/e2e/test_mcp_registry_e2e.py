@@ -18,7 +18,7 @@ from agora.agent_registry import (
     sign_challenge,
     verify_signature,
 )
-from agora.mcp_bootstrap import (
+from agora.mcp.mcp_bootstrap import (
     KNOWN_SERVICES,
     _default_config,
 )
@@ -792,7 +792,7 @@ class TestMcpBootstrapConfig:
 
     def test_disabled_services_not_in_enabled_list(self):
         """_build_enabled_services() 过滤掉 disabled 服务。"""
-        from agora.mcp_bootstrap import _build_enabled_services
+        from agora.mcp.mcp_bootstrap import _build_enabled_services
 
         config_services = [
             {"name": "enabled-svc", "command": "echo", "args": [], "enabled": True},
