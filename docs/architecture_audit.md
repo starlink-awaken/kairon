@@ -276,15 +276,18 @@ def main():
 | **CRDT** | eidos, engine-core | 无冲突复制数据类型同步 |
 | **门控 (Gate)** | symphony-protocol | 阶段门控，条件通过/阻塞 |
 
-### 5.5 LLM 抽象层冗余
+### 5.5 LLM 抽象层冗余（已解决 ✅）
 
-存在 **4 种独立 LLM 抽象实现**，语义重复：
+**已于 2026-06-04 统一为 `llm-gateway` 单一抽象**，详细见对应的治理 Plan。
 
-| 实现 | 包 | 基类/接口 | 支持的 Provider |
-|------|-----|-----------|----------------|
-| `BaseProvider` | ontoderive | ABC | OpenAI, Anthropic |
-| `OpenAICompatibleClient` | minerva | 自定义 | OpenAI-compatible |
-| `LLMBackend` | ssot-kernel | 自定义 | OpenAI-compatible |
+存在 **4 种独立 LLM 抽象实现**，语义重复（已解决）：
+
+| 实现 | 包 | 基类/接口 | 状态 |
+|------|-----|-----------|------|
+| `BaseProvider` | ontoderive | ABC → `OntoderiveProvider` | ✅ 已适配 |
+| `OpenAICompatibleClient` | minerva | 自定义 → `MinervaProvider` | ✅ 已适配 |
+| `LLMBackend` | ssot-kernel | 自定义 → `SSOTProvider` | ✅ 已适配 |
+| `llm-gateway` | llm-gateway | ABC（统一载体） | 🟢 统一完成 |
 | `llm-gateway` | llm-gateway | ABC | OpenAI, Anthropic（未提交） |
 
 **问题**: 同一功能重复实现 4 次，导致维护成本 4x，接口不统一，参数配置各异。

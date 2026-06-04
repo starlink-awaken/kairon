@@ -603,7 +603,7 @@ Kairon 项目层（projects/kairon/）
 
 | ID | 债务 | Phase | 状态 | 风险等级 | 说明 |
 |----|------|-------|------|---------|------|
-| K-001 | LLM 抽象层 4 路重复 | Phase 1 | 🔴 Unresolved | P0 | S-1 |
+| K-001 | LLM 抽象层 4 路重复 | Phase 1 | ✅ **Completed** (2026-06-04) | P0 | S-1 — 3 个适配器已创建 |
 | K-002 | Ruff 配置不一致 | Phase 1 | 🔴 Unresolved | P1 | S-2 |
 | K-003 | 测试覆盖严重不足 | Phase 1~3 | 🔴 Unresolved | P1 | S-3 |
 | K-004 | engine-core 重复/空文件 | Phase 2 | 🟡 Unresolved | P2 | S-4 |

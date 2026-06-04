@@ -109,6 +109,18 @@ minerva, ontoderive, sharedbrain-bridge, sharedbrain-standalone
 | 🔴 早期 | core-models (v0.1.0), shared-lib (v0.1.0) | 快速变化，接口不稳定 |
 | ⚪ 待评估 | kairon-assistant, kairon-voice | 来自外部集成，需验证 |
 
+### LLM 统一
+
+4 路 LLM 抽象已统一为 **`llm-gateway`**（2026-06-04）：
+
+| 旧实现 | 适配器 | 状态 |
+|--------|--------|------|
+| ontoderive `BaseProvider` | `OntoderiveProvider` | ✅ |
+| minerva `OpenAICompatibleClient` | `MinervaProvider` | ✅ |
+| ssot `LLMBackend` | `SSOTProvider` | ✅ |
+
+新代码优先使用 `from llm_gateway.providers.legacy_*_adapter import *`。
+
 ## 测试惯例
 
 - **框架**: pytest + uv
@@ -133,6 +145,7 @@ minerva, ontoderive, sharedbrain-bridge, sharedbrain-standalone
 | 类型检查 | mypy（namespace_packages + explicit_package_bases） |
 | 覆盖率 | fail_under 70%（`[tool.coverage.report]`） |
 | 包管理 | uv（非 pip/poetry） |
+| Lint 状态 | **`ruff check packages/` → 0 errors**（2026-06-04 归零） |
 
 ## 关键文件
 
