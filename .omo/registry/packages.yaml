@@ -1,421 +1,127 @@
-# Kairon 包治理注册表
-#
-# 维护: 2026-06-02 · Phase 3 治理体系落地
-# 关联: docs/governance_plan.md（附录 8.1 包状态追踪表）
-#
-# 成熟度定义:
-#   stable    — 核心稳定包，生产可用
-#   beta      — 功能完善，偶有 API 变动
-#   alpha     — 实验性包，API 不稳定
-#
-# 状态标记:
-#   ✅ 已完成 · 🔄 进行中 · ❌ 未完成 · ⚪ 待分析 · ⚠️ 需关注
-
+generated_at: '2026-06-04'
 packages:
-
-  # ============================================================================
-  # 稳定包 (Stable)
-  # ============================================================================
-
-  agora:
-    maturity: stable
-    version: 2.0.0
-    owner: null
-    description: 核心包 — 服务发现与路由
-    test_files: 49
-    test_passed: "ModuleNotFound — 未安装"
-    test_coverage_target: 50%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts:
-      - "SSRF 防护需补充安全测试"
-      - "包未在环境中安装，ModuleNotFoundError"
-    dependencies: []
-
-  kos:
-    maturity: stable
-    version: 2.0.0
-    owner: null
-    description: 知识 OS — 知识图 CRUD + MCP 工具
-    test_files: 22
-    test_passed: "263/268 (98%) — 5 pre-existing failures"
-    test_coverage_target: 60%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: true
-    phase17_note: "D_KnowledgeIntegration → knowledge_bridge.py"
-    known_debts:
-      - "5 个既有测试失败需修复"
-    dependencies: [ontoderive]
-
-  ssot:
-    maturity: stable
-    version: 1.0.0
-    owner: null
-    description: SSOT 知识引擎 — 唯一真实源
-    test_files: 11
-    test_passed: "161/161 (100%)"
-    test_coverage_target: 60%
-    ruff_unified: true
-    llm_unified: true
-    llm_note: "LLMBackend → llm-gateway 适配完成"
-    phase17_migrated: false
-    known_debts: []
-    dependencies: [core-models, llm-gateway]
-
-  ontoderive:
-    maturity: stable
-    version: 3.6.4
-    owner: null
-    description: 本体推导引擎
-    test_files: 50
-    test_passed: "759/759 (100%)"
-    test_coverage_target: 60%
-    ruff_unified: true
-    llm_unified: true
-    llm_note: "BaseProvider → llm-gateway 适配完成"
-    phase17_migrated: false
-    known_debts: []
-    dependencies: [core-models, llm-gateway]
-
-  cron-service:
-    maturity: stable
-    version: 1.0.0
-    owner: null
-    description: 定时任务调度服务
-    test_files: 1
-    test_passed: "106/106 (100%)"
-    test_coverage_target: 60%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts: []
-    dependencies: [shared-lib]
-
-  kairon-assistant:
-    maturity: stable
-    version: 1.0.0
-    owner: null
-    description: 智能助手
-    test_files: 2
-    test_passed: "53/53 (100%)"
-    test_coverage_target: 60%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts:
-      - "曾缺失 governance_integration.py — 已修复"
-    dependencies: [core-models, shared-lib]
-
-  kairon-voice:
-    maturity: stable
-    version: 1.0.0
-    owner: null
-    description: 语音子系统 — 策略模式 + 抽象工厂
-    test_files: 1
-    test_passed: "64/64 (100%)"
-    test_coverage_target: 60%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts: []
-    dependencies: []
-
-  # ============================================================================
-  # Beta 包 (Beta)
-  # ============================================================================
-
-  minerva:
-    maturity: beta
-    version: 0.11.0
-    owner: null
-    description: 研究管线 — 最大的包之一
-    test_files: 34
-    test_passed: "无测试输出"
-    test_coverage_target: 50%
-    ruff_unified: true
-    llm_unified: true
-    llm_note: "OpenAICompatibleClient → llm-gateway 适配完成"
-    phase17_migrated: false
-    known_debts:
-      - "无测试输出，需排查 pytest 配置"
-    dependencies: [core-models, llm-gateway]
-
-  sophia:
-    maturity: beta
-    version: 0.2.1
-    owner: null
-    description: 符号范式引擎
-    test_files: 6
-    test_passed: "ModuleNotFound — 未安装"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts:
-      - "包未在环境中安装，ModuleNotFoundError"
-    dependencies: []
-
-  kronos:
-    maturity: beta
-    version: 0.4.0
-    owner: null
-    description: 时间管理
-    test_files: 9
-    test_passed: "无测试输出"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts:
-      - "版本已统一（之前 pyproject:0.4.0 vs 内部 0.5.0 不一致）"
-    dependencies: []
-
-  codeanalyze:
-    maturity: beta
-    version: 0.3.0
-    owner: null
-    description: 代码分析工具
-    test_files: 9
-    test_passed: "111/128 (87%)"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts: []
-    dependencies: []
-
-  forge:
-    maturity: beta
-    version: 1.3.0
-    owner: null
-    description: 锻造引擎 — 工具注册与内部工具集
-    test_files: 11
-    test_passed: "无测试输出"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    phase17_potential: "D_Karma (工具) 候选目标"
-    known_debts:
-      - "⚪ 需深度分析"
-    dependencies: []
-
-  eidos:
-    maturity: beta
-    version: 0.1.0
-    owner: null
-    description: 记忆与知识管理
-    test_files: 19
-    test_passed: "147/150 (98%) — 3 pre-existing failures"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    phase17_potential: "D_Memory 迁移候选 (42K 行)"
-    known_debts:
-      - "3 个既有测试失败需修复"
-      - "D_Memory 器官迁移候选"
-    dependencies: [core-models]
-
-  # ============================================================================
-  # Alpha 包 (Alpha)
-  # ============================================================================
-
-  metaos:
-    maturity: alpha
-    version: 0.1.0
-    owner: null
-    description: 元治理层
-    test_files: 11
-    test_passed: "163/163 (100%)"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts:
-      - "版本已统一（之前 pyproject:0.1.0 vs __version__: v7.1.0 不一致）"
-    dependencies: [core-models]
-
-  ecos:
-    maturity: alpha
-    version: 0.6.0
-    owner: null
-    description: 认知 OS 生态层 — 外化认知服务注册与发现
-    test_files: 12
-    test_passed: "无测试输出"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts:
-      - "⚪ 需深度分析"
-      - "无测试输出，需排查 pytest 配置"
-    dependencies: []
-
-  iris:
-    maturity: alpha
-    version: 0.1.0
-    owner: null
-    description: 连接器中心
-    test_files: 10
-    test_passed: "178/180 (99%) — 2 pre-existing failures"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts:
-      - "2 个既有测试失败需修复"
-    dependencies: [core-models]
-
-  agent-runtime:
-    maturity: alpha
-    version: 0.1.0
-    owner: null
-    description: Agent 运行时
-    test_files: 6
-    test_passed: "103/108 (95%) — 5 pre-existing failures"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts:
-      - "5 个 terminal_run 测试失败需修复"
-    dependencies: [core-models, shared-lib]
-
-  core-models:
-    maturity: alpha
-    version: 0.1.0
-    owner: null
-    description: 核心模型定义 — 依赖根
-    test_files: 2
-    test_passed: "61/61 (100%)"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts: []
-    dependencies: []
-
-  engine-core:
-    maturity: alpha
-    version: 0.1.0
-    owner: null
-    description: 核心引擎 — EventBus、CRDT、Worker 抽象
-    test_files: 2
-    test_passed: "无测试输出"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts:
-      - "重复文件已清理"
-      - "result_bus.py 空文件已删除"
-      - "EventBus 已提取到 shared-lib"
-      - "无测试 — 需创建测试基线"
-    dependencies: [shared-lib, core-models]
-
-  llm-gateway:
-    maturity: alpha
-    version: 0.1.0
-    owner: null
-    description: LLM 抽象层 — Provider 统一接口
-    test_files: 1
-    test_passed: "无测试输出"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: true
-    llm_note: "统一 ABC — LLMProvider、LLMRequest、LLMResponse、NoneProvider"
-    phase17_migrated: false
-    known_debts:
-      - "无测试 — 需创建测试基线"
-    dependencies: []
-
-  shared-lib:
-    maturity: alpha
-    version: 0.1.0
-    owner: null
-    description: 共享库 — 通用工具函数与类型
-    test_files: 7
-    test_passed: "无测试输出"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts:
-      - "⚪ 需深度分析"
-      - "无测试输出，需排查 pytest 配置"
-      - "EventBus 已提取（events.py）"
-    dependencies: []
-
-  sharedbrain-bridge:
-    maturity: alpha
-    version: 0.1.0
-    owner: null
-    description: SharedBrain HTTP 桥接
-    test_files: 2
-    test_passed: "31/31 (100%)"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts: []
-    dependencies: []
-
-  eu-pricing:
-    status: merged
-    merged_into: kaironcloud-billing
-    merged_at: "2026-06-04"
-    version: 0.1.0
-    description: EU 虚拟资源记账 — 已合并至 kaironcloud-billing/pricing/
-    test_files: 3
-    test_passed: "10/10 (100%)"
-    known_debts:
-      - "⚪ 已合并至 kaironcloud-billing，保留记录供追溯"
-    dependencies: []
-
-  symphony-protocol:
-    maturity: alpha
-    version: 0.1.0
-    owner: null
-    description: 阶段门控协议
-    test_files: 1
-    test_passed: "118/118 (100%)"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts: []
-    dependencies: [core-models]
-
-  wksp:
-    maturity: alpha
-    version: 0.2.0
-    owner: null
-    description: 工作台 — CLI 交互式工作台
-    test_files: 40
-    test_passed: "无测试输出"
-    test_coverage_target: 30%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: false
-    known_debts:
-      - "⚪ 需深度分析"
-      - "无测试输出，需排查 pytest 配置"
-    dependencies: []
-
-  kaironcloud-billing:
-    maturity: alpha
-    version: 0.1.0
-    owner: null
-    description: 计费系统 + EU 虚拟资源记账（合并自 eu-pricing）
-    test_files: 5
-    test_passed: "114/114 (100%)"
-    test_coverage_target: 60%
-    ruff_unified: true
-    llm_unified: n/a
-    phase17_migrated: true
-    phase17_note: "eu-pricing 已于 2026-06-04 合并为 pricing/ 子包"
-    known_debts: []
-    dependencies: []
+- cli: true
+  description: Agent Runtime engine — CLI, MCP & FastAPI entry points
+  name: agent-runtime
+  tests: 15
+  version: 0.5.0
+- cli: true
+  description: Agora — MCP Service Convergence Hub. Route, monitor, and gov
+  name: agora
+  tests: 47
+  version: 2.0.0
+- cli: true
+  description: Unified code & document analysis toolkit
+  name: codeanalyze
+  tests: 14
+  version: 0.5.0
+- cli: false
+  description: Core Entity/Relation/Provenance/KnowledgeGraph data models f
+  name: core-models
+  tests: 5
+  version: 0.5.0
+- cli: true
+  description: Cron scheduler service — scripts as SSOT, MCP for Hermes
+  name: cron-service
+  tests: 4
+  version: 1.0.0
+- cli: true
+  description: eCOS — 认知层：SSB 签名链、涌现度量、认知监控
+  name: ecos
+  tests: 13
+  version: 0.8.0
+- cli: true
+  description: Schema definition and validation layer for the Workspace kno
+  name: eidos
+  tests: 26
+  version: 0.5.0
+- cli: false
+  description: Engine core utilities extracted from SharedBrain D_Execution
+  name: engine-core
+  tests: 14
+  version: 0.3.0
+- cli: true
+  description: 个人 AI 数字资产管理中心 — 统一工具注册、发现与治理层
+  name: forge
+  tests: 12
+  version: 1.3.0
+- cli: true
+  description: Connector hub for personal knowledge platforms
+  name: iris
+  tests: 11
+  version: 0.3.0
+- cli: false
+  description: Smart Assistant — command parsing, context management, and s
+  name: kairon-assistant
+  tests: 5
+  version: 1.0.0
+- cli: false
+  description: Voice subsystem — STT/TTS interfaces and provider adapters e
+  name: kairon-voice
+  tests: 4
+  version: 1.0.0
+- cli: true
+  description: Billing subsystem extracted from SharedBrain D_Cloud — model
+  name: kaironcloud-billing
+  tests: 7
+  version: 0.2.0
+- cli: true
+  description: 'Knowledge Operating System — cross-domain search, ontology, '
+  name: kos
+  tests: 25
+  version: 2.0.0
+- cli: true
+  description: Kronos — 知识摄取管线。L0原生HTTP / L2 Jina / L4 CloakBrowser / 5层自动抓
+  name: kronos
+  tests: 10
+  version: 0.7.0
+- cli: false
+  description: Unified LLM provider abstraction — ABC, dataclasses, and con
+  name: llm-gateway
+  tests: 5
+  version: 0.3.0
+- cli: true
+  description: MetaOS — 编排/治理层：决策门控、免疫监控、路由、数字资产引擎
+  name: metaos
+  tests: 4
+  version: 7.1.0
+- cli: true
+  description: Minerva — A local-first deep research system with tiered pip
+  name: minerva
+  tests: 10
+  version: 0.15.0
+- cli: true
+  description: OntoDerive 渊衍框架 — 事实驱动的一体化知识工程与方案推导
+  name: ontoderive
+  tests: 51
+  version: 3.6.4
+- cli: false
+  description: Shared library for kairon monorepo
+  name: shared-lib
+  tests: 36
+  version: 0.4.0
+- cli: true
+  description: Bridge between kairon and SharedBrain — EU pricing, immune a
+  name: sharedbrain-bridge
+  tests: 5
+  version: 0.2.0
+- cli: true
+  description: Sophia — Symbolic Research Paradigm Engine. Composable, dyna
+  name: sophia
+  tests: 7
+  version: 0.3.0
+- cli: false
+  description: SSOT — 领域知识单一事实源（Domain Knowledge Single Source of Truth）
+  name: ssot
+  tests: 12
+  version: 1.0.0
+- cli: false
+  description: Symphony Protocol — 形式化执行阶段协议（状态机 + Agent匹配 + 触发器引擎）
+  name: symphony-protocol
+  tests: 6
+  version: 0.1.0
+- cli: true
+  description: Workspace — 统一用户入口：研究对象管理系统
+  name: wksp
+  tests: 3
+  version: 0.3.0

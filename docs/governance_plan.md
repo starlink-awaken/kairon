@@ -559,7 +559,7 @@ Kairon 项目层（projects/kairon/）
 
 | 包名 | 版本 | 成熟度 | 测试文件数 | 测试目标 | Ruff 状态 | LLM 统一状态 | 责任人 | 备注 |
 |------|------|--------|-----------|---------|----------|-------------|--------|------|
-| agora | 2.0.0 | Stable | 49 | 50%+ | ❌ 待统一 | N/A（不含 LLM） | TBD | 核心包，测试基础好 |
+| agora | 2.0.0 | Stable | 50 | 50%+ | ✅ 已统一 | N/A（不含 LLM） | TBD | 核心包，测试基础好 |
 | minerva | 0.11.0 | Beta | 34 | 50%+ | ❌ 待统一 | 🔄 需适配（OpenAICompatibleClient） | TBD | 最大包之一 |
 | kos | 2.0.0 | Stable | 22 | 50%+ | ❌ 待统一 | N/A | TBD | 知识 OS，Phase 17 W1 目标 |
 | ssot | 1.0.0 | Stable | 11 | 50%+ | ❌ 待统一 | 🔄 需适配（LLMBackend） | TBD | SSOT 知识引擎 |
