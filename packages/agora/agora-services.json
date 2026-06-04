@@ -1,0 +1,177 @@
+{
+  "services": [
+    {
+      "name": "minerva",
+      "description": "Local-first deep research system — 5 Super Tools (Dropbox Dash pattern)",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio://minerva",
+      "health_endpoint": "http://localhost:8765/health",
+      "port": 8765,
+      "tags": [
+        "research",
+        "knowledge",
+        "llm"
+      ],
+      "instances": [],
+      "provider_info": null,
+      "healthy": true,
+      "last_health_check": 0.0
+    },
+    {
+      "name": "ontoderive",
+      "description": "Fact-driven knowledge engineering — ToolForge + derive + check",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio://ontoderive",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "knowledge-engineering",
+        "derivation",
+        "ontology"
+      ],
+      "instances": [],
+      "provider_info": null,
+      "healthy": true,
+      "last_health_check": 0.0
+    },
+    {
+      "name": "sophia",
+      "description": "Symbolic research paradigm compiler — state machine formalism",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio://sophia",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "paradigm",
+        "compiler",
+        "state-machine"
+      ],
+      "instances": [],
+      "provider_info": null,
+      "healthy": true,
+      "last_health_check": 0.0
+    },
+    {
+      "name": "agora",
+      "description": "MCP service convergence hub — registry, routing, pipeline",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio://agora",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "gateway",
+        "registry",
+        "pipeline"
+      ],
+      "instances": [],
+      "provider_info": null,
+      "healthy": true,
+      "last_health_check": 0.0
+    },
+    {
+      "name": "eidos",
+      "description": "Schema definition and validation layer for the Workspace knowledge foundation",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio://eidos",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "schema",
+        "validation",
+        "knowledge",
+        "ontology"
+      ],
+      "instances": [],
+      "provider_info": null,
+      "healthy": true,
+      "last_health_check": 0.0
+    },
+    {
+      "name": "metaos",
+      "description": "MetaOS — 编排/治理层：决策门控、免疫监控、路由、数字资产引擎",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio://metaos",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [],
+      "instances": [],
+      "provider_info": null,
+      "healthy": true,
+      "last_health_check": 0.0
+    },
+    {
+      "name": "iris",
+      "description": "Connector hub for personal knowledge platforms",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio://iris",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "connector",
+        "knowledge",
+        "note",
+        "sync",
+        "mcp"
+      ],
+      "instances": [],
+      "provider_info": null,
+      "healthy": true,
+      "last_health_check": 0.0
+    },
+    {
+      "name": "kronos",
+      "description": "Kronos — 知识摄取管线。L0原生HTTP / L2 Jina / L4 CloakBrowser / 5层自动抓取引擎",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio://kronos",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "knowledge",
+        "pipeline",
+        "ingestion",
+        "content",
+        "ontology"
+      ],
+      "instances": [],
+      "provider_info": null,
+      "healthy": true,
+      "last_health_check": 0.0
+    },
+    {
+      "name": "agent-runtime",
+      "description": "Agent Runtime engine — CLI, MCP & FastAPI entry points",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio://agent-runtime",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [],
+      "instances": [],
+      "provider_info": null,
+      "healthy": true,
+      "last_health_check": 0.0
+    },
+    {
+      "name": "cron-service",
+      "description": "Cron scheduler service — scripts as SSOT, MCP for Hermes",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [],
+      "instances": [],
+      "provider_info": null,
+      "healthy": true,
+      "last_health_check": 0.0
+    }
+  ]
+}

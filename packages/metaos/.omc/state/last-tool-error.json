@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cp -r /Users/xiamingxing/Workspace/MetaOS/config /Users/xiamingxing/Workspace/kairon/packages/metaos/src/metaos/config/ 2>/dev/null && python3 -m pytest tests/test_unit.py -q --tb=line 2>&...",
+  "error": "Exit code 1",
+  "timestamp": "2026-05-29T09:30:27.069Z",
+  "retry_count": 1
+}

@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"PYTHONPATH=src python3 -m pytest tests/ -q 2>&1\",\"description\":\"Run billing tests with PYTHONPATH fix\"}",
+  "error": "Exit code 1\n.......................................................F..F............. [ 88%]\n.........                                                                [100%]\n=================================== FAILURES ===================================\n__________________ TestGetUsageReport.test_aggregates_compute __________________\n\nself = <tests.test_usage_tracker.TestGetUsageReport object at 0x107693ed0>\ntracker = <kaironcloud_billing.usage_tracker.UsageTracker object at 0x1070acaa0>\n\n    @pyt...",
+  "timestamp": "2026-06-02T03:06:02.636Z",
+  "retry_count": 1
+}

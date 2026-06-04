@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cd /Users/xiamingxing/Workspace && python3 scripts/sync_omo_state.py --omo-dir .omo 2>&1 && echo \\\"---\\\" && python3 -c \\\"\\nimport yaml\\ns = yaml.safe_load(open('.omo/state/system.yaml').re...",
+  "error": "Exit code 1\nTraceback (most recent call last):\n  File \"/Users/xiamingxing/Workspace/scripts/sync_omo_state.py\", line 435, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"/Users/xiamingxing/Workspace/scripts/sync_omo_state.py\", line 430, in main\n    sync_state(Path(args.omo_dir), test_output=test_output, now=args.now)\n    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/xiamingxing/Workspace/scripts/sync_omo_state.py\", line 362, in ...",
+  "timestamp": "2026-06-01T09:58:01.599Z",
+  "retry_count": 2
+}

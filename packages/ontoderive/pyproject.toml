@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ontoderive"
+version = "3.6.4"
+description = "OntoDerive 渊衍框架 — 事实驱动的一体化知识工程与方案推导"
+authors = [{name = "Summer"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = ["knowledge-engineering", "ontology", "derivation", "fact-driven"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "pyyaml",
+    "fastmcp>=1.0",
+    "core-models",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov", "ruff"]
+llm = ["openai"]
+web = ["fastapi", "uvicorn"]
+
+[project.scripts]
+ontoderive = "engine.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["engine"]
+
+[tool.hatch.version]
+path = "engine/__init__.py"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-v", "--tb=short"]
+

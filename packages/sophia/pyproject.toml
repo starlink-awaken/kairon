@@ -1,0 +1,52 @@
+[project]
+name = "sophia"
+version = "0.2.1"
+description = "Sophia — Symbolic Research Paradigm Engine. Composable, dynamically programmable research methodology based on state machine formalism (Turing-machine-inspired)."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [{name = "Minerva Contributors"}]
+keywords = ["research", "paradigm", "state-machine", "symbolic", "methodology", "compiler", "learning"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "core-models",
+    "rich>=13.0",
+    "fastmcp>=0.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/starlink-awaken/sophia"
+Repository = "https://github.com/starlink-awaken/sophia.git"
+Documentation = "https://github.com/starlink-awaken/sophia#readme"
+Issues = "https://github.com/starlink-awaken/sophia/issues"
+
+[project.scripts]
+sophia = "sophia.cli:main"
+sophia-mcp = "sophia.server.mcp_server:main"
+sophia-tui = "sophia.tui.app:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.24", "ruff>=0.8", "mypy>=1.0"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sophia"]
+
+[tool.hatch.build.targets.sdist]
+packages = ["src/sophia"]

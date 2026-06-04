@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cd /Users/xiamingxing/Workspace/projects/kairon && uv run --package shared-lib python -m pytest packages/shared-lib/tests/ -v 2>&1 && echo \\\"===SHARED_LIB_OK===\\\"\",\"description\":\"Run share...",
+  "error": "Exit code 2\n============================= test session starts ==============================\nplatform darwin -- Python 3.13.13, pytest-8.4.2, pluggy-1.6.0 -- /Users/xiamingxing/Workspace/projects/kairon/.venv/bin/python3\ncachedir: .pytest_cache\nrootdir: /Users/xiamingxing/Workspace/projects/kairon\nconfigfile: pyproject.toml\nplugins: asyncio-0.26.0, anyio-4.13.0\nasyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 0 ...",
+  "timestamp": "2026-06-02T01:21:19.099Z",
+  "retry_count": 1
+}

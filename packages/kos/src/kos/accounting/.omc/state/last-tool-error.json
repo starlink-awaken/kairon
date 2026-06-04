@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"echo \\\"test\\\" && echo \\\"test2\\\"</parameter>\\n</invoke>\\n\"}",
+  "error": "Exit code 1\n(eval):2: parse error near `\\n'",
+  "timestamp": "2026-05-25T09:27:21.133Z",
+  "retry_count": 1
+}

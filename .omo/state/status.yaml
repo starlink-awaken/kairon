@@ -1,0 +1,151 @@
+# Kairon 状态快照
+#
+# 维护: 2026-06-02 · Phase 3 治理体系落地
+# 关联: 根级 `.omo/state/system.yaml`
+
+---
+
+## 健康分
+
+current_score: 29.1
+target_score: 75.0
+phase_targets:
+  phase1: 45.0
+  phase2: 60.0
+  phase3: 75.0
+
+## 债务概览
+
+total_debts: 10
+resolved: 8
+unresolved: 2
+
+debts:
+  - id: K-001
+    title: "LLM 抽象层 4 路重复"
+    phase: 1
+    status: resolved
+    resolved_at: null
+    risk: P0
+    note: "S-1 — 已通过 llm-gateway 统一"
+
+  - id: K-002
+    title: "Ruff 配置不一致"
+    phase: 1
+    status: resolved
+    resolved_at: null
+    risk: P1
+    note: "S-2 — 已统一根级配置"
+
+  - id: K-003
+    title: "测试覆盖严重不足"
+    phase: 3
+    status: unresolved
+    resolved_at: null
+    risk: P1
+    note: "S-3 — 目标全包 ≥30%（Phase 3 进行中）"
+
+  - id: K-004
+    title: "engine-core 重复/空文件"
+    phase: 2
+    status: resolved
+    resolved_at: null
+    risk: P2
+    note: "S-4 — 已清理重复文件 + result_bus.py"
+
+  - id: K-005
+    title: "版本内外不一致（metaos, kronos）"
+    phase: 1
+    status: resolved
+    resolved_at: null
+    risk: P2
+    note: "S-5 — metaos/kronos 版本已统一"
+
+  - id: K-006
+    title: "共享能力未提取"
+    phase: 2
+    status: resolved
+    resolved_at: null
+    risk: P2
+    note: "S-6 — EventBus 已提取到 shared-lib"
+
+  - id: K-007
+    title: "kairon-assistant 缺失文件"
+    phase: 1
+    status: resolved
+    resolved_at: null
+    risk: P2
+    note: "governance_integration.py 缺失 — 已修复"
+
+  - id: K-008
+    title: "5 包未深度分析"
+    phase: 3
+    status: resolved
+    resolved_at: 2026-06-02
+    risk: P2
+    note: "ecos/eu-pricing/forge/shared-lib/wksp — 已全部完成深度分析"
+
+  - id: K-009
+    title: "外部依赖混淆（hermes_ops）"
+    phase: 3
+    status: unresolved
+    resolved_at: null
+    risk: P2
+    note: "独立 TS 项目 — 需评估"
+
+  - id: K-010
+    title: "CI 门禁 3 项预存失败"
+    phase: 3
+    status: unresolved
+    resolved_at: null
+    risk: P2
+    note: "ruff-lint 565 errors / ruff-format 22 files / version 2 MISMATCH — 需 Phase 3 持续修复"
+
+## 测试覆盖状态（2026-06-02 全量测试基线）
+
+# 前提: make test 使用系统 python3，部分包未通过 .venv 安装
+# 实际所有 26 包均有测试文件
+
+coverage_by_package:
+  agent-runtime: "103 passed, 5 failed (terminal_run 安全确认)"
+  agora: "19 collection errors (缺 kairon_lib, prometheus_client)"
+  codeanalyze: "111 passed, 17 skipped"
+  core-models: "61 passed"
+  cron-service: "106 passed"
+  ecos: "2 collection errors (SyntaxError: from ... as 语法)"
+  eidos: "147 passed, 3 failed (kos 依赖)"
+  engine-core: "1 collection error (ModuleNotFound: engine_core)"
+  eu-pricing: "10 passed"
+  forge: "3 collection errors (ModuleNotFound: asset_cli, cron_utils, entropy)"
+  iris: "178 passed, 2 failed (keychain)"
+  kairon-assistant: "53 passed"
+  kairon-voice: "64 passed"
+  kaironcloud-billing: "114 passed"
+  kos: "263 passed, 5 failed (config 模块、类型错误)"
+  kronos: "2 collection errors (ImportError: _is_error_page)"
+  llm-gateway: "1 collection error (ModuleNotFound: llm_gateway)"
+  metaos: "163 passed"
+  minerva: "2 collection errors (ModuleNotFound, SyntaxError)"
+  ontoderive: "759 passed"
+  shared-lib: "23 collection errors (ModuleNotFound: kairon_lib)"
+  sharedbrain-bridge: "31 passed"
+  sophia: "5 collection errors (ModuleNotFound: sophia)"
+  ssot: "运行中（预计 161 passed）"
+  symphony-protocol: "待运行"
+  wksp: "待运行（tests 在 src/ 内）"
+
+## Phase 进度
+
+phases:
+  phase1:
+    status: completed
+    note: "Ruff 标准化、LLM 统一、4 核心包测试基线、6 包提交、版本修复"
+  phase2:
+    status: completed
+    note: "engine-core 清理、EventBus 提取、Phase 17 W1 迁移、5 包测试 ≥60%"
+  phase3:
+    status: in_progress
+    note: "治理目录 ✅、包注册表 ✅、5 包深度分析 ✅、CI 门禁脚本 ✅ (9/26 包 pytest 通过)、全量测试 ≥30% 进行中"
+  phase4:
+    status: planned
+    note: "季度审计、债务看板、ADR、成熟度自动评估"

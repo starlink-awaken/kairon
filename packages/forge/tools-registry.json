@@ -1,0 +1,2113 @@
+{
+  "schema_version": "v1.1",
+  "tools": [
+    {
+      "id": "forge-health",
+      "name": "health",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "health",
+        "monitoring"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "health"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "运行健康检查",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-status",
+      "name": "status",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "status",
+        "overview"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "status"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "项目状态概览",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-schedule",
+      "name": "schedule",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "cron",
+        "schedule"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "schedule"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "配置每日巡更定时任务",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-routine",
+      "name": "routine",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "routine",
+        "workflow"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "routine"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "显示每日例行流程",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-serve-mcp",
+      "name": "serve-mcp",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "mcp",
+        "server"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "serve-mcp"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "启动 MCP 服务器",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-serve-api",
+      "name": "serve-api",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "api",
+        "server"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "serve-api"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "启动 HTTP REST API",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-capture",
+      "name": "capture",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "capture",
+        "registry"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "capture"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "记下新工具",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-build-graph",
+      "name": "build-graph",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "graph",
+        "knowledge"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "build-graph"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "构建知识图谱",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-query-graph",
+      "name": "query-graph",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "graph",
+        "query"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "query-graph"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "查询图谱",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-recommend",
+      "name": "recommend",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "recommend",
+        "knowledge"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "recommend"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "知识推荐",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-discover-links",
+      "name": "discover-links",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "discovery",
+        "links"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "discover-links"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "自动关联发现",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-graph-viz",
+      "name": "graph-viz",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "graph",
+        "viz"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "graph-viz"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "图谱可视化",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-sync-registry",
+      "name": "sync-registry",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "registry",
+        "sync"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "sync-registry"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "同步工具注册表",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-sniff-local",
+      "name": "sniff-local",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "sniff",
+        "local"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "sniff-local"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "本地嗅探",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-sniff-network",
+      "name": "sniff-network",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "sniff",
+        "network"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "sniff-network"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "网络嗅探",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-insight",
+      "name": "insight",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "insight",
+        "analytics"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "insight"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "洞察引擎",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-classify",
+      "name": "classify",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "classify",
+        "ml"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "classify"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "请求分类器",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-sediment",
+      "name": "sediment",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "sediment",
+        "management"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "sediment"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "工具沉淀管理",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-sediment-capture",
+      "name": "sediment-capture",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "capture",
+        "skill"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "sediment-capture"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "显式捕获 Skill",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-sediment-detect",
+      "name": "sediment-detect",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "detect",
+        "frequency"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "sediment-detect"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "频率检测沉淀",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-sunrise",
+      "name": "sunrise",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "candidate",
+        "pool"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "sunrise"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "候选池管理",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-sunset",
+      "name": "sunset",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "sunset",
+        "cleanup"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "sunset"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "日落条款",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-converge",
+      "name": "converge",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "converge",
+        "check"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "converge"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "收敛检查",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-entropy",
+      "name": "entropy",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "entropy",
+        "anti-entropy"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "entropy"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "反熵统一入口",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-kos-bridge",
+      "name": "kos-bridge",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "kos",
+        "bridge"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "kos-bridge"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "KOS 桥接",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-sync-agora",
+      "name": "sync-agora",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "agora",
+        "sync"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "sync-agora"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Agora 同步",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-rss-manager",
+      "name": "rss-manager",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "rss",
+        "feed"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "rss-manager"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "RSS 源管理",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-check-updates",
+      "name": "check-updates",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "update",
+        "check"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "check-updates"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "检查工具更新",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-discover-ecosystem",
+      "name": "discover-ecosystem",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "discover",
+        "ecosystem"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "discover-ecosystem"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "发现新工具/服务",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-sniff",
+      "name": "sniff",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "sniff",
+        "environment"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "sniff"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "环境嗅探",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-asset-list",
+      "name": "asset-list",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "asset",
+        "list"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "asset-list"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "资产清册列表",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-asset-register",
+      "name": "asset-register",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "asset",
+        "register"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "asset-register"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "资产注册",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-asset-check",
+      "name": "asset-check",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "asset",
+        "check"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "asset-check"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "资产检查",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-asset-scan",
+      "name": "asset-scan",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "asset",
+        "scan"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "asset-scan"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "资产扫描",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-asset-export",
+      "name": "asset-export",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "asset",
+        "export"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "asset-export"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "资产导出",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-verify",
+      "name": "verify",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "verify",
+        "test"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "verify"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "运行验证",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-dashboard",
+      "name": "dashboard",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "dashboard",
+        "web"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "dashboard"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "启动 Web 仪表盘",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-model-garden",
+      "name": "model-garden",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "model",
+        "garden"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "model-garden"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "模型花园",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-watchdog",
+      "name": "watchdog",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "watchdog",
+        "monitor"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "watchdog"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "看门狗",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "forge-cron-manager",
+      "name": "cron-manager",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "cron",
+        "manager"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "cron-manager"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "定时任务管理",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "git",
+      "name": "git",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "vcs",
+        "version-control"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "git"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "分布式版本控制",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "python3",
+      "name": "python3",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "runtime",
+        "python"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "python3"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Python 解释器",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "uv",
+      "name": "uv",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "package-manager",
+        "python"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "uv"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Python 包管理器",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "bun",
+      "name": "bun",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "runtime",
+        "javascript"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "bun"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "JavaScript 运行时",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "node",
+      "name": "node",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "runtime",
+        "javascript"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "node"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Node.js 运行时",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "npm",
+      "name": "npm",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "package-manager",
+        "javascript"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "npm"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Node 包管理器",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "docker",
+      "name": "docker",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "container",
+        "runtime"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "docker"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "容器引擎",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "docker-compose",
+      "name": "docker-compose",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "container",
+        "orchestration"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "docker-compose"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "容器编排",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "kubectl",
+      "name": "kubectl",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "k8s",
+        "cli"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "kubectl"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Kubernetes CLI",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "helm",
+      "name": "helm",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "k8s",
+        "package-manager"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "helm"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Kubernetes 包管理",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "brew",
+      "name": "brew",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "package-manager",
+        "macos"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "brew"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "macOS 包管理器",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "cargo",
+      "name": "cargo",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "package-manager",
+        "rust"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "cargo"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Rust 包管理器",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "go",
+      "name": "go",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "compiler",
+        "go"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "go"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Go 编译器",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "rustc",
+      "name": "rustc",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "compiler",
+        "rust"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "rustc"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Rust 编译器",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "ruff",
+      "name": "ruff",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "lint",
+        "python"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "ruff"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Python linter/formatter",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "pytest",
+      "name": "pytest",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "test",
+        "python"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "pytest"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Python 测试框架",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "mypy",
+      "name": "mypy",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "type-check",
+        "python"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "mypy"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Python 类型检查",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "black",
+      "name": "black",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "format",
+        "python"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "black"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Python 格式化",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "jq",
+      "name": "jq",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "json",
+        "processor"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "jq"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "JSON 处理器",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "ripgrep",
+      "name": "ripgrep",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "search",
+        "grep"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "ripgrep"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "快速搜索",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "fd",
+      "name": "fd",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "search",
+        "find"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "fd"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "快速文件查找",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "fzf",
+      "name": "fzf",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "search",
+        "fuzzy"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "fzf"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "模糊查找",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "bat",
+      "name": "bat",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "cat",
+        "viewer"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "bat"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "语法高亮 cat",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "tree",
+      "name": "tree",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "directory",
+        "tree"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "tree"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "目录树",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "htop",
+      "name": "htop",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "monitor",
+        "process"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "htop"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "进程监控",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "tmux",
+      "name": "tmux",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "terminal",
+        "multiplexer"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "tmux"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "终端复用",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "zsh",
+      "name": "zsh",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "shell",
+        "terminal"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "zsh"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Z Shell",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "bash",
+      "name": "bash",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "shell",
+        "terminal"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "bash"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Bourne Again Shell",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "vim",
+      "name": "vim",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "editor",
+        "text"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "vim"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "文本编辑器",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    },
+    {
+      "id": "nvim",
+      "name": "nvim",
+      "type": "cli",
+      "status": "active",
+      "category": [
+        "editor",
+        "text"
+      ],
+      "capabilities": [],
+      "access": {
+        "method": "cli",
+        "location": "nvim"
+      },
+      "source": {
+        "type": "system",
+        "provider": "omostation",
+        "version_tracking": false
+      },
+      "cost_model": "free",
+      "health": "healthy",
+      "notes": "Neovim 编辑器",
+      "added": "2026-06-03",
+      "updated": "2026-06-03",
+      "version": "1.0.0",
+      "telemetry": {
+        "use_count": 0,
+        "last_used": ""
+      }
+    }
+  ],
+  "event_log": [
+    {
+      "type": "registry:init",
+      "tool_id": "system",
+      "summary": "初始化注册表，70 工具",
+      "timestamp": "2026-06-03T14:42:00Z"
+    }
+  ]
+}

@@ -1,0 +1,428 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1780383238324,
+  "projectRoot": "/Users/xiamingxing/Workspace/projects/kairon",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Python",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "pyproject.toml"
+        ]
+      },
+      {
+        "name": "C/C++",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "Makefile"
+        ]
+      }
+    ],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "make build",
+    "testCommand": "ruff check /Users/xiamingxing/Workspace/projects/kairon/packages/engine-core/src/engine_core/__init__.py 2>&1 | tail -3 && echo \"---\" && cd /Users/xiamingxing/Workspace/projects/kairon && python3 -m pytest packages/engine-core/tests/ -q 2>&1 | tail -5",
+    "lintCommand": "ruff check",
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "examples",
+      "src",
+      "tests"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "Plans": {
+      "path": "Plans",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1780383238312,
+      "keyFiles": []
+    },
+    "_derivation_logs": {
+      "path": "_derivation_logs",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1780383238313,
+      "keyFiles": [
+        "insight-derive-46c51c1b1d6c.json"
+      ]
+    },
+    "dist": {
+      "path": "dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 3,
+      "lastAccessed": 1780383238313,
+      "keyFiles": [
+        "kairon-0.1.0-py3-none-any.whl",
+        "kairon-0.1.0.tar.gz"
+      ]
+    },
+    "examples": {
+      "path": "examples",
+      "purpose": "Example code",
+      "fileCount": 0,
+      "lastAccessed": 1780383238313,
+      "keyFiles": []
+    },
+    "kairon.egg-info": {
+      "path": "kairon.egg-info",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1780383238314,
+      "keyFiles": [
+        "PKG-INFO",
+        "SOURCES.txt",
+        "dependency_links.txt",
+        "top_level.txt"
+      ]
+    },
+    "packages": {
+      "path": "packages",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1780383238314,
+      "keyFiles": [
+        "agora-audit.db",
+        "agora.db"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1780383238314,
+      "keyFiles": []
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 1,
+      "lastAccessed": 1780383238314,
+      "keyFiles": [
+        "test_root_package.py"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "packages/engine-core/src/engine_core/__init__.py",
+      "accessCount": 8,
+      "lastAccessed": 1780387167663,
+      "type": "file"
+    },
+    {
+      "path": "packages/agora/src/agora/__init__.py",
+      "accessCount": 3,
+      "lastAccessed": 1780384402088,
+      "type": "file"
+    },
+    {
+      "path": "packages/symphony-protocol/src/symphony_protocol/triggers.py",
+      "accessCount": 3,
+      "lastAccessed": 1780384887881,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/role_message.py",
+      "accessCount": 3,
+      "lastAccessed": 1780385647706,
+      "type": "file"
+    },
+    {
+      "path": "packages/symphony-protocol/src/symphony_protocol/models.py",
+      "accessCount": 2,
+      "lastAccessed": 1780384197767,
+      "type": "file"
+    },
+    {
+      "path": "pyproject.toml",
+      "accessCount": 2,
+      "lastAccessed": 1780384335656,
+      "type": "file"
+    },
+    {
+      "path": "packages/kairon-assistant/pyproject.toml",
+      "accessCount": 2,
+      "lastAccessed": 1780384358507,
+      "type": "file"
+    },
+    {
+      "path": "packages/kairon-assistant/tests/test_assistant.py",
+      "accessCount": 2,
+      "lastAccessed": 1780384381173,
+      "type": "file"
+    },
+    {
+      "path": "packages/symphony-protocol/src/symphony_protocol/state_machine.py",
+      "accessCount": 2,
+      "lastAccessed": 1780384403451,
+      "type": "file"
+    },
+    {
+      "path": "packages/symphony-protocol/src/symphony_protocol/matcher.py",
+      "accessCount": 2,
+      "lastAccessed": 1780384403871,
+      "type": "file"
+    },
+    {
+      "path": "packages/symphony-protocol/src/symphony_protocol/__init__.py",
+      "accessCount": 2,
+      "lastAccessed": 1780384910643,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/routing.py",
+      "accessCount": 2,
+      "lastAccessed": 1780385023954,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/handlers/execution.py",
+      "accessCount": 2,
+      "lastAccessed": 1780385692093,
+      "type": "file"
+    },
+    {
+      "path": "packages/eidos/src/eidos/vector_backends/base.py",
+      "accessCount": 2,
+      "lastAccessed": 1780386061716,
+      "type": "file"
+    },
+    {
+      "path": "packages/agora/src/agora/auth_models.py",
+      "accessCount": 2,
+      "lastAccessed": 1780387223648,
+      "type": "file"
+    },
+    {
+      "path": "packages/agora/src/agora/api_types.py",
+      "accessCount": 2,
+      "lastAccessed": 1780387249318,
+      "type": "file"
+    },
+    {
+      "path": "packages/eidos/src/eidos/crdt_engine.py",
+      "accessCount": 2,
+      "lastAccessed": 1780387262426,
+      "type": "file"
+    },
+    {
+      "path": "packages/kairon-voice/pyproject.toml",
+      "accessCount": 1,
+      "lastAccessed": 1780384179972,
+      "type": "file"
+    },
+    {
+      "path": "packages/shared-lib/src/kairon_lib/utils/error_classifier.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384213490,
+      "type": "file"
+    },
+    {
+      "path": "packages/shared-lib/src/kairon_lib/utils/__init__.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384213522,
+      "type": "file"
+    },
+    {
+      "path": "packages/shared-lib/src/kairon_lib/utils/logging.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384213545,
+      "type": "file"
+    },
+    {
+      "path": "packages/kairon-voice/src/kairon_voice/__init__.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384213623,
+      "type": "file"
+    },
+    {
+      "path": "packages/eidos/src/eidos/crdt_core.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384263309,
+      "type": "file"
+    },
+    {
+      "path": "packages/eidos/src/eidos/role_memory_model.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384264244,
+      "type": "file"
+    },
+    {
+      "path": "packages/eidos/src/eidos/prompts.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384264615,
+      "type": "file"
+    },
+    {
+      "path": "packages/eidos/src/eidos/search_utils.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384265020,
+      "type": "file"
+    },
+    {
+      "path": "packages/eidos/src/eidos/vector_backends/__init__.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384277559,
+      "type": "file"
+    },
+    {
+      "path": "packages/agora/src/agora/connection_pool.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384299298,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/task_context.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384299855,
+      "type": "file"
+    },
+    {
+      "path": "packages/agora/src/agora/tools_template.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384300127,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/lifecycle_state_machine.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384300278,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/worker_profile.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384300327,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/domain_router.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384300841,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/worker_abstraction.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384300895,
+      "type": "file"
+    },
+    {
+      "path": "packages/kairon-assistant/src/kairon_assistant/__init__.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384321767,
+      "type": "file"
+    },
+    {
+      "path": "packages/kairon-assistant/src/kairon_assistant/types.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384322073,
+      "type": "file"
+    },
+    {
+      "path": "packages/kairon-assistant/src/kairon_assistant/command_parser.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384322407,
+      "type": "file"
+    },
+    {
+      "path": "packages/kairon-assistant/src/kairon_assistant/context_manager.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384322763,
+      "type": "file"
+    },
+    {
+      "path": "packages/kairon-assistant/src/kairon_assistant/session_manager.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384323119,
+      "type": "file"
+    },
+    {
+      "path": "packages/kairon-assistant/tests/__init__.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384323489,
+      "type": "file"
+    },
+    {
+      "path": "packages/shared-lib/src/kairon_lib/utils/versioning.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384351805,
+      "type": "file"
+    },
+    {
+      "path": "packages/shared-lib/src/kairon_lib/utils/error_handler.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384352096,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/conflict_resolution.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384375636,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/conflict_resolver.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384375970,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/bidder.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384376335,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/auctioneer.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384376714,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/handlers/economy.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384377734,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/handlers/genesis.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384378131,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/handlers/memory.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384378536,
+      "type": "file"
+    },
+    {
+      "path": "packages/engine-core/src/engine_core/handlers/tool.py",
+      "accessCount": 1,
+      "lastAccessed": 1780384378936,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

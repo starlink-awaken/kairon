@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cd /Users/xiamingxing/Workspace/projects/kairon && uv run --package engine-core python -c \\\"from engine_core import SwarmStateMachine, ConflictArbitrator, TaskAuctioneer, TaskBidder, Bindi...",
+  "error": "Exit code 1\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    from engine_core import SwarmStateMachine, ConflictArbitrator, TaskAuctioneer, TaskBidder, BindingStrategy, BurndownEngine, AssociationEngine, ConflictResolution, DeterministicConflictResolver, MessageBroker, RoutingEngine, CostAwareDispatcher, EnergyLedger, SLOScheduler, MutationValidator, OKRFramework, SemanticReranker, GoalTaskMapper, EnvResolver, RefinementDaemon, PrimordialSoil, SessionContextStore, Co...",
+  "timestamp": "2026-06-02T07:28:49.894Z",
+  "retry_count": 3
+}

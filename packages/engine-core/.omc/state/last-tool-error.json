@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"python3 -c \\\"\\nimport sys\\n# Clear any cached engine_core\\nfor mod in list(sys.modules.keys()):\\n    if 'engine_core' in mod:\\n        del sys.modules[mod]\\nsys.path.insert(0, 'src')\\nfrom...",
+  "error": "Exit code 1\nTraceback (most recent call last):\n  File \"<string>\", line 8, in <module>\n    from engine_core import *\nAttributeError: module 'engine_core' has no attribute 'WorkerProfileBase'",
+  "timestamp": "2026-06-04T03:49:28.514Z",
+  "retry_count": 1
+}

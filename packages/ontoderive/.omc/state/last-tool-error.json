@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cat > /Users/xiamingxing/Workspace/projects/kairon/packages/minerva/src/minerva/harvest_models.py << 'PYEOF'\\n\\\"\\\"\\\"Harvest data models — extracted from SharedBrain D_Harvest.\\n\\nDefines c...",
+  "error": "Exit code 2\nharvest_models.py created\nharvest tests created\n============================= test session starts ==============================\nplatform darwin -- Python 3.14.5, pytest-9.0.3, pluggy-1.6.0 -- /opt/homebrew/opt/python@3.14/bin/python3.14\ncachedir: .pytest_cache\nhypothesis profile 'default'\nrootdir: /Users/xiamingxing/Workspace/projects/kairon/packages/minerva\nconfigfile: pyproject.toml\nplugins: timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.9, cov-7.1.0, anyio-4.13.0\nasyncio: mode=Mo...",
+  "timestamp": "2026-06-02T01:57:04.233Z",
+  "retry_count": 1
+}

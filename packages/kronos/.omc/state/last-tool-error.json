@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"python3 -c \\\"from kronos.fetcher.errors import _is_error_page; print('found')\\\" 2>&1\",\"description\":\"用 Python 检查 _is_error_page 是否存在\"}",
+  "error": "Exit code 1\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    from kronos.fetcher.errors import _is_error_page; print('found')\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'kronos'",
+  "timestamp": "2026-05-29T08:33:29.419Z",
+  "retry_count": 1
+}

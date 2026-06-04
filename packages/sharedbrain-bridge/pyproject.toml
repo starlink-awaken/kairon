@@ -1,0 +1,17 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sharedbrain-bridge"
+version = "0.1.0"
+description = "Bridge between kairon and SharedBrain — EU pricing, immune audit, batch sync"
+requires-python = ">=3.10"
+dependencies = ["core-models"]
+
+[project.scripts]
+sb-bridge = "sharedbrain_bridge.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

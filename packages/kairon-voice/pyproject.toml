@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "kairon-voice"
+version = "1.0.0"
+description = "Voice subsystem — STT/TTS interfaces and provider adapters extracted from SharedBrain D_Voice"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Kairon Contributors"}]
+keywords = ["voice", "stt", "tts", "speech", "whisper", "elevenlabs"]
+
+dependencies = [
+    "pydantic>=2.0",
+    "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+whisper = ["openai-whisper>=20231117"]
+faster-whisper = ["faster-whisper>=0.10"]
+elevenlabs = []  # uses stdlib urllib — no extra deps
+google-tts = ["google-cloud-texttospeech>=2.0"]
+azure-tts = []  # uses stdlib urllib REST API — no extra deps
+all = [
+    "kairon-voice[whisper,faster-whisper,google-tts]",
+]
+dev = [
+    "pytest>=7.0",
+    "ruff>=0.1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/kairon_voice"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[dependency-groups]
+dev = [
+    "pytest-cov>=7.1.0",
+]
+

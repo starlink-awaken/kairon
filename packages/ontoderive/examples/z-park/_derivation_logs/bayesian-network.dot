@@ -1,0 +1,24 @@
+digraph BayesianNetwork {
+  rankdir=LR;
+  node [shape=box];
+  "D-F1" [label="D-F1\n园区入驻企业\nP=0.95", fillcolor=green, style=filled];
+  "D-F2" [label="D-F2\n高校合作\nP=0.95", fillcolor=green, style=filled];
+  "D-F3" [label="D-F3\n年技术对接量\nP=0.95", fillcolor=green, style=filled];
+  "D-F4" [label="D-F4\n转化成功率\nP=0.95", fillcolor=green, style=filled];
+  "D-F5" [label="D-F5\n园区技术经理人\nP=0.95", fillcolor=green, style=filled];
+  "D-F6" [label="D-F6\n年政策申报量\nP=0.95", fillcolor=green, style=filled];
+  "P-F1" [label="P-F1\n科技成果转化法修正案\nP=0.95", fillcolor=green, style=filled];
+  "P-F2" [label="P-F2\n中关村先行先试政策\nP=0.95", fillcolor=green, style=filled];
+  "目标: 量子计算在药物研发中的应用" [label="目标: 量子计算在药物研发中的应用\n目标: 量子计算在药物研发中的应用\nP=0.85", fillcolor=blue, style=filled];
+  "上下文: 量子,医药" [label="上下文: 量子,医药\n上下文: 量子,医药\nP=0.85", fillcolor=blue, style=filled];
+  "匹配模式: tfidf" [label="匹配模式: tfidf\n匹配模式: tfidf\nP=0.85", fillcolor=blue, style=filled];
+  "推荐推导框架" [label="推荐推导框架\n推荐推导框架\nP=0.85", fillcolor=blue, style=filled];
+  "L1 供需匹配矛盾" [label="L1 供需匹配矛盾\nL1 供需匹配矛盾\nP=0.85", fillcolor=blue, style=filled];
+  "L2 人才瓶颈矛盾" [label="L2 人才瓶颈矛盾\nL2 人才瓶颈矛盾\nP=0.85", fillcolor=blue, style=filled];
+  "D-F1" -> "L1 供需匹配矛盾";
+  "D-F2" -> "L1 供需匹配矛盾";
+  "D-F3" -> "L1 供需匹配矛盾";
+  "D-F3" -> "L2 人才瓶颈矛盾";
+  "D-F4" -> "L1 供需匹配矛盾";
+  "D-F5" -> "L2 人才瓶颈矛盾";
+}

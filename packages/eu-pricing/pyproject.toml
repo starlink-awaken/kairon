@@ -1,0 +1,13 @@
+[project]
+name = "eu-pricing"
+version = "0.1.0"
+description = "EU (Energy Unit) virtual resource accounting — L2 capability layer"
+requires-python = ">=3.10"
+dependencies = ["core-models"]
+
+[project.scripts]
+eu-pricing = "eu_pricing.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

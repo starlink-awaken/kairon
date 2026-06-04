@@ -1,0 +1,200 @@
+{
+  "derived_at": "2026-06-04T11:49:02.391545",
+  "facts": 8,
+  "entities": 0,
+  "inferences": 0,
+  "scheme_files": 1,
+  "confidence_distribution": {
+    "mean": 0.8517,
+    "min": 0.85,
+    "max": 0.855,
+    "count": 6
+  },
+  "entailment_graph": {
+    "nodes": 14,
+    "edges": 11,
+    "max_depth": 1,
+    "cycles": 0
+  },
+  "analysis_mode": "structural",
+  "derivation_hints": [
+    "_toolforge_guide.md: 缺少 derives_from 声明",
+    "_toolforge_guide.md: 建议添加理论支撑",
+    "推导链深度仅1，推论间缺少递进关系"
+  ],
+  "derived_conclusions": [
+    {
+      "conclusion": "转化成功率(8.0)低于基准80.0",
+      "certainty": "certain",
+      "method": "threshold_alert",
+      "derives_from": [
+        "D-F4"
+      ],
+      "confidence": 0.9,
+      "source": "rule_engine",
+      "derivation_trail": "R5: D-F4",
+      "type": "threshold_alert"
+    },
+    {
+      "conclusion": "推论'L1 供需匹配矛盾'的4个前提全部成立, 推论有效",
+      "certainty": "certain",
+      "method": "modus_ponens_valid",
+      "derives_from": [
+        "D-F1",
+        "D-F2",
+        "D-F4",
+        "D-F3"
+      ],
+      "confidence": 0.9,
+      "source": "rule_engine",
+      "derivation_trail": "R7: D-F1→D-F2→D-F4→D-F3",
+      "type": "modus_ponens_valid"
+    },
+    {
+      "conclusion": "推论'L2 人才瓶颈矛盾'的2个前提全部成立, 推论有效",
+      "certainty": "certain",
+      "method": "modus_ponens_valid",
+      "derives_from": [
+        "D-F3",
+        "D-F5"
+      ],
+      "confidence": 0.9,
+      "source": "rule_engine",
+      "derivation_trail": "R7: D-F3→D-F5",
+      "type": "modus_ponens_valid"
+    },
+    {
+      "conclusion": "本体归类: 6/12个ID正确(50%)",
+      "certainty": "certain",
+      "method": "subsumption",
+      "derives_from": [],
+      "confidence": 0.85,
+      "source": "rule_engine",
+      "derivation_trail": "R9",
+      "type": "subsumption"
+    },
+    {
+      "conclusion": "孤立前缀: '目标:'(仅目标: 量子计算在药物研发中的应用)可能是'ORG-'的拼写错误",
+      "certainty": "certain",
+      "method": "subsumption",
+      "derives_from": [
+        "目标: 量子计算在药物研发中的应用"
+      ],
+      "confidence": 0.4,
+      "source": "rule_engine",
+      "derivation_trail": "R9: 目标: 量子计算在药物研发中的应用",
+      "type": "subsumption"
+    },
+    {
+      "conclusion": "孤立前缀: '上下文'(仅上下文: 量子,医药)可能是'ORG-'的拼写错误",
+      "certainty": "certain",
+      "method": "subsumption",
+      "derives_from": [
+        "上下文: 量子,医药"
+      ],
+      "confidence": 0.4,
+      "source": "rule_engine",
+      "derivation_trail": "R9: 上下文: 量子,医药",
+      "type": "subsumption"
+    },
+    {
+      "conclusion": "孤立前缀: '匹配模'(仅匹配模式: tfidf)可能是'ORG-'的拼写错误",
+      "certainty": "certain",
+      "method": "subsumption",
+      "derives_from": [
+        "匹配模式: tfidf"
+      ],
+      "confidence": 0.4,
+      "source": "rule_engine",
+      "derivation_trail": "R9: 匹配模式: tfidf",
+      "type": "subsumption"
+    },
+    {
+      "conclusion": "孤立前缀: '推荐推'(仅推荐推导框架)可能是'ORG-'的拼写错误",
+      "certainty": "certain",
+      "method": "subsumption",
+      "derives_from": [
+        "推荐推导框架"
+      ],
+      "confidence": 0.4,
+      "source": "rule_engine",
+      "derivation_trail": "R9: 推荐推导框架",
+      "type": "subsumption"
+    },
+    {
+      "conclusion": "孤立前缀: 'L1 '(仅L1 供需匹配矛盾)可能是'ROL-'的拼写错误",
+      "certainty": "certain",
+      "method": "subsumption",
+      "derives_from": [
+        "L1 供需匹配矛盾"
+      ],
+      "confidence": 0.4,
+      "source": "rule_engine",
+      "derivation_trail": "R9: L1 供需匹配矛盾",
+      "type": "subsumption"
+    },
+    {
+      "conclusion": "孤立前缀: 'L2 '(仅L2 人才瓶颈矛盾)可能是'ROL-'的拼写错误",
+      "certainty": "certain",
+      "method": "subsumption",
+      "derives_from": [
+        "L2 人才瓶颈矛盾"
+      ],
+      "confidence": 0.4,
+      "source": "rule_engine",
+      "derivation_trail": "R9: L2 人才瓶颈矛盾",
+      "type": "subsumption"
+    },
+    {
+      "conclusion": "最具影响力的前提: D-F3(被2个推论引用); D-F1(被1个推论引用); D-F2(被1个推论引用)",
+      "certainty": "probable",
+      "method": "influence_analysis",
+      "derives_from": [
+        "D-F3",
+        "D-F1",
+        "D-F2"
+      ],
+      "confidence": 0.8,
+      "source": "rule_engine",
+      "derivation_trail": "R10: D-F3→D-F1→D-F2",
+      "type": "influence_analysis"
+    },
+    {
+      "conclusion": "节点'L1 供需匹配矛盾'连接4个其他节点, 是潜在结构洞/瓶颈",
+      "certainty": "probable",
+      "method": "structural_hole",
+      "derives_from": [
+        "D-F1",
+        "D-F2",
+        "D-F3",
+        "D-F4"
+      ],
+      "confidence": 0.65,
+      "source": "rule_engine",
+      "derivation_trail": "R17: D-F1→D-F2→D-F3→D-F4",
+      "type": "structural_hole"
+    },
+    {
+      "conclusion": "推导链深度仅1，6个推论间缺少递进关系",
+      "certainty": "structural",
+      "method": "shallow_chain",
+      "derives_from": [],
+      "confidence": 0.7,
+      "source": "rule_engine",
+      "derivation_trail": "R6",
+      "type": "shallow_chain"
+    },
+    {
+      "conclusion": "事实覆盖率83%(5/6), 未引用: ['D-F6']",
+      "certainty": "structural",
+      "method": "coverage",
+      "derives_from": [
+        "D-F6"
+      ],
+      "confidence": 0.95,
+      "source": "rule_engine",
+      "derivation_trail": "R12: D-F6",
+      "type": "coverage"
+    }
+  ]
+}
