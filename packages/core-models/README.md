@@ -1,5 +1,9 @@
 # core-models
 
-> Core Entity/Relation/Provenance/KnowledgeGraph data models for kairon
+> Kairon 核心包
 
-Kairon 包。详见 [kairon/CLAUDE.md](../CLAUDE.md)。
+此包是 kairon monorepo 的一部分。详见 [CLAUDE.md](../CLAUDE.md)。
+
+## 测试
+
+cd packages/core-models && uv run pytest tests/ -q
