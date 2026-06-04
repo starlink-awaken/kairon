@@ -64,8 +64,8 @@ class KnowledgeClosedLoop:
         if self._kos_store is not None:
             return self._kos_store
         try:
-            from kos.ontology._types import Entity, EntityType  # type: ignore[import-not-found]
-            from kos.ontology.store import search_entities  # type: ignore[import-not-found]
+            from kos.ontology._types import Entity, EntityType
+            from kos.ontology.store import search_entities
 
             self._kos_store = {
                 "search_entities": search_entities,

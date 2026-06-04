@@ -13,6 +13,7 @@ authors = [{name = "Kos Contributors"}]
 keywords = ["knowledge", "search", "ontology", "cli"]
 
 dependencies = [
+    "eidos",
     "python-docx>=0.8.11",
     "PyMuPDF>=1.23.0",
     "openpyxl>=3.1.0",

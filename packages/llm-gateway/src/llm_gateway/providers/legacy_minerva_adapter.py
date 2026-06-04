@@ -60,7 +60,7 @@ class MinervaProvider(LLMProvider):
         if self._client is not None:
             return self._client
         try:
-            from minerva.llm import (  # type: ignore[import-not-found]
+            from minerva.llm import (
                 OpenAICompatibleClient,
             )
 

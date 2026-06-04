@@ -33,7 +33,7 @@ class SmartRouter:
         if self._llm is not None:
             return self._llm if self._llm is not False else None
         try:
-            from minerva.llm.client import OpenAICompatibleClient  # type: ignore[import-not-found]
+            from minerva.llm.client import OpenAICompatibleClient
 
             self._llm = OpenAICompatibleClient(
                 base_url="http://localhost:11434/v1",

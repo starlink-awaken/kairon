@@ -33,9 +33,9 @@ from typing import TYPE_CHECKING, Any
 _log = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
-    from eidos.organs.nks.graph_store import Entity, GraphStore  # type: ignore[import-not-found]
-    from eidos.organs.nks.impact_analyzer import ImpactAnalyzer  # type: ignore[import-not-found]
-    from eidos.organs.nks.query_engine import GraphQueryEngine  # type: ignore[import-not-found]
+    from eidos.organs.nks.graph_store import Entity, GraphStore
+    from eidos.organs.nks.impact_analyzer import ImpactAnalyzer
+    from eidos.organs.nks.query_engine import GraphQueryEngine
 
 
 def _lazy_nks_imports() -> tuple[Any | None, Any | None, Any | None, Any | None]:

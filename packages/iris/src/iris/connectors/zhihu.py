@@ -46,7 +46,7 @@ class ZhihuConnector(BaseConnector):
     def _fetch_url(self, url: str) -> str | None:
         """Fetch a URL using kronos fetch_router or direct HTTP."""
         try:
-            from kronos.fetch_router import execute_fetch  # type: ignore[import-not-found]
+            from kronos.fetch_router import execute_fetch
 
             result = execute_fetch(url, cookie=self._cookie)
             if result and result.get("content"):

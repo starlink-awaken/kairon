@@ -15,7 +15,7 @@ from datetime import UTC, datetime, timedelta
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from eidos.memory_graph import MemoryGraph  # type: ignore[import-not-found]
+    from eidos.memory_graph import MemoryGraph
 
 _log = logging.getLogger(__name__)
 

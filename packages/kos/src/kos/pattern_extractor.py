@@ -16,7 +16,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from eidos.memory_graph import MemoryGraph  # type: ignore[import-not-found]
+    from eidos.memory_graph import MemoryGraph
 
 logger = logging.getLogger(__name__)
 

@@ -22,6 +22,7 @@ classifiers = [
 ]
 
 dependencies = [
+    "minerva",
     "requests>=2.25",
     "pyyaml>=6.0",
 ]

@@ -44,7 +44,7 @@ class NotebookLMConnector(BaseConnector):
 
     def _init_adapter(self) -> None:
         try:
-            from minerva.creative.notebooklm_adapter import (  # type: ignore[import-not-found]
+            from minerva.creative.notebooklm_adapter import (
                 create_client,
                 is_available,
             )

@@ -188,7 +188,7 @@ def convert_kg(kg: KnowledgeGraph) -> dict:
 def try_eidos_validate(data: dict) -> dict:
     """尝试用 Eidos 校验输出。如果 Eidos 未安装则优雅降级。"""
     try:
-        from eidos.registry import create_registry  # type: ignore[import-not-found]
+        from eidos.registry import create_registry
 
         registry = create_registry()
         results: dict = {"schema_checks": {}}

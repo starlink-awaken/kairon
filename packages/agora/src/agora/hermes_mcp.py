@@ -31,7 +31,7 @@ class HermesToolRegistry:
         """Search the knowledge graph. Returns results matching SearchResult."""
         results: list[dict[str, Any]] = []
         try:
-            from kos.semantic import semantic_search  # type: ignore[import-not-found]
+            from kos.semantic import semantic_search
             raw = semantic_search(query, limit=max_results)
             items = raw.get("results", raw) if isinstance(raw, dict) else raw
             for r in list(items)[:max_results]:

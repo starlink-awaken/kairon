@@ -20,7 +20,7 @@ from kos.meta_types import infer_meta_type  # type: ignore[import-not-found]
 from typing import Callable, Any
 
 try:
-    from eidos.protocols.contracts import validate_contract_payload  # type: ignore[import-not-found]
+    from eidos.protocols.contracts import validate_contract_payload
 except ImportError:
     validate_contract_payload: Callable[[str, dict[str, Any]], list[str]] | None = None
 

@@ -27,7 +27,7 @@
   },
   "build": {
     "buildCommand": "make build",
-    "testCommand": "cd packages/agora && python3 -m pytest tests/mcp_gateway_test.py -v 2>&1",
+    "testCommand": "python3 -m pytest packages/agent-runtime/tests/ packages/shared-lib/tests/ packages/engine-core/tests/ packages/wksp/tests/ -q --timeout=30 2>&1 | tail -15",
     "lintCommand": "ruff check",
     "devCommand": null,
     "scripts": {}

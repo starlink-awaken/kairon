@@ -26,11 +26,15 @@ Thumbs.db
 
 # Runtime logs
 *.jsonl
-agora-events.json
+agora-*.json
 
 # Tool runtime state
 .omc/
 .omo/
+.claude/worktrees/
+
+# Derived/generated data
+_derivation_logs/
 
 # Environment
 .env
