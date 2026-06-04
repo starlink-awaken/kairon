@@ -214,10 +214,9 @@ class TestCmdRepoInfo:
 class TestCmdRepoDiscover:
     def test_discover_success(self, capsys):
         with (
-            patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog,
+            patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.mcp_registry.orchestrator.search_all", new_callable=AsyncMock) as mock_search,
         ):
-            catalog_instance = MockCatalog.return_value
             mock_search.return_value = [
                 _make_tool("t1", name="tool1", source="github", description="A test tool"),
             ]
@@ -264,11 +263,9 @@ class TestCmdRepoDiscover:
 class TestCmdRepoInstall:
     def test_install_success(self, capsys):
         with (
-            patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog,
-            patch("agora.cli.commands_repo.LifecycleManager") as MockLifecycle,
+            patch("agora.cli.commands_repo.ToolCatalog"),
+            patch("agora.cli.commands_repo.LifecycleManager"),
         ):
-            catalog_instance = MockCatalog.return_value
-            LifecycleManager_instance = MockLifecycle.return_value
             orchestrator_mock = AsyncMock()
 
             with patch("agora.cli.commands_repo.Orchestrator") as MockOrch:
@@ -281,7 +278,7 @@ class TestCmdRepoInstall:
                 assert "installed" in captured.out
 
     def test_install_failure(self, capsys):
-        with patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog:
+        with patch("agora.cli.commands_repo.ToolCatalog"):
             with patch("agora.cli.commands_repo.LifecycleManager"):
                 with patch("agora.cli.commands_repo.Orchestrator") as MockOrch:
                     orch_instance = MockOrch.return_value
@@ -299,7 +296,7 @@ class TestCmdRepoInstall:
 class TestCmdRepoLoad:
     def test_load_success(self, capsys):
         with (
-            patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog,
+            patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
             patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
         ):
@@ -313,7 +310,7 @@ class TestCmdRepoLoad:
 
     def test_load_failure(self, capsys):
         with (
-            patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog,
+            patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
             patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
         ):
@@ -332,7 +329,7 @@ class TestCmdRepoLoad:
 class TestCmdRepoUnload:
     def test_unload_success(self, capsys):
         with (
-            patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog,
+            patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
             patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
         ):
@@ -346,7 +343,7 @@ class TestCmdRepoUnload:
 
     def test_unload_failure(self, capsys):
         with (
-            patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog,
+            patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
             patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
         ):
@@ -365,7 +362,7 @@ class TestCmdRepoUnload:
 class TestCmdRepoLoadAll:
     def test_load_all_zero(self, capsys):
         with (
-            patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog,
+            patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
             patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
         ):
@@ -379,7 +376,7 @@ class TestCmdRepoLoadAll:
 
     def test_load_all_some(self, capsys):
         with (
-            patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog,
+            patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
             patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
         ):
@@ -398,7 +395,7 @@ class TestCmdRepoLoadAll:
 class TestCmdRepoUnloadAll:
     def test_unload_all_zero(self, capsys):
         with (
-            patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog,
+            patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
             patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
         ):
@@ -412,7 +409,7 @@ class TestCmdRepoUnloadAll:
 
     def test_unload_all_some(self, capsys):
         with (
-            patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog,
+            patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
             patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
         ):
@@ -431,7 +428,7 @@ class TestCmdRepoUnloadAll:
 class TestCmdRepoPipeline:
     def test_pipeline_success(self, capsys):
         with (
-            patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog,
+            patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
             patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
         ):
@@ -453,7 +450,7 @@ class TestCmdRepoPipeline:
 
     def test_pipeline_json(self, capsys):
         with (
-            patch("agora.cli.commands_repo.ToolCatalog") as MockCatalog,
+            patch("agora.cli.commands_repo.ToolCatalog"),
             patch("agora.cli.commands_repo.LifecycleManager"),
             patch("agora.cli.commands_repo.Orchestrator") as MockOrch,
         ):

@@ -19,10 +19,10 @@ import time
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-from config import get_vault_ops_dir  # type: ignore[unused-ignore]
+from kos.config import get_vault_ops_dir  # type: ignore[unused-ignore, import-not-found]
 
 VAULT_OPS_DIR = get_vault_ops_dir()
-from config import get_artifact_path
+from kos.config import get_artifact_path
 from typing import Any
 
 # ── Configuration ──────────────────────────────────────

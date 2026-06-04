@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from eidos.graph_store import GraphStore
+from eidos.graph_store import GraphStore  # type: ignore[import-not-found]
 
 """
 ---
@@ -40,7 +40,7 @@ _log = logging.getLogger(__name__)
 
 # Import from tree_sitter_extractor
 try:
-    from eidos.tree_sitter_extractor import TreeSitterExtractionResult, TreeSitterExtractor
+    from eidos.tree_sitter_extractor import TreeSitterExtractionResult, TreeSitterExtractor  # type: ignore[import-not-found]
 except ImportError:
     TreeSitterExtractor = None
     TreeSitterExtractionResult = None

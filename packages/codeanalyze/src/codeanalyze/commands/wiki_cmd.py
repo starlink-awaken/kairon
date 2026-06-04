@@ -5,10 +5,10 @@ from pathlib import Path
 import click
 from rich.panel import Panel
 
-from codeanalyze.analyzers import gitnexus, graphify
-from codeanalyze.commands.common import _validate_path, console
-from codeanalyze.core.registry import build_registry
-from codeanalyze.documents.deepwiki import (
+from codeanalyze.analyzers import gitnexus, graphify  # type: ignore[import-not-found]
+from codeanalyze.commands.common import _validate_path, console  # type: ignore[import-not-found]
+from codeanalyze.core.registry import build_registry  # type: ignore[import-not-found]
+from codeanalyze.documents.deepwiki import (  # type: ignore[import-not-found]
     check_deepwiki_open,
     generate_wiki_from_analysis,
     trigger_api_wiki_generation,

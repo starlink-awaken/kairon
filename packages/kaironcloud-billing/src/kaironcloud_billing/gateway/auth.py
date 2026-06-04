@@ -27,7 +27,7 @@ from datetime import UTC, datetime, timedelta
 
 import jwt
 
-from .types import AuthResult, Request
+from .types import AuthResult, Request  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

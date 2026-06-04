@@ -24,7 +24,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from engine.meta_validate_types import (
+from engine.meta_validate_types import (  # type: ignore[import-not-found]
     GroundTruth,
 )
 

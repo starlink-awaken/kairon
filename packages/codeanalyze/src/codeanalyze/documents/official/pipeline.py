@@ -5,8 +5,8 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from codeanalyze.documents.official.models import PolicyDocument, PolicyGraph
-from codeanalyze.documents.official.parsers import (
+from codeanalyze.documents.official.models import PolicyDocument, PolicyGraph  # type: ignore[import-not-found]
+from codeanalyze.documents.official.parsers import (  # type: ignore[import-not-found]
     _clean_title,
     _extract_doc_number,
     extract_file_content,

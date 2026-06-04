@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 try:
-    from .query_engine import CallGraphNode, PathResult
+    from .query_engine import CallGraphNode, PathResult  # type: ignore[import-not-found]
 except (ImportError, ModuleNotFoundError):
 
     class PathResult:  # type: ignore[no-redef]
@@ -625,7 +625,7 @@ class QueryCache:
 def __getattr__(name: str) -> Any:
     if name == "CachingQueryEngine":
         try:
-            from .caching_query_engine import CachingQueryEngine
+            from .caching_query_engine import CachingQueryEngine  # type: ignore[import-not-found]
         except (ImportError, ModuleNotFoundError):
 
             class CachingQueryEngine:  # type: ignore[no-redef]

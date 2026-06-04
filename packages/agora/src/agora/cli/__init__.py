@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from agora.cli.parser import build_parser
+from agora.cli.parser import build_parser  # type: ignore[import-not-found]
 
 
 def main():
@@ -22,7 +22,7 @@ def main():
 
     # Dispatch to command modules
     if args.command == "discover":
-        from agora.cli.commands_discover import cmd_discover
+        from agora.cli.commands_discover import cmd_discover  # type: ignore[import-not-found]
 
         return cmd_discover(args)
 
@@ -37,7 +37,7 @@ def main():
         return cmd_sync(args)
 
     if args.command == "search":
-        from agora.cli.commands_registry import cmd_search
+        from agora.cli.commands_registry import cmd_search  # type: ignore[import-not-found]
 
         return cmd_search(args)
 
@@ -77,7 +77,7 @@ def main():
         cmd_config(args)
 
     elif args.command == "route":
-        from agora.cli.commands_routes import cmd_route
+        from agora.cli.commands_routes import cmd_route  # type: ignore[import-not-found]
 
         cmd_route(args)
 
@@ -92,12 +92,12 @@ def main():
 
             return cmd_instance(args)
         else:
-            from agora.cli.commands_instance import cmd_instance
+            from agora.cli.commands_instance import cmd_instance  # type: ignore[import-not-found]
 
             return cmd_instance(args)
 
     elif args.command == "mcp":
-        from agora.cli.commands_mcp import cmd_mcp
+        from agora.cli.commands_mcp import cmd_mcp  # type: ignore[import-not-found]
 
         return cmd_mcp(args)
 
@@ -117,7 +117,7 @@ def main():
         return cmd_completion(args)
 
     elif args.command == "pipeline":
-        from agora.cli.commands_pipeline import cmd_pipeline
+        from agora.cli.commands_pipeline import cmd_pipeline  # type: ignore[import-not-found]
 
         cmd_pipeline(args)
 
@@ -132,7 +132,7 @@ def main():
         cmd_pipeline_define(args)
 
     elif args.command == "key":
-        from agora.cli.commands_governance import cmd_key
+        from agora.cli.commands_governance import cmd_key  # type: ignore[import-not-found]
 
         cmd_key(args)
 
@@ -152,7 +152,7 @@ def main():
         return cmd_market(args)
 
     elif args.command == "repo":
-        from agora.cli.commands_repo import cmd_repo
+        from agora.cli.commands_repo import cmd_repo  # type: ignore[import-not-found]
 
         return cmd_repo(args)
 
@@ -162,7 +162,7 @@ def main():
         cmd_proto(args)
 
     elif args.command == "transitions":
-        from agora.cli.commands_a2a import cmd_transitions
+        from agora.cli.commands_a2a import cmd_transitions  # type: ignore[import-not-found]
 
         cmd_transitions(args)
 
@@ -182,12 +182,16 @@ def main():
         cmd_event(args)
 
     elif args.command == "enforce":
-        from agora.cli.commands_authorizer import cmd_enforce
+        from agora.cli.commands_authorizer import cmd_enforce  # type: ignore[import-not-found]
 
         return cmd_enforce(args)
 
     elif args.command == "accounting":
-        from agora.cli.commands_accounting import cmd_accounting_quota, cmd_accounting_report, cmd_accounting_top
+        from agora.cli.commands_accounting import (  # type: ignore[import-not-found]
+            cmd_accounting_quota,
+            cmd_accounting_report,
+            cmd_accounting_top,
+        )
 
         if args.accounting_cmd == "top":
             return cmd_accounting_top(args)
@@ -203,17 +207,17 @@ def main():
             return 0
 
     elif args.command == "pallas":
-        from agora.cli.commands_pallas import dispatch_pallas
+        from agora.cli.commands_pallas import dispatch_pallas  # type: ignore[import-not-found]
 
         return dispatch_pallas(args)
 
     elif args.command == "identity":
-        from agora.cli.commands_identity import cmd_identity
+        from agora.cli.commands_identity import cmd_identity  # type: ignore[import-not-found]
 
         return cmd_identity(args)
 
     elif args.command == "grant":
-        from agora.cli.commands_grant import cmd_grant
+        from agora.cli.commands_grant import cmd_grant  # type: ignore[import-not-found]
 
         return cmd_grant(args)
 

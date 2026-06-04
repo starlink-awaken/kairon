@@ -28,8 +28,8 @@ import re as _re
 import time
 from pathlib import Path
 
-from ..pipeline_models import ProgressInfo, StepResult, StepStatus
-from .base import PipelineStep
+from .pipeline_models import ProgressInfo, StepResult, StepStatus
+from .pipeline_steps.base import PipelineStep
 
 # ============================================================
 # Doc Governance: Mechanism 2 — CI Gate Steps
@@ -178,7 +178,7 @@ class AgentContextStep(PipelineStep):
 
     def run(self, root: Path) -> list[dict]:
         """Return issue dicts for required directories that lack AGENTS.md."""
-        from ..context_compiler import find_missing_contexts
+        from .context_compiler import find_missing_contexts
 
         missing = find_missing_contexts(root)
         issues = []

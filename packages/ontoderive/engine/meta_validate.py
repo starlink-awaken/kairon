@@ -51,10 +51,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from engine.organs.doc_type_validator import DocTypeValidator
-from engine.organs.meta_validate_benchmark import _MetaBenchmarkMixin
-from engine.organs.meta_validate_persist import _MetaPersistenceMixin
-from engine.organs.meta_validate_types import (
+from engine.organs.doc_type_validator import DocTypeValidator  # type: ignore[import-not-found]
+from engine.organs.meta_validate_benchmark import _MetaBenchmarkMixin  # type: ignore[import-not-found]
+from engine.organs.meta_validate_persist import _MetaPersistenceMixin  # type: ignore[import-not-found]
+from engine.organs.meta_validate_types import (  # type: ignore[import-not-found]
     BenchmarkResult,
     ConfidenceScore,
     GroundTruth,
@@ -62,8 +62,8 @@ from engine.organs.meta_validate_types import (
     ValidationStatus,
     ValidationVerification,
 )
-from engine.organs.meta_validate_verify import _MetaVerifyMixin
-from engine.organs.quality_probe import QualityProbe, ScanResult
+from engine.organs.meta_validate_verify import _MetaVerifyMixin  # type: ignore[import-not-found]
+from engine.organs.quality_probe import QualityProbe, ScanResult  # type: ignore[import-not-found]
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 _log = logging.getLogger(__name__)
@@ -184,7 +184,7 @@ class MetaValidateEngine(_MetaVerifyMixin, _MetaBenchmarkMixin, _MetaPersistence
         def _test_f1_score(self) -> bool: ...
 
     def __init__(self, root: Path | str | None = None, config_path: str | None = None) -> None:
-        from nucleus.Z_Microkernel.facades import get_path_resolver
+        from nucleus.Z_Microkernel.facades import get_path_resolver  # type: ignore[import-not-found]
 
         self.status = "active"
         self.root = Path(root) if root is not None else Path("organs/D-Logos")

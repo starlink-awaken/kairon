@@ -20,12 +20,12 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 # sys.path.insert(0, str(SCRIPT_DIR))  # removed
-from config import get_vault_ops_dir  # type: ignore[unused-ignore]
+from kos.config import get_vault_ops_dir  # type: ignore[unused-ignore, import-not-found]
 
 VAULT_OPS_DIR = get_vault_ops_dir()
 # sys.path.insert(0, str(VAULT_OPS_DIR))  # removed
 
-from config import get_workspace_manifest
+from kos.config import get_workspace_manifest
 
 # Metacog application layers that map to KOS domains
 METACOG_APPS: dict[str, Any] = {

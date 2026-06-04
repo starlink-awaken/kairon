@@ -98,7 +98,7 @@ class ImmuneLawSystem(ShieldMixin, WitnessMixin):  # type: ignore[misc]
 
         # Load S5 Risk Engine
         try:
-            from cedar import CedarEngine
+            from cedar import CedarEngine  # type: ignore[import-not-found]
 
             resolver = get_path_resolver()
 
@@ -126,7 +126,7 @@ class ImmuneLawSystem(ShieldMixin, WitnessMixin):  # type: ignore[misc]
 
         # RFC-005: Activate Kernel-level IO Trap
         try:
-            from proxy_trap import trap_controller
+            from proxy_trap import trap_controller  # type: ignore[import-not-found]
 
             trap_controller.governor = self
             trap_controller.activate()

@@ -48,7 +48,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
+from enum import Enum, StrEnum
 from pathlib import Path
 from typing import Any, Protocol
 from uuid import uuid4
@@ -57,13 +57,13 @@ import yaml
 
 # Event bus integration via shared-lib
 try:
-    from kairon_lib.events import BOSEvent, get_global_event_bus
+    from kairon_lib.events import BOSEvent, get_global_event_bus  # type: ignore[import-not-found]
 except (ModuleNotFoundError, ImportError):
     BOSEvent: type[Any] | None = None
     get_global_event_bus: Any | None = None
 
 
-class EventType(str, Enum):
+class EventType(StrEnum):
     """Document event types published on the EventBus."""
 
     DOC_BEFORE_UPDATE = "doc.before_update"

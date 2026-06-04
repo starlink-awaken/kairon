@@ -36,8 +36,8 @@ import logging
 import time
 from typing import Any
 
-from minerva.base_subscriber import BaseSubscriber
-from minerva.events import KnowledgeEvent
+from minerva.base_subscriber import BaseSubscriber  # type: ignore[import-not-found]
+from minerva.events import KnowledgeEvent  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 
@@ -100,7 +100,7 @@ class CacheInvalidationNotifier:
         importlib 路径，避免对 D-Execution 的硬依赖。
         """
         try:
-            from kairon_lib.events import get_global_event_bus, make_event
+            from kairon_lib.events import get_global_event_bus, make_event  # type: ignore[import-not-found]
 
             bus = get_global_event_bus()
             if bus is None:

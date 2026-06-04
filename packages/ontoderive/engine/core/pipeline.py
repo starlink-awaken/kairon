@@ -8,11 +8,11 @@ OntoDerive Pipeline — 推导管道
 from pathlib import Path
 
 try:
-    from .config import Config
-    from .protocols import AnalysisResult, PipelineStage
+    from .config import Config  # type: ignore[import-not-found]
+    from .protocols import AnalysisResult, PipelineStage  # type: ignore[import-not-found]
 except ImportError:
-    from engine.foundation.config import Config  # noqa
-    from engine.foundation.protocols import PipelineStage, AnalysisResult
+    from engine.foundation.config import Config  # type: ignore[import-not-found]  # noqa
+    from engine.foundation.protocols import PipelineStage, AnalysisResult  # type: ignore[import-not-found]
 
 
 class ToolForgeStage(PipelineStage):
@@ -20,9 +20,9 @@ class ToolForgeStage(PipelineStage):
 
     def run(self, ctx):
         try:
-            from .toolforge import ToolForge
+            from .toolforge import ToolForge  # type: ignore[import-not-found]
         except ImportError:
-            from engine.toolforge import ToolForge
+            from engine.toolforge import ToolForge  # type: ignore[import-not-found]
         tf = ToolForge()
         cfg = ctx.get("config", {})
         goal = ctx.get("goal", "")
@@ -43,7 +43,7 @@ class LoadStage(PipelineStage):
         try:
             from .derive import OntoDerive as _OD  # noqa: N814
         except ImportError:
-            from engine.core.derive import OntoDerive as _OD  # noqa: N814
+            from engine.core.derive import OntoDerive as _OD  # type: ignore[import-not-found]  # noqa: N814
         od = _OD(ctx["project_root"])
         summary = od.derive()
         return {"derive_summary": summary}

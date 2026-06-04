@@ -4,7 +4,7 @@
 
 import json
 
-from intelligence.prompts import (
+from intelligence.prompts import (  # type: ignore[import-not-found]
     CHECK_CONTRADICTION,
     DERIVE_INSIGHTS,
     DOMAIN_PRESETS,

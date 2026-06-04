@@ -9,7 +9,7 @@ Eidos 是 Workspace 的 schema 定义与校验层。
 
 from datetime import datetime
 
-from codeanalyze.core.results import RELATION_TYPES, Entity, KnowledgeGraph
+from codeanalyze.core.results import RELATION_TYPES, Entity, KnowledgeGraph  # type: ignore[import-not-found]
 
 # ── 元关系映射 (codeanalyze → Eidos MetaRelationType) ──
 _RELATION_TO_META = {
@@ -188,7 +188,7 @@ def convert_kg(kg: KnowledgeGraph) -> dict:
 def try_eidos_validate(data: dict) -> dict:
     """尝试用 Eidos 校验输出。如果 Eidos 未安装则优雅降级。"""
     try:
-        from eidos.registry import create_registry
+        from eidos.registry import create_registry  # type: ignore[import-not-found]
 
         registry = create_registry()
         results: dict = {"schema_checks": {}}

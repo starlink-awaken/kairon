@@ -3,14 +3,14 @@
 保持向后兼容：所有公开 API 在此 re-export。
 """
 
-from codeanalyze.documents.official.models import PolicyDocument, PolicyGraph
-from codeanalyze.documents.official.parsers import (
+from codeanalyze.documents.official.models import PolicyDocument, PolicyGraph  # type: ignore[import-not-found]
+from codeanalyze.documents.official.parsers import (  # type: ignore[import-not-found]
     _clean_title,
     _extract_doc_number,
     _strip_control_chars,
     extract_file_content,
 )
-from codeanalyze.documents.official.pipeline import (
+from codeanalyze.documents.official.pipeline import (  # type: ignore[import-not-found]
     _extract_domain_from_path,
     _guess_level_from_path_or_name,
     analyze_policy_directory,
@@ -19,7 +19,8 @@ from codeanalyze.documents.official.pipeline import (
 
 # Keep old function names for backward compatibility
 _extract_file_content = extract_file_content
-_try_llm_fallback = lambda *a: None  # moved to parsers
+def _try_llm_fallback(*a):
+    return None  # moved to parsers
 
 __all__ = [
     "PolicyDocument",

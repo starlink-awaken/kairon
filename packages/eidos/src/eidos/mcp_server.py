@@ -28,8 +28,8 @@ def _dump(data: Any) -> str:
 
 def handle_list(params: dict | None = None) -> dict:
     """List all registered schemas."""
-    from eidos.meta import list_types
-    from eidos.schema import SchemaRegistry
+    from eidos.meta import list_types  # type: ignore[import-not-found]
+    from eidos.schema import SchemaRegistry  # type: ignore[import-not-found]
 
     sr = SchemaRegistry()
     schemas: list[dict[str, Any]] = []
@@ -65,7 +65,7 @@ def handle_list(params: dict | None = None) -> dict:
 
 def handle_validate(params: dict | None = None) -> dict:
     """Validate a JSON object against an Eidos schema type."""
-    from eidos.types import Fact, KnowledgeCard, OntologyNode
+    from eidos.types import Fact, KnowledgeCard, OntologyNode  # type: ignore[import-not-found]
 
     payload = params or {}
     data = payload.get("data", "{}")
@@ -226,7 +226,7 @@ def handle_export(params: dict | None = None) -> dict:
     The output is a JSON document that downstream tools (ontoderive, kronos,
     minerva) can consume for schema-aware data processing.
     """
-    from eidos.registry import create_registry
+    from eidos.registry import create_registry  # type: ignore[import-not-found]
 
     payload = params or {}
     schema_names = payload.get("names", [])

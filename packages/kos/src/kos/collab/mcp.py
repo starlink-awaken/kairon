@@ -5,7 +5,7 @@
 
 from typing import Any
 
-from kos.collab.api import (
+from kos.collab.api import (  # type: ignore[import-not-found]
     add_artifact,
     claim_subtask,
     complete_subtask,

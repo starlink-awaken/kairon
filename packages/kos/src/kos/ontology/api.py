@@ -5,13 +5,13 @@ Adapted from SPEC-v0.1.md §4.7.
 
 from typing import Any
 
-from kos.ontology import discover, export, resolver, store
+from kos.ontology import discover, export, resolver, store  # type: ignore[import-not-found]
 
 
 def handle_action(action: str, **kwargs: Any) -> Any:
     """Dispatch ontology actions from CLI or MCP."""
     if action == "put":
-        from kos.ontology._types import Entity
+        from kos.ontology._types import Entity  # type: ignore[import-not-found]
 
         return store.put_entity(Entity(**kwargs))
     elif action == "get":

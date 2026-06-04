@@ -5,16 +5,16 @@ from __future__ import annotations
 import asyncio
 import json
 
-from agora.event_bus import EventBus
-from agora.router import Router
-from agora.state import get_registry
+from agora.event_bus import EventBus  # type: ignore[import-not-found]
+from agora.router import Router  # type: ignore[import-not-found]
+from agora.state import get_registry  # type: ignore[import-not-found]
 
 
 def cmd_a2a(args):
     """A2A Task API."""
     registry = get_registry()
     router = Router(registry)
-    from agora.a2a.task_manager import TaskManager
+    from agora.a2a.task_manager import TaskManager  # type: ignore[import-not-found]
 
     tm = TaskManager(router)
 
@@ -66,7 +66,7 @@ def cmd_a2a(args):
 def cmd_agent_card(args):
     """A2A Agent Card operations."""
     registry = get_registry()
-    from agora.server.mcp import _build_agent_card
+    from agora.server.mcp import _build_agent_card  # type: ignore[import-not-found]
 
     if args.agent_card_cmd == "list":
         cards = {}

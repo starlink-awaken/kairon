@@ -233,7 +233,7 @@ def _register_tools(fastmcp, sched: scheduler.CronScheduler):
         err_count = sum(1 for j in jobs if j.last_status in ("error", "timeout"))
 
         # Check if scheduler is likely running — any job executed recently?
-        recent_runs = sum(1 for j in jobs if j.last_run_at is not None)
+        sum(1 for j in jobs if j.last_run_at is not None)
         return json.dumps(
             {
                 "running": True,  # scheduler runs in the HTTP process

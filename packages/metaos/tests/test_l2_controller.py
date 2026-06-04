@@ -137,7 +137,7 @@ class TestPIDCompute(unittest.TestCase):
         self.state["current_latency_ms"] = 150
         self.state["_prev_error"] = 0.5  # 前次误差=50%
         # 当前 error = (150-100)/100 = 0.5 → no change → D = 0
-        output_steady = self.ctl._pid_compute(self.state)
+        self.ctl._pid_compute(self.state)
         self.state["_prev_error"] = 0.0  # 手工重置
         # 但这里 _pid_compute 内部更新了 _prev_error，所以需要重新思考
 
@@ -157,7 +157,7 @@ class TestPIDCompute(unittest.TestCase):
         """重新注册时积分和前一误差应重置"""
         self.state["current_latency_ms"] = 200
         self.ctl._pid_compute(self.state)
-        old_integral = self.state["_integral"]
+        self.state["_integral"]
         # 重新注册
         self.ctl.register_service("minerva", 100, 0.01, 50)
         s = self.ctl.services["minerva"]
@@ -186,13 +186,13 @@ class TestPIDCoefficients(unittest.TestCase):
     def test_ki_accumulates_over_multiple_calls(self):
         """Ki 使积分随时间累积"""
         self.state["current_latency_ms"] = 120
-        output_first = self.ctl._pid_compute(self.state)
+        self.ctl._pid_compute(self.state)
         self.state["_prev_error"] = 0.2
         self.ctl._pid_compute(self.state)  # 第二次调用
         # 第三次调用时 integral 应有累积
-        output_third = self.ctl._pid_compute(self.state)
+        self.ctl._pid_compute(self.state)
         # 积分项应大于仅 P 项
-        p_term = self.ctl.Kp * 0.2
+        self.ctl.Kp * 0.2
         i_term = self.ctl.Ki * self.state["_integral"]
         self.assertGreater(i_term, 0)
 

@@ -1,9 +1,10 @@
 """Tests for CLI — argparse parsing and main entry point."""
 
-import sys
+from unittest.mock import patch
 
 import pytest
 from eu_pricing.cli import main
+from eu_pricing.ledger import EUTransaction
 
 
 def test_main_no_args_shows_help():
@@ -42,7 +43,10 @@ def test_balance_command():
 
 def test_consume_command():
     """The 'consume' subcommand should work with EnergyLedger."""
-    rc = main(["consume"])
+    with patch("eu_pricing.cli.EULedger.consume", return_value=EUTransaction(
+        caller="kairon", operation="kronos_ingest", cost=1, balance_after=99, success=True,
+    )):
+        rc = main(["consume"])
     assert rc == 0
 
 
@@ -87,21 +91,18 @@ def test_endpoint_flag_json_balance():
 
 def test_consume_with_json():
     """Consume with --json flag should work."""
-    rc = main(["--json", "consume", "kairon", "test_op"])
+    with patch("eu_pricing.cli.EULedger.consume", return_value=EUTransaction(
+        caller="kairon", operation="test_op", cost=1, balance_after=99, success=True,
+    )):
+        rc = main(["--json", "consume", "kairon", "test_op"])
     assert rc == 0
 
 
 def test_main_handles_bad_subcommand():
     """main() with an invalid subcommand should be handled gracefully."""
-    from io import StringIO
-
-    old_stderr = sys.stderr
-    sys.stderr = StringIO()
-    try:
-        rc = main(["nonexistent_command"])
-        assert rc != 0
-    finally:
-        sys.stderr = old_stderr
+    with pytest.raises(SystemExit) as exc_info:
+        main(["nonexistent_command"])
+    assert exc_info.value.code == 2
 
 
 def test_main_balance_normal():

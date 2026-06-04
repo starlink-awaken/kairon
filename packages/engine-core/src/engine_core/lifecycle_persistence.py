@@ -75,7 +75,7 @@ class SwarmPersistence:
             self._store = state_store
         elif db_path is not None:
             try:
-                from engine_core.organs.engine.swarm_state_store import (
+                from engine_core.organs.engine.swarm_state_store import (  # type: ignore[import-not-found]
                     SwarmStateStore,
                 )
 

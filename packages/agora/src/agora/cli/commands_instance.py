@@ -2,7 +2,7 @@
 
 
 def cmd_instance(args):
-    from agora.instance import AgoraInstance, InstanceManager
+    from agora.instance import AgoraInstance, InstanceManager  # type: ignore[import-not-found]
 
     im = InstanceManager()
     if args.instance_cmd == "list":

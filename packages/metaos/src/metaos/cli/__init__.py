@@ -6,8 +6,8 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from metaos.core.engine import SEngine
-from metaos.core.types import Principle, Task, TaskType
+from metaos.core.engine import SEngine  # type: ignore[import-not-found]
+from metaos.core.types import Principle, Task, TaskType  # type: ignore[import-not-found]
 
 
 class CLI:
@@ -143,7 +143,7 @@ class CLI:
 
     def ssot_scan(self, base_dir: str = "") -> dict:
         """扫描文档目录的 SSOT 覆盖完整性"""
-        from cli.ssot_scan import format_markdown_table, scan_ssot
+        from cli.ssot_scan import format_markdown_table, scan_ssot  # type: ignore[import-not-found]
 
         base = base_dir or os.path.join(os.path.dirname(__file__), "..", "..")
         entries = scan_ssot(base)

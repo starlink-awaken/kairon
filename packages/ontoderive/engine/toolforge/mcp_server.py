@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from mcp_server import handle_mcp_request
+from mcp_server import handle_mcp_request  # type: ignore[import-not-found]
 
 
 def handle_request(request: dict) -> dict:

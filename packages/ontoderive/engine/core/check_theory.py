@@ -12,7 +12,7 @@ def check_bayesian(root):
     """C-09: 贝叶斯信念传播"""
     try:
         sys.path.insert(0, str(Path(__file__).parent))
-        from engine.theories.bayesian import BayesianLayer
+        from engine.theories.bayesian import BayesianLayer  # type: ignore[import-not-found]
 
         bl = BayesianLayer(root)
         dist = bl.get_distribution()
@@ -38,7 +38,7 @@ def check_metrics(root, precomputed_confs=None):
     """C-10: KQI知识质量指数"""
     try:
         sys.path.insert(0, str(Path(__file__).parent))
-        from engine.theories.metrics import MetricsLayer
+        from engine.theories.metrics import MetricsLayer  # type: ignore[import-not-found]
 
         ml = MetricsLayer(root)
         kqi = ml.compute_kqi(precomputed_confs=precomputed_confs)
@@ -59,7 +59,7 @@ def check_pid(root):
     """C-11: PID反馈控制"""
     try:
         sys.path.insert(0, str(Path(__file__).parent))
-        from engine.theories.controller import PIDController
+        from engine.theories.controller import PIDController  # type: ignore[import-not-found]
 
         pid = PIDController(root).analyze()
         return {
@@ -76,7 +76,7 @@ def check_turing(root):
     """C-12: 知识状态机"""
     try:
         sys.path.insert(0, str(Path(__file__).parent))
-        from engine.theories.turing_k import KnowledgeTM
+        from engine.theories.turing_k import KnowledgeTM  # type: ignore[import-not-found]
 
         state = KnowledgeTM(root).snapshot()
         return {
@@ -94,7 +94,7 @@ def check_ontolang(root=None):
         import sys
 
         sys.path.insert(0, str(Path(__file__).parent))
-        from ontolang import OntoLangParser
+        from ontolang import OntoLangParser  # type: ignore[import-not-found]
 
         parser = OntoLangParser()
         parser.test_suite()

@@ -13,11 +13,11 @@ import time
 from collections.abc import Callable
 from typing import Any
 
-from agora.config import load_config
-from agora.context import context_manager
-from agora.scheduler import scheduler
-from agora.task_manager import task_manager
-from agora.types import Agent, AgentMessage, GatewayConfig, Task
+from agora.config import load_config  # type: ignore[import-not-found]
+from agora.context import context_manager  # type: ignore[import-not-found]
+from agora.scheduler import scheduler  # type: ignore[import-not-found]
+from agora.task_manager import task_manager  # type: ignore[import-not-found]
+from agora.types import Agent, AgentMessage, GatewayConfig, Task  # type: ignore[import-not-found]
 
 gateway_agent_registry: Any = _importlib.import_module("agora.agent_registry").gateway_agent_registry
 gateway_event_bus: Any = _importlib.import_module("agora.event_bus").gateway_event_bus

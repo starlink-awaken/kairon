@@ -1020,14 +1020,6 @@ def main(argv: list[str] | None = None) -> int:
     # 监控子命令
     if MONITORING_AVAILABLE:
         monitoring_sub = sub.add_parser("monitor", help="智能监控系统", parents=[_common])
-        monitor_commands = [
-            ("start", "启动监控"),
-            ("status", "查看监控状态"),
-            ("alerts", "查看告警信息"),
-            ("metrics", "查看指标"),
-            ("report", "生成监控报告"),
-            ("dashboard", "监控仪表板"),
-        ]
 
         monitor_subparsers = monitoring_sub.add_subparsers(dest="monitor_command", help="监控子命令")
 

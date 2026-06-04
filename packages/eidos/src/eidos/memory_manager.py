@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Any, Protocol
 
 from .archetype_loader import ArchetypeLoader, get_archetype_loader
-from .storage_dal import SQLiteError, SQLiteRelationalProvider
+from .storage_dal import SQLiteError, SQLiteRelationalProvider  # type: ignore[import-not-found]
 
 # =============================================================================
 # 0. 形式化摘要 ≝

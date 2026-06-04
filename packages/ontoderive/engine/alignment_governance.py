@@ -34,7 +34,11 @@ import json
 import re as _re
 from pathlib import Path
 
-from engine.alignment_models import AlignmentCategory, AlignmentIssue, AlignmentSeverity
+from engine.alignment_models import (  # type: ignore[import-not-found]
+    AlignmentCategory,
+    AlignmentIssue,
+    AlignmentSeverity,
+)
 
 
 class IndexAuditor:

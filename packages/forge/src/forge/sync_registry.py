@@ -19,7 +19,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-from forge.forge_config import FORGE_ROOT, REGISTRY
+from forge.forge_config import FORGE_ROOT, REGISTRY  # type: ignore[import-not-found]
 
 
 def _load() -> dict:

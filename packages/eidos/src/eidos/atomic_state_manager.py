@@ -562,7 +562,7 @@ class _SQLiteAtomicStateManager(AtomicStateManager):
     """AtomicStateManager with SQLite-backed persistence."""
 
     def __init__(self, db_path: str = ".bos_atomic_states.db") -> None:
-        storage = _SQLiteRoleStateStorage(db_path)
+        _SQLiteRoleStateStorage(db_path)
         self.metadata_path = "eidos/atomic_state_manager.py"
         self.organ_name = "atomic_state_manager"
         self.organ_id = f"eidos-{id(self):x}"

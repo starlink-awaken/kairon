@@ -170,7 +170,7 @@ def _supports_rate_limiter(candidate: Any) -> bool:
     """Best-effort structural check used only for runtime warnings."""
     return callable(getattr(candidate, "is_allowed", None))
 
-from .api_docs_mixin import _APIDocsMixin
+from .api_docs_mixin import _APIDocsMixin  # type: ignore[import-not-found]
 from .api_handlers_mixin import _APIHandlersMixin
 from .api_routing_mixin import _APIRoutingMixin
 from .api_types import APIRequest, APIResponse, APIRoute, HTTPMethod  # noqa: F401
@@ -409,7 +409,7 @@ def get_api_gateway(
     global _global_api_gateway
     if _global_api_gateway is None:
         from .oauth2_server import get_oauth2_server
-        from .rate_limiter import get_rate_limiter
+        from .rate_limiter import get_rate_limiter  # type: ignore[import-not-found]
 
         _global_api_gateway = APIGateway(
             oauth2_server=cast(IOAuth2Server, oauth2_server or get_oauth2_server()),

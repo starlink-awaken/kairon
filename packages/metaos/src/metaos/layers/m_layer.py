@@ -16,7 +16,7 @@ import logging
 import os
 import time
 
-from metaos.core.types import CapabilityMap, ModelConfig, Task, TaskResult
+from metaos.core.types import CapabilityMap, ModelConfig, Task, TaskResult  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 

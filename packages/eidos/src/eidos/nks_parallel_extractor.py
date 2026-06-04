@@ -8,7 +8,7 @@ from importlib import import_module
 from multiprocessing import cpu_count
 from typing import Any, TypeVar
 
-from eidos.graph_store import CandidateEntity, CandidateRelation
+from eidos.graph_store import CandidateEntity, CandidateRelation  # type: ignore[import-not-found]
 
 """
 ---

@@ -9,9 +9,9 @@ import logging
 from collections.abc import Callable
 from typing import Any
 
-from eidos.graph_store import Entity, Relation
-from eidos.query_cache import QueryCache
-from eidos.query_engine import CallGraphNode, CentralityScore, GraphQueryEngine, PathResult
+from eidos.graph_store import Entity, Relation  # type: ignore[import-not-found]
+from eidos.query_cache import QueryCache  # type: ignore[import-not-found]
+from eidos.query_engine import CallGraphNode, CentralityScore, GraphQueryEngine, PathResult  # type: ignore[import-not-found]
 
 """
 ---

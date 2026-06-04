@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from eidos.schema import FieldType, Schema, SchemaField, SchemaRegistry
+from eidos.schema import FieldType, Schema, SchemaField, SchemaRegistry  # type: ignore[import-not-found]
 
 
 def _build_registry() -> SchemaRegistry:

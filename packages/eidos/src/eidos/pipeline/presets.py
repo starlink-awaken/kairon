@@ -6,7 +6,7 @@ Each preset is a Pipeline with named steps ready to run.
 # Determine workspace root from current file location
 import os
 
-from eidos.pipeline import Pipeline, PipelineStep
+from eidos.pipeline import Pipeline, PipelineStep  # type: ignore[import-not-found]
 
 _WORKSPACE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 

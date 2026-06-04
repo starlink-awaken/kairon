@@ -23,7 +23,7 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-AX01-10_holographic_metadata_axio
 import logging
 from typing import Any
 
-from .base import BaseGovernanceRouter
+from .base import BaseGovernanceRouter  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ class VetoRouter(BaseGovernanceRouter):
 
     async def _handler(self, uri: str, params: dict | None = None) -> dict[str, Any]:
         try:
-            from kairon_lib.organs.governance.review.user_veto import UserVeto
+            from kairon_lib.organs.governance.review.user_veto import UserVeto  # type: ignore[import-not-found]
 
             veto = UserVeto()
             params = params or {}

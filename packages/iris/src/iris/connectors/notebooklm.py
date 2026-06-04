@@ -19,8 +19,8 @@ import logging
 from pathlib import Path
 from typing import Any, cast
 
-from iris.base import BaseConnector, SyncResult
-from iris.models import KnowledgeArtifact, Note
+from iris.base import BaseConnector, SyncResult  # type: ignore[import-not-found]
+from iris.models import KnowledgeArtifact, Note  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +44,7 @@ class NotebookLMConnector(BaseConnector):
 
     def _init_adapter(self) -> None:
         try:
-            from minerva.creative.notebooklm_adapter import (
+            from minerva.creative.notebooklm_adapter import (  # type: ignore[import-not-found]
                 create_client,
                 is_available,
             )

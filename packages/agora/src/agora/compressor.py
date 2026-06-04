@@ -13,7 +13,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from agora import persistence_db as _persist
+from agora import persistence_db as _persist  # type: ignore[import-not-found]
 
 
 @dataclass

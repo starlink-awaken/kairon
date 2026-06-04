@@ -6,10 +6,10 @@ import sys
 import time
 from pathlib import Path
 
-from cli import CLI
+from cli import CLI  # type: ignore[import-not-found]
 
-from metaos.cli.ssot_scan import scan_ssot
-from metaos.core.engine import SEngine
+from metaos.cli.ssot_scan import scan_ssot  # type: ignore[import-not-found]
+from metaos.core.engine import SEngine  # type: ignore[import-not-found]
 
 DEFAULT_DATA_DIR = str(Path.home() / ".metaos" / "data")
 

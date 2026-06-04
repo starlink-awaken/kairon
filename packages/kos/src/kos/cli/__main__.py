@@ -27,21 +27,25 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from kos.meta_types import FILTERABLE_META_TYPES_HELP
+from kos.meta_types import FILTERABLE_META_TYPES_HELP  # type: ignore[import-not-found]
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 get_workspace_manifest = None
 get_artifact_path = None
 get_vault_ops_dir = None
 try:
-    from kos.config import get_artifact_path, get_vault_ops_dir, get_workspace_manifest
+    from kos.config import (  # type: ignore[import-not-found]
+        get_artifact_path,
+        get_vault_ops_dir,
+        get_workspace_manifest,
+    )
 except ImportError:
     try:
-        from config import (  # type: ignore[[, [str, reportMissingImports, unused-ignore]
+        from config import (  # type: ignore[import-not-found]
             get_artifact_path,
             get_vault_ops_dir,
             get_workspace_manifest,
-        )
+        )  # type: ignore[import-not-found]
     except ImportError:
         KOS_READY = False
     else:
@@ -109,7 +113,7 @@ def MAG(t) -> str:  # type: ignore[no-untyped-def]  # noqa:
 
 
 # ── Minerva adapter (version-aware discovery) ────────────
-from kos.adapters import MinervaAdapter, NullMinerva
+from kos.adapters import MinervaAdapter, NullMinerva  # type: ignore[import-not-found]
 
 _MINERVA = None
 
@@ -661,7 +665,7 @@ def main():  # type: ignore[unknown]
             sys.exit(1)
         return
     elif args.command == "ingest":
-        from kos.commands.ingest import ingest_command
+        from kos.commands.ingest import ingest_command  # type: ignore[import-not-found]
 
         result = ingest_command(args)
         if not result.get("ok", True):

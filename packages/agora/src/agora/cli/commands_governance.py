@@ -8,7 +8,7 @@ from pathlib import Path
 
 def cmd_tenant(args):
     """Multi-tenant management."""
-    from agora.tenant import TenantManager
+    from agora.tenant import TenantManager  # type: ignore[import-not-found]
 
     tm = TenantManager()
     if args.tenant_cmd == "list":
@@ -29,7 +29,7 @@ def cmd_tenant(args):
 
 def cmd_market(args):
     """MCP tool marketplace."""
-    from agora.market import Market
+    from agora.market import Market  # type: ignore[import-not-found]
 
     mkt = Market()
     if args.market_cmd == "list":
@@ -67,7 +67,7 @@ def cmd_market(args):
 
 def cmd_key(args):
     """API Key management."""
-    from agora.governance import KeyManager
+    from agora.governance import KeyManager  # type: ignore[import-not-found]
 
     km = KeyManager()
     if args.key_cmd == "create":
@@ -97,7 +97,7 @@ def cmd_key(args):
 
 def cmd_audit(args):
     """Audit log query."""
-    from agora.audit import AuditLogger
+    from agora.audit import AuditLogger  # type: ignore[import-not-found]
 
     al = AuditLogger()
     if args.stats:
@@ -115,7 +115,7 @@ def cmd_proto(args):
     """gRPC proto compilation tools."""
     if args.proto_cmd == "compile":
         try:
-            from grpc_tools import protoc
+            from grpc_tools import protoc  # type: ignore[import-not-found]
         except ImportError:
             print("Error: grpcio-tools not installed. Run: pip install grpcio-tools")
             return

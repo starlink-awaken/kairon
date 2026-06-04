@@ -10,8 +10,8 @@ from typing import Any
 
 from fastmcp import FastMCP
 
-from kronos.extractor import check_ollama
-from kronos.fetch_router import (
+from kronos.extractor import check_ollama  # type: ignore[import-not-found]
+from kronos.fetch_router import (  # type: ignore[import-not-found]
     _extract_title,
     _html_to_markdown,
     _strip_html,
@@ -161,7 +161,7 @@ def kronos_browser_fetch(url: str) -> dict:
             text = _strip_html(content)
             md = _html_to_markdown(content)
             title = _extract_title(content)
-            from kronos.adapters import to_knowledge_card_from_browser_fetch
+            from kronos.adapters import to_knowledge_card_from_browser_fetch  # type: ignore[import-not-found]
 
             card = to_knowledge_card_from_browser_fetch(url, md, title)
             return _ok(
@@ -225,7 +225,7 @@ def kronos_insight(title: str, content: str = "", importance: str = "medium") ->
     """
     if not title:
         return _error("title is required")
-    from kronos.insight_engine import generate_insight
+    from kronos.insight_engine import generate_insight  # type: ignore[import-not-found]
 
     report = generate_insight(title, content, importance=importance)
     return _ok(

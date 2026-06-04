@@ -67,7 +67,7 @@ def validate_script_name(script: str) -> bool:
 
 
 # ── 路径 ──
-from forge.forge_config import ASSET_REGISTRY as REGISTRY_FILE
+from forge.forge_config import ASSET_REGISTRY as REGISTRY_FILE  # type: ignore[import-not-found]
 from forge.forge_config import DISABLED_DIR, LAUNCH_AGENTS, LOG_DIR
 
 

@@ -6,7 +6,7 @@ from collections import deque
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from eidos.graph_store import Entity, GraphStore
+from eidos.graph_store import Entity, GraphStore  # type: ignore[import-not-found]
 
 """
 ---
@@ -139,7 +139,7 @@ class ImpactAnalyzer:
         else:
             # Default database path using standard PathResolver
             try:
-                from nucleus.Z_Microkernel.facades import get_path_resolver
+                from nucleus.Z_Microkernel.facades import get_path_resolver  # type: ignore[import-not-found]
 
                 resolver = get_path_resolver()
                 default_db = resolver.resolve_db("memory", "nks_graph.db")

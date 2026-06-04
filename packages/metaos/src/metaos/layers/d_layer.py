@@ -5,7 +5,7 @@ import sqlite3
 from datetime import datetime
 from pathlib import Path
 
-from metaos.core.types import Decision, DigitalAsset, Principle
+from metaos.core.types import Decision, DigitalAsset, Principle  # type: ignore[import-not-found]
 
 
 class DLayer:

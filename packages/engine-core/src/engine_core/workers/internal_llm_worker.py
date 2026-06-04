@@ -16,8 +16,8 @@ from engine_core._compat import (
     SynapseAgentCard,
     get_synapse_registry,
 )
-from engine_core.agent_daemon_base import AgentDaemonBase
-from engine_core.knowledge_enhancement_mixin import KnowledgeEnhancementMixin
+from engine_core.agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
+from engine_core.knowledge_enhancement_mixin import KnowledgeEnhancementMixin  # type: ignore[import-not-found]
 
 """
 ---

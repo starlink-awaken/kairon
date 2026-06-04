@@ -24,20 +24,20 @@ from typing import TYPE_CHECKING
 from fastapi import FastAPI, Form, Request, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
-from prometheus_client import REGISTRY, Gauge, generate_latest
+from prometheus_client import REGISTRY, Gauge, generate_latest  # type: ignore[import-not-found]
 
-from agora.agent_card import service_to_agent_card
-from agora.audit_subscriber import AuditSubscriber
-from agora.discovery import DiscoveryEngine
-from agora.pipeline import Pipeline
-from agora.service_base import Service, is_safe_url, parse_protocol_config, parse_tags
-from agora.state import get_event_bus, get_registry, get_router
-from agora.web import workspace_research
+from agora.agent_card import service_to_agent_card  # type: ignore[import-not-found]
+from agora.audit_subscriber import AuditSubscriber  # type: ignore[import-not-found]
+from agora.discovery import DiscoveryEngine  # type: ignore[import-not-found]
+from agora.pipeline import Pipeline  # type: ignore[import-not-found]
+from agora.service_base import Service, is_safe_url, parse_protocol_config, parse_tags  # type: ignore[import-not-found]
+from agora.state import get_event_bus, get_registry, get_router  # type: ignore[import-not-found]
+from agora.web import workspace_research  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
-    from agora.a2a.task_manager import TaskManager
+    from agora.a2a.task_manager import TaskManager  # type: ignore[import-not-found]
 
 FORMAT_VERSION = "agora-v1"
 API_KEY = os.environ.get("AGORA_API_KEY", "")
@@ -660,7 +660,7 @@ async def well_known_agent_card():
     """
     services = registry.list_all()
     cards = {}
-    from agora.governance import KeyManager
+    from agora.governance import KeyManager  # type: ignore[import-not-found]
 
     has_auth = KeyManager().has_keys()
 

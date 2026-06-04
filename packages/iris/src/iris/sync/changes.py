@@ -13,9 +13,9 @@ from datetime import UTC, datetime
 from enum import Enum
 from typing import cast
 
-from iris.base import BaseConnector
-from iris.models import Note
-from iris.sync.id_map import IdMapping
+from iris.base import BaseConnector  # type: ignore[import-not-found]
+from iris.models import Note  # type: ignore[import-not-found]
+from iris.sync.id_map import IdMapping  # type: ignore[import-not-found]
 
 
 class ChangeType(Enum):
@@ -73,7 +73,7 @@ class ChangeTracker:
         wpsnote_items = self._fetch_all(self._wpsnote)
 
         # Build lookup dicts by ID
-        obsidian_by_id: dict[str, Note] = {item.id: item for item in obsidian_items}
+        {item.id: item for item in obsidian_items}
         wpsnote_by_id: dict[str, Note] = {item.id: item for item in wpsnote_items}
 
         # Get all known mappings
@@ -88,7 +88,7 @@ class ChangeTracker:
             # But the mapping uses relative paths
             from pathlib import Path
 
-            vault = Path(item.source_path)
+            Path(item.source_path)
             # Use the relative path as the key, derived from the base64 ID
             # Since the ID is base64(relative_path), decode it back
             obsidian_by_path[item.source_path] = item
@@ -217,7 +217,7 @@ class ChangeTracker:
             try:
                 from pathlib import Path
 
-                vault = Path(item.source_path)
+                Path(item.source_path)
                 # We don't know the vault root directly from the item,
                 # but we can derive it from the base64-encoded ID
                 import base64

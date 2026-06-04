@@ -10,8 +10,8 @@ import os
 import time
 from typing import Any
 
-from agora.agent_providers import ModelGatewayConfig, ResolvedProvider
-from agora.circuit_breaker import registry
+from agora.agent_providers import ModelGatewayConfig, ResolvedProvider  # type: ignore[import-not-found]
+from agora.circuit_breaker import registry  # type: ignore[import-not-found]
 
 # ── System Health ────────────────────────────────────────────────────────────
 

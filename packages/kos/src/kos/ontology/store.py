@@ -11,7 +11,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from kos.ontology._types import (
+from kos.ontology._types import (  # type: ignore[import-not-found]
     Entity,
     EntityType,
     Relation,
@@ -24,7 +24,7 @@ from kos.ontology._types import (
 def _get_db_path() -> str:
     """Resolve KOS retrieval database path via workspace_config fallback."""
     try:
-        from kos._default_workspace_config import get_artifact_path
+        from kos._default_workspace_config import get_artifact_path  # type: ignore[import-not-found]
 
         return get_artifact_path("retrievalDatabase")
     except Exception:

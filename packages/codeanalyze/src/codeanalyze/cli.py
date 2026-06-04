@@ -6,7 +6,7 @@
 import click
 from rich.console import Console
 
-from codeanalyze import __version__
+from codeanalyze import __version__  # type: ignore[import-not-found]
 
 console = Console()
 
@@ -22,7 +22,7 @@ def cli():
 
 
 # 注册所有命令（按顺序控制 help 显示顺序）
-from codeanalyze.commands import register_commands
+from codeanalyze.commands import register_commands  # type: ignore[import-not-found]
 
 register_commands(cli)
 

@@ -46,7 +46,7 @@ class GeminiProvider(LLMProvider):
         if not self._api_key or self._api_key == "MOCK_KEY":
             return False
         try:
-            import google.generativeai  # noqa: F401
+            import google.generativeai  # type: ignore[import-untyped]  # noqa: F401
 
             return True
         except ImportError:

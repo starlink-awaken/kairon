@@ -28,8 +28,8 @@ from typing import Any
 
 import numpy as np
 
-from eidos.base import VectorSearchResult, VectorStoreBackend
-from eidos.organs.storage_dal import SQLiteOperationalError, SQLiteRelationalProvider
+from eidos.base import VectorSearchResult, VectorStoreBackend  # type: ignore[import-not-found]
+from eidos.organs.storage_dal import SQLiteOperationalError, SQLiteRelationalProvider  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

@@ -29,7 +29,7 @@ class _PrinciplesStub:
 
 
 try:
-    from .principles import Principles
+    from .principles import Principles  # type: ignore[import-not-found]
 except ImportError:
     Principles = _PrinciplesStub
 

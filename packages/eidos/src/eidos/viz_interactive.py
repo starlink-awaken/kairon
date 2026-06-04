@@ -15,8 +15,8 @@ def explore(meta_type: str = "") -> None:
 
     Shows nodes and edges for a given meta_type, lets user drill down.
     """
-    from eidos.meta import list_types
-    from eidos.viz import render
+    from eidos.meta import list_types  # type: ignore[import-not-found]
+    from eidos.viz import render  # type: ignore[import-not-found]
 
     types = list_types()
     nodes = []

@@ -1,6 +1,6 @@
 """免疫监控器——偏误检测 + 三层免疫"""
 
-from metaos.core.types import Decision, ImmuneLevel
+from metaos.core.types import Decision, ImmuneLevel  # type: ignore[import-not-found]
 
 
 class ImmuneMonitor:
@@ -80,7 +80,7 @@ class ImmuneMonitor:
             return {"status": "insufficient_data"}
 
         avg_self_score = sum(a.get("score", 5) for a in self_assessments) / len(self_assessments)
-        good_decisions = sum(1 for d in recent_decisions if getattr(d, "outcome_pending_review", True) == False)
+        good_decisions = sum(1 for d in recent_decisions if not getattr(d, "outcome_pending_review", True))
 
         report = {
             "h_id": h_id,

@@ -21,8 +21,8 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
-from minerva.extractors.base import StructuredKnowledge
-from minerva.quality.gate import IQualityRule
+from minerva.extractors.base import StructuredKnowledge  # type: ignore[import-not-found]
+from minerva.quality.gate import IQualityRule  # type: ignore[import-not-found]
 
 if TYPE_CHECKING:
     pass

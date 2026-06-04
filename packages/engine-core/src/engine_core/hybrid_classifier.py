@@ -117,7 +117,9 @@ class HybridIntentClassifier:
         self._enable_llm = enable_llm and env_hybrid in ("true", "1", "yes")
 
         # Import L1 classifier (existing rule-based implementation)
-        from engine_core.organs.intent_classifier import IntentClassifier as L1Classifier
+        from engine_core.organs.intent_classifier import (  # type: ignore[import-not-found]
+            IntentClassifier as L1Classifier,
+        )
 
         self._l1_classifier = L1Classifier(llm_enhance=False)
 
@@ -333,7 +335,7 @@ class HybridIntentClassifier:
     def _init_llm_client(self) -> None:
         """Initialize LLM client (lazy load)."""
         try:
-            from engine_core.organs.synapse_ollama import OllamaSynapse
+            from engine_core.organs.synapse_ollama import OllamaSynapse  # type: ignore[import-not-found]
 
             self._llm_client = OllamaSynapse()
             _log.info("LLM client initialized (OllamaSynapse)")

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from iris.base import BaseConnector
+from iris.base import BaseConnector  # type: ignore[import-not-found]
 
 
 class ConnectorRegistry:

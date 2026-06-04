@@ -5,8 +5,8 @@ from pathlib import Path
 import click
 from rich.panel import Panel
 
-from codeanalyze.commands.common import _validate_path, console
-from codeanalyze.documents.official import (
+from codeanalyze.commands.common import _validate_path, console  # type: ignore[import-not-found]
+from codeanalyze.documents.official import (  # type: ignore[import-not-found]
     analyze_policy_directory,
     format_policy_graph_report,
 )

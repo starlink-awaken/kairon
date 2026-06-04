@@ -12,8 +12,8 @@ import time
 import uuid
 from typing import Any
 
-from agora.circuit_breaker import registry
-from agora.vectors import vector_store
+from agora.circuit_breaker import registry  # type: ignore[import-not-found]
+from agora.vectors import vector_store  # type: ignore[import-not-found]
 
 try:
     from fastapi import HTTPException
@@ -35,7 +35,7 @@ _pipeline = None
 def _get_tm():
     global _task_manager
     if _task_manager is None:
-        from agora.task_manager import task_manager as tm
+        from agora.task_manager import task_manager as tm  # type: ignore[import-not-found]
         _task_manager = tm
     return _task_manager
 
@@ -43,7 +43,7 @@ def _get_tm():
 def _get_router():
     global _router
     if _router is None:
-        from agora.router import router as r
+        from agora.router import router as r  # type: ignore[import-not-found]
         _router = r
     return _router
 
@@ -51,7 +51,7 @@ def _get_router():
 def _get_cm():
     global _context_manager
     if _context_manager is None:
-        from agora.context import context_manager as cm
+        from agora.context import context_manager as cm  # type: ignore[import-not-found]
         _context_manager = cm
     return _context_manager
 
@@ -59,7 +59,7 @@ def _get_cm():
 def _get_scheduler():
     global _scheduler
     if _scheduler is None:
-        from agora.scheduler import scheduler as s
+        from agora.scheduler import scheduler as s  # type: ignore[import-not-found]
         _scheduler = s
     return _scheduler
 
@@ -67,7 +67,7 @@ def _get_scheduler():
 def _get_pipeline():
     global _pipeline
     if _pipeline is None:
-        from agora.pipeline import agent_pipeline as p
+        from agora.pipeline import agent_pipeline as p  # type: ignore[import-not-found]
         _pipeline = p
     return _pipeline
 
@@ -109,7 +109,7 @@ async def handle_detailed_health() -> dict:
 
 async def handle_submit_task(body: dict) -> dict:
     """Submit a new task for processing."""
-    from agora.types import AgentMessage
+    from agora.types import AgentMessage  # type: ignore[import-not-found]
 
     msg = AgentMessage(
         id=str(uuid.uuid4()),

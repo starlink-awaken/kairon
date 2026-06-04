@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING, Any
 _log = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
-    from eidos.continuity_conflict_resolution import ConflictResolution, ResolutionStrategy, VectorClock
+    from eidos.continuity_conflict_resolution import ConflictResolution, ResolutionStrategy, VectorClock  # type: ignore[import-not-found]
 
 try:
     from eidos.continuity_conflict_resolution import ConflictResolution, ResolutionStrategy, VectorClock

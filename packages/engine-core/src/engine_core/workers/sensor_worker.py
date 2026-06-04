@@ -17,7 +17,7 @@ import threading
 import time
 from typing import Any
 
-from engine_core.agent_daemon_base import AgentDaemonBase
+from engine_core.agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
 
 """
 ---

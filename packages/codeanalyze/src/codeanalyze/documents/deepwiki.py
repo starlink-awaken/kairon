@@ -9,7 +9,7 @@ DeepWiki-Open 是自托管的 AI 文档生成器（Python/FastAPI + Next.js）�
 import os
 from pathlib import Path
 
-from codeanalyze.core.registry import ToolInfo
+from codeanalyze.core.registry import ToolInfo  # type: ignore[import-not-found]
 
 DEEPWIKI_OPEN_URL = os.environ.get("DEEPWIKI_OPEN_URL", "")
 

@@ -35,7 +35,7 @@ import time
 from dataclasses import dataclass
 from typing import Literal
 
-from eidos.organs.context_compressor import ContextCompressor, MemoryEntry
+from eidos.organs.context_compressor import ContextCompressor, MemoryEntry  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 

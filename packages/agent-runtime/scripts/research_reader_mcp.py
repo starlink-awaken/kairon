@@ -71,7 +71,7 @@ def _direct_call(tool, args):
             (args["id"],),
         )
         return json.dumps(events, ensure_ascii=False, default=str)
-    return json.dumps({"error": "Unknown tool: %s" % tool})
+    return json.dumps({"error": f"Unknown tool: {tool}"})
 
 
 def main():

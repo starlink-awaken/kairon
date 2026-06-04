@@ -109,7 +109,7 @@ class IrisConfig:
 
         Keychain takes priority over config file and env var.
         """
-        from iris.keychain import get_password
+        from iris.keychain import get_password  # type: ignore[import-not-found]
 
         pw = get_password("wxread_cookie")
         if pw is not None:

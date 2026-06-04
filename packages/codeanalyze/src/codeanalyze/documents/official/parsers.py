@@ -80,7 +80,7 @@ def _try_pdf_extract(fp: Path) -> str | None:
 def _try_docx_extract(fp: Path) -> str | None:
     """从 DOCX 中提取文本"""
     try:
-        import docx
+        import docx  # type: ignore[import-not-found]
 
         doc = docx.Document(str(fp))
         texts = [p.text for p in doc.paragraphs if p.text.strip()]
@@ -94,7 +94,6 @@ def _try_docx_extract(fp: Path) -> str | None:
         with zipfile.ZipFile(fp) as z:
             if "word/document.xml" in z.namelist():
                 tree = ET.fromstring(z.read("word/document.xml"))
-                ns = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
                 texts = []
                 for p in tree.iter("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}p"):
                     t = "".join(

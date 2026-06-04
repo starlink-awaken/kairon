@@ -3,7 +3,7 @@
 """
 
 import pytest
-from foundation.semantic import SemanticMatcher
+from foundation.semantic import SemanticMatcher  # type: ignore[import-not-found]
 
 
 class TestSemanticMatcher:

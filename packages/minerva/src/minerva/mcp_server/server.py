@@ -20,7 +20,7 @@ import uuid
 
 from fastmcp import FastMCP
 
-from minerva.executor.executor import ExecutionMode, ResearchExecutor, ResearchTask
+from minerva.executor.executor import ExecutionMode, ResearchExecutor, ResearchTask  # type: ignore[import-not-found]
 
 FORMAT_VERSION = "minerva-v1"
 
@@ -203,7 +203,7 @@ async def research_now(
 
     # 构建 Eidos KnowledgeCard 兼容数据
     try:
-        from minerva.knowledge.adapters import research_result_to_card
+        from minerva.knowledge.adapters import research_result_to_card  # type: ignore[import-not-found]
 
         eidos_card = research_result_to_card(result)
     except Exception:
@@ -411,12 +411,12 @@ async def minerva_bfs_search(
         max_branches: Maximum parallel branches per level (default: 5)
     """
     try:
-        from minerva.search.bfs_search import BFTSearch
-        from minerva.search.engine import SearchEngine
+        from minerva.search.bfs_search import BFTSearch  # type: ignore[import-not-found]
+        from minerva.search.engine import SearchEngine  # type: ignore[import-not-found]
 
         # Create SearchEngine from config (lazy — errors are non-fatal)
         try:
-            from minerva.config import MinervaConfig
+            from minerva.config import MinervaConfig  # type: ignore[import-not-found]
 
             config = MinervaConfig.load()
             engine = SearchEngine(
@@ -521,7 +521,7 @@ async def knowledge_closed_loop(
         fresh: Skip KOS cache, force fresh research
     """
     try:
-        from minerva.knowledge_closed_loop import KnowledgeClosedLoop
+        from minerva.knowledge_closed_loop import KnowledgeClosedLoop  # type: ignore[import-not-found]
 
         loop = KnowledgeClosedLoop(_ensure_executor())
         return await loop.search(
@@ -617,7 +617,7 @@ def main():
 
     # Try full executor init first (LLM + pipeline + KB + cost_guard)
     try:
-        from minerva.init import create_default_executor
+        from minerva.init import create_default_executor  # type: ignore[import-not-found]
 
         executor = create_default_executor(kos_save_enabled=True)
         init_server(executor)
@@ -627,7 +627,7 @@ def main():
         sys.stderr.write("  Trying degraded mode: knowledge_search + knowledge_ingest only...\n")
         # Degraded mode: create a minimal executor with just the knowledge store
         try:
-            from minerva.knowledge.store import SQLiteKnowledgeStore
+            from minerva.knowledge.store import SQLiteKnowledgeStore  # type: ignore[import-not-found]
 
             kb = SQLiteKnowledgeStore()
             init_server(DegradedExecutor(kb))

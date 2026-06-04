@@ -72,12 +72,10 @@ def _entity_to_md(e) -> str:
 def _fact_to_md(f) -> str:
     """将 YAML 事实转换为 Markdown 条目"""
     if f.id.startswith("POL-"):
-        icon = "📋"
         lines = [f"- **{f.id}**：{f.title}"]
         if f.value:
             lines.append(f"  - 内容：{f.value}")
     else:
-        icon = "✅"
         lines = [f"- **{f.id}**：{f.title} = {f.value or ''} {f.unit or ''}"]
     if f.source:
         lines.append(f"  - 来源：{f.source}")

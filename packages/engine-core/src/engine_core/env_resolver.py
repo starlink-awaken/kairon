@@ -10,7 +10,7 @@ _log = logging.getLogger(__name__)
 
 # Import metrics system (optional, falls back to noop)
 try:
-    from engine_core.metrics import get_registry
+    from engine_core.metrics import get_registry  # type: ignore[import-not-found]
 except ImportError:
 
     class _Counter(Protocol):

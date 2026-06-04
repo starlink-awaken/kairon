@@ -9,7 +9,7 @@ import threading
 from datetime import UTC, datetime
 from typing import Any
 
-from kos.config import get_artifact_path  # type: ignore[import-untyped]
+from kos.config import get_artifact_path  # type: ignore[import-untyped, import-not-found]
 
 from .agentmesh import dispatch_to_agentmesh
 

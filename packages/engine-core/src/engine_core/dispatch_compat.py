@@ -127,7 +127,7 @@ class ExecutionCompatHelper:
             except (sqlite3.Error, KeyError, AttributeError, OSError):
                 pass
         try:
-            from engine_core.result_bus import ResultBus
+            from engine_core.result_bus import ResultBus  # type: ignore[import-not-found]
 
             results = ResultBus.get_instance().list_results()
         except (ImportError, AttributeError, TypeError, ValueError):
@@ -213,7 +213,7 @@ class ExecutionCompatHelper:
 
         if not data:
             try:
-                from nucleus.Z_Microkernel.organs.capability_registry import (
+                from nucleus.Z_Microkernel.organs.capability_registry import (  # type: ignore[import-not-found]
                     CapabilityRegistry,
                 )
 
@@ -256,7 +256,7 @@ class ExecutionCompatHelper:
         swarm = getattr(self._agent_orchestrator, "_swarm_manager", None)
         if swarm is None:
             try:
-                from nucleus.Z_Microkernel.infrastructure.bos_daemon.swarm import (
+                from nucleus.Z_Microkernel.infrastructure.bos_daemon.swarm import (  # type: ignore[import-not-found]
                     get_lifecycle_manager,
                 )
 

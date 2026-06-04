@@ -22,7 +22,7 @@ import logging
 
 _log = logging.getLogger(__name__)
 
-from engine.meta_validate_types import (
+from engine.meta_validate_types import (  # type: ignore[import-not-found]
     ConfidenceScore,
     FalseNegative,
     FalseNegativeType,

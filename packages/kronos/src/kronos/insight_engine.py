@@ -9,7 +9,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 
-from kronos.config import get_config
+from kronos.config import get_config  # type: ignore[import-not-found]
 
 CONCEPTS_DIR = os.path.join(get_config().vault_path, "99-系统", "knowledge", "concepts")
 
@@ -73,7 +73,7 @@ def match_concepts(text: str, concepts: list[dict]) -> dict:
             continue
         # fuzzy 匹配（处理拼写变体/中英文混排）
         try:
-            from rapidfuzz import fuzz
+            from rapidfuzz import fuzz  # type: ignore[import-not-found]
 
             words = text_lower.split()
             for w in words:

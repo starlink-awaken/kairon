@@ -14,7 +14,7 @@ import httpx
 import structlog
 from httpx import Limits
 
-from agora.service_base import is_safe_url
+from agora.service_base import is_safe_url  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 

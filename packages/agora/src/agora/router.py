@@ -15,13 +15,13 @@ from pathlib import Path as _Path
 
 import structlog
 
-from agora._protocols import close_client
+from agora._protocols import close_client  # type: ignore[import-not-found]
 from agora._protocols import dispatch as _dispatch
-from agora.compressor import Compressor as _Compressor
-from agora.event_bus import EventBus
-from agora.identity import Identity, normalize_identity
-from agora.registry import ServiceRegistry
-from agora.service_cache import (
+from agora.compressor import Compressor as _Compressor  # type: ignore[import-not-found]
+from agora.event_bus import EventBus  # type: ignore[import-not-found]
+from agora.identity import Identity, normalize_identity  # type: ignore[import-not-found]
+from agora.registry import ServiceRegistry  # type: ignore[import-not-found]
+from agora.service_cache import (  # type: ignore[import-not-found]
     load_service_cache as _load_service_cache,
 )
 from agora.service_cache import (
@@ -88,7 +88,7 @@ class Router:
 
     def _load_routes(self):
         """Load persisted route mappings from JSON file."""
-        from agora.persistence import json_load
+        from agora.persistence import json_load  # type: ignore[import-not-found]
 
         data = json_load(self._routes_path, default={})
         self._routes = data.get("routes", {})
@@ -190,7 +190,7 @@ class Router:
         Converts ``Service.to_dict()`` format (uses ``endpoint`` key) to the
         canonical cache format (uses ``mcp_endpoint`` and ``health_endpoint``).
         """
-        from agora.service_base import Service as _Service
+        from agora.service_base import Service as _Service  # type: ignore[import-not-found]
 
         def _convert(svc: _Service | dict) -> dict:
             if isinstance(svc, dict):
@@ -338,7 +338,11 @@ emit('AGORA_DEGRADE_ENTERED', {{"service": "agora", "reason": "{reason}"}})
             # ── Accounting middleware ────────────────────────────────────
             if result.get("status") != "error":
                 try:
-                    from agora.accounting import CallRecord, ResourceAccountDB, estimate_cost
+                    from agora.accounting import (  # type: ignore[import-not-found]
+                        CallRecord,
+                        ResourceAccountDB,
+                        estimate_cost,
+                    )
 
                     # Extract token usage from response if available
                     # Common MCP response patterns for usage info
@@ -387,7 +391,7 @@ emit('AGORA_DEGRADE_ENTERED', {{"service": "agora", "reason": "{reason}"}})
             # ── EU cost tracking middleware ────────────────────────────────
             if result.get("status") != "error":
                 try:
-                    from eu_pricing.ledger import EULedger
+                    from eu_pricing.ledger import EULedger  # type: ignore[import-not-found]
 
                     # Map tool name to EU operation — fall back to tool prefix
                     eu_operation = tool_name.split(".")[0] if "." in tool_name else tool_name
@@ -417,7 +421,7 @@ emit('AGORA_DEGRADE_ENTERED', {{"service": "agora", "reason": "{reason}"}})
                 )
                 # Audit
                 try:
-                    from agora.audit import AuditLogger
+                    from agora.audit import AuditLogger  # type: ignore[import-not-found]
 
                     AuditLogger().log("route.call", caller.actor, service_name, "error", result.get("error", "")[:100])
                 except Exception:

@@ -16,9 +16,9 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 try:
-    from kos.config import get_artifact_path, get_vault_ops_dir, get_workspace_manifest
+    from kos.config import get_artifact_path, get_vault_ops_dir, get_workspace_manifest  # type: ignore[import-not-found]
 except ImportError:
-    from config import get_artifact_path, get_vault_ops_dir, get_workspace_manifest
+    from config import get_artifact_path, get_vault_ops_dir, get_workspace_manifest  # type: ignore[import-not-found]
 
 VAULT_OPS_DIR = get_vault_ops_dir()
 
@@ -356,7 +356,7 @@ async def collab_callback(request: Request):  # type: ignore[no-untyped-def]
                 status_code=400,
             )
 
-        from kos.collab.api import update_task_by_agentmesh_id
+        from kos.collab.api import update_task_by_agentmesh_id  # type: ignore[import-not-found]
 
         # Map agentmesh status to KOS collab status
         am_status = body.get("status", "")

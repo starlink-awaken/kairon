@@ -16,9 +16,9 @@ _log = logging.getLogger(__name__)
 
 
 def run_perceive(goal: str, auto: bool = True) -> bool:
-    from kos.perception.fact_injector import inject_facts
-    from kos.perception.scrape import scrape_url
-    from kos.perception.search import web_search
+    from kos.perception.fact_injector import inject_facts  # type: ignore[import-not-found]
+    from kos.perception.scrape import scrape_url  # type: ignore[import-not-found]
+    from kos.perception.search import web_search  # type: ignore[import-not-found]
 
     print("  >> [external search]")
     results = web_search(goal)

@@ -17,12 +17,12 @@ if _src not in sys.path:
     sys.path.insert(0, _src)
 
 # ── 导入 Agora 核心模块 ──
-from agora.mcp_proxy.client import MCPClient
-from agora.mcp_proxy.registry import ProxyEntry, ProxyRegistry
-from agora.mcp_registry.evaluator import QualityScorer
-from agora.mcp_registry.orchestrator import Orchestrator
-from agora.mcp_registry.repository import ToolCatalog
-from agora.mcp_registry.router import SmartRouter
+from agora.mcp_proxy.client import MCPClient  # type: ignore[import-not-found]
+from agora.mcp_proxy.registry import ProxyEntry, ProxyRegistry  # type: ignore[import-not-found]
+from agora.mcp_registry.evaluator import QualityScorer  # type: ignore[import-not-found]
+from agora.mcp_registry.orchestrator import Orchestrator  # type: ignore[import-not-found]
+from agora.mcp_registry.repository import ToolCatalog  # type: ignore[import-not-found]
+from agora.mcp_registry.router import SmartRouter  # type: ignore[import-not-found]
 
 # 尝试导入 EmbeddingStore；如果不支持则跳过语义搜索测试
 try:
@@ -307,7 +307,7 @@ async def test_direct_execution(report: EvalReport, registry: ProxyRegistry):
 
     # 用新的 registry 确保干净
     registry2 = ProxyRegistry()
-    tools_data = populate_proxy_registry(registry2)
+    populate_proxy_registry(registry2)
 
     # 1. 精确工具名匹配（通过 get_entry）
     entry = registry2.get_entry("kos.semantic_search")
@@ -500,7 +500,7 @@ async def test_auto_registration(report: EvalReport):
 
     # ── 7a. DiscoveryEngine 工作空间发现 ──
     report.info("=== 7a: DiscoveryEngine 工作空间发现 ===")
-    from agora.discovery import DiscoveredService, DiscoveryEngine
+    from agora.discovery import DiscoveredService, DiscoveryEngine  # type: ignore[import-not-found]
 
     mock_services = [
         DiscoveredService(name="minerva", description="深度研究系统", mcp_endpoint="stdio://minerva", confidence=0.85),
@@ -527,7 +527,7 @@ async def test_auto_registration(report: EvalReport):
 
     # ── 7b. auto_register 自动注册 ──
     report.info("=== 7b: auto_register 自动注册 ===")
-    from agora.registry import ServiceRegistry
+    from agora.registry import ServiceRegistry  # type: ignore[import-not-found]
 
     registry = ServiceRegistry(storage_path="/tmp/test_agora_registry_eval.json")
     registry.clear_all()  # 确保从干净状态开始
@@ -563,7 +563,7 @@ async def test_auto_registration(report: EvalReport):
 
     # ── 7c. mcp_bootstrap.scan_and_launch 启动引导 ──
     report.info("=== 7c: mcp_bootstrap.scan_and_launch 启动引导 ===")
-    from agora import mcp_bootstrap
+    from agora import mcp_bootstrap  # type: ignore[import-not-found]
 
     proxy_manager = MagicMock()
     proxy_manager.start = AsyncMock(return_value={"minerva": "started", "kos": "started"})

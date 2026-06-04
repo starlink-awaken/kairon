@@ -438,8 +438,8 @@ class TestDbCRUD:
         with patch("cron_service.db._get_db_path", return_value=db_path):
             db_module._local.conn = None
             init_db()
-            j1 = create_job(JobCreate(name="enabled-job", schedule="every 5m"))
-            j2 = create_job(JobCreate(name="disabled-job", schedule="every 5m", enabled=False))
+            create_job(JobCreate(name="enabled-job", schedule="every 5m"))
+            create_job(JobCreate(name="disabled-job", schedule="every 5m", enabled=False))
 
             all_jobs = list_jobs()
             enabled_jobs = list_jobs(enabled_only=True)
@@ -779,7 +779,6 @@ class TestRegisterTools:
         mock_sched = MagicMock()
 
         # Collect the actual tool functions
-        tool_fns = {}
 
         def capture_tool(**kwargs):
             def decorator(fn):

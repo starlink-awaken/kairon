@@ -122,7 +122,7 @@ class BehaviorLogger:
     def _try_init_fact_graph(self) -> None:
         """尝试初始化 FactGraph 连接。"""
         try:
-            from eidos.fact_graph import get_fact_graph
+            from eidos.fact_graph import get_fact_graph  # type: ignore[import-not-found]
 
             self._fact_graph = get_fact_graph()
             _log.info("[BehaviorLogger] FactGraph connection established.")

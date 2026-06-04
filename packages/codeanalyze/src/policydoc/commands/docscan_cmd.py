@@ -3,10 +3,10 @@
 from pathlib import Path
 
 import click
-from codeanalyze.documents.scanner import analyze_wiki_structure, scan_directory
+from codeanalyze.documents.scanner import analyze_wiki_structure, scan_directory  # type: ignore[import-not-found]
 from rich.panel import Panel
 
-from policydoc.cli import console
+from policydoc.cli import console  # type: ignore[import-not-found]
 
 
 def _validate_path(path: str) -> Path:

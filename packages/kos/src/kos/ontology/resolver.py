@@ -8,7 +8,7 @@ import json
 from dataclasses import dataclass
 from typing import Any
 
-from kos.ontology._types import Entity
+from kos.ontology._types import Entity  # type: ignore[import-not-found]
 
 
 @dataclass
@@ -20,7 +20,7 @@ class ResolutionCandidate:
 
 
 def find_candidates(entity: Entity, threshold: float = 0.7) -> list[ResolutionCandidate]:
-    from kos.ontology.store import search_entities
+    from kos.ontology.store import search_entities  # type: ignore[import-not-found]
 
     candidates: list[ResolutionCandidate] = []
 

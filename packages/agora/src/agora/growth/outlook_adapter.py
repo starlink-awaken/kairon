@@ -42,7 +42,7 @@ from typing import Any
 _log = logging.getLogger(__name__)
 
 try:
-    import msal
+    import msal  # type: ignore[import-not-found]
     from msal import SerializableTokenCache
 
     _HAS_MSAL = True

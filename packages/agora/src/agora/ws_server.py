@@ -27,7 +27,7 @@ import logging
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import TYPE_CHECKING, Any, NoReturn, Protocol, TypeAlias, cast
+from typing import TYPE_CHECKING, Any, NoReturn, Protocol, cast
 
 _log = logging.getLogger(__name__)
 logger = logging.getLogger(__name__)
@@ -40,10 +40,10 @@ if TYPE_CHECKING:
     from websockets.asyncio.server import ServerConnection as WebSocketServerProtocol
     from websockets.typing import Data, Subprotocol
 else:
-    WebSocketServer: TypeAlias = Any
-    WebSocketServerProtocol: TypeAlias = Any
-    Data: TypeAlias = str | bytes
-    Subprotocol: TypeAlias = str
+    type WebSocketServer = Any
+    type WebSocketServerProtocol = Any
+    type Data = str | bytes
+    type Subprotocol = str
 
 
 def _missing_serve(*args: Any, **kwargs: Any) -> NoReturn:
@@ -64,14 +64,14 @@ else:
     _RuntimeConnectionClosed = _ImportedConnectionClosed
 
 
-JSONDict: TypeAlias = dict[str, Any]
+type JSONDict = dict[str, Any]
 
 
 class _HandshakeRequest(Protocol):
     headers: Mapping[str, str]
 
 
-EventHandler: TypeAlias = Callable[["WebSocketConnection", JSONDict], object]
+type EventHandler = Callable[["WebSocketConnection", JSONDict], object]
 
 
 @dataclass

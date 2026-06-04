@@ -136,13 +136,18 @@ def main():
         return
 
     # 路由到对应功能（委托至 engine/core/commands/）
-    from engine.core.commands.derive_commands import cmd_analyze, cmd_check, cmd_derive, cmd_rounds
-    from engine.core.commands.extract import cmd_extract
-    from engine.core.commands.mcp_serve import cmd_mcp
-    from engine.core.commands.toolforge import cmd_toolforge
+    from engine.core.commands.derive_commands import (  # type: ignore[import-not-found]
+        cmd_analyze,
+        cmd_check,
+        cmd_derive,
+        cmd_rounds,
+    )
+    from engine.core.commands.extract import cmd_extract  # type: ignore[import-not-found]
+    from engine.core.commands.mcp_serve import cmd_mcp  # type: ignore[import-not-found]
+    from engine.core.commands.toolforge import cmd_toolforge  # type: ignore[import-not-found]
 
     if args.command == "init":
-        from engine.foundation.templates import TEMPLATES
+        from engine.foundation.templates import TEMPLATES  # type: ignore[import-not-found]
 
         root = Path(args.name)
         tmpl_name = getattr(args, "template", "default")
@@ -187,13 +192,13 @@ def main():
         print(f"项目 {args.name} 已初始化 (模板: {tmpl_name})")
 
     elif args.command in ("derive", "check", "rounds", "generate", "analyze"):
-        from engine.core.derive import OntoDerive
+        from engine.core.derive import OntoDerive  # type: ignore[import-not-found]
 
         od = OntoDerive(getattr(args, "project", "."))
 
         # ToolForge 前置
         if getattr(args, "with_tools", False):
-            from engine.toolforge import ToolForge
+            from engine.toolforge import ToolForge  # type: ignore[import-not-found]
 
             tf = ToolForge()
             goal = getattr(args, "goal", "") or ""
@@ -233,13 +238,13 @@ def main():
                 r = od.derive()
                 try:
                     if fmt in ("html", "json"):
-                        from engine.core.export import to_html, to_json
+                        from engine.core.export import to_html, to_json  # type: ignore[import-not-found]
 
                         output = to_html(r, args.project) if fmt == "html" else to_json(r)
                         ext = fmt
                     else:
-                        from engine.foundation.ontology_map import OntologyMapper
-                        from engine.reasoners.formalize import Formalizer
+                        from engine.foundation.ontology_map import OntologyMapper  # type: ignore[import-not-found]
+                        from engine.reasoners.formalize import Formalizer  # type: ignore[import-not-found]
 
                         fz = Formalizer()
                         all_text = ""
@@ -275,7 +280,7 @@ def main():
         print(result.get("report", "推理完成")[:3000])
 
     elif args.command == "watch":
-        from engine.watcher import FileWatcher
+        from engine.watcher import FileWatcher  # type: ignore[import-not-found]
 
         w = FileWatcher(args.project)
         print(f"[watch] 监听中... 间隔{args.interval}秒, Ctrl+C停止")

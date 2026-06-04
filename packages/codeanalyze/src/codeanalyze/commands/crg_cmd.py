@@ -2,9 +2,9 @@
 
 import click
 
-from codeanalyze.analyzers import codereviewgraph
-from codeanalyze.commands.common import _validate_path, console
-from codeanalyze.core.registry import build_registry
+from codeanalyze.analyzers import codereviewgraph  # type: ignore[import-not-found]
+from codeanalyze.commands.common import _validate_path, console  # type: ignore[import-not-found]
+from codeanalyze.core.registry import build_registry  # type: ignore[import-not-found]
 
 
 @click.group()

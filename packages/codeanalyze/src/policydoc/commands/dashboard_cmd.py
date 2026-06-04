@@ -6,7 +6,7 @@ from pathlib import Path
 import click
 from rich.panel import Panel
 
-from policydoc.cli import console
+from policydoc.cli import console  # type: ignore[import-not-found]
 
 
 def _validate_path(path: str) -> Path:
@@ -30,7 +30,10 @@ def dashboard(path: str, port: int, force: bool, open_browser: bool = False):
     root = _validate_path(path)
     console.print(Panel.fit(f"[bold cyan]📊 政策文档知识图谱仪表盘: {root.name}[/]", border_style="cyan"))
 
-    from codeanalyze.reports.understand import generate_standalone_html, launch_dashboard
+    from codeanalyze.reports.understand import (  # type: ignore[import-not-found]
+        generate_standalone_html,
+        launch_dashboard,
+    )
 
     if not force:
         result = launch_dashboard(str(root), port=port)

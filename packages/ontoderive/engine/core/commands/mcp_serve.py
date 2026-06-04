@@ -3,8 +3,8 @@
 import threading
 import time
 
-from engine.mcp_server import main as mcp_main
-from engine.watcher import FileWatcher
+from engine.mcp_server import main as mcp_main  # type: ignore[import-not-found]
+from engine.watcher import FileWatcher  # type: ignore[import-not-found]
 
 
 def cmd_mcp(port: int = 0) -> None:
@@ -32,7 +32,7 @@ def cmd_serve(
     enable_mcp = not no_mcp
 
     if http:
-        from engine.web_server import serve
+        from engine.web_server import serve  # type: ignore[import-not-found]
 
         serve(project=project, host=host, port=port, watch=watch_enabled)
         return

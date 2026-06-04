@@ -161,7 +161,7 @@ class CommunityEngine:
             prop.votes_abstain += 1
 
         # 检查是否达到通过/拒绝阈值
-        total_votes = prop.votes_for + prop.votes_against
+        prop.votes_for + prop.votes_against
         required = max(
             len(self._registered_h) * self._approval_rate,
             2,  # 最少 2 票

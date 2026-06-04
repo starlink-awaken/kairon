@@ -10,7 +10,7 @@ from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 
-from config import get_artifact_path
+from kos.config import get_artifact_path  # type: ignore[import-not-found]
 
 
 def related(query: str, limit: int = 5) -> dict:

@@ -4,8 +4,8 @@ import os
 import re
 from pathlib import Path
 
-from codeanalyze.core.workspace import EXCLUDE_DIRS
-from codeanalyze.reports.insights import format_insights
+from codeanalyze.core.workspace import EXCLUDE_DIRS  # type: ignore[import-not-found]
+from codeanalyze.reports.insights import format_insights  # type: ignore[import-not-found]
 
 
 def generate_summary(

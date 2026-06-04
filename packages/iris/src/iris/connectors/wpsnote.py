@@ -16,10 +16,10 @@ import os
 from datetime import UTC
 from typing import Any
 
-from iris.base import BaseConnector
-from iris.config import IrisConfig
-from iris.mcp_client import McpClient, McpError
-from iris.models import Note
+from iris.base import BaseConnector  # type: ignore[import-not-found]
+from iris.config import IrisConfig  # type: ignore[import-not-found]
+from iris.mcp_client import McpClient, McpError  # type: ignore[import-not-found]
+from iris.models import Note  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 

@@ -18,8 +18,8 @@ from dataclasses import dataclass, field
 # 尝试 LLM path
 HAS_LLM = False
 try:
-    from organs.D_Execution.organs.llm.provider import LLMRequest
-    from organs.D_Execution.organs.llm.provider_factory import LLMProviderFactory
+    from organs.D_Execution.organs.llm.provider import LLMRequest  # type: ignore[import-not-found]
+    from organs.D_Execution.organs.llm.provider_factory import LLMProviderFactory  # type: ignore[import-not-found]
     HAS_LLM = True
 except ImportError:
     pass
@@ -379,7 +379,9 @@ def enhance_decomposition(result: DecompositionResult) -> dict:
 def _wire_local_planner(goal: str) -> dict | None:
     """尝试对接 LocalPlanner — 导入失败返回 None。"""
     try:
-        from organs.D_Execution.organs.local_planner import LocalPlanner  # type: ignore[import-untyped]
+        from organs.D_Execution.organs.local_planner import (  # type: ignore[import-not-found, import-untyped]
+            LocalPlanner,
+        )
         planner = LocalPlanner()
         can_handle, confidence = planner.can_handle(goal)
         if can_handle and confidence > 0.5:

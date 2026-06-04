@@ -36,7 +36,7 @@ class DHTStateLock:
 
     def __init__(self, dht: Any | None = None) -> None:
         if dht is None:
-            from agora.p2p_discovery import get_p2p
+            from agora.p2p_discovery import get_p2p  # type: ignore[import-not-found]
 
             self._dht = get_p2p().dht
         else:

@@ -47,8 +47,8 @@ from email.header import decode_header
 from email.message import EmailMessage
 from typing import Any
 
-from agora.interfaces.base_tool import BaseTool
-from agora.interfaces.tool_interface_contract import (
+from agora.interfaces.base_tool import BaseTool  # type: ignore[import-not-found]
+from agora.interfaces.tool_interface_contract import (  # type: ignore[import-not-found]
     ToolConfig,
     ToolRequest,
     ToolResult,

@@ -6,7 +6,6 @@ from typing import Any
 
 from engine_core._compat import AgentDaemonBase, KnowledgeEnhancementMixin
 
-
 """
 ---
 Type: Infrastructure

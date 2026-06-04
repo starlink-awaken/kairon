@@ -2,7 +2,7 @@
 
 import sys
 
-from kos.indexer import main as indexer_main
+from kos.indexer import main as indexer_main  # type: ignore[import-not-found]
 
 
 def main() -> None:

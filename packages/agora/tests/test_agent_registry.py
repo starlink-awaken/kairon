@@ -270,7 +270,7 @@ class TestHeartbeat:
         assert hb_result["status"] == "renewed"
 
     def test_heartbeat_with_invalid_signature(self, registry):
-        result = registry.register("agent-1")
+        registry.register("agent-1")
         _, wrong_sk = generate_key_pair()
         bad_sig = sign_challenge("agent-1", wrong_sk)
         hb_result = registry.heartbeat("agent-1", signature_b64=bad_sig)
@@ -327,7 +327,7 @@ class TestVerifyAgentIdentity:
         assert result["valid"] is True
 
     def test_verify_identity_with_invalid_signature(self, registry):
-        reg = registry.register("agent-1")
+        registry.register("agent-1")
         _, wrong_sk = generate_key_pair()
         bad_sig = sign_challenge("agent-1", wrong_sk)
         result = registry.verify_agent_identity("agent-1", bad_sig)
@@ -366,7 +366,7 @@ class TestQuery:
         registry.register("agent-2", identity_token="tok")
         registry._agents["agent-2"].last_heartbeat = time.time() - 7200
         active = registry.list_agents(status_filter="active")
-        stale = registry.list_agents(status_filter="stale")
+        registry.list_agents(status_filter="stale")
         assert len(active) == 1
         assert active[0]["agent_id"] == "agent-1"
 
@@ -543,7 +543,7 @@ class TestIntegration:
 
     def test_backup_failover_scenario(self, registry):
         r = registry
-        reg = r.register("agent-1")
+        r.register("agent-1")
         r.register("agent-2", identity_token="tok2")
 
         os.remove(r._cache_file)

@@ -16,7 +16,7 @@ class TestAgentHubBasic:
     def test_register_with_empty_capabilities(self):
         """Register agent with empty capabilities list."""
         hub = AgentHub()
-        agent_id = hub.register_agent("empty-cap", [], "http://localhost:1")
+        hub.register_agent("empty-cap", [], "http://localhost:1")
         info = hub.list_all()[0]
         assert info.capabilities == []
 

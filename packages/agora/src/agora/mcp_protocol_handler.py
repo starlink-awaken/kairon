@@ -28,7 +28,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
 
-from agora.unified_protocol_adapter import ProtocolVersion
+from agora.unified_protocol_adapter import ProtocolVersion  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 

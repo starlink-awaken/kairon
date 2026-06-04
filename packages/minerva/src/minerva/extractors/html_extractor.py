@@ -9,8 +9,8 @@ import re
 from dataclasses import dataclass
 from html.parser import HTMLParser
 
-from minerva.extractors.base import IContentExtractor, StructuredKnowledge
-from minerva.sources.connectors import RawContent
+from minerva.extractors.base import IContentExtractor, StructuredKnowledge  # type: ignore[import-not-found]
+from minerva.sources.connectors import RawContent  # type: ignore[import-not-found]
 
 
 @dataclass

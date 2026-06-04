@@ -28,7 +28,7 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from engine_core.organs.engine.task_store import TaskRecord
+    from engine_core.organs.engine.task_store import TaskRecord  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

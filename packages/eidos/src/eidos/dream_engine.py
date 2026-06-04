@@ -24,7 +24,7 @@ import logging
 import math
 from typing import Any
 
-from nucleus.Z_Microkernel.gateways.cognitive_gateway import Gateway
+from nucleus.Z_Microkernel.gateways.cognitive_gateway import Gateway  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

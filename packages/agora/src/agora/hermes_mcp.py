@@ -31,7 +31,7 @@ class HermesToolRegistry:
         """Search the knowledge graph. Returns results matching SearchResult."""
         results: list[dict[str, Any]] = []
         try:
-            from kos.semantic import semantic_search
+            from kos.semantic import semantic_search  # type: ignore[import-not-found]
             raw = semantic_search(query, limit=max_results)
             items = raw.get("results", raw) if isinstance(raw, dict) else raw
             for r in list(items)[:max_results]:
@@ -72,7 +72,7 @@ class HermesToolRegistry:
         """List registered agents with status and capabilities."""
         agents: list[dict[str, Any]] = []
         try:
-            from agent_runtime.agent_pool import AgentPool
+            from agent_runtime.agent_pool import AgentPool  # type: ignore[import-not-found]
             pool = AgentPool()
             for agent in pool.list_all():
                 agents.append({
@@ -105,7 +105,7 @@ class HermesToolRegistry:
         """List active and recent tasks."""
         tasks: list[dict[str, Any]] = []
         try:
-            from agent_runtime.task_scheduler import TaskScheduler
+            from agent_runtime.task_scheduler import TaskScheduler  # type: ignore[import-not-found]
             scheduler = TaskScheduler()
             for t in scheduler._tasks.values():
                 tasks.append({
@@ -138,7 +138,7 @@ class HermesToolRegistry:
     async def _tool_agent_chat(self, message: str) -> dict[str, Any]:
         """Process a chat message and return a response."""
         try:
-            from agent_runtime.engine import Engine  # type: ignore[attr-defined]
+            from agent_runtime.engine import Engine  # type: ignore[attr-defined, import-not-found]
             engine = Engine()
             result = engine.run_task(message)
             return {"response": result.get("response", result.get("output", str(result)))}
@@ -153,7 +153,7 @@ class HermesToolRegistry:
         """List service health statuses."""
         services: list[dict[str, Any]] = []
         try:
-            from agora.registry import ServiceRegistry
+            from agora.registry import ServiceRegistry  # type: ignore[import-not-found]
             registry = ServiceRegistry()
             for svc in (registry.list_all() if hasattr(registry, "list_all") else []):
                 services.append({
@@ -186,7 +186,7 @@ class HermesToolRegistry:
         """List system alerts."""
         alerts: list[dict[str, Any]] = []
         try:
-            from observability.alerts import AlertManager
+            from observability.alerts import AlertManager  # type: ignore[import-not-found]
             manager = AlertManager()
             for a in manager.get_active() if hasattr(manager, "get_active") else []:
                 alerts.append({

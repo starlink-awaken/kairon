@@ -34,7 +34,7 @@ import asyncio
 import logging
 from typing import Any  # noqa: F401
 
-from agora.mcp_tools import ToolContext, _ParamError
+from agora.mcp_tools import ToolContext, _ParamError  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 _SUPPORTED_PROTOCOL_VERSION = "2024-11-05"

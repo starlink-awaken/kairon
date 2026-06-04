@@ -224,7 +224,7 @@ class ApprovalQueue:
         """Lazily load AuditTrail to avoid circular imports."""
         if self._audit_trail is None:
             try:
-                from kairon_lib.organs.audit.audit_trail import (
+                from kairon_lib.organs.audit.audit_trail import (  # type: ignore[import-not-found]
                     AuditSeverity,
                     AuditTrail,
                     OperationType,

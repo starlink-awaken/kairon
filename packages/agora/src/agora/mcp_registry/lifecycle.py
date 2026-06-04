@@ -5,8 +5,8 @@ import time
 
 import structlog
 
-from agora.mcp_proxy.manager import ProxyManager
-from agora.mcp_registry.repository import ToolCatalog
+from agora.mcp_proxy.manager import ProxyManager  # type: ignore[import-not-found]
+from agora.mcp_registry.repository import ToolCatalog  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 

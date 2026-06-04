@@ -36,7 +36,7 @@ from collections import Counter
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-from forge.forge_config import (
+from forge.forge_config import (  # type: ignore[import-not-found]
     ALLOWED_CORS_ORIGINS,
     GRAPH,
     MAX_BODY,

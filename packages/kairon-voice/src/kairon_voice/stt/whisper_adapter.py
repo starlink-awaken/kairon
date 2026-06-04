@@ -39,7 +39,7 @@ import logging
 from collections.abc import Iterable
 from typing import Any, Literal, Protocol, TypedDict, cast
 
-from ..interfaces.base_voice import BaseVoiceInput
+from ..interfaces.base_voice import BaseVoiceInput  # type: ignore[import-not-found]
 from ..interfaces.voice_io import VoiceConfig, VoiceResult
 
 _log = logging.getLogger(__name__)

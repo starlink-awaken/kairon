@@ -77,8 +77,8 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
         # Fail-closed: reject all when no API key configured
         if not self.api_key:
-            from minerva.audit_store import log_operation as log_sqlite
-            from minerva.shared.audit import audit
+            from minerva.audit_store import log_operation as log_sqlite  # type: ignore[import-not-found]
+            from minerva.shared.audit import audit  # type: ignore[import-not-found]
 
             ip = request.client.host if request.client else "unknown"
             audit.auth_failure(path=request.url.path, ip=ip, reason="no_key_configured")

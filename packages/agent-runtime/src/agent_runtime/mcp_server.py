@@ -38,7 +38,7 @@ def _log_execution(task_name: str, status: str, summary: str, result: dict[str, 
 def get_runtime():
     global _runtime
     if _runtime is None:
-        from runtime import AgentRuntime
+        from runtime import AgentRuntime  # type: ignore[import-not-found]
 
         _runtime = AgentRuntime()
     return _runtime

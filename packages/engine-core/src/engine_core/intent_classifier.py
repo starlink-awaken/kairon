@@ -38,7 +38,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 try:
-    from nucleus.Z_Microkernel.infrastructure.oracle.inference_oracle import InferenceOracle
+    from nucleus.Z_Microkernel.infrastructure.oracle.inference_oracle import (  # type: ignore[import-not-found]
+        InferenceOracle,
+    )
 except (ImportError, ModuleNotFoundError):
 
     class InferenceOracle:  # type: ignore[no-redef]

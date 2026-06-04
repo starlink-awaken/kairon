@@ -18,12 +18,12 @@ Use:
   from kos.ontology.api import handle_action
 """
 
-from kos.ontology.store import (  # noqa: F401
-    delete_entity,
-    get_entity,
-    get_relations,
-    import_entities,
-    put_entity,
-    put_relation,
-    search_entities,
-)
+from kos.ontology.store import (  # type: ignore[import-not-found]  # noqa: F401
+    delete_entity,  # type: ignore[import-not-found]
+    get_entity,  # type: ignore[import-not-found]
+    get_relations,  # type: ignore[import-not-found]
+    import_entities,  # type: ignore[import-not-found]
+    put_entity,  # type: ignore[import-not-found]
+    put_relation,  # type: ignore[import-not-found]
+    search_entities,  # type: ignore[import-not-found]
+)  # type: ignore[import-not-found]

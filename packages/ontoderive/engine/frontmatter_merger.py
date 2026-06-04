@@ -53,7 +53,7 @@ try:
 except ImportError:
     yaml = None  # type: ignore
 
-from engine.frontmatter_detector import FrontmatterDetector
+from engine.frontmatter_detector import FrontmatterDetector  # type: ignore[import-not-found]
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 _log = logging.getLogger(__name__)

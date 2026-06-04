@@ -35,14 +35,14 @@ from pathlib import Path
 from threading import RLock
 from typing import Any
 
-from engine_core.organs.engine.agent_cli_bootstrap import (
+from engine_core.organs.engine.agent_cli_bootstrap import (  # type: ignore[import-not-found]
     build_agent_cli_handle,
     inject_agent_cli_soul_env,
     prepare_agent_cli_bootstrap,
     resolve_agent_cli_command,
     spawn_agent_cli_process,
 )
-from engine_core.organs.engine.hatch_runtime import (
+from engine_core.organs.engine.hatch_runtime import (  # type: ignore[import-not-found]
     WorkerProcessExitedError,
     WorkerProcessStartTimeoutError,
     build_active_worker_handle,
@@ -50,24 +50,24 @@ from engine_core.organs.engine.hatch_runtime import (
     spawn_worker_process,
     wait_for_worker_process_start,
 )
-from engine_core.organs.engine.hatcher_events import (
+from engine_core.organs.engine.hatcher_events import (  # type: ignore[import-not-found]
     emit_worker_hatched,
     emit_worker_terminated,
 )
-from engine_core.organs.engine.retry_policy import (
+from engine_core.organs.engine.retry_policy import (  # type: ignore[import-not-found]
     RetryExhaustedError,
     RetryPolicy,
     RetryState,
 )
-from engine_core.organs.engine.task_store import TaskState, TaskStore
+from engine_core.organs.engine.task_store import TaskState, TaskStore  # type: ignore[import-not-found]
 
-from ._events import (
+from ._events import (  # type: ignore[import-not-found]
     _DEFAULT_HATCH_TIMEOUT_S,
     _PROCESS_POLL_INTERVAL_S,
     _emit_hatcher_event,
 )
-from .exceptions import HatchError, HatchTimeoutError
-from .thread_worker import _thread_worker
+from .exceptions import HatchError, HatchTimeoutError  # type: ignore[import-not-found]
+from .thread_worker import _thread_worker  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 
@@ -192,7 +192,7 @@ class Hatcher:
         worker_pool: Any | None = None,
     ) -> str:
         """Dispatch *task* through a :class:`WorkerPool` when available."""
-        from engine_core.organs.engine.worker_pool import WorkerPool
+        from engine_core.organs.engine.worker_pool import WorkerPool  # type: ignore[import-not-found]
 
         pool: WorkerPool | None = worker_pool if isinstance(worker_pool, WorkerPool) else None
 
@@ -213,8 +213,8 @@ class Hatcher:
                 payload = task.get("payload", task)
                 await asyncio.sleep(0)
                 return f"local:{payload!r}"
-            from engine_core.organs.llm.provider import LLMRequest
-            from engine_core.organs.llm.provider_factory import (
+            from engine_core.organs.llm.provider import LLMRequest  # type: ignore[import-not-found]
+            from engine_core.organs.llm.provider_factory import (  # type: ignore[import-not-found]
                 get_default_factory,
             )
 
@@ -480,9 +480,9 @@ class Hatcher:
     ) -> WorkerHandle:
         """Spawn a swarm worker as an in-process daemon thread."""
         try:
-            from engine_core.organs.engine.result_bus import ResultBus
+            from engine_core.organs.engine.result_bus import ResultBus  # type: ignore[import-not-found]
         except ImportError:
-            from engine.result_bus import ResultBus  # type: ignore[no-redef]
+            from engine.result_bus import ResultBus  # type: ignore[no-redef, import-not-found]
 
         spore_id = spore_config.get("id", "unknown")
         capabilities: list[str] = spore_config.get("capabilities", [])

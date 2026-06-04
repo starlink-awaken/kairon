@@ -2,10 +2,10 @@
 
 import structlog
 
-from agora.mcp_registry.evaluator import QualityScorer
-from agora.mcp_registry.lifecycle import LifecycleManager
-from agora.mcp_registry.repository import ToolCatalog
-from agora.mcp_registry.sources import search_all
+from agora.mcp_registry.evaluator import QualityScorer  # type: ignore[import-not-found]
+from agora.mcp_registry.lifecycle import LifecycleManager  # type: ignore[import-not-found]
+from agora.mcp_registry.repository import ToolCatalog  # type: ignore[import-not-found]
+from agora.mcp_registry.sources import search_all  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 

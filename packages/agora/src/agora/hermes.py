@@ -97,7 +97,11 @@ def get_hermes_health() -> dict:
 
 async def _execute_hermes_task(task: HermesTask) -> None:
     """Execute a Hermes task by calling the model provider."""
-    from agora.agent_providers import call_chat_completions, remap_model, resolve_provider
+    from agora.agent_providers import (  # type: ignore[import-not-found]
+        call_chat_completions,
+        remap_model,
+        resolve_provider,
+    )
 
     task.status = "running"
     start = time.time()

@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import Enum, StrEnum
 from typing import Any
 
 
-class ContentType(str, Enum):
+class ContentType(StrEnum):
     ARTICLE = "article"
     PAPER = "paper"
     SOCIAL = "social"

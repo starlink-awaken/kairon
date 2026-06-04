@@ -58,7 +58,7 @@ class AnthropicProvider(LLMProvider):
         if not self._api_key or self._api_key == "MOCK_KEY":
             return False
         try:
-            import anthropic  # noqa: F401
+            import anthropic  # type: ignore[import-not-found]  # noqa: F401
 
             return True
         except ImportError:

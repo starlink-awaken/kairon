@@ -11,7 +11,7 @@ from engine_core._compat import (
     SynapseAgentCard,
     get_synapse_registry,
 )
-from engine_core.agent_daemon_base import AgentDaemonBase
+from engine_core.agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
 
 """
 ---

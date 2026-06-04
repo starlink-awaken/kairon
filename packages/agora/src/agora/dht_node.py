@@ -23,7 +23,7 @@ import json
 import logging
 from typing import Any
 
-from agora.dht_routing import DHTRoutingTable
+from agora.dht_routing import DHTRoutingTable  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 
@@ -103,7 +103,7 @@ class DHTNode:
             elif rpc_type == "SYNC_FACTS":
                 facts = request.get("facts", [])
                 # [PB-5] Canonical implementation: Write facts to D-Memory (Phase 2 Task 1 Cleanup)
-                from nucleus.Z_Microkernel.organs.uri_router import Router
+                from nucleus.Z_Microkernel.organs.uri_router import Router  # type: ignore[import-not-found]
 
                 success_count = 0
                 for fact in facts:

@@ -42,7 +42,7 @@ from uuid import uuid4
 # Lazily import kairon_lib.events — may not be available in all contexts
 _has_kairon_lib = False
 try:
-    from kairon_lib.events import BOSEvent as _RealBOSEvent
+    from kairon_lib.events import BOSEvent as _RealBOSEvent  # type: ignore[import-not-found]
     from kairon_lib.events import make_event as _real_make_event
     from kairon_lib.events import register_global_event_bus as _real_register_global_event_bus
 

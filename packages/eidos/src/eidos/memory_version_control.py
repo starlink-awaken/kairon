@@ -30,7 +30,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from eidos.organs.storage_dal import SQLiteRelationalProvider
+from eidos.organs.storage_dal import SQLiteRelationalProvider  # type: ignore[import-not-found]
 
 """
 Type: Organ

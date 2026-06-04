@@ -3,7 +3,7 @@
 """
 
 import pytest
-from foundation.protocols import (
+from foundation.protocols import (  # type: ignore[import-not-found]
     AnalysisResult,
     DeriveInterface,
     PipelineObservable,

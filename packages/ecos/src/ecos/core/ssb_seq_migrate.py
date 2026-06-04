@@ -20,7 +20,7 @@ import sqlite3
 import sys
 from datetime import datetime, timedelta, timezone
 
-from ecos.core.common import ECOS_HOME as ECOS_DIR
+from ecos.core.common import ECOS_HOME as ECOS_DIR  # type: ignore[import-not-found]
 
 SSB_DB = ECOS_DIR / "LADS/ssb/ecos.db"
 CHAIN_CHECKPOINT = ECOS_DIR / "LADS/ssb" / ".chain_hash"
@@ -44,7 +44,7 @@ def compute_signature(seq, event_id, agent, payload_str):
     """计算 HMAC 签名（与 ssb_auth 兼容）"""
     try:
         sys.path.insert(0, str(ECOS_DIR / "scripts"))
-        from ssb_auth import compute_signature as cs
+        from ssb_auth import compute_signature as cs  # type: ignore[import-not-found]
 
         return cs(seq, event_id, agent, payload_str) or ""
     except Exception:
@@ -74,13 +74,13 @@ def collect_events(conn):
     # 按 (timestamp, id) 排序建立 canonical 顺序
     # 时间戳统一解析，naive 的视为 CST
     rows = conn.execute("""
-        SELECT id, seq, timestamp, source_agent, 
+        SELECT id, seq, timestamp, source_agent,
                payload_json, agent_signature
-        FROM ssb_events 
-        ORDER BY 
-            CASE 
-                WHEN timestamp LIKE '%+%' THEN timestamp 
-                ELSE timestamp || '+08:00' 
+        FROM ssb_events
+        ORDER BY
+            CASE
+                WHEN timestamp LIKE '%+%' THEN timestamp
+                ELSE timestamp || '+08:00'
             END ASC,
             id ASC
     """).fetchall()
@@ -180,7 +180,7 @@ def migrate(dry_run=False):
 
             conn.execute(
                 """
-                UPDATE ssb_events SET 
+                UPDATE ssb_events SET
                     seq = ?,
                     timestamp = ?,
                     agent_signature = COALESCE(?, agent_signature)
@@ -191,7 +191,7 @@ def migrate(dry_run=False):
 
         # 添加 UNIQUE 约束
         conn.execute("""
-            CREATE UNIQUE INDEX IF NOT EXISTS idx_ssb_seq_unique 
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_ssb_seq_unique
             ON ssb_events(seq)
         """)
 
@@ -238,7 +238,7 @@ def verify():
 
     # 签名覆盖率
     sig_ok = conn.execute("""
-        SELECT COUNT(*) FROM ssb_events 
+        SELECT COUNT(*) FROM ssb_events
         WHERE agent_signature IS NOT NULL AND agent_signature != ''
     """).fetchone()[0]
     print(f"  签名覆盖: {sig_ok}/{total} ({sig_ok / total * 100:.1f}%)")
@@ -283,7 +283,7 @@ def rebuild_chain():
     """重建哈希链基线"""
     try:
         sys.path.insert(0, str(ECOS_DIR / "scripts"))
-        from ssb_integrity import CHAIN_CHECKPOINT, compute_chain_hash
+        from ssb_integrity import CHAIN_CHECKPOINT, compute_chain_hash  # type: ignore[import-not-found]
 
         conn = sqlite3.connect(str(SSB_DB))
         new_hash, count = compute_chain_hash(conn)

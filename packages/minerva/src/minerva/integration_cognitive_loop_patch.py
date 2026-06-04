@@ -40,7 +40,7 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from minerva.cognitive_provider import CognitiveLoopKnowledgeProvider
+    from minerva.cognitive_provider import CognitiveLoopKnowledgeProvider  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

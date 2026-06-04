@@ -1,6 +1,6 @@
 """Docling / Docling-Graph 分析适配器"""
 
-from codeanalyze.core.registry import ToolInfo
+from codeanalyze.core.registry import ToolInfo  # type: ignore[import-not-found]
 
 
 def check_docling(tool: ToolInfo | None = None) -> dict:
@@ -8,7 +8,7 @@ def check_docling(tool: ToolInfo | None = None) -> dict:
     if tool and not tool.available:
         return {"available": False, "error": "docling not installed"}
     try:
-        import docling
+        import docling  # type: ignore[import-not-found]
 
         return {"available": True, "version": getattr(docling, "__version__", "unknown")}
     except ImportError:
@@ -20,7 +20,7 @@ def check_docling_graph(tool: ToolInfo | None = None) -> dict:
     if tool and not tool.available:
         return {"available": False, "error": "docling-graph not installed"}
     try:
-        import docling_graph  # noqa: F401
+        import docling_graph  # type: ignore[import-not-found]  # noqa: F401
 
         return {"available": True, "version": "installed"}
     except ImportError:
@@ -30,7 +30,7 @@ def check_docling_graph(tool: ToolInfo | None = None) -> dict:
 def convert_to_markdown(file_path: str) -> str | None:
     """使用 Docling 将文档转为 Markdown。"""
     try:
-        from docling.document_converter import DocumentConverter
+        from docling.document_converter import DocumentConverter  # type: ignore[import-not-found]
 
         converter = DocumentConverter()
         result = converter.convert(file_path)

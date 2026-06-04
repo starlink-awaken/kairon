@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any, Protocol
 
-from eidos.organs.storage_dal import SQLiteError, SQLiteRelationalProvider
+from eidos.organs.storage_dal import SQLiteError, SQLiteRelationalProvider  # type: ignore[import-not-found]
 
 # =============================================================================
 # 0. 形式化摘要 ≝
@@ -51,9 +51,9 @@ _log = logging.getLogger(__name__)
 _log = logging.getLogger(__name__)
 
 try:
-    from eidos.enhanced_session import EnhancedSession
+    from eidos.enhanced_session import EnhancedSession  # type: ignore[import-not-found]
 except ImportError:
-    from eidos.organs.enhanced_session import EnhancedSession  # type: ignore[no-redef]
+    from eidos.organs.enhanced_session import EnhancedSession  # type: ignore[no-redef, import-not-found]
 
 
 class CheckpointPolicy(Protocol):

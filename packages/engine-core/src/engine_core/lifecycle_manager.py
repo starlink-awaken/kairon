@@ -47,7 +47,7 @@ from typing import TYPE_CHECKING as _TC
 from typing import Any
 
 if _TC:
-    from nucleus.Z_Microkernel.organs.swarm_types import (
+    from nucleus.Z_Microkernel.organs.swarm_types import (  # type: ignore[import-not-found]
         ISwarmLifecycle,
         TaskResult,
         WorkerBundle,
@@ -109,29 +109,29 @@ class WorkerState(StrEnum):  # type: ignore[no-redef]
 
 
 # ─── engine subcomponents (extracted) ────────────────────────────────────────
-from engine_core.organs.engine.lifecycle.call_dispatcher import CallDispatcher
-from engine_core.organs.engine.lifecycle.cluster import ClusterCoordinator
-from engine_core.organs.engine.lifecycle.events import SwarmEventEmitter
-from engine_core.organs.engine.lifecycle.governance import SwarmGovernance
-from engine_core.organs.engine.lifecycle.parallel_dispatch import ParallelDispatch
-from engine_core.organs.engine.lifecycle.persistence import SwarmPersistence
-from engine_core.organs.engine.lifecycle.state_machine import (
+from engine_core.organs.engine.lifecycle.call_dispatcher import CallDispatcher  # type: ignore[import-not-found]
+from engine_core.organs.engine.lifecycle.cluster import ClusterCoordinator  # type: ignore[import-not-found]
+from engine_core.organs.engine.lifecycle.events import SwarmEventEmitter  # type: ignore[import-not-found]
+from engine_core.organs.engine.lifecycle.governance import SwarmGovernance  # type: ignore[import-not-found]
+from engine_core.organs.engine.lifecycle.parallel_dispatch import ParallelDispatch  # type: ignore[import-not-found]
+from engine_core.organs.engine.lifecycle.persistence import SwarmPersistence  # type: ignore[import-not-found]
+from engine_core.organs.engine.lifecycle.state_machine import (  # type: ignore[import-not-found]
     InvalidTransitionError,
     SwarmStateMachine,
 )
-from engine_core.organs.engine.lifecycle.watchdog import SwarmWatchdog
-from engine_core.organs.engine.lifecycle.worker_pool import (
+from engine_core.organs.engine.lifecycle.watchdog import SwarmWatchdog  # type: ignore[import-not-found]
+from engine_core.organs.engine.lifecycle.worker_pool import (  # type: ignore[import-not-found]
     WorkerNotFoundError,
     WorkerPool,
 )
-from engine_core.organs.engine.worker_hatch_attempt import WorkerHatchAttempt
-from engine_core.organs.engine.worker_hatch_gatekeeper import (
+from engine_core.organs.engine.worker_hatch_attempt import WorkerHatchAttempt  # type: ignore[import-not-found]
+from engine_core.organs.engine.worker_hatch_gatekeeper import (  # type: ignore[import-not-found]
     WorkerHatchGatekeeper,
 )
-from engine_core.organs.engine.worker_reap_orchestrator import (
+from engine_core.organs.engine.worker_reap_orchestrator import (  # type: ignore[import-not-found]
     WorkerReapOrchestrator,
 )
-from engine_core.organs.swarm_worker_governance_controller import (
+from engine_core.organs.swarm_worker_governance_controller import (  # type: ignore[import-not-found]
     WorkerGovernanceController,
 )
 
@@ -139,53 +139,53 @@ _COMPAT_MODULE_NAME = "organs.D_Execution.organs.swarm_lifecycle_manager"
 
 # ─── Soft-dependency imports ───────────────────────────────────────────────────
 try:
-    from engine_core.organs.engine.spore_registry import (
+    from engine_core.organs.engine.spore_registry import (  # type: ignore[import-not-found]
         SporeNotFoundError,
         SporeRegistry,
     )
 except ImportError:
-    from engine.spore_registry import SporeRegistry  # type: ignore[no-redef]
+    from engine.spore_registry import SporeRegistry  # type: ignore[no-redef, import-not-found]
 
     SporeNotFoundError = Exception  # type: ignore[assignment,misc]
 
 try:
-    from engine_core.organs.engine.hatcher import (
+    from engine_core.organs.engine.hatcher import (  # type: ignore[import-not-found]
         Hatcher,
         HatchError,
         HatchTimeoutError,
     )
 except ImportError:
-    from engine.hatcher import Hatcher  # type: ignore[no-redef]
+    from engine.hatcher import Hatcher  # type: ignore[no-redef, import-not-found]
 
     HatchError = Exception  # type: ignore[assignment,misc]
     HatchTimeoutError = Exception  # type: ignore[assignment,misc]
 
 try:
-    from engine_core.organs.engine.swarm_result_collector import (
+    from engine_core.organs.engine.swarm_result_collector import (  # type: ignore[import-not-found]
         SwarmResultCollector,
     )
 
     _HAS_RESULT_COLLECTOR = True
 except ImportError:
     try:
-        from engine.swarm_result_collector import SwarmResultCollector  # type: ignore[no-redef]
+        from engine.swarm_result_collector import SwarmResultCollector  # type: ignore[no-redef, import-not-found]
     except ImportError:
         SwarmResultCollector = None  # type: ignore[assignment]
     _HAS_RESULT_COLLECTOR = False
 
 try:
-    from engine_core.organs.engine.consensus_monitor import ConsensusMonitor
+    from engine_core.organs.engine.consensus_monitor import ConsensusMonitor  # type: ignore[import-not-found]
 
     _HAS_CONSENSUS_MONITOR = True
 except ImportError:
     try:
-        from engine.consensus_monitor import ConsensusMonitor  # type: ignore[no-redef]
+        from engine.consensus_monitor import ConsensusMonitor  # type: ignore[no-redef, import-not-found]
     except ImportError:
         ConsensusMonitor = None  # type: ignore[assignment]
     _HAS_CONSENSUS_MONITOR = False
 
 try:
-    from nucleus.Z_Microkernel.mesh.synapse.registry import get_synapse_registry
+    from nucleus.Z_Microkernel.mesh.synapse.registry import get_synapse_registry  # type: ignore[import-not-found]
 
     _HAS_SYNAPSE_REGISTRY = True
 except ImportError:

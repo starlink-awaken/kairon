@@ -10,7 +10,7 @@ from types import ModuleType, SimpleNamespace
 from eidos.schema import FieldType, Schema, SchemaField, SchemaRegistry
 from eidos.validator import Validator
 
-KOS_REPO = str(Path(__file__).resolve().parents[2] / "kos")
+KOS_REPO = str(Path(__file__).resolve().parents[2] / "kos/src")
 
 
 def make_knowledge_card_schema() -> Schema:

@@ -397,11 +397,11 @@ class EnvironmentManager:
         """清理旧数据"""
         for name, monitor in self.monitors.items():
             policy = monitor.get_retention_policy()
-            retention_days = days or policy["metrics_days"]
+            days or policy["metrics_days"]
 
             # 清理采集历史
             if monitor.collection_history:
-                cutoff_time = datetime.now().isoformat()
+                datetime.now().isoformat()
                 # 简化的清理逻辑
                 old_count = len(monitor.collection_history)
                 monitor.collection_history = [record for record in monitor.collection_history[-1000:]]

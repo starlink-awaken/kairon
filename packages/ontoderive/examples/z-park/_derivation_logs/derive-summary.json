@@ -1,5 +1,5 @@
 {
-  "derived_at": "2026-06-04T11:49:02.391545",
+  "derived_at": "2026-06-04T12:50:07.590847",
   "facts": 8,
   "entities": 0,
   "inferences": 0,
@@ -42,12 +42,12 @@
       "derives_from": [
         "D-F1",
         "D-F2",
-        "D-F4",
-        "D-F3"
+        "D-F3",
+        "D-F4"
       ],
       "confidence": 0.9,
       "source": "rule_engine",
-      "derivation_trail": "R7: D-F1→D-F2→D-F4→D-F3",
+      "derivation_trail": "R7: D-F1→D-F2→D-F3→D-F4",
       "type": "modus_ponens_valid"
     },
     {

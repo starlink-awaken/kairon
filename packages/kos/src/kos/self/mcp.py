@@ -6,7 +6,12 @@
 
 from typing import Any
 
-from kos.self.api import get_current_role, get_profile, get_vision_summary, skill_router
+from kos.self.api import (  # type: ignore[import-not-found]
+    get_current_role,
+    get_profile,
+    get_vision_summary,
+    skill_router,
+)
 
 SELF_TOOLS: dict[str, dict[str, Any]] = {
     "self.get_profile": {

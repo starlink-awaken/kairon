@@ -52,7 +52,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-from forge.forge_config import ASSET_REGISTRY as REGISTRY_FILE
+from forge.forge_config import ASSET_REGISTRY as REGISTRY_FILE  # type: ignore[import-not-found]
 
 # ── 路径 ──
 from forge.forge_config import ASSETS_DIR, FORGE_ROOT
@@ -390,8 +390,7 @@ def _print_category_items(cat_data: dict, category: str) -> None:
         return
 
     # Pick first item to determine schema
-    sample = items[0]
-    has_status = "status" in sample
+    items[0]
 
     print(f"  ➤ {category} ({len(items)} 条目)")
     print(f"  {'─' * 68}")
@@ -655,7 +654,7 @@ def cmd_scan(args: list[str]) -> None:
     reg = _load()
     assets = _get_items(reg)
 
-    existing_ids = {a.get("id") or a.get("name") for a in assets if a.get("id") or a.get("name")}
+    {a.get("id") or a.get("name") for a in assets if a.get("id") or a.get("name")}
 
     # 1. Port scan
     try:

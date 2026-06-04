@@ -7,14 +7,14 @@ import json
 import time
 from pathlib import Path
 
-from agora.circuit_breaker import CircuitBreaker
-from agora.service_base import (
+from agora.circuit_breaker import CircuitBreaker  # type: ignore[import-not-found]
+from agora.service_base import (  # type: ignore[import-not-found]
     KNOWN_PROTOCOLS,
     Service,
     ServiceConfig,  # noqa: F401 — re-exported for mcp.py
     is_safe_url,
 )
-from agora.transition_log import TransitionLog
+from agora.transition_log import TransitionLog  # type: ignore[import-not-found]
 
 
 class ServiceRegistry:
@@ -55,11 +55,11 @@ class ServiceRegistry:
 
     def _load(self):
         """Load persisted services from storage (SQLite with JSON fallback)."""
-        from agora.persistence_db import json_load as _db_load
+        from agora.persistence_db import json_load as _db_load  # type: ignore[import-not-found]
 
         data = _db_load(Path(self._storage_path))
         if not data:
-            from agora.persistence import json_load
+            from agora.persistence import json_load  # type: ignore[import-not-found]
 
             data = json_load(Path(self._storage_path))
         if not isinstance(data, dict):
@@ -115,7 +115,7 @@ class ServiceRegistry:
         self._save()
         self._transitions.add(service.name, "", "registered", "Service registered", "register")
         try:
-            from agora.audit import AuditLogger
+            from agora.audit import AuditLogger  # type: ignore[import-not-found]
 
             AuditLogger().log("service.register", "system", service.name)
         except Exception:

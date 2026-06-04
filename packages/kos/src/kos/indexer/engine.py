@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # ruff: noqa
-from kos.config import get_vault_ops_dir
+from kos.config import get_vault_ops_dir  # type: ignore[import-not-found]
 
 """
 KOS Indexer — Fingerprint-driven incremental indexing (v1.0)
@@ -33,7 +33,7 @@ from kos.config import get_vault_ops_dir  # type: ignore[[, unused-ignore]
 
 VAULT_OPS_DIR = get_vault_ops_dir()  # type: ignore[func-returns-value]
 
-from kos._default_workspace_config import get_artifact_path, get_workspace_manifest, get_zone_path
+from kos._default_workspace_config import get_artifact_path, get_workspace_manifest, get_zone_path  # type: ignore[import-not-found]
 
 # ── Chinese tokenizer (jieba) ──────────────────────────
 
@@ -458,7 +458,7 @@ class PdfHandler(FormatHandler):
     def extract_text(self, p) -> str:
         # Tier 1: MinerU (best quality, Markdown output)
         try:
-            from magic_pdf.tools.common import do_parse  # type: ignore[import-untyped]
+            from magic_pdf.tools.common import do_parse  # type: ignore[import-untyped, import-not-found]
 
             result = do_parse(str(p))
             md = result.get("markdown", "") or result.get("content", "")

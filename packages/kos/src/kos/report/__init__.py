@@ -10,7 +10,7 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 
-from config import get_artifact_path, get_workspace_manifest
+from kos.config import get_artifact_path, get_workspace_manifest  # type: ignore[import-not-found]
 
 db_path = Path(get_artifact_path("retrievalDatabase"))
 if not db_path.exists():  # type: ignore[attr-defined]

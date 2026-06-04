@@ -14,13 +14,13 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from kos.eidos import validate_object, KnowledgeCard, Fact, OntologyNode
-from kos.meta_types import infer_meta_type
+from kos.eidos import validate_object, KnowledgeCard, Fact, OntologyNode  # type: ignore[import-not-found]
+from kos.meta_types import infer_meta_type  # type: ignore[import-not-found]
 
 from typing import Callable, Any
 
 try:
-    from eidos.protocols.contracts import validate_contract_payload
+    from eidos.protocols.contracts import validate_contract_payload  # type: ignore[import-not-found]
 except ImportError:
     validate_contract_payload: Callable[[str, dict[str, Any]], list[str]] | None = None
 
@@ -95,7 +95,7 @@ def _first_heading(text: str, fallback: str) -> str:
 
 
 def _load_kos_indexer_class() -> type:
-    from kos.indexer.engine import KosIndexer
+    from kos.indexer.engine import KosIndexer  # type: ignore[import-not-found]
 
     return KosIndexer
 

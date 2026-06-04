@@ -25,8 +25,8 @@ from pathlib import Path
 
 import structlog
 
-from minerva.pipeline.engine import Pipeline, ResearchContext
-from minerva.triage.router import ResearchLevel
+from minerva.pipeline.engine import Pipeline, ResearchContext  # type: ignore[import-not-found]
+from minerva.triage.router import ResearchLevel  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 
@@ -240,7 +240,7 @@ class SourceChecker:
     async def check_rss(self, feed_url: str, topic: str, since: datetime | None) -> list[dict]:
         """Check RSS feed for new items matching topic."""
         try:
-            import feedparser
+            import feedparser  # type: ignore[import-not-found]
 
             feed = feedparser.parse(feed_url)
         except Exception:
@@ -399,7 +399,7 @@ class ResearchExecutor:
             except Exception as exc:
                 logger.error("scheduled_task_failed", task_id=task_id, error=str(exc))
 
-        from apscheduler.triggers.cron import CronTrigger
+        from apscheduler.triggers.cron import CronTrigger  # type: ignore[import-untyped]
 
         job = self._apscheduler.add_job(
             _execute_scheduled,
@@ -466,8 +466,8 @@ class ResearchExecutor:
         """Lazy-init APScheduler with SQLite persistence."""
         if hasattr(self, "_apscheduler"):
             return
-        from apscheduler.jobstores.memory import MemoryJobStore
-        from apscheduler.schedulers.asyncio import AsyncIOScheduler
+        from apscheduler.jobstores.memory import MemoryJobStore  # type: ignore[import-untyped]
+        from apscheduler.schedulers.asyncio import AsyncIOScheduler  # type: ignore[import-untyped]
 
         self._apscheduler = AsyncIOScheduler(jobstores={"default": MemoryJobStore()})
         self._apscheduler.start()

@@ -3,7 +3,7 @@
 import click
 from rich.panel import Panel
 
-from codeanalyze.commands.common import console
+from codeanalyze.commands.common import console  # type: ignore[import-not-found]
 
 
 @click.command()
@@ -19,7 +19,7 @@ def serve(port: int, host: str):
       POST http://{host}:{port}/tools/call/{tool_name}
       GET  http://{host}:{port}/health
     """
-    from codeanalyze.mcp import mcp
+    from codeanalyze.mcp import mcp  # type: ignore[import-not-found]
 
     console.print(
         Panel.fit(

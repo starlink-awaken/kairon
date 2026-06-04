@@ -5,9 +5,9 @@ from collections import defaultdict
 
 import click
 
-from codeanalyze.analyzers import ripgrep
-from codeanalyze.commands.common import console
-from codeanalyze.core.registry import build_registry
+from codeanalyze.analyzers import ripgrep  # type: ignore[import-not-found]
+from codeanalyze.commands.common import console  # type: ignore[import-not-found]
+from codeanalyze.core.registry import build_registry  # type: ignore[import-not-found]
 
 
 @click.command()

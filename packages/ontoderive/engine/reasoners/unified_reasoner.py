@@ -128,7 +128,7 @@ class UnifiedReasoner:
 
         # 5. 分析模式 (v3.4: AnalyticsEngine纳入统一输出)
         try:
-            from engine.theories.analytics import AnalyticsEngine
+            from engine.theories.analytics import AnalyticsEngine  # type: ignore[import-not-found]
 
             ae = AnalyticsEngine(enhancer=enhancer)
             ae_results = ae.run(facts, {}, inferences, relations)

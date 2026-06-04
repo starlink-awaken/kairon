@@ -11,7 +11,7 @@ __version__ = "1.2.0"
 # These were migrated from SharedBrain/organs/D_Gateway/ and are self-contained
 # with no nucleus dependencies.  See each module's docstring for details.
 
-from agora import (  # noqa: F401
+from . import (  # type: ignore[import-not-found]  # noqa: F401
     api_types,
     auth_models,
     base_tool,

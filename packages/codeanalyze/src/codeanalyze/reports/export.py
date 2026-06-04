@@ -3,13 +3,13 @@
 import json
 from pathlib import Path
 
-from codeanalyze.core.results import (
+from codeanalyze.core.results import (  # type: ignore[import-not-found]
     Entity,
     KnowledgeGraph,
     Provenance,
     Relation,
 )
-from codeanalyze.documents.official import PolicyGraph
+from codeanalyze.documents.official import PolicyGraph  # type: ignore[import-not-found]
 
 
 def policy_graph_to_kg(pg: PolicyGraph, source: str = "official") -> KnowledgeGraph:
@@ -192,7 +192,7 @@ def policy_graph_to_kg(pg: PolicyGraph, source: str = "official") -> KnowledgeGr
 
 def merge_code_kg(kg: KnowledgeGraph, repo_path: str) -> KnowledgeGraph:
     """尝试从代码分析器（Graphify/GitNexus）提取实体并合并。"""
-    from codeanalyze.analyzers import graphify as gfa
+    from codeanalyze.analyzers import graphify as gfa  # type: ignore[import-not-found]
 
     g_result = gfa.analyze(repo_path)
     if g_result.get("error"):

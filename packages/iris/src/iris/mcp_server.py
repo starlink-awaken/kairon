@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from iris.config import IrisConfig
+from iris.config import IrisConfig  # type: ignore[import-not-found]
 
 FORMAT_VERSION = "iris-v1"
 
@@ -26,8 +26,8 @@ _config = None
 def _ensure_registry():
     global _registry
     if _registry is None:
-        from iris.connectors import register_all
-        from iris.registry import ConnectorRegistry
+        from iris.connectors import register_all  # type: ignore[import-not-found]
+        from iris.registry import ConnectorRegistry  # type: ignore[import-not-found]
 
         _registry = ConnectorRegistry()
         register_all(_registry)
@@ -47,7 +47,7 @@ _eidos = None
 def _ensure_eidos():
     global _eidos
     if _eidos is None:
-        from iris.adapters.eidos import EidosAdapter
+        from iris.adapters.eidos import EidosAdapter  # type: ignore[import-not-found]
 
         _eidos = EidosAdapter()
     return _eidos
@@ -150,9 +150,9 @@ def sync_bidirectional(dry_run: bool = False) -> dict[str, Any]:
 
     Returns a dict with sync statistics.
     """
-    from iris.connectors.obsidian import ObsidianConnector
-    from iris.connectors.wpsnote import WPSNoteConnector
-    from iris.sync.engine import SyncEngine
+    from iris.connectors.obsidian import ObsidianConnector  # type: ignore[import-not-found]
+    from iris.connectors.wpsnote import WPSNoteConnector  # type: ignore[import-not-found]
+    from iris.sync.engine import SyncEngine  # type: ignore[import-not-found]
 
     config = _ensure_config()
     obsidian = ObsidianConnector(config)

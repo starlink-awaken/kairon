@@ -31,7 +31,7 @@ Layer: L3
 
 import json
 
-from engine.alignment_models import EnhancedDiffReport
+from engine.alignment_models import EnhancedDiffReport  # type: ignore[import-not-found]
 
 
 def generate_markdown_report(report: EnhancedDiffReport) -> str:

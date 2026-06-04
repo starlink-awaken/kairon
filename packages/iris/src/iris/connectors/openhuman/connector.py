@@ -27,8 +27,8 @@ import time
 import urllib.request
 from typing import Any
 
-from iris.base import BaseConnector, SyncResult
-from iris.models import KnowledgeArtifact, Note
+from iris.base import BaseConnector, SyncResult  # type: ignore[import-not-found]
+from iris.models import KnowledgeArtifact, Note  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 

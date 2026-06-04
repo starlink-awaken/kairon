@@ -16,7 +16,7 @@ from typing import Any, Protocol
 
 from aiohttp import web  # pyright: ignore[reportMissingImports]
 
-from agora.api_types import APIRequest, APIResponse
+from agora.api_types import APIRequest, APIResponse  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

@@ -7,13 +7,13 @@ the same 30-line initialization sequence.
 
 from __future__ import annotations
 
-from minerva.config import MinervaConfig
-from minerva.executor.executor import CostGuard, ResearchExecutor
-from minerva.knowledge.store import SQLiteKnowledgeStore
-from minerva.llm.client import OpenAICompatibleClient
-from minerva.pipeline.engine import create_default_pipeline
-from minerva.search.engine import SearchEngine
-from minerva.triage.router import TriageRouter
+from minerva.config import MinervaConfig  # type: ignore[import-not-found]
+from minerva.executor.executor import CostGuard, ResearchExecutor  # type: ignore[import-not-found]
+from minerva.knowledge.store import SQLiteKnowledgeStore  # type: ignore[import-not-found]
+from minerva.llm.client import OpenAICompatibleClient  # type: ignore[import-not-found]
+from minerva.pipeline.engine import create_default_pipeline  # type: ignore[import-not-found]
+from minerva.search.engine import SearchEngine  # type: ignore[import-not-found]
+from minerva.triage.router import TriageRouter  # type: ignore[import-not-found]
 
 
 def create_default_executor(

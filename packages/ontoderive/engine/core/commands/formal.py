@@ -1,6 +1,6 @@
 """命令: formal — 形式化推理(Phase1-4管线)"""
 
-from engine.core.derive import OntoDerive
+from engine.core.derive import OntoDerive  # type: ignore[import-not-found]
 
 
 def cmd_formal(text: str = "", project: str = ".") -> None:

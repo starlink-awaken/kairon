@@ -127,7 +127,7 @@ class RecoveryHistoryManager:
         # 模式统计
         pattern_counts = {}
         for pattern_name in self.patterns:
-            pattern = self.patterns[pattern_name]
+            self.patterns[pattern_name]
             count = len([r for r in self.records if r.pattern_id == pattern_name])
             pattern_counts[pattern_name] = {
                 "total": count,
@@ -196,7 +196,6 @@ class RecoveryHistoryManager:
             return 0.0
 
         learning_opportunities = 0
-        successful_opportunities = 0
 
         for pattern_name, pattern in self.patterns.items():
             success_count = len([r for r in self.records if r.pattern_id == pattern_name and r.success])

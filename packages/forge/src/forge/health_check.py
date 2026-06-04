@@ -15,7 +15,7 @@ import sys
 from datetime import date, datetime
 
 # ── 路径 ──────────────────────────────────────────
-from forge.forge_config import FORGE_ROOT as TOOLBOX
+from forge.forge_config import FORGE_ROOT as TOOLBOX  # type: ignore[import-not-found]
 from forge.forge_config import GRAPH, REGISTRY
 from forge.forge_config import SCRIPTS_DIR as SCRIPTS
 

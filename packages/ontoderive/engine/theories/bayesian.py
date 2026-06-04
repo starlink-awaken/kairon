@@ -14,7 +14,7 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
-from engine.foundation.utils import all_md, detect_cycles, rf, wf
+from engine.foundation.utils import all_md, detect_cycles, rf, wf  # type: ignore[import-not-found]
 
 CONFIDENCE_MAP = {
     "fact": 0.95,

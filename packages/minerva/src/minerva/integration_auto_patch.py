@@ -61,7 +61,7 @@ from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any, ClassVar
 
 if TYPE_CHECKING:
-    from minerva.cognitive_provider import CognitiveLoopKnowledgeProvider
+    from minerva.cognitive_provider import CognitiveLoopKnowledgeProvider  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

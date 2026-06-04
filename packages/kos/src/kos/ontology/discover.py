@@ -13,7 +13,7 @@ def discover_implicit_relations(threshold: int = 3) -> list[dict[str, Any]]:
     Two entities appearing in the same document >= threshold times
     and without an explicit relation are suggested as related_to.
     """
-    from kos.ontology.store import _get_conn
+    from kos.ontology.store import _get_conn  # type: ignore[import-not-found]
 
     conn = _get_conn()
     rows = conn.execute(

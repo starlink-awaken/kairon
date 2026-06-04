@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from agora.registry import ServiceRegistry
+    from agora.registry import ServiceRegistry  # type: ignore[import-not-found]
 
 
 @dataclass
@@ -53,7 +53,7 @@ class EventBus:
         self._load()
 
     def _load(self):
-        from agora.persistence import json_load
+        from agora.persistence import json_load  # type: ignore[import-not-found]
 
         data = json_load(self._storage_path, default={"events": [], "subscriptions": []})
         if not isinstance(data, dict):

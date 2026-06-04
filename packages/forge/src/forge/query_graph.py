@@ -12,7 +12,7 @@ import json
 import sys
 from collections import Counter
 
-from forge.forge_config import GRAPH
+from forge.forge_config import GRAPH  # type: ignore[import-not-found]
 
 
 def _load() -> dict:

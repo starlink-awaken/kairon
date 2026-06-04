@@ -748,7 +748,7 @@ class EnhancedMetricsCollector:
 
     def aggregate_metrics(self, metric_name: str, time_window_minutes: int = 5) -> AggregatedMetric | None:
         """聚合指标"""
-        key = self.monitor.generate_isolation_key("all", metric_name)
+        self.monitor.generate_isolation_key("all", metric_name)
 
         # 从所有分类中查找指标
         all_metrics = []

@@ -25,7 +25,7 @@ import logging
 import uuid
 from typing import Any
 
-from .base import BaseGovernanceRouter
+from .base import BaseGovernanceRouter  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

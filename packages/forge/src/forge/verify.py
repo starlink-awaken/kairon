@@ -14,7 +14,7 @@ import json
 import subprocess
 import sys
 
-from forge.forge_config import ADAPTERS_DIR, FORGE_ROOT, GRAPH, REGISTRY, SCRIPTS_DIR
+from forge.forge_config import ADAPTERS_DIR, FORGE_ROOT, GRAPH, REGISTRY, SCRIPTS_DIR  # type: ignore[import-not-found]
 
 
 def _load() -> dict:
@@ -155,7 +155,7 @@ def phase1() -> int:
 
     # 8. entropy 可用
     try:
-        import entropy
+        import entropy  # type: ignore[import-not-found]
 
         ok = True
     except ImportError:

@@ -10,7 +10,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any
 
-from iris.models import KnowledgeArtifact
+from iris.models import KnowledgeArtifact  # type: ignore[import-not-found]
 
 
 @dataclass

@@ -228,7 +228,6 @@ class EdgeComputingPlatform:
     """
 
     def __init__(self, node_id: str = "edge-01") -> None:
-        metadata_path = "organs/D-Gateway/organs/edge_computing.py"
         self.status = "active"
 
         self.node_id = node_id

@@ -39,7 +39,7 @@ import urllib.request
 import uuid
 from collections.abc import Callable
 from pathlib import Path
-from typing import Any, TypeAlias
+from typing import Any
 
 # TODO-migrate: from nucleus.Z_Spore.interfaces.surface_contract import SurfaceContract, SurfaceContractError, SurfaceIngressKind
 SurfaceContract: Any = None
@@ -48,7 +48,7 @@ SurfaceIngressKind: Any = None
 
 _log = logging.getLogger(__name__)
 
-JSONDict: TypeAlias = dict[str, Any]
+type JSONDict = dict[str, Any]
 _ResultBus: Any | None = None
 _TaskResult: Any | None = None
 _NodeIdentityManager: Any | None = None
@@ -180,8 +180,8 @@ class ToolContext:
     file_lock: threading.Lock
 
 
-ToolHandler: TypeAlias = Callable[[JSONDict, ToolContext], JSONDict]
-RegistryEntry: TypeAlias = tuple[str, ToolHandler, str]
+type ToolHandler = Callable[[JSONDict, ToolContext], JSONDict]
+type RegistryEntry = tuple[str, ToolHandler, str]
 
 
 @dataclasses.dataclass(frozen=True)
@@ -558,7 +558,7 @@ def tool_evolution_status(params: JSONDict, ctx: ToolContext) -> JSONDict:
 def tool_mail_handler(params: JSONDict, ctx: ToolContext) -> JSONDict:
     """MCP handler for all mail_inbox actions — wraps MailTool."""
     try:
-        from organs.D_Gateway.tools.mail_tool import MailTool
+        from organs.D_Gateway.tools.mail_tool import MailTool  # type: ignore[import-not-found]
     except ImportError:
         return {"error": "MailTool not available (missing mail_tool.py)", "success": False}
 
@@ -587,7 +587,7 @@ def tool_mail_handler(params: JSONDict, ctx: ToolContext) -> JSONDict:
 
 def tool_tasks_list(params: JSONDict, ctx: ToolContext) -> JSONDict:
     """MCP handler for tasks_list — wraps TasksTool via tool_tasks_handler."""
-    from organs.D_Gateway.interfaces.tools.tasks_tool import tool_tasks_handler
+    from organs.D_Gateway.interfaces.tools.tasks_tool import tool_tasks_handler  # type: ignore[import-not-found]
 
     return tool_tasks_handler(params, ctx)
 
@@ -596,8 +596,8 @@ def tool_voice_speak(params: JSONDict, ctx: ToolContext) -> JSONDict:
     """MCP handler for voice/speak — synthesize and play text as speech."""
     surface: SurfaceContract | None = None
     try:
-        from organs.D_Voice.interfaces.voice_io import VoiceConfig
-        from organs.D_Voice.tts.tts_provider import TTSProviderFactory
+        from organs.D_Voice.interfaces.voice_io import VoiceConfig  # type: ignore[import-not-found]
+        from organs.D_Voice.tts.tts_provider import TTSProviderFactory  # type: ignore[import-not-found]
     except ImportError:
         return {"error": "D-Voice TTS not available", "success": False}
 
@@ -654,7 +654,7 @@ def tool_voice_session_info(params: JSONDict, ctx: ToolContext) -> JSONDict:
         return {"error": str(exc), "success": False, **payload}
 
     try:
-        from organs.D_Voice.voice_session_manager import VoiceSessionManager
+        from organs.D_Voice.voice_session_manager import VoiceSessionManager  # type: ignore[import-not-found]
     except ImportError:
         return {"error": "VoiceSessionManager not available", "success": False, **_surface_payload(surface)}
 
@@ -676,7 +676,7 @@ def tool_voice_intent_digest(params: JSONDict, ctx: ToolContext) -> JSONDict:
     surface: SurfaceContract | None = None
     try:
         from organs.D_Voice.interfaces.voice_io import VoiceResult
-        from organs.D_Voice.voice_intent_digestor import VoiceIntentDigestor
+        from organs.D_Voice.voice_intent_digestor import VoiceIntentDigestor  # type: ignore[import-not-found]
     except ImportError:
         return {"error": "VoiceIntentDigestor not available", "success": False}
 
@@ -738,7 +738,7 @@ def build_default_registry() -> MCPToolRegistry:
 
     # --- Calendar Tool registration ---
     try:
-        from organs.D_Gateway.tools.calendar_tool import (
+        from organs.D_Gateway.tools.calendar_tool import (  # type: ignore[import-not-found]
             tool_calendar_check_conflicts,
             tool_calendar_create_event,
             tool_calendar_delete_event,

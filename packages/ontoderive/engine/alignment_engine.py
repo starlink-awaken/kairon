@@ -32,8 +32,8 @@ Re-exports the public API from the extracted alignment engine modules.
 AlignmentEngine core class is not yet extracted (future wave).
 """
 
-from engine.alignment_governance import DocFreshnessScanner, IndexAuditor
-from engine.alignment_models import (
+from engine.alignment_governance import DocFreshnessScanner, IndexAuditor  # type: ignore[import-not-found]
+from engine.alignment_models import (  # type: ignore[import-not-found]
     AlignmentCategory,
     AlignmentIssue,
     AlignmentSeverity,

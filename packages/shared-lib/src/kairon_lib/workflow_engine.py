@@ -27,7 +27,7 @@ from __future__ import annotations
 
 import time
 import uuid
-from collections.abc import Callable, Generator
+from collections.abc import Generator
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from enum import StrEnum
@@ -51,35 +51,9 @@ class WorkflowSummary(TypedDict):
     duration_s: float
 
 
-try:
-    from nucleus.Z_Microkernel.organs.traced_decorator import (  # type: ignore[import-not-found]
-        get_current_trace,
-        start_trace,
-        traced,
-    )
+from kairon_lib._compat import get_current_trace
 
-    _TRACING_AVAILABLE = True
-except ImportError:
-    _TRACING_AVAILABLE = False
-
-    def get_current_trace() -> TraceContextProtocol | None:
-        return None
-
-    def start_trace(name: str = "root") -> TraceContextProtocol | None:
-        return None
-
-    def traced(
-        _func: Callable[..., object] | None = None,
-        *,
-        domain: str = "",
-    ) -> Any:
-        if _func is not None:
-            return _func
-
-        def decorator(func: Callable[..., object]) -> Callable[..., object]:
-            return func
-
-        return decorator
+_TRACING_AVAILABLE = True  # stubs from _compat are always available
 
 
 class WorkflowPhase(StrEnum):

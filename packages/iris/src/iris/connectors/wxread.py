@@ -20,9 +20,9 @@ import os
 import urllib.request
 from typing import Any
 
-from iris.base import BaseConnector, SyncResult
-from iris.config import IrisConfig
-from iris.models import Highlight, KnowledgeArtifact
+from iris.base import BaseConnector, SyncResult  # type: ignore[import-not-found]
+from iris.config import IrisConfig  # type: ignore[import-not-found]
+from iris.models import Highlight, KnowledgeArtifact  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 
@@ -170,7 +170,7 @@ class WXReadConnector(BaseConnector):
             title = b.get("title", "Untitled")
             author = b.get("author", "")
             intro = b.get("intro", "") or ""
-            cover = b.get("cover", "")
+            b.get("cover", "")
 
             items.append(
                 Highlight(

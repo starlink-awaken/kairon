@@ -458,7 +458,6 @@ class TestRetryHandling:
 
         # Override: first call returns error, then reset for retry
         call_count = 0
-        original_add = proxy.add_service
 
         async def flaky_add(config):
             nonlocal call_count

@@ -4,7 +4,7 @@
 
 import json
 
-from foundation.ontology_map import (
+from foundation.ontology_map import (  # type: ignore[import-not-found]
     RELATION_MAPPINGS,
     TYPE_MAPPINGS,
     OntologyMapper,

@@ -186,7 +186,6 @@ class TestIdleTimeoutManager:
 
     def test_sweep_once_callback_error_logged(self):
         """_sweep_once should catch and log callback errors, not raise."""
-        errors = []
 
         async def failing_cb(name: str):
             raise RuntimeError(f"oops: {name}")

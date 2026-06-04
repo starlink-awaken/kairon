@@ -2,9 +2,9 @@
 
 
 
-from metaos.cli import CLI
-from metaos.core.engine import SEngine
-from metaos.core.types import Decision, Principle, Task
+from metaos.cli import CLI  # type: ignore[import-not-found]
+from metaos.core.engine import SEngine  # type: ignore[import-not-found]
+from metaos.core.types import Decision, Principle, Task  # type: ignore[import-not-found]
 
 
 def run_scenario():

@@ -2,7 +2,7 @@
 
 
 
-from metaos.core.engine import SEngine
+from metaos.core.engine import SEngine  # type: ignore[import-not-found]
 
 
 def assert_output_format(name: str, result: dict, required_keys: list[str]):
@@ -29,7 +29,7 @@ def run_scenario():
 
     # ── 测试1：CLI morning + evening + 格式断言 ──
     print("\n[测试1] CLI 模拟调用 + 格式验证")
-    from metaos.cli import CLI
+    from metaos.cli import CLI  # type: ignore[import-not-found]
 
     cli = CLI(engine)
 
@@ -95,7 +95,7 @@ def run_scenario():
     print("\n[测试3] process() access_level 默认值")
     token = engine.register_h("H_ACC", "访问控制测试")
     engine.authenticate(token)
-    from core.types import Task
+    from core.types import Task  # type: ignore[import-not-found]
 
     t = Task(h_id="H_ACC", task_type="info_retrieval", input="测试 access_level")
     r = engine.process(t)

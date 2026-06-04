@@ -39,12 +39,12 @@ class TestPatternDataClasses:
             pattern_id="tp-1",
             event_type="click",
             time_distribution={"morning": 3.0, "evening": 2.0},
-            peak_hour=9,
+            peak_hours=[9],
             confidence=0.7,
         )
         d = tp.to_dict()
         assert d["event_type"] == "click"
-        assert d["peak_hour"] == 9
+        assert d["peak_hours"] == [9]
         assert len(d["time_distribution"]) == 2
 
 

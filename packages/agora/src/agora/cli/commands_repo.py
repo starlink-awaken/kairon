@@ -4,9 +4,9 @@ import argparse
 import asyncio
 import json
 
-from agora.mcp_registry.lifecycle import LifecycleManager
-from agora.mcp_registry.orchestrator import Orchestrator
-from agora.mcp_registry.repository import ToolCatalog
+from agora.mcp_registry.lifecycle import LifecycleManager  # type: ignore[import-not-found]
+from agora.mcp_registry.orchestrator import Orchestrator  # type: ignore[import-not-found]
+from agora.mcp_registry.repository import ToolCatalog  # type: ignore[import-not-found]
 
 
 def _print_json(data):
@@ -214,8 +214,8 @@ def _cmd_repo_run(catalog: ToolCatalog, args: argparse.Namespace) -> int:
     """Run a natural language query through the Smart Router."""
     import asyncio
 
-    from agora.mcp_registry.embeddings import EmbeddingStore
-    from agora.mcp_registry.router import SmartRouter
+    from agora.mcp_registry.embeddings import EmbeddingStore  # type: ignore[import-not-found]
+    from agora.mcp_registry.router import SmartRouter  # type: ignore[import-not-found]
 
     if not args.query:
         print("Error: run requires a query string.")

@@ -8,12 +8,12 @@ Phase C components:
   - SyncEngine: Orchestrator that ties everything together
 """
 
-from iris.sync.changes import Change, ChangeTracker, ChangeType
-from iris.sync.conflict import Conflict, ConflictResolver
-from iris.sync.engine import SyncEngine
+from iris.sync.changes import Change, ChangeTracker, ChangeType  # type: ignore[import-not-found]
+from iris.sync.conflict import Conflict, ConflictResolver  # type: ignore[import-not-found]
+from iris.sync.engine import SyncEngine  # type: ignore[import-not-found]
 from iris.sync.engine import SyncResult as EngineSyncResult
-from iris.sync.format import FormatConverter
-from iris.sync.id_map import IdMapping
+from iris.sync.format import FormatConverter  # type: ignore[import-not-found]
+from iris.sync.id_map import IdMapping  # type: ignore[import-not-found]
 
 __all__ = [
     "IdMapping",

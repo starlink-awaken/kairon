@@ -10,7 +10,7 @@ from collections.abc import Generator
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from eidos.organs.storage_dal import SQLiteError, SQLiteRelationalProvider
+from eidos.organs.storage_dal import SQLiteError, SQLiteRelationalProvider  # type: ignore[import-not-found]
 
 """
 ---

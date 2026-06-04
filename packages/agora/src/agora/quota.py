@@ -10,7 +10,7 @@ import os
 import time
 from typing import Any
 
-from agora.agent_providers import QuotaInfo
+from agora.agent_providers import QuotaInfo  # type: ignore[import-not-found]
 
 _quota_cache: dict[str, QuotaInfo] = {}
 _last_probe_time: float = 0

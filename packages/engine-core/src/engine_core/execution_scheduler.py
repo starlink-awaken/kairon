@@ -145,7 +145,9 @@ class QueueFullError(Exception):
 # Structured error support (TD-004) — import best-effort to keep scheduler
 # self-contained in environments where nucleus path isn't configured yet.
 try:
-    from nucleus.Z_Spore.interfaces.structured_error import ErrorCatalog as _ErrorCatalog
+    from nucleus.Z_Spore.interfaces.structured_error import (  # type: ignore[import-not-found]
+        ErrorCatalog as _ErrorCatalog,
+    )
 
     _STRUCTURED_ERRORS_AVAILABLE = True
 except ImportError:  # pragma: no cover
@@ -469,7 +471,10 @@ class ExecutionScheduler:
             # Scan AFTER writing so we inspect the exact bytes on disk.
             # Import lazily to avoid a hard dependency when sandbox feature is unused.
             try:
-                from workspace_sandbox import SandboxSecurityError, scan_input_file_content
+                from workspace_sandbox import (  # type: ignore[import-not-found]
+                    SandboxSecurityError,
+                    scan_input_file_content,
+                )
             except ImportError:
                 _ws_mod = __import__(  # cross-organ: invisible to AST topology checker
                     "organs.workspace_sandbox",

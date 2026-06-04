@@ -78,7 +78,7 @@ def _auto_select_ollama_model() -> str:
 class OpenAIProvider(BaseProvider):
     def call(self, prompt, system="", temperature=0.3):
         try:
-            from openai import OpenAI
+            from openai import OpenAI  # type: ignore[import-not-found]
 
             client_kwargs = {}
             if self.base_url:
@@ -108,7 +108,7 @@ class OpenAIProvider(BaseProvider):
 class AnthropicProvider(BaseProvider):
     def call(self, prompt, system="", temperature=0.3):
         try:
-            import anthropic
+            import anthropic  # type: ignore[import-not-found]
 
             api_key = os.environ.get("ANTHROPIC_API_KEY")
             if _standard_llm_provider() == "anthropic":

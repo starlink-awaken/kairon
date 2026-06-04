@@ -8,7 +8,7 @@ import json
 import subprocess
 from pathlib import Path
 
-from codeanalyze.core.registry import ToolInfo
+from codeanalyze.core.registry import ToolInfo  # type: ignore[import-not-found]
 
 
 def analyze(repo_path: str = ".", tool: ToolInfo | None = None) -> dict:

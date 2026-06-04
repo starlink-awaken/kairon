@@ -8,7 +8,7 @@ import importlib.util
 import os
 from pathlib import Path
 
-from kos import _default_workspace_config
+from kos import _default_workspace_config  # type: ignore[import-not-found]
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 _mod = None

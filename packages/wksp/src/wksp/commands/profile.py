@@ -11,7 +11,7 @@ from .base import _PROFILE_PATH, _get_console, _get_err, _load_profile, _panel
 
 
 def cmd_profile(args: argparse.Namespace) -> int:
-    c, e = _get_console(), _get_err()
+    c, _e = _get_console(), _get_err()
     if args.edit:
         import yaml
 

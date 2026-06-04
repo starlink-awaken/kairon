@@ -19,7 +19,7 @@ import json
 import sys
 from datetime import UTC, datetime, timedelta
 
-from forge.forge_config import FORGE_ROOT, REGISTRY
+from forge.forge_config import FORGE_ROOT, REGISTRY  # type: ignore[import-not-found]
 
 # ── 预设能力矩阵（与 shell 版一致）────────────────────────────────
 PRESET_CAPABILITIES = [

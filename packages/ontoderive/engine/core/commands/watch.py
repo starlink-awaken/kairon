@@ -1,6 +1,6 @@
 """命令: watch — 文件监听自动重推导"""
 
-from engine.watcher import FileWatcher
+from engine.watcher import FileWatcher  # type: ignore[import-not-found]
 
 
 def cmd_watch(project: str = ".", interval: int = 5) -> None:

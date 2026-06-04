@@ -197,7 +197,7 @@ class HabitLearner:
     def _get_fact_graph(self) -> Any | None:
         """Lazily load FactGraph to avoid circular import at startup."""
         try:
-            from eidos.fact_graph import FactGraph
+            from eidos.fact_graph import FactGraph  # type: ignore[import-not-found]
 
             return FactGraph()
         except ImportError:

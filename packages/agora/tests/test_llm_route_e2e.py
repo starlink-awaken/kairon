@@ -140,7 +140,7 @@ class TestPromptBuilding:
         many = [_make_tool(f"tool_{i}", quality_score=0.5) for i in range(15)]
         prompt = router._build_selection_prompt("test", many)
         # Count numbered entries — should be 10
-        lines = [l for l in prompt.splitlines() if l.strip().startswith(tuple(str(i) + "." for i in range(1, 11)))]
+        [l for l in prompt.splitlines() if l.strip().startswith(tuple(str(i) + "." for i in range(1, 11)))]
         # A simpler check: "Available tools" section should have at most 10 entries
         entries = [
             l
@@ -593,7 +593,7 @@ def asyncio_run(coro):
     import asyncio
 
     try:
-        loop = asyncio.get_running_loop()
+        asyncio.get_running_loop()
     except RuntimeError:
         return asyncio.run(coro)
     # Already in an event loop — create new one in a thread

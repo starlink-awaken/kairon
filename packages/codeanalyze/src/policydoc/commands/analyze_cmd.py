@@ -3,13 +3,16 @@
 from pathlib import Path
 
 import click
-from codeanalyze.core.registry import build_registry
-from codeanalyze.documents import pipeline as doc_pipeline
-from codeanalyze.documents.official import analyze_policy_directory, format_policy_graph_report
-from codeanalyze.documents.scanner import analyze_wiki_structure
+from codeanalyze.core.registry import build_registry  # type: ignore[import-not-found]
+from codeanalyze.documents import pipeline as doc_pipeline  # type: ignore[import-not-found]
+from codeanalyze.documents.official import (  # type: ignore[import-not-found]
+    analyze_policy_directory,
+    format_policy_graph_report,
+)
+from codeanalyze.documents.scanner import analyze_wiki_structure  # type: ignore[import-not-found]
 from rich.panel import Panel
 
-from policydoc.cli import _validate_path, console
+from policydoc.cli import _validate_path, console  # type: ignore[import-not-found]
 
 
 @click.command()

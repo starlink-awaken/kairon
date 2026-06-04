@@ -285,19 +285,27 @@ class WorkerHandle:
     def eu_budget(self, value: float) -> None:
         self._eu_budget = value
 
-class WorkerBundle(NamedTuple):
+class WorkerBundle:
     """Bundle of a worker handle and its metadata."""
 
-    handle: WorkerHandle
-    task_type: TaskType
-    task_results: tuple[TaskResult, ...] = ()
-    total_eu_consumed: float = 0.0
-    total_tasks: int = 0
-    successful_tasks: int = 0
-    nectar_earned: float = 0.0
-
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        pass
+        if args:
+            self.handle = args[0] if len(args) > 0 else WorkerHandle()
+            self.task_type = args[1] if len(args) > 1 else TaskType.UNKNOWN
+            self.task_results = args[2] if len(args) > 2 else ()
+            self.total_eu_consumed = args[3] if len(args) > 3 else 0.0
+            self.total_tasks = args[4] if len(args) > 4 else 0
+            self.successful_tasks = args[5] if len(args) > 5 else 0
+            self.nectar_earned = args[6] if len(args) > 6 else 0.0
+        else:
+            self.handle = kwargs.get("handle", WorkerHandle())
+            self.task_type = kwargs.get("task_type", TaskType.UNKNOWN)
+            self.task_results = kwargs.get("task_results", ())
+            self.total_eu_consumed = kwargs.get("total_eu_consumed", 0.0)
+            self.total_tasks = kwargs.get("total_tasks", 0)
+            self.successful_tasks = kwargs.get("successful_tasks", 0)
+            self.nectar_earned = kwargs.get("nectar_earned", 0.0)
+
 
 class AgentDaemonBase:
     """Stub base class for agent daemons."""
@@ -484,3 +492,24 @@ class _SynapseRegistryStub:
 
     def unregister(self, synapse_id: str) -> None:
         pass
+
+
+class RegistryAgentCard:
+    """Stub for nucleus.Z_Microkernel.organs.capability_registry.AgentCard."""
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        pass
+
+
+def agent_send(target: str, message: Any) -> bool:
+    """Stub for bos_agent_router_bridge.agent_send."""
+    return True
+
+
+def agent_receive(target: str) -> list[Any]:
+    """Stub for bos_agent_router_bridge.agent_receive."""
+    return []
+
+
+def agent_ack(message_id: str) -> bool:
+    """Stub for bos_agent_router_bridge.agent_ack."""
+    return True

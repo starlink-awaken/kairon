@@ -10,9 +10,9 @@ from pathlib import Path
 # 确保能找到 engine 模块
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from cli import CLI
+from cli import CLI  # type: ignore[import-not-found]
 
-from metaos.core.engine import SEngine
+from metaos.core.engine import SEngine  # type: ignore[import-not-found]
 
 
 def get_engine_and_cli(data_dir: str = "") -> tuple:
@@ -211,7 +211,7 @@ def cmd_day(args):
         print("目标：简化版周复盘")
         counts = input("微粒复盘次数: ") or "0"
         lessons = input("经验教训条数: ") or "0"
-        biases = input("偏误提醒次数: ") or "0"
+        input("偏误提醒次数: ") or "0"
         r = cli.review("简化周复盘", f"本周复盘{counts}次", f"教训{lessons}条")
         print(f"  复盘输出: {r.get('output', '')[:200]}")
         print("\n✅ Day 6 完成")

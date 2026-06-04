@@ -36,7 +36,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from nucleus.Z_Microkernel.utilities.sqlite_utils import managed_connection
+from kairon_lib._compat import managed_connection
 
 _log = logging.getLogger(__name__)
 
@@ -151,7 +151,7 @@ class EvolutionMetrics:
     def _collect_archetype_count(self) -> int:
         """Count distinct ThinkingModes from ThinkingPathLibrary."""
         try:
-            from kairon_lib.organs.governance.thinking_paths import (
+            from kairon_lib.organs.governance.thinking_paths import (  # type: ignore[import-not-found]
                 ThinkingMode,
             )
 
@@ -171,7 +171,7 @@ class EvolutionMetrics:
     def _collect_knowledge_entries(self) -> int:
         """Count total harvest entries from HarvestScheduler."""
         try:
-            from kairon_lib.organs.registry.harvest_scheduler import (
+            from kairon_lib.organs.registry.harvest_scheduler import (  # type: ignore[import-not-found]
                 HarvestScheduler,
             )
 
@@ -185,7 +185,7 @@ class EvolutionMetrics:
     def _collect_gate_reviews(self) -> tuple[int, int]:
         """Return (passed, total) gate reviews from AuditQueryEngine."""
         try:
-            from kairon_lib.organs.audit.audit_query import (
+            from kairon_lib.organs.audit.audit_query import (  # type: ignore[import-not-found]
                 AuditQueryEngine,
             )
 
@@ -200,7 +200,7 @@ class EvolutionMetrics:
     def _collect_cognitive_loop_iterations(self) -> int:
         """Count cognitive loop iterations."""
         try:
-            from kairon_lib.organs.cognitive.cognitive_loop import (
+            from kairon_lib.organs.cognitive.cognitive_loop import (  # type: ignore[import-not-found]
                 CognitiveLoop,
             )
 
@@ -213,7 +213,7 @@ class EvolutionMetrics:
     def _collect_adr_count(self) -> int:
         """Count ADR records."""
         try:
-            from kairon_lib.organs.registry.adr_storage import (
+            from kairon_lib.organs.registry.adr_storage import (  # type: ignore[import-not-found]
                 SQLiteADRStorage,
             )
 

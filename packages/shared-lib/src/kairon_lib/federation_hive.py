@@ -110,7 +110,7 @@ class FamilyHiveNetwork:
         """Lazily load FactGraph to avoid circular imports."""
         if self._fact_graph is None:
             try:
-                from organs.D_Memory.organs.fact_graph import FactGraph
+                from organs.D_Memory.organs.fact_graph import FactGraph  # type: ignore[import-not-found]
 
                 self._fact_graph = FactGraph()
             except (ImportError, OSError):

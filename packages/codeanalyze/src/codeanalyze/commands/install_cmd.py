@@ -3,8 +3,8 @@
 import click
 from rich.table import Table
 
-from codeanalyze.commands.common import _INSTALL_GUIDE, console
-from codeanalyze.core.registry import build_registry
+from codeanalyze.commands.common import _INSTALL_GUIDE, console  # type: ignore[import-not-found]
+from codeanalyze.core.registry import build_registry  # type: ignore[import-not-found]
 
 
 @click.command()

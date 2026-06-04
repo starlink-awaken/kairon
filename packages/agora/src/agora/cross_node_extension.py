@@ -146,7 +146,7 @@ class CrossNodeExtensionDiscovery:
         """Lazy load federation router."""
         if self._federation_router is None:
             try:
-                from agora.organs.federation_router import get_federation_router
+                from agora.organs.federation_router import get_federation_router  # type: ignore[import-not-found]
 
                 self._federation_router = get_federation_router()
             except ImportError:

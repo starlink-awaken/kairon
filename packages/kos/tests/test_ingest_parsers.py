@@ -8,18 +8,10 @@ from __future__ import annotations
 
 import importlib
 import json
-import sys
 import tempfile
 from pathlib import Path
 
 import pytest
-
-# ── 将父目录加入 sys.path，使 personal_ingest 包可直接导入 ──
-_THIS_DIR = Path(__file__).parent
-_PARENT_DIR = _THIS_DIR.parent
-if str(_PARENT_DIR) not in sys.path:
-    sys.path.insert(0, str(_PARENT_DIR))
-
 
 # ── 微信解析测试 ──
 
@@ -154,14 +146,14 @@ class TestBookmarksParser:
 
 @pytest.fixture
 def wechat_parser():
-    return importlib.import_module("personal_ingest.parse_wechat")
+    return importlib.import_module("kos.ingest.parsers.wechat")
 
 
 @pytest.fixture
 def notes_parser():
-    return importlib.import_module("personal_ingest.parse_notes")
+    return importlib.import_module("kos.ingest.parsers.notes")
 
 
 @pytest.fixture
 def bookmarks_parser():
-    return importlib.import_module("personal_ingest.parse_bookmarks")
+    return importlib.import_module("kos.ingest.parsers.bookmarks")

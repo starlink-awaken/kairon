@@ -13,7 +13,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from minerva.web.middleware import APIKeyMiddleware, InputGuardMiddleware, RateLimitMiddleware
+from minerva.web.middleware import (  # type: ignore[import-not-found]
+    APIKeyMiddleware,
+    InputGuardMiddleware,
+    RateLimitMiddleware,
+)
 
 _executor_ref: dict = {}  # Holds executor singleton for API use
 
@@ -39,7 +43,7 @@ def _safe_report_path(path: str) -> _Path | None:
 async def lifespan(app: FastAPI):
     """Startup: init executor. Shutdown: cleanup."""
     try:
-        from minerva.init import create_default_executor
+        from minerva.init import create_default_executor  # type: ignore[import-not-found]
 
         executor = create_default_executor()
         _executor_ref["executor"] = executor
@@ -92,7 +96,7 @@ app.add_middleware(APIKeyMiddleware)
 
 def _build_paradigm_info(query: str) -> dict | None:
     """Compile Sophia paradigm info for a query via CLI. Returns None on failure."""
-    from minerva.paradigm.meta import sophia_compile
+    from minerva.paradigm.meta import sophia_compile  # type: ignore[import-not-found]
 
     data = sophia_compile(query[:500])
     if data is None:
@@ -170,7 +174,7 @@ def _check_llm_local() -> bool:
     try:
         import httpx
 
-        from minerva.config import MinervaConfig
+        from minerva.config import MinervaConfig  # type: ignore[import-not-found]
 
         config = MinervaConfig.load()
         resp = httpx.get(f"{config.llm.base_url}/models", timeout=5)
@@ -193,7 +197,7 @@ async def paradigm_analyze(query: str):
             return JSONResponse({"error": "Analysis failed"}, status_code=500)
 
         # Get paradigm suggestion via sophia CLI (no code import)
-        from minerva.paradigm.meta import sophia_suggest
+        from minerva.paradigm.meta import sophia_suggest  # type: ignore[import-not-found]
 
         suggestion = sophia_suggest(query[:500])
 
@@ -246,7 +250,7 @@ async def research_start(query: str = Form(...), level: str = Form("auto"), max_
     if executor is None:
         return JSONResponse({"error": "Service unavailable"}, status_code=503)
     task_id = str(uuid.uuid4())[:8]
-    from minerva.executor.executor import ExecutionMode, ResearchTask
+    from minerva.executor.executor import ExecutionMode, ResearchTask  # type: ignore[import-not-found]
 
     task = ResearchTask(id=task_id, query=query, mode=ExecutionMode.IMMEDIATE, level=level, max_cost=max_cost)
     try:
@@ -309,7 +313,7 @@ async def system_progress():
 async def knowledge_graph(limit: int = 50):
     """Return Neo4j graph data (nodes + edges) for visualization."""
     try:
-        from minerva.knowledge.graph_api import graph_accessor
+        from minerva.knowledge.graph_api import graph_accessor  # type: ignore[import-not-found]
 
         data = await graph_accessor.get_graph_data(limit=limit)
         return data
@@ -327,7 +331,7 @@ async def export_pdf(path: str = ""):
     if fp is None:
         return JSONResponse({"error": "Report not found"}, status_code=404)
     try:
-        from minerva.web.export import markdown_to_html
+        from minerva.web.export import markdown_to_html  # type: ignore[import-not-found]
 
         html = markdown_to_html(str(fp))
         return HTMLResponse(html)

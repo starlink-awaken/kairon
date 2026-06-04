@@ -11,9 +11,9 @@ from __future__ import annotations
 
 import structlog
 
-from agora.mcp_proxy.client import create_client
-from agora.mcp_proxy.idle_timeout import IdleTimeoutConfig, IdleTimeoutManager
-from agora.mcp_proxy.registry import ProxyRegistry, UsageCallback
+from agora.mcp_proxy.client import create_client  # type: ignore[import-not-found]
+from agora.mcp_proxy.idle_timeout import IdleTimeoutConfig, IdleTimeoutManager  # type: ignore[import-not-found]
+from agora.mcp_proxy.registry import ProxyRegistry, UsageCallback  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 

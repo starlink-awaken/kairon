@@ -286,7 +286,7 @@ class KnowledgeStore:
         # 如果启用 BM25，使用 BM25 搜索
         if use_bm25:
             try:
-                from minerva.search.bm25_searcher import BM25Searcher
+                from minerva.search.bm25_searcher import BM25Searcher  # type: ignore[import-not-found]
 
                 searcher = BM25Searcher()
                 # 确保索引已构建

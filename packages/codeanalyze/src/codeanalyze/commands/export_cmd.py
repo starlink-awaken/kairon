@@ -6,10 +6,10 @@ from pathlib import Path
 import click
 from rich.panel import Panel
 
-from codeanalyze.commands.common import _validate_path, console
-from codeanalyze.documents.official import analyze_policy_directory
-from codeanalyze.integrations.forge import guardrail
-from codeanalyze.reports.export import merge_code_kg, policy_graph_to_kg
+from codeanalyze.commands.common import _validate_path, console  # type: ignore[import-not-found]
+from codeanalyze.documents.official import analyze_policy_directory  # type: ignore[import-not-found]
+from codeanalyze.integrations.forge import guardrail  # type: ignore[import-not-found]
+from codeanalyze.reports.export import merge_code_kg, policy_graph_to_kg  # type: ignore[import-not-found]
 
 
 def _md_summary(kg) -> str:
@@ -163,7 +163,7 @@ def export(path: str, output_format: str, output: str | None, code: bool, eidos:
     # Eidos 集成（可选）
     if eidos:
         console.print("\n  [cyan]▶ Eidos 格式转换 + Schema 校验...[/]")
-        from codeanalyze.integrations.eidos_adapter import (
+        from codeanalyze.integrations.eidos_adapter import (  # type: ignore[import-not-found]
             convert_kg,
             try_eidos_validate,
         )

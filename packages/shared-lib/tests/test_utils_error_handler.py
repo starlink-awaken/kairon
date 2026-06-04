@@ -91,7 +91,7 @@ class TestErrorContext:
 
     def test_context_no_error(self):
         with ErrorContext("test") as ctx:
-            result = 1 + 1
+            pass
         assert ctx.error_occurred is False
         assert ctx.error_result is None
 

@@ -17,8 +17,8 @@ from typing import Any
 
 import structlog
 
-from minerva.audit_store import AuditLogger
-from minerva.pipeline.engine import IPipelineStage, ResearchContext
+from minerva.audit_store import AuditLogger  # type: ignore[import-not-found]
+from minerva.pipeline.engine import IPipelineStage, ResearchContext  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 
@@ -32,8 +32,8 @@ def _get_kos_store() -> dict[str, Any]:
     if _kos_store is not None:
         return _kos_store
     try:
-        from kos.ontology._types import Entity, EntityType
-        from kos.ontology.store import put_entity, search_entities
+        from kos.ontology._types import Entity, EntityType  # type: ignore[import-not-found]
+        from kos.ontology.store import put_entity, search_entities  # type: ignore[import-not-found]
 
         _kos_store = {
             "put_entity": put_entity,

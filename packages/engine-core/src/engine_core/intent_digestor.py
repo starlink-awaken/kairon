@@ -19,7 +19,11 @@ import re
 import sqlite3
 from typing import Any
 
-from engine_core.organs.intent_particle import IntentParticle, MetabolicStage, VisionParticle
+from engine_core.organs.intent_particle import (  # type: ignore[import-not-found]
+    IntentParticle,
+    MetabolicStage,
+    VisionParticle,
+)
 
 try:
     MetaEvolveEngine = __import__("organs.D_Logos.organs", fromlist=["MetaEvolveEngine"]).MetaEvolveEngine

@@ -26,7 +26,7 @@ R21时态序列
 import re
 from dataclasses import dataclass
 
-from engine.foundation.rule_loader import RuleLoader
+from engine.foundation.rule_loader import RuleLoader  # type: ignore[import-not-found]
 
 from .reasoning_rules import (
     chain_integrity_check,

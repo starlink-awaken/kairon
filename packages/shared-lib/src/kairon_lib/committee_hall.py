@@ -152,7 +152,7 @@ class CommitteeHall:
         if not rfc:
             return
         try:
-            from nucleus.Z_Microkernel.organs.uri_router import Router
+            from kairon_lib._compat import Router
 
             fact = {
                 "sub": f"rfc:{rfc_id}",
@@ -181,7 +181,7 @@ class CommitteeHall:
             return False
 
         try:
-            from nucleus.Z_Microkernel.organs.uri_router import Router
+            from kairon_lib._compat import Router
 
             total_weight = 0.0
             score = 0.0
@@ -250,7 +250,7 @@ class CommitteeHall:
                 problem = rfc.description
 
             # Call op2 via BOS-URI
-            from nucleus.Z_Microkernel.organs.uri_router import Router
+            from kairon_lib._compat import Router
 
             op2_params = {
                 "problem": problem,

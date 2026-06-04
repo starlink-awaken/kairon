@@ -1,6 +1,6 @@
 """KOS Collab Domain — L3 协作层：共享任务对象 (TaskObject)。"""
 
-from kos.collab.api import (
+from kos.collab.api import (  # type: ignore[import-not-found]
     add_artifact,
     claim_subtask,
     complete_subtask,

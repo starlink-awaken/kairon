@@ -59,7 +59,7 @@ class BurndownEngine:
         if not completed_items:
             return 0.0
         completed_pts = sum(i.points for i in completed_items)
-        earliest = min(ca for i in completed_items if (ca := i.completed_at) is not None)
+        min(ca for i in completed_items if (ca := i.completed_at) is not None)
         latest = max(ca for i in completed_items if (ca := i.completed_at) is not None)
         elapsed = latest - sprint.start_time
         if elapsed <= 0:

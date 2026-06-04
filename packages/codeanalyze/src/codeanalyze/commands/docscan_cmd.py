@@ -5,8 +5,8 @@ from pathlib import Path
 import click
 from rich.panel import Panel
 
-from codeanalyze.commands.common import _validate_path, console
-from codeanalyze.documents.scanner import analyze_wiki_structure, scan_directory
+from codeanalyze.commands.common import _validate_path, console  # type: ignore[import-not-found]
+from codeanalyze.documents.scanner import analyze_wiki_structure, scan_directory  # type: ignore[import-not-found]
 
 
 @click.command()

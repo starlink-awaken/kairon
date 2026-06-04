@@ -37,7 +37,7 @@ def migrate_entities(ssot_dir: Path) -> list:
     for f in sorted(ent_dir.glob("*.md")):
         text = f.read_text("utf-8")
         fm = extract_frontmatter(text)
-        ent_type = fm.get("type", "ontology")
+        fm.get("type", "ontology")
 
         # 提取表格中的实体
         tables = re.findall(r"^\|.*\|$", text, re.MULTILINE)
@@ -98,11 +98,10 @@ def migrate_facts(ssot_dir: Path) -> dict:
 
     for f in sorted(fact_dir.glob("*.md")):
         text = f.read_text("utf-8")
-        fm = extract_frontmatter(text)
+        extract_frontmatter(text)
 
         # 提取表格行
         tables = re.findall(r"^\|.*\|$", text, re.MULTILINE)
-        headers = None
         for table in tables:
             cols = [c.strip() for c in table.split("|")[1:-1]]
             if not cols:
@@ -112,7 +111,6 @@ def migrate_facts(ssot_dir: Path) -> dict:
                 continue
             # 检测表头
             if any(k in cols[0].lower() for k in ["编号", "id", "数据"]):
-                headers = cols
                 continue
             if len(cols) >= 4:
                 # 简单启发式：如果编号以P-F开头是政策，D-F开头是数据

@@ -12,7 +12,7 @@ from typing import Any
 
 import yaml
 
-from kos.self import db
+from kos.self import db  # type: ignore[import-not-found]
 
 SELF_DIR = Path.home() / ".kos" / "self"
 PROFILE_PATH = SELF_DIR / "profile.json"

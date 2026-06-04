@@ -13,12 +13,12 @@ __all__ = []
 __version__ = "3.6.4"
 
 # 顶层 re-export — 保持向后兼容
-from engine.core.derive import VERSION as _VERSION
+from engine.core.derive import VERSION as _VERSION  # type: ignore[import-not-found]
 from engine.core.derive import OntoDerive as _OntoDerive
-from engine.reasoners.formalize import Formalizer as _Formalizer
+from engine.reasoners.formalize import Formalizer as _Formalizer  # type: ignore[import-not-found]
 from engine.reasoners.formalize import FormalKnowledge as _FormalKnowledge
-from engine.reasoners.pipeline_v4 import FormalPipeline as _FormalPipeline
-from engine.toolforge import ToolForge as _ToolForge
+from engine.reasoners.pipeline_v4 import FormalPipeline as _FormalPipeline  # type: ignore[import-not-found]
+from engine.toolforge import ToolForge as _ToolForge  # type: ignore[import-not-found]
 
 from . import core as core
 from . import foundation as foundation

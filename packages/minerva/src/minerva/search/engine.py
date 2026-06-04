@@ -154,7 +154,7 @@ class SearchEngine:
     # --- Individual backend implementations ---
 
     async def _search_searxng(self, query: str) -> list[SearchResult]:
-        from minerva.search.backends import search_searxng
+        from minerva.search.backends import search_searxng  # type: ignore[import-not-found]
 
         return await search_searxng(query, base_url=self.config.get("searxng_url", "http://localhost:8080"))
 
@@ -189,7 +189,7 @@ class SearchEngine:
         return await search_brave(query, api_key=self.config.get("brave_api_key", ""))
 
     async def _search_zhipu(self, query: str) -> list[SearchResult]:
-        from minerva.search.mcp_backends import search_web_search_prime
+        from minerva.search.mcp_backends import search_web_search_prime  # type: ignore[import-not-found]
 
         return await search_web_search_prime(query, api_key=self.config.get("zhipu_api_key", ""))
 

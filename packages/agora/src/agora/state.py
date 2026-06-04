@@ -6,9 +6,9 @@ import os
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from agora.event_bus import EventBus
-    from agora.registry import ServiceRegistry
-    from agora.router import Router
+    from agora.event_bus import EventBus  # type: ignore[import-not-found]
+    from agora.registry import ServiceRegistry  # type: ignore[import-not-found]
+    from agora.router import Router  # type: ignore[import-not-found]
 
 _registry: ServiceRegistry | None = None
 _bus: EventBus | None = None

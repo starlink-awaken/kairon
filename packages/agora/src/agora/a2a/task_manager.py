@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from agora.mcp_bootstrap import get_data_dir
+from agora.mcp_bootstrap import get_data_dir  # type: ignore[import-not-found]
 
 
 @dataclass

@@ -70,7 +70,7 @@ def process_patterns(patterns: list[dict]):
 
 
 def simulate():
-    from kos.pattern_learner import PatternLearner
+    from kos.pattern_learner import PatternLearner  # type: ignore[import-not-found]
 
     pl = PatternLearner()
     patterns = pl.simulate()

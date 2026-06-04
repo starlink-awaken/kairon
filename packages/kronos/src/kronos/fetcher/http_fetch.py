@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 import re
 
-from kronos.fetcher.classify import FetchLayer, FetchPlan
+from kronos.fetcher.classify import FetchLayer, FetchPlan  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ def _try_scrapling_fetch(url: str, timeout: int = 15) -> str | None:
     API 文档: https://github.com/D4Vinci/Scrapling
     """
     try:
-        from scrapling.fetchers import StealthyFetcher
+        from scrapling.fetchers import StealthyFetcher  # type: ignore[import-not-found]
 
         f = StealthyFetcher()
         resp = f.get(url, timeout=timeout)
@@ -81,7 +81,7 @@ def _strip_html(html: str) -> str:
 def _html_to_markdown(html: str) -> str:
     """HTML → Markdown(可选 html2text,否则用纯文本降级)"""
     try:
-        import html2text
+        import html2text  # type: ignore[import-not-found]
 
         h = html2text.HTML2Text()
         h.ignore_links = False
@@ -101,7 +101,7 @@ def _try_web_search(query: str, timeout: int = 10) -> list[dict]:
     """DuckDuckGo HTML 搜索(不需要 API Key)"""
     try:
         import httpx
-        from scrapling.parser import Selector
+        from scrapling.parser import Selector  # type: ignore[import-not-found]
 
         resp = httpx.get(
             "https://html.duckduckgo.com/html/",
@@ -150,7 +150,7 @@ def _try_web_search(query: str, timeout: int = 10) -> list[dict]:
 # ═══════════════════════════════════════════════════
 
 
-from kronos.fetcher.browser import _try_cloakbrowser, _try_playwright, build_cloakbrowser_plan  # noqa
+from kronos.fetcher.browser import _try_cloakbrowser, _try_playwright, build_cloakbrowser_plan  # type: ignore[import-not-found]  # noqa
 
 
 def _extract_title(html: str) -> str:

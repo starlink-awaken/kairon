@@ -7,12 +7,12 @@ import json
 import shutil
 from datetime import datetime
 
-from agora.state import get_registry
+from agora.state import get_registry  # type: ignore[import-not-found]
 
 
 def cmd_register(args):
     """Register a service."""
-    from agora.service_base import Service, parse_protocol_config, parse_tags
+    from agora.service_base import Service, parse_protocol_config, parse_tags  # type: ignore[import-not-found]
 
     registry = get_registry()
 
@@ -24,7 +24,7 @@ def cmd_register(args):
         return 1
 
     if args.name == "eidos" and args.mcp is None:
-        from agora.eidos_pipeline import EIDOS_PIPELINE_SERVICE
+        from agora.eidos_pipeline import EIDOS_PIPELINE_SERVICE  # type: ignore[import-not-found]
 
         print(f"Registering {EIDOS_PIPELINE_SERVICE['name']}...")
         print(f"Capabilities: {EIDOS_PIPELINE_SERVICE['capabilities']}")
@@ -195,7 +195,7 @@ def _check_proxy_services() -> dict:
     results = []
     for svc in services:
         cmd = svc.get("command", "")
-        cwd = svc.get("cwd", "")
+        svc.get("cwd", "")
         name = svc.get("name", "?")
         desc = svc.get("description", "")[:60]
 

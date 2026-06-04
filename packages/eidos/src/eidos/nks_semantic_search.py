@@ -27,12 +27,12 @@ from typing import Any
 
 import numpy as np
 
-from eidos.organs.storage_dal import SQLiteError, SQLiteRelationalProvider
+from eidos.organs.storage_dal import SQLiteError, SQLiteRelationalProvider  # type: ignore[import-not-found]
 
-from .graph_store import Entity, GraphStore
+from .graph_store import Entity, GraphStore  # type: ignore[import-not-found]
 
 try:
-    from nucleus.Z_Microkernel.organs.meta_protocol.service import MetaProtocolService
+    from nucleus.Z_Microkernel.organs.meta_protocol.service import MetaProtocolService  # type: ignore[import-not-found]
 
     HAS_META_PROTOCOL = True
 except ImportError:

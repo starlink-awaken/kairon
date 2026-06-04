@@ -9,7 +9,7 @@ from pathlib import Path
 
 import numpy as np
 
-from eidos.organs.storage_dal import SQLiteRelationalProvider
+from eidos.organs.storage_dal import SQLiteRelationalProvider  # type: ignore[import-not-found]
 
 """
 ---

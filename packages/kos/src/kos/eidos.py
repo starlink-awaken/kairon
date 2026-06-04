@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 # Type classes — re-exported from eidos for structured validation.
 # TODO: replace with MCP calls once eidos MCP exposes type constructors.
 try:
-    from eidos.types import Fact, KnowledgeCard, OntologyNode
+    from eidos.types import Fact, KnowledgeCard, OntologyNode  # type: ignore[import-not-found]
 except ImportError:
     KnowledgeCard = None
     Fact = None

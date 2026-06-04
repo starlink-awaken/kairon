@@ -76,15 +76,15 @@ class InMemoryStorage(MetricsStorage):
 
         # 计算聚合值
         if aggregation == "avg":
-            agg_value = sum(values) / len(values)
+            sum(values) / len(values)
         elif aggregation == "sum":
-            agg_value = sum(values)
+            sum(values)
         elif aggregation == "min":
-            agg_value = min(values)
+            min(values)
         elif aggregation == "max":
-            agg_value = max(values)
+            max(values)
         else:
-            agg_value = sum(values) / len(values)
+            sum(values) / len(values)
 
         return AggregatedMetric(
             name=metric_name,
@@ -185,15 +185,15 @@ class JSONStorage(MetricsStorage):
 
         # 计算聚合值
         if aggregation == "avg":
-            agg_value = sum(values) / len(values)
+            sum(values) / len(values)
         elif aggregation == "sum":
-            agg_value = sum(values)
+            sum(values)
         elif aggregation == "min":
-            agg_value = min(values)
+            min(values)
         elif aggregation == "max":
-            agg_value = max(values)
+            max(values)
         else:
-            agg_value = sum(values) / len(values)
+            sum(values) / len(values)
 
         return AggregatedMetric(
             name=metric_name,
@@ -259,12 +259,12 @@ class SQLiteStorage(MetricsStorage):
 
         # 创建索引
         cursor.execute("""
-        CREATE INDEX IF NOT EXISTS idx_metrics_name 
+        CREATE INDEX IF NOT EXISTS idx_metrics_name
         ON metrics(name)
         """)
 
         cursor.execute("""
-        CREATE INDEX IF NOT EXISTS idx_metrics_timestamp 
+        CREATE INDEX IF NOT EXISTS idx_metrics_timestamp
         ON metrics(timestamp)
         """)
 
@@ -319,7 +319,7 @@ class SQLiteStorage(MetricsStorage):
 
         cursor.execute(
             f"""
-        SELECT {agg_func}(value) as agg_value, COUNT(*) as count, 
+        SELECT {agg_func}(value) as agg_value, COUNT(*) as count,
                MIN(value) as min_val, MAX(value) as max_val
         FROM metrics
         WHERE name = ?

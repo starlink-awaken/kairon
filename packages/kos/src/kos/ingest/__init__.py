@@ -20,7 +20,7 @@ from urllib.parse import urlparse
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 
-from config import get_artifact_path, get_workspace_manifest
+from kos.config import get_artifact_path, get_workspace_manifest  # type: ignore[import-not-found]
 from typing import Any, Optional
 
 INBOX = Path.home() / "Documents" / "KOS-Inbox"

@@ -26,7 +26,7 @@ class GraphDataAccessor:
     def _get_driver(self):
         if self._driver is None:
             try:
-                from neo4j import GraphDatabase
+                from neo4j import GraphDatabase  # type: ignore[import-not-found]
 
                 self._driver = GraphDatabase.driver(self.uri, auth=(self.user, self.password))
             except ImportError:

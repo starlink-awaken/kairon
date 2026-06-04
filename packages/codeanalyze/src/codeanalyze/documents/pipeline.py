@@ -2,9 +2,9 @@
 
 from pathlib import Path
 
-from codeanalyze.core.registry import Registry
-from codeanalyze.documents import docling
-from codeanalyze.documents.base import DocumentAnalysis
+from codeanalyze.core.registry import Registry  # type: ignore[import-not-found]
+from codeanalyze.documents import docling  # type: ignore[import-not-found]
+from codeanalyze.documents.base import DocumentAnalysis  # type: ignore[import-not-found]
 
 
 def analyze_path(path: str, registry: Registry) -> dict:

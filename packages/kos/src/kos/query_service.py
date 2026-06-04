@@ -17,7 +17,7 @@ import numpy as np
 import numpy.typing as npt
 
 if TYPE_CHECKING:
-    from eidos.memory_graph import MemoryGraph
+    from eidos.memory_graph import MemoryGraph  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 
@@ -101,7 +101,7 @@ except (ImportError, AttributeError):
 
 # VectorSearchAdapter
 try:
-    from .vector_search_adapter import VectorSearchAdapter as _VectorSearchAdapter
+    from .vector_search_adapter import VectorSearchAdapter as _VectorSearchAdapter  # type: ignore[import-not-found]
 
     VectorSearchAdapter: VectorAdapterFactory | None = cast(
         VectorAdapterFactory,

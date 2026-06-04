@@ -491,7 +491,7 @@ class TestPersistence:
 
 class TestClose:
     def test_close_releases_connection(self, catalog):
-        conn = catalog._get_conn()
+        catalog._get_conn()
         catalog.close()
         assert catalog._conn is None
 

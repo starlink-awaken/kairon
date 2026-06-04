@@ -11,9 +11,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))  # 项目根
 sys.path.insert(0, str(Path(__file__).parent))  # engine/
-from toolforge.matcher import ToolForge
+from toolforge.matcher import ToolForge  # type: ignore[import-not-found]
 
-from engine.core.derive import OntoDerive
+from engine.core.derive import OntoDerive  # type: ignore[import-not-found]
 
 tf = ToolForge()
 
@@ -291,7 +291,7 @@ def _handle_analyze(args, req_id):
 
 def _handle_config(args, req_id):
     project = args.get("project", ".")
-    from engine.foundation.config import Config
+    from engine.foundation.config import Config  # type: ignore[import-not-found]
 
     cfg = Config(project).to_dict()
     return respond(req_id, cfg)
@@ -299,7 +299,7 @@ def _handle_config(args, req_id):
 
 def _handle_delta(args, req_id):
     project = args.get("project", ".")
-    from engine.theories.turing_k import KnowledgeTM
+    from engine.theories.turing_k import KnowledgeTM  # type: ignore[import-not-found]
 
     ktm = KnowledgeTM(project)
     d = ktm.delta()
@@ -328,12 +328,12 @@ def _handle_export(args, req_id):
     od = OntoDerive(project)
     r = od.derive()
     if fmt in ("html", "json"):
-        from engine.core.export import to_html, to_json
+        from engine.core.export import to_html, to_json  # type: ignore[import-not-found]
 
         output = to_html(r, project) if fmt == "html" else to_json(r)
     else:
-        from engine.foundation.ontology_map import OntologyMapper
-        from engine.reasoners.formalize import Formalizer
+        from engine.foundation.ontology_map import OntologyMapper  # type: ignore[import-not-found]
+        from engine.reasoners.formalize import Formalizer  # type: ignore[import-not-found]
 
         fz = Formalizer()
         kb = fz.extract_from_text("\n".join(str(r.get(k, "")) for k in r), mode="rule_only")

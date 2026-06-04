@@ -13,11 +13,11 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from metaos.cli import CLI
+from metaos.cli import CLI  # type: ignore[import-not-found]
 
 ENGINE_DIR = Path(__file__).parent.resolve()
-from metaos.cli.ssot_scan import scan_ssot
-from metaos.core.engine import SEngine
+from metaos.cli.ssot_scan import scan_ssot  # type: ignore[import-not-found]
+from metaos.core.engine import SEngine  # type: ignore[import-not-found]
 
 _DATA_DIR = str(Path.home() / ".metaos" / "data")
 _lock = threading.Lock()

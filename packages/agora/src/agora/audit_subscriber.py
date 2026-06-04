@@ -23,13 +23,13 @@ from typing import TYPE_CHECKING
 
 import structlog
 
-from agora.identity import normalize_identity
+from agora.identity import normalize_identity  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 
 if TYPE_CHECKING:
-    from agora.event_bus import EventBus
-    from agora.registry import ServiceRegistry
+    from agora.event_bus import EventBus  # type: ignore[import-not-found]
+    from agora.registry import ServiceRegistry  # type: ignore[import-not-found]
 
 # Default audit DB path (relative to agora project root)
 AUDIT_DB = Path(os.environ.get("AGORA_AUDIT_DB", Path(__file__).resolve().parents[3] / "agora-audit.db"))

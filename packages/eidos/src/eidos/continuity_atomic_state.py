@@ -18,7 +18,7 @@ from enum import Enum
 from threading import Lock
 from typing import Protocol
 
-from eidos.atomic_state_manager import managed_connection
+from eidos.atomic_state_manager import managed_connection  # type: ignore[import-not-found]
 
 # =============================================================================
 # 0. 形式化摘要 ≝

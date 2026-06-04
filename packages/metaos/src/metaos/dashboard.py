@@ -5,8 +5,8 @@ import json
 import sys
 from pathlib import Path
 
-from metaos.cli.ssot_scan import scan_ssot
-from metaos.core.engine import SEngine
+from metaos.cli.ssot_scan import scan_ssot  # type: ignore[import-not-found]
+from metaos.core.engine import SEngine  # type: ignore[import-not-found]
 
 ENGINE_DIR = Path(__file__).parent.resolve()
 

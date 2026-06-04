@@ -8,7 +8,7 @@ Extracted from SharedBrain D_Harvest → minerva.
 from dataclasses import dataclass
 from typing import Protocol
 
-from minerva.extractors.base import StructuredKnowledge
+from minerva.extractors.base import StructuredKnowledge  # type: ignore[import-not-found]
 
 
 @dataclass
@@ -48,7 +48,7 @@ class QualityGate:
 
     def _register_default_rules(self) -> None:
         """注册默认质量规则"""
-        from minerva.quality.rules import (
+        from minerva.quality.rules import (  # type: ignore[import-not-found]
             EncodingRule,
             LanguageRule,
             LengthRule,

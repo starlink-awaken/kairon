@@ -37,7 +37,7 @@ import hashlib
 from dataclasses import dataclass
 
 import httpx
-from minerva.sources.connectors import ISourceConnector, RawContent
+from minerva.sources.connectors import ISourceConnector, RawContent  # type: ignore[import-not-found]
 
 # ---------------------------------------------------------------------------
 # HTTPClientPool - 连接池管理器

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from minerva.paradigm.types import ParadigmResult, ResearchParadigm
+from minerva.paradigm.types import ParadigmResult, ResearchParadigm  # type: ignore[import-not-found]
 
 CLASSIFY_PROMPT = """Classify this research question into exactly ONE of these paradigms:
 

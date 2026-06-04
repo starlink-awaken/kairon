@@ -13,7 +13,7 @@ import uuid
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
-from kos.config import get_artifact_path  # type: ignore[import-untyped]
+from kos.config import get_artifact_path  # type: ignore[import-untyped, import-not-found]
 
 EXPIRY_DAYS = {1: 30, 2: 90, 3: 365}
 

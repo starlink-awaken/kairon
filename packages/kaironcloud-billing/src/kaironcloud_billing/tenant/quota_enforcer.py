@@ -26,8 +26,8 @@ import logging
 import time
 from dataclasses import dataclass, field
 
-from kaironcloud_billing.organs.tenant.manager import TenantManager
-from kaironcloud_billing.organs.tenant.models import ResourceQuota
+from kaironcloud_billing.organs.tenant.manager import TenantManager  # type: ignore[import-not-found]
+from kaironcloud_billing.organs.tenant.models import ResourceQuota  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

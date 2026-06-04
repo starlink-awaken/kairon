@@ -1,7 +1,7 @@
 """核心引擎层 — OntoDerive的分析入口"""
 
-from engine.core.check import run_check
-from engine.core.check_theory import (
+from engine.core.check import run_check  # type: ignore[import-not-found]
+from engine.core.check_theory import (  # type: ignore[import-not-found]
     THEORY_CHECKS,
     check_bayesian,
     check_metrics,
@@ -9,10 +9,16 @@ from engine.core.check_theory import (
     check_pid,
     check_turing,
 )
-from engine.core.derive import VERSION, OntoDerive
-from engine.core.export import to_html, to_json  # noqa: F401
+from engine.core.derive import VERSION, OntoDerive  # type: ignore[import-not-found]
+from engine.core.export import to_html, to_json  # type: ignore[import-not-found]  # noqa: F401
 from engine.core.export import to_markdown as export_markdown  # noqa: F401
-from engine.core.pipeline import CheckStage, DerivePipeline, DeriveStage, LoadStage, ToolForgeStage
+from engine.core.pipeline import (  # type: ignore[import-not-found]
+    CheckStage,
+    DerivePipeline,
+    DeriveStage,
+    LoadStage,
+    ToolForgeStage,
+)
 
 __all__ = [
     "OntoDerive",

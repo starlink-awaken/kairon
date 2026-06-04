@@ -1,11 +1,11 @@
 """policydoc: status"""
 
 import click
-from codeanalyze.core.registry import build_registry
+from codeanalyze.core.registry import build_registry  # type: ignore[import-not-found]
 from rich.panel import Panel
 from rich.table import Table
 
-from policydoc.cli import console
+from policydoc.cli import console  # type: ignore[import-not-found]
 
 
 @click.command()

@@ -25,12 +25,12 @@ from datetime import datetime
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-from config import get_vault_ops_dir  # type: ignore[unused-ignore]
+from kos.config import get_vault_ops_dir  # type: ignore[unused-ignore, import-not-found]
 
 VAULT_OPS_DIR = get_vault_ops_dir()
 # Unified Minerva adapter (version-aware discovery)
-from kos.adapters import MinervaAdapter, NullMinerva
-from config import get_artifact_path, get_workspace_manifest
+from kos.adapters import MinervaAdapter, NullMinerva  # type: ignore[import-not-found]
+from kos.config import get_artifact_path, get_workspace_manifest
 from typing import Any
 
 _MINERVA = None  # lazy singleton

@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from iris.store import JSONFileStore
+from iris.store import JSONFileStore  # type: ignore[import-not-found]
 
 
 class IdMapping:

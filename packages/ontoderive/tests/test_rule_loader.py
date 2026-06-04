@@ -5,7 +5,7 @@
 import json
 
 import pytest
-from foundation.rule_loader import RuleLoader
+from foundation.rule_loader import RuleLoader  # type: ignore[import-not-found]
 
 
 class TestRuleLoader:

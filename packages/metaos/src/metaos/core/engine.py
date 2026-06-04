@@ -7,12 +7,20 @@ import traceback
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from metaos.core.gate import DecisionGate
-from metaos.core.immune import ImmuneMonitor
-from metaos.core.router import Router
-from metaos.core.types import AssetLevel, Decision, DecisionLevel, DigitalAsset, H, ImmuneLevel, Task
-from metaos.layers.d_layer import DLayer
-from metaos.layers.m_layer import MLayer
+from metaos.core.gate import DecisionGate  # type: ignore[import-not-found]
+from metaos.core.immune import ImmuneMonitor  # type: ignore[import-not-found]
+from metaos.core.router import Router  # type: ignore[import-not-found]
+from metaos.core.types import (  # type: ignore[import-not-found]
+    AssetLevel,
+    Decision,
+    DecisionLevel,
+    DigitalAsset,
+    H,
+    ImmuneLevel,
+    Task,
+)
+from metaos.layers.d_layer import DLayer  # type: ignore[import-not-found]
+from metaos.layers.m_layer import MLayer  # type: ignore[import-not-found]
 
 logging.basicConfig(
     level=logging.WARNING,
@@ -54,7 +62,7 @@ class SEngine:
         self._community = None
 
         # V5#1 修复：元治理集成——V6#6 修复：传入 d 作为持久化层
-        from layers.governance import MetaGovernance
+        from layers.governance import MetaGovernance  # type: ignore[import-not-found]
 
         self.governance = MetaGovernance(
             scenario="personal",
@@ -95,7 +103,7 @@ class SEngine:
         try:
             level, reason, deadline = self.gate.evaluate(task)
         except Exception:
-            level, reason, deadline = DecisionLevel.GREEN, "社区共识", None
+            level, _reason, _deadline = DecisionLevel.GREEN, "社区共识", None
 
         # 3. 生成决策日志
         decision = Decision(
@@ -190,7 +198,7 @@ class SEngine:
         # V6#7 惰性创建：首次注册后才 init community
         # B-01 修复：传入回调，社区提案通过后自动走 gate/immune 管道
         if self._community is None:
-            from layers.community import CommunityEngine
+            from layers.community import CommunityEngine  # type: ignore[import-not-found]
 
             self._community = CommunityEngine(
                 on_proposal_approved=self.accept_community_proposal,

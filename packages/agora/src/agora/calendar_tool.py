@@ -12,10 +12,10 @@ import logging
 from datetime import datetime
 from typing import Any
 
-from agora.base_tool import BaseTool
-from agora.calendar_adapters import BaseCalendarAdapter, create_adapter
-from agora.calendar_models import CalendarEvent
-from agora.tool_contract import ToolConfig, ToolRequest, ToolResult, ToolStatus
+from agora.base_tool import BaseTool  # type: ignore[import-not-found]
+from agora.calendar_adapters import BaseCalendarAdapter, create_adapter  # type: ignore[import-not-found]
+from agora.calendar_models import CalendarEvent  # type: ignore[import-not-found]
+from agora.tool_contract import ToolConfig, ToolRequest, ToolResult, ToolStatus  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

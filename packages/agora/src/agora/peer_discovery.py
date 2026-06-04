@@ -32,12 +32,12 @@ import uuid
 from typing import Any
 
 try:
-    from agora.dht_routing import DHTRoutingTable
+    from agora.dht_routing import DHTRoutingTable  # type: ignore[import-not-found]
 except ImportError:
-    from dht_routing import DHTRoutingTable  # type: ignore[no-redef]
+    from dht_routing import DHTRoutingTable  # type: ignore[no-redef, import-not-found]
 
 try:
-    from nucleus.Z_Microkernel.organs.async_utils import run_sync
+    from nucleus.Z_Microkernel.organs.async_utils import run_sync  # type: ignore[import-not-found]
 except (ImportError, ModuleNotFoundError):
     # Minimal fallback — only used when nucleus is unavailable.
     import asyncio as _asyncio
@@ -178,7 +178,7 @@ class PeerDiscovery:
 
         # Use the global P2P instance if it exists.
         try:
-            from agora.p2p_discovery import get_p2p
+            from agora.p2p_discovery import get_p2p  # type: ignore[import-not-found]
 
             p2p = get_p2p()
             if p2p and hasattr(p2p, "dht") and p2p.dht:

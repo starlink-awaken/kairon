@@ -10,7 +10,12 @@ from dataclasses import dataclass, field
 
 import structlog
 
-from minerva.paradigm.types import PARADIGMS, ParadigmResult, ResearchParadigm, VerificationMode
+from minerva.paradigm.types import (  # type: ignore[import-not-found]
+    PARADIGMS,
+    ParadigmResult,
+    ResearchParadigm,
+    VerificationMode,
+)
 
 logger = structlog.get_logger(__name__)
 

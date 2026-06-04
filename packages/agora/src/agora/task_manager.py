@@ -12,7 +12,7 @@ import uuid
 from collections.abc import Callable
 from typing import Any
 
-from agora.types import AgentInvoker, AgentMessage, Error, Task
+from agora.types import AgentInvoker, AgentMessage, Error, Task  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 

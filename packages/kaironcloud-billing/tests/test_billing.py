@@ -145,7 +145,7 @@ def temp_db():
 
 class TestBillGenerator:
     def test_init_creates_tables(self, temp_db):
-        gen = BillGenerator(temp_db)
+        BillGenerator(temp_db)
         import sqlite3
         with sqlite3.connect(temp_db) as conn:
             tables = [r[0] for r in conn.execute(

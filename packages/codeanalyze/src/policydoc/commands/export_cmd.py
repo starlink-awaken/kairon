@@ -4,11 +4,11 @@ import json as _json
 from pathlib import Path
 
 import click
-from codeanalyze.documents.official import analyze_policy_directory
-from codeanalyze.reports.export import policy_graph_to_kg
+from codeanalyze.documents.official import analyze_policy_directory  # type: ignore[import-not-found]
+from codeanalyze.reports.export import policy_graph_to_kg  # type: ignore[import-not-found]
 from rich.panel import Panel
 
-from policydoc.cli import _validate_path, console
+from policydoc.cli import _validate_path, console  # type: ignore[import-not-found]
 
 
 def _md_summary(kg, project_name):
@@ -43,7 +43,7 @@ def export(path, output_format, output, eidos, pipeline):
     console.print(f"  📊 {kg.entity_count} 实体 / {kg.relation_count} 关系")
 
     if eidos:
-        from codeanalyze.integrations.eidos_adapter import convert_kg
+        from codeanalyze.integrations.eidos_adapter import convert_kg  # type: ignore[import-not-found]
 
         data = convert_kg(kg)
         etarget = output or str(root / "policydoc-eidos.json")

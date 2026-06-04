@@ -40,7 +40,7 @@ except ImportError:
 
 def _get_onto_db() -> DB:
     """Get SQLite connection to KOS retrieval DB (contains ontology tables)."""
-    from config import get_vault_ops_dir
+    from config import get_vault_ops_dir  # type: ignore[import-not-found]
 
     VAULT_OPS_DIR = get_vault_ops_dir()
     from config import get_artifact_path

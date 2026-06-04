@@ -5,14 +5,14 @@ from __future__ import annotations
 
 def cmd_mcp(_args):
     """Start MCP server."""
-    from agora.server.mcp import main as mcp_main
+    from agora.server.mcp import main as mcp_main  # type: ignore[import-not-found]
 
     return mcp_main()
 
 
 def cmd_web(_args):
     """Start Web Dashboard."""
-    from agora.web.app import main as web_main
+    from agora.web.app import main as web_main  # type: ignore[import-not-found]
 
     print("Agora Dashboard -> http://localhost:7430")
     return web_main()
@@ -20,7 +20,7 @@ def cmd_web(_args):
 
 def cmd_init(_args):
     """Guided setup wizard."""
-    from agora.wizard import run_wizard
+    from agora.wizard import run_wizard  # type: ignore[import-not-found]
 
     return run_wizard()
 

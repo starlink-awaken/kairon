@@ -5,7 +5,7 @@ import re
 
 def default_rules():
     """内置推导规则库 — 可扩展"""
-    from engine.reasoners.reasoner import DerivationRule
+    from engine.reasoners.reasoner import DerivationRule  # type: ignore[import-not-found]
 
     return [
         DerivationRule(

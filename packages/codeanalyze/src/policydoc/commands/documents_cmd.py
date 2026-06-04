@@ -3,10 +3,13 @@
 from pathlib import Path
 
 import click
-from codeanalyze.documents.official import analyze_policy_directory, format_policy_graph_report
+from codeanalyze.documents.official import (  # type: ignore[import-not-found]
+    analyze_policy_directory,
+    format_policy_graph_report,
+)
 from rich.panel import Panel
 
-from policydoc.cli import _validate_path, console
+from policydoc.cli import _validate_path, console  # type: ignore[import-not-found]
 
 
 @click.command()

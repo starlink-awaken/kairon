@@ -34,8 +34,8 @@ class FetchResult(TypedDict, total=False):
     plan: NotRequired[list[dict]]
 
 
-from kronos.fetcher.classify import ContentType, FetchLayer, FetchPlan, MCPTool
-from kronos.fetcher.errors import (
+from kronos.fetcher.classify import ContentType, FetchLayer, FetchPlan, MCPTool  # type: ignore[import-not-found]
+from kronos.fetcher.errors import (  # type: ignore[import-not-found]
     execute_fetch,
 )
 
@@ -117,7 +117,7 @@ def _try_scrapling_fetch(url: str, timeout: int = 15) -> str | None:
     API 文档: https://github.com/D4Vinci/Scrapling
     """
     try:
-        from scrapling.fetchers import StealthyFetcher
+        from scrapling.fetchers import StealthyFetcher  # type: ignore[import-not-found]
 
         f = StealthyFetcher()
         resp = f.get(url, timeout=timeout)
@@ -159,7 +159,7 @@ def _strip_html(html: str) -> str:
 def _html_to_markdown(html: str) -> str:
     """HTML → Markdown(可选 html2text,否则用纯文本降级)"""
     try:
-        import html2text
+        import html2text  # type: ignore[import-not-found]
 
         h = html2text.HTML2Text()
         h.ignore_links = False
@@ -179,7 +179,7 @@ def _try_web_search(query: str, timeout: int = 10) -> list[dict]:
     """DuckDuckGo HTML 搜索(不需要 API Key)"""
     try:
         import httpx
-        from scrapling.parser import Selector
+        from scrapling.parser import Selector  # type: ignore[import-not-found]
 
         resp = httpx.get(
             "https://html.duckduckgo.com/html/",
@@ -237,7 +237,7 @@ def _try_cloakbrowser(url: str, timeout: int = 60) -> str | None:
     try:
         import asyncio
 
-        from cloakbrowser import launch_async
+        from cloakbrowser import launch_async  # type: ignore[import-not-found]
 
         async def _fetch() -> str | None:
             try:
@@ -274,7 +274,7 @@ def _try_playwright(url: str, timeout: int = 60) -> str | None:
     try:
         import asyncio
 
-        from playwright.async_api import async_playwright
+        from playwright.async_api import async_playwright  # type: ignore[import-not-found]
 
         async def _fetch() -> str | None:
             async with async_playwright() as p:
@@ -541,7 +541,7 @@ def list_all_methods() -> list[dict]:
 
 def check_ollama(timeout: float = 3.0) -> tuple[bool, str]:
     """委派到 extractor(保持向后兼容)"""
-    from kronos.extractor import check_ollama as _co
+    from kronos.extractor import check_ollama as _co  # type: ignore[import-not-found]
 
     ok = _co(timeout)
     return ok, "Ollama 已连接" if ok else "Ollama 未连接"

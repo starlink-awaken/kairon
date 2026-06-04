@@ -19,16 +19,16 @@ import sys
 from pathlib import Path
 
 try:
-    from .utils import all_md, load_json, rf, save_json, wf
+    from .utils import all_md, load_json, rf, save_json, wf  # type: ignore[import-not-found]
 except ImportError:
-    from engine.foundation.utils import rf, wf, all_md, load_json, save_json  # noqa
+    from engine.foundation.utils import rf, wf, all_md, load_json, save_json  # type: ignore[import-not-found]  # noqa
 
 VERSION = "3.6.4"
 
 try:
-    from .protocols import DeriveInterface
+    from .protocols import DeriveInterface  # type: ignore[import-not-found]
 except ImportError:
-    from engine.foundation.protocols import DeriveInterface
+    from engine.foundation.protocols import DeriveInterface  # type: ignore[import-not-found]
 
 
 class OntoDerive(DeriveInterface):
@@ -47,7 +47,7 @@ class OntoDerive(DeriveInterface):
     def _init_rules(self):
         """加载声明式YAML规则 (v3.4)"""
         try:
-            from engine.foundation.rule_loader import RuleLoader
+            from engine.foundation.rule_loader import RuleLoader  # type: ignore[import-not-found]
 
             rl = RuleLoader()
             rules_dir = Path(__file__).parent.parent / "foundation" / "rules"
@@ -107,7 +107,7 @@ class OntoDerive(DeriveInterface):
         """贝叶斯置信度传播"""
         # v2.1: 集成贝叶斯置信度分布+逻辑链深度
         try:
-            from engine.theories.bayesian import BayesianLayer
+            from engine.theories.bayesian import BayesianLayer  # type: ignore[import-not-found]
 
             bl = BayesianLayer(self.root)
             _, bayes_infs = bl.propagate_all()
@@ -127,7 +127,7 @@ class OntoDerive(DeriveInterface):
     def _derive_entailment(self, summary):
         """逻辑依赖图分析"""
         try:
-            from engine.theories.logic import build_from_project
+            from engine.theories.logic import build_from_project  # type: ignore[import-not-found]
 
             g = build_from_project(self.root).stats()
             summary["entailment_graph"] = {
@@ -184,7 +184,7 @@ class OntoDerive(DeriveInterface):
         """统一推理引擎"""
         # v3.4: 统一推理引擎 (RuleReasoner + FormalReasoner + AnalyticsEngine)
         try:
-            from engine.reasoners.unified_reasoner import UnifiedReasoner
+            from engine.reasoners.unified_reasoner import UnifiedReasoner  # type: ignore[import-not-found]
 
             # 重建推论dict
             inferences_dict = {}
@@ -230,7 +230,7 @@ class OntoDerive(DeriveInterface):
         v3.2: 形式化推理 — 四阶段管线。
         Phase1: LLM提取(降级规则) → Phase2: 符号化 → Phase3: 形式推理 → Phase4: 解读
         """
-        from engine.reasoners.pipeline_v4 import FormalPipeline
+        from engine.reasoners.pipeline_v4 import FormalPipeline  # type: ignore[import-not-found]
 
         enhancer = self._try_llm()
         pipeline = FormalPipeline(enhancer=enhancer)
@@ -256,7 +256,7 @@ class OntoDerive(DeriveInterface):
 
         print("[analyze] 🤖 启动LLM洞察推导...")
         try:
-            from engine.intelligence.insight import InsightEngine
+            from engine.intelligence.insight import InsightEngine  # type: ignore[import-not-found]
 
             engine = InsightEngine(enhancer=self._try_llm())
             facts_summary = f"事实数={summary['facts']}, 推论数={summary['inferences']}"
@@ -276,7 +276,7 @@ class OntoDerive(DeriveInterface):
 
     def _try_llm(self):
         try:
-            from engine.intelligence.llm import get_enhancer
+            from engine.intelligence.llm import get_enhancer  # type: ignore[import-not-found]
 
             e = get_enhancer()
             return e if e.available else None
@@ -288,7 +288,7 @@ class OntoDerive(DeriveInterface):
         try:
             from .check import run_check
         except ImportError:
-            from engine.core.check import run_check
+            from engine.core.check import run_check  # type: ignore[import-not-found]
         return run_check(
             self.root, self.facts_dir, self.entities_dir, self.inferences_dir, self.scheme_dir, self.log_dir
         )[0]
@@ -341,9 +341,9 @@ generated: {datetime.datetime.now().isoformat()}
 # CLI入口 (v2.2: 委托给cli.py)
 def main():
     try:
-        from .cli import main as _main
+        from .cli import main as _main  # type: ignore[import-not-found]
     except ImportError:
-        from cli import main as _main
+        from cli import main as _main  # type: ignore[import-not-found]
     _main()
 
 

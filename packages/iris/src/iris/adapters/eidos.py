@@ -24,7 +24,7 @@ class EidosAdapter:
 
     def _check_eidos(self) -> bool:
         try:
-            import eidos  # noqa: F401
+            import eidos  # type: ignore[import-not-found]  # noqa: F401
 
             return True
         except ImportError:
@@ -33,8 +33,8 @@ class EidosAdapter:
     def _ensure_validator(self):
         """Lazy-init and cache eidos registry + validator."""
         if self._validator is None and self._eidos_available:
-            from eidos.registry import create_registry
-            from eidos.validator import Validator
+            from eidos.registry import create_registry  # type: ignore[import-not-found]
+            from eidos.validator import Validator  # type: ignore[import-not-found]
 
             self._registry = create_registry()
             self._validator = Validator(self._registry)

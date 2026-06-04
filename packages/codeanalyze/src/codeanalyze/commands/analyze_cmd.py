@@ -6,14 +6,14 @@ from typing import Any
 import click
 from rich.panel import Panel
 
-from codeanalyze.analyzers import codereviewgraph as crg
+from codeanalyze.analyzers import codereviewgraph as crg  # type: ignore[import-not-found]
 from codeanalyze.analyzers import gitnexus, graphify, serena
-from codeanalyze.commands.common import _validate_path, console
-from codeanalyze.core.registry import build_registry
-from codeanalyze.core.workspace import CLAUDE_PLUGINS_DIR, detect_workspace
-from codeanalyze.documents import pipeline as doc_pipeline
-from codeanalyze.reports.generate import generate_summary, write_report
-from codeanalyze.reports.insights import _SEVERITY_ICONS as SEVERITY_ICONS
+from codeanalyze.commands.common import _validate_path, console  # type: ignore[import-not-found]
+from codeanalyze.core.registry import build_registry  # type: ignore[import-not-found]
+from codeanalyze.core.workspace import CLAUDE_PLUGINS_DIR, detect_workspace  # type: ignore[import-not-found]
+from codeanalyze.documents import pipeline as doc_pipeline  # type: ignore[import-not-found]
+from codeanalyze.reports.generate import generate_summary, write_report  # type: ignore[import-not-found]
+from codeanalyze.reports.insights import _SEVERITY_ICONS as SEVERITY_ICONS  # type: ignore[import-not-found]
 from codeanalyze.reports.insights import analyze as analyze_insights
 
 

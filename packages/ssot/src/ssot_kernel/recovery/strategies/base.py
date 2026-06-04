@@ -165,14 +165,9 @@ class BaseRecoveryStrategy(ABC):
         """获取错误信息"""
         error_type = type(error).__name__
         error_message = str(error)
-        error_traceback = ""
 
-        import sys
 
-        if sys.version_info < (3, 8):
-            error_info = self._get_legacy_error_info(error)
-        else:
-            error_info = {"type": error_type, "message": error_message, "file": None, "line": None, "function": None}
+        error_info = {"type": error_type, "message": error_message, "file": None, "line": None, "function": None}
 
         return {
             "type": error_type,

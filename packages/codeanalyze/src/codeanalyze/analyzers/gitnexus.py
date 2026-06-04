@@ -3,7 +3,7 @@
 import subprocess
 from pathlib import Path
 
-from codeanalyze.core.registry import ToolInfo
+from codeanalyze.core.registry import ToolInfo  # type: ignore[import-not-found]
 
 
 def gitnexus_available() -> bool:

@@ -55,7 +55,7 @@ except ImportError:
     yaml = None  # type: ignore
 
 if __package__ in {None, ""}:
-    from frontmatter_detector import FrontmatterDetector
+    from frontmatter_detector import FrontmatterDetector  # type: ignore[import-not-found]
 else:
     from .frontmatter_detector import FrontmatterDetector
 

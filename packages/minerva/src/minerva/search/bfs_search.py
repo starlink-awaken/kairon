@@ -6,7 +6,7 @@ import asyncio
 
 import structlog
 
-from minerva.search.bfs_search_types import (
+from minerva.search.bfs_search_types import (  # type: ignore[import-not-found]
     BFTSNode,
     collect_completed,
     count_nodes,

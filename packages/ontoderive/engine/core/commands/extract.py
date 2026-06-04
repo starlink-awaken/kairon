@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from engine.reasoners.formalize import Formalizer
+from engine.reasoners.formalize import Formalizer  # type: ignore[import-not-found]
 
 
 def cmd_extract(source: str, to_path: str = "facts/data.md", project: str = ".") -> None:

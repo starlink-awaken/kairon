@@ -736,9 +736,7 @@ class TestRegistryIntegration:
 
 class TestQueryGraph:
     def test_query_by_keyword(self):
-        import query_graph
 
-        q = query_graph
         # Direct function test
         import json
 

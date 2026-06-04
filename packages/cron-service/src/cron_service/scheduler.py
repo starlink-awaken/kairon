@@ -230,7 +230,7 @@ class CronScheduler:
         self.last_tick_time = datetime.now(UTC)
         self.tick_count += 1
         jobs = db.list_jobs(enabled_only=True)
-        now = datetime.now(UTC)
+        datetime.now(UTC)
 
         for job in jobs:
             last = job.last_run_at

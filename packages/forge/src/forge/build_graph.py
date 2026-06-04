@@ -17,7 +17,7 @@ if str(_src_dir) not in sys.path:
     sys.path.insert(0, str(_src_dir))
 
 # Import local helpers after path setup
-from graph_utils import compute_capability_overlap, kebab
+from graph_utils import compute_capability_overlap, kebab  # type: ignore[import-not-found]
 
 
 def build(reg_path: str, graph_path: str, dry_run: bool = False):

@@ -18,18 +18,18 @@ from fastmcp.server.dependencies import get_access_token
 from fastmcp.server.middleware import AuthMiddleware
 from fastmcp.tools import Tool, ToolResult
 
-from agora import mcp_bootstrap
-from agora.agent_card import service_to_agent_card
-from agora.audit_subscriber import AuditSubscriber
-from agora.identity import normalize_identity
-from agora.mcp_proxy.manager import ProxyManager
-from agora.mcp_registry.embeddings import EmbeddingStore
-from agora.mcp_registry.lifecycle import LifecycleManager
-from agora.mcp_registry.orchestrator import Orchestrator
-from agora.mcp_registry.repository import ToolCatalog
-from agora.mcp_registry.router import SmartRouter
-from agora.service_base import is_safe_url, parse_protocol_config, parse_tags
-from agora.state import get_event_bus, get_registry, get_router
+from agora import mcp_bootstrap  # type: ignore[import-not-found]
+from agora.agent_card import service_to_agent_card  # type: ignore[import-not-found]
+from agora.audit_subscriber import AuditSubscriber  # type: ignore[import-not-found]
+from agora.identity import normalize_identity  # type: ignore[import-not-found]
+from agora.mcp_proxy.manager import ProxyManager  # type: ignore[import-not-found]
+from agora.mcp_registry.embeddings import EmbeddingStore  # type: ignore[import-not-found]
+from agora.mcp_registry.lifecycle import LifecycleManager  # type: ignore[import-not-found]
+from agora.mcp_registry.orchestrator import Orchestrator  # type: ignore[import-not-found]
+from agora.mcp_registry.repository import ToolCatalog  # type: ignore[import-not-found]
+from agora.mcp_registry.router import SmartRouter  # type: ignore[import-not-found]
+from agora.service_base import is_safe_url, parse_protocol_config, parse_tags  # type: ignore[import-not-found]
+from agora.state import get_event_bus, get_registry, get_router  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 
@@ -123,7 +123,7 @@ def _get_task_manager() -> TaskManager:  # noqa: F821
     """Lazy-init and return the global TaskManager instance."""
     global _task_manager
     if _task_manager is None:
-        from agora.a2a.task_manager import TaskManager
+        from agora.a2a.task_manager import TaskManager  # type: ignore[import-not-found]
 
         _task_manager = TaskManager(router)
     return _task_manager
@@ -155,7 +155,7 @@ def _load_proxy_services() -> list[dict]:
     """
     # Try explicit config first (supports stdio services with command/args)
     if _PROXY_CONFIG_PATH.exists():
-        from agora.persistence import json_load
+        from agora.persistence import json_load  # type: ignore[import-not-found]
 
         data = json_load(_PROXY_CONFIG_PATH, default={})
         if data:
@@ -687,7 +687,7 @@ async def register_service(
         provider_info: JSON string with provider info (e.g. '{"organization":"MyOrg"}')
         documentation_url: Documentation URL for the service
     """
-    from agora.registry import Service, ServiceConfig
+    from agora.registry import Service, ServiceConfig  # type: ignore[import-not-found]
 
     cfg = ServiceConfig(
         name=name,
@@ -974,7 +974,7 @@ def audit_stats(since: str = "") -> dict:
 @mcp.tool()
 def create_api_key(name: str, scopes: str = "read", tenant: str = "", expires_days: int = 0) -> dict:
     """Create a new API key. The raw secret is shown only once."""
-    from agora.governance import KeyManager
+    from agora.governance import KeyManager  # type: ignore[import-not-found]
 
     scope_list = [s.strip() for s in scopes.split(",") if s.strip()]
     kid, secret = KeyManager().create_key(name, scope_list, tenant, expires_days)
@@ -1300,7 +1300,7 @@ async def repo_search(query: str = "", source: str = "local", limit: int = 20) -
         catalog = ToolCatalog()
         try:
             if source == "external":
-                from agora.mcp_registry.sources import search_all
+                from agora.mcp_registry.sources import search_all  # type: ignore[import-not-found]
 
                 results = await search_all(query or "mcp-server")
                 results = results[:limit]

@@ -6,7 +6,7 @@ import json
 import time
 from pathlib import Path
 
-from agora.persistence_db import _get_db
+from agora.persistence_db import _get_db  # type: ignore[import-not-found]
 
 GRANTS_DB = Path.home() / ".kos" / "grants.db"
 

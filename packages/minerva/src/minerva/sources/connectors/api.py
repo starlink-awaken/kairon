@@ -35,7 +35,7 @@ from dataclasses import dataclass
 from typing import Any
 
 import httpx
-from minerva.sources.connectors import ISourceConnector, RawContent
+from minerva.sources.connectors import ISourceConnector, RawContent  # type: ignore[import-not-found]
 
 
 # 共享的HTTP客户端池 - 这个SB连接池避免重复创建TCP连接

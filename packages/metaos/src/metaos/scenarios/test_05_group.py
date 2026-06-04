@@ -4,8 +4,13 @@
 
 
 
-from metaos.core.engine import SEngine
-from metaos.layers.community import CommunityEngine, ConflictStatus, ProposalStatus, VoteType
+from metaos.core.engine import SEngine  # type: ignore[import-not-found]
+from metaos.layers.community import (  # type: ignore[import-not-found]
+    CommunityEngine,
+    ConflictStatus,
+    ProposalStatus,
+    VoteType,
+)
 
 
 def run_scenario():

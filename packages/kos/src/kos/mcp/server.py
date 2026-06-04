@@ -24,7 +24,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 KOS_HOME_DEFAULT = str(SCRIPT_DIR.parent.parent)
 os.environ.setdefault("KOS_HOME", KOS_HOME_DEFAULT)
 
-from kos.config import get_vault_ops_dir  # type: ignore[unused-ignore]
+from kos.config import get_vault_ops_dir  # type: ignore[unused-ignore, import-not-found]
 
 VAULT_OPS_DIR = get_vault_ops_dir()
 os.chdir(str(SCRIPT_DIR))
@@ -72,12 +72,12 @@ SERVER_NAME = "kos-mcp-server"
 SERVER_VERSION = "1.2.0"
 
 # ── External adapters (version-aware, resilient) ─────────
-from kos.adapters import MinervaAdapter, NullMinerva, SemanticScholarAdapter, negotiate_mcp_protocol
+from kos.adapters import MinervaAdapter, NullMinerva, SemanticScholarAdapter, negotiate_mcp_protocol  # type: ignore[import-not-found]
 
 # ── Domain modules ────────────────────────────────────────
-from kos.self.mcp import SELF_HANDLERS, SELF_TOOLS
-from kos.collab.mcp import COLLAB_HANDLERS, COLLAB_TOOLS
-from kos.consensus.mcp import CONSENSUS_HANDLERS, CONSENSUS_TOOLS
+from kos.self.mcp import SELF_HANDLERS, SELF_TOOLS  # type: ignore[import-not-found]
+from kos.collab.mcp import COLLAB_HANDLERS, COLLAB_TOOLS  # type: ignore[import-not-found]
+from kos.consensus.mcp import CONSENSUS_HANDLERS, CONSENSUS_TOOLS  # type: ignore[import-not-found]
 
 _MINERVA = None
 _S2 = None

@@ -11,8 +11,8 @@ import logging
 import subprocess
 from typing import Any
 
-from iris.base import BaseConnector, SyncResult
-from iris.models import Article, Bookmark, KnowledgeArtifact
+from iris.base import BaseConnector, SyncResult  # type: ignore[import-not-found]
+from iris.models import Article, Bookmark, KnowledgeArtifact  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 

@@ -7,7 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from agora.persistence import json_load
+from agora.persistence import json_load  # type: ignore[import-not-found]
 
 
 def _load_command_map() -> dict:
@@ -50,7 +50,7 @@ def run_proxy_launch(args):
     """Proxy-launch subcommand handler."""
     import argparse
 
-    from agora import mcp_bootstrap as _bootstrap
+    from agora import mcp_bootstrap as _bootstrap  # type: ignore[import-not-found]
 
     if args.status:
         status = _bootstrap.get_config_status()
@@ -89,7 +89,7 @@ def build_parser():
     """Build the argument parser."""
     import argparse
 
-    from agora.registry import KNOWN_PROTOCOLS
+    from agora.registry import KNOWN_PROTOCOLS  # type: ignore[import-not-found]
 
     p = argparse.ArgumentParser(prog="agora", description="Agora -- Service Convergence Hub")
     p.add_argument("--json", action="store_true", help="JSON output")
@@ -144,7 +144,7 @@ def build_parser():
     inst_add.add_argument("--mcp", required=True, help="MCP endpoint URL")
     inst_add.add_argument("--health", default="", help="Health check URL")
     inst_add.add_argument("--port", type=int, default=0)
-    inst_list = inst_sub.add_parser("list", help="List registered instances")
+    inst_sub.add_parser("list", help="List registered instances")
     inst_register = inst_sub.add_parser("register", help="Register this instance with the peer network")
     inst_register.add_argument("instance_id", help="Unique instance ID")
     inst_register.add_argument("--type", default="mcp-server", help="Instance type (default: mcp-server)")
@@ -296,7 +296,7 @@ def build_parser():
 
     # pipeline MCP endpoint
     start_parser = sub.add_parser("start-pipeline", help="Start Eidos Pipeline MCP endpoint")
-    from agora.eidos_pipeline import EIDOS_PIPELINE_SERVICE
+    from agora.eidos_pipeline import EIDOS_PIPELINE_SERVICE  # type: ignore[import-not-found]
 
     start_parser.add_argument(
         "--pipeline", choices=list(EIDOS_PIPELINE_SERVICE["commands"].keys()), default="knowledge-base"
@@ -459,7 +459,7 @@ def build_parser():
     grant_check.add_argument("--cost", type=float, default=0.0, help="Cost in USD")
 
     # pallas subcommands (merged from pallas CLI)
-    from agora.cli.commands_pallas import add_pallas_subparser
+    from agora.cli.commands_pallas import add_pallas_subparser  # type: ignore[import-not-found]
 
     add_pallas_subparser(sub)
 

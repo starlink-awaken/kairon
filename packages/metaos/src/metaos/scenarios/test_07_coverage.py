@@ -2,9 +2,9 @@
 
 
 
-from metaos.core.engine import SEngine
-from metaos.core.types import Decision
-from metaos.layers.governance import MetaGovernance
+from metaos.core.engine import SEngine  # type: ignore[import-not-found]
+from metaos.core.types import Decision  # type: ignore[import-not-found]
+from metaos.layers.governance import MetaGovernance  # type: ignore[import-not-found]
 
 
 def run_scenario():
@@ -73,7 +73,7 @@ def run_scenario():
     # ── 领域4：异常路径覆盖 ──
     print("\n[领域4] 异常路径与安全降级")
     # 强制一个异常——用非法 task 调用
-    from core.types import Task
+    from core.types import Task  # type: ignore[import-not-found]
 
     # 先注册 H
     token = engine.register_h("H_COV", "覆盖测试")

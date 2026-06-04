@@ -4,7 +4,7 @@ import json
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from metaos.core.types import DecisionLevel, Task
+from metaos.core.types import DecisionLevel, Task  # type: ignore[import-not-found]
 
 # 引擎根目录（相对于此文件的位置）
 _ENGINE_DIR = Path(__file__).resolve().parent.parent

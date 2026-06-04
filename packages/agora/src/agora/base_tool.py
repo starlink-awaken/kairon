@@ -14,7 +14,7 @@ import time
 from abc import abstractmethod
 from typing import Any
 
-from agora.tool_contract import ToolConfig, ToolRequest, ToolResult, ToolStatus
+from agora.tool_contract import ToolConfig, ToolRequest, ToolResult, ToolStatus  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

@@ -9,7 +9,7 @@ import secrets
 import time
 from pathlib import Path
 
-from agora.persistence_db import _get_db
+from agora.persistence_db import _get_db  # type: ignore[import-not-found]
 
 CA_DB_PATH = Path.home() / ".kos" / "identity.db"
 

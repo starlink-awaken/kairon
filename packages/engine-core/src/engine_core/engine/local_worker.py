@@ -126,7 +126,7 @@ class LocalWorker:
 
     def _get_store(self) -> TaskStoreProtocol:
         if self._store is None:
-            from engine_core.organs.engine.task_store import TaskStore
+            from engine_core.organs.engine.task_store import TaskStore  # type: ignore[import-not-found]
 
             db = self._config.db_path or ":memory:"
             self._store = TaskStore(db_path=db)
@@ -380,8 +380,8 @@ class LocalWorker:
         """
         import asyncio
 
-        from engine_core.organs.llm.provider import LLMRequest
-        from engine_core.organs.llm.provider_factory import (
+        from engine_core.organs.llm.provider import LLMRequest  # type: ignore[import-not-found]
+        from engine_core.organs.llm.provider_factory import (  # type: ignore[import-not-found]
             get_default_factory,
         )
 
@@ -421,7 +421,7 @@ class LocalWorker:
 
             # ── If no explicit model match, use quota-aware priority ──
             if provider is None or not provider.is_available():
-                from engine_core.organs.llm.quota_router import (
+                from engine_core.organs.llm.quota_router import (  # type: ignore[import-not-found]
                     get_quota_aware_priority,
                 )
 

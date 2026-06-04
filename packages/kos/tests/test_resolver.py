@@ -1,6 +1,9 @@
 """Tests for kos.ontology.resolver — entity resolution."""
 
 import unittest
+from unittest.mock import patch
+
+from kos.ontology._types import Entity, EntityType
 
 
 class TestResolverSchema(unittest.TestCase):
@@ -25,11 +28,12 @@ class TestResolverSchema(unittest.TestCase):
     def test_find_candidates_no_db(self):
         from kos.ontology.resolver import find_candidates
 
-        result = find_candidates("nonexistent")
+        entity = Entity(entity_id="test-1", entity_type=EntityType.CONCEPT, label="nonexistent", aliases=[])
+        with patch("kos.ontology.store.search_entities", return_value=[]):
+            result = find_candidates(entity)
         self.assertIsInstance(result, list)
 
 
 if __name__ == "__main__":
-    import unittest.mock
 
     unittest.main()

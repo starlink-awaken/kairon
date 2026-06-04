@@ -134,7 +134,7 @@ class PerformanceCLI:
             print("⚠️  未找到性能基线，将使用当前结果创建新基线")
 
             # 创建新基线
-            new_baseline = self.regression_detector.create_baseline(results, name="initial_baseline", version="1.0")
+            self.regression_detector.create_baseline(results, name="initial_baseline", version="1.0")
             print("✅ 新基线已创建")
             return
 

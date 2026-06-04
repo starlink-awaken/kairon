@@ -23,7 +23,9 @@ import logging
 from typing import Any
 
 try:
-    from nucleus.Z_Microkernel.infrastructure.oracle.inference_oracle import InferenceOracle
+    from nucleus.Z_Microkernel.infrastructure.oracle.inference_oracle import (  # type: ignore[import-not-found]
+        InferenceOracle,
+    )
 except ModuleNotFoundError:
     InferenceOracle = None  # type: ignore[assignment,misc]
 

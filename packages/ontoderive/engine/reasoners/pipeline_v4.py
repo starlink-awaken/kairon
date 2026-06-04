@@ -23,7 +23,7 @@ class FormalPipeline:
         try:
             from engine.reasoners.formalize import Formalizer
         except ImportError:
-            from engine.reasoners.formalize import Formalizer
+            from engine.reasoners.formalize import Formalizer  # type: ignore[import-not-found]
         fz = Formalizer(enhancer=self.enhancer)
         knowledge = fz.extract_from_text(text)
         self.results["phase1"] = {
@@ -32,7 +32,7 @@ class FormalPipeline:
             "inferences": len(knowledge.inferences),
         }
 
-        from engine.reasoners.reasoner_formal import FormalReasoner
+        from engine.reasoners.reasoner_formal import FormalReasoner  # type: ignore[import-not-found]
 
         fr = FormalReasoner()
         conclusions = fr.reason(knowledge)

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from agora.accounting import DEFAULT_DAILY_QUOTA, ResourceAccountDB
+from agora.accounting import DEFAULT_DAILY_QUOTA, ResourceAccountDB  # type: ignore[import-not-found]
 
 
 def cmd_accounting_top(args):

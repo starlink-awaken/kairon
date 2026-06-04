@@ -92,7 +92,7 @@ class WhisperVoiceRecognizer:
     def initialize(self) -> bool:
         """Initialize the Whisper model."""
         try:
-            import whisper
+            import whisper  # type: ignore[import-not-found]
 
             logger.info("Loading Whisper model: %s (device=%s)", self.config.model_size, self.config.device)
 

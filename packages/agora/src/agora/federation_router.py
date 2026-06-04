@@ -37,7 +37,7 @@ _log = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 try:
-    from bos_daemon.main import metrics as _metrics
+    from bos_daemon.main import metrics as _metrics  # type: ignore[import-not-found]
 except ImportError:
 
     class _MetricsFallback:

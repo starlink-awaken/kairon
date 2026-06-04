@@ -693,9 +693,7 @@ class TestLoadProfile:
         """无 profile 文件→返回空字典"""
         from pathlib import Path
 
-        from wksp.commands.base import _PROFILE_PATH
 
-        original = _PROFILE_PATH
         mock_path = Path("/tmp") / "_test_nonexistent_profile.yaml"
         monkeypatch.setattr("wksp.commands.base._PROFILE_PATH", mock_path)
         assert _load_profile() == {}

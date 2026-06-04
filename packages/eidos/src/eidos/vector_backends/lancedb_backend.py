@@ -26,13 +26,13 @@ import logging
 import os
 import time
 
-from eidos.base import VectorSearchResult, VectorStoreBackend
+from eidos.base import VectorSearchResult, VectorStoreBackend  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 
 # Optional dependencies - will be None if not installed
 try:
-    import lancedb
+    import lancedb  # type: ignore[import-untyped]
     from sentence_transformers import SentenceTransformer
 
     LANCEDB_AVAILABLE = True

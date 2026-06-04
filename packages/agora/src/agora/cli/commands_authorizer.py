@@ -8,7 +8,7 @@ import sys
 
 def cmd_enforce(args):
     """Enforce 子命令分发：list / set / clear。"""
-    from agora.authorizer import ENFORCE_TOOLS, is_enforced, set_enforce_tools
+    from agora.authorizer import ENFORCE_TOOLS, is_enforced, set_enforce_tools  # type: ignore[import-not-found]
 
     if args.enforce_cmd == "list":
         current = ENFORCE_TOOLS

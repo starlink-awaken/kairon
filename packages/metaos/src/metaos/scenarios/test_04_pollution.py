@@ -2,8 +2,8 @@
 
 
 
-from metaos.core.engine import SEngine
-from metaos.core.types import AssetLevel, Decision, DigitalAsset
+from metaos.core.engine import SEngine  # type: ignore[import-not-found]
+from metaos.core.types import AssetLevel, Decision, DigitalAsset  # type: ignore[import-not-found]
 
 
 def run_scenario():

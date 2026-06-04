@@ -52,6 +52,7 @@ all = ["agora[dev,grpc,ws]"]
 asyncio_mode = "auto"
 testpaths = ["tests"]
 addopts = "-ra --strict-markers"
+pythonpath = ["src"]
 markers = [
     "network: marks tests that require network access to github.com (skip if no network).",
 ]

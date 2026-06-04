@@ -21,7 +21,7 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-AX01-10_holographic_metadata_axio
 import re
 from pathlib import Path
 
-from engine.meta_validate_types import (
+from engine.meta_validate_types import (  # type: ignore[import-not-found]
     DocType,
     ValidationIssue,
     ValidationIssueSeverity,

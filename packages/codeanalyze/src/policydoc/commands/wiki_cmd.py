@@ -3,15 +3,15 @@
 from pathlib import Path
 
 import click
-from codeanalyze.core.registry import build_registry
-from codeanalyze.documents.deepwiki import (
+from codeanalyze.core.registry import build_registry  # type: ignore[import-not-found]
+from codeanalyze.documents.deepwiki import (  # type: ignore[import-not-found]
     check_deepwiki_open,
     generate_wiki_from_analysis,
     trigger_api_wiki_generation,
 )
 from rich.panel import Panel
 
-from policydoc.cli import console
+from policydoc.cli import console  # type: ignore[import-not-found]
 
 
 def _validate_path(path: str) -> Path:
@@ -51,7 +51,7 @@ def wiki(path: str, output: str | None, api: bool):
     reg = build_registry()
     g_result = {}
     if reg.tools.get("graphify", None):
-        from codeanalyze.analyzers.graphify import analyze
+        from codeanalyze.analyzers.graphify import analyze  # type: ignore[import-not-found]
 
         g_result = analyze(str(root), reg.tools["graphify"])
 

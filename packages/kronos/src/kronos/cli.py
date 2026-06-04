@@ -10,7 +10,7 @@ from threading import Thread
 
 import click
 
-from kronos.fetch_router import (
+from kronos.fetch_router import (  # type: ignore[import-not-found]
     content_type_label,
     execute_fallback_chain,
     execute_fetch,
@@ -134,7 +134,7 @@ def fetch(url: str, dry_run: bool = False):
         if ollama_ok:
             click.echo("  ✅ Ollama 已连接 — 提取中...")
             try:
-                from kronos.extractor import ExtractedContent, extract
+                from kronos.extractor import ExtractedContent, extract  # type: ignore[import-not-found]
 
                 extracted = extract(markdown[:8000], model=None)
                 if extracted.get("title") or extracted.get("summary"):
@@ -212,7 +212,7 @@ def search(query: tuple[str, ...]):
 @click.option("--save", is_flag=True, help="保存内容到桌面")
 def batch(save: bool):
     """批量处理 pending 列表"""
-    from kronos.config import get_config
+    from kronos.config import get_config  # type: ignore[import-not-found]
 
     pending_file = get_config().pending_links_path
     if not os.path.exists(pending_file):
@@ -269,7 +269,7 @@ def insight(title: str, content: tuple[str, ...] | None = None):
     body = " ".join(content) if content else ""
     if not body and not sys.stdin.isatty():
         body = sys.stdin.read().strip()
-    from kronos.insight_engine import format_insight_report, generate_insight
+    from kronos.insight_engine import format_insight_report, generate_insight  # type: ignore[import-not-found]
 
     report = generate_insight(title, body)
     click.echo(format_insight_report(report))

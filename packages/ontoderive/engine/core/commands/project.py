@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from engine.foundation.templates import TEMPLATES
+from engine.foundation.templates import TEMPLATES  # type: ignore[import-not-found]
 
 
 def cmd_init(project_name: str, template: str = "default") -> None:

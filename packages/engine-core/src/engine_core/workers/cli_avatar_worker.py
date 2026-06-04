@@ -14,12 +14,15 @@ from engine_core._compat import (
     ISynapseWorker,
     MessageEnvelope,
     Receipt,
+    RegistryAgentCard,
     SynapseAgentCard,
+    agent_ack,
+    agent_receive,
+    agent_send,
     get_synapse_registry,
 )
-
 from engine_core.context_injector import ContextInjector
-from engine_core.workspace_manager import WorkspaceManager
+from engine_core.workspace_manager import WorkspaceManager  # type: ignore[import-not-found]
 
 # =============================================================================
 # 0. 形式化摘要 ≝
@@ -231,7 +234,7 @@ class CliAvatarWorker(ISynapseWorker):
 
             # Start Metabolic Monitor (Rule-R)
             try:
-                from D_Economy.organs.metabolism import MetabolicMonitor
+                from D_Economy.organs.metabolism import MetabolicMonitor  # type: ignore[import-not-found]
 
                 monitor = MetabolicMonitor(process.pid, self.worker_id, budget_eu=300.0)
                 monitor.start()

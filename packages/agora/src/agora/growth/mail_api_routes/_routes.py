@@ -34,7 +34,7 @@ import time
 from typing import Any
 
 from . import _infrastructure as _infra
-from ._infrastructure import (
+from ._infrastructure import (  # type: ignore[import-not-found]
     DatabaseIndexManager,
     OptimizedCache,
     performance_monitored,

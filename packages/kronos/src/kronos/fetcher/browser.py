@@ -16,7 +16,7 @@ def _try_cloakbrowser(url: str, timeout: int = 60) -> str | None:
     try:
         import asyncio
 
-        from cloakbrowser import launch_async
+        from cloakbrowser import launch_async  # type: ignore[import-not-found]
 
         async def _fetch() -> str | None:
             try:
@@ -53,7 +53,7 @@ def _try_playwright(url: str, timeout: int = 60) -> str | None:
     try:
         import asyncio
 
-        from playwright.async_api import async_playwright
+        from playwright.async_api import async_playwright  # type: ignore[import-not-found]
 
         async def _fetch() -> str | None:
             async with async_playwright() as p:

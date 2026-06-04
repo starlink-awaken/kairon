@@ -28,7 +28,10 @@ class _MissingEidosType:
 KnowledgeCard: type = _MissingEidosType
 OntologyNode: type = _MissingEidosType
 try:
-    from eidos.types import KnowledgeCard, OntologyNode  # pyright: ignore[reportMissingImports]
+    from eidos.types import (  # type: ignore[import-not-found]  # pyright: ignore[reportMissingImports]
+        KnowledgeCard,
+        OntologyNode,
+    )
 
     EIDOS_AVAILABLE = True
 except ImportError:

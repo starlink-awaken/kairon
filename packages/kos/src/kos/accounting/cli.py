@@ -19,7 +19,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from kos.accounting.db import COST_PER_1K, CostSummary, record_usage
+from kos.accounting.db import COST_PER_1K, CostSummary, record_usage  # type: ignore[import-not-found]
 
 
 def cmd_summary(args: argparse.Namespace) -> int:

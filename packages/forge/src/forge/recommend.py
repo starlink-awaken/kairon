@@ -2,7 +2,7 @@ import json
 import sys
 
 sys.path.insert(0, "src")
-from forge.forge_config import GRAPH, REGISTRY
+from forge.forge_config import GRAPH, REGISTRY  # type: ignore[import-not-found]
 
 g = json.loads(GRAPH.read_text())
 reg = json.loads(REGISTRY.read_text())
@@ -75,7 +75,7 @@ if "--tool" in args:
     rec_by_tool(args[args.index("--tool") + 1])
 elif "--gap" in args:
     # reuse existing recommend_by_gap from the file
-    from recommend import recommend_by_gap
+    from recommend import recommend_by_gap  # type: ignore[import-not-found]
 
     recommend_by_gap(args[args.index("--gap") + 1])
 elif "--frequent" in args:

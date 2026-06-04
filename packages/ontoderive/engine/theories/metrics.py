@@ -10,7 +10,7 @@ import math
 import re
 from pathlib import Path
 
-from engine.foundation.utils import all_md, load_json, rf, save_json, wf
+from engine.foundation.utils import all_md, load_json, rf, save_json, wf  # type: ignore[import-not-found]
 
 
 class MetricsLayer:
@@ -36,7 +36,7 @@ class MetricsLayer:
         try:
             from .bayesian import BayesianLayer
         except ImportError:
-            from bayesian import BayesianLayer
+            from bayesian import BayesianLayer  # type: ignore[import-not-found]
 
         bl = BayesianLayer(self.root)
         facts, inferences = bl.propagate_all()
@@ -129,7 +129,7 @@ class MetricsLayer:
         try:
             from .logic import build_from_project
         except ImportError:
-            from logic import build_from_project
+            from logic import build_from_project  # type: ignore[import-not-found]
         g = build_from_project(self.root)
         return g.chain_depths()["max"]
 

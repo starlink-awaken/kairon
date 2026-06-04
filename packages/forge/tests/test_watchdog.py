@@ -258,7 +258,7 @@ class TestMain:
         assert result == 0
         assert m._last_healthy is True
         # Should have sent notification for unhealthy->healthy transition
-        recovery_notifications = [
+        [
             n
             for n in notifications
             if "recovered" in n[0].lower() or "healthy" == n[0].split(": ")[-1].split("\n")[0].lower()

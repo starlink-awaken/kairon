@@ -6,13 +6,14 @@ from datetime import UTC, datetime
 
 import structlog
 
-from agora.mcp_bootstrap import get_data_dir
+from agora.mcp_bootstrap import get_data_dir  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 
 _DB_PATH = get_data_dir() / "repository.db"
 
-_now = lambda: datetime.now(UTC).isoformat()
+def _now():
+    return datetime.now(UTC).isoformat()
 
 
 class ToolCatalog:

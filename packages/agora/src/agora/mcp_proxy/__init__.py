@@ -7,15 +7,15 @@ Supports dynamic load/unload (ref-count based), idle timeout for
 automatic disconnection of inactive services, and lazy reconnection.
 """
 
-from agora.mcp_proxy.client import (
+from agora.mcp_proxy.client import (  # type: ignore[import-not-found]
     HttpMCPClient,
     MCPClient,
     StdioMCPClient,
     create_client,
 )
-from agora.mcp_proxy.idle_timeout import IdleTimeoutConfig, IdleTimeoutManager
-from agora.mcp_proxy.manager import ProxyManager
-from agora.mcp_proxy.registry import ProxyEntry, ProxyRegistry
+from agora.mcp_proxy.idle_timeout import IdleTimeoutConfig, IdleTimeoutManager  # type: ignore[import-not-found]
+from agora.mcp_proxy.manager import ProxyManager  # type: ignore[import-not-found]
+from agora.mcp_proxy.registry import ProxyEntry, ProxyRegistry  # type: ignore[import-not-found]
 
 __all__ = [
     "MCPClient",

@@ -110,7 +110,7 @@ class StripeClient:
             raise ValueError("Stripe API key required. Set STRIPE_API_KEY env var.")
 
         try:
-            import stripe
+            import stripe  # type: ignore[import-not-found]
 
             stripe.api_key = self.api_key
             self.stripe = stripe

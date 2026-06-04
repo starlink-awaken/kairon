@@ -34,7 +34,7 @@ from collections.abc import Callable, Coroutine, Mapping
 from dataclasses import dataclass, field
 from typing import Any, NotRequired, Protocol, TypedDict, cast, runtime_checkable
 
-from nucleus.Z_Microkernel.organs.async_utils import run_sync
+from nucleus.Z_Microkernel.organs.async_utils import run_sync  # type: ignore[import-not-found]
 
 _TRACE_CONTEXT: contextvars.ContextVar[dict[str, str] | None] = contextvars.ContextVar("_TRACE_CONTEXT", default=None)
 
@@ -62,7 +62,7 @@ type MemoryMetadata = Mapping[str, JSONValue]
 
 
 def build_default_unified_memory_api() -> UnifiedMemoryAPI:
-    from eidos.organs import (
+    from eidos.organs import (  # type: ignore[import-not-found]
         unified_memory_api_defaults as defaults_module,
     )
 
@@ -233,7 +233,7 @@ class UnifiedMemoryAPI:
         self._nks: _SubsystemProtocol | None = nks_query_engine
         # Lazy-init MemorySifter (P-10-01: Think-and-Rank before inference).
         try:
-            from eidos.organs.services.memory_sifter import MemorySifter
+            from eidos.organs.services.memory_sifter import MemorySifter  # type: ignore[import-not-found]
 
             self._sifter: MemorySifter | None = MemorySifter()
         except ImportError:
@@ -324,7 +324,7 @@ class UnifiedMemoryAPI:
         # Apply MemorySifter (Think-and-Rank) to compress context before returning.
         if self._sifter is not None and len(merged) > limit:
             try:
-                from eidos.organs.holo_memory import MNode
+                from eidos.organs.holo_memory import MNode  # type: ignore[import-not-found]
 
                 nodes = [
                     MNode(key=item.dedup_key(), value=item.content or "", importance=item.score or 0.0)

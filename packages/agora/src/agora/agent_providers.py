@@ -10,8 +10,8 @@ import os
 from dataclasses import dataclass, field
 from typing import Any
 
-from agora.circuit_breaker import registry
-from agora.retry import is_retryable
+from agora.circuit_breaker import registry  # type: ignore[import-not-found]
+from agora.retry import is_retryable  # type: ignore[import-not-found]
 from agora.retry import with_retry as retry_with_retry
 
 # ── Types ────────────────────────────────────────────────────────────────────

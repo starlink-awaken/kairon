@@ -13,7 +13,7 @@ import json
 from collections import deque
 from pathlib import Path
 
-from engine.foundation.utils import wf
+from engine.foundation.utils import wf  # type: ignore[import-not-found]
 
 
 class PIDController:

@@ -24,7 +24,7 @@ import subprocess
 import sys
 from datetime import UTC, date, datetime
 
-from forge.forge_config import FORGE_ROOT, REGISTRY
+from forge.forge_config import FORGE_ROOT, REGISTRY  # type: ignore[import-not-found]
 
 SKILLS_DIR = FORGE_ROOT / "skills"
 SCRIPTS_DIR = FORGE_ROOT / "scripts"

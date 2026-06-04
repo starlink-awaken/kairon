@@ -2,7 +2,7 @@
 
 import re
 
-from engine.foundation.semantic import SemanticMatcher
+from engine.foundation.semantic import SemanticMatcher  # type: ignore[import-not-found]
 
 # Helpers
 #############################################

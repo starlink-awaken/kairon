@@ -11,11 +11,11 @@ import re
 from pathlib import Path
 
 try:
-    from .constants import V2_ID_PATTERNS
-    from .utils import CachedReader, save_json
+    from .constants import V2_ID_PATTERNS  # type: ignore[import-not-found]
+    from .utils import CachedReader, save_json  # type: ignore[import-not-found]
 except ImportError:
-    from engine.foundation.utils import CachedReader, save_json  # noqa
-    from engine.foundation.constants import V2_ID_PATTERNS
+    from engine.foundation.utils import CachedReader, save_json  # type: ignore[import-not-found]  # noqa
+    from engine.foundation.constants import V2_ID_PATTERNS  # type: ignore[import-not-found]
 
 
 # ── C1-C8 独立检查函数 ──────────────────────────────────────────────
@@ -91,7 +91,7 @@ def _check_c04(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_di
     detail = f"事实{len(fact_ids)}个: 推论引用{traced_in_inf}, 方案引用{traced_in_scheme}"
     # v2.3: 蕴含图运行时统计
     try:
-        from engine.theories.logic import build_from_project
+        from engine.theories.logic import build_from_project  # type: ignore[import-not-found]
 
         g = build_from_project(root)
         gs = g.stats()
@@ -199,7 +199,7 @@ def _check_c07(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_di
     ids_found = set()
     skip_prefixes = ("C-", "P-", "ISC-", "F", "v", "v2", "v3", "E", "e")
     try:
-        from engine.foundation.typesystem import TypeValidator
+        from engine.foundation.typesystem import TypeValidator  # type: ignore[import-not-found]
 
         tv = TypeValidator()
         for m in re.finditer(r"\b([A-Z][A-Za-z0-9_-]*(?:-[A-Za-z0-9_-]+)*)\b", all_text):
@@ -295,7 +295,7 @@ def run_check(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_dir
     try:
         from .check_theory import THEORY_CHECKS, check_bayesian
     except ImportError:
-        from check_theory import THEORY_CHECKS, check_bayesian
+        from check_theory import THEORY_CHECKS, check_bayesian  # type: ignore[import-not-found]
 
     # C9: 贝叶斯 → 结果缓存供C-10复用
     try:

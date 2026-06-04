@@ -16,7 +16,7 @@ from collections import defaultdict
 from datetime import UTC, datetime
 from pathlib import Path
 
-from forge.forge_config import GRAPH, REGISTRY
+from forge.forge_config import GRAPH, REGISTRY  # type: ignore[import-not-found]
 
 
 def _load_graph() -> dict:

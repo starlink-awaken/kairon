@@ -32,7 +32,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
-from nucleus.Z_Microkernel.utilities.sqlite_utils import managed_connection
+from kairon_lib._compat import managed_connection
 
 _log = logging.getLogger(__name__)
 
@@ -338,7 +338,7 @@ class HarvestScheduler:
 
         new_entries: list[HarvestEntry] = []
         try:
-            from kairon_lib.organs.registry.adr_storage import (
+            from kairon_lib.organs.registry.adr_storage import (  # type: ignore[import-not-found]
                 SQLiteADRStorage as _SQLiteADRStorage,
             )
 

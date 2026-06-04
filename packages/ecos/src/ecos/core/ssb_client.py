@@ -38,11 +38,11 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 
-from ecos.core.common import ECOS_HOME, TZ, get_conn, now_iso
+from ecos.core.common import ECOS_HOME, TZ, get_conn, now_iso  # type: ignore[import-not-found]
 from ecos.core.common import SSB_DB_PATH as _SSB_DB_PATH
 
 # SSB Auth for event signing
-from ecos.core.ssb_auth import compute_signature
+from ecos.core.ssb_auth import compute_signature  # type: ignore[import-not-found]
 
 # ─── Paths ────────────────────────────────────────────────────────────
 
@@ -236,17 +236,17 @@ class SSBClient:
                     created_at    TEXT DEFAULT (datetime('now', 'localtime'))
                 );
 
-                CREATE INDEX IF NOT EXISTS idx_ssb_type 
+                CREATE INDEX IF NOT EXISTS idx_ssb_type
                     ON ssb_events(event_type);
-                CREATE INDEX IF NOT EXISTS idx_ssb_source 
+                CREATE INDEX IF NOT EXISTS idx_ssb_source
                     ON ssb_events(source_agent);
-                CREATE INDEX IF NOT EXISTS idx_ssb_action 
+                CREATE INDEX IF NOT EXISTS idx_ssb_action
                     ON ssb_events(action_req);
-                CREATE INDEX IF NOT EXISTS idx_ssb_risk 
+                CREATE INDEX IF NOT EXISTS idx_ssb_risk
                     ON ssb_events(risk_level);
-                CREATE INDEX IF NOT EXISTS idx_ssb_ts 
+                CREATE INDEX IF NOT EXISTS idx_ssb_ts
                     ON ssb_events(timestamp DESC);
-                CREATE INDEX IF NOT EXISTS idx_ssb_seq 
+                CREATE INDEX IF NOT EXISTS idx_ssb_seq
                     ON ssb_events(seq);
             """)
             conn.commit()
@@ -305,8 +305,8 @@ class SSBClient:
 
             conn.execute(
                 """
-                INSERT INTO ssb_events 
-                (id, seq, timestamp, session_id, 
+                INSERT INTO ssb_events
+                (id, seq, timestamp, session_id,
                  source_agent, source_instance,
                  target_scope, target_hint,
                  event_type, event_subtype,

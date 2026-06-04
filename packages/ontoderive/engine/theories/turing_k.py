@@ -11,11 +11,11 @@ import json
 from pathlib import Path
 
 try:
-    from .models import DeriveSnapshot
-    from .utils import all_md, rf, wf
+    from .models import DeriveSnapshot  # type: ignore[import-not-found]
+    from .utils import all_md, rf, wf  # type: ignore[import-not-found]
 except ImportError:
-    from engine.foundation.utils import all_md, rf, wf  # noqa
-    from engine.foundation.models import DeriveSnapshot
+    from engine.foundation.utils import all_md, rf, wf  # type: ignore[import-not-found]  # noqa
+    from engine.foundation.models import DeriveSnapshot  # type: ignore[import-not-found]
 
 
 class KnowledgeTM:

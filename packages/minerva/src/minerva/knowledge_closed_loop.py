@@ -28,8 +28,8 @@ from typing import Any
 
 import structlog
 
-from minerva.audit_store import AuditLogger
-from minerva.executor.executor import ExecutionMode, ResearchExecutor, ResearchTask
+from minerva.audit_store import AuditLogger  # type: ignore[import-not-found]
+from minerva.executor.executor import ExecutionMode, ResearchExecutor, ResearchTask  # type: ignore[import-not-found]
 
 FORMAT_VERSION = "minerva-v1"
 logger = structlog.get_logger(__name__)
@@ -64,8 +64,8 @@ class KnowledgeClosedLoop:
         if self._kos_store is not None:
             return self._kos_store
         try:
-            from kos.ontology._types import Entity, EntityType
-            from kos.ontology.store import search_entities
+            from kos.ontology._types import Entity, EntityType  # type: ignore[import-not-found]
+            from kos.ontology.store import search_entities  # type: ignore[import-not-found]
 
             self._kos_store = {
                 "search_entities": search_entities,

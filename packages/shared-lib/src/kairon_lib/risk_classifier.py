@@ -50,7 +50,7 @@ import logging
 from dataclasses import dataclass
 from typing import Any
 
-from ..voting.approval_queue import RiskLevel
+from ..voting.approval_queue import RiskLevel  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

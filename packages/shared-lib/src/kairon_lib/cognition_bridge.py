@@ -27,8 +27,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
-from kairon_lib.organs.cognitive.cognitive_loop import CognitiveLoop
-from kairon_lib.organs.voting.approval_router import ApprovalRouter
+from kairon_lib.organs.cognitive.cognitive_loop import CognitiveLoop  # type: ignore[import-not-found]
+from kairon_lib.organs.voting.approval_router import ApprovalRouter  # type: ignore[import-not-found]
 
 
 @dataclass

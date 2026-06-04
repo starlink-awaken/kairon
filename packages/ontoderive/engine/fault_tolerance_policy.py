@@ -26,19 +26,19 @@ Authority: organs/D-Logos/AGENTS.md
 import logging
 import re
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import Enum, StrEnum
 from pathlib import Path
 from typing import Any
 
 # Event bus integration — try shared-lib first, then legacy nucleus path
 try:
-    from kairon_lib.events import BOSEvent, get_global_event_bus
+    from kairon_lib.events import BOSEvent, get_global_event_bus  # type: ignore[import-not-found]
 except (ModuleNotFoundError, ImportError):
     BOSEvent = None  # type: ignore[assignment]
     get_global_event_bus = None  # type: ignore[assignment]
 
 
-class EventType(str, Enum):
+class EventType(StrEnum):
     """Document event types published on the EventBus."""
 
     DOC_BEFORE_UPDATE = "doc.before_update"

@@ -385,7 +385,7 @@ class MonitoringDashboard:
             <h1>{self.config.title}</h1>
             <p>更新时间: {self.last_update} | 环境: 开发环境</p>
         </div>
-        
+
         <!-- 系统状态 -->
         <div class="grid" style="grid-template-columns: repeat(2, 1fr);">
             <div class="card">
@@ -405,7 +405,7 @@ class MonitoringDashboard:
                 <div class="metric" id="success-rate">--</div>
             </div>
         </div>
-        
+
         <!-- 关键指标 -->
         <div class="grid" style="grid-template-columns: repeat(4, 1fr);">
             <div class="card">
@@ -425,7 +425,7 @@ class MonitoringDashboard:
                 <div class="metric" id="success-rate-card">--</div>
             </div>
         </div>
-        
+
         <!-- 告警信息 -->
         <div class="card" style="grid-column: 1 / -1;">
             <div class="card-title">🚨 活跃告警</div>
@@ -433,12 +433,12 @@ class MonitoringDashboard:
                 <div class="alert-item">✅ 当前没有活跃告警</div>
             </div>
         </div>
-        
+
         <div class="footer">
             SSOT 智能监控系统 v2.0 | 自动刷新间隔: {self.config.refresh_interval}秒
         </div>
     </div>
-    
+
     <script>
         // 模拟数据更新
         function updateMetrics() {{
@@ -452,7 +452,7 @@ class MonitoringDashboard:
             document.getElementById('throughput').textContent = document.getElementById('throughput-card').textContent;
             document.getElementById('success-rate').textContent = document.getElementById('success-rate-card').textContent;
         }}
-        
+
         // 初始化并设置定时更新
         updateMetrics();
         setInterval(updateMetrics, {self.config.refresh_interval * 1000});

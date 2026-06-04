@@ -293,7 +293,7 @@ class TreeSitterExtractor:
                 try:
                     import importlib
 
-                    import tree_sitter
+                    import tree_sitter  # type: ignore[import-not-found]
 
                     mod = importlib.import_module(mod_name)
 

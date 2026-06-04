@@ -24,7 +24,7 @@ import logging
 import sqlite3
 from typing import Any
 
-from nucleus.Z_Microkernel.facades.path_resolver_facade import get_path_resolver
+from nucleus.Z_Microkernel.facades.path_resolver_facade import get_path_resolver  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 _DEFAULT_ROLE = "General"

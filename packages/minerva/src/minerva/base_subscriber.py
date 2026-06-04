@@ -28,7 +28,7 @@ import asyncio
 import logging
 from abc import ABC, abstractmethod
 
-from minerva.events import KnowledgeEvent
+from minerva.events import KnowledgeEvent  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

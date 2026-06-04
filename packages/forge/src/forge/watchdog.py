@@ -22,7 +22,7 @@ import subprocess
 import sys
 import time
 
-from forge.forge_config import LOG_DIR, SRC
+from forge.forge_config import LOG_DIR, SRC  # type: ignore[import-not-found]
 
 LOG_FILE = LOG_DIR / "forge-watchdog.log"
 PID_FILE = LOG_DIR / "forge-watchdog.pid"

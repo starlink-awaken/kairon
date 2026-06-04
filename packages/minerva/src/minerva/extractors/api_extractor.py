@@ -32,8 +32,8 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
 
-from minerva.extractors.base import IContentExtractor, StructuredKnowledge
-from minerva.sources.connectors import RawContent
+from minerva.extractors.base import IContentExtractor, StructuredKnowledge  # type: ignore[import-not-found]
+from minerva.sources.connectors import RawContent  # type: ignore[import-not-found]
 
 
 @dataclass

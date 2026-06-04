@@ -5,14 +5,14 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
+from enum import StrEnum
 
 # ═══════════════════════════════════════════
 # 值类型：枚举
 # ═══════════════════════════════════════════
 
 
-class DecisionLevel(str, Enum):
+class DecisionLevel(StrEnum):
     """决策级别（本体决策级别 DecisionLevel）"""
 
     GREEN = "green"
@@ -20,7 +20,7 @@ class DecisionLevel(str, Enum):
     RED = "red"
 
 
-class ImmuneLevel(str, Enum):
+class ImmuneLevel(StrEnum):
     """免疫级别（本体免疫级别 ImmuneLevel）"""
 
     NONE = "none"
@@ -29,7 +29,7 @@ class ImmuneLevel(str, Enum):
     MELTDOWN = "meltdown"
 
 
-class TaskType(str, Enum):
+class TaskType(StrEnum):
     """任务类型"""
 
     INFO_RETRIEVAL = "info_retrieval"
@@ -42,7 +42,7 @@ class TaskType(str, Enum):
     MICRO_REVIEW = "micro_review"
 
 
-class AssetLevel(str, Enum):
+class AssetLevel(StrEnum):
     """资产层级（本体 D_私有 / D_共有 / D_融合）"""
 
     PRIVATE = "private"
@@ -50,7 +50,7 @@ class AssetLevel(str, Enum):
     FUSED = "fused"
 
 
-class ModelType(str, Enum):
+class ModelType(StrEnum):
     """模型专长类型（本体 M.type）"""
 
     GENERAL = "general"
@@ -60,7 +60,7 @@ class ModelType(str, Enum):
     MULTIMODAL = "multimodal"
 
 
-class CouplingRule(str, Enum):
+class CouplingRule(StrEnum):
     """耦合协议子类（本体 S 的子协议）"""
 
     COGNITIVE_CIRCUIT = "cognitive_circuit"

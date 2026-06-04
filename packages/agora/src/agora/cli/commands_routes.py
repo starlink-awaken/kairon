@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import json
 
-from agora.router import Router
-from agora.state import get_registry
+from agora.router import Router  # type: ignore[import-not-found]
+from agora.state import get_registry  # type: ignore[import-not-found]
 
 
 def cmd_route(args):

@@ -7,8 +7,8 @@ import threading
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 
-from engine.core.derive import OntoDerive
-from engine.mcp_server import TOOL_DEFS, handle_mcp_request
+from engine.core.derive import OntoDerive  # type: ignore[import-not-found]
+from engine.mcp_server import TOOL_DEFS, handle_mcp_request  # type: ignore[import-not-found]
 
 app = FastAPI(title="OntoDerive", version="3.6.4")
 
@@ -63,7 +63,7 @@ async def api_check(project: str = ""):
 async def api_export(project: str = "", fmt: str = "json"):
     od = _get_od(project or None)
     r = od.derive()
-    from engine.core.export import to_html, to_json
+    from engine.core.export import to_html, to_json  # type: ignore[import-not-found]
 
     if fmt == "html":
         return HTMLResponse(to_html(r, project or _project_path))
@@ -203,7 +203,7 @@ def serve(project: str = ".", host: str = "127.0.0.1", port: int = 8080, watch: 
     _project_path = project
 
     if watch:
-        from engine.watcher import FileWatcher
+        from engine.watcher import FileWatcher  # type: ignore[import-not-found]
 
         t = threading.Thread(target=FileWatcher(project).watch, daemon=True)
         t.start()

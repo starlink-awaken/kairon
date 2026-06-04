@@ -109,7 +109,7 @@ class AutoRecoveryStrategy(BaseRecoveryStrategy):
 
     def _find_matching_pattern(self, error_info: dict[str, Any]) -> RecoveryPattern | None:
         """查找匹配的错误模式"""
-        error_type = error_info["type"]
+        error_info["type"]
         error_message = error_info["message"].lower()
 
         # 模式匹配表
@@ -167,7 +167,7 @@ class AutoRecoveryStrategy(BaseRecoveryStrategy):
         # 简化版本：从测试数据中查找类似错误
         matches: list[dict[str, Any]] = []
 
-        test_cases = [
+        [
             {"error_type": error_info["type"], "solution": "创建默认实体", "time": "1-3分钟"},
             {"error_type": error_info["type"], "solution": "检查规则依赖", "time": "3-5分钟"},
         ]

@@ -21,8 +21,8 @@ import re
 import sys
 from typing import NoReturn
 
-from iris import __version__
-from iris.config import IrisConfig
+from iris import __version__  # type: ignore[import-not-found]
+from iris.config import IrisConfig  # type: ignore[import-not-found]
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -102,7 +102,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def _get_registry():
     """Lazy import to avoid circular deps at module level."""
-    from iris.registry import ConnectorRegistry
+    from iris.registry import ConnectorRegistry  # type: ignore[import-not-found]
 
     registry = ConnectorRegistry()
     _register_all_connectors(registry)
@@ -111,7 +111,7 @@ def _get_registry():
 
 def _register_all_connectors(registry):
     """Register all available connectors."""
-    from iris.connectors import register_all
+    from iris.connectors import register_all  # type: ignore[import-not-found]
 
     register_all(registry)
 
@@ -189,7 +189,7 @@ def cmd_get(args, config):
     item = connector.get_item(args.id)
     if item:
         card = item.to_knowledge_card()
-        from iris.adapters.eidos import EidosAdapter
+        from iris.adapters.eidos import EidosAdapter  # type: ignore[import-not-found]
 
         eidos = EidosAdapter()
         if eidos.is_eidos_available():
@@ -230,9 +230,9 @@ def cmd_sync(args, config):
 
 def _run_bidirectional_sync(args, config):
     """Execute bidirectional sync between Obsidian and WPS Note."""
-    from iris.connectors.obsidian import ObsidianConnector
-    from iris.connectors.wpsnote import WPSNoteConnector
-    from iris.sync.engine import SyncEngine
+    from iris.connectors.obsidian import ObsidianConnector  # type: ignore[import-not-found]
+    from iris.connectors.wpsnote import WPSNoteConnector  # type: ignore[import-not-found]
+    from iris.sync.engine import SyncEngine  # type: ignore[import-not-found]
 
     obsidian = ObsidianConnector(config)
     wpsnote = WPSNoteConnector(config)
@@ -300,7 +300,7 @@ def cmd_config(args, config):
 
 def cmd_init(args, config):
     """Handle `iris init`."""
-    from iris.adapters.ssot import SSOTDomainAdapter
+    from iris.adapters.ssot import SSOTDomainAdapter  # type: ignore[import-not-found]
 
     ssot = SSOTDomainAdapter(config)
 

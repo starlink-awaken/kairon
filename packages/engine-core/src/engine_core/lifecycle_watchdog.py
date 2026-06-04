@@ -217,9 +217,9 @@ class SwarmWatchdog:
 
     def _default_has_watchdog(self) -> bool:
         try:
-            from nucleus.Z_Microkernel.organs.metabolic_watchdog import (  # noqa: F401
-                MetabolicWatchdog,
-            )
+            from nucleus.Z_Microkernel.organs.metabolic_watchdog import (  # type: ignore[import-not-found]  # noqa: F401
+                MetabolicWatchdog,  # type: ignore[import-not-found]
+            )  # type: ignore[import-not-found]
 
             return True
         except ImportError:

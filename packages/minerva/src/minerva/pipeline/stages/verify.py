@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from minerva.pipeline.engine import IPipelineStage, QualityGateError, ResearchContext
+from minerva.pipeline.engine import IPipelineStage, QualityGateError, ResearchContext  # type: ignore[import-not-found]
 
 CROSS_ANALYZE_PROMPT = """Given this analysis of multiple sources about: {query}
 

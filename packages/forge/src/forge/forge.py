@@ -86,7 +86,7 @@ import sys
 import time
 from pathlib import Path
 
-from forge.forge_config import ADAPTERS_DIR as ADAPTERS
+from forge.forge_config import ADAPTERS_DIR as ADAPTERS  # type: ignore[import-not-found]
 from forge.forge_config import FORGE_ROOT as TOOLBOX
 from forge.forge_config import SCRIPTS_DIR as SCRIPTS
 from forge.forge_config import SRC
@@ -591,7 +591,7 @@ ALIASES = {
 def _setup_completion() -> bool:
     """设置 Bash/Zsh 自动补全（通过 argcomplete）。"""
     try:
-        import argcomplete
+        import argcomplete  # type: ignore[import-not-found]
 
         registry = _build_command_map()
         parser = argparse.ArgumentParser(prog="forge", add_help=False)

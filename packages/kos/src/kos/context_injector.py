@@ -101,8 +101,8 @@ class HarvestContextInjector:
     def __init__(self, memory_graph: Any) -> None:
         self._factgraph = memory_graph
         try:
-            from kos.freshness import FreshnessManager
-            from kos.query_service import KnowledgeQueryService
+            from kos.freshness import FreshnessManager  # type: ignore[import-not-found]
+            from kos.query_service import KnowledgeQueryService  # type: ignore[import-not-found]
 
             self._query_service = KnowledgeQueryService(memory_graph)
             self._freshness = FreshnessManager(memory_graph)
@@ -406,7 +406,7 @@ def get_context_injector(memory_graph: Any | None = None) -> HarvestContextInjec
     """工厂函数：获取 HarvestContextInjector 实例。"""
     if memory_graph is None:
         try:
-            from eidos.memory_graph import MemoryGraph
+            from eidos.memory_graph import MemoryGraph  # type: ignore[import-not-found]
 
             memory_graph = MemoryGraph()
         except ImportError:

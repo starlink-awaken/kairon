@@ -15,7 +15,7 @@ from pathlib import Path
 
 import structlog
 
-from agora.mcp_bootstrap import get_data_dir
+from agora.mcp_bootstrap import get_data_dir  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 

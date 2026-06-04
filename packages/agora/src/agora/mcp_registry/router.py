@@ -8,8 +8,8 @@ Three modes:
 
 import structlog
 
-from agora.mcp_registry.embeddings import EmbeddingStore
-from agora.mcp_registry.repository import ToolCatalog
+from agora.mcp_registry.embeddings import EmbeddingStore  # type: ignore[import-not-found]
+from agora.mcp_registry.repository import ToolCatalog  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 
@@ -33,7 +33,7 @@ class SmartRouter:
         if self._llm is not None:
             return self._llm if self._llm is not False else None
         try:
-            from minerva.llm.client import OpenAICompatibleClient
+            from minerva.llm.client import OpenAICompatibleClient  # type: ignore[import-not-found]
 
             self._llm = OpenAICompatibleClient(
                 base_url="http://localhost:11434/v1",

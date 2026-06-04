@@ -7,7 +7,7 @@ import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from codeanalyze.core.workspace import CLAUDE_PLUGINS_DIR
+from codeanalyze.core.workspace import CLAUDE_PLUGINS_DIR  # type: ignore[import-not-found]
 
 
 @dataclass

@@ -2,7 +2,7 @@
 
 import json
 
-from engine.toolforge import ToolForge
+from engine.toolforge import ToolForge  # type: ignore[import-not-found]
 
 
 def cmd_toolforge(

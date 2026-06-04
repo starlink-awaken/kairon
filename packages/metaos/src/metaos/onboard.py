@@ -6,9 +6,9 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.resolve()))
-from cli import CLI
+from cli import CLI  # type: ignore[import-not-found]
 
-from metaos.core.engine import SEngine
+from metaos.core.engine import SEngine  # type: ignore[import-not-found]
 
 DEFAULT_DATA_DIR = str(Path.home() / ".metaos" / "data")
 ONBOARD_FILE = Path.home() / ".metaos" / "onboard.json"

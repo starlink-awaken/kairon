@@ -57,7 +57,7 @@ class DecisionResult:
 
 from typing import Any
 
-from nucleus.Z_Microkernel.utilities.sqlite_utils import managed_connection
+from kairon_lib._compat import managed_connection
 
 _log = logging.getLogger(__name__)
 

@@ -20,9 +20,9 @@ import os
 import re
 from typing import Any
 
-from iris.base import BaseConnector, SyncResult
-from iris.config import IrisConfig
-from iris.models import Article
+from iris.base import BaseConnector, SyncResult  # type: ignore[import-not-found]
+from iris.config import IrisConfig  # type: ignore[import-not-found]
+from iris.models import Article  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,7 @@ class ZhihuConnector(BaseConnector):
     def _fetch_url(self, url: str) -> str | None:
         """Fetch a URL using kronos fetch_router or direct HTTP."""
         try:
-            from kronos.fetch_router import execute_fetch
+            from kronos.fetch_router import execute_fetch  # type: ignore[import-not-found]
 
             result = execute_fetch(url, cookie=self._cookie)
             if result and result.get("content"):

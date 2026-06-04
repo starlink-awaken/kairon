@@ -39,8 +39,8 @@ from pathlib import Path
 from socketserver import ThreadingMixIn
 from typing import Any
 
-from agora.mcp_auth import MCPAuthError, get_auth_middleware
-from agora.mcp_protocol import (
+from agora.mcp_auth import MCPAuthError, get_auth_middleware  # type: ignore[import-not-found]
+from agora.mcp_protocol import (  # type: ignore[import-not-found]
     handle_initialize,
     handle_prompts_get,
     handle_prompts_list,
@@ -49,7 +49,7 @@ from agora.mcp_protocol import (
     handle_tools_call,
     handle_tools_list,
 )
-from agora.mcp_tools import (
+from agora.mcp_tools import (  # type: ignore[import-not-found]
     MCPToolRegistry,
     ToolContext,
     _ParamError,

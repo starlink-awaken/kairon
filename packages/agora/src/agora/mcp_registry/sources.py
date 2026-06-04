@@ -8,7 +8,7 @@ from typing import Any
 import httpx
 import structlog
 
-from agora.mcp_registry.evaluator import QualityScorer
+from agora.mcp_registry.evaluator import QualityScorer  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 

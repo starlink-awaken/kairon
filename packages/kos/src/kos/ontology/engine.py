@@ -11,7 +11,7 @@ _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 if _ROOT not in _sys.path:
     _sys.path.insert(0, _ROOT)
 
-from config import get_vault_ops_dir  # type: ignore[unused-ignore]
+from kos.config import get_vault_ops_dir  # type: ignore[unused-ignore, import-not-found]
 
 import hashlib
 import json
@@ -26,7 +26,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 VAULT_OPS_DIR = get_vault_ops_dir()
 
-from config import get_artifact_path, get_workspace_manifest
+from kos.config import get_artifact_path, get_workspace_manifest
 
 # ── Patterns ─────────────────────────────────────────────
 

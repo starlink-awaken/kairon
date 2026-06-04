@@ -21,7 +21,7 @@ import structlog
 logger = structlog.get_logger(__name__)
 
 if TYPE_CHECKING:
-    from agora.registry import ServiceRegistry
+    from agora.registry import ServiceRegistry  # type: ignore[import-not-found]
 
 
 @dataclass

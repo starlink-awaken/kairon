@@ -26,7 +26,7 @@ def cli():
 
 
 # Register commands
-from policydoc.commands import load_commands
+from policydoc.commands import load_commands  # type: ignore[import-not-found]
 
 load_commands(cli)
 

@@ -138,7 +138,7 @@ class VectorEmbeddingPipeline:
         """延迟初始化向量适配器（使用 minerva embeddings 提供者）"""
         if self._adapter is None:
             try:
-                from minerva.embeddings.providers import FallbackEmbeddingProvider
+                from minerva.embeddings.providers import FallbackEmbeddingProvider  # type: ignore[import-not-found]
 
                 self._adapter = _EmbeddingAdapter(FallbackEmbeddingProvider())
             except ImportError:

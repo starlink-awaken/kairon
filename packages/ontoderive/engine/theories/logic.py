@@ -10,7 +10,7 @@ OntoDerive 逻辑层 — 蕴含图分析
 
 from collections import defaultdict
 
-from engine.foundation.utils import detect_cycles
+from engine.foundation.utils import detect_cycles  # type: ignore[import-not-found]
 
 
 class EntailmentGraph:

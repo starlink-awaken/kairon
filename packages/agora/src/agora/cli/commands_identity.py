@@ -5,7 +5,7 @@ from __future__ import annotations
 
 def cmd_identity(args):
     """Identity CA management."""
-    from agora.identity_ca import IdentityCA
+    from agora.identity_ca import IdentityCA  # type: ignore[import-not-found]
 
     ca = IdentityCA()
     if args.identity_cmd == "init":

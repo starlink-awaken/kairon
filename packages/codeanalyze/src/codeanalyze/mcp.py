@@ -8,8 +8,8 @@ Or manually via Agora's MCP:
 
 from pathlib import Path
 
-from codeanalyze import __version__
-from codeanalyze.integrations.forge import guardrail
+from codeanalyze import __version__  # type: ignore[import-not-found]
+from codeanalyze.integrations.forge import guardrail  # type: ignore[import-not-found]
 
 try:
     from fastmcp import FastMCP
@@ -22,7 +22,7 @@ except ImportError:
     raise RuntimeError("fastmcp required: pip install fastmcp")
 
 # Lazy-loaded CRG graph query
-from codeanalyze.analyzers.crg_graph import (
+from codeanalyze.analyzers.crg_graph import (  # type: ignore[import-not-found]
     callees as _crg_callees,
 )
 from codeanalyze.analyzers.crg_graph import (
@@ -58,7 +58,7 @@ def _run_eidos_export(kg, root: Path) -> dict:
     """运行 Eidos 格式转换 + Schema 校验。"""
     import json as _json
 
-    from codeanalyze.integrations.eidos_adapter import (
+    from codeanalyze.integrations.eidos_adapter import (  # type: ignore[import-not-found]
         convert_kg,
         try_eidos_validate,
     )
@@ -126,8 +126,8 @@ def analyze_project(path: str = ".") -> dict:
         path: Path to the project root directory
     """
     try:
-        from codeanalyze.documents.official import analyze_policy_directory
-        from codeanalyze.reports.export import policy_graph_to_kg
+        from codeanalyze.documents.official import analyze_policy_directory  # type: ignore[import-not-found]
+        from codeanalyze.reports.export import policy_graph_to_kg  # type: ignore[import-not-found]
 
         root = _resolve(path)
         pg = analyze_policy_directory(root)
@@ -218,7 +218,7 @@ def audit_project(path: str = ".") -> dict:
         path: Project root path (must contain _工作机制/wiki directory)
     """
     try:
-        from codeanalyze.reports.audit import run_audit
+        from codeanalyze.reports.audit import run_audit  # type: ignore[import-not-found]
 
         root = _resolve(path)
         report = run_audit(root)
@@ -271,7 +271,7 @@ def extract_policy_docs(path: str = ".") -> dict:
 @mcp.tool()
 def status() -> dict:
     """Show installed code analysis and document processing tools."""
-    from codeanalyze.core.registry import build_registry
+    from codeanalyze.core.registry import build_registry  # type: ignore[import-not-found]
 
     reg = build_registry()
     tools = {}
@@ -303,7 +303,7 @@ def scan_directory(path: str = ".") -> dict:
         path: Project root path
     """
     try:
-        from codeanalyze.documents.scanner import analyze_wiki_structure
+        from codeanalyze.documents.scanner import analyze_wiki_structure  # type: ignore[import-not-found]
         from codeanalyze.documents.scanner import scan_directory as _scan
 
         root = _resolve(path)
@@ -338,7 +338,7 @@ def crg_status(path: str = ".") -> dict:
         path: Project root path
     """
     try:
-        from codeanalyze.analyzers import codereviewgraph as crg
+        from codeanalyze.analyzers import codereviewgraph as crg  # type: ignore[import-not-found]
 
         stats = crg.status(path)
         if stats.error:

@@ -10,7 +10,7 @@ from html import escape
 from pathlib import Path
 from typing import NotRequired, TypedDict
 
-from kronos.config import get_config
+from kronos.config import get_config  # type: ignore[import-not-found]
 
 VAULT_BASE = Path(get_config().vault_path)
 
@@ -204,7 +204,7 @@ def dispatch(
 
     # → KOS（通过 Python API）
     try:
-        import kos
+        import kos  # type: ignore[import-not-found]
 
         result["kos"] = True
     except ImportError:

@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 
 import structlog
 
-from minerva.triage.router import ResearchLevel, TriageResult
+from minerva.triage.router import ResearchLevel, TriageResult  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 
@@ -160,7 +160,7 @@ def create_default_pipeline(
         immune_audit_enabled: Insert ImmuneAuditStage before quality gate.
     """
 
-    from minerva.pipeline.stages import (
+    from minerva.pipeline.stages import (  # type: ignore[import-not-found]
         CounterArgumentStageImpl,
         CrossAnalyzeStageImpl,
         DecomposeStageImpl,

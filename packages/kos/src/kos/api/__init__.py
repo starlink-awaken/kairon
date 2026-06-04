@@ -26,7 +26,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 # sys.path.insert(0, str(SCRIPT_DIR))  # removed by replace_imports.py
 
 # sys.path.insert(0, str(get_vault_ops_dir()))  # removed by replace_imports.py
-from config import get_artifact_path
+from kos.config import get_artifact_path  # type: ignore[import-not-found]
 
 HISTORY_FILE = Path.home() / "Documents" / "KOS-Inbox" / ".search_history.jsonl"
 PORT = 8765

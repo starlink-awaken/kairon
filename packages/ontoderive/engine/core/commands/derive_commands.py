@@ -3,11 +3,11 @@
 import json
 from pathlib import Path
 
-from engine.core.derive import OntoDerive
+from engine.core.derive import OntoDerive  # type: ignore[import-not-found]
 
 
 def _run_toolforge(project: str, goal: str, tool_context: str) -> None:
-    from engine.toolforge import ToolForge
+    from engine.toolforge import ToolForge  # type: ignore[import-not-found]
 
     tf = ToolForge()
     print(f"\n{'━' * 50}")
@@ -72,7 +72,7 @@ def cmd_derive(project, auto, with_tools, goal, tool_context, pipeline_input, pi
 def cmd_analyze(project, force):
     """全量分析: 推导+LLM洞察(自动检测)"""
     print("[analyze] 全量分析: 结构推导 + LLM洞察(自动检测LLM)...")
-    from engine.intelligence.llm import get_enhancer
+    from engine.intelligence.llm import get_enhancer  # type: ignore[import-not-found]
 
     od = OntoDerive(project)
     enhancer = get_enhancer(force)
@@ -104,7 +104,7 @@ def cmd_generate(project, export):
         r = od.derive()
         try:
             if export == "html":
-                from engine.core.export import to_html
+                from engine.core.export import to_html  # type: ignore[import-not-found]
 
                 output = to_html(r, project)
                 Path(project + "/export.html").write_text(output)

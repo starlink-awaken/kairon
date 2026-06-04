@@ -40,7 +40,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 try:
-    from nucleus.Z_Spore.interfaces.surface_contract import SurfaceContract
+    from nucleus.Z_Spore.interfaces.surface_contract import SurfaceContract  # type: ignore[import-not-found]
 except (ImportError, ModuleNotFoundError):
     from dataclasses import dataclass, field
     from typing import Any

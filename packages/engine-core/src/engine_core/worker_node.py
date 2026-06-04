@@ -59,7 +59,7 @@ _log = logging.getLogger(__name__)
 
 # Soft import — graceful if SwarmLifecycleManager is not available
 try:
-    from engine_core.organs.swarm_lifecycle_manager import SwarmLifecycleManager
+    from engine_core.organs.swarm_lifecycle_manager import SwarmLifecycleManager  # type: ignore[import-not-found]
 
     _HAS_SLM = True
 except ImportError:

@@ -3,38 +3,34 @@
 # layer: tool
 # status: active
 # ---
-"""Tests for workflows.perception — all network calls mocked."""
+"""Tests for kos.perception — all network calls mocked."""
 from __future__ import annotations
 
 import importlib
 import json
 import sqlite3
-import sys
 import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(PROJECT_ROOT))
-
 
 class TestWebSearch:
     def setup_method(self):
-        self.mod = importlib.import_module("workflows.perception.search")
+        self.mod = importlib.import_module("kos.perception.search")
 
     def test_returns_list(self):
         result = self.mod.web_search("test query")
         assert isinstance(result, list)
 
     def test_graceful_on_error(self):
-        with patch("workflows.perception.search._async_search", side_effect=RuntimeError("fail")):
+        with patch("kos.perception.search._async_search", side_effect=RuntimeError("fail")):
             result = self.mod.web_search("test")
             assert result == []
 
 
 class TestWebSearchTimeout:
     def setup_method(self):
-        self.mod = importlib.import_module("workflows.perception.search")
+        self.mod = importlib.import_module("kos.perception.search")
 
     def test_empty_on_timeout(self):
         result = self.mod.web_search("")
@@ -43,10 +39,10 @@ class TestWebSearchTimeout:
 
 class TestScrapeURL:
     def setup_method(self):
-        self.mod = importlib.import_module("workflows.perception.scrape")
+        self.mod = importlib.import_module("kos.perception.scrape")
 
     def test_returns_dict(self):
-        with patch("workflows.perception.scrape._async_scrape") as mock_scrape:
+        with patch("kos.perception.scrape._async_scrape") as mock_scrape:
             mock_scrape.return_value = {
                 "url": "http://example.com",
                 "title": "Example",
@@ -60,16 +56,16 @@ class TestScrapeURL:
 
 class TestScrapeURLFailure:
     def setup_method(self):
-        self.mod = importlib.import_module("workflows.perception.scrape")
+        self.mod = importlib.import_module("kos.perception.scrape")
 
     def test_returns_none_on_error(self):
-        with patch("workflows.perception.scrape._async_scrape", side_effect=RuntimeError("fail")):
+        with patch("kos.perception.scrape._async_scrape", side_effect=RuntimeError("fail")):
             result = self.mod.scrape_url("http://invalid")
             assert result is None
 
     def test_logs_async_scrape_error(self, caplog):
-        with patch("workflows.perception.scrape._async_scrape", side_effect=RuntimeError("fail")):
-            with caplog.at_level("WARNING", logger="workflows.perception.scrape"):
+        with patch("kos.perception.scrape._async_scrape", side_effect=RuntimeError("fail")):
+            with caplog.at_level("WARNING", logger="kos.perception.scrape"):
                 result = self.mod.scrape_url("http://invalid")
         assert result is None
         assert "scrape_url failed" in caplog.text
@@ -77,7 +73,7 @@ class TestScrapeURLFailure:
 
 class TestFactInjector:
     def setup_method(self):
-        self.mod = importlib.import_module("workflows.perception.fact_injector")
+        self.mod = importlib.import_module("kos.perception.fact_injector")
         fd, self.tmp_path = tempfile.mkstemp(suffix=".db")
         self.conn = sqlite3.connect(self.tmp_path)
         self.conn.execute("""
@@ -108,7 +104,6 @@ class TestFactInjector:
         assert rows[0] == 2
 
     def test_inject_to_real_db_smoke(self):
-        self.mod.DB_PATH = self._orig_db_path
         count = self.mod.inject_facts([
             {"sub": "SmokeTest", "pred": "perception_test", "obj": "ok",
              "metadata": json.dumps({"source": "test", "confidence": 0.9})}
@@ -120,7 +115,7 @@ class TestFactInjector:
             {"sub": "First", "pred": "is", "obj": "stored"},
             {"sub": "Second", "pred": "is", "obj": "ignored"},
         ]
-        with patch("workflows.perception.fact_injector.uuid.uuid4", return_value="same-id-value"):
+        with patch("kos.perception.fact_injector.uuid.uuid4", return_value="same-id-value"):
             count = self.mod.inject_facts(facts)
         assert count == 1
         rows = self.conn.execute("SELECT COUNT(*) FROM fact_triples").fetchone()
@@ -139,7 +134,7 @@ class TestFactInjector:
 
 class TestFactInjectorValidation:
     def setup_method(self):
-        self.mod = importlib.import_module("workflows.perception.fact_injector")
+        self.mod = importlib.import_module("kos.perception.fact_injector")
 
     def test_valid_fact(self):
         assert self.mod._validate_fact({"sub": "A", "pred": "B", "obj": "C"})
@@ -156,17 +151,17 @@ class TestFactInjectorValidation:
 
 class TestRunPerception:
     def setup_method(self):
-        self.mod = importlib.import_module("workflows.perception.run_perception")
+        self.mod = importlib.import_module("kos.perception.run_perception")
 
     def test_returns_false_on_empty_search(self):
-        with patch("workflows.perception.search.web_search", return_value=[]):
+        with patch("kos.perception.search.web_search", return_value=[]):
             result = self.mod.run_perceive("test query")
             assert result is False
 
     def test_returns_true_with_results(self):
-        with patch("workflows.perception.search.web_search") as mock_search, \
-             patch("workflows.perception.scrape.scrape_url") as mock_scrape, \
-             patch("workflows.perception.fact_injector.inject_facts") as mock_inject:
+        with patch("kos.perception.search.web_search") as mock_search, \
+             patch("kos.perception.scrape.scrape_url") as mock_scrape, \
+             patch("kos.perception.fact_injector.inject_facts") as mock_inject:
             mock_search.return_value = [{"url": "http://example.com", "title": "Test", "snippet": "test"}]
             mock_scrape.return_value = {"url": "http://example.com", "title": "Test", "text_content": "content"}
             mock_inject.return_value = 1
@@ -176,7 +171,7 @@ class TestRunPerception:
 
 class TestNoNetworkFallback:
     def setup_method(self):
-        self.mod = importlib.import_module("workflows.perception.search")
+        self.mod = importlib.import_module("kos.perception.search")
 
     def test_empty_results_no_crash(self):
         result = self.mod.web_search("anything")

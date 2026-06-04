@@ -8,7 +8,7 @@ from collections import deque
 from dataclasses import dataclass, field
 from typing import Any
 
-from pontus.dsl import PipelineDef, StepDef
+from pontus.dsl import PipelineDef, StepDef  # type: ignore[import-not-found]
 
 
 @dataclass

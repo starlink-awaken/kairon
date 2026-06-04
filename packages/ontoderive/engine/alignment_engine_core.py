@@ -32,19 +32,19 @@ import logging
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from .models import (
+from .alignment_models import (
     AlignmentCategory,
     AlignmentIssue,
     AlignmentSeverity,
     EnhancedDiffReport,
     ScanResult,
 )
-from .renderers import generate_html_report, generate_json_report, generate_markdown_report
+from .alignment_renderers import generate_html_report, generate_json_report, generate_markdown_report
 
 if TYPE_CHECKING:
-    from ..diff_analyzer import DiffAnalyzer, DiffReport, MatchResult
-    from ..doc_extractor import DocStatementExtractor
-    from ..impl_scanner import ImplementationScanner
+    from .diff_analyzer import DiffAnalyzer, DiffReport, MatchResult
+    from .doc_extractor import DocStatementExtractor
+    from .impl_scanner import ImplementationScanner
 _log = logging.getLogger(__name__)
 
 class AlignmentEngine:
@@ -101,7 +101,7 @@ class AlignmentEngine:
             return True
         except (ImportError, KeyError, AttributeError):
             try:
-                from engine.organs.fault_tolerance_policy import (
+                from engine.organs.fault_tolerance_policy import (  # type: ignore[import-not-found]
                     FaultContext,
                     FaultTolerancePolicy,
                 )
@@ -394,7 +394,7 @@ class AlignmentEngine:
     def _get_doc_extractor(self) -> DocStatementExtractor:
         """获取文档提取器（延迟加载）"""
         if self._doc_extractor is None:
-            from ..doc_extractor import DocStatementExtractor
+            from ..doc_extractor import DocStatementExtractor  # type: ignore[import-not-found]
 
             self._doc_extractor = DocStatementExtractor()
         return self._doc_extractor
@@ -402,7 +402,7 @@ class AlignmentEngine:
     def _get_impl_scanner(self) -> ImplementationScanner:
         """获取实现扫描器（延迟加载）"""
         if self._impl_scanner is None:
-            from ..impl_scanner import ImplementationScanner
+            from ..impl_scanner import ImplementationScanner  # type: ignore[import-not-found]
 
             self._impl_scanner = ImplementationScanner(self.root)
         return self._impl_scanner
@@ -410,7 +410,7 @@ class AlignmentEngine:
     def _get_diff_analyzer(self) -> DiffAnalyzer:
         """获取差异分析器（延迟加载）"""
         if self._diff_analyzer is None:
-            from ..diff_analyzer import DiffAnalyzer
+            from ..diff_analyzer import DiffAnalyzer  # type: ignore[import-not-found]
 
             self._diff_analyzer = DiffAnalyzer()
         return self._diff_analyzer

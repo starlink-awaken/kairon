@@ -17,7 +17,7 @@ import time
 from dataclasses import dataclass
 from typing import Any
 
-from eidos.organs.storage_dal import (
+from eidos.organs.storage_dal import (  # type: ignore[import-not-found]
     SQLiteError,
     SQLiteOperationalError,
     SQLiteRelationalProvider,

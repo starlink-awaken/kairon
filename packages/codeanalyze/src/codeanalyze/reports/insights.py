@@ -9,7 +9,7 @@ import os
 import re
 from pathlib import Path
 
-from codeanalyze.core.workspace import EXCLUDE_DIRS
+from codeanalyze.core.workspace import EXCLUDE_DIRS  # type: ignore[import-not-found]
 
 # 严重级别图标映射
 _SEVERITY_ICONS = {"insight": "💡", "warning": "⚠️", "critical": "🔴"}

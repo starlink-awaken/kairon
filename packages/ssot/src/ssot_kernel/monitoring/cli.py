@@ -79,7 +79,6 @@ class MonitoringCLI:
         """收集并显示指标"""
         # 收集系统指标
         system_metrics = self.metrics_collector.system_collector.collect_all()
-        all_metrics = {"system": system_metrics}
 
         # 显示关键指标
         print(f"\n🕐 {datetime.now().strftime('%H:%M:%S')}: ", end="")

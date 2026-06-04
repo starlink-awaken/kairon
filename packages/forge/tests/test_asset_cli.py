@@ -213,7 +213,7 @@ class TestCheck:
 class TestScan:
     def test_scan_dry_run(self, sample_asset):
         cmd_register([json.dumps(sample_asset)])
-        before = len(m.REGISTRY_FILE.read_text() if m.REGISTRY_FILE.exists() else "")
+        len(m.REGISTRY_FILE.read_text() if m.REGISTRY_FILE.exists() else "")
         with patch("asset_cli.socket.socket") as mock_sock:
             inst = mock_sock.return_value
             inst.connect_ex.return_value = 1

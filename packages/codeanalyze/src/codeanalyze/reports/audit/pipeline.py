@@ -5,8 +5,8 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from codeanalyze.reports.audit.checkers import _extract_docx, _extract_pdf, _read_wiki
-from codeanalyze.reports.audit.models import AuditGroup, AuditReport
+from codeanalyze.reports.audit.checkers import _extract_docx, _extract_pdf, _read_wiki  # type: ignore[import-not-found]
+from codeanalyze.reports.audit.models import AuditGroup, AuditReport  # type: ignore[import-not-found]
 
 
 def _check_policy_graph(root: Path, wiki: Path, report: AuditReport) -> None:

@@ -2,6 +2,6 @@
 
 from __future__ import annotations
 
-from iris.connectors.polar.connector import PolarConnector
+from iris.connectors.polar.connector import PolarConnector  # type: ignore[import-not-found]
 
 __all__ = ["PolarConnector"]

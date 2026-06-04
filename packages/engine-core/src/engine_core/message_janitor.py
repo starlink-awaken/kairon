@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 import logging
 import os
 import sqlite3
@@ -8,8 +7,6 @@ import threading
 import time
 
 from engine_core._compat import ProjectPaths
-
-# TODO-migrate: from nucleus.Z_Microkernel.utilities.sqlite_utils import managed_connection
 
 """
 ---
@@ -49,7 +46,7 @@ class MessageJanitor:
         self.running = True
         self._thread = threading.Thread(target=self._run_loop, daemon=True)
         self._thread.start()
-        _log.info("🧹 [MessageJanitor] Started. Cleaning every {self.interval}s.")
+        _log.info(f"🧹 [MessageJanitor] Started. Cleaning every {self.interval}s.")
 
     def stop(self) -> None:
         self.running = False
@@ -61,8 +58,8 @@ class MessageJanitor:
         while self.running:
             try:
                 self.cleanup()
-            except (TimeoutError, asyncio.CancelledError):
-                _log.info("❌ [MessageJanitor] Error during cleanup: {e}")
+            except Exception as exc:
+                _log.info(f"❌ [MessageJanitor] Error during cleanup: {exc}")
             time.sleep(self.interval)
 
     def cleanup(self) -> None:
@@ -106,10 +103,10 @@ class MessageJanitor:
                     f"🧹 [MessageJanitor] Cleaned up {total_deleted} messages (TTL: {ttl_deleted}, Dead: {dead_deleted})."
                 )
 
-        except sqlite3.OperationalError:
-            _log.info("⚠️ [MessageJanitor] Database locked or unavailable: {e}")
-        except sqlite3.Error:
-            _log.info("❌ [MessageJanitor] Unexpected error: {e}")
+        except sqlite3.OperationalError as exc:
+            _log.info(f"⚠️ [MessageJanitor] Database locked or unavailable: {exc}")
+        except sqlite3.Error as exc:
+            _log.info(f"❌ [MessageJanitor] Unexpected error: {exc}")
 
 
 if __name__ == "__main__":

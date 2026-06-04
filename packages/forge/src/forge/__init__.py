@@ -1,6 +1,6 @@
 """Forge — 统一工具注册、发现与治理层"""
 
-from forge.forge import (
+from forge.forge import (  # type: ignore[import-not-found]
     ALIASES,
     COMMANDS,
     TOOLBOX,

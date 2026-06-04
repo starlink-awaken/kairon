@@ -7,7 +7,7 @@ import re
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from kronos.fetch_router import FetchResult
+    from kronos.fetch_router import FetchResult  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 

@@ -23,10 +23,22 @@ import os
 import sqlite3
 import time
 from collections.abc import Callable, Generator
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
-from nucleus.Z_Microkernel.utilities.sqlite_utils import managed_connection
+
+@contextmanager
+def _managed_connection(conn: sqlite3.Connection) -> Generator[sqlite3.Connection]:
+    """Wrap a SQLite connection with commit/rollback semantics and guaranteed close."""
+    try:
+        yield conn
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 # =============================================================================
 # 0. 形式化摘要 ≝
@@ -97,7 +109,7 @@ class PerceptionManager:
         conn.isolation_level = ""  # Restore autocommit
         conn.execute("PRAGMA synchronous=NORMAL")
         conn.row_factory = sqlite3.Row
-        return managed_connection(conn)
+        return _managed_connection(conn)
 
     def initialize(self) -> None:
         """初始化数据库表"""

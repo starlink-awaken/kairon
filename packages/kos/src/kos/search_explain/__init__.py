@@ -20,11 +20,11 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 # sys.path.insert(0, str(SCRIPT_DIR))  # removed by replace_imports.py
-from config import get_vault_ops_dir  # type: ignore[unused-ignore]
+from kos.config import get_vault_ops_dir  # type: ignore[unused-ignore, import-not-found]
 
 VAULT_OPS_DIR = get_vault_ops_dir()
 # sys.path.insert(0, str(VAULT_OPS_DIR))  # removed by replace_imports.py
-from config import get_artifact_path
+from kos.config import get_artifact_path
 
 # Preferred models: smallest/fastest first
 OLLAMA_MODEL_CANDIDATES = [

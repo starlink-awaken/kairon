@@ -1,10 +1,10 @@
 """policydoc: install — 文档工具安装指南"""
 
 import click
-from codeanalyze.core.registry import build_registry
+from codeanalyze.core.registry import build_registry  # type: ignore[import-not-found]
 from rich.table import Table
 
-from policydoc.cli import console
+from policydoc.cli import console  # type: ignore[import-not-found]
 
 _INSTALL_GUIDE = {
     "docling": ("pip install docling docling-graph", "文档→知识图谱 (IBM)"),

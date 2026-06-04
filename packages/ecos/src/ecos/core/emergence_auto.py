@@ -23,7 +23,7 @@ import sys
 import uuid
 from datetime import datetime, timedelta, timezone
 
-from ecos.core.common import ECOS_HOME as ECOS_DIR
+from ecos.core.common import ECOS_HOME as ECOS_DIR  # type: ignore[import-not-found]
 
 SSB_DB = ECOS_DIR / "LADS/ssb/ecos.db"
 STATE_PATH = ECOS_DIR / "STATE.yaml"
@@ -61,7 +61,7 @@ def get_deviations():
 
     try:
         sys.path.insert(0, str(SCRIPTS))
-        from snapshot_emergence import collect_metrics, compare, load_latest_snapshot
+        from snapshot_emergence import collect_metrics, compare, load_latest_snapshot  # type: ignore[import-not-found]
 
         current = collect_metrics()
         previous = load_latest_snapshot()

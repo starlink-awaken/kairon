@@ -9,7 +9,7 @@ from typing import Any
 
 def export_jsonld(zone: str | None = None) -> dict[str, Any]:
     """Export KOS entities to JSON-LD format."""
-    from kos.ontology.store import _get_conn
+    from kos.ontology.store import _get_conn  # type: ignore[import-not-found]
 
     conn = _get_conn()
     if zone:

@@ -383,7 +383,7 @@ class A2AProtocol:
             from engine_core._compat import MessageEnvelope
         except ImportError:
             try:
-                from synapse import MessageEnvelope  # type: ignore[no-redef]
+                from synapse import MessageEnvelope  # type: ignore[no-redef, import-not-found]
             except ImportError:
                 return None
 

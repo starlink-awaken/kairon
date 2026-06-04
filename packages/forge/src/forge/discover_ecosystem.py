@@ -17,7 +17,7 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
-from forge.forge_config import REGISTRY
+from forge.forge_config import REGISTRY  # type: ignore[import-not-found]
 
 # ─── 跳过的基础设施包 ─────────────────────────────
 

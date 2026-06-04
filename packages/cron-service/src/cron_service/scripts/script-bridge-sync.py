@@ -86,7 +86,7 @@ def sync_bridge():
 
         # 检查是否需要 symlink 到 Hermes
         if filename in hermes_symlinks:
-            existing_target = hermes_symlinks[filename]
+            hermes_symlinks[filename]
             if os.path.exists(HERMES_SCRIPTS / filename):
                 actual = (HERMES_SCRIPTS / filename).resolve()
                 if actual == target_path.resolve():

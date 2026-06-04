@@ -13,7 +13,7 @@ if str(SRC_DIR) not in sys.path:
 
 
 def _main() -> None:
-    from kos.cli.__main__ import main
+    from kos.cli.__main__ import main  # type: ignore[import-not-found]
 
     main()
 

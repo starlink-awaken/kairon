@@ -133,7 +133,7 @@ Action: FINISH
 
             if name == "get_confidence":
                 try:
-                    from engine.theories.bayesian import BayesianLayer
+                    from engine.theories.bayesian import BayesianLayer  # type: ignore[import-not-found]
 
                     bl = BayesianLayer(self.root)
                     _, infs = bl.propagate_all()
@@ -160,7 +160,7 @@ Action: FINISH
 
             if name == "find_contradictions":
                 try:
-                    from engine.theories.logic import build_from_project
+                    from engine.theories.logic import build_from_project  # type: ignore[import-not-found]
 
                     g = build_from_project(self.root)
                     return {"contradictions": g.find_contradictions()}
@@ -169,7 +169,7 @@ Action: FINISH
 
             if name == "compute_kqi":
                 try:
-                    from engine.theories.metrics import MetricsLayer
+                    from engine.theories.metrics import MetricsLayer  # type: ignore[import-not-found]
 
                     ml = MetricsLayer(self.root)
                     kqi = ml.compute_kqi()

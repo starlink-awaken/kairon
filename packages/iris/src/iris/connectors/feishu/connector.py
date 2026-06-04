@@ -19,7 +19,7 @@ class FeishuConnector:
         data = json.dumps({"msg_type": "text", "content": {"text": message[:2000]}}).encode()
         try:
             req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
-            with urllib.request.urlopen(req, timeout=10) as r:
+            with urllib.request.urlopen(req, timeout=10):
                 return {"sent": True}
         except Exception as e:
             return {"error": str(e)}

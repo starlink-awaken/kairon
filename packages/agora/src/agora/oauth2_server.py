@@ -141,7 +141,7 @@ except ImportError:  # pragma: no cover — optional dependency
     base64 = None  # type: ignore[assignment, unused-ignores]
     _FERNET_AVAILABLE = False
 
-from agora.auth_models import (
+from agora.auth_models import (  # type: ignore[import-not-found]
     AuthenticatedUser,
     AuthenticationError,
     AuthorizationError,
