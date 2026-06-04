@@ -87,13 +87,38 @@ agentmesh 的 5 个子系统已 100% 迁移至 kairon：
 | Orchestrator | `llm-gateway` |
 | Forge | `forge` |
 
+## 架构主线
+
+### 依赖根：core-models
+
+`core-models` 是整个 monorepo 的依赖基座，9 个包直接依赖它：
+
+```
+agora, codeanalyze, eidos, eu-pricing, kronos,
+minerva, ontoderive, sharedbrain-bridge, sharedbrain-standalone
+```
+
+包间交叉依赖较少，多数通过 core-models 间接耦合。
+
+### 成熟度梯队
+
+| 梯队 | 包 | 特征 |
+|------|-----|------|
+| 🟢 成熟 | agora (v2.0.0), minerva (v0.11.0), forge (v1.3.0), ssot (v1.0.0) | 独立版本号，测试完备 |
+| 🟡 发展中 | kos (v2.0.0), ontoderive (v3.6.4), sophia (v0.2.1) | 活跃迭代 |
+| 🔴 早期 | core-models (v0.1.0), shared-lib (v0.1.0) | 快速变化，接口不稳定 |
+| ⚪ 待评估 | kairon-assistant, kairon-voice | 来自外部集成，需验证 |
+
 ## 测试惯例
 
 - **框架**: pytest + uv
 - **运行**: `make test`（遍历 `packages/*/` 执行 `python3 -m pytest tests/ -q`）
 - **快速模式**: `make test-fast`（跳过 `tests/integration/` 和 `tests/benchmarks/`）
-- **配置**: `pyproject.toml` 中的 `[tool.pytest.ini_options]` → `testpaths = ["packages/*/tests"]`
-- **命名**: `test_*.py` 模式
+- **配置**: 根 `pyproject.toml` 中 `[tool.pytest.ini_options]` → `testpaths = ["packages/*/tests"]`；各包另有独立 `[tool.pytest.ini_options]`
+- **命名**: 统一 `test_*.py` 模式
+- **conftest**: 7 个包有 conftest.py（agora, ecos, engine-core, eu-pricing, kos, minerva, ontoderive）
+- **覆盖率门禁**: fail_under 70%
+- **wksp 是唯一无 tests/ 目录的包** — 测试覆盖为零
 
 ## 编码规范
 
@@ -117,6 +142,19 @@ agentmesh 的 5 个子系统已 100% 迁移至 kairon：
 | `Makefile` | 测试/格式化/清理命令 |
 | `packages/*/pyproject.toml` | 各包独立配置和依赖 |
 | `packages/*/tests/` | 各包测试目录 |
+| `docs/architecture_audit.md` | 架构审计报告（2026-06-02） |
+| `docs/governance_plan.md` | 治理规划 |
+| `docker/docker-compose.e2e.yml` | E2E 测试环境编排 |
+
+## CI
+
+kairon 拥有独立于根工作区的 CI 流水线：
+
+| 配置 | 路径 | 说明 |
+|------|------|------|
+| CI | `.github/workflows/ci.yml` | lint + codeanalyze 多版本矩阵（3.10–3.13） |
+
+根工作区的 `.github/workflows/` 有 11 个全局 workflow（pytest.yml, phase11-ci.yml, integration.yml 等），与 kairon 内部 CI 相互独立。
 
 ## Gotchas
 
@@ -125,3 +163,6 @@ agentmesh 的 5 个子系统已 100% 迁移至 kairon：
 3. **agora 依赖运行中服务** — 测试需要 MCP 端点，部分测试跳过
 4. **mypy 严格模式** — namespace_packages 需要显式配置 mypy_path
 5. **包间依赖通过 workspace 引用** — `[tool.uv.sources]` 定义内部包来源
+6. **wksp 包零测试** — `packages/wksp/` 没有 `tests/` 目录
+7. **根目录遗留修复脚本** — 约 8 个 `_fix_*.py` 脚本（fix_imports, mypy_suppress 等），是 mypy 迁移残留
+8. **CI 薄弱** — kairon 内部 CI 仅覆盖 lint + codeanalyze 单包测试，无全包测试门禁
