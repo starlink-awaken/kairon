@@ -46,3 +46,17 @@ class Job(JobCreate):
     run_count: int = 0
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+
+
+class JobResult(BaseModel):
+    job_id: str
+    success: bool
+    output: str = ""
+    error: str = ""
+    exit_code: int | None = None
+    timed_out: bool = False
+
+
+class ScheduleConfig(BaseModel):
+    expression: str = "every 5m"
+    timezone: str = "UTC"

@@ -8,7 +8,7 @@ import json
 
 def cmd_grant(args):
     """Grant 子命令分发：create / revoke / list / check。"""
-    from agora.authorizer import Authorizer  # type: ignore[import-not-found]
+    from agora.auth.authorizer import Authorizer  # type: ignore[import-not-found]
 
     az = Authorizer()
     if args.grant_cmd == "create":

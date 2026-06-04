@@ -50,7 +50,7 @@ def run_proxy_launch(args):
     """Proxy-launch subcommand handler."""
     import argparse
 
-    from agora import mcp_bootstrap as _bootstrap  # type: ignore[import-not-found]
+    from agora.mcp import mcp_bootstrap as _bootstrap  # type: ignore[import-not-found]
 
     if args.status:
         status = _bootstrap.get_config_status()
@@ -89,7 +89,7 @@ def build_parser():
     """Build the argument parser."""
     import argparse
 
-    from agora.registry import KNOWN_PROTOCOLS  # type: ignore[import-not-found]
+    from agora.core.registry import KNOWN_PROTOCOLS  # type: ignore[import-not-found]
 
     p = argparse.ArgumentParser(prog="agora", description="Agora -- Service Convergence Hub")
     p.add_argument("--json", action="store_true", help="JSON output")

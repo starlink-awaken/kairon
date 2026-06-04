@@ -80,6 +80,21 @@ class ExecutionResult:
         self.timed_out = timed_out
 
 
+class Executor:
+    """Compatibility wrapper around module-level execute()."""
+
+    def execute(
+        self, script_path_str: str | None, timeout: int = 120, workdir: str | None = None, env: dict | None = None
+    ) -> ExecutionResult:
+        return execute(script_path_str, timeout=timeout, workdir=workdir, env=env)
+
+
+def execute_script(
+    script_path_str: str | None, timeout: int = 120, workdir: str | None = None, env: dict | None = None
+) -> ExecutionResult:
+    return execute(script_path_str, timeout=timeout, workdir=workdir, env=env)
+
+
 def execute(
     script_path_str: str | None, timeout: int = 120, workdir: str | None = None, env: dict | None = None
 ) -> ExecutionResult:

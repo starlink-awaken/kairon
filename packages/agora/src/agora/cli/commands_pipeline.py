@@ -5,9 +5,9 @@ from __future__ import annotations
 import asyncio
 import json
 
+from agora.core.router import Router  # type: ignore[import-not-found]
+from agora.core.state import get_registry  # type: ignore[import-not-found]
 from agora.pipeline import Pipeline  # type: ignore[import-not-found]
-from agora.router import Router  # type: ignore[import-not-found]
-from agora.state import get_registry  # type: ignore[import-not-found]
 
 
 def cmd_pipeline(args):

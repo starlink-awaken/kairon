@@ -167,3 +167,15 @@ def record_run(job_id: str, status: str, output: str = "", error: str = ""):
         (now, status, output[:10000], error[:5000], now, job_id),
     )
     conn.commit()
+
+
+class JobStore:
+    """Compatibility facade over module-level CRUD helpers."""
+
+    init_db = staticmethod(init_db)
+    list_jobs = staticmethod(list_jobs)
+    get_job = staticmethod(get_job)
+    create_job = staticmethod(create_job)
+    update_job = staticmethod(update_job)
+    delete_job = staticmethod(delete_job)
+    record_run = staticmethod(record_run)

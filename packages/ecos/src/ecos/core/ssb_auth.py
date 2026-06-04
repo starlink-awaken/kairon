@@ -14,8 +14,9 @@ import sqlite3
 import sys
 from pathlib import Path
 
-KEY_FILE = Path(__file__).resolve().parent.parent / "LADS" / "ssb" / ".ssb_key"
-DB_PATH = Path(__file__).resolve().parent.parent / "LADS" / "ssb" / "ecos.db"
+ECOS_HOME = Path(__file__).resolve().parents[3]
+KEY_FILE = ECOS_HOME / "LADS" / "ssb" / ".ssb_key"
+DB_PATH = ECOS_HOME / "LADS" / "ssb" / "ecos.db"
 
 
 def _load_key():

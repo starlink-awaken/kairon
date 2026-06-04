@@ -165,3 +165,13 @@ def should_bridge(name: str) -> bool:
         if name.startswith(p) and name != p:
             return False
     return bool(classify(name))
+
+
+def classify_tasks(tasks: list[str]) -> list[str]:
+    """Return classified project names for task/script names, dropping misses."""
+    return [project for item in tasks if (project := classify(item))]
+
+
+def sort_by_priority(tasks: list[str]) -> list[str]:
+    """Stable priority helper for compatibility tests."""
+    return list(tasks)

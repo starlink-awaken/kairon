@@ -5,7 +5,7 @@ from __future__ import annotations
 import tempfile
 from pathlib import Path
 
-from agora.registry import KNOWN_PROTOCOLS, Service, ServiceRegistry
+from agora.core.registry import KNOWN_PROTOCOLS, Service, ServiceRegistry
 
 
 def _new_registry() -> ServiceRegistry:

@@ -215,7 +215,10 @@ def detect_backend() -> tuple[str, str]:
 
 
 # ── 向后兼容 ──────────────────────────────────────────
-# 新代码推荐使用 llm-gateway，旧代码通过此别名继续工作
-from llm_gateway.providers.legacy_ontoderive_adapter import (
-    OntoderiveProvider as BaseProvider,
-)
+# 新代码优先使用 llm-gateway；若独立 CLI 环境没有安装该包，则回退到本地抽象基类。
+try:
+    from llm_gateway.providers.legacy_ontoderive_adapter import (
+        OntoderiveProvider as BaseProvider,
+    )
+except ImportError:
+    pass

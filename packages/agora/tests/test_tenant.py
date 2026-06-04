@@ -3,7 +3,7 @@
 import tempfile
 from pathlib import Path
 
-from agora.tenant import Tenant, TenantManager
+from agora.auth.tenant import Tenant, TenantManager
 
 
 def test_tenant_dataclass():

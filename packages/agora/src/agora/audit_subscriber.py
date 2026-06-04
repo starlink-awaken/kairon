@@ -23,16 +23,18 @@ from typing import TYPE_CHECKING
 
 import structlog
 
-from agora.identity import normalize_identity  # type: ignore[import-not-found]
+from agora.auth.identity import normalize_identity  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 
 if TYPE_CHECKING:
-    from agora.event_bus import EventBus  # type: ignore[import-not-found]
-    from agora.registry import ServiceRegistry  # type: ignore[import-not-found]
+    from agora.core.event_bus import EventBus  # type: ignore[import-not-found]
+    from agora.core.registry import ServiceRegistry  # type: ignore[import-not-found]
 
 # Default audit DB path (relative to agora project root)
-AUDIT_DB = Path(os.environ.get("AGORA_AUDIT_DB", Path(__file__).resolve().parents[3] / "agora-audit.db"))
+from agora.mcp.mcp_bootstrap import get_data_dir  # type: ignore[import-not-found]
+
+AUDIT_DB = Path(os.environ.get("AGORA_AUDIT_DB", get_data_dir() / "agora-audit.db"))
 
 
 class AuditSubscriber:

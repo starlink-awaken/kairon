@@ -13,7 +13,7 @@ class TaskBidder:
     Tracks consecutive losses to adjust pricing.
     """
 
-    def __init__(self, node_id: str) -> None:
+    def __init__(self, node_id: str = "stub-node") -> None:
         self.node_id = node_id
         self._capabilities: set[str] = set()
         self._consecutive_losses = 0

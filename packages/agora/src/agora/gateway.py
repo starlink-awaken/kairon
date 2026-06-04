@@ -13,9 +13,9 @@ import time
 from collections.abc import Callable
 from typing import Any
 
-from agora.config import load_config  # type: ignore[import-not-found]
 from agora.context import context_manager  # type: ignore[import-not-found]
-from agora.scheduler import scheduler  # type: ignore[import-not-found]
+from agora.core.config import load_config  # type: ignore[import-not-found]
+from agora.core.scheduler import scheduler  # type: ignore[import-not-found]
 from agora.task_manager import task_manager  # type: ignore[import-not-found]
 from agora.types import Agent, AgentMessage, GatewayConfig, Task  # type: ignore[import-not-found]
 

@@ -16,6 +16,7 @@ import logging
 import os
 import random
 import string
+from dataclasses import dataclass
 from pathlib import Path
 
 import httpx
@@ -36,6 +37,18 @@ ITEM_TEXT = 1
 # ── Output directory ───────────────────────────────────────────────
 
 OUTPUT_ROOT = Path(config.OUTPUT_DIR).expanduser()
+
+
+@dataclass
+class DeliveryConfig:
+    type: str = "file"
+
+
+class FileDelivery:
+    """Minimal compatibility facade for file-based delivery."""
+
+    def deliver(self, job_name: str, content: str) -> str | None:
+        return deliver(job_name, content, "local")
 
 
 def _output_path(job_name: str) -> Path:

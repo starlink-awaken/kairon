@@ -5,9 +5,9 @@ import tempfile
 from pathlib import Path
 
 import pytest
+from agora.core.registry import ServiceRegistry
+from agora.core.router import Router
 from agora.pipeline import Pipeline
-from agora.registry import ServiceRegistry
-from agora.router import Router
 
 
 def _new_pipeline():

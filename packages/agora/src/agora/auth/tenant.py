@@ -15,7 +15,7 @@ tenants:
 ```
 
 Usage:
-    from agora.tenant import TenantManager
+    from agora.auth.tenant import TenantManager
     tm = TenantManager()
     tenant = tm.authenticate("sk-personal-xxx")  # → Tenant or None
     tm.check_rate_limit("personal")               # → True/False

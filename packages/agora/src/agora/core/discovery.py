@@ -21,7 +21,7 @@ import structlog
 logger = structlog.get_logger(__name__)
 
 if TYPE_CHECKING:
-    from agora.registry import ServiceRegistry  # type: ignore[import-not-found]
+    from agora.core.registry import ServiceRegistry  # type: ignore[import-not-found]
 
 
 @dataclass
@@ -364,7 +364,7 @@ class DiscoveryEngine:
 
     def auto_register(self, registry: ServiceRegistry) -> int:
         """Discover and auto-register new services. Returns count registered."""
-        from agora.registry import Service
+        from agora.core.registry import Service
 
         count = 0
         for svc in self.discover_all():

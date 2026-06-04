@@ -6,7 +6,7 @@ from datetime import UTC, datetime
 
 import structlog
 
-from agora.mcp_bootstrap import get_data_dir  # type: ignore[import-not-found]
+from agora.mcp.mcp_bootstrap import get_data_dir  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 

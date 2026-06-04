@@ -8,7 +8,7 @@ from pathlib import Path
 
 def cmd_tenant(args):
     """Multi-tenant management."""
-    from agora.tenant import TenantManager  # type: ignore[import-not-found]
+    from agora.auth.tenant import TenantManager  # type: ignore[import-not-found]
 
     tm = TenantManager()
     if args.tenant_cmd == "list":

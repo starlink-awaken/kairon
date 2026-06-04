@@ -19,8 +19,8 @@ def run_wizard() -> int:
     print("🏛️  Welcome to Agora — MCP Service Hub\n")
     print("This wizard will help you discover and register services.\n")
 
-    from agora.discovery import DiscoveryEngine  # type: ignore[import-not-found]
-    from agora.registry import ServiceRegistry  # type: ignore[import-not-found]
+    from agora.core.discovery import DiscoveryEngine  # type: ignore[import-not-found]
+    from agora.core.registry import ServiceRegistry  # type: ignore[import-not-found]
 
     registry = ServiceRegistry()  # Single instance for both register + health
     engine = DiscoveryEngine()

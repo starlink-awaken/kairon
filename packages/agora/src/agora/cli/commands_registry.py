@@ -7,12 +7,12 @@ import json
 import shutil
 from datetime import datetime
 
-from agora.state import get_registry  # type: ignore[import-not-found]
+from agora.core.state import get_registry  # type: ignore[import-not-found]
 
 
 def cmd_register(args):
     """Register a service."""
-    from agora.service_base import Service, parse_protocol_config, parse_tags  # type: ignore[import-not-found]
+    from agora.core.service_base import Service, parse_protocol_config, parse_tags  # type: ignore[import-not-found]
 
     registry = get_registry()
 

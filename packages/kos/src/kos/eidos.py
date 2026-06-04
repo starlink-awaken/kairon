@@ -84,6 +84,17 @@ def validate_object_full(
     Falls back to (False, ["eidos MCP unavailable"]) on failure.
     """
     try:
+        import importlib
+
+        direct_validator = importlib.import_module("eidos.validator")
+
+        direct_validate = getattr(direct_validator, "validate_object", None)
+        if callable(direct_validate):
+            return bool(direct_validate(data)), []
+    except Exception:
+        pass
+
+    try:
         resp = _mcp_call(
             "eidos_validate",
             data=json.dumps(data),

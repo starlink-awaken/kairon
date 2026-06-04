@@ -7,8 +7,8 @@ import time
 from pathlib import Path
 
 from agora.audit_subscriber import AuditSubscriber
-from agora.event_bus import EventBus
-from agora.registry import ServiceRegistry
+from agora.core.event_bus import EventBus
+from agora.core.registry import ServiceRegistry
 
 
 def test_on_event_uses_identity_payload_as_actor():

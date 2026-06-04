@@ -12,7 +12,7 @@ import time
 import uuid
 from typing import Any
 
-from agora.circuit_breaker import registry  # type: ignore[import-not-found]
+from agora.core.circuit_breaker import registry  # type: ignore[import-not-found]
 from agora.vectors import vector_store  # type: ignore[import-not-found]
 
 try:
@@ -43,7 +43,7 @@ def _get_tm():
 def _get_router():
     global _router
     if _router is None:
-        from agora.router import router as r  # type: ignore[import-not-found]
+        from agora.core.router import router as r  # type: ignore[import-not-found]
         _router = r
     return _router
 
@@ -59,7 +59,7 @@ def _get_cm():
 def _get_scheduler():
     global _scheduler
     if _scheduler is None:
-        from agora.scheduler import scheduler as s  # type: ignore[import-not-found]
+        from agora.core.scheduler import scheduler as s  # type: ignore[import-not-found]
         _scheduler = s
     return _scheduler
 

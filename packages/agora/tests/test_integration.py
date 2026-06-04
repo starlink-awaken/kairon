@@ -3,8 +3,8 @@
 import tempfile
 from pathlib import Path
 
-from agora.registry import Service, ServiceRegistry
-from agora.router import Router
+from agora.core.registry import Service, ServiceRegistry
+from agora.core.router import Router
 
 
 class TestAgoraIntegration:

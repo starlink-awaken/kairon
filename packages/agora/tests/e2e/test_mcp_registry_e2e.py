@@ -18,14 +18,14 @@ from agora.agent_registry import (
     sign_challenge,
     verify_signature,
 )
+from agora.core.registry import KNOWN_PROTOCOLS, Service, ServiceRegistry
+from agora.core.service_base import is_safe_url, parse_protocol_config, parse_tags
 from agora.mcp.mcp_bootstrap import (
     KNOWN_SERVICES,
     _default_config,
 )
 from agora.persistence_db import json_load as db_load
 from agora.persistence_db import json_save as db_save
-from agora.registry import KNOWN_PROTOCOLS, Service, ServiceRegistry
-from agora.service_base import is_safe_url, parse_protocol_config, parse_tags
 
 # ═══════════════════════════════════════════════════════════════
 # 工具函数
@@ -783,9 +783,9 @@ class TestMcpBootstrapConfig:
     def test_default_config_contains_all_services(self, monkeypatch, tmp_path: Path):
         """_default_config() 包含所有 KNOWN_SERVICES。"""
         # Mock workspace 以通过 kairon 服务可用性检查
-        monkeypatch.setattr("agora.mcp_bootstrap._find_workspace_root", lambda: None)
+        monkeypatch.setattr("agora.mcp.mcp_bootstrap._find_workspace_root", lambda: None)
         # Mock _check_tool_available 返回 False 使所有服务为不可用
-        monkeypatch.setattr("agora.mcp_bootstrap._check_tool_available", lambda name, info: False)
+        monkeypatch.setattr("agora.mcp.mcp_bootstrap._check_tool_available", lambda name, info: False)
         config = _default_config(workspace=None)
         assert "services" in config
         assert len(config["services"]) == len(KNOWN_SERVICES)
@@ -810,12 +810,12 @@ class TestMcpBootstrapConfig:
         # 强制重新导入以使用新的 env
         import importlib
 
-        from agora import mcp_bootstrap
+        from agora.mcp import mcp_bootstrap
 
         importlib.reload(mcp_bootstrap)
 
-        monkeypatch.setattr("agora.mcp_bootstrap._find_workspace_root", lambda: None)
-        monkeypatch.setattr("agora.mcp_bootstrap._check_tool_available", lambda name, info: False)
+        monkeypatch.setattr("agora.mcp.mcp_bootstrap._find_workspace_root", lambda: None)
+        monkeypatch.setattr("agora.mcp.mcp_bootstrap._check_tool_available", lambda name, info: False)
 
         services, config_path = mcp_bootstrap.load_or_generate_config()
         assert config_path.exists()
@@ -827,11 +827,11 @@ class TestMcpBootstrapConfig:
         monkeypatch.setenv("AGORA_DATA_DIR", str(agora_dir))
         import importlib
 
-        from agora import mcp_bootstrap
+        from agora.mcp import mcp_bootstrap
 
         importlib.reload(mcp_bootstrap)
-        monkeypatch.setattr("agora.mcp_bootstrap._find_workspace_root", lambda: None)
-        monkeypatch.setattr("agora.mcp_bootstrap._check_tool_available", lambda name, info: False)
+        monkeypatch.setattr("agora.mcp.mcp_bootstrap._find_workspace_root", lambda: None)
+        monkeypatch.setattr("agora.mcp.mcp_bootstrap._check_tool_available", lambda name, info: False)
 
         services = mcp_bootstrap.reload_config()
         assert len(services) == len(KNOWN_SERVICES)
@@ -842,11 +842,11 @@ class TestMcpBootstrapConfig:
         monkeypatch.setenv("AGORA_DATA_DIR", str(agora_dir))
         import importlib
 
-        from agora import mcp_bootstrap
+        from agora.mcp import mcp_bootstrap
 
         importlib.reload(mcp_bootstrap)
-        monkeypatch.setattr("agora.mcp_bootstrap._find_workspace_root", lambda: None)
-        monkeypatch.setattr("agora.mcp_bootstrap._check_tool_available", lambda name, info: False)
+        monkeypatch.setattr("agora.mcp.mcp_bootstrap._find_workspace_root", lambda: None)
+        monkeypatch.setattr("agora.mcp.mcp_bootstrap._check_tool_available", lambda name, info: False)
 
         status = mcp_bootstrap.get_config_status()
         assert "config_path" in status

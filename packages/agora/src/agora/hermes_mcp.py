@@ -153,7 +153,7 @@ class HermesToolRegistry:
         """List service health statuses."""
         services: list[dict[str, Any]] = []
         try:
-            from agora.registry import ServiceRegistry  # type: ignore[import-not-found]
+            from agora.core.registry import ServiceRegistry  # type: ignore[import-not-found]
             registry = ServiceRegistry()
             for svc in (registry.list_all() if hasattr(registry, "list_all") else []):
                 services.append({

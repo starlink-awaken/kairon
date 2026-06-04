@@ -4,9 +4,9 @@ import asyncio
 import tempfile
 from pathlib import Path
 
-from agora.event_bus import EventBus
+from agora.core.event_bus import EventBus
+from agora.core.registry import ServiceRegistry
 from agora.pipeline import Pipeline
-from agora.registry import ServiceRegistry
 
 
 class _FakeRouter:

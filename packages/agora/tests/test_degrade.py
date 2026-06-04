@@ -12,9 +12,9 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
-from agora.router import Router
-from agora.service_base import Service
-from agora.service_cache import (
+from agora.core.router import Router
+from agora.core.service_base import Service
+from agora.core.service_cache import (
     CACHE_FILE,
     clear_service_cache,
     is_cache_stale,

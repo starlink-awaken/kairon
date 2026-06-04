@@ -18,18 +18,18 @@ from fastmcp.server.dependencies import get_access_token
 from fastmcp.server.middleware import AuthMiddleware
 from fastmcp.tools import Tool, ToolResult
 
-from agora import mcp_bootstrap  # type: ignore[import-not-found]
 from agora.agent_card import service_to_agent_card  # type: ignore[import-not-found]
 from agora.audit_subscriber import AuditSubscriber  # type: ignore[import-not-found]
-from agora.identity import normalize_identity  # type: ignore[import-not-found]
+from agora.auth.identity import normalize_identity  # type: ignore[import-not-found]
+from agora.core.service_base import is_safe_url, parse_protocol_config, parse_tags  # type: ignore[import-not-found]
+from agora.core.state import get_event_bus, get_registry, get_router  # type: ignore[import-not-found]
+from agora.mcp import mcp_bootstrap  # type: ignore[import-not-found]
 from agora.mcp_proxy.manager import ProxyManager  # type: ignore[import-not-found]
 from agora.mcp_registry.embeddings import EmbeddingStore  # type: ignore[import-not-found]
 from agora.mcp_registry.lifecycle import LifecycleManager  # type: ignore[import-not-found]
 from agora.mcp_registry.orchestrator import Orchestrator  # type: ignore[import-not-found]
 from agora.mcp_registry.repository import ToolCatalog  # type: ignore[import-not-found]
 from agora.mcp_registry.router import SmartRouter  # type: ignore[import-not-found]
-from agora.service_base import is_safe_url, parse_protocol_config, parse_tags  # type: ignore[import-not-found]
-from agora.state import get_event_bus, get_registry, get_router  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 
@@ -687,7 +687,7 @@ async def register_service(
         provider_info: JSON string with provider info (e.g. '{"organization":"MyOrg"}')
         documentation_url: Documentation URL for the service
     """
-    from agora.registry import Service, ServiceConfig  # type: ignore[import-not-found]
+    from agora.core.registry import Service, ServiceConfig  # type: ignore[import-not-found]
 
     cfg = ServiceConfig(
         name=name,

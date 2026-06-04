@@ -13,13 +13,17 @@ __version__ = "2.0.0"
 
 from . import (
     api_types,  # type: ignore[import-not-found]
-    auth_models,  # type: ignore[import-not-found]
-    base_tool,  # type: ignore[import-not-found]
     connection_pool,  # type: ignore[import-not-found]
-    tool_contract,  # type: ignore[import-not-found]
-    tools_template,  # type: ignore[import-not-found]
     umbilical_protocol,  # type: ignore[import-not-found]
     unified_protocol_adapter,  # type: ignore[import-not-found]
+)
+from .auth import (
+    auth_models,  # type: ignore[import-not-found]
+)
+from .mcp import (
+    base_tool,  # type: ignore[import-not-found]
+    tool_contract,  # type: ignore[import-not-found]
+    tools_template,  # type: ignore[import-not-found]
 )
 
 __all__ = (

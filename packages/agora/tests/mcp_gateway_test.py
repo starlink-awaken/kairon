@@ -8,7 +8,7 @@ not on ``$PATH``; the test only validates that the API surface works.
 from __future__ import annotations
 
 import pytest
-from agora import mcp_gateway
+from agora.auth import mcp_gateway
 
 
 class TestKnownBackends:

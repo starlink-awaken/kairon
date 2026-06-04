@@ -6,9 +6,9 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from agora.event_bus import EventBus
-from agora.registry import Service, ServiceRegistry
-from agora.router import Router
+from agora.core.event_bus import EventBus
+from agora.core.registry import Service, ServiceRegistry
+from agora.core.router import Router
 
 
 def _reg():
@@ -17,9 +17,9 @@ def _reg():
 
 
 def _identity_module():
-    spec = importlib.util.find_spec("agora.identity")
-    assert spec is not None, "agora.identity module should exist for typed identity support"
-    return importlib.import_module("agora.identity")
+    spec = importlib.util.find_spec("agora.auth.identity")
+    assert spec is not None, "agora.auth.identity module should exist for typed identity support"
+    return importlib.import_module("agora.auth.identity")
 
 
 class TestEUMiddleware:
@@ -689,7 +689,7 @@ class TestRouterAdvanced:
 
     def test_trace_flush(self, tmp_path):
         """_trace writes to disk when buffer reaches 50 entries."""
-        from agora.router import Router as Router2
+        from agora.core.router import Router as Router2
 
         registry = _reg()
         router = Router2(registry)
@@ -706,7 +706,7 @@ class TestRouterAdvanced:
 
     def test_maybe_publish_with_event_bus(self):
         """_maybe_publish sends event when event_bus is configured."""
-        from agora.event_bus import EventBus
+        from agora.core.event_bus import EventBus
 
         registry = _reg()
         bus = EventBus(registry=registry)
@@ -736,7 +736,7 @@ class TestRouterAdvanced:
 
     def test_get_percentiles_with_data(self):
         """Percentiles return correct values with latency data."""
-        from agora.router import Router as Router3
+        from agora.core.router import Router as Router3
 
         registry = _reg()
         router = Router3(registry)

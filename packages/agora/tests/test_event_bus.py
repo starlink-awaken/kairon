@@ -3,7 +3,7 @@
 import tempfile
 from pathlib import Path
 
-from agora.event_bus import EventBus
+from agora.core.event_bus import EventBus
 
 
 def _new_bus():

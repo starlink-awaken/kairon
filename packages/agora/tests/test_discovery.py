@@ -1,6 +1,6 @@
 """Tests for DiscoveryEngine."""
 
-from agora.discovery import DiscoveredService, DiscoveryEngine
+from agora.core.discovery import DiscoveredService, DiscoveryEngine
 
 
 class TestDiscoveryEngine:

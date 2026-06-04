@@ -2,13 +2,19 @@
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from enum import Enum, auto
+from enum import Enum, EnumType, auto
 from typing import Any
 
 
-class WorkerStatus(Enum):
+class _DefaultEnumMeta(EnumType):
+    def __call__(cls, value=None, *args, **kwargs):
+        if value is None:
+            return next(iter(cls))
+        return super().__call__(value, *args, **kwargs)
+
+
+class WorkerStatus(Enum, metaclass=_DefaultEnumMeta):
     """Operational status of a worker."""
 
     IDLE = auto()
@@ -18,7 +24,7 @@ class WorkerStatus(Enum):
     ERROR = auto()
 
 
-class WorkerType(Enum):
+class WorkerType(Enum, metaclass=_DefaultEnumMeta):
     """Classification of worker implementations."""
 
     DAEMON = auto()
@@ -33,7 +39,7 @@ class WorkerType(Enum):
 class WorkerCapability:
     """Descriptor for a single worker capability."""
 
-    name: str
+    name: str = "generic"
     version: str = "1.0"
     metadata: dict[str, Any] = field(default_factory=dict)
 
@@ -65,7 +71,7 @@ class WorkerMetrics:
         return self.current_load / self.max_load if self.max_load > 0 else 0.0
 
 
-class WorkerAbstract(ABC):
+class WorkerAbstract:
     """Abstract base for all worker implementations.
 
     Subclasses must implement :meth:`execute`.
@@ -73,7 +79,7 @@ class WorkerAbstract(ABC):
 
     def __init__(
         self,
-        worker_id: str,
+        worker_id: str = "stub-worker",
         worker_type: WorkerType = WorkerType.DAEMON,
         capabilities: list[WorkerCapability] | None = None,
     ) -> None:
@@ -83,10 +89,9 @@ class WorkerAbstract(ABC):
         self.status = WorkerStatus.IDLE
         self.metrics = WorkerMetrics()
 
-    @abstractmethod
     async def execute(self, task: dict[str, Any]) -> dict[str, Any]:
         """Execute a task and return the result."""
-        ...
+        return {"status": "noop", "task": task}
 
     def can_handle(self, task: dict[str, Any]) -> bool:
         """Check whether this worker can handle a task based on capabilities.

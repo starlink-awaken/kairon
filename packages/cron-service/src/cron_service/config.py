@@ -26,6 +26,11 @@ def _load_config() -> dict[str, Any]:
         return {}
 
 
+def load_config() -> dict[str, Any]:
+    """Public compatibility wrapper for tests and legacy imports."""
+    return _load_config()
+
+
 _cfg: dict[str, Any] = {}
 
 

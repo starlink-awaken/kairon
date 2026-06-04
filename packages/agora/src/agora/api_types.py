@@ -14,7 +14,7 @@ from typing import Any
 
 from aiohttp import web
 
-from agora.auth_models import AuthenticatedUser  # type: ignore[import-not-found]
+from agora.auth.auth_models import AuthenticatedUser  # type: ignore[import-not-found]
 from agora.rate_limit import RateLimitConfig  # type: ignore[import-not-found]
 
 

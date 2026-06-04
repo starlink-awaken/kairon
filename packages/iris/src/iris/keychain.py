@@ -10,10 +10,15 @@ from __future__ import annotations
 from typing import Any
 
 _KEYRING_SERVICE = "iris"
+_KEYRING_ENABLED = {"1", "true", "yes", "on"}
 
 
 def _get_keyring() -> Any:
     """Import keyring if available. Returns module or None."""
+    import os
+
+    if os.environ.get("IRIS_ENABLE_KEYRING", "").strip().lower() not in _KEYRING_ENABLED:
+        return None
     try:
         import keyring as _kr
 

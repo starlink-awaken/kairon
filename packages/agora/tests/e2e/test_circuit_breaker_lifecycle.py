@@ -1,6 +1,6 @@
 """E2E test: Circuit breaker lifecycle — CLOSED → OPEN → HALF_OPEN → CLOSED."""
 
-from agora.registry import Service, ServiceRegistry
+from agora.core.registry import Service, ServiceRegistry
 
 
 def _new_registry(**kwargs):

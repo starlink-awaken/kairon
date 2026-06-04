@@ -1,2 +1,0 @@
-# config.py - 向后兼容
-from agora.core.config import *  # noqa: F403

@@ -6,12 +6,12 @@ import asyncio
 import contextlib
 import json
 
-from agora.state import get_registry  # type: ignore[import-not-found]
+from agora.core.state import get_registry  # type: ignore[import-not-found]
 
 
 def cmd_discover(args):
     """Auto-discover MCP services."""
-    from agora.discovery import DiscoveryEngine  # type: ignore[import-not-found]
+    from agora.core.discovery import DiscoveryEngine  # type: ignore[import-not-found]
 
     workspace = args.workspace or None
     engine = DiscoveryEngine(workspace)
@@ -77,9 +77,9 @@ def cmd_sync(args):
 
     Auto-discovers MCP services and registers them + prefix routes.
     """
-    from agora.discovery import DiscoveryEngine
-    from agora.registry import Service  # type: ignore[import-not-found]
-    from agora.router import Router  # type: ignore[import-not-found]
+    from agora.core.discovery import DiscoveryEngine
+    from agora.core.registry import Service  # type: ignore[import-not-found]
+    from agora.core.router import Router  # type: ignore[import-not-found]
 
     workspace = args.workspace or None
     engine = DiscoveryEngine(workspace)

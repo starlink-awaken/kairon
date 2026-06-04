@@ -233,6 +233,7 @@ class SSBClient:
                     deadline      TEXT DEFAULT '',
                     payload_json  TEXT DEFAULT '{}',
                     semantic_json TEXT DEFAULT '{}',
+                    agent_signature TEXT DEFAULT '',
                     created_at    TEXT DEFAULT (datetime('now', 'localtime'))
                 );
 
@@ -249,6 +250,9 @@ class SSBClient:
                 CREATE INDEX IF NOT EXISTS idx_ssb_seq
                     ON ssb_events(seq);
             """)
+            cols = {row["name"] for row in conn.execute("PRAGMA table_info(ssb_events)")}
+            if "agent_signature" not in cols:
+                conn.execute("ALTER TABLE ssb_events ADD COLUMN agent_signature TEXT DEFAULT ''")
             conn.commit()
         finally:
             conn.close()

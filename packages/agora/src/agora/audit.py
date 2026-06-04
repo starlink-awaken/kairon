@@ -9,8 +9,8 @@ import time
 import uuid
 from dataclasses import dataclass
 
-from agora.identity import Identity, normalize_identity  # type: ignore[import-not-found]
-from agora.mcp_bootstrap import get_data_dir  # type: ignore[import-not-found]
+from agora.auth.identity import Identity, normalize_identity  # type: ignore[import-not-found]
+from agora.mcp.mcp_bootstrap import get_data_dir  # type: ignore[import-not-found]
 from agora.persistence_db import _get_db  # type: ignore[import-not-found]
 
 _DB_PATH = get_data_dir() / "agora.db"

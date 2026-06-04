@@ -4,8 +4,8 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from agora.registry import KNOWN_PROTOCOLS, Service, ServiceRegistry
-from agora.service_base import parse_protocol_config, parse_tags
+from agora.core.registry import KNOWN_PROTOCOLS, Service, ServiceRegistry
+from agora.core.service_base import parse_protocol_config, parse_tags
 
 
 def _new_registry():

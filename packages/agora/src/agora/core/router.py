@@ -190,7 +190,7 @@ class Router:
         Converts ``Service.to_dict()`` format (uses ``endpoint`` key) to the
         canonical cache format (uses ``mcp_endpoint`` and ``health_endpoint``).
         """
-        from agora.service_base import Service as _Service  # type: ignore[import-not-found]
+        from agora.core.service_base import Service as _Service  # type: ignore[import-not-found]
 
         def _convert(svc: _Service | dict) -> dict:
             if isinstance(svc, dict):

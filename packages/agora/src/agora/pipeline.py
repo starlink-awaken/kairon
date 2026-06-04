@@ -21,7 +21,7 @@ from typing import Any
 
 import structlog
 
-from agora.identity import normalize_identity  # type: ignore[import-not-found]
+from agora.auth.identity import normalize_identity  # type: ignore[import-not-found]
 
 logger = structlog.get_logger(__name__)
 

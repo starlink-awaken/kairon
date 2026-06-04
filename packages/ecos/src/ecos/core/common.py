@@ -14,7 +14,7 @@ import sqlite3
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-ECOS_HOME = Path(__file__).resolve().parent.parent
+ECOS_HOME = Path(__file__).resolve().parents[3]
 SSB_DB_DIR = ECOS_HOME / "LADS" / "ssb"
 SSB_DB_PATH = SSB_DB_DIR / "ecos.db"
 TZ = timezone(timedelta(hours=8), "CST")
@@ -53,6 +53,7 @@ def now_iso() -> str:
 
 def get_conn(db_path=None):
     """数据库连接工厂 — WAL模式, Row工厂"""
+    SSB_DB_DIR.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(str(db_path or SSB_DB_PATH))
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")

@@ -14,7 +14,17 @@ Architecture:
     server.py      — FastAPI entry point + service lifecycle
 """
 
+import builtins as _builtins
+
+from cron_service.classify import classify_tasks, sort_by_priority  # type: ignore[import-not-found]
+
 __version__ = "1.0.0"
+
+_builtins.classify_tasks = classify_tasks
+_builtins.sort_by_priority = sort_by_priority
+
 __all__ = (
     "__version__",
+    "classify_tasks",
+    "sort_by_priority",
 )

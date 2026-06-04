@@ -500,7 +500,7 @@ async def test_auto_registration(report: EvalReport):
 
     # ── 7a. DiscoveryEngine 工作空间发现 ──
     report.info("=== 7a: DiscoveryEngine 工作空间发现 ===")
-    from agora.discovery import DiscoveredService, DiscoveryEngine  # type: ignore[import-not-found]
+    from agora.core.discovery import DiscoveredService, DiscoveryEngine  # type: ignore[import-not-found]
 
     mock_services = [
         DiscoveredService(name="minerva", description="深度研究系统", mcp_endpoint="stdio://minerva", confidence=0.85),
@@ -527,7 +527,7 @@ async def test_auto_registration(report: EvalReport):
 
     # ── 7b. auto_register 自动注册 ──
     report.info("=== 7b: auto_register 自动注册 ===")
-    from agora.registry import ServiceRegistry  # type: ignore[import-not-found]
+    from agora.core.registry import ServiceRegistry  # type: ignore[import-not-found]
 
     registry = ServiceRegistry(storage_path="/tmp/test_agora_registry_eval.json")
     registry.clear_all()  # 确保从干净状态开始
@@ -563,7 +563,7 @@ async def test_auto_registration(report: EvalReport):
 
     # ── 7c. mcp_bootstrap.scan_and_launch 启动引导 ──
     report.info("=== 7c: mcp_bootstrap.scan_and_launch 启动引导 ===")
-    from agora import mcp_bootstrap  # type: ignore[import-not-found]
+    from agora.mcp import mcp_bootstrap  # type: ignore[import-not-found]
 
     proxy_manager = MagicMock()
     proxy_manager.start = AsyncMock(return_value={"minerva": "started", "kos": "started"})
@@ -586,7 +586,7 @@ async def test_auto_registration(report: EvalReport):
     ]
     mock_config_path = "/tmp/mock_config.json"
 
-    with patch("agora.mcp_bootstrap.load_or_generate_config", return_value=(mock_config, mock_config_path)):
+    with patch("agora.mcp.mcp_bootstrap.load_or_generate_config", return_value=(mock_config, mock_config_path)):
         results = await mcp_bootstrap.scan_and_launch(proxy_manager)
         assert isinstance(results, dict), f"返回类型应为 dict，实际 {type(results)}"
         report.ok("7c: scan_and_launch 启动引导成功", detail=f"返回 {len(results)} 个服务结果")

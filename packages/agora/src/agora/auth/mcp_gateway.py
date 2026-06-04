@@ -6,7 +6,7 @@ ProxyManager, making them available via the unified MCP entry points
 
 Usage:
     python -m agora.mcp_gateway          # CLI mode (starts all, waits for signal)
-    from agora.mcp_gateway import start_all, stop_all
+    from agora.auth.mcp_gateway import start_all, stop_all
 """
 
 from __future__ import annotations
@@ -31,44 +31,44 @@ KNOWN_BACKENDS: list[dict] = [
     {
         "name": "agent-runtime",
         "mcp_endpoint": "",
-        "command": "agent-runtime-mcp",
-        "args": [],
+        "command": "uv",
+        "args": ["run", "--package", "agent-runtime", "python", "-m", "agent_runtime.mcp_server"],
     },
     {
         "name": "eidos",
         "mcp_endpoint": "",
-        "command": "eidos-mcp",
-        "args": [],
+        "command": "uv",
+        "args": ["run", "--package", "eidos", "python", "-m", "eidos.mcp_server"],
     },
     {
         "name": "iris",
         "mcp_endpoint": "",
-        "command": "iris-mcp",
-        "args": [],
+        "command": "uv",
+        "args": ["run", "--package", "iris", "python", "-m", "iris.mcp_server"],
     },
     {
         "name": "kronos",
         "mcp_endpoint": "",
-        "command": "kronos-mcp",
-        "args": [],
+        "command": "uv",
+        "args": ["run", "--package", "kronos", "python", "-m", "kronos.mcp_server"],
     },
     {
         "name": "metaos",
         "mcp_endpoint": "",
-        "command": "metaos-mcp",
-        "args": [],
+        "command": "uv",
+        "args": ["run", "--package", "metaos", "python", "-m", "metaos.mcp_server"],
     },
     {
         "name": "minerva",
         "mcp_endpoint": "",
-        "command": "minerva-mcp",
-        "args": [],
+        "command": "uv",
+        "args": ["run", "--package", "minerva", "python", "-m", "minerva.mcp_server.server"],
     },
     {
         "name": "sophia",
         "mcp_endpoint": "",
-        "command": "sophia-mcp",
-        "args": [],
+        "command": "uv",
+        "args": ["run", "--package", "sophia", "python", "-m", "sophia.server.mcp_server"],
     },
     {
         "name": "cron-service",

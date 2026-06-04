@@ -7,9 +7,9 @@ import importlib.util
 
 
 def _identity_module():
-    spec = importlib.util.find_spec("agora.identity")
-    assert spec is not None, "agora.identity module should exist for typed identity support"
-    return importlib.import_module("agora.identity")
+    spec = importlib.util.find_spec("agora.auth.identity")
+    assert spec is not None, "agora.auth.identity module should exist for typed identity support"
+    return importlib.import_module("agora.auth.identity")
 
 
 def test_normalize_identity_formats_actor_billing_and_payload():

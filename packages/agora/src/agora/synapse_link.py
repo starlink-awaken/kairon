@@ -33,7 +33,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import StrEnum
 
-from agora.node_identity import NodeIdentity  # type: ignore[import-not-found]
+from agora.auth.node_identity import NodeIdentity  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

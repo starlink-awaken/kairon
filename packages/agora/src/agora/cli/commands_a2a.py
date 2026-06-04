@@ -5,9 +5,9 @@ from __future__ import annotations
 import asyncio
 import json
 
-from agora.event_bus import EventBus  # type: ignore[import-not-found]
-from agora.router import Router  # type: ignore[import-not-found]
-from agora.state import get_registry  # type: ignore[import-not-found]
+from agora.core.event_bus import EventBus  # type: ignore[import-not-found]
+from agora.core.router import Router  # type: ignore[import-not-found]
+from agora.core.state import get_registry  # type: ignore[import-not-found]
 
 
 def cmd_a2a(args):

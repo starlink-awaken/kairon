@@ -28,10 +28,15 @@ from prometheus_client import REGISTRY, Gauge, generate_latest  # type: ignore[i
 
 from agora.agent_card import service_to_agent_card  # type: ignore[import-not-found]
 from agora.audit_subscriber import AuditSubscriber  # type: ignore[import-not-found]
-from agora.discovery import DiscoveryEngine  # type: ignore[import-not-found]
+from agora.core.discovery import DiscoveryEngine  # type: ignore[import-not-found]
+from agora.core.service_base import (  # type: ignore[import-not-found]
+    Service,
+    is_safe_url,
+    parse_protocol_config,
+    parse_tags,
+)
+from agora.core.state import get_event_bus, get_registry, get_router  # type: ignore[import-not-found]
 from agora.pipeline import Pipeline  # type: ignore[import-not-found]
-from agora.service_base import Service, is_safe_url, parse_protocol_config, parse_tags  # type: ignore[import-not-found]
-from agora.state import get_event_bus, get_registry, get_router  # type: ignore[import-not-found]
 from agora.web import workspace_research  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
