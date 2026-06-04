@@ -3,7 +3,6 @@
 import sys
 
 import pytest
-
 from eu_pricing.cli import main
 
 

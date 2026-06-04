@@ -20,8 +20,6 @@ from enum import Enum
 from threading import Lock
 from typing import Protocol
 
-from eidos.base_membrane import BaseMembrane
-
 
 @contextmanager
 def managed_connection(conn):
@@ -133,7 +131,7 @@ class _SessionStorageProtocol(Protocol):
     def update_session_status(self, session_id: str, status: str) -> None: ...
 
 
-class AtomicStateManager(BaseMembrane):
+class AtomicStateManager:
     """
     原子状态管理器
 
@@ -154,7 +152,11 @@ class AtomicStateManager(BaseMembrane):
         session_storage: _SessionStorageProtocol | None = None,
         worker_registry: _WorkerRegistryProtocol | None = None,
     ) -> None:
-        super().__init__(metadata_path="eidos/atomic_state_manager.py")
+        self.metadata_path = "eidos/atomic_state_manager.py"
+        self.organ_name = "atomic_state_manager"
+        self.organ_id = f"eidos-{id(self):x}"
+        self._status = "active"
+        self._metabolic_budget = 1000.0
         self.role_state_storage = role_state_storage
         self.session_storage = session_storage
         self.worker_registry = worker_registry
@@ -462,11 +464,15 @@ def create_atomic_manager(
     return AtomicStateManager()
 
 
-class _SQLiteRoleStateStorage(BaseMembrane):
+class _SQLiteRoleStateStorage:
     """SQLite 后端的角色状态存储，供 AtomicStateManager 内部使用。"""
 
     def __init__(self, db_path: str) -> None:
-        super().__init__()
+        self.metadata_path = "eidos/atomic_state_manager.py"
+        self.organ_name = "atomic_state_manager"
+        self.organ_id = f"eidos-{id(self):x}"
+        self._status = "active"
+        self._metabolic_budget = 1000.0
         import sqlite3
 
         self._db_path = db_path
@@ -552,10 +558,14 @@ class _SQLiteRoleStateStorage(BaseMembrane):
             return False, str(exc)
 
 
-class _SQLiteAtomicStateManager(AtomicStateManager, BaseMembrane):
+class _SQLiteAtomicStateManager(AtomicStateManager):
     """AtomicStateManager with SQLite-backed persistence."""
 
     def __init__(self, db_path: str = ".bos_atomic_states.db") -> None:
         storage = _SQLiteRoleStateStorage(db_path)
-        super().__init__(role_state_storage=storage)
+        self.metadata_path = "eidos/atomic_state_manager.py"
+        self.organ_name = "atomic_state_manager"
+        self.organ_id = f"eidos-{id(self):x}"
+        self._status = "active"
+        self._metabolic_budget = 1000.0
         self._db_path = db_path

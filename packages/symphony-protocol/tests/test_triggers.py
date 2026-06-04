@@ -3,8 +3,7 @@
 from unittest.mock import MagicMock
 
 import pytest
-
-from symphony_protocol.models import SymphonyStage, Trigger, TriggerType
+from symphony_protocol.models import Trigger
 from symphony_protocol.triggers import (
     TriggerEngine,
     create_default_triggers,

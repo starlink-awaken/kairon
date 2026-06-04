@@ -64,34 +64,6 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-
-class BaseMembrane:  # type: ignore[no-redef]
-    """Minimal stub used when the nucleus is not present."""
-
-    def __init__(self, metadata_path: str = "unknown") -> None:
-        self.metadata_path = metadata_path
-        self.organ_name = metadata_path.split("/")[-1].replace(".py", "")
-        self.organ_id = "stub-id"
-        self._status = "active"
-
-    def initialize(self) -> None:
-        self._status = "active"
-
-    def shutdown(self) -> None:
-        self._status = "inactive"
-
-    def call(self, *a: object, **kw: object) -> dict[str, object]:
-        return {}
-
-    @property
-    def status(self) -> str:
-        return getattr(self, "_status", "inactive")
-
-    @status.setter
-    def status(self, v: str) -> None:
-        self._status = v
-
-
 _log = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------

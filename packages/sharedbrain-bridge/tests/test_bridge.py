@@ -2,15 +2,11 @@
 
 import json
 import sys
-from pathlib import Path
 from unittest.mock import MagicMock, patch
-
-import pytest
 
 from sharedbrain_bridge.eu import DEFAULT_AGORA, DEFAULT_SB, PRICING, EUBridge
 from sharedbrain_bridge.immune import ImmuneBridge
-from sharedbrain_bridge.sync import SHAREDBRAIN_ORGANS, SyncBridge
-
+from sharedbrain_bridge.sync import SyncBridge
 
 # ── EUBridge tests ───────────────────────────────────────────
 

@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
 # ── Governance Integration ──────────────────────────────────
-
 from kairon_assistant.governance_integration import GovernanceIntegration
 from kairon_assistant.types import CommandType
 
@@ -52,10 +51,8 @@ class TestGovernanceIntegration:
 
 # ── Recommendation Engine ───────────────────────────────────
 
-from kairon_assistant.recommendation_engine import Recommendation, RecommendationEngine
 from kairon_assistant.command_parser import ParsedCommand
-from kairon_assistant.context_manager import ConversationContext
-from kairon_assistant.session_manager import AssistantSession
+from kairon_assistant.recommendation_engine import Recommendation, RecommendationEngine
 
 
 class _MockSession:
@@ -245,10 +242,10 @@ class TestSmartAssistant:
 # ── System Handlers ────────────────────────────────────────
 
 from kairon_assistant.system_handlers import (
-    handle_help,
-    handle_config,
-    _query_session,
     _query_metrics,
+    _query_session,
+    handle_config,
+    handle_help,
 )
 
 

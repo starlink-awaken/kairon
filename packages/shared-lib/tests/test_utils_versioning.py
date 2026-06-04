@@ -1,6 +1,5 @@
 """Tests for kairon_lib.utils.versioning — ContentVersion, ContentVersionTracker."""
 
-import json
 import tempfile
 from pathlib import Path
 

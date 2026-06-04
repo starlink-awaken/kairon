@@ -2,7 +2,6 @@
 
 import time
 
-import pytest
 from kairon_lib.workflow_engine import (
     GateReview,
     PhaseContext,

@@ -1,8 +1,6 @@
 """Tests for kairon_lib.utils.error_classifier — ErrorCategory, ErrorClassifier, ErrorStatistics."""
 
-import asyncio
 
-import pytest
 from kairon_lib.utils.error_classifier import ErrorCategory, ErrorClassifier, ErrorStatistics
 
 
@@ -47,7 +45,7 @@ class TestErrorClassifier:
 
     def test_classify_asyncio_timeout(self):
         c = ErrorClassifier()
-        assert c.classify(asyncio.TimeoutError()) == ErrorCategory.TRANSIENT
+        assert c.classify(TimeoutError()) == ErrorCategory.TRANSIENT
 
     def test_classify_http_status_429(self):
         c = ErrorClassifier()

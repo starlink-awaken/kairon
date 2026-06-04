@@ -12,14 +12,13 @@
 """
 
 from dataclasses import dataclass, field
-from typing import Protocol
+from typing import Any, Protocol
 
 from core_models.protocols.circuit import CircuitProtocol
 from core_models.protocols.governance import GovernanceProtocol
 from core_models.protocols.health import HealthProtocol
 from core_models.protocols.identity import IdentityProtocol
 from core_models.protocols.metrics import MetricsProtocol
-from typing import Any
 
 # 渐进取采纳：当前只强制Health + Identity
 REQUIRED_INTERFACES: list[type[Protocol]] = [  # type: ignore[valid-type]

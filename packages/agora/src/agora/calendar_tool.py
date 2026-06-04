@@ -10,12 +10,12 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime
+from typing import Any
 
 from agora.base_tool import BaseTool
 from agora.calendar_adapters import BaseCalendarAdapter, create_adapter
 from agora.calendar_models import CalendarEvent
 from agora.tool_contract import ToolConfig, ToolRequest, ToolResult, ToolStatus
-from typing import Any
 
 _log = logging.getLogger(__name__)
 

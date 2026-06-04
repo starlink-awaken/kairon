@@ -1,6 +1,5 @@
 """Tests for kairon_lib.weighted_voting — WeightedBallot, WeightedVoting."""
 
-import pytest
 from kairon_lib.weighted_voting import WeightedBallot, WeightedVoting
 
 

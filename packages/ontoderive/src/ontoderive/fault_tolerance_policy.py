@@ -298,7 +298,7 @@ class FaultTolerancePolicy:
         if operation not in self._config.critical_operations:
             self._config.critical_operations.append(operation)
 
-    def get_policy_summary(self) -> dict[str, Any]:  # noqa: F821
+    def get_policy_summary(self) -> dict[str, Any]:
         """Return a snapshot of current configuration, health, and stats."""
         return {
             "default_mode": self._config.default_mode.value,
@@ -313,7 +313,7 @@ class FaultTolerancePolicy:
 
     # -- CoreService BOS-URI handler ----------------------------------------
 
-    def call(self, action: str, params: dict[str, Any] | None = None) -> dict[str, Any]:  # type: ignore[override]  # noqa: F821  # noqa: F821
+    def call(self, action: str, params: dict[str, Any] | None = None) -> dict[str, Any]:  # type: ignore[override]
         """BOS-URI handler – delegates to ``_handle_{action}``."""
         params = params or {}
         handler_name = f"_handle_{action}"
@@ -321,7 +321,7 @@ class FaultTolerancePolicy:
             return getattr(self, handler_name)(params)
         return {"status": "error", "message": f"Unknown action: {action}"}
 
-    def _handle_evaluate(self, params: dict[str, Any]) -> dict[str, Any]:  # noqa: F821  # noqa: F821
+    def _handle_evaluate(self, params: dict[str, Any]) -> dict[str, Any]:
         ctx = FaultContext(
             operation=params.get("operation", "unknown"),
             severity=params.get("severity", "medium"),
@@ -339,13 +339,13 @@ class FaultTolerancePolicy:
             "retry_delay": decision.retry_delay,
         }
 
-    def _handle_summary(self, params: dict[str, Any]) -> dict[str, Any]:  # noqa: F821  # noqa: F821
+    def _handle_summary(self, params: dict[str, Any]) -> dict[str, Any]:
         return {"status": "ok", **self.get_policy_summary()}
 
-    def _handle_status(self, params: dict[str, Any]) -> dict[str, Any]:  # noqa: F821  # noqa: F821
+    def _handle_status(self, params: dict[str, Any]) -> dict[str, Any]:
         return self._handle_summary(params)
 
-    def _handle_stats(self, params: dict[str, Any]) -> dict[str, Any]:  # noqa: F821  # noqa: F821
+    def _handle_stats(self, params: dict[str, Any]) -> dict[str, Any]:
         return {"status": "ok", "stats": dict(self._stats)}
 
     # -- private evaluators --------------------------------------------------

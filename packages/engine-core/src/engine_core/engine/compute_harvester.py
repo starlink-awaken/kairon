@@ -146,7 +146,7 @@ class ComputeHarvester:
         return nodes
 
     def _harvest_cc_switch(self) -> list[dict[str, Any]]:
-        nodes = []
+        nodes: list[dict[str, Any]] = []
         if not os.path.exists(self.cc_switch_db):
             return nodes
         try:
@@ -171,7 +171,7 @@ class ComputeHarvester:
         return nodes
 
     def _harvest_antigravity(self) -> list[dict[str, Any]]:
-        nodes = []
+        nodes: list[dict[str, Any]] = []
         if not os.path.exists(self.antigravity_cfg):
             return nodes
         try:

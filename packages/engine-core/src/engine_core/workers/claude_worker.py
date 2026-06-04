@@ -4,7 +4,7 @@ import logging
 import os
 from typing import Any
 
-from engine_core._compat import BaseMembrane, KnowledgeEnhancementMixin
+from engine_core._compat import KnowledgeEnhancementMixin
 from engine_core.agent_daemon_base import AgentDaemonBase
 
 """Worker extracted from SharedBrain."""
@@ -21,7 +21,7 @@ from engine_core.agent_daemon_base import AgentDaemonBase
 _log = logging.getLogger(__name__)
 
 
-class ClaudeWorker(KnowledgeEnhancementMixin, AgentDaemonBase, BaseMembrane):
+class ClaudeWorker(KnowledgeEnhancementMixin, AgentDaemonBase):
     def __init__(self, agent_id: str = "Claude-Worker-01", **kwargs: Any) -> None:
         super().__init__(
             agent_id=agent_id,

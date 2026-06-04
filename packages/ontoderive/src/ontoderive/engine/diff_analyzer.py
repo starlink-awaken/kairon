@@ -9,44 +9,12 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-AX01-10_holographic_metadata_axio
 ---
 """
 
-
 import json
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any
-
-try:
-    from some_module import BaseMembrane
-except (ModuleNotFoundError, ImportError):
-
-    class BaseMembrane:  # type: ignore[no-redef]
-        """Minimal stub used when the nucleus is not present."""
-
-        def __init__(self, metadata_path: str = "unknown") -> None:
-            self.metadata_path = metadata_path
-            self.organ_name = metadata_path.split("/")[-1].replace(".py", "")
-            self.organ_id = "stub-id"
-            self._status = "active"
-
-        def initialize(self) -> None:
-            self._status = "active"
-
-        def shutdown(self) -> None:
-            self._status = "inactive"
-
-        def call(self, *a: Any, **kw: Any) -> dict[str, object]:
-            return {}
-
-        @property
-        def status(self) -> str:
-            return getattr(self, "_status", "inactive")
-
-        @status.setter
-        def status(self, v: str) -> None:
-            self._status = v
-
 
 """
 ---
@@ -71,7 +39,6 @@ Authority: organs/D-Logos/AGENTS.md
 # 功能 ⊢ {Diff_Analyzer, Init_Diff, Validate_Analyzer}
 # =============================================================================
 
-
 """差异分析器 (DiffAnalyzer)
 
 比对文档声明和代码实现:
@@ -82,7 +49,6 @@ Authority: organs/D-Logos/AGENTS.md
 
 _log = logging.getLogger(__name__)
 
-
 class DiffType(Enum):
     """差异类型"""
 
@@ -90,7 +56,6 @@ class DiffType(Enum):
     TYPE_B = "type_b"  # 实现缺失，文档有定义
     TYPE_C = "type_c"  # 文档错误，需重新描述
     TYPE_D = "type_d"  # 实现偏差，需重构代码
-
 
 class MatchConfidence(Enum):
     """匹配置信度"""
@@ -100,7 +65,6 @@ class MatchConfidence(Enum):
     MEDIUM = "medium"  # 中等置信度
     LOW = "low"  # 低置信度
     NO_MATCH = "no_match"  # 无匹配
-
 
 @dataclass
 class MatchResult:
@@ -129,7 +93,6 @@ class MatchResult:
     missing_methods: list[str] = field(default_factory=list)
     extra_methods: list[str] = field(default_factory=list)
 
-
 @dataclass
 class DiffReport:
     """差异报告"""
@@ -152,12 +115,15 @@ class DiffReport:
     # 修复建议
     recommendations: list[dict]
 
-
-class DiffAnalyzer(BaseMembrane):
+class DiffAnalyzer:
     """差异分析器"""
 
     def __init__(self) -> None:
-        super().__init__(metadata_path="organs/D-Logos/organs/diff_analyzer.py")
+        self.metadata_path = "organs/D-Logos/organs/diff_analyzer.py"
+        self.organ_name = "diff_analyzer"
+        self.organ_id = f"eidos-{id(self):x}"
+        self._status = "active"
+        self._metabolic_budget = 1000.0
         self.matches: list[MatchResult] = []
 
     def analyze(self, doc_ast_path: Path, impl_manifest_path: Path) -> DiffReport:

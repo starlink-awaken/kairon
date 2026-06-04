@@ -125,8 +125,8 @@
   "hotPaths": [
     {
       "path": "packages/engine-core/src/engine_core/__init__.py",
-      "accessCount": 8,
-      "lastAccessed": 1780387167663,
+      "accessCount": 9,
+      "lastAccessed": 1780544822500,
       "type": "file"
     },
     {

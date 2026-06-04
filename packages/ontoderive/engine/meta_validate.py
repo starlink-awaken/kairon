@@ -51,34 +51,6 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-
-class BaseMembrane:
-    """Minimal stub used when the nucleus is not present."""
-
-    def __init__(self, metadata_path: str = "unknown") -> None:
-        self.metadata_path = metadata_path
-        self.organ_name = metadata_path.split("/")[-1].replace(".py", "")
-        self.organ_id = "stub-id"
-        self._status = "INACTIVE"
-
-    def initialize(self) -> None:
-        self._status = "ACTIVE"
-
-    def shutdown(self) -> None:
-        self._status = "SHUTDOWN"
-
-    def call(self, *a: object, **kw: object) -> dict[str, object]:
-        return {}
-
-    @property
-    def status(self) -> str:
-        return getattr(self, "_status", "INACTIVE")
-
-    @status.setter
-    def status(self, v: str) -> None:
-        self._status = v
-
-
 from engine.organs.doc_type_validator import DocTypeValidator
 from engine.organs.meta_validate_benchmark import _MetaBenchmarkMixin
 from engine.organs.meta_validate_persist import _MetaPersistenceMixin
@@ -168,7 +140,7 @@ class MetaValidationReport:
         }
 
 
-class MetaValidateEngine(BaseMembrane, _MetaVerifyMixin, _MetaBenchmarkMixin, _MetaPersistenceMixin):
+class MetaValidateEngine(_MetaVerifyMixin, _MetaBenchmarkMixin, _MetaPersistenceMixin):
     """元验证引擎"""
 
     if TYPE_CHECKING:

@@ -22,8 +22,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from eidos.base_membrane import BaseMembrane
-
 _log = logging.getLogger(__name__)
 
 
@@ -85,7 +83,7 @@ class SignatureError(Exception):
     pass
 
 
-class SessionStore(BaseMembrane):
+class SessionStore:
     """
     Cross-device session persistence manager.
 
@@ -104,7 +102,11 @@ class SessionStore(BaseMembrane):
         storage_dir: str = ".sessions",
         signature_key: bytes | None = None,
     ) -> None:
-        super().__init__(metadata_path="eidos/session_store.py")
+        self.metadata_path = "eidos/session_store.py"
+        self.organ_name = "session_store"
+        self.organ_id = f"eidos-{id(self):x}"
+        self._status = "active"
+        self._metabolic_budget = 1000.0
         self._storage_dir = Path(storage_dir)
         self._storage_dir.mkdir(parents=True, exist_ok=True)
         self._signature_key = signature_key or b"default-dev-key-replace-in-production"

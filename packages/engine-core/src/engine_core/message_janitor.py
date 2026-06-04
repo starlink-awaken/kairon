@@ -7,7 +7,7 @@ import sqlite3
 import threading
 import time
 
-from engine_core._compat import ProjectPaths, managed_connection
+from engine_core._compat import ProjectPaths
 
 # TODO-migrate: from nucleus.Z_Microkernel.utilities.sqlite_utils import managed_connection
 

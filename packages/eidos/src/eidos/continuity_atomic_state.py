@@ -18,7 +18,6 @@ from enum import Enum
 from threading import Lock
 from typing import Protocol
 
-from eidos.base_membrane import BaseMembrane
 from eidos.atomic_state_manager import managed_connection
 
 # =============================================================================
@@ -458,7 +457,7 @@ class _SQLiteRoleStateStorage:
         import sqlite3
 
         self._db_path = db_path
-        with managed_connection(sqlite3.connect(self._db_path)) as conn:  # noqa: F821
+        with managed_connection(sqlite3.connect(self._db_path)) as conn:
             conn.execute(
                 """CREATE TABLE IF NOT EXISTS atomic_states (
                     role_id TEXT PRIMARY KEY,
@@ -472,7 +471,7 @@ class _SQLiteRoleStateStorage:
     def get_version(self, role_id: str) -> int:
         import sqlite3
 
-        with managed_connection(sqlite3.connect(self._db_path)) as conn:  # noqa: F821
+        with managed_connection(sqlite3.connect(self._db_path)) as conn:
             row = conn.execute("SELECT version FROM atomic_states WHERE role_id=?", (role_id,)).fetchone()
         return row[0] if row else 0
 
@@ -485,7 +484,7 @@ class _SQLiteRoleStateStorage:
         if not role_id:
             return False
         try:
-            with managed_connection(sqlite3.connect(self._db_path)) as conn:  # noqa: F821
+            with managed_connection(sqlite3.connect(self._db_path)) as conn:
                 conn.execute(
                     """INSERT INTO atomic_states(role_id, state_json, version, updated_at)
                        VALUES(?,?,?,?)
@@ -512,7 +511,7 @@ class _SQLiteRoleStateStorage:
         from datetime import datetime
 
         try:
-            with managed_connection(sqlite3.connect(self._db_path)) as conn:  # noqa: F821
+            with managed_connection(sqlite3.connect(self._db_path)) as conn:
                 current = conn.execute("SELECT version FROM atomic_states WHERE role_id=?", (role_id,)).fetchone()
                 current_version = current[0] if current else 0
                 if current_version != expected_version:
@@ -540,7 +539,7 @@ class _SQLiteRoleStateStorage:
             return False, str(exc)
 
 
-class _SQLiteAtomicStateManager(AtomicStateManager, BaseMembrane):  # noqa: F821
+class _SQLiteAtomicStateManager(AtomicStateManager):
     """AtomicStateManager with SQLite-backed persistence."""
 
     def __init__(self, db_path: str = ".bos_atomic_states.db") -> None:

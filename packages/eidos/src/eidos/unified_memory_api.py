@@ -30,7 +30,7 @@ import json
 import logging
 import math
 import time
-from collections.abc import Awaitable, Callable, Coroutine, Mapping
+from collections.abc import Callable, Coroutine, Mapping
 from dataclasses import dataclass, field
 from typing import Any, NotRequired, Protocol, TypedDict, cast, runtime_checkable
 

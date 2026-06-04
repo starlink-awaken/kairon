@@ -1,6 +1,5 @@
 """Tests for cron-service core logic — scheduler, executor, classify, config, models."""
 
-import json
 import os
 import tempfile
 from datetime import UTC, datetime, timedelta
@@ -197,7 +196,7 @@ class TestClassify:
 
 # ── Config tests ─────────────────────────────────────────────
 
-from cron_service.config import _get, _load_config, CONFIG_FILE
+from cron_service.config import CONFIG_FILE, _get, _load_config
 
 
 class TestLoadConfig:
@@ -324,8 +323,7 @@ class TestJob:
 # ── DB tests ────────────────────────────────────────────────
 
 import cron_service.db as db_module
-from cron_service.db import init_db, list_jobs, get_job, create_job, update_job, delete_job, record_run
-from cron_service.models import JobCreate, JobUpdate
+from cron_service.db import create_job, delete_job, get_job, init_db, list_jobs, record_run, update_job
 
 
 def _init_temp_db(tmp_path: Path):
@@ -582,14 +580,14 @@ class TestDeliverOrigin:
 
 # ── Executor extended tests ──────────────────────────────────
 
-import signal
 import subprocess
 import sys
+
 from cron_service.executor import (
-    _get_interpreter,
-    _read_shebang,
-    _kill_process,
     ExecutionResult,
+    _get_interpreter,
+    _kill_process,
+    _read_shebang,
     execute,
 )
 
@@ -727,7 +725,6 @@ class TestKillProcess:
 # ── MCP server tests ────────────────────────────────────────
 
 from cron_service.mcp_server import _fmt_job, _register_tools
-from cron_service.models import Job
 
 
 def _make_job(**overrides):

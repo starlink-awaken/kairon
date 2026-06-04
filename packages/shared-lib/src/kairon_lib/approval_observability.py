@@ -4,6 +4,7 @@
 # status: active
 # ---
 from __future__ import annotations
+
 from typing import Any
 
 """Observability seam for ApprovalRouter audit and EventBus side effects."""

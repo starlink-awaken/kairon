@@ -22,9 +22,9 @@ from __future__ import annotations
 
 import logging
 import os
+from typing import Any
 
 from llm_gateway.provider import LLMProvider, NoneProvider
-from typing import Any
 
 _log = logging.getLogger(__name__)
 

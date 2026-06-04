@@ -17,9 +17,9 @@ from __future__ import annotations
 import logging
 import uuid
 from collections.abc import Callable
+from typing import Any
 
 from engine_core._compat import WorkerHandle
-from typing import Any
 
 _log = logging.getLogger(__name__)
 

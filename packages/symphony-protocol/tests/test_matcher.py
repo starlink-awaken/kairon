@@ -3,7 +3,6 @@
 from unittest.mock import MagicMock
 
 import pytest
-
 from symphony_protocol.matcher import AgentMatcher
 from symphony_protocol.models import AgentCapability, AgentProfile, TaskRequirement
 

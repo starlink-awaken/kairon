@@ -1,4 +1,3 @@
-from typing import Any
 """policydoc: dashboard — 政策文档知识图谱仪表盘"""
 
 import webbrowser

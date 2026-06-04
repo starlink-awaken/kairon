@@ -13,15 +13,6 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
 
-
-class BaseMembrane:  # type: ignore[no-redef]
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        self.logger = logging.getLogger(__name__)
-
-    def _deduct_metabolic_tax(self, amount: float) -> None:
-        _ = amount
-
-
 """
 ---
 Type: Organ

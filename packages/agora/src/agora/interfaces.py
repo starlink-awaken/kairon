@@ -7,8 +7,7 @@ nucleus dependencies removed.
 
 from __future__ import annotations
 
-from typing import Protocol, runtime_checkable
-from typing import Any
+from typing import Any, Protocol, runtime_checkable
 
 
 @runtime_checkable

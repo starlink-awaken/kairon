@@ -8,7 +8,7 @@ import urllib.error
 import urllib.request
 from typing import Any
 
-from engine_core._compat import BaseMembrane, ISynapseWorker, MessageEnvelope, Receipt, SynapseAgentCard
+from engine_core._compat import ISynapseWorker, MessageEnvelope, Receipt, SynapseAgentCard
 from engine_core.agent_daemon_base import AgentDaemonBase
 
 """
@@ -34,14 +34,14 @@ Authority: organs/D-Execution/AGENTS.md
 _log = logging.getLogger(__name__)
 
 
-class GitHubSensorWorker(AgentDaemonBase, ISynapseWorker, BaseMembrane):
+class GitHubSensorWorker(AgentDaemonBase, ISynapseWorker):
     def __init__(
         self,
         agent_id: str,
         persona: str,
         capabilities: list[str],
         repo: str,
-        token: str = None,
+        token: str | None = None,
     ) -> None:
         super().__init__(
             agent_id=agent_id,
@@ -52,9 +52,9 @@ class GitHubSensorWorker(AgentDaemonBase, ISynapseWorker, BaseMembrane):
         )
         self.repo = repo
         self.token = token
-        self._sensor_thread = None
+        self._sensor_thread: threading.Thread | None = None
         self._last_checked_time = time.time()
-        self._seen_events = set()
+        self._seen_events: set[str] = set()
 
     def describe(self) -> SynapseAgentCard:
         return SynapseAgentCard(capabilities=self.capabilities, cost_class="low", mode="active", max_eu_budget=20.0)

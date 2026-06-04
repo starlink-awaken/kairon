@@ -23,9 +23,9 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-AX01-10_holographic_metadata_axio
 import logging
 import math
 import time
+from typing import Any
 
 from eidos.fact_graph import get_graph
-from typing import Any
 
 _log = logging.getLogger(__name__)
 

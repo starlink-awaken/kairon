@@ -21,11 +21,6 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-AX01-10_holographic_metadata_axio
 import logging
 from typing import Any
 
-try:
-    from nucleus.Z_Microkernel.organs.base_membrane import BaseMembrane
-except (ImportError, ModuleNotFoundError):
-    BaseMembrane = object  # type: ignore[misc,assignment]
-
 _log = logging.getLogger(__name__)
 
 
@@ -45,7 +40,7 @@ class _MetaBenchmarkMixin:
     def _test_syntax_required_fields(self) -> bool:
         """测试语法检查：必填字段"""
 
-        class MockReport(BaseMembrane):
+        class MockReport:
             total_declarations = 10
             total_entities = 15
             matched_count = 8
@@ -56,7 +51,7 @@ class _MetaBenchmarkMixin:
     def _test_syntax_optional_fields(self) -> bool:
         """测试语法检查：可选字段"""
 
-        class MockReport(BaseMembrane):
+        class MockReport:
             total_declarations = 10
             total_entities = 15
             matched_count = 8
@@ -68,7 +63,7 @@ class _MetaBenchmarkMixin:
     def _test_logic_matched_unmatched(self) -> bool:
         """测试逻辑检查：matched + unmatched <= total"""
 
-        class MockReport(BaseMembrane):
+        class MockReport:
             total_declarations = 10
             matched_count = 8
             unmatched_doc_count = 2
@@ -79,7 +74,7 @@ class _MetaBenchmarkMixin:
     def _test_logic_alignment_rate(self) -> bool:
         """测试逻辑检查：对齐率计算"""
 
-        class MockReport(BaseMembrane):
+        class MockReport:
             total_declarations = 100
             matched_count = 90
             unmatched_doc_count = 5
@@ -90,7 +85,7 @@ class _MetaBenchmarkMixin:
     def _test_fp_deprecated(self) -> bool:
         """测试误报检测：deprecated"""
 
-        class MockIssue(BaseMembrane):
+        class MockIssue:
             description = "deprecated API"
 
         return self._is_likely_false_positive(MockIssue())
@@ -98,7 +93,7 @@ class _MetaBenchmarkMixin:
     def _test_fp_optional(self) -> bool:
         """测试误报检测：optional"""
 
-        class MockIssue(BaseMembrane):
+        class MockIssue:
             description = "optional parameter"
 
         return self._is_likely_false_positive(MockIssue())

@@ -28,11 +28,6 @@ import time
 import uuid
 from typing import Any
 
-try:
-    from some_module import BaseMembrane
-except ImportError:
-    BaseMembrane = object  # type: ignore[misc,assignment]
-
 _log = logging.getLogger(__name__)
 logger = logging.getLogger(__name__)
 

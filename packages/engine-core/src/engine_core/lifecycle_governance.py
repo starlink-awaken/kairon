@@ -106,7 +106,7 @@ class SwarmGovernance:
             runtime_effect = "reaped"
             self._reap(
                 worker_id,
-                reason=f"governance:{normalized_action.value.lower()}:{reason}",
+                f"governance:{normalized_action.value.lower()}:{reason}",
             )
 
         self._emit(

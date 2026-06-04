@@ -23,13 +23,13 @@ import logging
 import time
 from collections import OrderedDict
 from dataclasses import dataclass, field
+from typing import Any
 
 import numpy as np
 
 from eidos.organs.storage_dal import SQLiteError, SQLiteRelationalProvider
 
 from .graph_store import Entity, GraphStore
-from typing import Any
 
 try:
     from nucleus.Z_Microkernel.organs.meta_protocol.service import MetaProtocolService
@@ -44,14 +44,7 @@ try:
     HAS_SENTENCE_TRANSFORMERS = True
 except ImportError:
     HAS_SENTENCE_TRANSFORMERS = False
-
-    class BaseMembrane:  # type: ignore[no-redef]
-        def __init__(self, *args: Any, **kwargs: Any) -> None:
-            pass
-
-
 _log = logging.getLogger(__name__)
-
 
 class QueryResultCache:
     """TTL-based cache for query results with hot query tracking."""
@@ -150,7 +143,6 @@ class QueryResultCache:
             "tracked_queries": len(self._query_counts),
         }
 
-
 @dataclass
 class SearchResult:
     """A single semantic search result with hybrid scoring."""
@@ -171,7 +163,6 @@ class SearchResult:
             "final_score": self.final_score,
             "explanation": self.explanation,
         }
-
 
 class EmbeddingCache:
     """SQLite-backed embedding cache with LRU eviction and size limits."""
@@ -332,7 +323,6 @@ class EmbeddingCache:
         except SQLiteError:
             return False
 
-
 class EmbeddingManager:
     """Manages text embeddings using sentence-transformers."""
 
@@ -402,7 +392,6 @@ class EmbeddingManager:
 
     def get_stats(self) -> dict[str, object]:
         return {"mock": False, "cached_embeddings": self.cache.get_stats()["memory_entries"]}
-
 
 class SemanticSearchEngine:
     """Semantic search engine with graph context integration."""
@@ -749,7 +738,6 @@ class SemanticSearchEngine:
             "results": [r.to_dict() for r in results],
         }
 
-
 def create_semantic_search_engine(
     db_path: str | None = None, cache_path: str | None = None, **kwargs: Any
 ) -> SemanticSearchEngine:
@@ -757,7 +745,6 @@ def create_semantic_search_engine(
     cache = EmbeddingCache(cache_path=cache_path)
     manager = EmbeddingManager(cache=cache)
     return SemanticSearchEngine(graph_store=store, embedding_manager=manager)
-
 
 def quick_search(query: str, documents: list[str], top_k: int = 5, **kwargs: Any) -> list[SearchResult]:
     """One-off semantic search over a list of strings."""

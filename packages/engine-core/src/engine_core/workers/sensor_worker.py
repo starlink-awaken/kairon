@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 
 from engine_core._compat import (
-    BaseMembrane,
     ISynapseWorker,
     MessageEnvelope,
     Receipt,
@@ -44,7 +43,7 @@ _log = logging.getLogger(__name__)
 HAS_SYNAPSE_REGISTRY = True
 
 
-class SensorWorker(AgentDaemonBase, ISynapseWorker, BaseMembrane):
+class SensorWorker(AgentDaemonBase, ISynapseWorker):
     def __init__(self, agent_id: str, persona: str, capabilities: list[str], watch_dir: str) -> None:
         super().__init__(
             agent_id=agent_id,

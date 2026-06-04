@@ -1,7 +1,6 @@
 """Eidos Pipeline — registered as an Agora MCP service."""
 
 import subprocess
-
 from typing import Any
 
 EIDOS_PIPELINE_SERVICE: dict[str, Any] = {

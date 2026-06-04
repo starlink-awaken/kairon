@@ -176,7 +176,7 @@ class ApiContentExtractor(IContentExtractor):
     def __init__(self, config: ApiExtractionConfig | None = None) -> None:
         self.config = config or ApiExtractionConfig()
 
-    async def extract(self, raw: RawContent) -> list[StructuredKnowledge]:  # noqa: F821
+    async def extract(self, raw: RawContent) -> list[StructuredKnowledge]:
         """从JSON内容中提取结构化知识"""
         # 解析JSON数据
         json_data = self._parse_json(raw)
@@ -191,7 +191,7 @@ class ApiContentExtractor(IContentExtractor):
             return [result]
         return []
 
-    def _parse_json(self, raw: RawContent) -> dict:  # noqa: F821
+    def _parse_json(self, raw: RawContent) -> dict:
         """解析JSON数据"""
         if isinstance(raw.data, bytes):
             try:
@@ -209,7 +209,7 @@ class ApiContentExtractor(IContentExtractor):
         except json.JSONDecodeError as e:
             raise ValueError(f"Invalid JSON data: {e}") from e
 
-    def _extract_array(self, json_data: dict, raw: RawContent) -> list[StructuredKnowledge]:  # noqa: F821
+    def _extract_array(self, json_data: dict, raw: RawContent) -> list[StructuredKnowledge]:
         """从数组中提取多个知识对象"""
         items = []
 
@@ -243,7 +243,7 @@ class ApiContentExtractor(IContentExtractor):
         return results
 
     def _extract_single(
-        self, json_data: dict, raw: RawContent, item_index: int | None = None  # noqa: F821
+        self, json_data: dict, raw: RawContent, item_index: int | None = None
     ) -> StructuredKnowledge | None:
         """从单个JSON对象中提取知识"""
         try:
@@ -279,7 +279,7 @@ class ApiContentExtractor(IContentExtractor):
             # 记录错误但继续处理
             return None
 
-    def _extract_title(self, json_data: dict, raw: RawContent, item_index: int | None = None) -> str:  # noqa: F821
+    def _extract_title(self, json_data: dict, raw: RawContent, item_index: int | None = None) -> str:
         """使用JSONPath提取标题"""
         extractor = JsonPathExtractor(self.config.title_path)
         title = extractor.extract(json_data)
@@ -294,7 +294,7 @@ class ApiContentExtractor(IContentExtractor):
         # 从URI生成标题
         return self._title_from_uri(raw.uri)
 
-    def _extract_body(self, json_data: dict, raw: RawContent) -> str:  # noqa: F821
+    def _extract_body(self, json_data: dict, raw: RawContent) -> str:
         """使用JSONPath提取正文内容"""
         extractor = JsonPathExtractor(self.config.body_path)
         body = extractor.extract(json_data)
@@ -358,7 +358,7 @@ class ApiContentExtractor(IContentExtractor):
         else:
             return str(data)
 
-    def _extract_uri(self, json_data: dict, raw: RawContent) -> str:  # noqa: F821
+    def _extract_uri(self, json_data: dict, raw: RawContent) -> str:
         """使用JSONPath提取URI"""
         if self.config.uri_path:
             extractor = JsonPathExtractor(self.config.uri_path)
@@ -379,7 +379,7 @@ class ApiContentExtractor(IContentExtractor):
         # 使用原始URI
         return raw.uri
 
-    def _extract_metadata(self, json_data: dict, raw: RawContent, item_index: int | None = None) -> dict:  # noqa: F821
+    def _extract_metadata(self, json_data: dict, raw: RawContent, item_index: int | None = None) -> dict:
         """使用JSONPath提取元数据"""
         metadata = {
             "content_type": raw.content_type,

@@ -12,7 +12,6 @@ from kairon_assistant import (
     ParsedCommand,
     SessionManager,
 )
-from kairon_assistant.system_handlers import handle_help
 
 
 class TestKaironAssistantBasic:

@@ -18,7 +18,6 @@ from __future__ import annotations
 import os
 import re
 from abc import ABC, abstractmethod
-from typing import Any
 
 from .base import ExtractionCandidate, ExtractionResult, Extractor, TextSource
 

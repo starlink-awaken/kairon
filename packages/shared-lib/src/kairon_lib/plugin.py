@@ -5,9 +5,9 @@ from __future__ import annotations
 Migrated from agentmesh/packages/toolkit/src/plugin/.
 """
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any, Protocol
-from collections.abc import Callable
 
 # ---------------------------------------------------------------------------
 # Types

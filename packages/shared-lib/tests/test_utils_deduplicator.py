@@ -1,6 +1,5 @@
 """Tests for kairon_lib.utils.deduplicator — ContentDeduplicator."""
 
-import json
 import tempfile
 from pathlib import Path
 

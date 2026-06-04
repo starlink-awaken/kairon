@@ -10,8 +10,9 @@ by providing a generic entity lifecycle manager.
 
 import time
 import uuid
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any
 
 # ---------------------------------------------------------------------------
 # Types

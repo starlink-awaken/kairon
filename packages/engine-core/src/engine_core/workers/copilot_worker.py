@@ -4,7 +4,7 @@ import logging
 import os
 from typing import Any
 
-from engine_core._compat import AgentDaemonBase, BaseMembrane, KnowledgeEnhancementMixin
+from engine_core._compat import AgentDaemonBase, KnowledgeEnhancementMixin
 
 """
 ---
@@ -33,7 +33,7 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-GN01-01_differentiation_protocol.
 _log = logging.getLogger(__name__)
 
 
-class CopilotWorker(KnowledgeEnhancementMixin, AgentDaemonBase, BaseMembrane):
+class CopilotWorker(KnowledgeEnhancementMixin, AgentDaemonBase):
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(agent_id="Copilot", persona="Auditor", capabilities=["audit.*"], **kwargs)
 

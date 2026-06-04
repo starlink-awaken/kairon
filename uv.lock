@@ -2906,6 +2906,16 @@ name = "kairon"
 version = "0.1.0"
 source = { editable = "." }
 
+[package.dev-dependencies]
+dev = [
+    { name = "mypy" },
+]
+
+[package.metadata]
+
+[package.metadata.requires-dev]
+dev = [{ name = "mypy", specifier = ">=2.1.0" }]
+
 [[package]]
 name = "kairon-assistant"
 version = "1.0.0"

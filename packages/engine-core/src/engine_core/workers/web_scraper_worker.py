@@ -5,7 +5,7 @@ import urllib.error
 import urllib.request
 from typing import Any
 
-from engine_core._compat import BaseMembrane, ISynapseWorker, MessageEnvelope, Receipt, SynapseAgentCard
+from engine_core._compat import ISynapseWorker, MessageEnvelope, Receipt, SynapseAgentCard
 from engine_core.agent_daemon_base import AgentDaemonBase
 
 """
@@ -31,7 +31,7 @@ Authority: organs/D-Execution/AGENTS.md
 _log = logging.getLogger(__name__)
 
 
-class WebScraperWorker(AgentDaemonBase, ISynapseWorker, BaseMembrane):
+class WebScraperWorker(AgentDaemonBase, ISynapseWorker):
     def __init__(self, agent_id: str, persona: str, capabilities: list[str]) -> None:
         super().__init__(
             agent_id=agent_id,

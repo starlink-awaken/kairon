@@ -45,11 +45,6 @@ except ImportError:  # pragma: no cover
     aiohttp = None  # type: ignore[assignment]
     AIOHTTP_AVAILABLE = False
 
-    class BaseMembrane:  # type: ignore[no-redef]
-        def __init__(self, *args: Any, **kwargs: Any) -> None:
-            pass
-
-
 HANDLER_DISPATCH_EXCEPTIONS = (KeyError, TypeError, ValueError)
 SLACK_API_EXCEPTIONS: tuple[type[BaseException], ...] = (
     TimeoutError,
@@ -63,7 +58,6 @@ if AIOHTTP_AVAILABLE:
 # =============================================================================
 # GitHub Webhook Handler
 # =============================================================================
-
 
 class GitHubWebhookHandler:
     """
@@ -308,11 +302,9 @@ class GitHubWebhookHandler:
 - @sharedbrain/info - Show context information
 """
 
-
 # =============================================================================
 # Slack Bot Handler
 # =============================================================================
-
 
 class SlackBotHandler:
     """
@@ -549,11 +541,9 @@ class SlackBotHandler:
             logger.exception(f"Error sending Slack ephemeral message: {e}")
             return {"status": "error", "error": str(e)}
 
-
 # =============================================================================
 # Integration Hub (统一集成中心)
 # =============================================================================
-
 
 class IntegrationHub:
     """
@@ -619,10 +609,8 @@ class IntegrationHub:
         else:
             return {"status": "error", "error": f"Handler {source} has no handle method"}
 
-
 # 全局单例
 _global_integration_hub: IntegrationHub | None = None
-
 
 def get_integration_hub() -> IntegrationHub:
     """获取全局集成中心实例"""
@@ -630,7 +618,6 @@ def get_integration_hub() -> IntegrationHub:
     if _global_integration_hub is None:
         _global_integration_hub = IntegrationHub()
     return _global_integration_hub
-
 
 # ========== async 导入支持 ==========
 try:

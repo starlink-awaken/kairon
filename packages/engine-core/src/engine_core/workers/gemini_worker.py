@@ -4,19 +4,8 @@ import logging
 import os
 from typing import Any
 
-from nucleus.Z_Microkernel.organs.agent_daemon_base import (
-    AgentDaemonBase,
-)
+from engine_core._compat import AgentDaemonBase, KnowledgeEnhancementMixin
 
-try:
-    from nucleus.Z_Microkernel.organs.knowledge_enhancement_mixin import KnowledgeEnhancementMixin
-except (ImportError, ModuleNotFoundError):
-
-    class KnowledgeEnhancementMixin:  # type: ignore[no-redef]
-        def enhance_task_with_knowledge(self, *a: Any, **kw: Any) -> None: ...
-
-
-from engine_core._compat import BaseMembrane
 
 """
 ---
@@ -45,7 +34,7 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-GN01-01_differentiation_protocol.
 _log = logging.getLogger(__name__)
 
 
-class GeminiWorker(KnowledgeEnhancementMixin, AgentDaemonBase, BaseMembrane):
+class GeminiWorker(KnowledgeEnhancementMixin, AgentDaemonBase):
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(agent_id="Gemini-Worker", persona="Orchestrator", capabilities=["reasoning.*"], **kwargs)
 

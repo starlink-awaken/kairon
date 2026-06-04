@@ -1,7 +1,6 @@
 """Tests for kairon_lib.competency_tracker — CompetencyLevel, CompetencyTracker."""
 
-import pytest
-from kairon_lib.competency_tracker import CompetencyLevel, CompetencyRecord, CompetencyTracker
+from kairon_lib.competency_tracker import CompetencyLevel, CompetencyTracker
 
 
 class TestCompetencyLevel:

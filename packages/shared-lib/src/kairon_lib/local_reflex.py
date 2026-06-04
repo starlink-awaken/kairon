@@ -8,9 +8,9 @@ Migrated from agentmesh/packages/toolkit/src/local-reflex/.
 import json
 import re
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
-from collections.abc import Callable
 
 
 class OllamaClient:

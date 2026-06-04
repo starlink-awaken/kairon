@@ -28,12 +28,6 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 
 
-class BaseMembrane:
-    def __init__(self, metadata_path: str = "unknown") -> None:
-        self.metadata_path = metadata_path
-        self.organ_name = metadata_path.split("/")[-1].replace(".py", "")
-
-
 @dataclass
 class TaskNode:
     """Represents a single task in the dependency graph."""
@@ -44,7 +38,6 @@ class TaskNode:
     priority: int = 0
     status: str = "pending"
     metadata: dict = field(default_factory=dict)
-
 
 class TaskDAG:
     """Directed acyclic graph for task dependency tracking and scheduling.

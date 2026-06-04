@@ -2,11 +2,10 @@
 
 import pytest
 from kairon_lib.audit_trail import (
-    AuditTrail,
-    AuditEntry,
     AuditSeverity,
-    OperationType,
+    AuditTrail,
     ComplianceReport,
+    OperationType,
 )
 
 

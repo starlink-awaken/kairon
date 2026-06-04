@@ -10,9 +10,9 @@ from __future__ import annotations
 import logging
 import os
 from collections.abc import Callable
+from typing import Any
 
 from .interfaces import BaseVoiceOutput, VoiceConfig, VoiceOutputProvider
-from typing import Any
 
 _log = logging.getLogger(__name__)
 

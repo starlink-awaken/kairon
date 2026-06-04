@@ -16,6 +16,7 @@ from datetime import UTC, datetime
 from enum import Enum
 from typing import Any, Protocol
 
+
 class EnergyLedger(Protocol):
     """Protocol for cross-organ energy ledger."""
     def get_balance(self) -> float: ...

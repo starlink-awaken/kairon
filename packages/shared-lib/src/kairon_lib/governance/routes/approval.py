@@ -22,6 +22,7 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-AX01-10_holographic_metadata_axio
 
 import logging
 from dataclasses import asdict, is_dataclass
+from typing import Any
 
 from kairon_lib.organs.voting.approval_router import (
     STATUS_APPROVED,
@@ -33,7 +34,6 @@ from kairon_lib.organs.voting.approval_router import (
 )
 
 from .base import BaseGovernanceRouter
-from typing import Any
 
 _log = logging.getLogger(__name__)
 _truth_router = None

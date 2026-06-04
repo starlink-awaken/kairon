@@ -20,8 +20,6 @@ from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
-from eidos.base_membrane import BaseMembrane
-
 _log = logging.getLogger(__name__)
 
 
@@ -114,7 +112,7 @@ class MigrationIntegrityError(Exception):
     pass
 
 
-class ContextMigration(BaseMembrane):
+class ContextMigration:
     """
     Context migration protocol for transferring digital twin state across sessions.
 
@@ -126,8 +124,11 @@ class ContextMigration(BaseMembrane):
     """
 
     def __init__(self) -> None:
-        super().__init__(metadata_path="eidos/context_migration.py")
-
+        self.metadata_path = "eidos/context_migration.py"
+        self.organ_name = "context_migration"
+        self.organ_id = f"eidos-{id(self):x}"
+        self._status = "active"
+        self._metabolic_budget = 1000.0
     # --------------------------------------------------------------------------
     # Build migration bundle
     # --------------------------------------------------------------------------

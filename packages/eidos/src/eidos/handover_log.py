@@ -29,13 +29,11 @@ import time
 import uuid
 from typing import Any
 
-from eidos.base_membrane import BaseMembrane
-
 _log = logging.getLogger(__name__)
 logger = logging.getLogger(__name__)
 
 
-class HandoverLog(BaseMembrane):
+class HandoverLog:
     """
     [TRK-013] 联邦节点交接日志
 
@@ -48,7 +46,11 @@ class HandoverLog(BaseMembrane):
         Args:
             db_path: SQLite 数据库路径
         """
-        super().__init__(metadata_path="eidos/handover_log.py")
+        self.metadata_path = "eidos/handover_log.py"
+        self.organ_name = "handover_log"
+        self.organ_id = f"eidos-{id(self):x}"
+        self._status = "active"
+        self._metabolic_budget = 1000.0
         self.db_path = db_path
         # 处理 :memory: 特殊路径
         if db_path != ":memory:":

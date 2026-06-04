@@ -75,8 +75,8 @@ class Conflict:
     existing_data: dict[str, Any]
     new_data: dict[str, Any]
     resolved: bool = False
-    resolution: str = None
-    timestamp: float = None
+    resolution: str | None = None
+    timestamp: float | None = None
 
 
 @dataclass
@@ -91,7 +91,7 @@ class SyncResult:
     conflicts_remaining: int
     entities_synced: int
     relations_synced: int
-    timestamp: float = None
+    timestamp: float | None = None
     consensus_achieved: bool = False  # RAFT 共识达成标志
 
 
@@ -124,6 +124,7 @@ class SyncEngine:
         self.total_syncs = 0
         self.total_conflicts = 0
         self.total_resolutions = 0
+        self.conflicts_resolved = 0
 
         # RAFT 定时器
         self.election_timeout = 5.0
@@ -244,14 +245,9 @@ class SyncEngine:
         self.total_conflicts += len(conflicts)
 
         # 解决冲突
-        for conflict in conflicts:
-            resolution = self._resolve_conflict(conflict, conflict_resolution)
-            if resolution:
-                conflicts_resolved += 1
-                self.total_resolutions += 1
-                self._save_conflict(conflict)
-            else:
-                conflicts_remaining += 1
+        self._resolve_conflicts(conflicts, knowledge, conflict_resolution)
+        conflicts_resolved = sum(1 for c in conflicts if c.resolved)
+        conflicts_remaining = len(conflicts) - conflicts_resolved
 
         # 同步知识（模拟）
         entities = knowledge.get("entities", [])
@@ -377,9 +373,9 @@ class SyncEngine:
 
         return {
             "total": len(results),
-            "successful": sum(1 for r in results if r.status == "success"),
-            "partial": sum(1 for r in results if r.status == "partial"),
-            "failed": sum(1 for r in results if r.status == "failed"),
+            "successful": sum(1 for r in results if r["status"] == "success"),
+            "partial": sum(1 for r in results if r["status"] == "partial"),
+            "failed": sum(1 for r in results if r["status"] == "failed"),
             "results": results,
         }
 
@@ -396,7 +392,7 @@ class SyncEngine:
         """
         import uuid
 
-        conflicts = []
+        conflicts: list[Conflict] = []
 
         # 检查实体冲突
         if "entities" in new_knowledge:

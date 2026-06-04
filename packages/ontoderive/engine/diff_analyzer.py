@@ -99,7 +99,7 @@ class DiffAnalyzer:
 
     def analyze(self, doc_ast_path: Path, impl_manifest_path: Path) -> DiffReport:
         """分析文档和实现的差异"""
-        _log.info("🔍 分析文档 - 实现差异...")  # noqa: F821
+        _log.info("🔍 分析文档 - 实现差异...")
 
         # 加载数据
         with open(doc_ast_path, encoding="utf-8") as f:
@@ -113,7 +113,7 @@ class DiffAnalyzer:
         code_entities = self._build_code_index(impl_data)
 
         # 执行匹配
-        _log.info("  执行匹配...")  # noqa: F821
+        _log.info("  执行匹配...")
         for _doc_id, doc_decl in doc_declarations.items():
             match = self._find_match(doc_decl, code_entities)
             self.matches.append(match)
@@ -145,12 +145,12 @@ class DiffAnalyzer:
             recommendations=recommendations,
         )
 
-        _log.info("✅ 分析完成:")  # noqa: F821
-        _log.info("  文档声明：{report.total_declarations}")  # noqa: F821
-        _log.info("  代码实体：{report.total_entities}")  # noqa: F821
-        _log.info("  已匹配：{report.matched_count}")  # noqa: F821
-        _log.info("  未匹配文档：{report.unmatched_doc_count}")  # noqa: F821
-        _log.info("  差异分布：A={diff_type_a}, B={diff_type_b}, C={diff_type_c}, D={diff_type_d}")  # noqa: F821
+        _log.info("✅ 分析完成:")
+        _log.info("  文档声明：{report.total_declarations}")
+        _log.info("  代码实体：{report.total_entities}")
+        _log.info("  已匹配：{report.matched_count}")
+        _log.info("  未匹配文档：{report.unmatched_doc_count}")
+        _log.info("  差异分布：A={diff_type_a}, B={diff_type_b}, C={diff_type_c}, D={diff_type_d}")
 
         return report
 
@@ -407,4 +407,4 @@ class DiffAnalyzer:
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
-        _log.info("✅ 差异报告已导出：{output_path}")  # noqa: F821
+        _log.info("✅ 差异报告已导出：{output_path}")

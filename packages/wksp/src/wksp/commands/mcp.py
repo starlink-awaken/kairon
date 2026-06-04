@@ -1,4 +1,5 @@
 from typing import Any
+
 """wksp.commands.mcp — workspace MCP server 命令。"""
 
 from __future__ import annotations

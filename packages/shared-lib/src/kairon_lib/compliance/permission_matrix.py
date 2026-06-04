@@ -230,7 +230,7 @@ class PermissionMatrix:
         """Get database connection context manager."""
         conn = sqlite3.connect(self._db_path, check_same_thread=False)
         conn.row_factory = sqlite3.Row
-        return managed_connection(conn)  # noqa: F821
+        return managed_connection(conn)
 
     def _init_db(self) -> None:
         with self._lock, self._connect() as conn:

@@ -38,12 +38,11 @@ import logging
 import sqlite3
 import threading
 import uuid
+from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from enum import StrEnum
 from pathlib import Path
-from collections.abc import Generator
-from contextlib import AbstractContextManager
 from typing import Any
 
 from kairon_lib.utils.sqlite_utils import managed_connection

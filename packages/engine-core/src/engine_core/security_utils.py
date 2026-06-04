@@ -4,8 +4,7 @@ import ast
 import io
 from collections.abc import Callable
 from types import ModuleType
-from typing import TextIO
-from typing import Any
+from typing import Any, TextIO
 
 # Safe builtins for code execution
 # Excludes dangerous functions: __import__, open, eval, exec, __loader__, __spec__

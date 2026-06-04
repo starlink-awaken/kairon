@@ -1,9 +1,9 @@
 """Agent Memory System — 3-tier memory (working, project, org)."""
 
 import time
-from typing import Any
 from collections import OrderedDict
 from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass

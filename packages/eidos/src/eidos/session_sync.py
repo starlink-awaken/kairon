@@ -22,8 +22,6 @@ from pathlib import Path
 from threading import Lock
 from typing import TYPE_CHECKING, Any
 
-from eidos.base_membrane import BaseMembrane
-
 _log = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
@@ -96,7 +94,7 @@ class SessionContinuityProjection:
         return asdict(self)
 
 
-class SessionSync(BaseMembrane):
+class SessionSync:
     """
     Multi-device session synchronization manager.
 
@@ -113,7 +111,11 @@ class SessionSync(BaseMembrane):
         persist: bool = True,
         conflict_strategy: Any | None = None,
     ) -> None:
-        super().__init__(metadata_path="eidos/session_sync.py")
+        self.metadata_path = "eidos/session_sync.py"
+        self.organ_name = "session_sync"
+        self.organ_id = f"eidos-{id(self):x}"
+        self._status = "active"
+        self._metabolic_budget = 1000.0
         self._registry_path = Path(registry_path)
         self._persist = persist
         self._devices: dict[str, DeviceInfo] = {}

@@ -240,7 +240,7 @@ class LanceDBBackend(VectorStoreBackend):
         table = self._get_table()
         return table.count_rows()
 
-    def health_check(self) -> dict[str, Any]:  # noqa: F821
+    def health_check(self) -> dict[str, Any]:
         """Check backend health."""
         base_status = super().health_check()
         if base_status["status"] == "healthy":

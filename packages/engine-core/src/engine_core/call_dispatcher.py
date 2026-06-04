@@ -34,8 +34,7 @@ This is infrastructure plumbing, not domain logic.
 
 import logging
 import math
-from typing import TYPE_CHECKING, Protocol, TypedDict
-from typing import Any
+from typing import TYPE_CHECKING, Any, Protocol, TypedDict
 
 if TYPE_CHECKING:
     from nucleus.Z_Spore.interfaces.swarm import (  # type: ignore[import]

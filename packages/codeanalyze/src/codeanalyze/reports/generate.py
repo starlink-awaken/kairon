@@ -1,6 +1,5 @@
 """报告生成与合并 — 跨工具分析结果汇总，含 CRG、GitNexus、Graphify 数据。"""
 
-from typing import Any
 import os
 import re
 from pathlib import Path

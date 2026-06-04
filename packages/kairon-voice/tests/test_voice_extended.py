@@ -2,13 +2,9 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 # ── Voice Recognition ───────────────────────────────────────
-
 from kairon_voice.voice_recognition import (
     LanguageCode,
     RecognitionConfig,
@@ -107,8 +103,8 @@ class TestVoiceIntentParser:
 
 # ── Voice Intent Digestor ──────────────────────────────────
 
-from kairon_voice.voice_intent_digestor import VoiceIntentDigestor, _voice_context_snapshot
 from kairon_voice.interfaces.voice_io import VoiceResult
+from kairon_voice.voice_intent_digestor import VoiceIntentDigestor, _voice_context_snapshot
 
 
 class TestVoiceContextSnapshot:

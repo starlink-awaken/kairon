@@ -4,9 +4,8 @@ import hashlib
 import json
 import logging
 from pathlib import Path
-from urllib.request import Request, urlopen
-
 from typing import Any
+from urllib.request import Request, urlopen
 
 _log = logging.getLogger(__name__)
 DEFAULT_SB = "http://localhost:7421"

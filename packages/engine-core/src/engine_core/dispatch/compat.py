@@ -259,9 +259,7 @@ class ExecutionCompatHelper:
         if swarm is None:
             try:
                 # TODO-migrate: from nucleus.Z_Microkernel.infrastructure.bos_daemon.swarm import get_lifecycle_manager
-                get_lifecycle_manager = None
-
-                swarm = get_lifecycle_manager()
+                swarm = None
             except (ImportError, AttributeError, RuntimeError, TypeError, ValueError):
                 swarm = None
 

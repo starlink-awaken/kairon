@@ -25,9 +25,9 @@ import logging
 import os
 import subprocess
 from datetime import datetime
+from typing import Any
 
 from eidos.fact_graph import get_graph
-from typing import Any
 
 _log = logging.getLogger(__name__)
 

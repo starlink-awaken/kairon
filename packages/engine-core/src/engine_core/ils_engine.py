@@ -88,7 +88,7 @@ class ImmuneLawSystem(ShieldMixin, WitnessMixin):  # type: ignore[misc]
         self.event_logger = event_logger or DefaultEventLogger()
 
         # ILS state
-        self._root_dir = ProjectPaths.ROOT
+        self._root_dir = Path(str(ProjectPaths.ROOT))
         self.name = "ILS"
         self.version = "1.1"
         self.initialized_at = datetime.now()

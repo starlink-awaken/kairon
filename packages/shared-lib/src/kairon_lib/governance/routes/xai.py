@@ -23,9 +23,9 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-AX01-10_holographic_metadata_axio
 import importlib
 import inspect
 import logging
+from typing import Any
 
 from .base import BaseGovernanceRouter
-from typing import Any
 
 _log = logging.getLogger(__name__)
 

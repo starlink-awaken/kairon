@@ -34,18 +34,6 @@ _log = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # CoreService stub removed — was lazy import with fallback
-class BaseMembrane:  # type: ignore[no-redef]
-    """Minimal stub when nucleus is absent."""
-
-    def __init__(self, metadata_path: str = "unknown") -> None:
-        self.metadata_path = metadata_path
-        self.organ_name = metadata_path.split("/")[-1].replace(".py", "")
-        self.organ_id = "stub-id"
-        self._status = "active"
-
-    @property
-    def status(self) -> str:
-        return getattr(self, "_status", "inactive")
 
 
 # ───────────────────────────────────────────────────────────────────────────
@@ -98,9 +86,10 @@ class PossessionMultiSession:
     """
 
     def __init__(self) -> None:
-        super().__init__(
-            metadata_path="D-Execution/organs/engine/possession_multi_session.py",
-        )
+        self.metadata_path = "D-Execution/organs/engine/possession_multi_session.py"
+        self.organ_name = "possession_multi_session"
+        self.organ_id = "stub-id"
+        self._status = "active"
         self._lock = threading.Lock()
         self._sessions: dict[str, PossessionSession] = {}
         self._active_session_id: str | None = None

@@ -77,7 +77,7 @@ class RFC:
     tags: list[str] = field(default_factory=list)
 
     @classmethod
-    def create(cls, title: str, author: str, body: str = "") -> RFC:  # noqa: F821
+    def create(cls, title: str, author: str, body: str = "") -> RFC:
         """Factory: create a new RFC in DRAFT state with a generated ID."""
         return cls(
             rfc_id=f"RFC-{uuid.uuid4().hex[:8]}",

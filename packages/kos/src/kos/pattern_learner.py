@@ -12,7 +12,6 @@ import subprocess
 import textwrap
 from collections import Counter
 from datetime import datetime
-from typing import Optional
 
 
 class Pattern:
@@ -47,7 +46,7 @@ class PatternLearner:
         for entry in iris_data:
             ts = entry.get("time", entry.get("timestamp", ""))
             try:
-                dt: Optional[datetime] = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                dt: datetime | None = datetime.fromisoformat(ts.replace("Z", "+00:00"))
                 assert dt is not None
                 hour_counts[dt.hour] += 1
                 weekday_counts[dt.weekday()] += 1

@@ -1,4 +1,3 @@
-from typing import Any
 """CLI commands: dashboard"""
 
 import webbrowser

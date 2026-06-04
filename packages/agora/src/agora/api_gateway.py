@@ -70,18 +70,6 @@ from aiohttp import web  # pyright: ignore[reportMissingImports]
 
 from .interfaces import IOAuth2Server, IRateLimiter  # Protocol checks
 
-try:
-    from nucleus.Z_Microkernel.organs.base_membrane import (
-        BaseMembrane,  # pyright: ignore[reportAssignmentType]
-    )
-except ImportError:
-
-    class BaseMembrane:
-        def __init__(self, *args: Any, **kwargs: Any) -> None:
-            pass
-
-
-# Tracing module is optional; if unavailable, tracing functions are no-ops.
 _Tracing = cast(Any, None)
 _clear_trace_impl = None
 _get_current_trace_impl = None
@@ -90,24 +78,20 @@ _TRACING_AVAILABLE = False
 
 TraceContext = cast(Any, _Tracing)
 
-
 def get_current_trace() -> Any | None:
     if _get_current_trace_impl is None:
         return None
     return _get_current_trace_impl()
-
 
 def start_trace(name: str = "root") -> Any | None:
     if _start_trace_impl is None:
         return None
     return _start_trace_impl(name=name)
 
-
 def clear_trace() -> None:
     if _clear_trace_impl is None:
         return None
     _clear_trace_impl()
-
 
 # =============================================================================
 # Constants
@@ -138,7 +122,6 @@ RATE_LIMIT_RETRY_AFTER: int = 60
 # _DEFAULT_CLUSTER_KEY intentionally removed — hard-coded fallback secrets
 # are a security anti-pattern.  Use _get_cluster_key() instead.
 
-
 def _get_cluster_key() -> str:
     """Return the cluster key from the environment.
 
@@ -154,10 +137,8 @@ def _get_cluster_key() -> str:
         )
     return key
 
-
 # Path-parameter allowlist pattern — blocks path-traversal and injection chars.
 _PATH_PARAM_RE = re.compile(r"^[A-Za-z0-9_\-./]+$")
-
 
 def _sanitize_path_param(value: str) -> str:
     """Validate and return a path parameter value against the allowlist pattern.
@@ -181,16 +162,13 @@ def _sanitize_path_param(value: str) -> str:
         )
     return value
 
-
 def _supports_oauth2_server(candidate: Any) -> bool:
     """Best-effort structural check used only for runtime warnings."""
     return all(callable(getattr(candidate, attr, None)) for attr in ("validate_token", "issue_token", "list_clients"))
 
-
 def _supports_rate_limiter(candidate: Any) -> bool:
     """Best-effort structural check used only for runtime warnings."""
     return callable(getattr(candidate, "is_allowed", None))
-
 
 from .api_docs_mixin import _APIDocsMixin
 from .api_handlers_mixin import _APIHandlersMixin
@@ -421,9 +399,7 @@ class APIGateway(_APIRoutingMixin, _APIHandlersMixin, _APIDocsMixin):
         """Return the underlying aiohttp Application."""
         return self._app
 
-
 _global_api_gateway: APIGateway | None = None
-
 
 def get_api_gateway(
     oauth2_server: IOAuth2Server | None = None,

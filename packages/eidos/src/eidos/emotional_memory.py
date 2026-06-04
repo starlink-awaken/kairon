@@ -36,15 +36,6 @@ from datetime import UTC, datetime
 from enum import StrEnum
 from typing import Any
 
-
-class BaseMembrane:  # type: ignore[no-redef]
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        pass
-
-    def validate_internal_state(self) -> bool:
-        return True
-
-
 from storage_dal import SQLiteError, SQLiteRelationalProvider
 
 _log = logging.getLogger(__name__)

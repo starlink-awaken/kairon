@@ -5,6 +5,9 @@ Orchestrates routing, task management, context, scheduling, and event bus.
 
 from __future__ import annotations
 
+# Module-level singleton references — typed Any because the actual singletons
+# may or may not be exported by their respective modules at runtime.
+import importlib as _importlib
 import logging
 import time
 from collections.abc import Callable
@@ -16,9 +19,6 @@ from agora.scheduler import scheduler
 from agora.task_manager import task_manager
 from agora.types import Agent, AgentMessage, GatewayConfig, Task
 
-# Module-level singleton references — typed Any because the actual singletons
-# may or may not be exported by their respective modules at runtime.
-import importlib as _importlib
 gateway_agent_registry: Any = _importlib.import_module("agora.agent_registry").gateway_agent_registry
 gateway_event_bus: Any = _importlib.import_module("agora.event_bus").gateway_event_bus
 gateway_pipeline: Any = _importlib.import_module("agora.pipeline").gateway_pipeline

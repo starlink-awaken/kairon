@@ -8,8 +8,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from eidos.base_membrane import BaseMembrane
-
 """
 ---
 Type: Organ
@@ -66,12 +64,15 @@ class TransferResult:
     timestamp: float = None
 
 
-class TransferOrchestrator(BaseMembrane):
+class TransferOrchestrator:
     """迁移编排器"""
 
     def __init__(self, metadata_path: str) -> None:
-        super().__init__(metadata_path=metadata_path)
-
+        self.metadata_path = metadata_path
+        self.organ_name = metadata_path.split("/")[-1].replace(".py", "")
+        self.organ_id = f"eidos-{id(self):x}"
+        self._status = "active"
+        self._metabolic_budget = 1000.0
         # 任务队列
         self.tasks: dict[str, TransferTask] = {}
 

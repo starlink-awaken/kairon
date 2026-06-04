@@ -166,13 +166,13 @@ class RequirementManager:
         )
 
         self.requirements[req_id] = req
-        _log.info("✅ 需求已创建: {req_id} - {title}")  # noqa: F821
+        _log.info("✅ 需求已创建: {req_id} - {title}")
         return req
 
     def update_requirement(self, req_id: str, **kwargs: object) -> Requirement | None:
         """更新需求"""
         if req_id not in self.requirements:
-            _log.info("❌ 需求不存在: {req_id}")  # noqa: F821
+            _log.info("❌ 需求不存在: {req_id}")
             return None
 
         req = self.requirements[req_id]
@@ -183,13 +183,13 @@ class RequirementManager:
                 setattr(req, key, value)
 
         req.updated_at = datetime.now().timestamp()
-        _log.info("✅ 需求已更新: {req_id}")  # noqa: F821
+        _log.info("✅ 需求已更新: {req_id}")
         return req
 
     def link_to_code(self, req_id: str, code_entity: str) -> bool:
         """关联需求到代码实体"""
         if req_id not in self.requirements:
-            _log.info("❌ 需求不存在: {req_id}")  # noqa: F821
+            _log.info("❌ 需求不存在: {req_id}")
             return False
 
         req = self.requirements[req_id]
@@ -197,13 +197,13 @@ class RequirementManager:
             req.related_code_entities.append(code_entity)
             req.updated_at = datetime.now().timestamp()
 
-        _log.info("✅ 需求 {req_id} 关联到代码: {code_entity}")  # noqa: F821
+        _log.info("✅ 需求 {req_id} 关联到代码: {code_entity}")
         return True
 
     def link_to_test(self, req_id: str, test_id: str) -> bool:
         """关联需求到测试"""
         if req_id not in self.requirements:
-            _log.info("❌ 需求不存在: {req_id}")  # noqa: F821
+            _log.info("❌ 需求不存在: {req_id}")
             return False
 
         req = self.requirements[req_id]
@@ -211,20 +211,20 @@ class RequirementManager:
             req.related_tests.append(test_id)
             req.updated_at = datetime.now().timestamp()
 
-        _log.info("✅ 需求 {req_id} 关联到测试: {test_id}")  # noqa: F821
+        _log.info("✅ 需求 {req_id} 关联到测试: {test_id}")
         return True
 
     def change_status(self, req_id: str, new_status: RequirementStatus) -> Requirement | None:
         """变更需求状态"""
         if req_id not in self.requirements:
-            _log.info("❌ 需求不存在: {req_id}")  # noqa: F821
+            _log.info("❌ 需求不存在: {req_id}")
             return None
 
         req = self.requirements[req_id]
         req.status = new_status
         req.updated_at = datetime.now().timestamp()
 
-        _log.info("✅ 需求 {req_id} 状态变更: {old_status.value} → {new_status.value}")  # noqa: F821
+        _log.info("✅ 需求 {req_id} 状态变更: {old_status.value} → {new_status.value}")
         return req
 
     def analyze_impact(self, req_id: str) -> dict:
@@ -308,7 +308,7 @@ class RequirementManager:
                 self.requirements[req_id] = req
                 reqs.append(req)
 
-        _log.info("✅ 从 {md_file.name} 提取了 {len(reqs)} 个需求")  # noqa: F821
+        _log.info("✅ 从 {md_file.name} 提取了 {len(reqs)} 个需求")
         return reqs
 
     def export_json(self, output_path: Path) -> None:
@@ -348,7 +348,7 @@ class RequirementManager:
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
-        _log.info("✅ 需求已导出: {output_path}")  # noqa: F821
+        _log.info("✅ 需求已导出: {output_path}")
 
     def _generate_req_id(self) -> str:
         """生成需求 ID"""
@@ -386,7 +386,7 @@ class RequirementManager:
                         related_tests=req_data.get("related_tests", []),
                     )
                     self.requirements[req.id] = req
-                _log.info("✅ 已加载 {len(req_list)} 个需求")  # noqa: F821
+                _log.info("✅ 已加载 {len(req_list)} 个需求")
 
     def save_requirements(self) -> None:
         """保存需求"""

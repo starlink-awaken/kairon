@@ -36,7 +36,6 @@ import logging
 import re
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
 
 try:
     from nucleus.Z_Microkernel.infrastructure.oracle.inference_oracle import InferenceOracle
@@ -46,18 +45,11 @@ except (ImportError, ModuleNotFoundError):
         @classmethod
         def get_instance(cls) -> InferenceOracle:
             raise ImportError("nucleus.Z_Microkernel.infrastructure.oracle.inference_oracle is unavailable")
-
-    class BaseMembrane:  # type: ignore[no-redef]
-        def __init__(self, *args: Any, **kwargs: Any) -> None:
-            pass
-
-
 _log = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Enums & Data Classes
 # ---------------------------------------------------------------------------
-
 
 class ComplexityLevel(Enum):
     """Intent complexity tier used to drive execution routing."""
@@ -65,7 +57,6 @@ class ComplexityLevel(Enum):
     SIMPLE = "SIMPLE"
     MODERATE = "MODERATE"
     COMPLEX = "COMPLEX"
-
 
 @dataclass
 class ClassificationResult:
@@ -79,7 +70,6 @@ class ClassificationResult:
 
     def __str__(self) -> str:
         return f"{self.level.value} (confidence: {self.confidence:.2f}) — {self.rationale}"
-
 
 # ---------------------------------------------------------------------------
 # Heuristic Rule Sets (Enhanced v1.1)
@@ -231,7 +221,6 @@ _DEFAULT_ROLES: dict[ComplexityLevel, list[str]] = {
 # ---------------------------------------------------------------------------
 # IntentClassifier
 # ---------------------------------------------------------------------------
-
 
 class IntentClassifier:
     """

@@ -2,6 +2,7 @@
 
 import math
 import time
+
 import pytest
 from eidos.forgetting_curve_engine import ForgettingCurveEngine, MemoryItem
 

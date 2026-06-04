@@ -4,8 +4,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Protocol
-from typing import Any
+from typing import Any, Protocol
 
 _log = logging.getLogger(__name__)
 

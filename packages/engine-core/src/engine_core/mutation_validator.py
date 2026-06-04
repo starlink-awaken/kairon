@@ -15,13 +15,6 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any
-
-
-class BaseMembrane:  # type: ignore[no-redef]
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        pass
-
 
 # =============================================================================
 # 0. 形式化摘要 ≝
@@ -47,7 +40,6 @@ Constraint: "[!!] MUTATION_SAFEGUARD"
 # 职责: 物理执行 PT01 协议中的“影子验证”，确保基因突变不会导致系统发育畸形。
 
 _log = logging.getLogger(__name__)
-
 
 class MutationValidator:
     def __init__(self, root_dir: str | Path | None = None) -> None:
@@ -103,7 +95,6 @@ class MutationValidator:
                 return False, result.stderr
         except (subprocess.CalledProcessError, OSError) as e:
             return False, str(e)
-
 
 _log = logging.getLogger(__name__)
 

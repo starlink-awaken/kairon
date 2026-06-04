@@ -9,7 +9,6 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import Any, cast
 
 from engine_core._compat import (
-    BaseMembrane,
     InferenceOracle,
     ISynapseWorker,
     MessageEnvelope,
@@ -44,7 +43,7 @@ _log = logging.getLogger(__name__)
 HAS_SYNAPSE_REGISTRY = True
 
 
-class InternalLlmWorker(KnowledgeEnhancementMixin, AgentDaemonBase, ISynapseWorker, BaseMembrane):
+class InternalLlmWorker(KnowledgeEnhancementMixin, AgentDaemonBase, ISynapseWorker):
     def __init__(self, agent_id: str, persona: str, capabilities: list[str]) -> None:
         super().__init__(
             agent_id=agent_id,

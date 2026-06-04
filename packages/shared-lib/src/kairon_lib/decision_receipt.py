@@ -93,8 +93,8 @@ class DecisionReceiptManager:
         change_summary: str,
         compliance_ref: str = "",
     ) -> DecisionReceipt:
-        if decision not in _VALID_DECISIONS:  # noqa: F821
-            raise ValueError(f"Invalid decision '{decision}'. Must be one of: {', '.join(sorted(_VALID_DECISIONS))}")  # noqa: F821
+        if decision not in _VALID_DECISIONS:
+            raise ValueError(f"Invalid decision '{decision}'. Must be one of: {', '.join(sorted(_VALID_DECISIONS))}")
 
         receipt = DecisionReceipt(
             receipt_id=str(uuid.uuid4()),

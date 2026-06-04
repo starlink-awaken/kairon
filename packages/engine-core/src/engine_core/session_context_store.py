@@ -29,12 +29,6 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 
 
-class BaseMembrane:
-    def __init__(self, metadata_path: str = "unknown") -> None:
-        self.metadata_path = metadata_path
-        self.organ_name = metadata_path.split("/")[-1].replace(".py", "")
-
-
 @dataclass
 class SessionContext:
     """Represents a single session's context data."""
@@ -44,7 +38,6 @@ class SessionContext:
     data: dict = field(default_factory=dict)
     parent_session: str | None = None
     tags: list[str] = field(default_factory=list)
-
 
 class SessionContextStore:
     """In-memory store for cross-session context with lineage tracking,

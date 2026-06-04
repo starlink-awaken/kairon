@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from engine_core._compat import BaseMembrane, _log
+from engine_core._compat import _log
 
 """
 ---
@@ -18,13 +18,17 @@ import importlib
 from typing import Any
 
 
-class MembraneGateway(BaseMembrane):
+class MembraneGateway:
     def __init__(self) -> None:
         # 延迟加载依赖以确保微内核启动顺序
-        super().__init__()
+        self.metadata_path = "eidos/unknown"
+        self.organ_name = "unknown"
+        self.organ_id = f"eidos-{id(self):x}"
+        self._status = "active"
+        self._metabolic_budget = 1000.0
         self._ledger = None
         self._toolkit = None
-        self.subscribers = {}
+        self.subscribers: dict[str, list[str]] = {}
 
     def _get_toolkit(self) -> Any | None:
         if self._toolkit is None:
@@ -69,7 +73,9 @@ class MembraneGateway(BaseMembrane):
         self._charge_metabolic_tax(uri)
 
         # 法律审计
-        meta = self._get_toolkit().get_node_metadata(target_node_rel)
+        meta = self._get_toolkit()
+        if meta is not None:
+            meta = meta.get_node_metadata(target_node_rel)
         if not self._audit_call(target_node_rel, meta):
             return None
 

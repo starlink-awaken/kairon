@@ -18,7 +18,7 @@ import json
 import logging
 import os
 import urllib.request
-from typing import Any, cast
+from typing import Any
 
 from iris.base import BaseConnector, SyncResult
 from iris.config import IrisConfig

@@ -31,8 +31,7 @@ from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from enum import StrEnum
-from typing import Protocol, TypedDict
-from typing import Any
+from typing import Any, Protocol, TypedDict
 
 
 class TraceContextProtocol(Protocol):

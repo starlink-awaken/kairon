@@ -4,9 +4,9 @@ import asyncio
 
 import pytest
 from kairon_lib.utils.concurrent import (
+    ConcurrencyManager,
     ConcurrentBatchResult,
     ConcurrentResult,
-    ConcurrencyManager,
     ProgressTracker,
     gather_with_concurrency,
 )

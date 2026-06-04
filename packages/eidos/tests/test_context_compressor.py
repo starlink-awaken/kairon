@@ -1,11 +1,12 @@
 """Tests for ContextCompressor — hot/warm/cold compression."""
 
 import time
+
 from eidos.context_compressor import (
+    _SUMMARY_TAG,
     ContextCompressor,
     MemoryEntry,
     _estimate_tokens,
-    _SUMMARY_TAG,
 )
 
 

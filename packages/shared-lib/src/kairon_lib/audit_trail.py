@@ -55,8 +55,9 @@ class DecisionResult:
     metadata: dict[str, object] = field(default_factory=dict)
 
 
-from nucleus.Z_Microkernel.utilities.sqlite_utils import managed_connection
 from typing import Any
+
+from nucleus.Z_Microkernel.utilities.sqlite_utils import managed_connection
 
 _log = logging.getLogger(__name__)
 

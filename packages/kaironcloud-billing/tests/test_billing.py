@@ -6,13 +6,12 @@ import json
 import tempfile
 from datetime import UTC, datetime
 from decimal import Decimal
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock
 
 import pytest
 
 # ── Tenant Models ───────────────────────────────────────────
-
-from kaironcloud_billing.tenant_models import Tenant, TenantTier, ResourceQuota
+from kaironcloud_billing.tenant_models import ResourceQuota, Tenant, TenantTier
 
 
 class TestTenantTier:
@@ -128,8 +127,7 @@ class TestTenant:
 # ── Bill Generator ──────────────────────────────────────────
 
 from kaironcloud_billing.bill_generator import BillGenerator
-from kaironcloud_billing.models import Bill, BillLineItem, BillStatus, TierType, UsageReport
-from kaironcloud_billing.pricing import PricingModel
+from kaironcloud_billing.models import BillStatus, TierType, UsageReport
 from kaironcloud_billing.usage_tracker import UsageTracker
 
 

@@ -59,3 +59,8 @@ quote-style = "double"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/kairon"]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.1.0",
+]

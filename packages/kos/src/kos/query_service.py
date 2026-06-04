@@ -11,11 +11,10 @@ import logging
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
-from typing import TYPE_CHECKING, Protocol, cast
+from typing import TYPE_CHECKING, Any, Protocol, cast
 
 import numpy as np
 import numpy.typing as npt
-from typing import Any
 
 if TYPE_CHECKING:
     from eidos.memory_graph import MemoryGraph

@@ -56,7 +56,7 @@ except ImportError as exc:
         source_file: str = ""
 
     raise RuntimeError(
-        "TreeSitterExtractor requires BaseMembrane; refusing to degrade silently to an in-module stub."
+        "TreeSitterExtractor requires CoreService; refusing to degrade silently to an in-module stub."
     ) from exc
 
 

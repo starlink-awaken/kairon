@@ -39,7 +39,7 @@ import asyncio
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from enum import StrEnum
 from typing import Any
 
@@ -313,7 +313,7 @@ class FamilyHiveNetwork:
             try:
                 await self.broadcast(
                     "heartbeat",
-                    {"node_id": self.node_id, "timestamp": datetime.now(timezone.utc).isoformat(), "role": self.role.value},
+                    {"node_id": self.node_id, "timestamp": datetime.now(UTC).isoformat(), "role": self.role.value},
                 )
                 self._stats["heartbeats_sent"] += 1
             except (OSError, ConnectionError, TimeoutError) as e:

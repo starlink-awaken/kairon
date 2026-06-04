@@ -29,12 +29,6 @@ from dataclasses import dataclass
 from typing import Any
 
 
-class BaseMembrane:
-    def __init__(self, metadata_path: str = "unknown") -> None:
-        self.metadata_path = metadata_path
-        self.organ_name = metadata_path.split("/")[-1].replace(".py", "")
-
-
 @dataclass
 class TaskSLO:
     """Service-level objective for a task."""
@@ -44,7 +38,6 @@ class TaskSLO:
     priority: int
     preemptible: bool = False
 
-
 @dataclass
 class ScheduleResult:
     """Result of scheduling a task."""
@@ -53,7 +46,6 @@ class ScheduleResult:
     assigned_at: float
     estimated_completion: float
     slo_met: bool
-
 
 class SLOScheduler:
     """Scheduler that respects service-level objectives (deadline + priority).

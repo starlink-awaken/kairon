@@ -6,7 +6,7 @@ import re
 import subprocess
 from typing import Any
 
-from engine_core._compat import AgentDaemonBase, BaseMembrane
+from engine_core._compat import AgentDaemonBase
 
 """
 ---
@@ -35,7 +35,7 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-GN01-01_differentiation_protocol.
 _log = logging.getLogger(__name__)
 
 
-class OpenCodeWorker(AgentDaemonBase, BaseMembrane):
+class OpenCodeWorker(AgentDaemonBase):
     """真·侦察兵：执行物理磁盘扫描并生成结构化报告"""
 
     def __init__(self, **kwargs: Any) -> None:

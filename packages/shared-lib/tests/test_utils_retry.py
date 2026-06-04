@@ -1,7 +1,7 @@
 """Tests for kairon_lib.utils.retry — RetryPolicy, RetryExecutor, CircuitBreaker."""
 
 import asyncio
-from unittest.mock import AsyncMock, Mock
+from unittest.mock import AsyncMock
 
 import pytest
 from kairon_lib.utils.retry import CircuitBreaker, RetryExecutor, RetryPolicy

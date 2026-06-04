@@ -8,10 +8,10 @@ Extracted from SharedBrain D_Harvest → minerva.
 import json
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from typing import Any
 
 from minerva.extractors.base import IContentExtractor, StructuredKnowledge
 from minerva.sources.connectors import RawContent
-from typing import Any
 
 
 @dataclass

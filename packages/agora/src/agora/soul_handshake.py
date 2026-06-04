@@ -33,14 +33,8 @@ try:
 except ImportError:
     httpx = None  # type: ignore[assignment]
 
-    class BaseMembrane:  # type: ignore[no-redef]
-        def __init__(self, *args: Any, **kwargs: Any) -> None:
-            pass
-
-
 _log = logging.getLogger(__name__)
 logger = logging.getLogger("bos.soul_handshake")
-
 
 class ClusterRegistry:
     """In-memory cluster membership registry with TTL-based expiry."""
@@ -84,7 +78,6 @@ class ClusterRegistry:
     def size(self) -> int:
         """Count of alive nodes."""
         return len(self.get_alive_nodes())
-
 
 class SoulHandshake:
     """

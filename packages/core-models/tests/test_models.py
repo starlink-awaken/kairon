@@ -12,7 +12,6 @@ from core_models.models import (
     Relation,
 )
 
-
 # ── ENTITY_TYPES ────────────────────────────────────────────
 
 class TestEntityTypes:

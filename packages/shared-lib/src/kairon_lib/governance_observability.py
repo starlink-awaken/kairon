@@ -31,7 +31,7 @@ tests wire it to real D-Immunity and D-Execution surfaces.
 """
 
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Any, Protocol
 
 from kairon_lib.organs.approval_router import ApprovalRouter
 from kairon_lib.organs.audit.audit_query import (
@@ -47,7 +47,6 @@ from kairon_lib.organs.governance.collaboration.collab_protocol import (
 )
 from kairon_lib.organs.governance.consensus.committee import Committee
 from kairon_lib.organs.policy_registry import PolicyRegistry
-from typing import Any
 
 
 class AuditLogger(Protocol):

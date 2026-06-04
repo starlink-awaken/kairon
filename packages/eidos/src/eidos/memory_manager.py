@@ -18,11 +18,10 @@ from collections.abc import Generator
 from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Protocol
+from typing import Any, Protocol
 
 from .archetype_loader import ArchetypeLoader, get_archetype_loader
 from .storage_dal import SQLiteError, SQLiteRelationalProvider
-from typing import Any
 
 # =============================================================================
 # 0. 形式化摘要 ≝
@@ -69,7 +68,7 @@ type JSONValue = JSONScalar | list["JSONValue"] | dict[str, "JSONValue"]
 type SovereignView = dict[str, object]
 
 
-class _BaseMembrane:
+class _OrganBase:
     """Local stub replacing nucleus CoreService for memory_manager."""
 
     def __init__(self) -> None: ...
@@ -127,7 +126,7 @@ class SQLiteConnectionProtocol(Protocol):
     def rollback(self) -> None: ...
 
 
-class _ConnectionPool(_BaseMembrane):
+class _ConnectionPool(_OrganBase):
     """
     轻量级 SQLite 连接池。
     使用上下文管理器获取连接，自动提交/回滚，用完归还池中。
@@ -197,7 +196,7 @@ def _init_shared_schema(conn: SQLiteConnectionProtocol) -> None:
     conn.commit()
 
 
-class MemoryManager(_BaseMembrane):
+class MemoryManager(_OrganBase):
     """
     六层记忆管理系统统一接口。
 

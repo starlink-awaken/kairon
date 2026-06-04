@@ -34,9 +34,9 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from enum import StrEnum
 from pathlib import Path
+from typing import Any
 
 from kairon_lib.utils.sqlite_utils import managed_connection
-from typing import Any
 
 _log = logging.getLogger(__name__)
 

@@ -7,8 +7,7 @@ from __future__ import annotations
 
 import os
 from datetime import datetime
-
-from typing import Any, Optional
+from typing import Any
 
 from agora.calendar_tool import CalendarTool
 from agora.tool_contract import ToolRequest

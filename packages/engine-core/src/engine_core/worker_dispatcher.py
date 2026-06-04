@@ -194,7 +194,7 @@ class WorkerDispatcher:
         target = self.resolve_target(tid, cap)
         if target:
             _log.info("📡 [Orchestrator] 发射物理任务: %s → %s (tid=%s)", summary, target, tid)
-            from nucleus.Z_Spore.interfaces.synapse import MessageEnvelope
+            from engine_core._compat import MessageEnvelope
 
             payload: dict[str, Any] = {"task_id": tid, "summary": summary, "action": "execute"}
             if handoff_context:
@@ -466,7 +466,7 @@ class WorkerDispatcher:
         capability: str,
         eu_budget: float,
         soul_context: Mapping[str, object] | None,
-    ) -> tuple[float, dict[str, object] | None]:
+    ) -> tuple[float, Mapping[str, object] | None]:
         """Apply minimal runtime governance before spawning a swarm worker."""
         if soul_context is None:
             return eu_budget, soul_context
@@ -634,7 +634,7 @@ class WorkerDispatcher:
             return None
 
     def wait_for_swarm(self, worker_id: str, timeout_s: float = 30.0) -> Any:
-        result_bus_class: type[object] | None = None
+        result_bus_class: type[ResultBus] | None = None
         try:
             try:
                 from engine_core.organs.engine.result_bus import ResultBus as ResultBusClass
@@ -683,7 +683,7 @@ class WorkerDispatcher:
         except ImportError as exc:
             logger.error("[Orchestrator] ResultAggregator not available: %s", exc)
             raise
-        result_bus_class: type[object] | None = None
+        result_bus_class: type[ResultBus] | None = None
         try:
             try:
                 from engine_core.organs.engine.result_bus import ResultBus as ResultBusClass

@@ -7,13 +7,6 @@ from collections import defaultdict
 from collections.abc import Callable
 
 from .role_message import RoleMessage
-from typing import Any
-
-
-class BaseMembrane:  # type: ignore[no-redef]
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        pass
-
 
 """
 ---
@@ -40,7 +33,6 @@ Authority: organs/D-Execution/AGENTS.md
 # =============================================================================
 
 _log = logging.getLogger(__name__)
-
 
 class MessageBroker:
     """

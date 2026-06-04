@@ -9,11 +9,11 @@ Auto-freeze at TL3, auto-quarantine at TL5.
 
 import logging
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import IntEnum
 from math import sqrt
 from typing import Any
-from collections.abc import Callable
 
 _log = logging.getLogger(__name__)
 

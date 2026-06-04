@@ -51,7 +51,7 @@ except ImportError:
     logging.getLogger(__name__).debug("[EventBus] kairon_lib.events unavailable — using local stubs")
 
     @dataclass
-    class _RealBOSEvent:
+    class _RealBOSEventStub:
         """Local BOSEvent stub used when kairon_lib is not installed."""
 
         event_type: str
@@ -60,16 +60,21 @@ except ImportError:
         timestamp: float = 0.0
         event_id: str = ""
 
-    def _real_make_event(event_type: str, source: str, payload: dict | None = None) -> _RealBOSEvent:
-        return _RealBOSEvent(event_type=event_type, source=source, payload=payload or {})
+    def _real_make_event_stub(event_type: str, source: str, payload: dict | None = None) -> _RealBOSEventStub:
+        return _RealBOSEventStub(event_type=event_type, source=source, payload=payload or {})
 
-    def _real_register_global_event_bus(bus: Any) -> None:
+    def _real_register_global_event_bus_stub(bus: Any) -> None:
         pass
 
 
-BOSEvent = _RealBOSEvent
-make_event = _real_make_event
-register_global_event_bus = _real_register_global_event_bus
+if _has_kairon_lib:
+    BOSEvent = _RealBOSEvent
+    make_event = _real_make_event
+    register_global_event_bus = _real_register_global_event_bus
+else:
+    BOSEvent = _RealBOSEventStub  # type: ignore[assignment,no-redef]
+    make_event = _real_make_event_stub  # type: ignore[assignment,no-redef]
+    register_global_event_bus = _real_register_global_event_bus_stub  # type: ignore[assignment,no-redef]
 
 _log = logging.getLogger(__name__)
 

@@ -105,7 +105,7 @@ class DeliveryResult(dict):
         """
         result: dict[str, Any] = {"status": "undelivered", "target": self._target_id}
         try:
-            deliver_frame = None
+            deliver_frame: Any | None = None
             try:
                 # TODO-migrate: from nucleus.Z_Microkernel.gateways import get_spore_gateway
                 spore = get_spore_gateway()
@@ -115,8 +115,10 @@ class DeliveryResult(dict):
                 pass
 
             # TODO-migrate: if deliver_frame is None, import from nucleus.Z_Spore.engine.a2a_transport
-
-            delivered_result = await deliver_frame(self._target_id, dict(self))
+            if deliver_frame is None:
+                delivered_result = None
+            else:
+                delivered_result = await deliver_frame(self._target_id, dict(self))
             if isinstance(delivered_result, dict):
                 result = delivered_result
             else:
@@ -274,7 +276,7 @@ class A2AProtocol:
     ) -> dict[str, object]:
         """发起 A2A 响应。"""
         # 响应通常免税，或计入请求方预支（Kiro 协议 v1.0）
-        frame = {
+        frame: dict[str, object] = {
             "jsonrpc": "2.0",
             "id": request_id,
             "metadata": {"sender": from_agent, "timestamp": time.time(), "version": self.version},
@@ -378,7 +380,7 @@ class A2AProtocol:
         返回 MessageEnvelope 实例，或在无法导入时返回 None。
         """
         try:
-            from ...interfaces.synapse import MessageEnvelope
+            from engine_core._compat import MessageEnvelope
         except ImportError:
             try:
                 from synapse import MessageEnvelope  # type: ignore[no-redef]

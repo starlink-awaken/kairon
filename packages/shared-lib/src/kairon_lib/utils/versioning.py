@@ -34,7 +34,7 @@ class ContentVersion:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: dict) -> ContentVersion:  # noqa: F821
+    def from_dict(cls, data: dict) -> ContentVersion:
         """Create from dictionary."""
         return cls(**data)
 

@@ -67,8 +67,8 @@ class RetrospectiveAutomation:
 
     def add_item(self, retro_id: str, category: str, description: str) -> RetroItem:
         retro = self._require(retro_id)
-        if category not in VALID_CATEGORIES:  # noqa: F821
-            raise ValueError(f"Invalid category '{category}'; must be one of {VALID_CATEGORIES}")  # noqa: F821
+        if category not in VALID_CATEGORIES:
+            raise ValueError(f"Invalid category '{category}'; must be one of {VALID_CATEGORIES}")
         iid = uuid.uuid4().hex[:8]
         item = RetroItem(item_id=iid, category=category, description=description)
         retro.items.append(item)

@@ -5,7 +5,6 @@ import logging
 from typing import Any
 
 from engine_core._compat import (
-    BaseMembrane,
     ISynapseWorker,
     MessageEnvelope,
     Receipt,
@@ -38,7 +37,7 @@ _log = logging.getLogger(__name__)
 HAS_SYNAPSE_REGISTRY = True
 
 
-class HitlWorker(AgentDaemonBase, ISynapseWorker, BaseMembrane):
+class HitlWorker(AgentDaemonBase, ISynapseWorker):
     def __init__(self, agent_id: str, persona: str, capabilities: list[str]) -> None:
         super().__init__(
             agent_id=agent_id,

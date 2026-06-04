@@ -16,7 +16,6 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 VAULT_OPS_DIR = SCRIPT_DIR.parent / "vault-ops" / "obsidian-vault"

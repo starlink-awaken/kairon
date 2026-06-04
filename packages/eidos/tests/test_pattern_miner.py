@@ -1,14 +1,11 @@
 """Tests for PatternMiner -- sequence and temporal pattern detection."""
 
-import time
-from datetime import UTC, datetime
 from eidos.pattern_miner import (
-    PatternMiner,
     Pattern,
+    PatternMiner,
     PatternType,
     SequencePattern,
     TemporalPattern,
-    PatternMetrics,
 )
 
 

@@ -26,8 +26,6 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
-from eidos.base_membrane import BaseMembrane
-
 
 class SessionParticleLike(Protocol):
     id: str
@@ -48,11 +46,15 @@ class QueuedSessionParticle:
         return self.particle.id
 
 
-class VoiceSessionParticleQueue(BaseMembrane):
+class VoiceSessionParticleQueue:
     """Execution-owned, in-memory queue for session-aware voice particle handoff."""
 
     def __init__(self) -> None:
-        super().__init__(metadata_path="eidos/voice_particle_queue.py")
+        self.metadata_path = "eidos/voice_particle_queue.py"
+        self.organ_name = "voice_particle_queue"
+        self.organ_id = f"eidos-{id(self):x}"
+        self._status = "active"
+        self._metabolic_budget = 1000.0
         self._lock = threading.RLock()
         self._session_queues: dict[str, list[QueuedSessionParticle]] = {}
 

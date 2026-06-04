@@ -472,7 +472,7 @@ class CachingQueryEngine:
         depth: int = 2,
         direction: str = "both",
         bypass_cache: bool = False,
-    ) -> dict[str, Any]:  # noqa: F821
+    ) -> dict[str, Any]:
         """
         Export subgraph with caching.
 
@@ -530,7 +530,7 @@ class CachingQueryEngine:
         """
         return self.cache.invalidate(entity_ids=entity_ids)
 
-    def get_cache_stats(self) -> dict[str, Any]:  # noqa: F821
+    def get_cache_stats(self) -> dict[str, Any]:
         """Get cache statistics."""
         return self.cache.get_stats()
 

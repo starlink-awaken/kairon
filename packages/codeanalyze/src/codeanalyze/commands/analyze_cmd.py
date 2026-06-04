@@ -1,6 +1,7 @@
 """CLI commands: analyze (核心分析命令 + 废弃的 graph/deps/docs/report)"""
 
 from pathlib import Path
+from typing import Any
 
 import click
 from rich.panel import Panel
@@ -14,8 +15,6 @@ from codeanalyze.documents import pipeline as doc_pipeline
 from codeanalyze.reports.generate import generate_summary, write_report
 from codeanalyze.reports.insights import _SEVERITY_ICONS as SEVERITY_ICONS
 from codeanalyze.reports.insights import analyze as analyze_insights
-
-from typing import Any
 
 
 @click.command()

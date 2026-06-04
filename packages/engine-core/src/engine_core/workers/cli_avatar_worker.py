@@ -9,23 +9,13 @@ import time
 from collections.abc import Callable
 from typing import Any
 
-from nucleus.Z_Microkernel.mesh.protocols.bos_agent_router_bridge import (
-    agent_ack,
-    agent_receive,
-    agent_send,
-)
-from nucleus.Z_Microkernel.mesh.synapse.registry import get_synapse_registry
-from nucleus.Z_Microkernel.mesh.synapse.synapse_base import (
+from engine_core._compat import (
+    CapabilityRegistry,
     ISynapseWorker,
     MessageEnvelope,
     Receipt,
     SynapseAgentCard,
-)
-from nucleus.Z_Microkernel.organs.capability_registry import (
-    AgentCard as RegistryAgentCard,
-)
-from nucleus.Z_Microkernel.organs.capability_registry import (
-    CapabilityRegistry,
+    get_synapse_registry,
 )
 
 from engine_core.context_injector import ContextInjector
@@ -44,8 +34,6 @@ _log = logging.getLogger(__name__)
 
 HAS_SYNAPSE_REGISTRY = True
 
-from engine_core._compat import BaseMembrane
-
 logger = logging.getLogger("bos_daemon.cli_avatar_worker")
 
 
@@ -57,7 +45,7 @@ def _get_harvest_context_injector_factory() -> Callable[..., object] | None:
         return None
 
 
-class CliAvatarWorker(ISynapseWorker, BaseMembrane):
+class CliAvatarWorker(ISynapseWorker):
     """
     A worker that acts as a physical body for an external CLI (like claude-code).
     It listens to the bos_agent_router message bus. When a task arrives, it:

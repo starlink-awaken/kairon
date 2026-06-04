@@ -32,8 +32,6 @@ from enum import Enum
 from threading import Lock
 from typing import Any
 
-from eidos.base_membrane import BaseMembrane
-
 _log = logging.getLogger(__name__)
 
 
@@ -161,7 +159,7 @@ class ORSet:
         return merged
 
 
-class ConflictResolution(BaseMembrane):
+class ConflictResolution:
     """
     Multi-end conflict resolution engine.
 
@@ -181,7 +179,11 @@ class ConflictResolution(BaseMembrane):
         max_history: int = DEFAULT_MAX_HISTORY,
         history_path: str | None = None,
     ) -> None:
-        super().__init__(metadata_path="eidos/continuity_conflict_resolution.py")
+        self.metadata_path = "eidos/continuity_conflict_resolution.py"
+        self.organ_name = "continuity_conflict_resolution"
+        self.organ_id = f"eidos-{id(self):x}"
+        self._status = "active"
+        self._metabolic_budget = 1000.0
         self._strategy = strategy
         self._max_history = max_history
         self._history_path = history_path

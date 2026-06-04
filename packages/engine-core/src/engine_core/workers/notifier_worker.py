@@ -8,7 +8,6 @@ from typing import Any
 
 from engine_core._compat import (
     AgentDaemonBase,
-    BaseMembrane,
     ISynapseWorker,
     MessageEnvelope,
     Receipt,
@@ -38,7 +37,7 @@ Authority: organs/D-Execution/AGENTS.md
 _log = logging.getLogger(__name__)
 
 
-class NotifierWorker(AgentDaemonBase, ISynapseWorker, BaseMembrane):
+class NotifierWorker(AgentDaemonBase, ISynapseWorker):
     def __init__(self, agent_id: str, persona: str, capabilities: list[str], webhook_url: str | None = None) -> None:
         super().__init__(
             agent_id=agent_id,
