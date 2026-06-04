@@ -11,5 +11,5 @@ class TestAgora:
 
     def test_known_services(self):
         """Test known service registry is loadable."""
-        from agora.mcp_bootstrap import KNOWN_SERVICES
+        from agora.mcp.mcp_bootstrap import KNOWN_SERVICES
         assert len(KNOWN_SERVICES) >= 1

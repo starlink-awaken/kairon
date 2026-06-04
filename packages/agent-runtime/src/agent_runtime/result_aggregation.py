@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Any
 
-from agent_runtime.agent_pool_parallel import ScheduledTask, TaskScheduler
+from agent_runtime.core.agent_pool_parallel import ScheduledTask, TaskScheduler
 
 
 class AggregationMode(StrEnum):

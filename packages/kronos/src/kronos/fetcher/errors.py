@@ -6,8 +6,6 @@ import logging
 import re
 from typing import TYPE_CHECKING
 
-from kronos.fetch_router import execute_fallback_chain
-
 if TYPE_CHECKING:
     from kronos.fetch_router import FetchResult  # type: ignore[import-not-found]
 
@@ -156,6 +154,8 @@ def execute_fetch(url: str, timeout: int = 15) -> FetchResult:
             continue
 
     # 全部失败 → 出方案链
+    from kronos.fetch_router import execute_fallback_chain
+
     chain = execute_fallback_chain(url)
     return {"ok": False, "plan": chain, "error": "所有方法均失败"}
 

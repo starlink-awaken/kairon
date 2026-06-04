@@ -45,3 +45,4 @@ __all__ = (
     "register_migration",
     "registry",
 )
+

@@ -4,13 +4,13 @@ from engine_core.arbitrator import ConflictArbitrator
 from engine_core.association_engine import AssociationEngine
 from engine_core.auctioneer import MarketConfig, TaskAuctioneer
 from engine_core.bidder import TaskBidder
-from engine_core.binding_strategies import BindingStrategy, HybridBinding, LongTermBinding, OnDemandBinding
 from engine_core.burndown_engine import BurndownEngine
-from engine_core.capability import AgentCard, Capability, CapabilityCatalog, TaskRequest
 from engine_core.command import Command, CommandRegistry, get_registry
 from engine_core.conflict_resolution import ConflictRecord, ConflictResolution, LWWRegister, ORSet, VectorClock
 from engine_core.conflict_resolver import DeterministicConflictResolver
 from engine_core.context_injector import ContextInjector
+from engine_core.core.binding_strategies import BindingStrategy, HybridBinding, LongTermBinding, OnDemandBinding
+from engine_core.core.capability import AgentCard, Capability, CapabilityCatalog, TaskRequest
 from engine_core.cost_aware_dispatcher import CostAwareDispatcher
 from engine_core.dag import TaskDAG, TaskNode
 from engine_core.domain_router import DomainRouter as DomainRouterNew
@@ -107,3 +107,4 @@ __all__ = (
     "make_event",
     "safe_exec_sandbox",
 )
+

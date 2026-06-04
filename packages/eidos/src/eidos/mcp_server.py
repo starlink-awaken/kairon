@@ -28,8 +28,8 @@ def _dump(data: Any) -> str:
 
 def handle_list(params: dict | None = None) -> dict:
     """List all registered schemas."""
+    from eidos.core.schema import SchemaRegistry  # type: ignore[import-not-found]
     from eidos.meta import list_types  # type: ignore[import-not-found]
-    from eidos.schema import SchemaRegistry  # type: ignore[import-not-found]
 
     sr = SchemaRegistry()
     schemas: list[dict[str, Any]] = []
@@ -125,7 +125,7 @@ def handle_meta(params: dict | None = None) -> dict:
 
 def handle_migrate(params: dict | None = None) -> dict:
     """Run Schema Migration on a data instance."""
-    from eidos.schema import get_migrations, migrate_schema_instance
+    from eidos.core.schema import get_migrations, migrate_schema_instance
 
     payload = params or {}
     schema_name = payload.get("schema_name", "")
@@ -174,7 +174,7 @@ def handle_migrate(params: dict | None = None) -> dict:
 
 def handle_migration_list(params: dict | None = None) -> dict:
     """List all registered schema migrations."""
-    from eidos.schema import _SCHEMA_MIGRATIONS
+    from eidos.core.schema import _SCHEMA_MIGRATIONS
 
     result = []
     for schema_name, migrations in _SCHEMA_MIGRATIONS.items():
@@ -192,7 +192,7 @@ def handle_migration_list(params: dict | None = None) -> dict:
 
 def handle_define(params: dict | None = None) -> dict:
     """Define a new schema."""
-    from eidos.schema import FieldType, Schema, SchemaField, SchemaRegistry
+    from eidos.core.schema import FieldType, Schema, SchemaField, SchemaRegistry
 
     payload = params or {}
     name = payload.get("name", "Untitled")

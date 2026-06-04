@@ -28,8 +28,8 @@ class TestChainAgoraToAgentRuntime:
 
     def test_service_registration(self, tmp_path):
         """Register service in Agora, verify it is discoverable."""
-        from agora.registry import ServiceRegistry
-        from agora.service_base import Service
+        from agora.core.registry import ServiceRegistry
+        from agora.core.service_base import Service
 
         registry = ServiceRegistry(storage_path=str(tmp_path / "agora.json"), cb_max_failures=5)
 
@@ -51,8 +51,8 @@ class TestChainAgoraToAgentRuntime:
 
     def test_service_listing(self, tmp_path):
         """Registered services appear in list_all."""
-        from agora.registry import ServiceRegistry
-        from agora.service_base import Service
+        from agora.core.registry import ServiceRegistry
+        from agora.core.service_base import Service
 
         registry = ServiceRegistry(storage_path=str(tmp_path / "agora2.json"))
         registry.register(

@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Any
 
-from agent_runtime.agent_runner import AgentDefinition, AgentPool, AgentRunner
+from agent_runtime.core.agent_runner import AgentDefinition, AgentPool, AgentRunner
 
 # ---------------------------------------------------------------------------
 # Enums & Types

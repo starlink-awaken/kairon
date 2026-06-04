@@ -39,6 +39,30 @@ from kronos.fetcher.errors import (  # type: ignore[import-not-found]
     execute_fetch,
 )
 
+
+def _is_error_page(content: str) -> bool:
+    from kronos.fetcher.errors import _is_error_page as _impl
+
+    return _impl(content)
+
+
+def diagnose_fetch_error(error: Exception) -> dict[str, str]:
+    from kronos.fetcher.errors import diagnose_fetch_error as _impl
+
+    return _impl(error)
+
+
+def extract_image_urls(html: str) -> list[str]:
+    from kronos.fetcher.errors import extract_image_urls as _impl
+
+    return _impl(html)
+
+
+def is_image_url(url: str) -> bool:
+    from kronos.fetcher.errors import is_image_url as _impl
+
+    return _impl(url)
+
 MCP_TOOLS: list[MCPTool] = [
     MCPTool(
         "mcp__metaso__metaso_web_reader",

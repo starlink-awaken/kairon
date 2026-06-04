@@ -1,0 +1,1 @@
+"""eidos cli module."""
