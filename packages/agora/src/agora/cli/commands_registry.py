@@ -188,7 +188,7 @@ def _check_proxy_services() -> dict:
         with open(proxy_path) as f:
             import json
 
-            services = json.load(f)
+            services = json.load(f).get("services", [])
     except Exception as e:
         return {"error": str(e), "services": [], "count": 0}
 

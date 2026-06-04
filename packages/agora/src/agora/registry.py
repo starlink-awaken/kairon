@@ -184,6 +184,8 @@ class ServiceRegistry:
     def load_cache_snapshot(cache_path: str, max_age_seconds: float, now: float | None = None) -> list[Service]:
         """Load services from a fresh local cache snapshot."""
         path = Path(cache_path)
+        if not path.exists():
+            return []
         data = json.loads(path.read_text(encoding="utf-8"))
         current = time.time() if now is None else now
         if current - data.get("timestamp", 0) > max_age_seconds:

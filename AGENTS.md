@@ -21,7 +21,7 @@ kairon 是一个 31 包的 Python monorepo，托管在 `projects/kairon/`。
 5 大分组：
 - **L1 知识工程** — eidos, ontoderive, kos, minerva, sophia, iris, ssot, forge, codeanalyze, kronos, metaos, cron-service
 - **L2 集成** — sharedbrain-bridge, sharedbrain-standalone
-- **L3 Agent** — agent-runtime, agent-hub, agora, llm-gateway, wksp **（零测试）**
+- **L3 Agent** — agent-runtime (含 agent-hub), agora, llm-gateway, wksp **（零测试）**
 - **Infra** — shared-lib, core-models, engine-core, observability, gc-engine, ecos
 - **业务支撑** — eu-pricing, kaironcloud-billing, kairon-assistant, kairon-voice, symphony-protocol, pontus
 

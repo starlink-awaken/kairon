@@ -11,7 +11,7 @@ test:
 	for pkg in packages/*/; do \
 		name=$$(basename $$pkg); \
 		echo "--- [$$name] ---"; \
-		if ! (cd $$pkg && uv run python -m pytest tests/ -q 2>/dev/null); then \
+		if ! (cd $$pkg && uv run python -m pytest tests/ -q); then \
 			fail=1; \
 		fi; \
 	done; \
@@ -26,7 +26,7 @@ test-fast:
 		name=$$(basename $$pkg); \
 		echo "--- [$$name] ---"; \
 		if [ -d "$$pkg/tests" ]; then \
-			if ! (cd $$pkg && python3 -m pytest tests/ -q --ignore=tests/integration --ignore=tests/benchmarks); then \
+			if ! (cd $$pkg && uv run python -m pytest tests/ -q --ignore=tests/integration --ignore=tests/benchmarks); then \
 				fail=1; \
 			fi; \
 		else \
