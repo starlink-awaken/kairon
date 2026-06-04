@@ -1,6 +1,6 @@
 # CLAUDE.md — kairon
 
-> 知识工程与研究栈 · 31 包 Python monorepo
+> 知识工程与研究栈 · 25 包 Python monorepo（治理中，原 31 包名册中的 6 包已归档）
 > 根工作区文档：`../CLAUDE.md`（全局）、`../AGENTS.md`（开发指南）、`../LAYER-INDEX.md`（架构分层）
 
 ---
@@ -22,9 +22,9 @@ make lint
 make format
 ```
 
-## 包结构（31 包）
+## 包结构（25 包）
 
-### L1 — 知识工程核心
+### L1 — 知识工程核心（11 包）
 
 | 包 | 路径 | 说明 |
 |----|------|------|
@@ -40,14 +40,14 @@ make format
 | kronos | `packages/kronos/` | 9 tools |
 | metaos | `packages/metaos/` | 基础工具（sys.path 已修复） |
 
-### L2 — 集成层
+### L2 — 集成层（1 包）
 
 | 包 | 路径 | 说明 |
 |----|------|------|
 | sharedbrain-bridge | `packages/sharedbrain-bridge/` | × SharedBrain 桥接（EU/免疫/同步） |
-| sharedbrain-standalone | `packages/sharedbrain-standalone/` | SharedBrain 独立运行壳（零测试） |
+| ~~sharedbrain-standalone~~ | 已归档 | 代码合入 sharedbrain-bridge |
 
-### L3 — Agent 层
+### L3 — Agent 层（4 包）
 
 | 包 | 路径 | 说明 |
 |----|------|------|
