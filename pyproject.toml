@@ -10,6 +10,9 @@ license = {text = "MIT"}
 requires-python = ">=3.10"
 authors = [{name = "Workspace Team"}]
 readme = "README.md"
+dependencies = [
+    "socksio>=1.0.0",
+]
 
 [tool.uv.workspace]
 members = ["packages/*"]
