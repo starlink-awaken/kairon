@@ -1,127 +1,130 @@
 generated_at: '2026-06-04'
+# 更新: mypy 清零 + 全量测试修复后
+# 注意: 测试数为 pytest 通过数，不包括 skip
 packages:
 - cli: true
   description: Agent Runtime engine — CLI, MCP & FastAPI entry points
   name: agent-runtime
-  tests: 15
+  tests: 238
   version: 0.5.0
 - cli: true
-  description: Agora — MCP Service Convergence Hub. Route, monitor, and gov
+  description: Agora — MCP Service Convergence Hub. Route, monitor, and govern inter-service communication
   name: agora
-  tests: 47
+  tests: 1195
   version: 2.0.0
 - cli: true
   description: Unified code & document analysis toolkit
   name: codeanalyze
-  tests: 14
+  tests: 122
   version: 0.5.0
 - cli: false
-  description: Core Entity/Relation/Provenance/KnowledgeGraph data models f
+  description: Core Entity/Relation/Provenance/KnowledgeGraph data models for kairon monorepo
   name: core-models
-  tests: 5
+  tests: 100
   version: 0.5.0
 - cli: true
   description: Cron scheduler service — scripts as SSOT, MCP for Hermes
   name: cron-service
-  tests: 4
+  tests: 157
   version: 1.0.0
 - cli: true
   description: eCOS — 认知层：SSB 签名链、涌现度量、认知监控
   name: ecos
-  tests: 13
+  tests: 122
   version: 0.8.0
 - cli: true
-  description: Schema definition and validation layer for the Workspace kno
+  description: Schema definition and validation layer for the Workspace knowledge graph
   name: eidos
-  tests: 26
+  tests: 272
   version: 0.5.0
 - cli: false
   description: Engine core utilities extracted from SharedBrain D_Execution
   name: engine-core
-  tests: 14
+  tests: 118
   version: 0.3.0
 - cli: true
   description: 个人 AI 数字资产管理中心 — 统一工具注册、发现与治理层
   name: forge
-  tests: 12
+  tests: 321
   version: 1.3.0
 - cli: true
   description: Connector hub for personal knowledge platforms
   name: iris
-  tests: 11
+  tests: 180
   version: 0.3.0
 - cli: false
-  description: Smart Assistant — command parsing, context management, and s
+  description: Smart Assistant — command parsing, context management, and service orchestration
   name: kairon-assistant
-  tests: 5
+  tests: 59
   version: 1.0.0
 - cli: false
-  description: Voice subsystem — STT/TTS interfaces and provider adapters e
+  description: Voice subsystem — STT/TTS interfaces and provider adapters
   name: kairon-voice
-  tests: 4
+  tests: 69
   version: 1.0.0
 - cli: true
-  description: Billing subsystem extracted from SharedBrain D_Cloud — model
+  description: Billing subsystem extracted from SharedBrain D_Cloud
   name: kaironcloud-billing
-  tests: 7
+  tests: 114
   version: 0.2.0
 - cli: true
-  description: 'Knowledge Operating System — cross-domain search, ontology, '
+  description: Knowledge Operating System — cross-domain search, ontology, governance
   name: kos
-  tests: 25
+  tests: 300
   version: 2.0.0
 - cli: true
-  description: Kronos — 知识摄取管线。L0原生HTTP / L2 Jina / L4 CloakBrowser / 5层自动抓
+  description: Kronos — 知识摄取管线。5 层自动抓取编排
   name: kronos
-  tests: 10
+  tests: 133
   version: 0.7.0
 - cli: false
-  description: Unified LLM provider abstraction — ABC, dataclasses, and con
+  description: Unified LLM provider abstraction — ABC, dataclasses, and connector hub
   name: llm-gateway
-  tests: 5
+  tests: 73
   version: 0.3.0
 - cli: true
   description: MetaOS — 编排/治理层：决策门控、免疫监控、路由、数字资产引擎
   name: metaos
-  tests: 4
+  tests: 163
   version: 7.1.0
+  note: "⚠️ 版本异常偏高，需治理对齐"
 - cli: true
-  description: Minerva — A local-first deep research system with tiered pip
+  description: Minerva — A local-first deep research system with tiered pipeline
   name: minerva
-  tests: 10
+  tests: 350
   version: 0.15.0
 - cli: true
   description: OntoDerive 渊衍框架 — 事实驱动的一体化知识工程与方案推导
   name: ontoderive
-  tests: 51
+  tests: 759
   version: 3.6.4
 - cli: false
-  description: Shared library for kairon monorepo
+  description: Shared library for kairon monorepo — audit trail, committee, events, workflow
   name: shared-lib
-  tests: 36
+  tests: 630
   version: 0.4.0
 - cli: true
-  description: Bridge between kairon and SharedBrain — EU pricing, immune a
+  description: Bridge between kairon and SharedBrain — EU pricing, immune, auth
   name: sharedbrain-bridge
-  tests: 5
+  tests: 61
   version: 0.2.0
 - cli: true
-  description: Sophia — Symbolic Research Paradigm Engine. Composable, dyna
+  description: Sophia — Symbolic Research Paradigm Engine. Composable, dynamic
   name: sophia
-  tests: 7
+  tests: 142
   version: 0.3.0
 - cli: false
-  description: SSOT — 领域知识单一事实源（Domain Knowledge Single Source of Truth）
+  description: SSOT — 领域知识单一事实源
   name: ssot
-  tests: 12
+  tests: 161
   version: 1.0.0
 - cli: false
-  description: Symphony Protocol — 形式化执行阶段协议（状态机 + Agent匹配 + 触发器引擎）
+  description: Symphony Protocol — 形式化执行阶段协议
   name: symphony-protocol
-  tests: 6
+  tests: 123
   version: 0.1.0
 - cli: true
   description: Workspace — 统一用户入口：研究对象管理系统
   name: wksp
-  tests: 3
+  tests: 23
   version: 0.3.0
