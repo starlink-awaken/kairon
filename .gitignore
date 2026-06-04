@@ -20,9 +20,17 @@ build/
 Thumbs.db
 
 # SQLite artifacts
+*.db
 *.db-shm
 *.db-wal
-database.db
+
+# Runtime logs
+*.jsonl
+agora-events.json
+
+# Tool runtime state
+.omc/
+.omo/
 
 # Environment
 .env
