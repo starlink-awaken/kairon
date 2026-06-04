@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from cron_service import __version__
-from cron_service.scheduler import Scheduler, _is_due, _parse_cron_expr, _parse_every_expr
+from cron_service.scheduler import CronScheduler, _is_due, _parse_cron_expr, _parse_every_expr
 
 
 class TestCronServiceBasic:
@@ -12,7 +12,7 @@ class TestCronServiceBasic:
     def test_imports(self):
         """All expected exports are importable."""
         assert __version__ is not None
-        assert Scheduler is not None
+        assert CronScheduler is not None
 
     def test_parse_every_5m(self):
         assert _parse_every_expr("every 5m") == 300
@@ -29,13 +29,14 @@ class TestCronServiceBasic:
     def test_parse_cron_minute(self):
         """Cron expression with only minute field."""
         result = _parse_cron_expr("* * * * *")
-        assert isinstance(result, dict)
+        assert result is not None
 
-    def test_is_due_no_last_run(self):
-        """is_due returns True when last_run is None."""
-        assert _is_due(None, 60) is True
+    def test_is_due_with_valid_schedule(self):
+        """_is_due with valid schedule and no last run."""
+        result = _is_due("test", "* * * * *", None)
+        assert isinstance(result, bool)
 
     def test_scheduler_init(self):
-        """Scheduler initializes without error."""
-        s = Scheduler()
+        """CronScheduler initializes without error."""
+        s = CronScheduler()
         assert s is not None

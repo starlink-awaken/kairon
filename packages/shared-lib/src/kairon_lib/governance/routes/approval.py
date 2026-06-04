@@ -33,7 +33,7 @@ from kairon_lib.organs.voting.approval_router import (
     ApprovalRouter as TruthApprovalRouter,
 )
 
-from .base import BaseGovernanceRouter  # type: ignore[import-not-found]
+from .base import BaseGovernanceRouter
 
 _log = logging.getLogger(__name__)
 _truth_router = None

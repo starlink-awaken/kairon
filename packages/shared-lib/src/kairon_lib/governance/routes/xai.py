@@ -25,7 +25,7 @@ import inspect
 import logging
 from typing import Any
 
-from .base import BaseGovernanceRouter  # type: ignore[import-not-found]
+from .base import BaseGovernanceRouter
 
 _log = logging.getLogger(__name__)
 

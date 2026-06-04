@@ -471,7 +471,9 @@
       "agent_type": "worker-2",
       "started_at": "2026-06-04T04:30:03.058Z",
       "parent_mode": "none",
-      "status": "running"
+      "status": "completed",
+      "completed_at": "2026-06-04T04:57:09.553Z",
+      "duration_ms": 1626495
     },
     {
       "agent_id": "af59cd8b6c24ec3b8",
@@ -493,7 +495,7 @@
     }
   ],
   "total_spawned": 24,
-  "total_completed": 46,
+  "total_completed": 47,
   "total_failed": 0,
-  "last_updated": "2026-06-04T04:39:54.550Z"
+  "last_updated": "2026-06-04T04:57:09.654Z"
 }

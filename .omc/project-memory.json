@@ -27,7 +27,7 @@
   },
   "build": {
     "buildCommand": "make build",
-    "testCommand": "uv run pytest packages/cron-service/tests/test_cron-service_basic.py -v --tb=short -q 2>&1 | tail -5 && echo \"=== core-models ===\" && uv run pytest packages/core-models/tests/test_core-models_basic.py -v --tb=short -q 2>&1 | tail -3 && echo \"=== sharedbrain-bridge ===\" && uv run pytest packages/sharedbrain-bridge/tests/test_sharedbrain_bridge.py -v --tb=short -q 2>&1 | tail -3",
+    "testCommand": "uv run pytest packages/llm-gateway/tests/test_llm-gateway_basic.py -v --tb=short -q 2>&1 | tail -2 && uv run pytest packages/cron-service/tests/test_cron-service_basic.py -v --tb=short -q 2>&1 | tail -2 && uv run pytest packages/core-models/tests/test_core-models_basic.py -v --tb=short -q 2>&1 | tail -2 && uv run pytest packages/sharedbrain-bridge/tests/test_sharedbrain_bridge.py -v --tb=short -q 2>&1 | tail -2",
     "lintCommand": "ruff check",
     "devCommand": null,
     "scripts": {}

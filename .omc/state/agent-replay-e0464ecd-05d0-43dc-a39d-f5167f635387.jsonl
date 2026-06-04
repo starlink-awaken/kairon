@@ -105,3 +105,4 @@
 {"t":0,"agent":"a61e828","agent_type":"general-purpose","event":"agent_stop","success":true,"duration_ms":272956}
 {"t":0,"agent":"af59cd8","agent_type":"general-purpose","event":"agent_stop","success":true,"duration_ms":289501}
 {"t":0,"agent":"ab2e79e","agent_type":"worker-1","event":"agent_stop","success":true,"duration_ms":592139}
+{"t":0,"agent":"a799d9d","agent_type":"worker-2","event":"agent_stop","success":true,"duration_ms":1626495}

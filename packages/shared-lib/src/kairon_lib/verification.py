@@ -41,7 +41,7 @@ if __package__ in {None, ""}:
     _bootstrap_spec.loader.exec_module(_bootstrap_module)
     ensure_project_root_on_sys_path = _bootstrap_module.ensure_project_root_on_sys_path
 else:
-    from .bootstrap import ensure_project_root_on_sys_path  # type: ignore[import-not-found]
+    from .bootstrap import ensure_project_root_on_sys_path
 
 project_root = ensure_project_root_on_sys_path()
 
@@ -50,13 +50,13 @@ import json
 import time
 from datetime import UTC, datetime
 
-from kairon_lib.extractors.base import StructuredKnowledge  # type: ignore[import-not-found]
-from kairon_lib.extractors.html_extractor import HtmlContentExtractor  # type: ignore[import-not-found]
-from kairon_lib.monitoring.metrics import HarvestMetrics, MetricsCollector  # type: ignore[import-not-found]
-from kairon_lib.orchestrator import HarvestOrchestrator  # type: ignore[import-not-found]
-from kairon_lib.quality.gate import QualityGate  # type: ignore[import-not-found]
-from kairon_lib.sources.connectors import RawContent  # type: ignore[import-not-found]
-from kairon_lib.sources.registry import SourceRegistry  # type: ignore[import-not-found]
+from kairon_lib.extractors.base import StructuredKnowledge
+from kairon_lib.extractors.html_extractor import HtmlContentExtractor
+from kairon_lib.monitoring.metrics import HarvestMetrics, MetricsCollector
+from kairon_lib.orchestrator import HarvestOrchestrator
+from kairon_lib.quality.gate import QualityGate
+from kairon_lib.sources.connectors import RawContent
+from kairon_lib.sources.registry import SourceRegistry
 
 _VERIFICATION_SAMPLE_HTML = """
 <html>
@@ -182,7 +182,7 @@ async def collect_post_implementation_metrics() -> None:
 
     # Test 4: Priority queue functionality
     print("\n[5/6] Testing priority queue...")
-    from kairon_lib.sources.priority import HarvestPriorityQueue, Priority  # type: ignore[import-not-found]
+    from kairon_lib.sources.priority import HarvestPriorityQueue, Priority
 
     queue = HarvestPriorityQueue()
 

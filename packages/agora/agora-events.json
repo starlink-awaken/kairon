@@ -8732,43 +8732,299 @@
       "type": "test:persist",
       "trace_id": "",
       "payload": {}
+    },
+    {
+      "id": "evt_1780548894_270f99",
+      "time": "2026-06-04T04:54:54Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "trans-test"
+      }
+    },
+    {
+      "id": "evt_1780548894_c2ca25",
+      "time": "2026-06-04T04:54:54Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "filter-a"
+      }
+    },
+    {
+      "id": "evt_1780548894_f8ef9b",
+      "time": "2026-06-04T04:54:54Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "filter-b"
+      }
+    },
+    {
+      "id": "evt_1780548894_d93029",
+      "time": "2026-06-04T04:54:54Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "clear-test"
+      }
+    },
+    {
+      "id": "evt_1780548894_7ead21",
+      "time": "2026-06-04T04:54:54Z",
+      "source": "test",
+      "type": "test:webhook",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780548894_8d4fd0",
+      "time": "2026-06-04T04:54:54Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "mcp-card-test"
+      }
+    },
+    {
+      "id": "evt_1780548909_48cd23",
+      "time": "2026-06-04T04:55:09Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "mcp-test"
+      }
+    },
+    {
+      "id": "evt_1780548909_5c29fc",
+      "time": "2026-06-04T04:55:09Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "rest-test"
+      }
+    },
+    {
+      "id": "evt_1780548909_3371d4",
+      "time": "2026-06-04T04:55:09Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "a2a-param-test"
+      }
+    },
+    {
+      "id": "evt_1780548909_d731c3",
+      "time": "2026-06-04T04:55:09Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "list-test"
+      }
+    },
+    {
+      "id": "evt_1780548909_300932",
+      "time": "2026-06-04T04:55:09Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780548932_2ba098",
+      "time": "2026-06-04T04:55:32Z",
+      "source": "test",
+      "type": "test:unit",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780548932_249fe5",
+      "time": "2026-06-04T04:55:32Z",
+      "source": "dashboard",
+      "type": "test:persist",
+      "trace_id": "",
+      "payload": {}
+    },
+    {
+      "id": "evt_1780549247_91ffce",
+      "time": "2026-06-04T05:00:47Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "trans-test"
+      }
+    },
+    {
+      "id": "evt_1780549247_8ffb68",
+      "time": "2026-06-04T05:00:47Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "filter-a"
+      }
+    },
+    {
+      "id": "evt_1780549247_2dee00",
+      "time": "2026-06-04T05:00:47Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "filter-b"
+      }
+    },
+    {
+      "id": "evt_1780549247_b5fc31",
+      "time": "2026-06-04T05:00:47Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "clear-test"
+      }
+    },
+    {
+      "id": "evt_1780549247_669ed3",
+      "time": "2026-06-04T05:00:47Z",
+      "source": "test",
+      "type": "test:webhook",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780549247_3eb512",
+      "time": "2026-06-04T05:00:47Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "mcp-card-test"
+      }
+    },
+    {
+      "id": "evt_1780549261_28618c",
+      "time": "2026-06-04T05:01:01Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "mcp-test"
+      }
+    },
+    {
+      "id": "evt_1780549261_2341bc",
+      "time": "2026-06-04T05:01:01Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "rest-test"
+      }
+    },
+    {
+      "id": "evt_1780549261_1493f6",
+      "time": "2026-06-04T05:01:01Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "a2a-param-test"
+      }
+    },
+    {
+      "id": "evt_1780549261_f2ad4f",
+      "time": "2026-06-04T05:01:01Z",
+      "source": "agora.server.mcp",
+      "type": "registry:service.registered",
+      "trace_id": "",
+      "payload": {
+        "name": "list-test"
+      }
+    },
+    {
+      "id": "evt_1780549261_21d986",
+      "time": "2026-06-04T05:01:01Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780549290_645d96",
+      "time": "2026-06-04T05:01:30Z",
+      "source": "test",
+      "type": "test:unit",
+      "trace_id": "",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1780549290_f449b1",
+      "time": "2026-06-04T05:01:30Z",
+      "source": "dashboard",
+      "type": "test:persist",
+      "trace_id": "",
+      "payload": {}
     }
   ],
   "subscriptions": [
     {
-      "id": "sub_245117f9",
+      "id": "sub_dd1b7cb8",
       "service": "a2a-push",
       "pattern": "registry:*",
       "callback_url": "http://example.com/events",
-      "created": "2026-06-04T04:47:44Z"
+      "created": "2026-06-04T05:00:47Z"
     },
     {
-      "id": "sub_66564e7b",
+      "id": "sub_99238754",
       "service": "a2a-push",
       "pattern": "route:call.failed",
       "callback_url": "http://example.com/events",
-      "created": "2026-06-04T04:47:44Z"
+      "created": "2026-06-04T05:00:47Z"
     },
     {
-      "id": "sub_0170826e",
+      "id": "sub_2322008a",
       "service": "a2a-push",
       "pattern": "*",
       "callback_url": "http://example.com/events",
-      "created": "2026-06-04T04:47:44Z"
+      "created": "2026-06-04T05:00:47Z"
     },
     {
-      "id": "sub_6542d818",
+      "id": "sub_02f22673",
       "service": "a2a-push",
       "pattern": "*",
       "callback_url": "http://example.com/notify",
-      "created": "2026-06-04T04:47:44Z"
+      "created": "2026-06-04T05:00:47Z"
     },
     {
-      "id": "sub_f2bdac16",
+      "id": "sub_b0ed5b04",
       "service": "mcp-caller",
       "pattern": "test:*",
       "callback_url": "",
-      "created": "2026-06-04T04:47:58Z"
+      "created": "2026-06-04T05:01:01Z"
     }
   ],
   "max_events": 1000

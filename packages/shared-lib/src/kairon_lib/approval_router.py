@@ -56,7 +56,7 @@ from kairon_lib.approval_router_observability import (
     _emit_governance_event,
     _load_optional_event_bus_module,
 )
-from kairon_lib.approval_router_persistence import ApprovalPersistence  # type: ignore[import-not-found]
+from kairon_lib.approval_router_persistence import ApprovalPersistence
 
 _log = logging.getLogger(__name__)
 
