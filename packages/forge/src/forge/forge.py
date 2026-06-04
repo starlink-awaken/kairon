@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 ai_toolbox.py — Forge 统一命令行入口
 
@@ -172,6 +173,24 @@ def cmd_capture(args: list[str]):
 def cmd_health(args: list[str] | None = None):
     """健康检查"""
     subprocess.run([sys.executable, str(SRC / "health_check.py")] + (args or []), cwd=TOOLBOX)
+
+
+def cmd_list(args: list[str] | None = None):
+    """List registered tools as JSON."""
+    from mcp_server import list_tools  # type: ignore[import-not-found]
+
+    limit = 50
+    if args:
+        if args and args[0] in {"--help", "-h"}:
+            print("用法: forge list [limit]")
+            return
+        try:
+            limit = int(args[0])
+        except ValueError:
+            print(f"❌ 无效 limit: {args[0]}")
+            sys.exit(1)
+
+    print(json.dumps({"tools": list_tools(limit=limit)}, ensure_ascii=False))
 
 
 def cmd_dashboard(_args: list[str] | None = None):
@@ -681,7 +700,7 @@ def _build_command_map() -> dict:
     # 1. 内建命令
     for name in ("status", "routine"):
         reg(name, "noargs", globals()[f"cmd_{name}"])
-    for name in ("health", "dashboard"):
+    for name in ("health", "dashboard", "list"):
         reg(name, "args", globals()[f"cmd_{name}"])
     for name in ("verify", "schedule", "sniff", "install"):
         reg(name, "args", globals()[f"cmd_{name}"])

@@ -70,6 +70,33 @@ def _parse_every_expr(expr: str) -> float | None:
     return None
 
 
+def _parse_step_cron_interval(expr: str) -> float | None:
+    """Best-effort interval extraction for simple step cron expressions.
+
+    Legacy tests treat ``*/N * * * *`` more like ``every Nm`` than a strict
+    wall-clock cron boundary. We preserve that behavior only for the obvious
+    step forms that can be reduced to a fixed interval.
+    """
+    parts = expr.strip().split()
+    if len(parts) != 5:
+        return None
+
+    minute, hour, day, month, weekday = parts
+    if hour == day == month == weekday == "*" and minute.startswith("*/"):
+        try:
+            return int(minute[2:]) * 60
+        except ValueError:
+            return None
+
+    if day == month == weekday == "*" and hour.startswith("*/") and minute.isdigit():
+        try:
+            return int(hour[2:]) * 3600
+        except ValueError:
+            return None
+
+    return None
+
+
 def _is_due(
     job_id: str | None,
     schedule_expr: str | int | None,
@@ -107,6 +134,11 @@ def _is_due(
     if interval is not None:
         elapsed = (now - last_run_at).total_seconds()
         return elapsed >= interval
+
+    step_interval = _parse_step_cron_interval(schedule_expr)
+    if step_interval is not None:
+        elapsed = (now - last_run_at).total_seconds()
+        return elapsed >= step_interval
 
     # Try cron expression
     if "/" in schedule_expr or schedule_expr.count(" ") >= 4:

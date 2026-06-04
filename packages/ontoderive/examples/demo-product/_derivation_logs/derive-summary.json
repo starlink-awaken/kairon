@@ -1,5 +1,5 @@
 {
-  "derived_at": "2026-06-04T16:11:25.261849",
+  "derived_at": "2026-06-04T18:23:52.522749",
   "facts": 8,
   "entities": 0,
   "inferences": 3,
@@ -63,14 +63,14 @@
       "certainty": "certain",
       "method": "modus_ponens_valid",
       "derives_from": [
+        "D-F4",
         "D-F3",
-        "D-F6",
         "D-F7",
-        "D-F4"
+        "D-F6"
       ],
       "confidence": 0.9,
       "source": "rule_engine",
-      "derivation_trail": "R7: D-F3→D-F6→D-F7→D-F4",
+      "derivation_trail": "R7: D-F4→D-F3→D-F7→D-F6",
       "type": "modus_ponens_valid"
     },
     {
@@ -80,13 +80,13 @@
       "derives_from": [
         "D-F3",
         "D-F1",
+        "D-F4",
         "D-F5",
-        "D-F2",
-        "D-F4"
+        "D-F2"
       ],
       "confidence": 0.9,
       "source": "rule_engine",
-      "derivation_trail": "R7: D-F3→D-F1→D-F5→D-F2",
+      "derivation_trail": "R7: D-F3→D-F1→D-F4→D-F5",
       "type": "modus_ponens_valid"
     },
     {
@@ -94,13 +94,13 @@
       "certainty": "certain",
       "method": "modus_ponens_valid",
       "derives_from": [
-        "D-F6",
+        "D-F8",
         "D-F7",
-        "D-F8"
+        "D-F6"
       ],
       "confidence": 0.9,
       "source": "rule_engine",
-      "derivation_trail": "R7: D-F6→D-F7→D-F8",
+      "derivation_trail": "R7: D-F8→D-F7→D-F6",
       "type": "modus_ponens_valid"
     },
     {
@@ -114,43 +114,43 @@
       "type": "subsumption"
     },
     {
-      "conclusion": "推论'INF-L1：产品稳定性是当前最紧迫问题'和'INF-L2：应加速新功能开发以追赶竞品NPS差距'共享2个前提(['D-F3', 'D-F4'])",
+      "conclusion": "推论'INF-L1：产品稳定性是当前最紧迫问题'和'INF-L2：应加速新功能开发以追赶竞品NPS差距'共享2个前提(['D-F4', 'D-F3'])",
       "certainty": "probable",
       "method": "shared_premise",
       "derives_from": [
-        "D-F3",
-        "D-F4"
+        "D-F4",
+        "D-F3"
       ],
       "confidence": 0.75,
       "source": "rule_engine",
-      "derivation_trail": "R2: D-F3→D-F4",
+      "derivation_trail": "R2: D-F4→D-F3",
       "type": "shared_premise"
     },
     {
-      "conclusion": "推论'INF-L1：产品稳定性是当前最紧迫问题'和'INF-L3：技术债务是根本瓶颈，必须优先清理'共享2个前提(['D-F6', 'D-F7'])",
+      "conclusion": "推论'INF-L1：产品稳定性是当前最紧迫问题'和'INF-L3：技术债务是根本瓶颈，必须优先清理'共享2个前提(['D-F7', 'D-F6'])",
       "certainty": "probable",
       "method": "shared_premise",
       "derives_from": [
-        "D-F6",
-        "D-F7"
+        "D-F7",
+        "D-F6"
       ],
       "confidence": 0.75,
       "source": "rule_engine",
-      "derivation_trail": "R2: D-F6→D-F7",
+      "derivation_trail": "R2: D-F7→D-F6",
       "type": "shared_premise"
     },
     {
-      "conclusion": "最具影响力的前提: D-F3(被2个推论引用); D-F6(被2个推论引用); D-F7(被2个推论引用)",
+      "conclusion": "最具影响力的前提: D-F4(被2个推论引用); D-F3(被2个推论引用); D-F7(被2个推论引用)",
       "certainty": "probable",
       "method": "influence_analysis",
       "derives_from": [
+        "D-F4",
         "D-F3",
-        "D-F6",
         "D-F7"
       ],
       "confidence": 0.8,
       "source": "rule_engine",
-      "derivation_trail": "R10: D-F3→D-F6→D-F7",
+      "derivation_trail": "R10: D-F4→D-F3→D-F7",
       "type": "influence_analysis"
     },
     {
@@ -158,14 +158,14 @@
       "certainty": "probable",
       "method": "structural_hole",
       "derives_from": [
+        "D-F4",
         "D-F3",
-        "D-F6",
         "D-F7",
-        "D-F4"
+        "D-F6"
       ],
       "confidence": 0.65,
       "source": "rule_engine",
-      "derivation_trail": "R17: D-F3→D-F6→D-F7→D-F4",
+      "derivation_trail": "R17: D-F4→D-F3→D-F7→D-F6",
       "type": "structural_hole"
     },
     {
@@ -175,13 +175,13 @@
       "derives_from": [
         "D-F3",
         "D-F1",
-        "D-F5",
         "D-F4",
+        "D-F5",
         "D-F2"
       ],
       "confidence": 0.65,
       "source": "rule_engine",
-      "derivation_trail": "R17: D-F3→D-F1→D-F5→D-F4",
+      "derivation_trail": "R17: D-F3→D-F1→D-F4→D-F5",
       "type": "structural_hole"
     },
     {
@@ -189,13 +189,13 @@
       "certainty": "probable",
       "method": "structural_hole",
       "derives_from": [
-        "D-F6",
+        "D-F8",
         "D-F7",
-        "D-F8"
+        "D-F6"
       ],
       "confidence": 0.65,
       "source": "rule_engine",
-      "derivation_trail": "R17: D-F6→D-F7→D-F8",
+      "derivation_trail": "R17: D-F8→D-F7→D-F6",
       "type": "structural_hole"
     },
     {

@@ -40,3 +40,6 @@ testpaths = ["tests"]
 minversion = "7.0"
 addopts = "-v --tb=short"
 
+
+[project.scripts]
+llm-gateway-mcp = "llm_gateway.mcp_server:main"

@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-06-04T16:11:25.195658",
+  "checked_at": "2026-06-04T19:21:37.208479",
   "total": 13,
   "passed": 13,
   "severities": {
@@ -48,7 +48,7 @@
       "name": "事实可追溯性",
       "passed": true,
       "severity": "PASS",
-      "detail": "事实8个: 推论引用5, 方案引用2 | 蕴含图: 14节点/11边, 深度1, 未追溯6个: D-F3,P-F1,D-F5",
+      "detail": "事实8个: 推论引用5, 方案引用2 | 蕴含图: 14节点/11边, 深度1, 未追溯6个: D-F3,P-F1,P-F2",
       "fixes": [
         "标注事实编号引用"
       ],
@@ -144,7 +144,7 @@
       "name": "形式语言层(OntoLang解析) [DEPRECATED]",
       "passed": true,
       "severity": "PASS",
-      "detail": "[DEPRECATED] OntoLang保留供外部引用",
+      "detail": "[DEPRECATED] ontolang不可用: No module named 'ontolang'",
       "fixes": [],
       "file": "",
       "line": 0

@@ -12,7 +12,10 @@ Usage:
 from __future__ import annotations
 
 import asyncio
+import os
 import signal
+import tomllib
+from pathlib import Path
 
 import structlog
 
@@ -78,6 +81,54 @@ KNOWN_BACKENDS: list[dict] = [
     },
 ]
 
+def discover_mcp_backends() -> list[dict]:
+    """Dynamically discover MCP backends from kairon packages."""
+    candidates = [
+        Path(__file__).resolve().parents[3] / "packages",
+        Path.cwd() / "packages",
+        Path.cwd() / "projects" / "kairon" / "packages",
+    ]
+    packages_dir = next((path for path in candidates if path.exists()), None)
+    if packages_dir is None:
+        return []
+
+    backends = []
+    for pkg_dir in packages_dir.iterdir():
+        if not pkg_dir.is_dir() or not (pkg_dir / "pyproject.toml").exists():
+            continue
+        try:
+            with open(pkg_dir / "pyproject.toml", "rb") as f:
+                config = tomllib.load(f)
+            pkg_name = config.get("project", {}).get("name")
+            if not pkg_name: continue
+
+            mcp_module = None
+            for root, _, files in os.walk(pkg_dir):
+                if "test" in root: continue
+                if "mcp_server.py" in files:
+                    mcp_module = "mcp_server"
+                elif "server.py" in files and ("mcp" in root or "standalone" in root):
+                    mcp_module = "server"
+                else:
+                    continue
+
+                rel_path = Path(root).relative_to(pkg_dir)
+                parts = list(rel_path.parts)
+                if parts and parts[0] == "src":
+                    parts = parts[1:]
+                mod_name = ".".join(parts + [mcp_module])
+                
+                backends.append({
+                    "name": pkg_name,
+                    "mcp_endpoint": "",
+                    "command": "uv",
+                    "args": ["run", "--package", pkg_name, "python", "-m", mod_name]
+                })
+                break
+        except Exception as e:
+            logger.warning("mcp_gateway_discovery_error", package=pkg_dir.name, error=str(e))
+    return backends
+
 # Module-level singleton — reused across start/stop calls.
 _gateway_manager: ProxyManager | None = None
 
@@ -92,7 +143,14 @@ async def start_all() -> dict[str, str]:
     if _gateway_manager is None:
         _gateway_manager = ProxyManager()
 
-    results = await _gateway_manager.start(KNOWN_BACKENDS)
+    backends = list(KNOWN_BACKENDS)
+    known_names = {backend["name"] for backend in backends}
+    discovered = [backend for backend in discover_mcp_backends() if backend["name"] not in known_names]
+    if discovered:
+        backends.extend(discovered)
+        logger.info("mcp_gateway_discovered_backends", count=len(discovered), services=[b["name"] for b in discovered])
+
+    results = await _gateway_manager.start(backends)
     ok_count = sum(1 for v in results.values() if v.startswith("ok"))
     logger.info("mcp_gateway_started", ok=ok_count, failed=len(results) - ok_count, services=list(results.keys()))
     return results

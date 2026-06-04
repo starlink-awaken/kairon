@@ -746,8 +746,12 @@ class TestQueryGraph:
 
     def test_topo_analysis(self):
         import json
+        from pathlib import Path
 
-        g = json.loads(open("graph/graph.json").read())
+        graph_path = Path(__file__).resolve().parent.parent / "graph" / "graph.json"
+        if not graph_path.exists():
+            pytest.skip("graph.json not found — run forge build-graph first")
+        g = json.loads(graph_path.read_text())
         assert "nodes" in g
         assert "edges" in g
 
@@ -770,7 +774,12 @@ class TestSyncRegistry:
 
 class TestVerify:
     def test_phase1_checks(self):
-        reg = json.loads(open("tools-registry.json").read())
+        from pathlib import Path
+
+        reg_path = Path(__file__).resolve().parent.parent / "tools-registry.json"
+        if not reg_path.exists():
+            pytest.skip("tools-registry.json not found — run forge asset export tools first")
+        reg = json.loads(reg_path.read_text())
         count = len(reg.get("tools", []))
         assert count >= 60, f"Tool count {count} < 60"
 

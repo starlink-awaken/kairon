@@ -28,17 +28,15 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Application Frameworks",
 ]
 readme = "README.md"
+dependencies = [
+    "socksio>=1.0.0",
+]
 
 [project.urls]
 Homepage = "https://github.com/starlink-awaken/omostation"
 Repository = "https://github.com/starlink-awaken/kairon"
 Documentation = "https://github.com/starlink-awaken/kairon/tree/main/docs"
 Changelog = "https://github.com/starlink-awaken/kairon/blob/main/CHANGELOG.md"
-authors = [{name = "Workspace Team"}]
-readme = "README.md"
-dependencies = [
-    "socksio>=1.0.0",
-]
 
 [tool.uv.workspace]
 members = ["packages/*"]

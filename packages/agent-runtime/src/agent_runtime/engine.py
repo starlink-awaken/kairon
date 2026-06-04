@@ -7,6 +7,7 @@
 """
 
 import json
+import os
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -65,69 +66,93 @@ class AgentRuntime:
         self._tool_registry = self.tools.build_tool_registry()
 
     def _call_llm(self, messages: list[dict], tools: list[dict] | None = None) -> dict:
-        """调用 LLM API。使用 OpenAI 兼容接口。
+        """调用 LLM API。使用 llm_gateway 统一网关。"""
+        import asyncio
+        from llm_gateway.detection import detect_backends
+        from llm_gateway.provider import LLMRequest, ToolSchema
 
-        API key 读取优先级：
-        1. AGENT_RUNTIME_API_KEY (专用环境变量)
-        2. DEEPSEEK_API_KEY / OPENAI_API_KEY
-        3. Hermes auth.json credential_pool
-        """
-        import urllib.error
-        import urllib.request
-
-        provider = _get_env("AGENT_RUNTIME_PROVIDER", "deepseek")
-        base_urls = {
-            "deepseek": "https://api.deepseek.com",
-            "openrouter": "https://openrouter.ai/api/v1",
-        }
-        base_url = _get_env("AGENT_RUNTIME_BASE_URL", base_urls.get(provider, "https://api.deepseek.com"))
-
-        api_key = _resolve_api_key()
-        if not api_key:
+        providers = detect_backends()
+        if not providers:
             return {
                 "role": "assistant",
                 "content": "",
                 "tool_calls": [],
                 "finish_reason": "error",
-                "error": "No API key found. Set AGENT_RUNTIME_API_KEY env var.",
+                "error": "No LLM backend available via llm-gateway.",
             }
+        
+        provider = providers[0]
 
-        payload = {
-            "model": self.model,
-            "messages": messages,
-            "max_tokens": 4096,
-            "temperature": 0.1,
-        }
+        mapped_tools = None
         if tools:
-            payload["tools"] = tools
-            payload["tool_choice"] = "auto"
+            mapped_tools = []
+            for t in tools:
+                if "function" in t:
+                    f = t["function"]
+                    mapped_tools.append(ToolSchema(
+                        name=f["name"],
+                        description=f.get("description", ""),
+                        parameters=f.get("parameters", {})
+                    ))
 
-        url = f"{base_url}/chat/completions"
-        data_bytes = json.dumps(payload).encode()
-        req = urllib.request.Request(  # noqa: S310
-            url,
-            data=data_bytes,
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {api_key}",
-            },
-            method="POST",
-        )
         try:
-            with urllib.request.urlopen(req, timeout=180) as resp:  # noqa: S310
-                data = json.loads(resp.read())
-        except urllib.error.HTTPError as e:
-            body = e.read().decode()[:500]
-            log.error(f"LLM API error {e.code} on {url}")
-            return {
+            system_prompt = ""
+            prompt = ""
+            context: list[dict[str, Any]] = []
+
+            for idx, message in enumerate(messages):
+                role = message.get("role", "")
+                content = message.get("content", "")
+                if idx == 0 and role == "system":
+                    system_prompt = content
+                    continue
+                if role == "user":
+                    prompt = content
+                else:
+                    context.append(message)
+
+            req = LLMRequest(
+                model=self.model or provider.default_model,
+                prompt=prompt,
+                system_prompt=system_prompt,
+                context=context,
+                metadata={"tools": mapped_tools or []},
+            )
+            resp = asyncio.run(provider.generate(req))
+
+            tool_calls = getattr(resp, "tool_calls", None) or []
+            usage = getattr(resp, "usage", None)
+            if usage is None:
+                usage = {
+                    "prompt_tokens": getattr(resp, "input_tokens", 0),
+                    "completion_tokens": getattr(resp, "output_tokens", 0),
+                    "total_tokens": getattr(resp, "input_tokens", 0) + getattr(resp, "output_tokens", 0),
+                }
+
+            result = {
                 "role": "assistant",
-                "content": "",
+                "content": resp.content,
                 "tool_calls": [],
-                "finish_reason": "error",
-                "error": f"HTTP {e.code}: {body}",
+                "finish_reason": getattr(resp, "finish_reason", "stop") or "stop",
+                "usage": usage,
             }
+
+            if tool_calls:
+                result["tool_calls"] = [
+                    {
+                        "id": tc.id,
+                        "type": "function",
+                        "function": {
+                            "name": tc.name,
+                            "arguments": json.dumps(tc.arguments)
+                        }
+                    } for tc in tool_calls
+                ]
+                result["finish_reason"] = "tool_calls"
+
+            return result
         except Exception as e:
-            log.error(f"LLM API error: {e}")
+            log.error(f"LLM Gateway error: {e}")
             return {
                 "role": "assistant",
                 "content": "",
@@ -135,19 +160,6 @@ class AgentRuntime:
                 "finish_reason": "error",
                 "error": str(e),
             }
-
-        choice = data["choices"][0]
-        msg = choice["message"]
-        result = {
-            "role": "assistant",
-            "content": msg.get("content", ""),
-            "tool_calls": msg.get("tool_calls", []),
-            "finish_reason": choice.get("finish_reason", "stop"),
-            "usage": data.get("usage", {}),
-        }
-        if "reasoning_content" in msg:
-            result["reasoning_content"] = msg["reasoning_content"]
-        return result
 
     def _execute_tool(self, tool_call: dict) -> dict:
         """执行单个工具调用。"""
@@ -252,49 +264,24 @@ def _get_env(key: str, default: str = "") -> str:
 
 
 def _resolve_api_key() -> str:
-    """解析 API key，优先级从高到低。
+    """Resolve API key using the historical precedence order."""
+    for key in ("AGENT_RUNTIME_API_KEY", "DEEPSEEK_API_KEY", "OPENAI_API_KEY"):
+        value = _get_env(key).strip()
+        if value:
+            return value
 
-    1. AGENT_RUNTIME_API_KEY (专用环境变量)
-    2. DEEPSEEK_API_KEY / OPENAI_API_KEY
-    3. ~/.hermes/auth.json credential_pool
-    4. ~/.hermes/.env
-    """
-    import os
-
-    api_key = (
-        os.environ.get("AGENT_RUNTIME_API_KEY")
-        or os.environ.get("DEEPSEEK_API_KEY")
-        or os.environ.get("OPENAI_API_KEY")
-        or ""
-    )
-
-    if api_key:
-        return api_key
-
-    # 回退1: Hermes auth.json
-    auth_file = Path.home() / ".hermes" / "auth.json"
-    if auth_file.exists():
+    home = Path.home()
+    for path in (
+        home / ".config" / "agent-runtime" / "api_key",
+        home / ".agent-runtime" / "api_key",
+        home / ".deepseek" / "api_key",
+        home / ".openai" / "api_key",
+    ):
         try:
-            auth_data = json.loads(auth_file.read_text())
-            pool = auth_data.get("credential_pool", {})
-            for provider_key in ("deepseek", "openai", "openrouter"):
-                for entry in pool.get(provider_key, []):
-                    token = entry.get("access_token", "")
-                    if token and token.startswith("sk-"):
-                        return token
-        except (json.JSONDecodeError, OSError):
-            pass
-
-    # 回退2: .env 文件
-    env_file = Path.home() / ".hermes" / ".env"
-    if env_file.exists():
-        for line in env_file.read_text().splitlines():
-            if "API_KEY" in line and "=" in line:
-                parts = line.split("=", 1)
-                if len(parts) == 2 and parts[1].strip():
-                    return parts[1].strip().strip("\"'")
+            value = path.read_text(encoding="utf-8").strip()
+        except OSError:
+            continue
+        if value:
+            return value
 
     return ""
-
-
-import os

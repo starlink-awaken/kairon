@@ -1,2 +1,27 @@
-"""Configuration module for agent-runtime."""
-from agent_runtime.config.config import *  # noqa: F403
+"""Reload-safe facade for agent_runtime.config.config."""
+
+from __future__ import annotations
+
+import importlib
+
+from . import config as _config
+
+importlib.reload(_config)
+
+from .config import *  # noqa: F403
+
+REGISTRY_PATH = _config.REGISTRY_PATH
+
+
+def _sync_overrides() -> None:
+    _config.REGISTRY_PATH = REGISTRY_PATH
+
+
+def _load_registry():
+    _sync_overrides()
+    return _config._load_registry()
+
+
+def _query_registry_port(known_names):
+    _sync_overrides()
+    return _config._query_registry_port(known_names)
