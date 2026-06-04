@@ -4,6 +4,7 @@ from kairon_lib.core.events import (  # noqa: F401
     BosEvent,
     EventBusProtocol,
     EventType,
+    _NullEventBus,
     get_event_bus,
     get_global_event_bus,
     make_event,

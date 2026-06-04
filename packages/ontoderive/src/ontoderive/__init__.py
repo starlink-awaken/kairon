@@ -4,7 +4,7 @@ Provides document abstraction, frontmatter detection/merging,
 meta-validation, meta-evolution, and fault-tolerant pipeline tools.
 """
 
-__version__ = "0.1.0"
+__version__ = "3.6.4"
 
 __all__ = (
     "BaseDocument",

@@ -1,6 +1,6 @@
 """Kairon shared library - common utilities and base models."""
 
-__version__ = "0.2.0"
+__version__ = "0.4.0"
 __all__: list[str] = []
 
 # Backward-compat re-exports

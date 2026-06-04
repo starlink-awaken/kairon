@@ -1,6 +1,6 @@
 """Eidos - Schema definition and validation layer for the Workspace knowledge foundation."""
 
-__version__ = "0.1.0"
+__version__ = "0.5.0"
 
 from .meta import MetaRelationType, MetaType
 from .registry import create_registry, registry

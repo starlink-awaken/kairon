@@ -28,7 +28,7 @@ SSOT Kernel — 单一事实源知识工程通用引擎
     from ssot_kernel.meta_model import DomainConfig, Entity, Fact, Rule
 """
 
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 __all__ = (
     "__version__",
 )

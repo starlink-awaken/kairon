@@ -72,9 +72,12 @@ dependencies = [
     { name = "aiohttp" },
     { name = "core-models" },
     { name = "cryptography" },
+    { name = "eidos" },
     { name = "fastapi" },
     { name = "fastmcp" },
     { name = "httpx" },
+    { name = "kos" },
+    { name = "minerva" },
     { name = "prometheus-client" },
     { name = "rich" },
     { name = "structlog" },
@@ -119,11 +122,14 @@ requires-dist = [
     { name = "aiohttp", specifier = ">=3.14.0" },
     { name = "core-models", editable = "packages/core-models" },
     { name = "cryptography", specifier = ">=41.0" },
+    { name = "eidos", editable = "packages/eidos" },
     { name = "fastapi", specifier = ">=0.100" },
     { name = "fastmcp", specifier = ">=0.1" },
     { name = "grpcio", marker = "extra == 'grpc'", specifier = ">=1.60" },
     { name = "grpcio-tools", marker = "extra == 'grpc'", specifier = ">=1.60" },
     { name = "httpx", specifier = ">=0.27" },
+    { name = "kos", editable = "packages/kos" },
+    { name = "minerva", editable = "packages/minerva" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0" },
     { name = "prometheus-client", specifier = ">=0.20" },
     { name = "protobuf", marker = "extra == 'grpc'", specifier = ">=4.0" },
@@ -962,6 +968,7 @@ source = { editable = "packages/codeanalyze" }
 dependencies = [
     { name = "click" },
     { name = "core-models" },
+    { name = "eidos" },
     { name = "rich" },
 ]
 
@@ -978,6 +985,7 @@ mcp = [
 requires-dist = [
     { name = "click", specifier = ">=8.0" },
     { name = "core-models", editable = "packages/core-models" },
+    { name = "eidos", editable = "packages/eidos" },
     { name = "fastmcp", marker = "extra == 'mcp'", specifier = ">=0.6" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0" },
     { name = "rich", specifier = ">=13.0" },
@@ -2588,8 +2596,11 @@ name = "iris"
 version = "0.3.0"
 source = { editable = "packages/iris" }
 dependencies = [
+    { name = "eidos" },
     { name = "fastmcp" },
     { name = "httpx" },
+    { name = "kronos" },
+    { name = "minerva" },
     { name = "pydantic" },
     { name = "pyyaml" },
 ]
@@ -2605,8 +2616,11 @@ ssot = [
 
 [package.metadata]
 requires-dist = [
+    { name = "eidos", editable = "packages/eidos" },
     { name = "fastmcp", specifier = ">=0.4" },
     { name = "httpx", specifier = ">=0.27" },
+    { name = "kronos", editable = "packages/kronos" },
+    { name = "minerva", editable = "packages/minerva" },
     { name = "pydantic", specifier = ">=2.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0" },
     { name = "pyyaml", specifier = ">=6.0" },
@@ -3117,6 +3131,7 @@ name = "kos"
 version = "2.0.0"
 source = { editable = "packages/kos" }
 dependencies = [
+    { name = "eidos" },
     { name = "jieba" },
     { name = "openpyxl" },
     { name = "pymupdf" },
@@ -3125,6 +3140,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "eidos", editable = "packages/eidos" },
     { name = "jieba", specifier = ">=0.42" },
     { name = "openpyxl", specifier = ">=3.1.0" },
     { name = "pymupdf", specifier = ">=1.23.0" },
@@ -3320,6 +3336,7 @@ name = "llm-gateway"
 version = "0.3.0"
 source = { editable = "packages/llm-gateway" }
 dependencies = [
+    { name = "minerva" },
     { name = "pyyaml" },
     { name = "requests" },
 ]
@@ -3339,6 +3356,7 @@ openai = [
 requires-dist = [
     { name = "anthropic", marker = "extra == 'anthropic'", specifier = ">=0.30" },
     { name = "google-generativeai", marker = "extra == 'gemini'", specifier = ">=0.6" },
+    { name = "minerva", editable = "packages/minerva" },
     { name = "openai", marker = "extra == 'openai'", specifier = ">=1.0" },
     { name = "pyyaml", specifier = ">=6.0" },
     { name = "requests", specifier = ">=2.25" },
@@ -3739,6 +3757,7 @@ dependencies = [
     { name = "ddgs" },
     { name = "fastmcp" },
     { name = "httpx" },
+    { name = "kos" },
     { name = "lancedb" },
     { name = "pydantic" },
     { name = "pyyaml" },
@@ -3781,6 +3800,7 @@ requires-dist = [
     { name = "fastmcp", specifier = ">=0.1" },
     { name = "graphiti-core", extras = ["neo4j"], marker = "extra == 'tier2'", specifier = ">=0.28" },
     { name = "httpx", specifier = ">=0.27" },
+    { name = "kos", editable = "packages/kos" },
     { name = "lancedb", specifier = ">=0.21" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0" },
     { name = "neo4j", marker = "extra == 'tier2'", specifier = ">=5.0" },
