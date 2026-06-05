@@ -57,6 +57,21 @@ test-diff:
 	echo "=== 全部完成 ==="; \
 	test $$fail -eq 0
 
+# Parallel: unit tests on all packages simultaneously (max 4 jobs)
+test-parallel:
+	@echo "=== 并行测试（最多 4 并发）==="; \
+	pkgs=""; \
+	for pkg in packages/*/; do \
+		if [ -d "$$pkg/tests" ]; then \
+			pkgs="$$pkgs $$(basename $$pkg)"; \
+		fi; \
+	done; \
+	echo "Packages: $$pkgs"; \
+	echo "$$pkgs" | tr ' ' '\n' | xargs -P4 -I{} sh -c ' \
+		echo "--- [{}] ---"; \
+		cd packages/{} && uv run python -m pytest tests/ -q --ignore=tests/integration --ignore=tests/benchmarks 2>&1 || echo "FAILED: {}"; \
+	'
+
 # Lint all packages with ruff
 lint:
 	ruff check packages/
