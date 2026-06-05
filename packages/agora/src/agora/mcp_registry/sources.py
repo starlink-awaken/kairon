@@ -195,11 +195,11 @@ async def search_all(
         sources = ["github", "registry"]
 
     source_map: dict[str, Any] = {
-        "github": search_github(query),
-        "registry": search_registry(),
+        "github": lambda: search_github(query),
+        "registry": search_registry,
     }
 
-    tasks = [source_map[s] for s in sources if s in source_map]
+    tasks = [source_map[source_name]() for source_name in sources if source_name in source_map]
     if not tasks:
         logger.warning("search_all_no_valid_sources", sources=sources)
         return []

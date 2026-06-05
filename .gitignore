@@ -35,6 +35,13 @@ agora-*.json
 
 # Derived/generated data
 _derivation_logs/
+examples/**/_derivation_logs/
+packages/ontoderive/_derivation_logs/
+packages/ontoderive/examples/**/_derivation_logs/
+
+# Package-local runtime data
+data/db/
+packages/shared-lib/data/db/
 
 # Environment
 .env

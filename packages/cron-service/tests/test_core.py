@@ -150,6 +150,21 @@ class TestResolveScript:
         assert result is None
 
 
+class TestStartScript:
+    """start-cron-service.sh should remain a valid repo entrypoint."""
+
+    def test_start_script_exists(self):
+        script = Path(__file__).resolve().parent.parent / "scripts" / "start-cron-service.sh"
+        assert script.exists()
+
+    def test_start_script_executes_cron_service_server(self):
+        script = (Path(__file__).resolve().parent.parent / "scripts" / "start-cron-service.sh").read_text(
+            encoding="utf-8"
+        )
+        assert "CRON_SERVICE_CONFIG" in script
+        assert "python3\" -m cron_service.server" in script or "python3' -m cron_service.server" in script or "-m cron_service.server" in script
+
+
 # ── Classify tests ───────────────────────────────────────────
 
 from cron_service.classify import classify, should_bridge

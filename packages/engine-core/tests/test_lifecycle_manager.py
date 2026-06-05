@@ -2,13 +2,14 @@
 
 SwarmLifecycleManager has heavy dependencies on engine_core.organs.engine.lifecycle.*
 and other submodules that may not exist. We verify:
-  - The source file exists
-  - Class and method signatures from source
+  - The compatibility facade exists
+  - The real implementation exposes expected classes/methods/subcomponents
   - Import when dependencies are met
 """
 
 from __future__ import annotations
 
+import ast
 import importlib.util
 import sys
 from pathlib import Path
@@ -16,89 +17,114 @@ from typing import Any
 
 import pytest
 
-LIFECYCLE_MANAGER_PATH = (
+COMPAT_LIFECYCLE_MANAGER_PATH = (
     Path(__file__).resolve().parent.parent
     / "src"
     / "engine_core"
     / "lifecycle_manager.py"
 )
 
-SOURCE_TEXT = LIFECYCLE_MANAGER_PATH.read_text(encoding="utf-8")
+IMPL_LIFECYCLE_MANAGER_PATH = (
+    Path(__file__).resolve().parent.parent
+    / "src"
+    / "engine_core"
+    / "lifecycle"
+    / "lifecycle_manager.py"
+)
 
+SOURCE_TEXT = IMPL_LIFECYCLE_MANAGER_PATH.read_text(encoding="utf-8")
+SOURCE_AST = ast.parse(SOURCE_TEXT)
+
+
+def _find_class(name: str) -> ast.ClassDef:
+    for node in SOURCE_AST.body:
+        if isinstance(node, ast.ClassDef) and node.name == name:
+            return node
+    raise AssertionError(f"Class {name} not found")
+
+
+def _class_method_names(name: str) -> set[str]:
+    node = _find_class(name)
+    return {
+        child.name
+        for child in node.body
+        if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef))
+    }
 
 def test_source_file_exists():
-    assert LIFECYCLE_MANAGER_PATH.is_file()
+    assert COMPAT_LIFECYCLE_MANAGER_PATH.is_file()
+    assert IMPL_LIFECYCLE_MANAGER_PATH.is_file()
 
 
 class TestSwarmLifecycleManagerClassSignatures:
-    """Verify SwarmLifecycleManager class and key methods exist in source."""
+    """Verify SwarmLifecycleManager class and key methods exist in implementation."""
 
     def test_class_swarm_lifecycle_manager_exists(self):
-        assert "class SwarmLifecycleManager(" in SOURCE_TEXT
+        assert _find_class("SwarmLifecycleManager").name == "SwarmLifecycleManager"
 
     def test_iswarm_lifecycle_protocol_exists(self):
-        assert "class ISwarmLifecycle(" in SOURCE_TEXT
+        assert _find_class("ISwarmLifecycle").name == "ISwarmLifecycle"
 
     def test_hatch_method_exists(self):
-        assert "def hatch(" in SOURCE_TEXT
+        assert "hatch" in _class_method_names("SwarmLifecycleManager")
 
     def test_reap_method_exists(self):
-        assert "def reap(" in SOURCE_TEXT
+        assert "reap" in _class_method_names("SwarmLifecycleManager")
 
     def test_spawn_method_exists(self):
-        assert "def spawn(" in SOURCE_TEXT
+        assert "spawn" in _class_method_names("SwarmLifecycleManager")
 
     def test_list_active_method_exists(self):
-        assert "def list_active(" in SOURCE_TEXT
+        assert "list_active" in _class_method_names("SwarmLifecycleManager")
 
     def test_initialize_method_exists(self):
-        assert "def initialize(" in SOURCE_TEXT
+        assert "initialize" in _class_method_names("SwarmLifecycleManager")
 
     def test_shutdown_method_exists(self):
-        assert "def shutdown(" in SOURCE_TEXT
+        assert "shutdown" in _class_method_names("SwarmLifecycleManager")
 
     def test_update_state_method_exists(self):
-        assert "def update_state(" in SOURCE_TEXT
+        assert "update_state" in _class_method_names("SwarmLifecycleManager")
 
     def test_reap_by_id_method_exists(self):
-        assert "def reap_by_id(" in SOURCE_TEXT
+        assert "reap_by_id" in _class_method_names("SwarmLifecycleManager")
 
     def test_ping_heartbeat_method_exists(self):
-        assert "def ping_heartbeat(" in SOURCE_TEXT
+        assert "ping_heartbeat" in _class_method_names("SwarmLifecycleManager")
 
     def test_get_stale_workers_method_exists(self):
-        assert "def get_stale_workers(" in SOURCE_TEXT
+        assert "get_stale_workers" in _class_method_names("SwarmLifecycleManager")
 
     def test_init_cluster_method_exists(self):
-        assert "def init_cluster(" in SOURCE_TEXT
+        assert "init_cluster" in _class_method_names("SwarmLifecycleManager")
 
     def test_discover_peers_method_exists(self):
-        assert "def discover_peers(" in SOURCE_TEXT
+        assert "discover_peers" in _class_method_names("SwarmLifecycleManager")
 
     def test_sync_state_method_exists(self):
-        assert "def sync_state(" in SOURCE_TEXT
+        assert "sync_state" in _class_method_names("SwarmLifecycleManager")
 
     def test_get_cluster_status_method_exists(self):
-        assert "def get_cluster_status(" in SOURCE_TEXT
+        assert "get_cluster_status" in _class_method_names("SwarmLifecycleManager")
 
     def test_list_active_threads_method_exists(self):
-        assert "def list_active_threads(" in SOURCE_TEXT
+        assert "list_active_threads" in _class_method_names("SwarmLifecycleManager")
 
 
 class TestSwarmLifecycleManagerDataClasses:
     """Verify supporting data classes exist in source."""
 
     def test_task_result_class_exists(self):
-        assert "class TaskResult:" in SOURCE_TEXT
+        assert _find_class("TaskResult").name == "TaskResult"
 
     def test_worker_bundle_class_exists(self):
-        assert "class WorkerBundle:" in SOURCE_TEXT
+        assert _find_class("WorkerBundle").name == "WorkerBundle"
 
     def test_worker_handle_class_exists(self):
-        assert "class WorkerHandle:" in SOURCE_TEXT
+        assert _find_class("WorkerHandle").name == "WorkerHandle"
 
     def test_worker_state_enum_exists(self):
-        assert "class WorkerState(" in SOURCE_TEXT
+        assert _find_class("WorkerState").name == "WorkerState"
 
     def test_worker_state_values(self):
         assert "HATCHING = \"HATCHING\"" in SOURCE_TEXT
@@ -169,7 +195,7 @@ class TestSwarmLifecycleManagerImport:
             spec_c.loader.exec_module(compat_mod)
 
         spec = importlib.util.spec_from_file_location(
-            "engine_core.lifecycle_manager", str(LIFECYCLE_MANAGER_PATH)
+            "engine_core.lifecycle_manager", str(COMPAT_LIFECYCLE_MANAGER_PATH)
         )
         if spec is None:
             pytest.skip("Could not create module spec for lifecycle_manager.py")
