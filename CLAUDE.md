@@ -1,6 +1,6 @@
 # CLAUDE.md — kairon
 
-> 知识工程与研究栈 · 25 包 Python monorepo（治理中，原 31 包名册中的 6 包已归档）
+> 知识工程与研究栈 · 23 包 Python monorepo（治理中，原 31 包名册中的 8 包已归档：6 包早期 + kairon-assistant/kairon-voice 于 P28-W2）
 > 根工作区文档：`../CLAUDE.md`（全局）、`../AGENTS.md`（开发指南）、`../LAYER-INDEX.md`（架构分层）
 
 ---
@@ -57,6 +57,8 @@ make format
 | llm-gateway | `packages/llm-gateway/` | LLM 路由 + 配额管理 |
 | wksp | `packages/wksp/` | 工作区管理 |
 
+> 注：kairon-assistant / kairon-voice 已于 P28-W2 归档（见下方"已归档（P28-W2）"段）。
+
 ### L4/Infra — 支撑层
 
 | 包 | 路径 | 说明 |
@@ -70,10 +72,17 @@ make format
 | cron-service | `packages/cron-service/` | 定时任务调度 |
 | eu-pricing | `packages/eu-pricing/` | EU 定价 |
 | kaironcloud-billing | `packages/kaironcloud-billing/` | 云计费 |
-| kairon-assistant | `packages/kairon-assistant/` | 助手 |
-| kairon-voice | `packages/kairon-voice/` | 语音 |
+| ~~kairon-assistant~~ | **已归档 (P28-W2)** | 0 外部 import、whisper 缺依赖 |
+| ~~kairon-voice~~ | **已归档 (P28-W2)** | 0 外部 import、自包含 |
 | symphony-protocol | `packages/symphony-protocol/` | 协议层 |
 | pontus | `packages/pontus/` | Pontus 模块 |
+
+### 已归档（P28-W2 · 2026-06-05）
+
+| 原包 | 归档位置 | 原因 |
+|------|---------|------|
+| kairon-assistant | `projects/_archived/kairon-archived-pkg-kairon-assistant-2026-06-05/kairon-assistant/` | 0 外部 import、whisper 缺依赖、3 tests、孤儿包 |
+| kairon-voice | `projects/_archived/kairon-archived-pkg-kairon-voice-2026-06-05/kairon-voice/` | 0 外部 import、自包含、3 tests、孤儿包 |
 
 ### 已归档（former agentmesh）
 

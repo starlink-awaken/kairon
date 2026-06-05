@@ -1,6 +1,6 @@
 # AGENTS.md — kairon
 
-> Knowledge & Research Operating Stack: 25 包 Python monorepo（以当前 checkout 为准）
+> Knowledge & Research Operating Stack: 23 包 Python monorepo（以当前 checkout 为准；P28-W2 已归档 2 包）
 
 如果你不是 Claude Code，从这里开始。Claude Code 会自动读取 `CLAUDE.md`。
 
@@ -23,7 +23,8 @@ kairon 是一个 25 包的 Python monorepo，托管在 `projects/kairon/`。
 - **L2 集成** — sharedbrain-bridge, llm-gateway
 - **L3 Agent** — agent-runtime, agora, llm-gateway, wksp
 - **Infra** — shared-lib, core-models, engine-core, ecos
-- **业务支撑** — kaironcloud-billing, kairon-assistant, kairon-voice, symphony-protocol
+- **业务支撑** — kaironcloud-billing, symphony-protocol
+- **P28-W2 已归档** — kairon-assistant, kairon-voice（2026-06-05 移入 `projects/_archived/`）
 
 当前 checkout 之外，近期文档和历史中仍引用过 `agent-hub`、`eu-pricing`、`gc-engine`、`observability`、`pontus`、`sharedbrain-standalone`。不要默认这些包在当前树中仍然存在，先以 live 目录为准。
 
