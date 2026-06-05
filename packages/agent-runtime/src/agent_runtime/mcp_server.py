@@ -9,14 +9,9 @@
 
 import json
 import logging
-import sys
 import time
 from pathlib import Path
 from typing import Any
-
-# 确保能找到 runtime.py
-RUNTIME_DIR = Path(__file__).parent
-sys.path.insert(0, str(RUNTIME_DIR))
 
 from mcp.server.fastmcp import FastMCP
 
@@ -38,7 +33,7 @@ def _log_execution(task_name: str, status: str, summary: str, result: dict[str, 
 def get_runtime():
     global _runtime
     if _runtime is None:
-        from runtime import AgentRuntime  # type: ignore[import-not-found]
+        from agent_runtime.engine import AgentRuntime  # type: ignore[import-not-found]
 
         _runtime = AgentRuntime()
     return _runtime
@@ -52,10 +47,10 @@ def run_task(task_name: str) -> str:
     Returns the LLM response or error message.
     """
     runtime = get_runtime()
-    task_file = RUNTIME_DIR / "task_definitions" / f"{task_name}.json"
-    if not task_file.exists():
-        available = ", ".join(sorted(p.stem for p in (RUNTIME_DIR / "task_definitions").glob("*.json")))
-        return f"Task '{task_name}' not found. Available tasks: {available}"
+    task_def_dir = Path(__file__).parent / "task_definitions"
+    task_file = task_def_dir / f"{task_name}.json"
+    if not task_file.exists() or not task_def_dir.exists():
+        return f"Task '{task_name}' not found. task_definitions directory is empty or missing."
 
     task_def = json.loads(task_file.read_text())
     prompt = task_def.get("prompt", "")
