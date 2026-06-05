@@ -1,12 +1,41 @@
 from __future__ import annotations
 
+import json
+import os
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 
 import httpx
 
 from llm_gateway.types import ChatOptions, ChatResult, ModelDescriptor, StreamChunk
+
+
+# ── X3 Cost tracking ─────────────────────────────────────────────────────
+_COST_LOG = Path(os.environ.get("RUNTIME_HOME", str(Path.home() / "runtime"))) / "data" / "llm_cost.jsonl"
+
+
+def record_llm_cost(model: str, input_tokens: int, output_tokens: int) -> None:
+    """Record an LLM call's token usage to the cost log (non-blocking)."""
+    try:
+        record = {
+            "ts": datetime.now(timezone.utc).isoformat(),
+            "model": model,
+            "input_tokens": input_tokens,
+            "output_tokens": output_tokens,
+        }
+        _COST_LOG.parent.mkdir(parents=True, exist_ok=True)
+        line = (json.dumps(record, ensure_ascii=False) + "\n").encode("utf-8")
+        import os as _os
+        fd = _os.open(str(_COST_LOG), _os.O_WRONLY | _os.O_CREAT | _os.O_APPEND, 0o644)
+        try:
+            _os.write(fd, line)
+        finally:
+            _os.close(fd)
+    except Exception:
+        pass  # non-blocking — logging failure must not break LLM calls
 
 
 class BaseLLMProvider(ABC):
@@ -120,6 +149,11 @@ def parse_openai_response(body: dict[str, Any], model: str) -> ChatResult:
             "completion_tokens": usage_raw.get("completion_tokens", 0),
             "total_tokens": usage_raw.get("total_tokens", 0),
         }
+        record_llm_cost(
+            body.get("model", model),
+            usage_raw.get("prompt_tokens", 0),
+            usage_raw.get("completion_tokens", 0),
+        )
     return ChatResult(
         id=body.get("id", "ai-0"),
         model=body.get("model", model),
