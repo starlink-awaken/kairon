@@ -11,7 +11,7 @@ Agent Runtime — 兼容入口。
 旧脚本通过 ``python3 runtime.py --server`` 调用，此入口保持兼容。
 """
 
-from cli import cli_main  # type: ignore[import-not-found]
+from agent_runtime.cli import cli_main  # type: ignore[import-not-found]
 
 if __name__ == "__main__":
     cli_main()
