@@ -36,6 +36,27 @@ test-fast:
 	echo "=== 全部完成 ==="; \
 	test $$fail -eq 0
 
+# Fast: unit tests only for changed packages (git diff)
+test-diff:
+	@echo "=== 差异测试（仅修改的包）==="; \
+	fail=0; \
+	for pkg in $$(git diff --name-only HEAD 2>/dev/null | grep "^packages/" | cut -d/ -f1-2 | sort -u); do \
+		name=$$(basename $$pkg); \
+		echo "--- [$$name] ---"; \
+		if [ -d "$$pkg/tests" ]; then \
+			if ! (cd $$pkg && uv run python -m pytest tests/ -q --ignore=tests/integration --ignore=tests/benchmarks 2>/dev/null); then \
+				fail=1; \
+			fi; \
+		else \
+			echo "  ⏭️ 跳过"; \
+		fi; \
+	done; \
+	if [ $$fail -eq 0 ] && [ -z "$${pkg:-}" ]; then \
+		echo "  ⏭️  无修改的包"; \
+	fi; \
+	echo "=== 全部完成 ==="; \
+	test $$fail -eq 0
+
 # Lint all packages with ruff
 lint:
 	ruff check packages/
