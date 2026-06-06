@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "protocols-layer"
+version = "0.1.0"
+description = "protocols-layer — 规则/协议层 (sophia 范式编译 + symphony-protocol 协议)"
+license = {text = "MIT"}
+requires-python = ">=3.13"
+authors = [{name = "Workspace Team"}]
+keywords = ["protocols", "rules", "paradigm-compiler", "state-machine", "trigger-engine"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "core-models",
+    "pydantic>=2.0",
+]
+
+[project.scripts]
+protocols-layer = "protocols_layer.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/protocols_layer"]
+
+[tool.hatch.build.targets.sdist]
+packages = ["src/protocols_layer"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "S", "PLE", "RUF100"]
+ignore = ["S101", "S603", "S607", "S108", "S110", "S314", "S608", "E402", "E501", "SIM115", "N813", "UP047"]

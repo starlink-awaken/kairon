@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Any
 
-from engine_core._compat import Infrastructure
+from ._compat import Infrastructure
 
 """
 ---

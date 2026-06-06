@@ -19,7 +19,7 @@ import uuid
 from collections.abc import Callable
 from typing import Any
 
-from engine_core._compat import WorkerHandle
+from ._compat import WorkerHandle
 
 _log = logging.getLogger(__name__)
 

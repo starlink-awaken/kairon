@@ -32,8 +32,8 @@ Version: 0.4.0
 
 import builtins
 
-from llm_gateway.detection import create_provider, detect_backends
-from llm_gateway.provider import (
+from .detection import create_provider, detect_backends
+from .provider import (
     LLMError,
     LLMProvider,
     LLMRequest,
@@ -45,12 +45,12 @@ from llm_gateway.provider import (
     ToolResult,
     ToolSchema,
 )
-from llm_gateway.providers.anthropic_provider import AnthropicProvider
-from llm_gateway.providers.deepseek_provider import DeepSeekProvider
-from llm_gateway.providers.gemini_provider import GeminiProvider
-from llm_gateway.providers.hitl_provider import HitlLLMProvider
-from llm_gateway.providers.ollama_provider import OllamaProvider
-from llm_gateway.providers.openai_provider import OpenAIProvider
+from .providers.anthropic_provider import AnthropicProvider
+from .providers.deepseek_provider import DeepSeekProvider
+from .providers.gemini_provider import GeminiProvider
+from .providers.hitl_provider import HitlLLMProvider
+from .providers.ollama_provider import OllamaProvider
+from .providers.openai_provider import OpenAIProvider
 
 __version__ = "0.4.0"
 

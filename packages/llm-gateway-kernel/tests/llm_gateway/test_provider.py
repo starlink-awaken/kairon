@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from llm_gateway.provider import (
+from llm_gateway_kernel.llm_gateway.provider import (
     LLMProvider,
     LLMRequest,
     LLMResponse,
@@ -85,7 +85,7 @@ def test_none_provider():
 
 
 def test_ollama_provider_exists():
-    from llm_gateway.providers.ollama_provider import OllamaProvider
+    from llm_gateway_kernel.llm_gateway.providers.ollama_provider import OllamaProvider
 
     p = OllamaProvider()
     assert p.default_model == "llama3"

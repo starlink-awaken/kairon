@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from engine_core._compat import TaskResult, TaskType, WorkerBundle, WorkerHandle
+from ._compat import TaskResult, TaskType, WorkerBundle, WorkerHandle
 
 """
 ---

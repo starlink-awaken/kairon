@@ -1,6 +1,6 @@
 """Tests for KEMS Runtime — methodology operationalization."""
 
-from sophia.kems_runtime import Chains, KemsRuntime, Planes, Protocols
+from protocols_layer.sophia.kems_runtime import Chains, KemsRuntime, Planes, Protocols
 
 
 class TestPlanes:

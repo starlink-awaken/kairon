@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator
 from typing import Any
 
-from llm_gateway.types import ChatOptions, ChatResult, ModelDescriptor, StreamChunk
+from ..types import ChatOptions, ChatResult, ModelDescriptor, StreamChunk
 
 
 class BaseLLMProvider(ABC):

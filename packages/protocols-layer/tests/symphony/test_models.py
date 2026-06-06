@@ -1,6 +1,6 @@
 """Tests for symphony-protocol data models."""
 
-from symphony_protocol.models import (
+from protocols_layer.symphony.models import (
     AgentCapability,
     AgentProfile,
     MatchResult,

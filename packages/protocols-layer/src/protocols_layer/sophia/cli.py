@@ -71,7 +71,7 @@ def main():
         return 0
 
     if args.command == "compile":
-        from sophia.compiler import compile_paradigm_sync
+        from .compiler import compile_paradigm_sync
 
         prog = compile_paradigm_sync(args.query)
         if args.json:
@@ -89,19 +89,19 @@ def main():
                     print(f"  ⚠ {i}")
 
     elif args.command == "ops":
-        from sophia.symbols import AtomicOp
+        from .symbols import AtomicOp
 
         for op in AtomicOp:
             print(f"  {op.value}")
 
     elif args.command == "states":
-        from sophia.symbols import ResearchState
+        from .symbols import ResearchState
 
         for s in ResearchState:
             print(f"  {s.value}")
 
     elif args.command == "transitions":
-        from sophia.symbols import BASE_TRANSITIONS
+        from .symbols import BASE_TRANSITIONS
 
         for t in BASE_TRANSITIONS:
             print(
@@ -110,7 +110,7 @@ def main():
             )
 
     elif args.command == "learn":
-        from sophia.learner import ParadigmLearner
+        from .learner import ParadigmLearner
 
         learner = ParadigmLearner()
         if args.learn_cmd == "ops":
@@ -134,8 +134,8 @@ def main():
                 print("  No data yet.")
 
     elif args.command == "evolve":
-        from sophia.compiler import compile_paradigm_sync
-        from sophia.learner import ParadigmLearner
+        from .compiler import compile_paradigm_sync
+        from .learner import ParadigmLearner
 
         learner = ParadigmLearner()
         default = compile_paradigm_sync(args.query)
@@ -169,7 +169,7 @@ def main():
         from pathlib import Path
 
         data = json.loads(Path(args.file).read_text())
-        from sophia.compiler import recompile_from_dict
+        from .compiler import recompile_from_dict
 
         prog = recompile_from_dict(data)
         if args.format == "mermaid":
@@ -182,7 +182,7 @@ def main():
 
         data_a = json.loads(Path(args.file_a).read_text())
         data_b = json.loads(Path(args.file_b).read_text())
-        from sophia.compiler import recompile_from_dict
+        from .compiler import recompile_from_dict
 
         delta = recompile_from_dict(data_a).diff(recompile_from_dict(data_b))
         print(json.dumps(delta, ensure_ascii=False, indent=2))
@@ -191,7 +191,7 @@ def main():
         from pathlib import Path
 
         data = json.loads(Path(args.file).read_text())
-        from sophia.compiler import recompile_from_dict
+        from .compiler import recompile_from_dict
 
         prog = recompile_from_dict(data)
         issues = prog.validate()
@@ -205,12 +205,12 @@ def main():
             return 0
 
     elif args.command == "mcp":
-        from sophia.server.mcp_server import main as mcp_main
+        from .server.mcp_server import main as mcp_main
 
         return mcp_main()
 
     elif args.command == "tui":
-        from sophia.tui.app import main as tui_main
+        from .tui.app import main as tui_main
 
         return tui_main()
 

@@ -14,7 +14,7 @@ import logging
 import os
 from collections.abc import AsyncIterator
 
-from llm_gateway.provider import (
+from ..provider import (
     LLMProvider,
     LLMRequest,
     LLMResponse,

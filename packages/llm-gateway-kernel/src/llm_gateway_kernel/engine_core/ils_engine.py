@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 
-from engine_core._compat import ProjectPaths, get_path_resolver
+from ._compat import ProjectPaths, get_path_resolver
 
 logger = logging.getLogger(__name__)
 """

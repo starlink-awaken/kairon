@@ -6,7 +6,7 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from llm_gateway.types import LoadInfo, ModelDescriptor, ModelRequest, ModelRoutePolicy
+from .types import LoadInfo, ModelDescriptor, ModelRequest, ModelRoutePolicy
 
 ScoreFn = Callable[[ModelDescriptor, ModelRequest], float]
 

@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 # Load bidder.py directly, bypassing broken __init__.py import chain
-_mod_path = (Path(__file__).resolve().parent.parent / "src" / "engine_core" / "bidder.py")
+_mod_path = (Path(__file__).resolve().parents[2] / "src" / "llm_gateway_kernel" / "engine_core" / "bidder.py")
 _spec = importlib.util.spec_from_file_location("engine_core.bidder", str(_mod_path))
 _mod = importlib.util.module_from_spec(_spec)
 sys.modules.setdefault("engine_core.bidder", _mod)

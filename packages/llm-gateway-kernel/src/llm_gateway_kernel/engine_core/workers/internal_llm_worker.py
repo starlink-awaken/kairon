@@ -8,7 +8,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any, cast
 
-from engine_core._compat import (
+from ._compat import (
     InferenceOracle,
     ISynapseWorker,
     MessageEnvelope,
@@ -16,8 +16,8 @@ from engine_core._compat import (
     SynapseAgentCard,
     get_synapse_registry,
 )
-from engine_core.agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
-from engine_core.knowledge_enhancement_mixin import KnowledgeEnhancementMixin  # type: ignore[import-not-found]
+from .agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
+from .knowledge_enhancement_mixin import KnowledgeEnhancementMixin  # type: ignore[import-not-found]
 
 """
 ---

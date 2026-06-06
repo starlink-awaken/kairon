@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from symphony_protocol import (
+from protocols_layer.symphony import (
     AgentCapability,
     AgentMatcher,
     AgentProfile,
@@ -52,7 +52,7 @@ class TestSymphonyBasic:
 
     def test_symphony_stage_complete_no_transitions(self):
         """COMPLETE stage has no valid outgoing transitions."""
-        from symphony_protocol.models import StageTransition
+        from protocols_layer.symphony.models import StageTransition
 
         assert StageTransition(
             from_stage=SymphonyStage.COMPLETE, to_stage=SymphonyStage.ANCHORING
@@ -63,7 +63,7 @@ class TestSymphonyBasic:
 
     def test_stage_transition_same_stage_invalid(self):
         """Same from/to stage is invalid."""
-        from symphony_protocol.models import StageTransition
+        from protocols_layer.symphony.models import StageTransition
 
         stages = list(SymphonyStage)
         for s in stages:

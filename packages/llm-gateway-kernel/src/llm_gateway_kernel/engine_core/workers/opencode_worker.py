@@ -6,7 +6,7 @@ import re
 import subprocess
 from typing import Any
 
-from engine_core._compat import AgentDaemonBase
+from ._compat import AgentDaemonBase
 
 """
 ---

@@ -25,8 +25,8 @@ import logging
 
 _log = logging.getLogger(__name__)
 
-from engine_core.organs.engine.vision_parser import VisionParser  # type: ignore[import-not-found]
-from engine_core.organs.intent_particle import IntentParticle, MetabolicStage  # type: ignore[import-not-found]
+from .organs.engine.vision_parser import VisionParser  # type: ignore[import-not-found]
+from .organs.intent_particle import IntentParticle, MetabolicStage  # type: ignore[import-not-found]
 
 
 class VisionMetabolizer:

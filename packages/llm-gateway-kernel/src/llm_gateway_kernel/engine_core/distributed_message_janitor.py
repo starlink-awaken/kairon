@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import asyncio
 
-from engine_core._compat import ProjectPaths
+from ._compat import ProjectPaths
 
 """
 ---

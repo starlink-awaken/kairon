@@ -18,8 +18,9 @@ from typing import Any
 import pytest
 
 EXEC_SCHEDULER_PATH = (
-    Path(__file__).resolve().parent.parent
+    Path(__file__).resolve().parents[2]
     / "src"
+    / "llm_gateway_kernel"
     / "engine_core"
     / "execution_scheduler.py"
 )
@@ -104,7 +105,7 @@ class TestExecutionSchedulerImport:
     def scheduler_module(self) -> Any:
         # Ensure _compat is loaded first
         compat_path = (
-            Path(__file__).resolve().parent.parent
+            Path(__file__).resolve().parents[2]
             / "src"
             / "engine_core"
             / "_compat.py"

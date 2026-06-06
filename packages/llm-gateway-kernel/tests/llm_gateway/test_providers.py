@@ -1,7 +1,7 @@
 """Tests for llm-gateway provider ABC."""
 from __future__ import annotations
 
-from llm_gateway.provider import LLMRequest, LLMResponse, MockLLMProvider, NoneProvider
+from llm_gateway_kernel.llm_gateway.provider import LLMRequest, LLMResponse, MockLLMProvider, NoneProvider
 
 
 def test_mock_provider():

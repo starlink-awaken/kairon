@@ -1,6 +1,6 @@
 """Tests for Sophia symbol system."""
 
-from sophia.symbols import (
+from protocols_layer.sophia.symbols import (
     BASE_TRANSITIONS,
     AtomicOp,
     ParadigmProgram,
@@ -147,7 +147,7 @@ class TestTransitionRule:
 
 class TestParadigmProgramExtended:
     def test_state_count_empty(self):
-        from sophia.symbols import ParadigmProgram
+        from protocols_layer.sophia.symbols import ParadigmProgram
 
         p = ParadigmProgram(name="empty")
         assert p.state_count == 0

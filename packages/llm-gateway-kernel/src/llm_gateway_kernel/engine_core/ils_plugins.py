@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from abc import abstractmethod
 
-from engine_core._compat import Infrastructure
+from ._compat import Infrastructure
 
 from .ils_types import ActionIntent, Event
 

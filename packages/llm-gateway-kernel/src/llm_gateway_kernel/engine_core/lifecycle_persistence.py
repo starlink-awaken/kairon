@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from engine_core._compat import WorkerHandle
+from ._compat import WorkerHandle
 
 """
 ---
@@ -75,7 +75,7 @@ class SwarmPersistence:
             self._store = state_store
         elif db_path is not None:
             try:
-                from engine_core.organs.engine.swarm_state_store import (  # type: ignore[import-not-found]
+                from .organs.engine.swarm_state_store import (  # type: ignore[import-not-found]
                     SwarmStateStore,
                 )
 

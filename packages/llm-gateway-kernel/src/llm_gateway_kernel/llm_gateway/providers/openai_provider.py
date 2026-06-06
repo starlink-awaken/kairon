@@ -15,7 +15,7 @@ import os
 from collections.abc import AsyncIterator
 from typing import Any
 
-from llm_gateway.provider import (
+from ..provider import (
     LLMProvider,
     LLMRequest,
     LLMResponse,

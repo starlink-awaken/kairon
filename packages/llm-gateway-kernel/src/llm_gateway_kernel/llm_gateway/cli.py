@@ -14,8 +14,8 @@ import argparse
 import json
 import sys
 
-from llm_gateway.detection import create_provider, detect_backends
-from llm_gateway.provider import LLMRequest
+from .detection import create_provider, detect_backends
+from .provider import LLMRequest
 
 
 def cmd_list() -> int:
@@ -56,14 +56,14 @@ def cmd_generate(prompt: str, model: str | None, provider_name: str | None) -> i
 
 
 def cmd_mcp() -> int:
-    from llm_gateway.mcp_server import main as mcp_main
+    from .mcp_server import main as mcp_main
     mcp_main()
     return 0
 
 
 def cmd_serve(port: int) -> int:
     """Start a simple HTTP server for LLM generation."""
-    from llm_gateway.http_server import serve
+    from .http_server import serve
     serve(port)
     return 0
 

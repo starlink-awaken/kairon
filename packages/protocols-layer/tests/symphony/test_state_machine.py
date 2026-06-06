@@ -1,7 +1,7 @@
 """Tests for symphony-protocol state machine — SymphonyStateMachine."""
 
-from symphony_protocol.models import SymphonyStage
-from symphony_protocol.state_machine import SymphonyStateMachine
+from protocols_layer.symphony.models import SymphonyStage
+from protocols_layer.symphony.state_machine import SymphonyStateMachine
 
 
 class TestSymphonyStateMachineInit:
@@ -265,7 +265,7 @@ class TestSymphonyStateMachineHelpers:
         assert history[0].stage == SymphonyStage.ANCHORING
 
     def test_set_stage_output(self):
-        from symphony_protocol.models import StageOutput
+        from protocols_layer.symphony.models import StageOutput
 
         sm = SymphonyStateMachine(initial_context={"task": "x"})
         sm.transition(SymphonyStage.ANCHORING)

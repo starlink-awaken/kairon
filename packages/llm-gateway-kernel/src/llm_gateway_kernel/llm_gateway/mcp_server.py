@@ -4,8 +4,8 @@ from typing import Any
 from fastmcp import FastMCP
 from pydantic import BaseModel
 
-from llm_gateway.detection import detect_backends
-from llm_gateway.provider import LLMRequest, ToolSchema
+from .detection import detect_backends
+from .provider import LLMRequest, ToolSchema
 
 mcp = FastMCP("llm-gateway")
 

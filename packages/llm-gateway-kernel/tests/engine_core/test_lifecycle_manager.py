@@ -18,15 +18,17 @@ from typing import Any
 import pytest
 
 COMPAT_LIFECYCLE_MANAGER_PATH = (
-    Path(__file__).resolve().parent.parent
+    Path(__file__).resolve().parents[2]
     / "src"
+    / "llm_gateway_kernel"
     / "engine_core"
     / "lifecycle_manager.py"
 )
 
 IMPL_LIFECYCLE_MANAGER_PATH = (
-    Path(__file__).resolve().parent.parent
+    Path(__file__).resolve().parents[2]
     / "src"
+    / "llm_gateway_kernel"
     / "engine_core"
     / "lifecycle"
     / "lifecycle_manager.py"
@@ -181,7 +183,7 @@ class TestSwarmLifecycleManagerImport:
     def lifecycle_module(self) -> Any:
         # Need _compat loaded first
         compat_path = (
-            Path(__file__).resolve().parent.parent
+            Path(__file__).resolve().parents[2]
             / "src"
             / "engine_core"
             / "_compat.py"

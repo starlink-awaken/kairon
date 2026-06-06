@@ -3,7 +3,7 @@
 import shutil
 import tempfile
 
-from sophia.learner import ParadigmLearner, ResearchTrace
+from protocols_layer.sophia.learner import ParadigmLearner, ResearchTrace
 
 
 class TestParadigmLearner:

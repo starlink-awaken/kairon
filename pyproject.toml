@@ -58,8 +58,16 @@ kairon-utils = { workspace = true }
 kairon-plugin-sdk = { workspace = true }
 kairon-observability = { workspace = true }
 kairon-pipeline = { workspace = true }
-ssot-kernel = { workspace = true }
+sot-bridge = { workspace = true }
 health-profile = { workspace = true }
+llm-gateway-kernel = { workspace = true }
+ssot-kernel = { workspace = true }
+protocols-layer = { workspace = true }
+engine-core = { workspace = true }
+llm-gateway = { workspace = true }
+sharedbrain-bridge = { workspace = true }
+shared-lib = { workspace = true }
+symphony-protocol = { workspace = true }
 
 [tool.pytest.ini_options]
 testpaths = ["packages/*/tests"]

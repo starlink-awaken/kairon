@@ -10,8 +10,8 @@ import sys
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Any
 
-from llm_gateway.detection import detect_backends
-from llm_gateway.provider import LLMRequest
+from .detection import detect_backends
+from .provider import LLMRequest
 
 
 class LLMGatewayHandler(BaseHTTPRequestHandler):

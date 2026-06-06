@@ -3,8 +3,8 @@
 from unittest.mock import MagicMock
 
 import pytest
-from symphony_protocol.matcher import AgentMatcher
-from symphony_protocol.models import AgentCapability, AgentProfile, TaskRequirement
+from protocols_layer.symphony.matcher import AgentMatcher
+from protocols_layer.symphony.models import AgentCapability, AgentProfile, TaskRequirement
 
 
 def _make_agent(agent_id: str, capabilities: dict | None = None, specialization: str | None = None) -> AgentProfile:

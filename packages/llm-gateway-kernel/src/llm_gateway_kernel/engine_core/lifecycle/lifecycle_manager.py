@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from engine_core._compat import _log
+from ._compat import _log
 
 """
 ---
@@ -109,29 +109,29 @@ class WorkerState(StrEnum):  # type: ignore[no-redef]
 
 
 # ─── engine subcomponents (extracted) ────────────────────────────────────────
-from engine_core.organs.engine.lifecycle.call_dispatcher import CallDispatcher  # type: ignore[import-not-found]
-from engine_core.organs.engine.lifecycle.cluster import ClusterCoordinator  # type: ignore[import-not-found]
-from engine_core.organs.engine.lifecycle.events import SwarmEventEmitter  # type: ignore[import-not-found]
-from engine_core.organs.engine.lifecycle.governance import SwarmGovernance  # type: ignore[import-not-found]
-from engine_core.organs.engine.lifecycle.parallel_dispatch import ParallelDispatch  # type: ignore[import-not-found]
-from engine_core.organs.engine.lifecycle.persistence import SwarmPersistence  # type: ignore[import-not-found]
-from engine_core.organs.engine.lifecycle.state_machine import (  # type: ignore[import-not-found]
+from .organs.engine.lifecycle.call_dispatcher import CallDispatcher  # type: ignore[import-not-found]
+from .organs.engine.lifecycle.cluster import ClusterCoordinator  # type: ignore[import-not-found]
+from .organs.engine.lifecycle.events import SwarmEventEmitter  # type: ignore[import-not-found]
+from .organs.engine.lifecycle.governance import SwarmGovernance  # type: ignore[import-not-found]
+from .organs.engine.lifecycle.parallel_dispatch import ParallelDispatch  # type: ignore[import-not-found]
+from .organs.engine.lifecycle.persistence import SwarmPersistence  # type: ignore[import-not-found]
+from .organs.engine.lifecycle.state_machine import (  # type: ignore[import-not-found]
     InvalidTransitionError,
     SwarmStateMachine,
 )
-from engine_core.organs.engine.lifecycle.watchdog import SwarmWatchdog  # type: ignore[import-not-found]
-from engine_core.organs.engine.lifecycle.worker_pool import (  # type: ignore[import-not-found]
+from .organs.engine.lifecycle.watchdog import SwarmWatchdog  # type: ignore[import-not-found]
+from .organs.engine.lifecycle.worker_pool import (  # type: ignore[import-not-found]
     WorkerNotFoundError,
     WorkerPool,
 )
-from engine_core.organs.engine.worker_hatch_attempt import WorkerHatchAttempt  # type: ignore[import-not-found]
-from engine_core.organs.engine.worker_hatch_gatekeeper import (  # type: ignore[import-not-found]
+from .organs.engine.worker_hatch_attempt import WorkerHatchAttempt  # type: ignore[import-not-found]
+from .organs.engine.worker_hatch_gatekeeper import (  # type: ignore[import-not-found]
     WorkerHatchGatekeeper,
 )
-from engine_core.organs.engine.worker_reap_orchestrator import (  # type: ignore[import-not-found]
+from .organs.engine.worker_reap_orchestrator import (  # type: ignore[import-not-found]
     WorkerReapOrchestrator,
 )
-from engine_core.organs.swarm_worker_governance_controller import (  # type: ignore[import-not-found]
+from .organs.swarm_worker_governance_controller import (  # type: ignore[import-not-found]
     WorkerGovernanceController,
 )
 
@@ -139,7 +139,7 @@ _COMPAT_MODULE_NAME = "organs.D_Execution.organs.swarm_lifecycle_manager"
 
 # ─── Soft-dependency imports ───────────────────────────────────────────────────
 try:
-    from engine_core.organs.engine.spore_registry import (  # type: ignore[import-not-found]
+    from .organs.engine.spore_registry import (  # type: ignore[import-not-found]
         SporeNotFoundError,
         SporeRegistry,
     )
@@ -149,7 +149,7 @@ except ImportError:
     SporeNotFoundError = Exception  # type: ignore[assignment,misc]
 
 try:
-    from engine_core.organs.engine.hatcher import (  # type: ignore[import-not-found]
+    from .organs.engine.hatcher import (  # type: ignore[import-not-found]
         Hatcher,
         HatchError,
         HatchTimeoutError,
@@ -161,7 +161,7 @@ except ImportError:
     HatchTimeoutError = Exception  # type: ignore[assignment,misc]
 
 try:
-    from engine_core.organs.engine.swarm_result_collector import (  # type: ignore[import-not-found]
+    from .organs.engine.swarm_result_collector import (  # type: ignore[import-not-found]
         SwarmResultCollector,
     )
 
@@ -174,7 +174,7 @@ except ImportError:
     _HAS_RESULT_COLLECTOR = False
 
 try:
-    from engine_core.organs.engine.consensus_monitor import ConsensusMonitor  # type: ignore[import-not-found]
+    from .organs.engine.consensus_monitor import ConsensusMonitor  # type: ignore[import-not-found]
 
     _HAS_CONSENSUS_MONITOR = True
 except ImportError:

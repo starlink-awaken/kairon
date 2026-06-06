@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from engine_core._compat import ProjectPaths, WorkerHandle, WorkerState
+from ._compat import ProjectPaths, WorkerHandle, WorkerState
 
 """
 ---
@@ -35,14 +35,14 @@ from pathlib import Path
 from threading import RLock
 from typing import Any
 
-from engine_core.organs.engine.agent_cli_bootstrap import (  # type: ignore[import-not-found]
+from .organs.engine.agent_cli_bootstrap import (  # type: ignore[import-not-found]
     build_agent_cli_handle,
     inject_agent_cli_soul_env,
     prepare_agent_cli_bootstrap,
     resolve_agent_cli_command,
     spawn_agent_cli_process,
 )
-from engine_core.organs.engine.hatch_runtime import (  # type: ignore[import-not-found]
+from .organs.engine.hatch_runtime import (  # type: ignore[import-not-found]
     WorkerProcessExitedError,
     WorkerProcessStartTimeoutError,
     build_active_worker_handle,
@@ -50,16 +50,16 @@ from engine_core.organs.engine.hatch_runtime import (  # type: ignore[import-not
     spawn_worker_process,
     wait_for_worker_process_start,
 )
-from engine_core.organs.engine.hatcher_events import (  # type: ignore[import-not-found]
+from .organs.engine.hatcher_events import (  # type: ignore[import-not-found]
     emit_worker_hatched,
     emit_worker_terminated,
 )
-from engine_core.organs.engine.retry_policy import (  # type: ignore[import-not-found]
+from .organs.engine.retry_policy import (  # type: ignore[import-not-found]
     RetryExhaustedError,
     RetryPolicy,
     RetryState,
 )
-from engine_core.organs.engine.task_store import TaskState, TaskStore  # type: ignore[import-not-found]
+from .organs.engine.task_store import TaskState, TaskStore  # type: ignore[import-not-found]
 
 from ._events import (  # type: ignore[import-not-found]
     _DEFAULT_HATCH_TIMEOUT_S,
@@ -192,7 +192,7 @@ class Hatcher:
         worker_pool: Any | None = None,
     ) -> str:
         """Dispatch *task* through a :class:`WorkerPool` when available."""
-        from engine_core.organs.engine.worker_pool import WorkerPool  # type: ignore[import-not-found]
+        from .organs.engine.worker_pool import WorkerPool  # type: ignore[import-not-found]
 
         pool: WorkerPool | None = worker_pool if isinstance(worker_pool, WorkerPool) else None
 
@@ -213,8 +213,8 @@ class Hatcher:
                 payload = task.get("payload", task)
                 await asyncio.sleep(0)
                 return f"local:{payload!r}"
-            from engine_core.organs.llm.provider import LLMRequest  # type: ignore[import-not-found]
-            from engine_core.organs.llm.provider_factory import (  # type: ignore[import-not-found]
+            from .organs.llm.provider import LLMRequest  # type: ignore[import-not-found]
+            from .organs.llm.provider_factory import (  # type: ignore[import-not-found]
                 get_default_factory,
             )
 
@@ -480,7 +480,7 @@ class Hatcher:
     ) -> WorkerHandle:
         """Spawn a swarm worker as an in-process daemon thread."""
         try:
-            from engine_core.organs.engine.result_bus import ResultBus  # type: ignore[import-not-found]
+            from .organs.engine.result_bus import ResultBus  # type: ignore[import-not-found]
         except ImportError:
             from engine.result_bus import ResultBus  # type: ignore[no-redef, import-not-found]
 
@@ -599,14 +599,14 @@ class Hatcher:
     ) -> WorkerHandle:
         """Spawn an external agent CLI process using the Bootstrap Protocol."""
         try:
-            from engine_core.organs.engine.agent_cli_bootstrap import (
+            from .organs.engine.agent_cli_bootstrap import (
                 WorkerContext,  # noqa: F401
                 write_worker_context,  # noqa: F401
             )
         except ImportError:
             pass
         try:
-            from engine_core.organs.engine.agent_cli_bootstrap import (
+            from .organs.engine.agent_cli_bootstrap import (
                 CockpitBinding,  # noqa: F401
                 apply_cockpit_binding,  # noqa: F401
             )

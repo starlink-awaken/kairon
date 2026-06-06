@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from engine_core._compat import get_spore_gateway, get_synapse_router
+from ._compat import get_spore_gateway, get_synapse_router
 
 """
 ---
@@ -380,7 +380,7 @@ class A2AProtocol:
         返回 MessageEnvelope 实例，或在无法导入时返回 None。
         """
         try:
-            from engine_core._compat import MessageEnvelope
+            from ._compat import MessageEnvelope
         except ImportError:
             try:
                 from synapse import MessageEnvelope  # type: ignore[no-redef, import-not-found]

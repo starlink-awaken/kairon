@@ -6,7 +6,7 @@ import importlib.util
 import sys
 from pathlib import Path
 
-_mod_path = (Path(__file__).resolve().parent.parent / "src" / "engine_core" / "conflict_resolver.py")
+_mod_path = (Path(__file__).resolve().parents[2] / "src" / "llm_gateway_kernel" / "engine_core" / "conflict_resolver.py")
 _spec = importlib.util.spec_from_file_location("engine_core.conflict_resolver", str(_mod_path))
 _mod = importlib.util.module_from_spec(_spec)
 sys.modules.setdefault("engine_core.conflict_resolver", _mod)

@@ -4,25 +4,21 @@ build-backend = "hatchling.build"
 
 [project]
 name = "engine-core"
-version = "0.3.0"
-description = "Engine core utilities extracted from SharedBrain D_Execution: event bus, task store, retry policy, capability catalog, command dispatch, domain router, task DAG"
+version = "0.4.0"
+description = "DEPRECATED SHIM: 已迁移到 llm-gateway-kernel 子模块 llm_gateway_kernel.engine_core"
 license = {text = "MIT"}
 requires-python = ">=3.10"
 authors = [{name = "Workspace Team"}]
-keywords = ["engine", "event-bus", "task-store", "retry", "dispatch", "dag"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 7 - Inactive",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
 dependencies = [
-    "kairon-lib-events",
+    "llm-gateway-kernel",
 ]
 
 [tool.hatch.build.targets.wheel]

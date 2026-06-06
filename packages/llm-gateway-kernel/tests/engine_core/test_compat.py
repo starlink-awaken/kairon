@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 # Load _compat.py directly, bypassing broken __init__.py import chain
-_compat_path = (Path(__file__).resolve().parent.parent / "src" / "engine_core" / "_compat.py")
+_compat_path = (Path(__file__).resolve().parents[2] / "src" / "llm_gateway_kernel" / "engine_core" / "_compat.py")
 _spec = importlib.util.spec_from_file_location("engine_core._compat", str(_compat_path))
 _compat = importlib.util.module_from_spec(_spec)
 sys.modules.setdefault("engine_core._compat", _compat)

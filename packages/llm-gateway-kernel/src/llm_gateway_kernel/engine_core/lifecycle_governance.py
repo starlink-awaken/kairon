@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from engine_core._compat import GovernanceAction, GovernanceState, WorkerHandle, WorkerState
+from ._compat import GovernanceAction, GovernanceState, WorkerHandle, WorkerState
 
 """
 ---

@@ -1,7 +1,7 @@
 """Tests for Sophia paradigm compiler."""
 
 import pytest
-from sophia.compiler import compile_paradigm_sync, recompile_from_dict
+from protocols_layer.sophia.compiler import compile_paradigm_sync, recompile_from_dict
 
 
 class TestCompileParadigmSync:
@@ -43,14 +43,14 @@ class TestCompileParadigmSync:
 
 class TestTemplatePattern:
     def test_survey_pattern(self):
-        from sophia.compiler import compile_paradigm_sync
+        from protocols_layer.sophia.compiler import compile_paradigm_sync
 
         prog = compile_paradigm_sync("Survey of ML techniques 2026")
         ops = [o.value for o in prog.operations]
         assert "synthesize" in ops
 
     def test_problem_pattern_debug(self):
-        from sophia.compiler import compile_paradigm_sync
+        from protocols_layer.sophia.compiler import compile_paradigm_sync
 
         prog = compile_paradigm_sync("Why does my API timeout?")
         ops = [o.value for o in prog.operations]
@@ -58,21 +58,21 @@ class TestTemplatePattern:
         assert "eliminate" in ops
 
     def test_comparative_vs(self):
-        from sophia.compiler import compile_paradigm_sync
+        from protocols_layer.sophia.compiler import compile_paradigm_sync
 
         prog = compile_paradigm_sync("Python versus Java performance")
         ops = [o.value for o in prog.operations]
         assert "compare" in ops
 
     def test_versus_keyword(self):
-        from sophia.compiler import compile_paradigm_sync
+        from protocols_layer.sophia.compiler import compile_paradigm_sync
 
         prog = compile_paradigm_sync("difference between SQL and NoSQL")
         ops = [o.value for o in prog.operations]
         assert "compare" in ops
 
     def test_llm_fallback_manual_ops(self):
-        from sophia.compiler import _default_ops
+        from protocols_layer.sophia.compiler import _default_ops
 
         ops = _default_ops("How does gravity work?")
         op_vals = [o.value for o in ops]
@@ -108,8 +108,8 @@ class TestRecompileFromDict:
 
 class TestMatchingTransitions:
     def test_matching_ops_filter(self):
-        from sophia.compiler import _matching_transitions
-        from sophia.symbols import AtomicOp
+        from protocols_layer.sophia.compiler import _matching_transitions
+        from protocols_layer.sophia.symbols import AtomicOp
 
         ops = [AtomicOp.DECOMPOSE]
         matches = _matching_transitions(ops)

@@ -9,7 +9,7 @@ import time
 from collections.abc import Callable
 from typing import Any
 
-from engine_core._compat import (
+from ._compat import (
     CapabilityRegistry,
     ISynapseWorker,
     MessageEnvelope,
@@ -21,8 +21,8 @@ from engine_core._compat import (
     agent_send,
     get_synapse_registry,
 )
-from engine_core.context_injector import ContextInjector
-from engine_core.workspace_manager import WorkspaceManager  # type: ignore[import-not-found]
+from .context_injector import ContextInjector
+from .workspace_manager import WorkspaceManager  # type: ignore[import-not-found]
 
 # =============================================================================
 # 0. 形式化摘要 ≝

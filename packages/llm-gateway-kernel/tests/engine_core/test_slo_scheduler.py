@@ -14,8 +14,9 @@ from typing import Any
 import pytest
 
 SLO_SCHEDULER_PATH = (
-    Path(__file__).resolve().parent.parent
+    Path(__file__).resolve().parents[2]
     / "src"
+    / "llm_gateway_kernel"
     / "engine_core"
     / "slo_scheduler.py"
 )

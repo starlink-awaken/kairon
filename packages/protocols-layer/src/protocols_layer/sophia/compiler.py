@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import logging
 
-from sophia.symbols import (
+from .symbols import (
     BASE_TRANSITIONS,
     AtomicOp,
     ParadigmProgram,

@@ -4,20 +4,20 @@ import asyncio
 
 
 def _tool_names():
-    from sophia.server.mcp_server import mcp
+    from protocols_layer.sophia.server.mcp_server import mcp
 
     tools = asyncio.run(mcp.list_tools())
     return [t.name for t in tools]
 
 
 def test_module_importable():
-    from sophia.server import mcp_server
+    from protocols_layer.sophia.server import mcp_server
 
     assert mcp_server is not None
 
 
 def test_mcp_runnable():
-    from sophia.server.mcp_server import mcp
+    from protocols_layer.sophia.server.mcp_server import mcp
 
     assert callable(mcp.tool)
 

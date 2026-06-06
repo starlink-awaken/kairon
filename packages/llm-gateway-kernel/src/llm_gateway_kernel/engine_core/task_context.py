@@ -6,7 +6,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
-from engine_core.role_message import MessagePriority, MessageType
+from .role_message import MessagePriority, MessageType
 
 
 @dataclass

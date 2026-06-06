@@ -18,8 +18,9 @@ from typing import Any
 import pytest
 
 HATCHER_CORE_PATH = (
-    Path(__file__).resolve().parent.parent
+    Path(__file__).resolve().parents[2]
     / "src"
+    / "llm_gateway_kernel"
     / "engine_core"
     / "hatcher_core.py"
 )
@@ -96,7 +97,7 @@ class TestHatcherCoreImports:
         Skips if the required submodules can't be satisfied.
         """
         # We need to mock the missing submodules to get the import to work
-        # Since hatcher_core imports from engine_core.organs.engine.* and other
+        # Since hatcher_core imports from llm_gateway_kernel.engine_core.organs.engine.* and other
         # non-existent modules, we create stub modules
         missing_modules = [
             "engine_core.organs",

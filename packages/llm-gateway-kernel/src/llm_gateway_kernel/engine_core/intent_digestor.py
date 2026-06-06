@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from engine_core._compat import Gateway, ProjectPaths
+from ._compat import Gateway, ProjectPaths
 
 """
 ---
@@ -19,7 +19,7 @@ import re
 import sqlite3
 from typing import Any
 
-from engine_core.organs.intent_particle import (  # type: ignore[import-not-found]
+from .organs.intent_particle import (  # type: ignore[import-not-found]
     IntentParticle,
     MetabolicStage,
     VisionParticle,

@@ -11,7 +11,7 @@ import sqlite3
 from collections.abc import Callable
 from typing import Any
 
-from engine_core._compat import CapabilityRegistry
+from ._compat import CapabilityRegistry
 
 
 class ExecutionCompatHelper:

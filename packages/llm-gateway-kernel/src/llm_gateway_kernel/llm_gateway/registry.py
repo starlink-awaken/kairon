@@ -7,10 +7,10 @@ import logging
 from collections.abc import AsyncIterator
 from typing import Any
 
-from llm_gateway.circuit_breaker import CircuitBreakerRegistry
-from llm_gateway.providers.base import BaseLLMProvider
-from llm_gateway.retry import RetryConfig, with_retry
-from llm_gateway.types import ChatOptions, ChatResult, ModelDescriptor, StreamChunk
+from .circuit_breaker import CircuitBreakerRegistry
+from .providers.base import BaseLLMProvider
+from .retry import RetryConfig, with_retry
+from .types import ChatOptions, ChatResult, ModelDescriptor, StreamChunk
 
 _log = logging.getLogger(__name__)
 

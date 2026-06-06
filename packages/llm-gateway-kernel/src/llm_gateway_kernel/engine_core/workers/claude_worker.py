@@ -4,8 +4,8 @@ import logging
 import os
 from typing import Any
 
-from engine_core._compat import KnowledgeEnhancementMixin
-from engine_core.agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
+from ._compat import KnowledgeEnhancementMixin
+from .agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
 
 """Worker extracted from SharedBrain."""
 
@@ -46,7 +46,7 @@ class ClaudeWorker(KnowledgeEnhancementMixin, AgentDaemonBase):
         # [REAL-LLM-EXECUTION] Call resilient LLM for brain-intensive tasks
         if "Analyze" in summary or "audit" in summary.lower() or "suggest" in summary.lower():
             try:
-                from engine_core.llm.provider_factory import LLMProviderFactory  # type: ignore[import-not-found]
+                from .llm.provider_factory import LLMProviderFactory  # type: ignore[import-not-found]
 
                 factory = LLMProviderFactory()
 
@@ -56,7 +56,7 @@ class ClaudeWorker(KnowledgeEnhancementMixin, AgentDaemonBase):
                 _log.info(f"[{self.agent_id}] 📡 Sending real analysis request to Resilient LLM Pool...")
 
                 # Use 'generate_resilient' for automatic fallback
-                from engine_core.llm.provider import LLMRequest  # type: ignore[import-not-found]
+                from .llm.provider import LLMRequest  # type: ignore[import-not-found]
 
                 request = LLMRequest(prompt=prompt, temperature=0.3)
                 response = factory.generate_resilient(request)

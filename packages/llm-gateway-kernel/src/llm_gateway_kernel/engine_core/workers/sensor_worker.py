@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 
-from engine_core._compat import (
+from ._compat import (
     ISynapseWorker,
     MessageEnvelope,
     Receipt,
@@ -17,7 +17,7 @@ import threading
 import time
 from typing import Any
 
-from engine_core.agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
+from .agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
 
 """
 ---

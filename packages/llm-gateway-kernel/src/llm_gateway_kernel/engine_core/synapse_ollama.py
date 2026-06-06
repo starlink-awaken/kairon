@@ -137,7 +137,7 @@ class OllamaSynapse:
             return
 
         try:
-            from engine_core.organs.engine.cognitive_gateway import Gateway  # type: ignore[import-not-found]
+            from .organs.engine.cognitive_gateway import Gateway  # type: ignore[import-not-found]
 
             for m in models:
                 name = m.get("name", "unknown")

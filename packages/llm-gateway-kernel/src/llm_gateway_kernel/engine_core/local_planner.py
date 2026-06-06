@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from engine_core._compat import ExecutionPlan, PlannedStep, Priority, TaskType, _log
+from ._compat import ExecutionPlan, PlannedStep, Priority, TaskType, _log
 
 # ---
 # domain: D-Execution

@@ -14,7 +14,7 @@ from __future__ import annotations
 import logging
 import os
 
-from llm_gateway.providers.openai_provider import OpenAIProvider
+from .openai_provider import OpenAIProvider
 
 _log = logging.getLogger(__name__)
 

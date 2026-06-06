@@ -42,7 +42,7 @@ make format
 | ontoderive | `packages/ontoderive/` | 本体推导（含 1,920 JSON 推导日志） |
 | kos | `packages/kos/` | KOS 搜索索引（26 tools） |
 | minerva | `packages/minerva/` | 5 super-tools |
-| sophia | `packages/sophia/` | 8 tools |
+| protocols-layer | `packages/protocols-layer/` | 协议层（sophia 范式编译 + symphony 协议，P31-W1 合并 1） |
 | iris | `packages/iris/` | 8 tools |
 | ssot | `packages/ssot/` | 单一事实源（6 tools） |
 | forge | `packages/forge/` | 89 tools（无 MCP @tool） |
@@ -84,7 +84,8 @@ make format
 | ~~kaironcloud-billing~~ | **已归档 (P28-W6)** | 1 软依赖（agora try/except）|
 | ~~kairon-assistant~~ | **已归档 (P28-W2)** | 0 外部 import、whisper 缺依赖 |
 | ~~kairon-voice~~ | **已归档 (P28-W2)** | 0 外部 import、自包含 |
-| symphony-protocol | `packages/symphony-protocol/` | 协议层 |
+| ~~sophia~~ | **已合并 (P31-W1)** | 移入 `packages/protocols-layer/src/protocols_layer/sophia/`（6 个月 shim 保留）|
+| ~~symphony-protocol~~ | **已合并 (P31-W1)** | 移入 `packages/protocols-layer/src/protocols_layer/symphony/`（6 个月 shim 保留）|
 | pontus | `packages/pontus/` | Pontus 模块 |
 
 ### 已归档（P28-W2 · 2026-06-05）
@@ -124,6 +125,15 @@ agentmesh 的 5 个子系统已 100% 迁移至 kairon：
 | 原包 | 新位置 | 原因 |
 |------|--------|------|
 | ecos | `projects/ecos/` | L0 协议编织层（SSB 协议 + 涌现计算）。v3 终态标注"0 依赖、0 被依赖"，纯自包含协议核心，6,288 行源码独立。P30 决策文档未列，补做。 |
+
+### 已合并（P31-W1 · 2026-06-06）
+
+| 原包 | 新位置 | 原因 |
+|------|--------|------|
+| sophia | `packages/protocols-layer/src/protocols_layer/sophia/` | 范式编译（compiler/learner/symbols/kems_runtime/MCP server），与 symphony-protocol 同属协议/规则层，合并为 protocols-layer（22→23 包） |
+| symphony-protocol | `packages/protocols-layer/src/protocols_layer/symphony/` | 状态机/Agent 匹配/触发器引擎，与 sophia 合并为 protocols-layer |
+| ssot | `packages/sot-bridge/src/sot_bridge/ssot_kernel/` | 单一事实源（17,649 行, 10 tests），与 sharedbrain-bridge 合并为 sot-bridge（6 个月 shim 保留） |
+| sharedbrain-bridge | `packages/sot-bridge/src/sot_bridge/sharedbrain_bridge/` | × SharedBrain 桥接（1,063 行, 4 tests；Phase 31 stubify），与 ssot 合并为 sot-bridge |
 
 ## 架构主线
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from engine_core._compat import WorkerHandle
+from ._compat import WorkerHandle
 
 """
 ---

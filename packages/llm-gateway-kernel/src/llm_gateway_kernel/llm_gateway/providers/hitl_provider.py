@@ -8,7 +8,7 @@ from __future__ import annotations
 import logging
 from collections.abc import AsyncIterator
 
-from llm_gateway.provider import LLMProvider, LLMRequest, LLMResponse
+from ..provider import LLMProvider, LLMRequest, LLMResponse
 
 _log = logging.getLogger(__name__)
 

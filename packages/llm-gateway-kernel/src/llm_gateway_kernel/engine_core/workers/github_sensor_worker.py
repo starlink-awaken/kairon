@@ -8,8 +8,8 @@ import urllib.error
 import urllib.request
 from typing import Any
 
-from engine_core._compat import ISynapseWorker, MessageEnvelope, Receipt, SynapseAgentCard
-from engine_core.agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
+from ._compat import ISynapseWorker, MessageEnvelope, Receipt, SynapseAgentCard
+from .agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
 
 """
 ---

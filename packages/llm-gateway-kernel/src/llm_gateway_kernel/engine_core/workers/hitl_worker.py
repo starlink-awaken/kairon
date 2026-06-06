@@ -4,14 +4,14 @@ import asyncio
 import logging
 from typing import Any
 
-from engine_core._compat import (
+from ._compat import (
     ISynapseWorker,
     MessageEnvelope,
     Receipt,
     SynapseAgentCard,
     get_synapse_registry,
 )
-from engine_core.agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
+from .agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
 
 """
 ---

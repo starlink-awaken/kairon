@@ -4,44 +4,22 @@ build-backend = "hatchling.build"
 
 [project]
 name = "llm-gateway"
-version = "0.4.0"
-description = "Unified LLM provider abstraction — CLI, HTTP, MCP. Multi-model with auto-detection."
+version = "0.5.0"
+description = "DEPRECATED SHIM: 已迁移到 llm-gateway-kernel 子模块 llm_gateway_kernel.llm_gateway"
 license = {text = "MIT"}
 requires-python = ">=3.10"
 authors = [{name = "Workspace Team"}]
-keywords = ["llm", "gateway", "provider", "openai", "anthropic", "gemini", "ollama", "mcp"]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 7 - Inactive",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
 dependencies = [
-    "requests>=2.25",
-    "pyyaml>=6.0",
+    "llm-gateway-kernel",
 ]
-
-[project.optional-dependencies]
-anthropic = ["anthropic>=0.30"]
-openai = ["openai>=1.0"]
-gemini = ["google-generativeai>=0.6"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/llm_gateway"]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-minversion = "7.0"
-addopts = "-v --tb=short"
-
-
-[project.scripts]
-llm-gateway = "llm_gateway.cli:main"
-llm-gateway-mcp = "llm_gateway.mcp_server:main"

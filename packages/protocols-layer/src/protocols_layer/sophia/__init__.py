@@ -9,9 +9,9 @@ Quick start:
     print(program.to_dict())
 """
 
-from sophia.compiler import compile_paradigm, compile_paradigm_sync, recompile_from_dict
-from sophia.learner import ParadigmLearner, ResearchTrace
-from sophia.symbols import (
+from .compiler import compile_paradigm, compile_paradigm_sync, recompile_from_dict
+from .learner import ParadigmLearner, ResearchTrace
+from .symbols import (
     BASE_TRANSITIONS,
     AtomicOp,
     ParadigmProgram,

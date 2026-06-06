@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any, Protocol
 
-from engine_core.command import Command, get_registry
+from .command import Command, get_registry
 
 _log = logging.getLogger(__name__)
 
@@ -155,7 +155,7 @@ class _AssociationTriggerCommand(Command):
     """Handles bos://execution/association/trigger."""
 
     async def execute(self, resource: str, action: str, params: dict[str, Any] | None) -> dict[str, Any]:
-        from engine_core.association_engine import AssociationEngine
+        from .association_engine import AssociationEngine
 
         if not params or "intent" not in params:
             return {"status": "error", "message": "Missing 'intent' in parameters"}

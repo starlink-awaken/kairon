@@ -58,8 +58,8 @@ from typing import Any
 
 import yaml
 
-from engine_core.organs.engine.agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
-from engine_core.organs.worker_profile import WORKER_REGISTRY, get_worker_profile  # type: ignore[import-not-found]
+from .organs.engine.agent_daemon_base import AgentDaemonBase  # type: ignore[import-not-found]
+from .organs.worker_profile import WORKER_REGISTRY, get_worker_profile  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 HAS_WORKER_PROFILE = True
@@ -352,7 +352,7 @@ class UniversalWorker(AgentDaemonBase):
         _log.info("[>] python exec (%d chars)", len(code))
 
         # Security: Use centralized sandbox execution
-        from engine_core.organs.security_utils import safe_exec_sandbox  # type: ignore[import-not-found]
+        from .organs.security_utils import safe_exec_sandbox  # type: ignore[import-not-found]
 
         exec_result = safe_exec_sandbox(code, capture_stdout=True)
 

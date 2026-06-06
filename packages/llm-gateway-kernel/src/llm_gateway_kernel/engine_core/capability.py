@@ -1,2 +1,2 @@
 # engine-core capability stub
-from engine_core.core.capability import *  # noqa: F403
+from .core.capability import *  # noqa: F403

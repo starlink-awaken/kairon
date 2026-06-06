@@ -127,7 +127,7 @@ class ExecutionCompatHelper:
             except (sqlite3.Error, KeyError, AttributeError, OSError):
                 pass
         try:
-            from engine_core.result_bus import ResultBus  # type: ignore[import-not-found]
+            from .result_bus import ResultBus  # type: ignore[import-not-found]
 
             results = ResultBus.get_instance().list_results()
         except (ImportError, AttributeError, TypeError, ValueError):

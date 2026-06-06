@@ -30,7 +30,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Protocol, TypedDict
 
-from engine_core.organs.symphony.models import AgentProfile  # type: ignore[import-not-found]
+from .organs.symphony.models import AgentProfile  # type: ignore[import-not-found]
 
 _log = logging.getLogger(__name__)
 

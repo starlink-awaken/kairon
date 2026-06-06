@@ -2,11 +2,11 @@
 import pytest
 
 try:
-    from engine_core.capability import Capability, CapabilityCatalog
-    from engine_core.dag import TaskDAG, TaskNode
-    from engine_core.event_bus import EventBus, make_event
-    from engine_core.retry_policy import RetryPolicy, RetryState
-    from engine_core.task_store import TaskRecord, TaskState
+    from llm_gateway_kernel.engine_core.capability import Capability, CapabilityCatalog
+    from llm_gateway_kernel.engine_core.dag import TaskDAG, TaskNode
+    from llm_gateway_kernel.engine_core.event_bus import EventBus, make_event
+    from llm_gateway_kernel.engine_core.retry_policy import RetryPolicy, RetryState
+    from llm_gateway_kernel.engine_core.task_store import TaskRecord, TaskState
 except ImportError:
     pytest.skip("engine_core imports require kairon_lib (not in PYTHONPATH)", allow_module_level=True)
 

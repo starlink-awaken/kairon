@@ -6,7 +6,7 @@ import urllib.error
 import urllib.request
 from typing import Any
 
-from engine_core._compat import (
+from ._compat import (
     AgentDaemonBase,
     ISynapseWorker,
     MessageEnvelope,

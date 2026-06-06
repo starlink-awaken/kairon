@@ -9,7 +9,7 @@ Priority:
 
 Usage::
 
-    from llm_gateway.detection import detect_backends, create_provider
+    from .detection import detect_backends, create_provider
 
     # Auto-detect all available providers
     providers = detect_backends()
@@ -24,7 +24,7 @@ import logging
 import os
 from typing import Any
 
-from llm_gateway.provider import LLMProvider, NoneProvider
+from .provider import LLMProvider, NoneProvider
 
 _log = logging.getLogger(__name__)
 

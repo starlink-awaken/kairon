@@ -22,8 +22,9 @@ def load_module(module_name: str, file_name: str) -> Any:
         Loaded module object.
     """
     mod_path = (
-        Path(__file__).resolve().parent
+        Path(__file__).resolve().parents[2]
         / "src"
+        / "llm_gateway_kernel"
         / "engine_core"
         / file_name
     )

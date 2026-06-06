@@ -7,9 +7,9 @@ import logging
 import time
 from collections.abc import Callable
 
-from llm_gateway.policies import score_models
-from llm_gateway.registry import ModelRegistry
-from llm_gateway.types import (
+from .policies import score_models
+from .registry import ModelRegistry
+from .types import (
     DEFAULT_SCHEDULER_CONFIG,
     LoadInfo,
     ModelRequest,

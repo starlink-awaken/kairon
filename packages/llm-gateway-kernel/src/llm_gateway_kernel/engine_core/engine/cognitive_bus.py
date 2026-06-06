@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from engine_core._compat import InferenceOracle
+from ._compat import InferenceOracle
 
 """
 ---

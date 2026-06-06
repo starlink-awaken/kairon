@@ -18,7 +18,7 @@ from __future__ import annotations
 
 class TestLLMRequest:
     def test_defaults(self):
-        from llm_gateway.provider import LLMRequest
+        from llm_gateway_kernel.llm_gateway.provider import LLMRequest
 
         r = LLMRequest(prompt="hello")
         assert r.prompt == "hello"
@@ -31,7 +31,7 @@ class TestLLMRequest:
         assert r.metadata == {}
 
     def test_all_fields(self):
-        from llm_gateway.provider import LLMRequest
+        from llm_gateway_kernel.llm_gateway.provider import LLMRequest
 
         r = LLMRequest(
             prompt="test",
@@ -55,7 +55,7 @@ class TestLLMRequest:
 
 class TestLLMResponse:
     def test_defaults(self):
-        from llm_gateway.provider import LLMResponse
+        from llm_gateway_kernel.llm_gateway.provider import LLMResponse
 
         r = LLMResponse(content="hello")
         assert r.content == "hello"
@@ -67,7 +67,7 @@ class TestLLMResponse:
         assert r.metadata == {}
 
     def test_all_fields(self):
-        from llm_gateway.provider import LLMResponse
+        from llm_gateway_kernel.llm_gateway.provider import LLMResponse
 
         r = LLMResponse(
             content="response",
@@ -94,28 +94,28 @@ class TestLLMResponse:
 
 class TestMockLLMProvider:
     def test_provider_name(self):
-        from llm_gateway.provider import MockLLMProvider
+        from llm_gateway_kernel.llm_gateway.provider import MockLLMProvider
 
         p = MockLLMProvider()
         assert p.provider_name == "mock"
 
     def test_is_available(self):
-        from llm_gateway.provider import MockLLMProvider
+        from llm_gateway_kernel.llm_gateway.provider import MockLLMProvider
 
         assert MockLLMProvider().is_available()
 
     def test_health_check(self):
-        from llm_gateway.provider import MockLLMProvider
+        from llm_gateway_kernel.llm_gateway.provider import MockLLMProvider
 
         assert MockLLMProvider().health_check() == ""
 
     def test_available_models(self):
-        from llm_gateway.provider import MockLLMProvider
+        from llm_gateway_kernel.llm_gateway.provider import MockLLMProvider
 
         assert MockLLMProvider().available_models() == ["mock-model"]
 
     def test_complete(self):
-        from llm_gateway.provider import LLMRequest, MockLLMProvider
+        from llm_gateway_kernel.llm_gateway.provider import LLMRequest, MockLLMProvider
 
         resp = MockLLMProvider().complete(LLMRequest(prompt="hello world"))
         assert "Mock response" in resp.content
@@ -125,7 +125,7 @@ class TestMockLLMProvider:
     def test_generate(self):
         import asyncio
 
-        from llm_gateway.provider import LLMRequest, MockLLMProvider
+        from llm_gateway_kernel.llm_gateway.provider import LLMRequest, MockLLMProvider
 
         resp = asyncio.run(MockLLMProvider().generate(LLMRequest(prompt="hello")))
         assert "Mock response" in resp.content
@@ -133,7 +133,7 @@ class TestMockLLMProvider:
     def test_stream_generate(self):
         import asyncio
 
-        from llm_gateway.provider import LLMRequest, MockLLMProvider
+        from llm_gateway_kernel.llm_gateway.provider import LLMRequest, MockLLMProvider
 
         async def collect():
             chunks = []
@@ -152,17 +152,17 @@ class TestMockLLMProvider:
 
 class TestNoneProvider:
     def test_provider_name(self):
-        from llm_gateway.provider import NoneProvider
+        from llm_gateway_kernel.llm_gateway.provider import NoneProvider
 
         assert NoneProvider().provider_name == "none"
 
     def test_is_available(self):
-        from llm_gateway.provider import NoneProvider
+        from llm_gateway_kernel.llm_gateway.provider import NoneProvider
 
         assert NoneProvider().is_available()
 
     def test_complete_returns_empty(self):
-        from llm_gateway.provider import LLMRequest, NoneProvider
+        from llm_gateway_kernel.llm_gateway.provider import LLMRequest, NoneProvider
 
         resp = NoneProvider().complete(LLMRequest(prompt="anything"))
         assert resp.content == ""
@@ -171,7 +171,7 @@ class TestNoneProvider:
     def test_generate_returns_empty(self):
         import asyncio
 
-        from llm_gateway.provider import LLMRequest, NoneProvider
+        from llm_gateway_kernel.llm_gateway.provider import LLMRequest, NoneProvider
 
         resp = asyncio.run(NoneProvider().generate(LLMRequest(prompt="anything")))
         assert resp.content == ""
@@ -180,7 +180,7 @@ class TestNoneProvider:
     def test_stream_generate(self):
         import asyncio
 
-        from llm_gateway.provider import LLMRequest, NoneProvider
+        from llm_gateway_kernel.llm_gateway.provider import LLMRequest, NoneProvider
 
         async def collect():
             chunks = []
@@ -199,20 +199,20 @@ class TestNoneProvider:
 
 class TestDetection:
     def test_create_provider_known(self):
-        from llm_gateway.detection import create_provider
+        from llm_gateway_kernel.llm_gateway.detection import create_provider
 
         p = create_provider("mock")
         # mock is not in the registry, so should return None
         assert p is None
 
     def test_create_provider_unknown(self):
-        from llm_gateway.detection import create_provider
+        from llm_gateway_kernel.llm_gateway.detection import create_provider
 
         p = create_provider("nonexistent")
         assert p is None
 
     def test_detect_backends_returns_list(self):
-        from llm_gateway.detection import detect_backends
+        from llm_gateway_kernel.llm_gateway.detection import detect_backends
 
         providers = detect_backends()
         assert isinstance(providers, list)
@@ -223,7 +223,7 @@ class TestDetection:
         # Save and clear relevant env vars
         import os
 
-        from llm_gateway.detection import detect_backends
+        from llm_gateway_kernel.llm_gateway.detection import detect_backends
 
         saved = {}
         for var in [
@@ -255,32 +255,32 @@ class TestDetection:
 
 class TestProviderIdentity:
     def test_openai_provider_name(self):
-        from llm_gateway.providers.openai_provider import OpenAIProvider
+        from llm_gateway_kernel.llm_gateway.providers.openai_provider import OpenAIProvider
 
         assert OpenAIProvider(api_key="test-key").provider_name == "openai"
 
     def test_anthropic_provider_name(self):
-        from llm_gateway.providers.anthropic_provider import AnthropicProvider
+        from llm_gateway_kernel.llm_gateway.providers.anthropic_provider import AnthropicProvider
 
         assert AnthropicProvider(api_key="test-key").provider_name == "anthropic"
 
     def test_gemini_provider_name(self):
-        from llm_gateway.providers.gemini_provider import GeminiProvider
+        from llm_gateway_kernel.llm_gateway.providers.gemini_provider import GeminiProvider
 
         assert GeminiProvider(api_key="test-key").provider_name == "gemini"
 
     def test_deepseek_provider_name(self):
-        from llm_gateway.providers.deepseek_provider import DeepSeekProvider
+        from llm_gateway_kernel.llm_gateway.providers.deepseek_provider import DeepSeekProvider
 
         assert DeepSeekProvider(api_key="test-key").provider_name == "deepseek"
 
     def test_ollama_provider_name(self):
-        from llm_gateway.providers.ollama_provider import OllamaProvider
+        from llm_gateway_kernel.llm_gateway.providers.ollama_provider import OllamaProvider
 
         assert OllamaProvider().provider_name == "ollama"
 
     def test_hitl_provider_name(self):
-        from llm_gateway.providers.hitl_provider import HitlLLMProvider
+        from llm_gateway_kernel.llm_gateway.providers.hitl_provider import HitlLLMProvider
 
         assert HitlLLMProvider().provider_name == "hitl"
 
@@ -292,18 +292,18 @@ class TestProviderIdentity:
 
 class TestHealthCheck:
     def test_mock_health_ok(self):
-        from llm_gateway.provider import MockLLMProvider
+        from llm_gateway_kernel.llm_gateway.provider import MockLLMProvider
 
         assert MockLLMProvider().health_check() == ""
 
     def test_openai_unavailable_health(self):
-        from llm_gateway.providers.openai_provider import OpenAIProvider
+        from llm_gateway_kernel.llm_gateway.providers.openai_provider import OpenAIProvider
 
         result = OpenAIProvider(api_key="").health_check()
         assert "not available" in result or result == ""
 
     def test_none_health_ok(self):
-        from llm_gateway.provider import NoneProvider
+        from llm_gateway_kernel.llm_gateway.provider import NoneProvider
 
         assert NoneProvider().health_check() == ""
 
@@ -315,14 +315,14 @@ class TestHealthCheck:
 
 class TestToolClasses:
     def test_tool_schema(self):
-        from llm_gateway.provider import ToolSchema
+        from llm_gateway_kernel.llm_gateway.provider import ToolSchema
 
         ts = ToolSchema(name="get_weather", description="Get weather", parameters={"loc": "str"})
         assert ts.name == "get_weather"
         assert ts.description == "Get weather"
 
     def test_tool_call(self):
-        from llm_gateway.provider import ToolCall
+        from llm_gateway_kernel.llm_gateway.provider import ToolCall
 
         tc = ToolCall(id="1", name="get_weather", arguments={"loc": "NYC"})
         assert tc.id == "1"
@@ -330,7 +330,7 @@ class TestToolClasses:
         assert tc.arguments == {"loc": "NYC"}
 
     def test_tool_result(self):
-        from llm_gateway.provider import ToolResult
+        from llm_gateway_kernel.llm_gateway.provider import ToolResult
 
         tr = ToolResult(call_id="1", output="sunny", error=None)
         assert tr.call_id == "1"

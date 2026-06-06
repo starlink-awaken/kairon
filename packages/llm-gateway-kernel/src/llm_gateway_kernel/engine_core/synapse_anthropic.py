@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from engine_core._compat import Gateway
+from ._compat import Gateway
 
 """
 ---

@@ -1,16 +1,42 @@
-"""SharedBrain Bridge — DEPRECATED STUB.
+"""SharedBrain Bridge — DEPRECATED SHIM (P31-W1, ADR-0006).
 
-SharedBrain has been decommissioned (Phase 31, 2026-06-06).
-This package is retained for import compatibility only. All bridge classes
-return safe no-op responses.
+sharedbrain-bridge 包已合并入 sot-bridge (sot_bridge.sharedbrain_bridge)。
+本 shim 保留 6 个月（2026-06-06 ~ 2026-12-06），仅作向后兼容。
 
-Migration: Use kairon-native data stores (kos, eidos, gbrain) instead.
+注意: SharedBrain 已于 Phase 31 退役（2026-06-06），本包内模块均为 stubify 状态。
 
-Resolved debts:
-  BYPASS-003: agent-runtime identity → SharedBrain direct connection
-  BYPASS-004: sharedbrain-bridge/eu.py DEFAULT_AGORA hardcoded localhost:7430
-  BYPASS-005: sharedbrain-bridge hardcoded DEFAULT_SB localhost:7421
+新代码请使用:
+    from sot_bridge.sharedbrain_bridge import ...
+    # 或
+    from sot_bridge import sharedbrain_bridge
 """
 
-__version__ = "0.3.0"
-__all__ = ("__version__",)
+from __future__ import annotations
+
+import warnings
+
+_warned = False
+
+
+def _warn_once() -> None:
+    global _warned
+    if not _warned:
+        warnings.warn(
+            "kairon.sharedbrain-bridge 已迁移到 sot-bridge 子模块 'sot_bridge.sharedbrain_bridge'。"
+            "SharedBrain 已退役（Phase 31），本包内模块为 stub。"
+            "请更新 import 路径（6 个月内会保留此 shim）。"
+            "详见: .omo/_knowledge/decisions/0006-kairon-package-merge.md",
+            DeprecationWarning,
+            stacklevel=3,
+        )
+        _warned = True
+
+
+_warn_once()
+
+# 委托到新位置
+from sot_bridge.sharedbrain_bridge import *  # noqa: E402, F401, F403
+from sot_bridge import sharedbrain_bridge as _sot_bridge_sb  # noqa: E402
+
+__version__ = _sot_bridge_sb.__version__
+__all__ = getattr(_sot_bridge_sb, "__all__", ())

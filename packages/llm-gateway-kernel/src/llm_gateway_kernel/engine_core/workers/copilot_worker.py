@@ -4,7 +4,7 @@ import logging
 import os
 from typing import Any
 
-from engine_core._compat import AgentDaemonBase, KnowledgeEnhancementMixin
+from ._compat import AgentDaemonBase, KnowledgeEnhancementMixin
 
 """
 ---

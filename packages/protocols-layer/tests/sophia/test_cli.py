@@ -4,7 +4,7 @@ import sys
 from unittest.mock import patch
 
 import pytest
-from sophia.cli import build_parser, main
+from protocols_layer.sophia.cli import build_parser, main
 
 
 class TestBuildParser:
@@ -123,13 +123,13 @@ class TestMainDispatch:
 
 class TestExportCommand:
     def test_compile_then_export_roundtrip(self):
-        from sophia.compiler import compile_paradigm_sync
+        from protocols_layer.sophia.compiler import compile_paradigm_sync
 
         prog = compile_paradigm_sync("Compare A vs B")
         assert prog.name == "Adaptive Research"
 
     def test_validate_via_api(self):
-        from sophia.compiler import compile_paradigm_sync
+        from protocols_layer.sophia.compiler import compile_paradigm_sync
 
         prog = compile_paradigm_sync("Test query")
         issues = prog.validate()

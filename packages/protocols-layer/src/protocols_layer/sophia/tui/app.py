@@ -27,9 +27,9 @@ def main():
     )
     console.print()
 
-    from sophia.compiler import compile_paradigm_sync
-    from sophia.learner import ParadigmLearner
-    from sophia.symbols import BASE_TRANSITIONS, AtomicOp, ResearchState
+    from .compiler import compile_paradigm_sync
+    from .learner import ParadigmLearner
+    from .symbols import BASE_TRANSITIONS, AtomicOp, ResearchState
 
     learner = ParadigmLearner()
 
@@ -108,7 +108,7 @@ def main():
                 for i in issues:
                     console.print(f"  [yellow]⚠ {i}[/yellow]")
             # Record trace
-            from sophia.learner import ResearchTrace
+            from .learner import ResearchTrace
 
             learner.record(
                 ResearchTrace(
