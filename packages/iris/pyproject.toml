@@ -43,3 +43,9 @@ packages = ["src/iris"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+
+[tool.uv.sources]
+eidos = { workspace = true }
+kronos = { workspace = true }
+minerva = { workspace = true }
+ssot-kernel = { workspace = true }
