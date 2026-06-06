@@ -1,38 +1,44 @@
-"""Adapter: minerva OpenAICompatibleClient -> llm-gateway LLMProvider.
+"""Minerva-compatible provider using llm-gateway's unified API.
 
-Wraps :class:`minerva.llm.OpenAICompatibleClient` (an async OpenAI-compatible
-HTTP client) into the unified :class:`llm_gateway.provider.LLMProvider` ABC.
+Replaces the legacy :mod:`minerva.llm.OpenAICompatibleClient` import
+with :func:`llm_gateway.provider.LLMProvider` for future-compatible
+LLM access through the unified gateway.
+
+.. deprecated:: 0.3.1
+    Use :func:`llm_gateway.detection.detect_backends` directly.
+    This class is kept for backward compatibility with
+    ``minerva/llm/__init__.py`` imports.
 """
 
 from __future__ import annotations
 
 import logging
 
-from llm_gateway.provider import LLMProvider, LLMRequest, LLMResponse
+from llm_gateway.provider import (
+    LLMProvider,
+    LLMRequest,
+    LLMResponse,
+    _with_llm_retry,
+    record_llm_cost,
+)
 
 _log = logging.getLogger(__name__)
 
 
 class MinervaProvider(LLMProvider):
-    """Adapter wrapping minerva's OpenAICompatibleClient into llm-gateway's ABC.
+    """Unified LLM provider — backward-compatible alias for minerva consumers.
 
-    Parameters
-    ----------
-    base_url:
-        OpenAI-compatible endpoint (e.g. ``http://localhost:11434/v1``).
-    api_key:
-        API key (default ``"ollama"`` for local Ollama).
-    model:
-        Model identifier (``default "qwen3.6:35b-a3b-coding-nvfp4"``).
-    timeout:
-        HTTP request timeout in seconds.
+    Uses OpenAI-compatible HTTP endpoint. Wraps the unified gateway API.
     """
+
+    DEFAULT_BASE_URL = "http://localhost:11434/v1"
+    DEFAULT_MODEL = "qwen3.6:35b-a3b-coding-nvfp4"
 
     def __init__(
         self,
-        base_url: str = "http://localhost:11434/v1",
+        base_url: str = DEFAULT_BASE_URL,
         api_key: str = "ollama",
-        model: str = "qwen3.6:35b-a3b-coding-nvfp4",
+        model: str = DEFAULT_MODEL,
         timeout: int = 120,
     ) -> None:
         super().__init__()
@@ -40,99 +46,55 @@ class MinervaProvider(LLMProvider):
         self._api_key = api_key
         self._model = model
         self._timeout = timeout
-        self._client = None
-        self._import_ok = False
-
-    # ------------------------------------------------------------------
-    # Identity
-    # ------------------------------------------------------------------
 
     @property
     def provider_name(self) -> str:
-        return "minerva"
+        return "minerva-compat"
 
-    # ------------------------------------------------------------------
-    # Lazy client
-    # ------------------------------------------------------------------
-
-    def _get_client(self):
-        """Lazy-initialize the minerva HTTP client."""
-        if self._client is not None:
-            return self._client
-        try:
-            from minerva.llm import (
-                OpenAICompatibleClient,
-            )
-
-            self._client = OpenAICompatibleClient(
-                base_url=self._base_url,
-                api_key=self._api_key,
-                model=self._model,
-                timeout=self._timeout,
-            )
-            self._import_ok = True
-        except ImportError:
-            _log.debug("minerva package not installed — MinervaProvider unavailable")
-        except Exception:
-            _log.exception("Failed to create minerva client")
-        return self._client
-
-    # ------------------------------------------------------------------
-    # Availability
-    # ------------------------------------------------------------------
+    def available_models(self) -> list[str]:
+        return [self._model]
 
     def is_available(self) -> bool:
-        return self._get_client() is not None and self._import_ok
+        return True
 
-    # ------------------------------------------------------------------
-    # Generation (async — delegates to minerva's native async method)
-    # ------------------------------------------------------------------
+    def _ollama_complete(self, request: LLMRequest) -> LLMResponse:
+        """Make an OpenAI-compatible HTTP request."""
+        import json as _json
+        import urllib.request
+        import urllib.error
 
-    async def generate(self, request: LLMRequest) -> LLMResponse:
-        client = self._get_client()
-        if client is None:
-            return LLMResponse(
-                content="",
-                provider=self.provider_name,
-                model=request.model or self._model,
-                finish_reason="error",
-            )
+        model = request.model or self._model
+        payload = _json.dumps({
+            "model": model.removeprefix("minerva/"),
+            "messages": [{"role": "user", "content": request.prompt}],
+            "stream": False,
+        }).encode("utf-8")
+
+        req = urllib.request.Request(
+            f"{self._base_url}/chat/completions",
+            data=payload,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self._api_key}",
+            },
+        )
         try:
-            content = await client.generate(
-                system=request.system_prompt or None,
-                prompt=request.prompt,
-                temperature=request.temperature,
-                max_tokens=request.max_tokens,
+            resp = urllib.request.urlopen(req, timeout=self._timeout)
+            body = _json.loads(resp.read())
+            usage = body.get("usage", {})
+            response = LLMResponse(
+                content=body["choices"][0]["message"]["content"],
+                provider="minerva-compat",
+                model=body.get("model", model),
+                input_tokens=usage.get("prompt_tokens", 0),
+                output_tokens=usage.get("completion_tokens", 0),
+                finish_reason=body["choices"][0].get("finish_reason", "stop"),
             )
-            return LLMResponse(
-                content=content,
-                provider=self.provider_name,
-                model=request.model or self._model,
-            )
-        except Exception as exc:
-            _log.error("MinervaProvider.generate failed: %s", exc)
-            return LLMResponse(
-                content=f"[Minerva error: {exc}]",
-                provider=self.provider_name,
-                model=request.model or self._model,
-                finish_reason="error",
-            )
-
-    # ------------------------------------------------------------------
-    # Generation (sync — run async in event loop)
-    # ------------------------------------------------------------------
+            record_llm_cost(response.model, response.input_tokens, response.output_tokens)
+            return response
+        except urllib.error.URLError as e:
+            _log.error("MinervaProvider request failed: %s", e)
+            return LLMResponse(content="", provider="minerva-compat", finish_reason="error")
 
     def complete(self, request: LLMRequest) -> LLMResponse:
-        import asyncio
-
-        try:
-            loop = asyncio.get_running_loop()
-        except RuntimeError:
-            loop = None
-        if loop is not None and loop.is_running():
-            # Already inside an async context — run via a new thread
-            import concurrent.futures
-
-            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
-                return pool.submit(asyncio.run, self.generate(request)).result()
-        return asyncio.run(self.generate(request))
+        return _with_llm_retry(lambda: self._ollama_complete(request))

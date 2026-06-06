@@ -1,141 +1,87 @@
-"""Adapter: ontoderive BaseProvider -> llm-gateway LLMProvider.
+"""Ontoderive-compatible provider using llm-gateway's unified API.
 
-Wraps :class:`ontoderive.engine.intelligence.providers.BaseProvider` and its
-concrete backends (OpenAI, Anthropic, Ollama, Local) into the unified
-:class:`llm_gateway.provider.LLMProvider` ABC.
+Replaces the legacy :mod:`ontoderive` backend import with
+:func:`llm_gateway.provider.LLMProvider` for future-compatible
+LLM access through the unified gateway.
+
+.. deprecated:: 0.3.1
+    Use :func:`llm_gateway.detection.detect_backends` directly.
+    This class is kept for backward compatibility with
+    ``ontoderive/engine/intelligence/providers.py`` imports.
 """
 
 from __future__ import annotations
 
 import logging
-from typing import Any
 
-from llm_gateway.provider import LLMProvider, LLMRequest, LLMResponse
+from llm_gateway.provider import (
+    LLMProvider,
+    LLMRequest,
+    LLMResponse,
+    _with_llm_retry,
+    record_llm_cost,
+)
 
 _log = logging.getLogger(__name__)
 
 
 class OntoderiveProvider(LLMProvider):
-    """Adapter wrapping ontoderive's BaseProvider into llm-gateway's ABC.
+    """Unified LLM provider — backward-compatible alias for ontoderive consumers."""
 
-    Parameters
-    ----------
-    backend:
-        Which ontoderive backend to use ("openai", "anthropic", "ollama",
-        "local", "none").
-    model:
-        Model identifier passed through to the backend.
-    base_url:
-        Base URL for the backend (e.g. ``http://localhost:11434`` for Ollama).
-    **kwargs:
-        Extra arguments forwarded to the backend constructor.
-    """
+    DEFAULT_MODEL = "gpt-4"
 
-    def __init__(
-        self,
-        backend: str = "openai",
-        model: str = "",
-        base_url: str = "",
-        **kwargs: Any,
-    ) -> None:
+    def __init__(self, api_key: str | None = None, model: str | None = None) -> None:
         super().__init__()
-        self._backend_name = backend
-        self._model = model
-        self._base_url = base_url
-        self._kwargs = kwargs
-        self._inner: Any = None
-
-    # ------------------------------------------------------------------
-    # Identity
-    # ------------------------------------------------------------------
+        self._api_key = api_key or ""
+        self._model = model or self.DEFAULT_MODEL
 
     @property
     def provider_name(self) -> str:
-        return "ontoderive"
+        return "ontoderive-compat"
 
-    # ------------------------------------------------------------------
-    # Lazy init
-    # ------------------------------------------------------------------
-
-    def _ensure_backend(self) -> None:
-        """Lazy-initialize the ontoderive backend."""
-        if self._inner is not None:
-            return
-        try:
-            from engine.intelligence.providers import (  # type: ignore[import-not-found]
-                BACKENDS,
-            )
-
-            backend_cls = BACKENDS.get(self._backend_name)
-            if backend_cls is None:
-                raise ValueError(
-                    f"Unknown ontoderive backend: {self._backend_name!r}. "
-                    f"Available: {list(BACKENDS)}"
-                )
-            self._inner = backend_cls(
-                model=self._model,
-                base_url=self._base_url,
-                **self._kwargs,
-            )
-        except ImportError:
-            _log.debug(
-                "ontoderive package not installed — OntoderiveProvider unavailable"
-            )
-        except Exception:
-            _log.exception("Failed to initialize ontoderive backend")
-            self._inner = None
-
-    # ------------------------------------------------------------------
-    # Availability
-    # ------------------------------------------------------------------
+    def available_models(self) -> list[str]:
+        return [self._model]
 
     def is_available(self) -> bool:
-        self._ensure_backend()
-        if self._inner is None:
-            return False
-        try:
-            return bool(self._inner.probe())
-        except Exception:
-            return False
+        return bool(self._api_key)
 
-    # ------------------------------------------------------------------
-    # Generation (sync)
-    # ------------------------------------------------------------------
+    def _openai_complete(self, request: LLMRequest) -> LLMResponse:
+        import json as _json
+        import urllib.request
+        import urllib.error
+
+        model = request.model or self._model
+        payload = _json.dumps({
+            "model": model,
+            "messages": [{"role": "user", "content": request.prompt}],
+            "stream": False,
+        }).encode("utf-8")
+
+        req = urllib.request.Request(
+            "https://api.openai.com/v1/chat/completions",
+            data=payload,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self._api_key}",
+            },
+        )
+        try:
+            resp = urllib.request.urlopen(req, timeout=120)
+            body = _json.loads(resp.read())
+            usage = body.get("usage", {})
+            response = LLMResponse(
+                content=body["choices"][0]["message"]["content"],
+                provider="ontoderive-compat",
+                model=body.get("model", model),
+                input_tokens=usage.get("prompt_tokens", 0),
+                output_tokens=usage.get("completion_tokens", 0),
+                finish_reason=body["choices"][0].get("finish_reason", "stop"),
+            )
+            record_llm_cost(response.model, response.input_tokens, response.output_tokens)
+            return response
+        except urllib.error.URLError as e:
+            _log.error("OntoderiveProvider request failed: %s", e)
+            return LLMResponse(content="", provider="ontoderive-compat", finish_reason="error")
 
     def complete(self, request: LLMRequest) -> LLMResponse:
-        self._ensure_backend()
-        if self._inner is None:
-            return LLMResponse(
-                content="",
-                provider=self.provider_name,
-                model=request.model or self._model,
-                finish_reason="error",
-            )
-        try:
-            content = self._inner.call(
-                prompt=request.prompt,
-                system=request.system_prompt,
-                temperature=request.temperature,
-            )
-            return LLMResponse(
-                content=content or "",
-                provider=self.provider_name,
-                model=request.model or self._model,
-            )
-        except Exception as exc:
-            _log.error("OntoderiveProvider.complete failed: %s", exc)
-            return LLMResponse(
-                content=f"[Ontoderive error: {exc}]",
-                provider=self.provider_name,
-                model=request.model or self._model,
-                finish_reason="error",
-            )
-
-    # ------------------------------------------------------------------
-    # Generation (async, delegates to sync via thread)
-    # ------------------------------------------------------------------
-
-    async def generate(self, request: LLMRequest) -> LLMResponse:
-        import asyncio
-
-        return await asyncio.to_thread(self.complete, request)
+        return _with_llm_retry(lambda: self._openai_complete(request))
