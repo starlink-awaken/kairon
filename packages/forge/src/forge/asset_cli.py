@@ -45,6 +45,7 @@ from __future__ import annotations
 
 import fcntl
 import json
+import os
 import socket
 import subprocess
 import sys
@@ -1119,12 +1120,12 @@ def cmd_import(args: list[str]) -> None:
                 "id": "agora-mcp",
                 "name": "Agora MCP",
                 "type": "service",
-                "port": 7430,
+                "port": int(os.environ.get("AGORA_MCP_PORT", "7430")),
                 "bind": "127.0.0.1",
                 "tags": ["agora", "mcp"],
             },
-            {"id": "agora-dashboard", "name": "Agora Dashboard", "type": "webapp", "port": 7430, "bind": "0.0.0.0"},  # noqa: S104
-            {"id": "minerva", "name": "Minerva", "type": "webapp", "port": 8765, "bind": "0.0.0.0"},  # noqa: S104
+            {"id": "agora-dashboard", "name": "Agora Dashboard", "type": "webapp", "port": int(os.environ.get("AGORA_DASHBOARD_PORT", "7430")), "bind": "0.0.0.0"},  # noqa: S104
+            {"id": "minerva", "name": "Minerva", "type": "webapp", "port": int(os.environ.get("MINERVA_PORT", "8765")), "bind": "0.0.0.0"},  # noqa: S104
             {
                 "id": "bos-daemon",
                 "name": "B-OS Daemon",
