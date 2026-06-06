@@ -566,6 +566,135 @@ def rg_search(
         return _error(str(e))
 
 
+@mcp.tool()
+def ast_search(
+    pattern: str,
+    path: str = ".",
+    language: str | None = None,
+    strict: bool = False,
+    max_count: int = 50,
+) -> dict:
+    """Search codebase using ast-grep (structural AST pattern matching).
+
+    Unlike text search, ast-grep finds code patterns based on syntax structure.
+    Use patterns like '$FUNC($___)' or 'try { $A } catch ($E) { $B }'.
+
+    Args:
+        pattern: AST search pattern
+        path: Search root path
+        language: Language (py, js, ts, rs, etc.)
+        strict: Strict pattern matching
+        max_count: Maximum matches to return
+    """
+    try:
+        from codeanalyze.analyzers import ast_grep
+
+        result = ast_grep.search(
+            pattern=pattern,
+            path=path,
+            language=language,
+            strict=strict,
+            max_count=max_count,
+        )
+
+        if result.error:
+            return _error(result.error)
+
+        return _ok(
+            {
+                "format_version": FORMAT_VERSION,
+                "pattern": result.pattern,
+                "language": result.language,
+                "total": result.total,
+                "matches": [
+                    {
+                        "path": m.path,
+                        "line": m.line_start,
+                        "col": m.col_start,
+                        "text": m.text[:200],
+                    }
+                    for m in result.matches[:max_count]
+                ],
+            }
+        )
+    except Exception as e:
+        return _error(str(e))
+
+
+@mcp.tool()
+def pack_repo(
+    path: str = ".",
+    fmt: str = "xml",
+    include: str | None = None,
+    ignore: str | None = None,
+    max_chars: int = 100000,
+) -> dict:
+    """Pack an entire repository into a single LLM-friendly file string.
+
+    Uses repomix to convert multiple files into one context window.
+    Only use this when you need broad context across many files.
+
+    Args:
+        path: Repository root path
+        fmt: Output format (xml, markdown, plain)
+        include: Comma-separated globs to include (e.g. 'src/**/*.py')
+        ignore: Comma-separated globs to ignore
+        max_chars: Truncate output if it exceeds this length
+    """
+    try:
+        from codeanalyze.analyzers import repomix
+
+        include_list = include.split(",") if include else None
+        ignore_list = ignore.split(",") if ignore else None
+
+        content = repomix.pack_to_string(
+            path=path,
+            fmt=fmt,
+            include=include_list,
+            ignore=ignore_list,
+            max_chars=max_chars,
+        )
+
+        if content.startswith("<!-- repomix error:"):
+            return _error(content)
+
+        return _ok(
+            {
+                "format_version": FORMAT_VERSION,
+                "length": len(content),
+                "content": content,
+            }
+        )
+    except Exception as e:
+        return _error(str(e))
+
+
+@mcp.tool()
+def cgc_query(query_str: str, path: str = ".") -> dict:
+    """Query CodeGraphContext semantic property graph using Cypher/Kuzu.
+
+    Args:
+        query_str: Cypher query string
+        path: Project root path
+    """
+    try:
+        from codeanalyze.analyzers import cgc
+
+        result = cgc.query(query_str, path=path)
+
+        if not result.success:
+            return _error(result.error or "CGC query failed")
+
+        return _ok(
+            {
+                "format_version": FORMAT_VERSION,
+                "data": result.data,
+            }
+        )
+    except Exception as e:
+        return _error(str(e))
+
+
 def main():
     """Run the MCP server in stdio mode (for Agora integration)."""
     mcp.run()

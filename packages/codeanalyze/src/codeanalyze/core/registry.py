@@ -107,6 +107,14 @@ _TOOL_SPECS: list[ToolSpec] = [
         cli="code-review-graph",
         python_module="code_review_graph",
     ),
+    ToolSpec("ast-grep", "AST-based structural code search (sg)", cli="ast-grep", python_fallback="sg"),
+    ToolSpec("repomix", "Pack repository to LLM-friendly format (XML/MD)", cli="repomix", python_fallback="npx"),
+    ToolSpec(
+        "codegraphcontext",
+        "CodeGraphContext semantic property graph (CGC)",
+        cli="cgc",
+        python_module="codegraphcontext",
+    ),
 ]
 
 
@@ -119,11 +127,17 @@ def _check_tool(spec: ToolSpec) -> ToolInfo:
     cli = spec.cli
     module_then_cli = spec.module_then_cli
 
-    # 1. Module with fallback (graphify)
+    # 1. Module with fallback (graphify), or CLI with fallback (npx/sg)
     if python_module and python_fallback:
         info = _check_python_module(python_module, name, desc)
         if not info.available:
             info = _check_python_module(python_fallback, name, desc)
+        return _check_plugin_dir(spec, info)
+
+    if cli and python_fallback and not python_module:
+        info = _check_cli(cli, name, desc)
+        if not info.available:
+            info = _check_cli(python_fallback, name, desc)
         return _check_plugin_dir(spec, info)
 
     # 2. Module only

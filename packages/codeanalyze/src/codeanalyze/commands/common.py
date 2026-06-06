@@ -23,4 +23,7 @@ _INSTALL_GUIDE = {
     "mineru": ("pip install mineru", "中文 PDF 解析 (OpenDataLab)"),
     "unstructured": ("pip install unstructured", "文档分块与分区"),
     "gitnexus": ("npm install -g gitnexus", "依赖关系图 (LadybugDB)"),
+    "ast-grep": ("brew install ast-grep", "AST 结构化代码搜索 (Rust)"),
+    "repomix": ("npm install -g repomix", "代码库打包为 LLM 友好格式"),
+    "codegraphcontext": ("pip install codegraphcontext", "CGC 代码语义图 (Tree-sitter + SCIP)"),
 }

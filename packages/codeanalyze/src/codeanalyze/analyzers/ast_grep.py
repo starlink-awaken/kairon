@@ -140,7 +140,7 @@ def search_rule(
     import tempfile
 
     root = Path(path).resolve()
-    result = SgResult(pattern=f"[rule]", path=str(root), language="multi")
+    result = SgResult(pattern="[rule]", path=str(root), language="multi")
 
     if not is_available():
         result.error = "ast-grep 未安装. 安装: brew install ast-grep"
@@ -248,10 +248,14 @@ def _parse_json_output(result: SgResult, stdout: str, max_count: int) -> None:
 def _lang_ext(language: str) -> str:
     """语言 → 文件扩展名。"""
     mapping = {
-        "py": ".py", "python": ".py",
-        "js": ".js", "javascript": ".js",
-        "ts": ".ts", "typescript": ".ts",
-        "rs": ".rs", "rust": ".rs",
+        "py": ".py",
+        "python": ".py",
+        "js": ".js",
+        "javascript": ".js",
+        "ts": ".ts",
+        "typescript": ".ts",
+        "rs": ".rs",
+        "rust": ".rs",
         "go": ".go",
         "java": ".java",
         "c": ".c",

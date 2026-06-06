@@ -11,7 +11,6 @@ repomix 把整个代码库压缩成单一文件（XML/Markdown/JSON），
 
 from __future__ import annotations
 
-import json
 import shutil
 import subprocess
 from dataclasses import dataclass, field
@@ -125,6 +124,7 @@ def pack(
     cmd.append(str(root))
 
     import time
+
     t0 = time.time()
 
     try:

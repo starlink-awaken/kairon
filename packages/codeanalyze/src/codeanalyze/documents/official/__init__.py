@@ -19,8 +19,11 @@ from codeanalyze.documents.official.pipeline import (  # type: ignore[import-not
 
 # Keep old function names for backward compatibility
 _extract_file_content = extract_file_content
+
+
 def _try_llm_fallback(*a):
     return None  # moved to parsers
+
 
 __all__ = [
     "PolicyDocument",
