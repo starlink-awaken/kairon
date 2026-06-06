@@ -248,8 +248,14 @@ class TriageRouter:
 
     async def _llm_classify(self, query: str) -> dict[str, int]:
         """Classify via local LLM (Qwen3.6-35B)."""
+
+        # Load L4 CARDS context for alignment
+        from minerva.shared.cards_context import get_cards_context  # type: ignore[import-not-found]
+        l4_context = get_cards_context()
+        system_prompt = TRIAGE_SYSTEM_PROMPT + l4_context
+
         response = await self.llm.generate(
-            system=TRIAGE_SYSTEM_PROMPT,
+            system=system_prompt,
             prompt=f"Classify this research query:\n\n{query}",
             temperature=0.1,  # Low temperature for consistent classification
         )

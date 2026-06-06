@@ -32,8 +32,13 @@ async def classify_paradigm(llm_client, query: str) -> ParadigmResult:
     try:
         import json
 
+        from minerva.shared.cards_context import get_cards_context  # type: ignore[import-not-found]
+
+        l4_context = get_cards_context()
+        system_prompt = "You classify research questions into paradigms. Output valid JSON only." + l4_context
+
         response = await llm_client.generate(
-            system="You classify research questions into paradigms. Output valid JSON only.",
+            system=system_prompt,
             prompt=CLASSIFY_PROMPT.format(query=query[:500]),
             temperature=0.1,
             max_tokens=300,
