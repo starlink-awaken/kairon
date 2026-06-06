@@ -1,8 +1,8 @@
 """Tests for llm-gateway CLI and public API."""
 from __future__ import annotations
 
-import sys
 import os
+import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 os.environ["OPENAI_API_KEY"] = ""
@@ -25,8 +25,9 @@ def test_cli_help():
 
 def test_import_public_api():
     from llm_gateway_kernel.llm_gateway import (
-        LLMProvider, LLMRequest, LLMResponse,
-        LLMError, detect_backends, create_provider,
+        LLMProvider,
+        LLMRequest,
+        LLMResponse,
     )
     assert LLMProvider is not None
     assert LLMRequest is not None

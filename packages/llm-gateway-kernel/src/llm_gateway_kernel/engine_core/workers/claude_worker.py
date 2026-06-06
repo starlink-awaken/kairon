@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# ruff: noqa: RUF003
 import logging
 import os
 from typing import Any

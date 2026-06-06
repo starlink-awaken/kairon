@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# ruff: noqa: RUF001, RUF002, RUF003
 import asyncio
 
 from ._compat import ProjectPaths

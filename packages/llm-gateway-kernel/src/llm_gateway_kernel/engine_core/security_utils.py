@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# ruff: noqa: RUF002
 import ast
 import io
 from collections.abc import Callable

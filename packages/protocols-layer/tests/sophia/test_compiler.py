@@ -1,6 +1,7 @@
 """Tests for Sophia paradigm compiler."""
 
 import pytest
+
 from protocols_layer.sophia.compiler import compile_paradigm_sync, recompile_from_dict
 
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# ruff: noqa: RUF002, RUF003
 from ._compat import get_spore_gateway, get_synapse_router
 
 """
@@ -111,7 +112,7 @@ class DeliveryResult(dict):
                 spore = get_spore_gateway()
                 a2a_transport = spore.get_component("a2a_transport")
                 deliver_frame = a2a_transport.deliver_frame
-            except Exception:
+            except Exception:  # noqa: S110
                 pass
 
             # TODO-migrate: if deliver_frame is None, import from nucleus.Z_Spore.engine.a2a_transport

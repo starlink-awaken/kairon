@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# ruff: noqa: RUF001, RUF002
 from ._compat import ProjectPaths
 
 """
@@ -60,7 +61,7 @@ from typing import Any
 _log = logging.getLogger(__name__)
 # 必须继承基础物理沙盒膜
 
-__all__ = ["ExecutionScheduler", "QueueFullError", "TaskPriority", "PrioritizedTask"]
+__all__ = ["ExecutionScheduler", "PrioritizedTask", "QueueFullError", "TaskPriority"]
 
 
 # =============================================================================
@@ -608,7 +609,7 @@ class ExecutionScheduler:
                     params.append(finished_at)
                 params.append(task_id)
                 with conn:
-                    conn.execute(f"UPDATE tasks SET {', '.join(sets)} WHERE task_id = ?", params)
+                    conn.execute(f"UPDATE tasks SET {', '.join(sets)} WHERE task_id = ?", params)  # noqa: S608
                 # Emit transition log — always, not just for audit events
                 _log.info("STATE task_id=%s transition=%s→%s", task_id, old_status, new_status)
                 return True

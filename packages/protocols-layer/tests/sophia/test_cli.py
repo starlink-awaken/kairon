@@ -4,6 +4,7 @@ import sys
 from unittest.mock import patch
 
 import pytest
+
 from protocols_layer.sophia.cli import build_parser, main
 
 

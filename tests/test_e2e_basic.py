@@ -42,9 +42,9 @@ class TestAgentRuntime:
     """Test agent-runtime basic types and creation."""
 
     def test_task_status(self):
-        assert TaskStatus.PENDING is not None
-        assert TaskStatus.RUNNING is not None
+        assert TaskStatus.PENDING is not None  # noqa: F821
+        assert TaskStatus.RUNNING is not None  # noqa: F821
 
     def test_task_def(self):
-        t = TaskDef(id="test-1", action="test", agent_id="worker-1")
+        t = TaskDef(id="test-1", action="test", agent_id="worker-1")  # noqa: F821
         assert t.id == "test-1"

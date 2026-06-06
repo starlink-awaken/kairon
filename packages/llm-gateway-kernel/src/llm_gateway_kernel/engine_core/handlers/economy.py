@@ -27,7 +27,7 @@ class EconomyCallHandler:
             }
         except (ImportError, TypeError, ValueError, AttributeError) as e:
             _log.error("%s: %s", type(e).__name__, e)
-            return {"status": "error", "message": f"Economy bridge error: {str(e)}"}
+            return {"status": "error", "message": f"Economy bridge error: {e!s}"}
 
     async def _handle_ledger(self, action: str, params: dict[str, Any] | None) -> dict[str, Any]:
         try:

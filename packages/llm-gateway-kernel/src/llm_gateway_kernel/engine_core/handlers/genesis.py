@@ -23,4 +23,4 @@ class GenesisCallHandler:
             return global_forge._handle_archetype_distill(params or {})
         except (ImportError, AttributeError) as e:
             _log.error("%s: %s", type(e).__name__, e)
-            return {"status": "error", "message": f"Genesis bridge error: {str(e)}"}
+            return {"status": "error", "message": f"Genesis bridge error: {e!s}"}

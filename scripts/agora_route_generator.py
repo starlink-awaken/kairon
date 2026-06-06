@@ -16,7 +16,7 @@ warnings.warn(
     stacklevel=2,
 )
 
-from kairon_governance.agora_routes import main  # noqa: E402
+from kairon_governance.agora_routes import main
 
 if __name__ == "__main__":
     raise SystemExit(main())

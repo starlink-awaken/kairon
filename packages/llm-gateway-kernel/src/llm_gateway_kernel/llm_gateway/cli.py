@@ -11,7 +11,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 
 from .detection import create_provider, detect_backends

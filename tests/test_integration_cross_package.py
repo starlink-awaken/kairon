@@ -13,8 +13,6 @@ Chains:
 
 from __future__ import annotations
 
-import uuid
-
 # ═══════════════════════════════════════════════════════════════════
 # Chain 1: Agora → Agent-Runtime
 # ═══════════════════════════════════════════════════════════════════
@@ -67,7 +65,7 @@ class TestChainAgoraToAgentRuntime:
     def test_agent_hub_register(self):
         """AgentHub works independently and is compatible with Agora types."""
 
-        hub = AgentHub()
+        hub = AgentHub()  # noqa: F821
         agent_id = hub.register_agent(
             name="agora-worker",
             capabilities=["task:execute", "llm:chat"],

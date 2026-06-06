@@ -17,7 +17,7 @@ warnings.warn(
     stacklevel=2,
 )
 
-from kairon_governance.sync_state import main  # noqa: E402
+from kairon_governance.sync_state import main
 
 if __name__ == "__main__":
     sys.exit(main())

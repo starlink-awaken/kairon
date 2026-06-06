@@ -11,8 +11,7 @@
 
 from __future__ import annotations
 
-from . import llm_gateway
-from . import engine_core
+from . import engine_core, llm_gateway
 
-__all__ = ["llm_gateway", "engine_core"]
+__all__ = ["engine_core", "llm_gateway"]
 __version__ = "0.1.0"

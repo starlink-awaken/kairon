@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# ruff: noqa: RUF002
 import sqlite3
 
 """

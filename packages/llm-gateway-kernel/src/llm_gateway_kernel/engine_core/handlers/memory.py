@@ -35,4 +35,4 @@ class MemoryCallHandler:
 
         except (TypeError, ValueError, AttributeError, ImportError) as e:
             _log.error("%s: %s", type(e).__name__, e)
-            return {"status": "error", "message": f"Memory bridge error: {str(e)}"}
+            return {"status": "error", "message": f"Memory bridge error: {e!s}"}

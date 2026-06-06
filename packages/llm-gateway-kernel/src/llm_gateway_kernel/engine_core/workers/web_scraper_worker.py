@@ -94,7 +94,7 @@ class WebScraperWorker(AgentDaemonBase, ISynapseWorker):
             _log.error("%s: %s", type(e).__name__, e)
             return {
                 "status": "ERROR",
-                "error": f"Unexpected error: {str(e)}",
+                "error": f"Unexpected error: {e!s}",
                 "worker_type": "WebScraperWorker",
             }
 

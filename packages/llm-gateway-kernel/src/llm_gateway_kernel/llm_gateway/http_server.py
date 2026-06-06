@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import json
 import sys
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from typing import Any
 
 from .detection import detect_backends
@@ -33,7 +33,7 @@ class LLMGatewayHandler(BaseHTTPRequestHandler):
 
         prompt: str = body.get("prompt", "")
         model: str | None = body.get("model")
-        provider_name: str | None = body.get("provider")
+        provider_name: str | None = body.get("provider")  # noqa: F841
 
         providers = detect_backends()
         if not providers:
@@ -95,8 +95,8 @@ def serve(port: int = 9090) -> None:
     """
     server = HTTPServer(("0.0.0.0", port), LLMGatewayHandler)  # noqa: S104
     print(f"llm-gateway HTTP server: http://localhost:{port}")
-    print(f"  POST /v1/generate  — generate LLM response")
-    print(f"  GET  /v1/health     — health check")
+    print("  POST /v1/generate  — generate LLM response")
+    print("  GET  /v1/health     — health check")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

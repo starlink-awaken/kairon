@@ -35,6 +35,12 @@ from pathlib import Path
 from threading import RLock
 from typing import Any
 
+from ._events import (  # type: ignore[import-not-found]
+    _DEFAULT_HATCH_TIMEOUT_S,
+    _PROCESS_POLL_INTERVAL_S,
+    _emit_hatcher_event,
+)
+from .exceptions import HatchError, HatchTimeoutError  # type: ignore[import-not-found]
 from .organs.engine.agent_cli_bootstrap import (  # type: ignore[import-not-found]
     build_agent_cli_handle,
     inject_agent_cli_soul_env,
@@ -60,13 +66,6 @@ from .organs.engine.retry_policy import (  # type: ignore[import-not-found]
     RetryState,
 )
 from .organs.engine.task_store import TaskState, TaskStore  # type: ignore[import-not-found]
-
-from ._events import (  # type: ignore[import-not-found]
-    _DEFAULT_HATCH_TIMEOUT_S,
-    _PROCESS_POLL_INTERVAL_S,
-    _emit_hatcher_event,
-)
-from .exceptions import HatchError, HatchTimeoutError  # type: ignore[import-not-found]
 from .thread_worker import _thread_worker  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)

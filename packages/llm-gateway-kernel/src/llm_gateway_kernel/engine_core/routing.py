@@ -51,7 +51,7 @@ class RoutingEngine:
             action = parsed.action
         except (TypeError, ValueError, AttributeError) as e:
             _log.error("%s: %s", type(e).__name__, e)
-            return {"status": "error", "message": f"Invalid URI: {str(e)}"}, {}
+            return {"status": "error", "message": f"Invalid URI: {e!s}"}, {}
 
         start_time = time.time()
 

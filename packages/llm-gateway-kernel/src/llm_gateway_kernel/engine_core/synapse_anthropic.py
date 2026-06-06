@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# ruff: noqa: RUF001, RUF003
 from ._compat import Gateway
 
 """

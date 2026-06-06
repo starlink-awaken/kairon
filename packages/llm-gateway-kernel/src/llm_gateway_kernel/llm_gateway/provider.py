@@ -1,3 +1,4 @@
+# ruff: noqa: RUF002
 """LLM provider abstraction — unified ABC and dataclasses.
 
 Provides:
@@ -17,7 +18,7 @@ import time as _time
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator, Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, TypeVar
 
@@ -37,7 +38,7 @@ def record_llm_cost(model: str, input_tokens: int, output_tokens: int) -> None:
     """
     try:
         record = {
-            "ts": datetime.now(timezone.utc).isoformat(),
+            "ts": datetime.now(UTC).isoformat(),
             "model": model,
             "input_tokens": input_tokens,
             "output_tokens": output_tokens,
@@ -49,7 +50,7 @@ def record_llm_cost(model: str, input_tokens: int, output_tokens: int) -> None:
             os.write(fd, line)
         finally:
             os.close(fd)
-    except Exception:
+    except Exception:  # noqa: S110
         pass  # non-blocking
 
 
@@ -75,7 +76,7 @@ class LLMRetryExhaustedError(LLMError):
 # ---------------------------------------------------------------------------
 
 
-def _with_llm_retry(
+def _with_llm_retry(  # noqa: UP047
     fn: Callable[[], _T],
     max_retries: int = 3,
     base_delay: float = 1.0,

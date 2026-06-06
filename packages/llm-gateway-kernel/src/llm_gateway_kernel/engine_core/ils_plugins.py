@@ -4,7 +4,6 @@ import logging
 from abc import abstractmethod
 
 from ._compat import Infrastructure
-
 from .ils_types import ActionIntent, Event
 
 """

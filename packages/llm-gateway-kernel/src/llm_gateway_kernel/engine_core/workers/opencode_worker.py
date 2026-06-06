@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# ruff: noqa: RUF002, RUF003
 import logging
 import os
 import re
@@ -63,8 +64,8 @@ class OpenCodeWorker(AgentDaemonBase):
 
         try:
             # 限制扫描深度，避免内存爆炸
-            res = subprocess.run(
-                ["find", target_path, "-maxdepth", "2", "-not", "-path", "*/.*"],
+            res = subprocess.run(  # noqa: S603
+                ["find", target_path, "-maxdepth", "2", "-not", "-path", "*/.*"],  # noqa: S607
                 capture_output=True,
                 text=True,
                 timeout=60,

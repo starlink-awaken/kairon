@@ -30,7 +30,7 @@ For minerva/ssot/ontoderive consumers, use:
 Version: 0.4.0
 """
 
-import builtins
+import builtins  # noqa: F401
 
 from .detection import create_provider, detect_backends
 from .provider import (
@@ -54,7 +54,7 @@ from .providers.openai_provider import OpenAIProvider
 
 __version__ = "0.4.0"
 
-__all__ = (
+__all__ = (  # noqa: RUF022
     # ── Stable public API ──
     "LLMProvider",
     "LLMRequest",

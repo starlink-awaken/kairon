@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+# ruff: noqa: RUF001, RUF002, RUF003
+
 """
 ---
 Type: Module
@@ -311,7 +313,7 @@ class UniversalWorker(AgentDaemonBase):
         merged_env = {**os.environ, **extra_env}
         _log.info("[>] subprocess: %s (timeout=%ss)", args, timeout)
         try:
-            result = subprocess.run(
+            result = subprocess.run(  # noqa: S603
                 args,
                 capture_output=True,
                 text=True,

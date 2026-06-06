@@ -864,7 +864,6 @@ def codegraph_get_affected_tests(files: list[str], path: str = ".") -> dict:
 
 
 
-
 @mcp.resource("bos://analysis/graph/{project}")
 def read_analysis_graph(project: str) -> str:
     """Dynamically generate a Mermaid diagram for a project."""

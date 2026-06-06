@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# ruff: noqa: RUF001, RUF002, RUF003
 import datetime
 import importlib
 import logging
@@ -149,7 +150,7 @@ class PrimordialSoil:
         auth_list = (
             [auth]
             if isinstance(auth, str)
-            else ([auth.get("Primary")] + auth.get("Secondary", []) if isinstance(auth, dict) else [])
+            else ([auth.get("Primary")] + auth.get("Secondary", []) if isinstance(auth, dict) else [])  # noqa: RUF005
         )
         issues = []
         for a in auth_list:
