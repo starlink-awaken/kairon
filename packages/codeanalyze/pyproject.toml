@@ -22,6 +22,7 @@ dependencies = [
     "click>=8.0",
     "rich>=13.0",
     "core-models",
+    "radon>=6.0.1",
 ]
 
 [project.optional-dependencies]
