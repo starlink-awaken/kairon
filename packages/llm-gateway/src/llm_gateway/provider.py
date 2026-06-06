@@ -5,20 +5,52 @@ Provides:
 - :class:`LLMProvider` abstract base class with async/sync/stream interfaces
 - :class:`MockLLMProvider` for testing
 - :class:`NoneProvider` for silent degradation
+- :func:`record_llm_cost` for X3 cost tracking
 """
 
 from __future__ import annotations
 
+import json
 import logging
+import os
 import time as _time
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator, Callable
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any, TypeVar
 
 _T = TypeVar("_T")
 
 _log = logging.getLogger(__name__)
+
+# ── X3 Cost tracking ─────────────────────────────────────────────────────────
+_COST_LOG = Path(os.environ.get("RUNTIME_HOME", str(Path.home() / "runtime"))) / "data" / "llm_cost.jsonl"
+
+
+def record_llm_cost(model: str, input_tokens: int, output_tokens: int) -> None:
+    """Record an LLM call's token usage to the cost log (non-blocking).
+
+    Called from provider implementations after each successful ``complete()``.
+    Failure to write the log never breaks the LLM call.
+    """
+    try:
+        record = {
+            "ts": datetime.now(timezone.utc).isoformat(),
+            "model": model,
+            "input_tokens": input_tokens,
+            "output_tokens": output_tokens,
+        }
+        _COST_LOG.parent.mkdir(parents=True, exist_ok=True)
+        line = (json.dumps(record, ensure_ascii=False) + "\n").encode("utf-8")
+        fd = os.open(str(_COST_LOG), os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o644)
+        try:
+            os.write(fd, line)
+        finally:
+            os.close(fd)
+    except Exception:
+        pass  # non-blocking
 
 
 # ---------------------------------------------------------------------------
