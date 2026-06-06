@@ -12,6 +12,7 @@ dependencies = [
     "kairon-utils",
     "kairon-plugin-sdk",
     "kairon-observability",
+    "kairon-pipeline",
 ]
 
 [dependency-groups]

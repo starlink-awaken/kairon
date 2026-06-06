@@ -51,13 +51,13 @@ import time
 from datetime import UTC, datetime
 
 from kairon_observability.monitoring_metrics import HarvestMetrics, MetricsCollector
+from kairon_pipeline.extract_base import StructuredKnowledge
+from kairon_pipeline.extract_html import HtmlContentExtractor
+from kairon_pipeline.quality_gate import QualityGate
+from kairon_pipeline.source_connectors import RawContent
+from kairon_pipeline.source_registry import SourceRegistry
 
-from kairon_lib.extractors.base import StructuredKnowledge
-from kairon_lib.extractors.html_extractor import HtmlContentExtractor
 from kairon_lib.orchestrator import HarvestOrchestrator
-from kairon_lib.quality.gate import QualityGate
-from kairon_lib.sources.connectors import RawContent
-from kairon_lib.sources.registry import SourceRegistry
 
 _VERIFICATION_SAMPLE_HTML = """
 <html>
@@ -183,7 +183,7 @@ async def collect_post_implementation_metrics() -> None:
 
     # Test 4: Priority queue functionality
     print("\n[5/6] Testing priority queue...")
-    from kairon_lib.sources.priority import HarvestPriorityQueue, Priority
+    from kairon_pipeline.source_priority import HarvestPriorityQueue, Priority
 
     queue = HarvestPriorityQueue()
 

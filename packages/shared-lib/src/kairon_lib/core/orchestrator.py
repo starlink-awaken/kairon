@@ -9,10 +9,10 @@ operations, bridging the source registry, content extractor, and quality gate.
 
 from typing import Any
 
-from kairon_lib.extractors.base import StructuredKnowledge
-from kairon_lib.extractors.html_extractor import HtmlContentExtractor
-from kairon_lib.quality.gate import QualityGate
-from kairon_lib.sources.registry import SourceRegistry
+from kairon_pipeline.extract_base import StructuredKnowledge
+from kairon_pipeline.extract_html import HtmlContentExtractor
+from kairon_pipeline.quality_gate import QualityGate
+from kairon_pipeline.source_registry import SourceRegistry
 
 
 class Checkpoint:

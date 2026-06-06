@@ -32,6 +32,7 @@ members = [
     "kairon",
     "kairon-lib-events",
     "kairon-observability",
+    "kairon-pipeline",
     "kairon-plugin-sdk",
     "kairon-utils",
     "kos",
@@ -3024,6 +3025,21 @@ dev = [{ name = "pytest", specifier = ">=8.4.2" }]
 name = "kairon-observability"
 version = "0.4.0"
 source = { editable = "packages/kairon-observability" }
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.4.2" }]
+
+[[package]]
+name = "kairon-pipeline"
+version = "0.4.0"
+source = { editable = "packages/kairon-pipeline" }
 
 [package.dev-dependencies]
 dev = [
@@ -7344,6 +7360,7 @@ source = { editable = "packages/shared-lib" }
 dependencies = [
     { name = "kairon-lib-events" },
     { name = "kairon-observability" },
+    { name = "kairon-pipeline" },
     { name = "kairon-plugin-sdk" },
     { name = "kairon-utils" },
 ]
@@ -7358,6 +7375,7 @@ dev = [
 requires-dist = [
     { name = "kairon-lib-events", editable = "packages/kairon-lib-events" },
     { name = "kairon-observability", editable = "packages/kairon-observability" },
+    { name = "kairon-pipeline", editable = "packages/kairon-pipeline" },
     { name = "kairon-plugin-sdk", editable = "packages/kairon-plugin-sdk" },
     { name = "kairon-utils", editable = "packages/kairon-utils" },
 ]

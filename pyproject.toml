@@ -57,6 +57,7 @@ kairon-lib-events = { workspace = true }
 kairon-utils = { workspace = true }
 kairon-plugin-sdk = { workspace = true }
 kairon-observability = { workspace = true }
+kairon-pipeline = { workspace = true }
 ssot-kernel = { workspace = true }
 health-profile = { workspace = true }
 
