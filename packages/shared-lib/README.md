@@ -1,6 +1,6 @@
 # shared-lib
 
-> Kairon shared library — core business logic
+> Kairon shared library — core business logic · v0.4.0
 
 Kairon 包。详见 [kairon/CLAUDE.md](../CLAUDE.md)。
 
@@ -16,12 +16,13 @@ Kairon 包。详见 [kairon/CLAUDE.md](../CLAUDE.md)。
 | [kairon-observability](../kairon-observability/) | 可观测性（指标/告警/异常/SLO） | 6 |
 | [kairon-pipeline](../kairon-pipeline/) | 数据管道（数据源/提取器/质量门） | 5 |
 
+Facade 文件已从 125 个精简至 26 个（-79%）。
+
 ## 当前范围
 
-shared-lib 当前保留以下核心业务模块：
 - `core/` — 工作流引擎、委员会系统、安全、威胁、LLM 客户端等
 - `governance/` — 审批路由、投票、用户否决、伦理治理
 - `cognitive/` — 认知推理、知识图谱、RAG、思维系统
 - `audit/` — 审计追踪、回顾、场景引擎
 
-向后兼容的 facade 重导文件保留在 `kairon_lib/events.py`、`kairon_lib/errors.py` 等位置。
+630 tests · 0 API breakages
