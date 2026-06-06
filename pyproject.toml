@@ -55,10 +55,8 @@ kos = { workspace = true }
 iris = { workspace = true }
 ssot-kernel = { workspace = true }
 agent-runtime = { workspace = true }
-wksp = { workspace = true }
 ecos = { workspace = true }
 cron-service = { workspace = true }
-kairon-governance = { workspace = true }
 
 [tool.pytest.ini_options]
 testpaths = ["packages/*/tests"]

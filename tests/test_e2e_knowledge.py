@@ -18,6 +18,6 @@ class TestOntoderive:
     def test_import(self):
         """ontoderive has workspace-specific package layout; skip if unavailable."""
         try:
-            import ontoderive
+            import ontoderive  # noqa: F401
         except ImportError:
             pytest.skip("ontoderive not in PYTHONPATH (workspace-scoped package)")

@@ -55,7 +55,7 @@ make format
 | agent-hub | `packages/agent-hub/` | Agent 注册中心 |
 | agora | `packages/agora/` | MCP 服务发现 + 代理 + 断路器（7430/7431） |
 | llm-gateway | `packages/llm-gateway/` | LLM 路由 + 配额管理 |
-| wksp | `packages/wksp/` | 工作区管理 |
+| ~~wksp~~ | **已拆出 (P30-W1)** | 移至 `projects/cockpit/` 独立项目（CLI + Web UI 统一研究驾驶舱，吸收 hermes-console 为 web/） |
 
 > 注：kairon-assistant / kairon-voice 已于 P28-W2 归档（见下方"已归档（P28-W2）"段）。
 
@@ -107,6 +107,7 @@ agentmesh 的 5 个子系统已 100% 迁移至 kairon：
 | 原包 | 新位置 | 原因 |
 |------|--------|------|
 | metaos | `projects/metaos/` | 编排引擎（决策门控/免疫/路由），非知识工程功能，拆为独立项目（v3 架构方案） |
+| wksp | `projects/cockpit/` | 工作区管理 + 吸收 hermes-console 为 web/，统一为 cockpit 独立项目 |
 
 ## 架构主线
 
@@ -152,6 +153,7 @@ minerva, ontoderive, sharedbrain-bridge, sharedbrain-standalone
 - **conftest**: 7 个包有 conftest.py（agora, ecos, engine-core, eu-pricing, kos, minerva, ontoderive）
 - **覆盖率门禁**: fail_under 70%
 - **wksp 是唯一无 tests/ 目录的包** — 测试覆盖为零
+  - *2026-06-06 更新：wksp 已拆出至 `projects/cockpit/`，kairon 改为 23 包（移除 wksp）*
 
 ## 编码规范
 
@@ -198,5 +200,6 @@ kairon 拥有独立于根工作区的 CI 流水线：
 4. **mypy 严格模式** — namespace_packages 需要显式配置 mypy_path
 5. **包间依赖通过 workspace 引用** — `[tool.uv.sources]` 定义内部包来源
 6. **wksp 包零测试** — `packages/wksp/` 没有 `tests/` 目录
+   - *2026-06-06：wksp 已拆出至 `projects/cockpit/`，kairon 不再 ship wksp*
 7. **根目录遗留修复脚本** — 约 8 个 `_fix_*.py` 脚本（fix_imports, mypy_suppress 等），是 mypy 迁移残留
 8. **CI 薄弱** — kairon 内部 CI 仅覆盖 lint + codeanalyze 单包测试，无全包测试门禁

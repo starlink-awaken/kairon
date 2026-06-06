@@ -58,6 +58,7 @@ dev = [
 [project.scripts]
 minerva = "minerva.cli:main"
 minerva-daemon = "minerva.executor.daemon:main"
+minerva-mcp = "minerva.mcp_server.server:main"
 
 [project.urls]
 Homepage = "https://github.com/starlink-awaken/minerva"

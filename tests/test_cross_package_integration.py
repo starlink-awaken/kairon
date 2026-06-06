@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import importlib
+
 import pytest
 
 
@@ -34,11 +35,6 @@ def test_shared_lib():
 def test_codeanalyze():
     m = _import("codeanalyze.mcp")
     assert hasattr(m, "FORMAT_VERSION")
-
-
-def test_wksp():
-    m = _import("wksp.cli")
-    assert callable(m.main)
 
 
 def test_agora():

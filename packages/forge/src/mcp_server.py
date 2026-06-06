@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from forge.http_api import build_asset_stats, load_graph, load_registry, query_assets, query_graph
+from forge.http_api import build_asset_stats, load_graph, load_registry, query_assets
 
 
 def search_tools(query: str, capabilities: list[str] | None = None, limit: int = 10):

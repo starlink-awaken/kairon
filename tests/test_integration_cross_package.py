@@ -15,9 +15,6 @@ from __future__ import annotations
 
 import uuid
 
-import pytest
-
-
 # ═══════════════════════════════════════════════════════════════════
 # Chain 1: Agora → Agent-Runtime
 # ═══════════════════════════════════════════════════════════════════
@@ -150,7 +147,7 @@ class TestChainAgentRuntimeToEngineCore:
 
     def test_capability_catalog_register(self):
         """Engine-core CapabilityCatalog stores agent-runtime capabilities."""
-        from engine_core.capability import CapabilityCatalog, Capability
+        from engine_core.capability import Capability, CapabilityCatalog
 
         catalog = CapabilityCatalog()
         catalog.register(
@@ -205,7 +202,7 @@ class TestChainEngineCoreToLlmGateway:
 
     def test_mock_llm_provider_returns_string_content(self):
         """MockLLMProvider returns string content (not list-based)."""
-        from llm_gateway.provider import MockLLMProvider, LLMRequest
+        from llm_gateway.provider import LLMRequest, MockLLMProvider
 
         provider = MockLLMProvider()
         request = LLMRequest(prompt="Hello from engine-core")
@@ -217,8 +214,9 @@ class TestChainEngineCoreToLlmGateway:
 
     def test_engine_core_retry_policy_with_llm_request(self):
         """RetryPolicy delay logic is usable alongside LLMRequest."""
-        from llm_gateway.provider import MockLLMProvider, LLMRequest
         import importlib
+
+        from llm_gateway.provider import LLMRequest, MockLLMProvider
         rp = importlib.import_module("engine_core.retry_policy")
 
         provider = MockLLMProvider()
@@ -233,8 +231,9 @@ class TestChainEngineCoreToLlmGateway:
 
     def test_task_context_and_llm_response_interop(self):
         """TaskContext and LLMResponse types coexist without conflict."""
-        from llm_gateway.provider import MockLLMProvider, LLMRequest
         import importlib
+
+        from llm_gateway.provider import LLMRequest, MockLLMProvider
         tc = importlib.import_module("engine_core.task_context")
 
         provider = MockLLMProvider()
@@ -247,8 +246,7 @@ class TestChainEngineCoreToLlmGateway:
 
     def test_capability_catalog_agent_card_uses_llm_gateway_types(self):
         """CapabilityCatalog's to_agent_card() works with MockLLMProvider types."""
-        from llm_gateway.provider import MockLLMProvider, LLMRequest
-        from engine_core.capability import CapabilityCatalog, Capability
+        from engine_core.capability import Capability, CapabilityCatalog
 
         catalog = CapabilityCatalog()
         catalog.register(
@@ -261,8 +259,8 @@ class TestChainEngineCoreToLlmGateway:
 
     def test_cost_aware_dispatcher_constructs(self):
         """CostAwareDispatcher can be instantiated alongside LLM types."""
-        from llm_gateway.provider import MockLLMProvider
         from engine_core.cost_aware_dispatcher import CostAwareDispatcher
+        from llm_gateway.provider import MockLLMProvider
 
         dispatcher = CostAwareDispatcher()
         provider = MockLLMProvider()
@@ -273,7 +271,7 @@ class TestChainEngineCoreToLlmGateway:
 
     def test_llm_response_metadata_compatible_with_engine_core(self):
         """LLMResponse metadata structure matches engine-core expectations."""
-        from llm_gateway.provider import MockLLMProvider, LLMRequest
+        from llm_gateway.provider import LLMRequest, MockLLMProvider
 
         provider = MockLLMProvider()
         request = LLMRequest(prompt="test metadata")

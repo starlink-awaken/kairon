@@ -1,6 +1,6 @@
 # AGENTS.md — kairon
 
-> Knowledge & Research Operating Stack: 23 包 Python monorepo（以当前 checkout 为准；P28-W2 已归档 2 包）
+> Knowledge & Research Operating Stack: 23 包 Python monorepo（以当前 checkout 为准；P28-W2 已归档 2 包；P30-W1 拆出 wksp → projects/cockpit/）
 
 如果你不是 Claude Code，从这里开始。Claude Code 会自动读取 `CLAUDE.md`。
 
@@ -21,7 +21,7 @@ kairon 是一个 25 包的 Python monorepo，托管在 `projects/kairon/`。
 5 大分组：
 - **L1 知识工程** — eidos, ontoderive, kos, minerva, sophia, iris, ssot, forge, codeanalyze, kronos, metaos, cron-service
 - **L2 集成** — sharedbrain-bridge, llm-gateway
-- **L3 Agent** — agent-runtime, agora, llm-gateway, wksp
+- **L3 Agent** — agent-runtime, agora, llm-gateway
 - **Infra** — shared-lib, core-models, engine-core, ecos
 - **业务支撑** — kaironcloud-billing, symphony-protocol
 - **P28-W2 已归档** — kairon-assistant, kairon-voice（2026-06-05 移入 `projects/_archived/`）

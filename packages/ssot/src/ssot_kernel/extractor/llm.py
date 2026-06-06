@@ -659,6 +659,4 @@ class LLMExtractor(Extractor):
 
 # ── 向后兼容 ──────────────────────────────────────────
 # 新代码推荐使用 llm-gateway，旧代码通过此别名继续工作
-from llm_gateway.providers.legacy_ssot_adapter import (
-    SSOTProvider as LLMBackend,
 )

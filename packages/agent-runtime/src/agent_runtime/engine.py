@@ -68,6 +68,7 @@ class AgentRuntime:
     def _call_llm(self, messages: list[dict], tools: list[dict] | None = None) -> dict:
         """调用 LLM API。使用 llm_gateway 统一网关。"""
         import asyncio
+
         from llm_gateway.detection import detect_backends
         from llm_gateway.provider import LLMRequest, ToolSchema
 
@@ -80,7 +81,7 @@ class AgentRuntime:
                 "finish_reason": "error",
                 "error": "No LLM backend available via llm-gateway.",
             }
-        
+
         provider = providers[0]
 
         mapped_tools = None

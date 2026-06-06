@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 """
 ai_toolbox.py — Forge 统一命令行入口
 

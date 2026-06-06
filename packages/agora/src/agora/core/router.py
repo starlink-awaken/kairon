@@ -78,7 +78,10 @@ class Router:
         if routes_path:
             self._routes_path = _Path(routes_path)
         else:
-            self._routes_path = _Path(registry._storage_path).parent / "agora-routes.json"
+            package_root = _Path(__file__).resolve().parents[3]
+            package_root_routes = package_root / "agora-routes.json"
+            storage_sibling_routes = _Path(registry._storage_path).parent / "agora-routes.json"
+            self._routes_path = package_root_routes if package_root_routes.exists() else storage_sibling_routes
         self._load_routes()
         global _routers, _atexit_registered
         _routers.append(self)

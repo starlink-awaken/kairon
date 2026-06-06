@@ -1,0 +1,6 @@
+{
+  "routes": {
+    "test.tool": "test-svc",
+    "eidos": "eidos"
+  }
+}
