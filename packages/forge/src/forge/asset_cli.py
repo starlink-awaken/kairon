@@ -1119,7 +1119,7 @@ def cmd_import(args: list[str]) -> None:
                 "id": "agora-mcp",
                 "name": "Agora MCP",
                 "type": "service",
-                "port": 7422,
+                "port": 7430,
                 "bind": "127.0.0.1",
                 "tags": ["agora", "mcp"],
             },

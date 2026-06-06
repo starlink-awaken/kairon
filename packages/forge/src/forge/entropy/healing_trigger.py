@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -23,7 +24,9 @@ class SharedBrainHealingTrigger:
 
     RULES: dict[str, str]
 
-    def __init__(self, agora_endpoint="http://localhost:7422", timeout=5):
+    def __init__(self, agora_endpoint=None, timeout=5):
+        if agora_endpoint is None:
+            agora_endpoint = os.environ.get("AGORA_ENDPOINT", "http://localhost:7430")
         self.endpoint = agora_endpoint.rstrip("/")
         self.timeout = timeout
         self.RULES = self._load_rules()
