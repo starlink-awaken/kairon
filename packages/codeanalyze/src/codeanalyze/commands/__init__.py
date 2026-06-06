@@ -11,6 +11,7 @@ from .repomix_cmd import pack
 from .search_cmd import search
 from .serve_cmd import serve
 from .status_cmd import status
+from .workflow_cmd import workflow_group
 
 
 def register_commands(cli):
@@ -29,4 +30,5 @@ def register_commands(cli):
     cli.add_command(ast, "ast")
     cli.add_command(pack, "pack")
     cli.add_command(cgc_group, "cgc")
+    cli.add_command(workflow_group, "workflow")
     cli.add_command(serve, "serve")

@@ -695,6 +695,59 @@ def cgc_query(query_str: str, path: str = ".") -> dict:
         return _error(str(e))
 
 
+@mcp.tool()
+def workflow_onboarding(path: str = ".", include: str | None = None) -> dict:
+    """Run the Onboarding workflow to prepare AI context for a project.
+
+    Uses repomix and ast-grep to bundle the repository and find entry points.
+
+    Args:
+        path: Project root path
+        include: Comma-separated globs to include (e.g. 'src/**/*.py')
+    """
+    try:
+        from codeanalyze.workflows import generate_onboarding_context
+
+        include_list = include.split(",") if include else None
+        result = generate_onboarding_context(path=path, include=include_list)
+        return _ok(
+            {
+                "format_version": FORMAT_VERSION,
+                "workflow": "onboarding",
+                "result": result,
+            }
+        )
+    except Exception as e:
+        return _error(str(e))
+
+
+@mcp.tool()
+def workflow_impact_analysis(symbol_name: str, language: str, path: str = ".") -> dict:
+    """Run the Impact Analysis workflow for a symbol (function/class).
+
+    Uses ast-grep to find structural usages and CodeGraphContext (if available)
+    for deep dependency resolution.
+
+    Args:
+        symbol_name: Name of the function or class (e.g. 'process_data')
+        language: Language of the project (e.g. 'py', 'js', 'ts')
+        path: Project root path
+    """
+    try:
+        from codeanalyze.workflows import analyze_impact
+
+        result = analyze_impact(symbol_name=symbol_name, language=language, path=path)
+        return _ok(
+            {
+                "format_version": FORMAT_VERSION,
+                "workflow": "impact_analysis",
+                "result": result,
+            }
+        )
+    except Exception as e:
+        return _error(str(e))
+
+
 def main():
     """Run the MCP server in stdio mode (for Agora integration)."""
     mcp.run()
