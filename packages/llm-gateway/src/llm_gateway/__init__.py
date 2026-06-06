@@ -1,15 +1,37 @@
-"""LLM Gateway — unified LLM provider abstraction layer.
+"""LLM Gateway v0.4 — unified LLM provider abstraction layer.
 
-Provides:
-- :class:`LLMProvider` ABC with :class:`LLMRequest` / :class:`LLMResponse` dataclasses
-- Concrete providers: Ollama, Anthropic, OpenAI, Gemini, DeepSeek, HITL
-- :class:`MockLLMProvider` and :class:`NoneProvider` for testing / degradation
-- :func:`detect_backends` / :func:`create_provider` for auto-detection
+Stable Public API
+=================
+
+Core types (always available):
+  * :class:`LLMProvider` — abstract base class for providers
+  * :class:`LLMRequest` — request dataclass
+  * :class:`LLMResponse` — response dataclass (includes token tracking)
+
+Provider discovery:
+  * :func:`detect_backends` — auto-detect available LLM providers
+  * :func:`create_provider` — create a specific provider by name
+
+Error types:
+  * :exc:`LLMError` — base exception
+  * :exc:`LLMRetryExhaustedError` — retry exhausted
+
+Tool types:
+  * :class:`ToolSchema` — tool definition schema
+  * :class:`ToolCall` — tool call in request
+  * :class:`ToolResult` — tool result in response
+
+Backward Compatibility
+======================
+
+For minerva/ssot/ontoderive consumers, use:
+  * :mod:`llm_gateway.compat` — legacy provider aliases
+
+Version: 0.4.0
 """
 
 import builtins
 
-from llm_gateway.circuit_breaker import CircuitBreaker, CircuitBreakerConfig
 from llm_gateway.detection import create_provider, detect_backends
 from llm_gateway.provider import (
     LLMError,
@@ -29,32 +51,29 @@ from llm_gateway.providers.gemini_provider import GeminiProvider
 from llm_gateway.providers.hitl_provider import HitlLLMProvider
 from llm_gateway.providers.ollama_provider import OllamaProvider
 from llm_gateway.providers.openai_provider import OpenAIProvider
-from llm_gateway.retry import RetryConfig
 
-builtins.CircuitBreaker = CircuitBreaker
-builtins.CircuitBreakerConfig = CircuitBreakerConfig
-builtins.RetryConfig = RetryConfig
+__version__ = "0.4.0"
 
 __all__ = (
-    "AnthropicProvider",
-    "CircuitBreaker",
-    "CircuitBreakerConfig",
-    "DeepSeekProvider",
-    "GeminiProvider",
-    "HitlLLMProvider",
-    "LLMError",
+    # ── Stable public API ──
     "LLMProvider",
     "LLMRequest",
     "LLMResponse",
+    "LLMError",
     "LLMRetryExhaustedError",
-    "MockLLMProvider",
-    "NoneProvider",
-    "OllamaProvider",
-    "OpenAIProvider",
-    "RetryConfig",
+    "ToolSchema",
     "ToolCall",
     "ToolResult",
-    "ToolSchema",
     "create_provider",
     "detect_backends",
+    # ── Concrete providers ──
+    "AnthropicProvider",
+    "DeepSeekProvider",
+    "GeminiProvider",
+    "HitlLLMProvider",
+    "OllamaProvider",
+    "OpenAIProvider",
+    # ── Testing ──
+    "MockLLMProvider",
+    "NoneProvider",
 )
