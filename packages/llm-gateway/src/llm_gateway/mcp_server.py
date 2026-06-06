@@ -1,9 +1,9 @@
-import os
 import json
-import asyncio
-from typing import Any, List, Dict, Optional
+from typing import Any
+
 from fastmcp import FastMCP
 from pydantic import BaseModel
+
 from llm_gateway.detection import detect_backends
 from llm_gateway.provider import LLMRequest, ToolSchema
 
@@ -11,8 +11,8 @@ mcp = FastMCP("llm-gateway")
 
 class GenerateRequest(BaseModel):
     model: str
-    messages: List[Dict[str, Any]]
-    tools: Optional[List[Dict[str, Any]]] = None
+    messages: list[dict[str, Any]]
+    tools: list[dict[str, Any]] | None = None
 
 @mcp.tool()
 async def llm_generate(req: GenerateRequest) -> str:
@@ -20,9 +20,9 @@ async def llm_generate(req: GenerateRequest) -> str:
     providers = detect_backends()
     if not providers:
         return json.dumps({"error": "No LLM backend available."})
-    
+
     provider = providers[0]
-    
+
     # Convert tools
     mapped_tools = None
     if req.tools:
@@ -41,10 +41,10 @@ async def llm_generate(req: GenerateRequest) -> str:
         messages=req.messages,
         tools=mapped_tools
     )
-    
+
     try:
         resp = await provider.generate(llm_req)
-        
+
         # Format response back to OpenAI style
         result = {
             "role": "assistant",
@@ -52,7 +52,7 @@ async def llm_generate(req: GenerateRequest) -> str:
             "tool_calls": [],
             "finish_reason": "stop"
         }
-        
+
         if resp.tool_calls:
             result["tool_calls"] = [
                 {
@@ -65,7 +65,7 @@ async def llm_generate(req: GenerateRequest) -> str:
                 } for tc in resp.tool_calls
             ]
             result["finish_reason"] = "tool_calls"
-            
+
         return json.dumps(result)
     except Exception as e:
         return json.dumps({"error": str(e)})

@@ -4,14 +4,14 @@ build-backend = "hatchling.build"
 
 [project]
 name = "llm-gateway"
-version = "0.3.0"
-description = "Unified LLM provider abstraction — ABC, dataclasses, and concrete providers (Ollama, Anthropic, OpenAI, Gemini, DeepSeek, LM Studio, HITL)"
+version = "0.4.0"
+description = "Unified LLM provider abstraction — CLI, HTTP, MCP. Multi-model with auto-detection."
 license = {text = "MIT"}
 requires-python = ">=3.10"
 authors = [{name = "Workspace Team"}]
-keywords = ["llm", "gateway", "provider", "openai", "anthropic", "gemini", "ollama"]
+keywords = ["llm", "gateway", "provider", "openai", "anthropic", "gemini", "ollama", "mcp"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
@@ -19,10 +19,11 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
 dependencies = [
-    "minerva",
     "requests>=2.25",
     "pyyaml>=6.0",
 ]
@@ -42,4 +43,5 @@ addopts = "-v --tb=short"
 
 
 [project.scripts]
+llm-gateway = "llm_gateway.cli:main"
 llm-gateway-mcp = "llm_gateway.mcp_server:main"
