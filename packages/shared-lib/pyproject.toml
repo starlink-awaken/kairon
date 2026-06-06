@@ -9,6 +9,7 @@ description = "Shared library for kairon monorepo"
 requires-python = ">=3.10"
 dependencies = [
     "kairon-lib-events",
+    "kairon-utils",
 ]
 
 [dependency-groups]

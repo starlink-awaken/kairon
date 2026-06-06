@@ -31,6 +31,7 @@ members = [
     "iris",
     "kairon",
     "kairon-lib-events",
+    "kairon-utils",
     "kos",
     "kronos",
     "llm-gateway",
@@ -3016,6 +3017,25 @@ dev = [
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest", specifier = ">=8.4.2" }]
+
+[[package]]
+name = "kairon-utils"
+version = "0.4.0"
+source = { editable = "packages/kairon-utils" }
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+]
+
+[package.metadata]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.4.2" },
+    { name = "pytest-asyncio", specifier = ">=0.26.0" },
+]
 
 [[package]]
 name = "keyring"
@@ -7278,6 +7298,7 @@ version = "0.4.0"
 source = { editable = "packages/shared-lib" }
 dependencies = [
     { name = "kairon-lib-events" },
+    { name = "kairon-utils" },
 ]
 
 [package.dev-dependencies]
@@ -7287,7 +7308,10 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "kairon-lib-events", editable = "packages/kairon-lib-events" }]
+requires-dist = [
+    { name = "kairon-lib-events", editable = "packages/kairon-lib-events" },
+    { name = "kairon-utils", editable = "packages/kairon-utils" },
+]
 
 [package.metadata.requires-dev]
 dev = [

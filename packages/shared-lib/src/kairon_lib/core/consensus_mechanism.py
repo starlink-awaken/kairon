@@ -55,7 +55,7 @@ class DecisionResult:
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
-from kairon_lib._compat import managed_connection
+from kairon_utils.sqlite_utils import managed_connection
 
 _log = logging.getLogger(__name__)
 

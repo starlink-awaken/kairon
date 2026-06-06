@@ -63,7 +63,7 @@ class RoleDefinition:
     parent_role: str | None = None
 
 
-from kairon_lib.utils.sqlite_utils import managed_connection
+from kairon_utils.sqlite_utils import managed_connection
 
 _log = logging.getLogger(__name__)
 

@@ -54,6 +54,7 @@ forge = { workspace = true }
 kos = { workspace = true }
 iris = { workspace = true }
 kairon-lib-events = { workspace = true }
+kairon-utils = { workspace = true }
 ssot-kernel = { workspace = true }
 health-profile = { workspace = true }
 

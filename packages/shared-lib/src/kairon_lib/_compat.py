@@ -4,30 +4,17 @@ _compat.py — Compatibility stubs for types migrated from SharedBrain/nucleus.
 These are placeholder definitions for types that were originally imported
 from nucleus.Z_*. Each should eventually be replaced with a proper
 implementation or import once the migration is complete.
+
+managed_connection is re-exported from kairon-utils (previously defined here).
 """
 
 from __future__ import annotations
 
-import sqlite3
-from collections.abc import Callable, Generator
-from contextlib import contextmanager
+from collections.abc import Callable
 from typing import Any, Protocol
 
-
-@contextmanager
-def managed_connection(conn: sqlite3.Connection) -> Generator[sqlite3.Connection]:
-    """Wrap a SQLite connection with commit/rollback/close semantics.
-
-    Compat stub for nucleus.Z_Microkernel.utilities.sqlite_utils.managed_connection.
-    """
-    try:
-        yield conn
-        conn.commit()
-    except Exception:
-        conn.rollback()
-        raise
-    finally:
-        conn.close()
+# Re-export from kairon-utils for backward compatibility
+from kairon_utils.sqlite_utils import managed_connection  # noqa: F401
 
 
 class Router:

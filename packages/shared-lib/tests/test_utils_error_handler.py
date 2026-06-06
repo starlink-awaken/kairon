@@ -1,8 +1,8 @@
 """Tests for kairon_lib.utils.error_handler — ErrorHandler, ErrorContext, handle_exception."""
 
 import pytest
-from kairon_lib.utils.error_classifier import ErrorCategory
-from kairon_lib.utils.error_handler import ErrorContext, ErrorHandler, create_error_handler, handle_exception
+from kairon_utils.error_classifier import ErrorCategory
+from kairon_utils.error_handler import ErrorContext, ErrorHandler, create_error_handler, handle_exception
 
 
 class TestErrorHandler:
