@@ -752,14 +752,25 @@ def codegraph_get_symbol_graph(symbol_name: str, path: str = ".") -> dict:
     """[Relational Engine] Get a tree of callers and callees for a specific symbol using codegraph.
 
     Args:
-        symbol_name: The target symbol name.
+        symbol_name: The target symbol name (qualified name).
         path: Workspace root path.
     """
     try:
-        from codeanalyze.analyzers.codegraph import CodeGraphAdapter
-        adapter = CodeGraphAdapter(workspace_root=_resolve(path))
-        result = adapter.get_symbol_graph(symbol_name)
-        return _ok({"format_version": FORMAT_VERSION, "result": result})
+        callers = _crg_callers(symbol_name, repo_path=_resolve(path), limit=20)
+        callees = _crg_callees(symbol_name, repo_path=_resolve(path), limit=20)
+
+        # Check for errors
+        if callers and "error" in callers[0]:
+            return _error(callers[0]["error"])
+        if callees and "error" in callees[0]:
+            return _error(callees[0]["error"])
+
+        return _ok({
+            "format_version": FORMAT_VERSION,
+            "symbol": symbol_name,
+            "callers": callers,
+            "callees": callees
+        })
     except Exception as e:
         return _error(str(e))
 
@@ -772,10 +783,18 @@ def codegraph_get_impact_radius(file_path: str, path: str = ".") -> dict:
         path: Workspace root path.
     """
     try:
-        from codeanalyze.analyzers.codegraph import CodeGraphAdapter
-        adapter = CodeGraphAdapter(workspace_root=_resolve(path))
-        result = adapter.get_impact_radius(file_path)
-        return _ok({"format_version": FORMAT_VERSION, "result": result})
+        ctx = _crg_context(file_path, repo_path=_resolve(path))
+        if "error" in ctx:
+            return _error(ctx["error"])
+
+        # Extract unique source files from callers
+        impacted_files = list({caller.get('source_file') for caller in ctx.get('callers', []) if caller.get('source_file')})
+
+        return _ok({
+            "format_version": FORMAT_VERSION,
+            "target_file": file_path,
+            "impacted_files": impacted_files
+        })
     except Exception as e:
         return _error(str(e))
 
