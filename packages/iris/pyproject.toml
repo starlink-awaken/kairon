@@ -31,7 +31,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-ssot = ["ssot-kernel"]
+ssot = ["sot-bridge"]
 dev = ["pytest>=7.0", "ruff>=0.6.0"]
 
 [project.scripts]
@@ -48,4 +48,4 @@ pythonpath = ["src"]
 eidos = { workspace = true }
 kronos = { workspace = true }
 minerva = { workspace = true }
-ssot-kernel = { workspace = true }
+sot-bridge = { workspace = true }

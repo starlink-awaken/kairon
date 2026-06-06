@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 
 from fastmcp import FastMCP
-from forge.http_api import build_asset_stats, load_registry, query_assets
+from forge.http_api import build_asset_stats, load_graph, load_registry, query_assets
 
 mcp = FastMCP("forge", mask_error_details=True)
 
@@ -66,6 +66,12 @@ def read_market_list() -> str:
             }
     return json.dumps(market, ensure_ascii=False)
 
+
+def get_graph_stats():
+    return load_graph().get("stats", {})
+
+def capture_tool(*_args, **_kwargs):
+    return {"status": "captured_stub"}
 
 def main():
     mcp.run()

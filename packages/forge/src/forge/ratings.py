@@ -56,9 +56,7 @@ class PluginRating:
 
     def __post_init__(self) -> None:
         # composite = 0.4 * quality + 0.6 * security
-        self.composite_score = round(
-            0.4 * self.quality.total + 0.6 * self.security.total, 2
-        )
+        self.composite_score = round(0.4 * self.quality.total + 0.6 * self.security.total, 2)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -187,12 +185,7 @@ class PluginRatingEngine:
         test_coverage = self._score_test_coverage(path)
         bos_uri_compliance = self._score_bos_uri_compliance(py_files)
 
-        total = (
-            0.30 * code_structure
-            + 0.25 * documentation
-            + 0.25 * test_coverage
-            + 0.20 * bos_uri_compliance
-        )
+        total = 0.30 * code_structure + 0.25 * documentation + 0.25 * test_coverage + 0.20 * bos_uri_compliance
 
         return QualityScore(
             code_structure=code_structure,
@@ -312,9 +305,7 @@ class PluginRatingEngine:
 
     # ── 安全评分 ──
 
-    def _rate_security(
-        self, path: Path, py_files: list[Path]
-    ) -> tuple[SecurityScore, list[str], list[str]]:
+    def _rate_security(self, path: Path, py_files: list[Path]) -> tuple[SecurityScore, list[str], list[str]]:
         violations: list[str] = []
         warnings: list[str] = []
 
@@ -323,12 +314,7 @@ class PluginRatingEngine:
         network_score = self._check_network_access(py_files, violations, warnings)
         secret_score = self._check_secret_exposure(py_files, violations, warnings)
 
-        total = (
-            0.35 * dangerous_calls
-            + 0.20 * filesystem_score
-            + 0.20 * network_score
-            + 0.25 * secret_score
-        )
+        total = 0.35 * dangerous_calls + 0.20 * filesystem_score + 0.20 * network_score + 0.25 * secret_score
 
         return (
             SecurityScore(
@@ -342,9 +328,7 @@ class PluginRatingEngine:
             warnings,
         )
 
-    def _check_dangerous_calls(
-        self, py_files: list[Path], violations: list[str], _warnings: list[str]
-    ) -> float:
+    def _check_dangerous_calls(self, py_files: list[Path], violations: list[str], _warnings: list[str]) -> float:
         base_score = 100.0
         for pattern, description, flags in _DANGEROUS_CALL_PATTERNS:
             for py_file in py_files:
@@ -358,9 +342,7 @@ class PluginRatingEngine:
                     pass
         return max(0.0, base_score)
 
-    def _check_filesystem_access(
-        self, py_files: list[Path], violations: list[str], _: list[str]
-    ) -> float:
+    def _check_filesystem_access(self, py_files: list[Path], violations: list[str], _: list[str]) -> float:
         score = 100.0
         for py_file in py_files:
             try:
@@ -372,9 +354,7 @@ class PluginRatingEngine:
                 pass
         return max(0.0, score)
 
-    def _check_network_access(
-        self, py_files: list[Path], _violations: list[str], warnings: list[str]
-    ) -> float:
+    def _check_network_access(self, py_files: list[Path], _violations: list[str], warnings: list[str]) -> float:
         del _violations
         score = 100.0
         network_patterns = [
@@ -393,9 +373,7 @@ class PluginRatingEngine:
                 pass
         return max(0.0, score)
 
-    def _check_secret_exposure(
-        self, py_files: list[Path], violations: list[str], _: list[str]
-    ) -> float:
+    def _check_secret_exposure(self, py_files: list[Path], violations: list[str], _: list[str]) -> float:
         score = 100.0
         for pattern, description, flags in _SECRET_PATTERNS:
             for py_file in py_files:

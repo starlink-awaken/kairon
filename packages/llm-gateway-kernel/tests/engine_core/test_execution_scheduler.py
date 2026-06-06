@@ -107,6 +107,7 @@ class TestExecutionSchedulerImport:
         compat_path = (
             Path(__file__).resolve().parents[2]
             / "src"
+            / "llm_gateway_kernel"
             / "engine_core"
             / "_compat.py"
         )

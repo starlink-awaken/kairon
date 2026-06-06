@@ -1124,8 +1124,20 @@ def cmd_import(args: list[str]) -> None:
                 "bind": "127.0.0.1",
                 "tags": ["agora", "mcp"],
             },
-            {"id": "agora-dashboard", "name": "Agora Dashboard", "type": "webapp", "port": int(os.environ.get("AGORA_DASHBOARD_PORT", "7430")), "bind": "0.0.0.0"},  # noqa: S104
-            {"id": "minerva", "name": "Minerva", "type": "webapp", "port": int(os.environ.get("MINERVA_PORT", "8765")), "bind": "0.0.0.0"},  # noqa: S104
+            {
+                "id": "agora-dashboard",
+                "name": "Agora Dashboard",
+                "type": "webapp",
+                "port": int(os.environ.get("AGORA_DASHBOARD_PORT", "7430")),
+                "bind": "0.0.0.0",
+            },
+            {
+                "id": "minerva",
+                "name": "Minerva",
+                "type": "webapp",
+                "port": int(os.environ.get("MINERVA_PORT", "8765")),
+                "bind": "0.0.0.0",
+            },
             {
                 "id": "bos-daemon",
                 "name": "B-OS Daemon",

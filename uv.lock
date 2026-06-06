@@ -18,7 +18,6 @@ members = [
     "codeanalyze",
     "core-models",
     "eidos",
-    "engine-core",
     "forge",
     "health-profile",
     "iris",
@@ -30,17 +29,12 @@ members = [
     "kairon-utils",
     "kos",
     "kronos",
-    "llm-gateway",
     "llm-gateway-kernel",
     "minerva",
     "ontoderive",
     "protocols-layer",
     "shared-lib",
-    "sharedbrain-bridge",
-    "sophia",
     "sot-bridge",
-    "ssot-kernel",
-    "symphony-protocol",
 ]
 
 [[package]]
@@ -1128,17 +1122,6 @@ wheels = [
 ]
 
 [[package]]
-name = "engine-core"
-version = "0.4.0"
-source = { editable = "packages/engine-core" }
-dependencies = [
-    { name = "llm-gateway-kernel" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "llm-gateway-kernel", editable = "packages/llm-gateway-kernel" }]
-
-[[package]]
 name = "et-xmlfile"
 version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1975,7 +1958,7 @@ dev = [
     { name = "ruff" },
 ]
 ssot = [
-    { name = "ssot-kernel" },
+    { name = "sot-bridge" },
 ]
 
 [package.metadata]
@@ -1989,7 +1972,7 @@ requires-dist = [
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0" },
     { name = "pyyaml", specifier = ">=6.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6.0" },
-    { name = "ssot-kernel", marker = "extra == 'ssot'", editable = "packages/ssot" },
+    { name = "sot-bridge", marker = "extra == 'ssot'", editable = "packages/sot-bridge" },
 ]
 provides-extras = ["ssot", "dev"]
 
@@ -2574,17 +2557,6 @@ wheels = [
 ]
 
 [[package]]
-name = "llm-gateway"
-version = "0.5.0"
-source = { editable = "packages/llm-gateway" }
-dependencies = [
-    { name = "llm-gateway-kernel" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "llm-gateway-kernel", editable = "packages/llm-gateway-kernel" }]
-
-[[package]]
 name = "llm-gateway-kernel"
 version = "0.1.0"
 source = { editable = "packages/llm-gateway-kernel" }
@@ -2943,7 +2915,7 @@ eidos = [
     { name = "eidos" },
 ]
 paradigm = [
-    { name = "sophia" },
+    { name = "protocols-layer" },
 ]
 tier2 = [
     { name = "graphiti-core" },
@@ -2968,6 +2940,7 @@ requires-dist = [
     { name = "lancedb", specifier = ">=0.21" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0" },
     { name = "neo4j", marker = "extra == 'tier2'", specifier = ">=5.0" },
+    { name = "protocols-layer", marker = "extra == 'paradigm'", editable = "packages/protocols-layer" },
     { name = "pydantic", specifier = ">=2.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.24" },
@@ -2977,7 +2950,6 @@ requires-dist = [
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.8" },
     { name = "semantica", marker = "extra == 'tier2'", specifier = ">=0.4.0" },
     { name = "sentence-transformers", specifier = ">=3.0" },
-    { name = "sophia", marker = "extra == 'paradigm'", editable = "packages/sophia" },
     { name = "spacy", specifier = ">=3.8" },
     { name = "structlog", specifier = ">=24.0" },
     { name = "ujson", specifier = ">=5.12.1" },
@@ -5176,32 +5148,6 @@ dev = [
 ]
 
 [[package]]
-name = "sharedbrain-bridge"
-version = "0.2.0"
-source = { editable = "packages/sharedbrain-bridge" }
-dependencies = [
-    { name = "core-models" },
-    { name = "fastapi" },
-    { name = "fastmcp" },
-    { name = "httpx" },
-]
-
-[package.optional-dependencies]
-standalone = [
-    { name = "uvicorn" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "core-models", editable = "packages/core-models" },
-    { name = "fastapi" },
-    { name = "fastmcp" },
-    { name = "httpx" },
-    { name = "uvicorn", marker = "extra == 'standalone'" },
-]
-provides-extras = ["standalone"]
-
-[[package]]
 name = "shellingham"
 version = "1.5.4"
 source = { registry = "https://pypi.org/simple" }
@@ -5257,36 +5203,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/f8/5c/48a7d9495be3d1c65
 wheels = [
     { url = "https://files.pythonhosted.org/packages/37/c3/6eeb6034408dac0fa653d126c9204ade96b819c936e136c5e8a6897eee9c/socksio-1.0.0-py3-none-any.whl", hash = "sha256:95dc1f15f9b34e8d7b16f06d74b8ccf48f609af32ab33c608d08761c5dcbb1f3", size = 12763, upload-time = "2020-04-17T15:50:31.878Z" },
 ]
-
-[[package]]
-name = "sophia"
-version = "0.3.0"
-source = { editable = "packages/sophia" }
-dependencies = [
-    { name = "core-models" },
-    { name = "fastmcp" },
-    { name = "rich" },
-]
-
-[package.optional-dependencies]
-dev = [
-    { name = "mypy" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "ruff" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "core-models", editable = "packages/core-models" },
-    { name = "fastmcp", specifier = ">=0.1" },
-    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
-    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.24" },
-    { name = "rich", specifier = ">=13.0" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.8" },
-]
-provides-extras = ["dev"]
 
 [[package]]
 name = "sot-bridge"
@@ -5475,30 +5391,6 @@ wheels = [
 ]
 
 [[package]]
-name = "ssot-kernel"
-version = "1.0.0"
-source = { editable = "packages/ssot" }
-dependencies = [
-    { name = "pydantic" },
-    { name = "pyyaml" },
-]
-
-[package.optional-dependencies]
-dev = [
-    { name = "pytest" },
-    { name = "ruff" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "pydantic", specifier = ">=2.0" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0" },
-    { name = "pyyaml", specifier = ">=6.0" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6.0" },
-]
-provides-extras = ["dev"]
-
-[[package]]
 name = "stack-data"
 version = "0.6.3"
 source = { registry = "https://pypi.org/simple" }
@@ -5566,11 +5458,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/ef/52/9ba0f43b686e7f3dd
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a8/45/a132b9074aa18e799b891b91ad72133c98d8042c70f6240e4c5f9dabee2f/structlog-25.5.0-py3-none-any.whl", hash = "sha256:a8453e9b9e636ec59bd9e79bbd4a72f025981b3ba0f5837aebf48f02f37a7f9f", size = 72510, upload-time = "2025-10-27T08:28:21.535Z" },
 ]
-
-[[package]]
-name = "symphony-protocol"
-version = "0.1.0"
-source = { editable = "packages/symphony-protocol" }
 
 [[package]]
 name = "sympy"

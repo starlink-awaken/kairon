@@ -43,7 +43,7 @@ dependencies = [
 
 [project.optional-dependencies]
 eidos = ["eidos>=0.1.0"]
-paradigm = ["sophia>=0.2.0"]
+paradigm = ["protocols-layer"]
 tier2 = [
     "graphiti-core[neo4j]>=0.28",
     "semantica>=0.4.0",

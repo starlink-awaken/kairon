@@ -40,6 +40,16 @@ Changelog = "https://github.com/starlink-awaken/kairon/blob/main/CHANGELOG.md"
 
 [tool.uv.workspace]
 members = ["packages/*"]
+# P31-W1 CLEANUP-SHIM (2026-06-06): 6 个原包 src/ 已删，目录保留作档案。
+# exclude 段防止 uv 解析为 workspace 成员。
+exclude = [
+    "packages/sophia",
+    "packages/symphony-protocol",
+    "packages/ssot",
+    "packages/sharedbrain-bridge",
+    "packages/llm-gateway",
+    "packages/engine-core",
+]
 
 [tool.uv.sources]
 core-models = { workspace = true }
@@ -48,7 +58,6 @@ kronos = { workspace = true }
 eidos = { workspace = true }
 minerva = { workspace = true }
 
-sophia = { workspace = true }
 ontoderive = { workspace = true }
 forge = { workspace = true }
 kos = { workspace = true }
@@ -63,11 +72,7 @@ health-profile = { workspace = true }
 llm-gateway-kernel = { workspace = true }
 ssot-kernel = { workspace = true }
 protocols-layer = { workspace = true }
-engine-core = { workspace = true }
-llm-gateway = { workspace = true }
-sharedbrain-bridge = { workspace = true }
 shared-lib = { workspace = true }
-symphony-protocol = { workspace = true }
 
 [tool.pytest.ini_options]
 testpaths = ["packages/*/tests"]

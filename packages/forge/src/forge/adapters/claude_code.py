@@ -183,10 +183,7 @@ class ClaudeCodeAdapter(ICliAdapter):
 
     def cleanup_monitors(self) -> None:
         """清理所有已终止进程的监控线程。"""
-        dead_pids = [
-            pid for pid, t in self._running_monitors.items()
-            if not t.is_alive()
-        ]
+        dead_pids = [pid for pid, t in self._running_monitors.items() if not t.is_alive()]
         for pid in dead_pids:
             self._running_monitors.pop(pid, None)
             _log.debug("Cleaned up monitor for pid=%d", pid)
