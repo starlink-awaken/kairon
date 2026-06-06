@@ -25,11 +25,11 @@ class TestDaysSince:
     """测试日期差计算。"""
 
     def test_today(self):
-        today = datetime.datetime.now().strftime("%Y-%m-%d")
+        today = datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d")
         assert m._days_since(today) == 0
 
     def test_yesterday(self):
-        yesterday = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+        yesterday = (datetime.datetime.now(datetime.UTC) - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
         assert m._days_since(yesterday) >= 1
 
     def test_invalid_date(self):
