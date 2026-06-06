@@ -1,6 +1,6 @@
 # Contributing to kairon
 
-欢迎贡献！kairon 是一个 25 包的 Python monorepo。
+欢迎贡献！kairon 是一个 30 包的 Python monorepo。
 
 ## 开发环境
 
