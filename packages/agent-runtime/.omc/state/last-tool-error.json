@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"python3 -m pytest tests/ -q 2>&1\",\"timeout\":15000,\"description\":\"测试 agent-runtime 导入\"}",
-  "error": "Exit code 1\n.F                                                                       [100%]\n=================================== FAILURES ===================================\n_________________________________ test_config __________________________________\n\n    def test_config():\n        from agent_runtime.config import DEFAULT_MODEL, ALLOWED_PATHS, sanitize_for_log\n        assert DEFAULT_MODEL\n        assert isinstance(ALLOWED_PATHS, list)\n        result = sanitize_for_log(\"sk-abc123\")\n>       ass...",
-  "timestamp": "2026-05-29T09:04:44.898Z",
-  "retry_count": 1
-}

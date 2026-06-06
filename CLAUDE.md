@@ -1,6 +1,6 @@
 # CLAUDE.md — kairon
 
-> 知识工程与研究栈 · 23 包 Python monorepo（治理中，原 31 包名册中的 10 包已归档：6 包早期 + kairon-assistant/kairon-voice 于 P28-W2 + kaironcloud-billing 于 P28-W6 + metaos 于 P30-W1 拆出为独立项目 `projects/metaos`）
+> 知识工程与研究栈 · 20 包 Python monorepo（治理中，原 31 包名册中的 13 包已拆出/归档：6 包早期 + kairon-assistant/kairon-voice 于 P28-W2 + kaironcloud-billing 于 P28-W6 + metaos/cron-service/wksp 于 P30 拆出 + ecos 于 P31-W0 拆出）
 > 根工作区文档：`../CLAUDE.md`（全局）、`../AGENTS.md`（开发指南）、`../LAYER-INDEX.md`（架构分层）
 
 ---
@@ -22,7 +22,7 @@ make lint
 make format
 ```
 
-## 包结构（24 包）
+## 包结构（20 包）
 
 ### L1 — 知识工程核心（10 包）
 
@@ -68,8 +68,8 @@ make format
 | engine-core | `packages/engine-core/` | 引擎核心 |
 | observability | `packages/observability/` | 可观测性 |
 | gc-engine | `packages/gc-engine/` | 垃圾回收引擎 |
-| ecos | `packages/ecos/` | 生态系统管理 |
-| cron-service | `packages/cron-service/` | 定时任务调度 |
+| ~~ecos~~ | **已拆出 (P31-W0)** | 移至 `projects/ecos/` 独立项目（SSB 协议 + 涌现计算，v3 0 依赖 0 被依赖） |
+| cron-service | `packages/cron-service/` | 定时任务调度（P30-M2.1 物理迁移至 runtime，目录占位待清理） |
 | eu-pricing | `packages/eu-pricing/` | EU 定价 |
 | ~~kaironcloud-billing~~ | **已归档 (P28-W6)** | 1 软依赖（agora try/except）|
 | ~~kairon-assistant~~ | **已归档 (P28-W2)** | 0 外部 import、whisper 缺依赖 |
@@ -108,6 +108,12 @@ agentmesh 的 5 个子系统已 100% 迁移至 kairon：
 |------|--------|------|
 | metaos | `projects/metaos/` | 编排引擎（决策门控/免疫/路由），非知识工程功能，拆为独立项目（v3 架构方案） |
 | wksp | `projects/cockpit/` | 工作区管理 + 吸收 hermes-console 为 web/，统一为 cockpit 独立项目 |
+
+### 已拆出（P31-W0 · 2026-06-06）
+
+| 原包 | 新位置 | 原因 |
+|------|--------|------|
+| ecos | `projects/ecos/` | L0 协议编织层（SSB 协议 + 涌现计算）。v3 终态标注"0 依赖、0 被依赖"，纯自包含协议核心，6,288 行源码独立。P30 决策文档未列，补做。 |
 
 ## 架构主线
 
@@ -150,7 +156,7 @@ minerva, ontoderive, sharedbrain-bridge, sharedbrain-standalone
 - **快速模式**: `make test-fast`（跳过 `tests/integration/` 和 `tests/benchmarks/`）
 - **配置**: 根 `pyproject.toml` 中 `[tool.pytest.ini_options]` → `testpaths = ["packages/*/tests"]`；各包另有独立 `[tool.pytest.ini_options]`
 - **命名**: 统一 `test_*.py` 模式
-- **conftest**: 7 个包有 conftest.py（agora, ecos, engine-core, eu-pricing, kos, minerva, ontoderive）
+- **conftest**: 6 个包有 conftest.py（agora, engine-core, eu-pricing, kos, minerva, ontoderive）— *2026-06-06: ecos 拆出后移除*
 - **覆盖率门禁**: fail_under 70%
 - **wksp 是唯一无 tests/ 目录的包** — 测试覆盖为零
   - *2026-06-06 更新：wksp 已拆出至 `projects/cockpit/`，kairon 改为 23 包（移除 wksp）*

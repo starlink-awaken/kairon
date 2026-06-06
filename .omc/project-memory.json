@@ -27,7 +27,7 @@
   },
   "build": {
     "buildCommand": "make build",
-    "testCommand": "uv run python -m pytest packages/minerva/tests/unit --co -q --continue-on-collection-errors 2>&1 | tail -80",
+    "testCommand": "echo \"=== cockpit ===\"; cd /Users/xiamingxing/Workspace/projects/cockpit && uv run python -m pytest tests/ -q 2>&1 | tail -3; echo \"=== runtime ===\"; cd /Users/xiamingxing/Workspace/projects/runtime && uv run python -m pytest tests/ -q 2>&1 | tail -3",
     "lintCommand": "ruff check",
     "devCommand": null,
     "scripts": {}

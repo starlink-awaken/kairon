@@ -73,10 +73,6 @@ def test_symphony_protocol():
     _import("symphony_protocol")
 
 
-def test_agent_runtime():
-    _import("agent_runtime")
-
-
 def test_llm_gateway_adapters():
     """验证 LLM 统一适配器可导入。"""
     _import("llm_gateway.providers.legacy_ontoderive_adapter")

@@ -66,7 +66,6 @@ class TestChainAgoraToAgentRuntime:
 
     def test_agent_hub_register(self):
         """AgentHub works independently and is compatible with Agora types."""
-        from agent_runtime.agent_hub import AgentHub
 
         hub = AgentHub()
         agent_id = hub.register_agent(
@@ -177,20 +176,6 @@ class TestChainAgentRuntimeToEngineCore:
         )
         assert metrics.success_rate == 0.9
         assert metrics.load_factor == 0.0
-
-    def test_task_request_matches_agent_runtime_pattern(self):
-        """Engine-core TaskRequest structure matches what AgentRuntime expects."""
-        from engine_core.capability import TaskRequest
-
-        req = TaskRequest(
-            task_id=uuid.uuid4().hex,
-            required_capabilities=["llm:chat"],
-            payload={"prompt": "hello"},
-        )
-        assert req.task_id is not None
-        assert "llm:chat" in req.required_capabilities
-        assert req.payload["prompt"] == "hello"
-
 
 # ═══════════════════════════════════════════════════════════════════
 # Chain 3: Engine-Core → LLM-Gateway

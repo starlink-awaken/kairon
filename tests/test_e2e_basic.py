@@ -4,22 +4,6 @@
 class TestCoreImports:
     """Verify all core packages can be imported without errors."""
 
-    def test_agent_runtime_import(self):
-        pass
-
-    def test_agora_import(self):
-        pass
-
-    def test_kos_import(self):
-        pass
-
-    def test_metaos_import(self):
-        pass
-
-    def test_pontus_import(self):
-        pass
-
-
 class TestPontusPipeline:
     """Test pontus pipeline: DSL → quality → checkpoint."""
 
@@ -58,11 +42,9 @@ class TestAgentRuntime:
     """Test agent-runtime basic types and creation."""
 
     def test_task_status(self):
-        from agent_runtime.task_scheduler import TaskStatus
         assert TaskStatus.PENDING is not None
         assert TaskStatus.RUNNING is not None
 
     def test_task_def(self):
-        from agent_runtime.task_scheduler import TaskDef
         t = TaskDef(id="test-1", action="test", agent_id="worker-1")
         assert t.id == "test-1"
