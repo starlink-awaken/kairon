@@ -96,11 +96,11 @@ class CacheInvalidationNotifier:
         这里通过共享 EventBus 发送缓存失效事件。
         Workers订阅此事件来失效其本地缓存。
 
-        使用 :data:`kairon_lib.events.get_global_event_bus` 而非直接
+        使用 :data:`kairon_events.get_global_event_bus` 而非直接
         importlib 路径，避免对 D-Execution 的硬依赖。
         """
         try:
-            from kairon_lib.events import get_global_event_bus, make_event  # type: ignore[import-not-found]
+            from kairon_events import get_global_event_bus, make_event
 
             bus = get_global_event_bus()
             if bus is None:
@@ -120,7 +120,7 @@ class CacheInvalidationNotifier:
             _log.info("Sent cache invalidation notification to workers")
 
         except ImportError as exc:
-            _log.warning("kairon_lib.events unavailable for cache invalidation: %s", exc)
+            _log.warning("kairon_events unavailable for cache invalidation: %s", exc)
 
     async def flush_pending(self) -> None:
         """刷新待处理的通知"""

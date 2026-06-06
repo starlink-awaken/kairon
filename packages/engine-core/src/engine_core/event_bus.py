@@ -39,20 +39,20 @@ from dataclasses import dataclass
 from typing import Any, ClassVar
 from uuid import uuid4
 
-# Lazily import kairon_lib.events — may not be available in all contexts
+# Lazily import kairon_events — may not be available in all contexts
 _has_kairon_lib = False
 try:
-    from kairon_lib.events import BOSEvent as _RealBOSEvent  # type: ignore[import-not-found]
-    from kairon_lib.events import make_event as _real_make_event
-    from kairon_lib.events import register_global_event_bus as _real_register_global_event_bus
+    from kairon_events import BOSEvent as _RealBOSEvent
+    from kairon_events import make_event as _real_make_event
+    from kairon_events import register_global_event_bus as _real_register_global_event_bus
 
     _has_kairon_lib = True
 except ImportError:
-    logging.getLogger(__name__).debug("[EventBus] kairon_lib.events unavailable — using local stubs")
+    logging.getLogger(__name__).debug("[EventBus] kairon_events unavailable — using local stubs")
 
     @dataclass
     class _RealBOSEventStub:
-        """Local BOSEvent stub used when kairon_lib is not installed."""
+        """Local BOSEvent stub used when kairon_events is not installed."""
 
         event_type: str
         source: str

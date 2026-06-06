@@ -22,6 +22,8 @@ classifiers = [
 dependencies = [
     "kos",
     "core-models",
+    "health-profile",
+    "kairon-lib-events",
     "httpx>=0.27",
     "lancedb>=0.21",
     "pyyaml>=6.0",

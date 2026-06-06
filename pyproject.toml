@@ -47,16 +47,15 @@ codeanalyze = { workspace = true }
 kronos = { workspace = true }
 eidos = { workspace = true }
 minerva = { workspace = true }
-agora = { workspace = true }
+
 sophia = { workspace = true }
 ontoderive = { workspace = true }
 forge = { workspace = true }
 kos = { workspace = true }
 iris = { workspace = true }
+kairon-lib-events = { workspace = true }
 ssot-kernel = { workspace = true }
-agent-runtime = { workspace = true }
-ecos = { workspace = true }
-cron-service = { workspace = true }
+health-profile = { workspace = true }
 
 [tool.pytest.ini_options]
 testpaths = ["packages/*/tests"]

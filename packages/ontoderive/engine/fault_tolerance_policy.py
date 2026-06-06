@@ -30,12 +30,8 @@ from enum import Enum, StrEnum
 from pathlib import Path
 from typing import Any
 
-# Event bus integration — try shared-lib first, then legacy nucleus path
-try:
-    from kairon_lib.events import BOSEvent, get_global_event_bus  # type: ignore[import-not-found]
-except (ModuleNotFoundError, ImportError):
-    BOSEvent = None  # type: ignore[assignment]
-    get_global_event_bus = None  # type: ignore[assignment]
+# Event bus integration via kairon-lib-events
+from kairon_events import BOSEvent, get_global_event_bus
 
 
 class EventType(StrEnum):

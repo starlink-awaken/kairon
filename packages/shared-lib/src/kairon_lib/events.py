@@ -1,7 +1,22 @@
-"""Backward-compat module alias."""
+"""Backward-compat module alias — re-exports from kairon_events (kairon-lib-events).
+
+.. deprecated:: 0.5.0
+    Import from ``kairon_events`` directly instead of ``kairon_lib.events``.
+    This facade will be removed in a future version.
+"""
 
 import sys
 
-from kairon_lib.core import events as _impl
+from kairon_events import (  # noqa: F401
+    BOSEvent,
+    BosEvent,
+    EventBusProtocol,
+    EventType,
+    get_event_bus,
+    get_global_event_bus,
+    make_event,
+    register_global_event_bus,
+)
 
-sys.modules[__name__] = _impl
+# Module-level re-export for backward compat
+sys.modules[__name__] = sys.modules["kairon_events"]

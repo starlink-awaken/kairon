@@ -62,10 +62,10 @@ class SwarmEventEmitter:
     ) -> None:
         """Emit a lifecycle event on the EventBus. Best-effort; never raises."""
         try:
-            from kairon_lib.events import get_global_event_bus, make_event  # type: ignore[import-not-found]
+            from kairon_events import get_global_event_bus, make_event
         except (ImportError, OSError, RuntimeError) as _exc:
             _log.debug(
-                "[SwarmEventEmitter] kairon_lib.events unavailable: %s",
+                "[SwarmEventEmitter] kairon_events unavailable: %s",
                 _exc,
             )
             return

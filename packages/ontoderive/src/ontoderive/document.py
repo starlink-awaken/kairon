@@ -55,13 +55,9 @@ from uuid import uuid4
 
 import yaml
 
-# Event bus integration via shared-lib
-# Uses the canonical BOSEvent from kairon_lib.events and the global EventBus registry.
-try:
-    from kairon_lib.events import BOSEvent, get_global_event_bus  # type: ignore[import-not-found]
-except (ModuleNotFoundError, ImportError):
-    BOSEvent = None  # type: ignore[assignment]
-    get_global_event_bus = None  # type: ignore[assignment]
+# Event bus integration via kairon-lib-events
+# Uses the canonical BOSEvent from kairon_events and the global EventBus registry.
+from kairon_events import BOSEvent, get_global_event_bus
 
 
 class EventType(StrEnum):
