@@ -831,6 +831,41 @@ def architecture_get_code_metrics(file_path: str, path: str = ".") -> dict:
         return _error(str(e))
 
 
+@mcp.resource("bos://analysis/graph/{project}")
+def read_analysis_graph(project: str) -> str:
+    """Dynamically generate a Mermaid diagram for a project."""
+    try:
+        import urllib.parse
+        project = urllib.parse.unquote(project)
+        # Assuming project refers to a module path, e.g. "projects/omo"
+        # Default workspace is the environment variable or common path
+        import os
+
+        from codeanalyze.analyzers.understand import UnderstandAdapter
+        workspace_root = os.environ.get("WORKSPACE_ROOT", "/Users/xiamingxing/Workspace")
+        adapter = UnderstandAdapter(workspace_root=_resolve(workspace_root))
+        diagram = adapter.generate_architecture_diagram(project)
+        return diagram
+    except Exception as e:
+        return f"Error generating graph: {str(e)}"
+
+@mcp.resource("bos://analysis/metrics/{file}")
+def read_analysis_metrics(file: str) -> str:
+    """Calculate and return code metrics (e.g. Radon/Understand)."""
+    try:
+        import json
+        import urllib.parse
+        file = urllib.parse.unquote(file)
+        import os
+        workspace_root = os.environ.get("WORKSPACE_ROOT", "/Users/xiamingxing/Workspace")
+        from codeanalyze.analyzers.understand import UnderstandAdapter
+        adapter = UnderstandAdapter(workspace_root=_resolve(workspace_root))
+        result = adapter.get_code_metrics(file)
+        return json.dumps(result, indent=2, ensure_ascii=False)
+    except Exception as e:
+        return f"Error getting metrics: {str(e)}"
+
+
 def main():
     """Run the MCP server in stdio mode (for Agora integration)."""
     mcp.run()

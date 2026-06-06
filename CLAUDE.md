@@ -1,7 +1,8 @@
 # CLAUDE.md — kairon
 
-> 知识工程与研究栈 · 25 包 Python monorepo（2026-06-06 从 shared-lib 拆出 5 个子包）
-> 根工作区文档：`../CLAUDE.md`（全局）、`../AGENTS.md`（开发指南）、`../LAYER-INDEX.md`（架构分层）
+> 知识工程与研究栈 · 25 包 Python monorepo
+> 根工作区文档：`../CLAUDE.md`（全局, 含 §0 启动强制指令）、`../AGENTS.md`（开发指南）、`../LAYER-INDEX.md`（架构分层）
+> **Agent 必须**: 先读 `../CLAUDE.md` §0, 通过 cockpit MCP `workspace_context` 获取当前上下文再开始工作
 
 ---
 
@@ -22,7 +23,7 @@ make lint
 make format
 ```
 
-## 包结构（25 包）
+## 包结构（19 包 · 2026-06-06 P31-W1 CLEANUP-SHIM 后）
 
 ### L0 — 基础依赖（5 包，2026-06-06 从 shared-lib 拆出）
 
@@ -132,8 +133,21 @@ agentmesh 的 5 个子系统已 100% 迁移至 kairon：
 |------|--------|------|
 | sophia | `packages/protocols-layer/src/protocols_layer/sophia/` | 范式编译（compiler/learner/symbols/kems_runtime/MCP server），与 symphony-protocol 同属协议/规则层，合并为 protocols-layer（22→23 包） |
 | symphony-protocol | `packages/protocols-layer/src/protocols_layer/symphony/` | 状态机/Agent 匹配/触发器引擎，与 sophia 合并为 protocols-layer |
-| ssot | `packages/sot-bridge/src/sot_bridge/ssot_kernel/` | 单一事实源（17,649 行, 10 tests），与 sharedbrain-bridge 合并为 sot-bridge（6 个月 shim 保留） |
+| ssot | `packages/sot-bridge/src/sot_bridge/ssot_kernel/` | 单一事实源（17,649 行, 10 tests），与 sharedbrain-bridge 合并为 sot-bridge |
 | sharedbrain-bridge | `packages/sot-bridge/src/sot_bridge/sharedbrain_bridge/` | × SharedBrain 桥接（1,063 行, 4 tests；Phase 31 stubify），与 ssot 合并为 sot-bridge |
+| llm-gateway | `packages/llm-gateway-kernel/src/llm_gateway_kernel/llm_gateway/` | LLM 路由 + 配额管理（2,560 行），与 engine-core 合并为 llm-gateway-kernel |
+| engine-core | `packages/llm-gateway-kernel/src/llm_gateway_kernel/engine_core/` | 引擎核心（25,641 行, 132 src files），与 llm-gateway 合并为 llm-gateway-kernel |
+
+### P31-W1 CLEANUP-SHIM 收官（2026-06-06）
+
+3 组合并完成后，6 个原包 src/ **立即删除（0 保留期，AST 实证 0 跨包 import）**：
+
+- kairon 物理目录 25 → 19（src/ 消失 6 个，目录保留 `pyproject.toml` 作档案）
+- 6 个原包目录仍含 `pyproject.toml` + `.pytest_cache` / `.omc` 等历史缓存，**不会被 uv 解析为 workspace 成员**（`[tool.uv.workspace] exclude` 段阻断）
+- 消费者迁移:
+  - `iris/pyproject.toml`: `ssot-kernel` → `sot-bridge`
+  - `minerva/pyproject.toml`: `paradigm = ["sophia>=0.2.0"]` → `paradigm = ["protocols-layer"]`
+- 旧 `import sophia` / `import ssot_kernel` / `import engine_core` 等 6 个旧名 ModuleNotFoundError（**破坏面 0**，AST 实证 0 跨包 import）
 
 ## 架构主线
 
