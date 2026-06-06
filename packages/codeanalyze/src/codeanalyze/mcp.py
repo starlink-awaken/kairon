@@ -747,6 +747,70 @@ def workflow_impact_analysis(symbol_name: str, language: str, path: str = ".") -
     except Exception as e:
         return _error(str(e))
 
+@mcp.tool()
+def codegraph_get_symbol_graph(symbol_name: str, path: str = ".") -> dict:
+    """[Relational Engine] Get a tree of callers and callees for a specific symbol using codegraph.
+
+    Args:
+        symbol_name: The target symbol name.
+        path: Workspace root path.
+    """
+    try:
+        from codeanalyze.analyzers.codegraph import CodeGraphAdapter
+        adapter = CodeGraphAdapter(workspace_root=_resolve(path))
+        result = adapter.get_symbol_graph(symbol_name)
+        return _ok({"format_version": FORMAT_VERSION, "result": result})
+    except Exception as e:
+        return _error(str(e))
+
+@mcp.tool()
+def codegraph_get_impact_radius(file_path: str, path: str = ".") -> dict:
+    """[Relational Engine] Find all files that depend on the target file using codegraph SQLite index.
+
+    Args:
+        file_path: Target file path relative to workspace.
+        path: Workspace root path.
+    """
+    try:
+        from codeanalyze.analyzers.codegraph import CodeGraphAdapter
+        adapter = CodeGraphAdapter(workspace_root=_resolve(path))
+        result = adapter.get_impact_radius(file_path)
+        return _ok({"format_version": FORMAT_VERSION, "result": result})
+    except Exception as e:
+        return _error(str(e))
+
+@mcp.tool()
+def architecture_generate_diagram(module_path: str, path: str = ".") -> dict:
+    """[Visualization Engine] Generate a Mermaid.js architecture diagram using Mindpilot / SciTools.
+
+    Args:
+        module_path: Target module or directory relative to workspace.
+        path: Workspace root path.
+    """
+    try:
+        from codeanalyze.analyzers.understand import UnderstandAdapter
+        adapter = UnderstandAdapter(workspace_root=_resolve(path))
+        diagram = adapter.generate_architecture_diagram(module_path)
+        return _ok({"format_version": FORMAT_VERSION, "mermaid": diagram})
+    except Exception as e:
+        return _error(str(e))
+
+@mcp.tool()
+def architecture_get_code_metrics(file_path: str, path: str = ".") -> dict:
+    """[Visualization Engine] Get complexity and coupling metrics using SciTools Understand.
+
+    Args:
+        file_path: Target file path relative to workspace.
+        path: Workspace root path.
+    """
+    try:
+        from codeanalyze.analyzers.understand import UnderstandAdapter
+        adapter = UnderstandAdapter(workspace_root=_resolve(path))
+        result = adapter.get_code_metrics(file_path)
+        return _ok({"format_version": FORMAT_VERSION, "result": result})
+    except Exception as e:
+        return _error(str(e))
+
 
 def main():
     """Run the MCP server in stdio mode (for Agora integration)."""
