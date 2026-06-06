@@ -1,6 +1,6 @@
 # CLAUDE.md — kairon
 
-> 知识工程与研究栈 · 30 包 Python monorepo（2026-06-06 从 shared-lib 拆出 5 个子包）
+> 知识工程与研究栈 · 25 包 Python monorepo（2026-06-06 从 shared-lib 拆出 5 个子包）
 > 根工作区文档：`../CLAUDE.md`（全局）、`../AGENTS.md`（开发指南）、`../LAYER-INDEX.md`（架构分层）
 
 ---
@@ -22,7 +22,7 @@ make lint
 make format
 ```
 
-## 包结构（30 包）
+## 包结构（25 包）
 
 ### L0 — 基础依赖（5 包，2026-06-06 从 shared-lib 拆出）
 
@@ -216,7 +216,7 @@ kairon 拥有独立于根工作区的 CI 流水线：
 |------|------|------|
 | CI | `.github/workflows/ci.yml` | lint + codeanalyze 多版本矩阵（3.10–3.13） |
 
-根工作区的 `.github/workflows/` 有 11 个全局 workflow（pytest.yml, phase11-ci.yml, integration.yml 等），与 kairon 内部 CI 相互独立。
+根工作区的 `.github/workflows/` 含 **18 个全局 workflow**（2026-06-06 补齐 5 项独立项目 CI），9/9 项目全覆盖。
 
 ## Gotchas
 
@@ -228,4 +228,4 @@ kairon 拥有独立于根工作区的 CI 流水线：
 6. **wksp 包零测试** — `packages/wksp/` 没有 `tests/` 目录
    - *2026-06-06：wksp 已拆出至 `projects/cockpit/`，kairon 不再 ship wksp*
 7. **根目录遗留修复脚本** — 约 8 个 `_fix_*.py` 脚本（fix_imports, mypy_suppress 等），是 mypy 迁移残留
-8. **CI 薄弱** — kairon 内部 CI 仅覆盖 lint + codeanalyze 单包测试，无全包测试门禁
+8. **CI 已覆盖全工作区** — 2026-06-06 补齐 5 独立项目 CI, 9/9 项目拥有流水线
