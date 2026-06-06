@@ -63,53 +63,8 @@ def cmd_mcp() -> int:
 
 def cmd_serve(port: int) -> int:
     """Start a simple HTTP server for LLM generation."""
-    from http.server import HTTPServer, BaseHTTPRequestHandler
-
-    class LLMHandler(BaseHTTPRequestHandler):
-        def do_POST(self):
-            if self.path != "/v1/generate":
-                self.send_response(404)
-                self.end_headers()
-                return
-            length = int(self.headers.get("Content-Length", 0))
-            body = json.loads(self.rfile.read(length))
-            prompt = body.get("prompt", "")
-            model = body.get("model")
-            providers = detect_backends()
-            if not providers:
-                self.send_response(503)
-                self.end_headers()
-                self.wfile.write(b'{"error":"No backends"}')
-                return
-            req = LLMRequest(prompt=prompt, model=model)
-            try:
-                resp = providers[0].complete(req)
-                result = {
-                    "content": resp.content,
-                    "model": resp.model,
-                    "input_tokens": resp.input_tokens,
-                    "output_tokens": resp.output_tokens,
-                }
-                self.send_response(200)
-                self.send_header("Content-Type", "application/json")
-                self.end_headers()
-                self.wfile.write(json.dumps(result).encode())
-            except Exception as e:
-                self.send_response(500)
-                self.end_headers()
-                self.wfile.write(json.dumps({"error": str(e)}).encode())
-
-        def log_message(self, fmt, *args):
-            sys.stderr.write(f"[llm-gateway] {args[0]} {args[1]} {args[2]}\n")
-
-    server = HTTPServer(("0.0.0.0", port), LLMHandler)  # noqa: S104
-    print(f"llm-gateway HTTP server: http://localhost:{port}")
-    print(f"  POST /v1/generate  — generate LLM response")
-    print(f"  GET  /v1/health     — health check")
-    try:
-        server.serve_forever()
-    except KeyboardInterrupt:
-        server.shutdown()
+    from llm_gateway.http_server import serve
+    serve(port)
     return 0
 
 

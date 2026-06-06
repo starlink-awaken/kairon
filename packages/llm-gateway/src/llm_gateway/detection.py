@@ -80,7 +80,7 @@ def _import_provider_class(provider_type: str) -> type[LLMProvider] | None:
         return None
 
 
-def create_provider(provider_type: str, **kwargs: Any) -> LLMProvider | None:
+def create_provider(provider_type: str, **kwargs: Any) -> LLMProvider:
     """Factory method to instantiate a provider by name.
 
     Parameters
