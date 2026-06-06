@@ -1,0 +1,52 @@
+# Kairon Interface Registry (25 packages)
+project: kairon
+layer: L2
+description: 知识工程引擎 (25 packages, 1810+ tests)
+
+cli:
+  - name: eidos
+    module: eidos.cli:main
+  - name: iris
+    module: iris.cli:main
+  - name: kos
+    module: kos.cli.__main__:main
+  - name: kronos
+    module: kronos.cli:main
+  - name: minerva
+    module: minerva.cli:main
+  - name: ontoderive
+    module: engine.cli:main
+  - name: forge
+    module: forge.forge:main
+  - name: codeanalyze
+    module: codeanalyze.cli:cli
+  - name: sot-bridge
+    module: sot_bridge.cli:main
+  - name: protocols-layer
+    module: protocols_layer.cli:main
+    status: broken
+  - name: sophia
+    module: sophia.cli:main
+    status: shim
+
+mcp:
+  total_tools: 92
+  packages: [eidos, iris, kos, kronos, minerva, ontoderive, forge, codeanalyze, sot-bridge, protocols-layer, llm-gateway-kernel]
+  proxy: via agora.ProxyManager
+
+http:
+  - port: 8765
+    protocol: FastAPI
+    owner: minerva
+  - port: 8080
+    protocol: web_server
+    owner: ontoderive [⚠ 与 agora 冲突]
+  - port: 9290
+    protocol: http.server
+    owner: llm-gateway-kernel
+
+dependencies:
+  runtime: [fastmcp, httpx, structlog, pydantic, pyyaml, rich, openai, ...]
+  dev: [pytest, ruff, mypy]
+
+tests: 1810+
