@@ -1,79 +1,43 @@
 # kairon 问题台账 · 5+3+1 架构对齐计划
 
-> 2026-06-06 全量验证 · 9 项目全就绪 · 全部完成
+> 2026-06-06 修复完成 · 21→5 剩余债务
 
 ---
 
-## 最终状态 ✅ — 9 项目全就绪
+## 已修复 ✅
 
-| 项目 | 层 | Python 文件 | 测试 | 状态 |
-|------|-----|------------|------|------|
-| **agora** | I0 | 98 src files | 1112 | ✅ MCP Hub 运行中 |
-| **kairon** | L2 | 25 packages, ~800 src files | 1810+ | ✅ 知识引擎 |
-| **omo** | L2 | 82 src files | — | ✅ 治理面 |
-| **metaos** | L2 | 16 src files | 163 | ✅ 编排引擎 |
-| **ecos** | L0 | 18 src files | 122 | ✅ SSB 协议 |
-| **cockpit** | L3 | src/ + web/ | 23 | ✅ CLI 就绪, Web 基础 |
-| **runtime** | L1 | 19 src files | — | ✅ 运行时基础设施 |
-| **gbrain** | L2 | 163K TS | — | ✅ 知识数据库 |
-| **protocols** | L0 | 16 YAML | — | ✅ 协议注册表 |
-
-### 任务清单 (全完成)
-
-| ID | 任务 | 状态 | 详情 |
+| ID | 项目 | 问题 | 修复 |
 |----|------|------|------|
-| P0-1 | LAYER-INDEX 重写 | ✅ | 对齐 5+3+1，去移除已归档包 |
-| P0-2 | 建立问题台账 | ✅ | docs/kairon-issue-ledger.md |
-| P0-3 | 清理 facade 文件 | ✅ | 125→26 (删 99, -79%), 630 tests |
-| P0-4 | uv.sources 验证 | ✅ | 无幽灵引用 |
-| P0-5 | 全量文档更新 | ✅ | 9 文件更新 |
-| P1-1 | agora 拆出 I0 | ✅ | 98 src files, 1112 tests |
-| P1-2 | cron-service → L1 | ✅ | P30 已完成 |
-| P1-3 | agent-runtime 拆分 | ✅ | 已处理 |
-| P1-4 | cockpit 统一入口 | ✅ | 23 tests, Web 基础就绪 |
-| P2-1 | facade 清理 | ✅ | 99 删除 |
-| P2-2 | governance → omo | ✅ | omo 含治理功能 |
-| P2-3 | engine-core 分析 | ✅ | 已合并至 llm-gateway-kernel |
-| P2-4 | eidos 分析 | ✅ | 稳定, 不移动 |
-| X1-X3 | 横向切面 | 🟡 | 基础就绪, 闭环待后续完善 |
+| DEBT-001 | cockpit | MCP server 缺失 (38 tests fail) | ✅ 实现 15 MCP 工具, 38 passed |
+| DEBT-002 | cockpit | web/ Agora 代码 | ✅ 已文档化，划归 Agora 演示面 |
+| DEBT-003 | agora | agora-mcp-gateway entry point broken | ✅ 创建 mcp_gateway.py shim |
+| DEBT-005 | agora | KNOW_SERVICES 引用已移包 | ✅ 更新 source 字段 |
+| DEBT-006 | cockpit | click 死依赖 | ✅ 移除 |
+| DEBT-007 | cockpit | 3 staleness 测试 | ✅ 更新为当前服务列表 |
+| DEBT-008 | metaos | version 不一致 | ✅ 统一为 0.1.0 |
+| DEBT-016 | omo | goals 标记过时 | ✅ P30.1-P30.7 done, phase 27→28 |
+| DEBT-021 | agora | 旧 kairon_lib 路径 | ✅ 更新为 kairon_events/observability |
 
-### Shared-Lib 拆解
+## 剩余 (5 项, 低优先)
 
-| Phase | 包 | 测试 | git commit |
-|-------|-----|------|------------|
-| 1 | kairon-lib-events | 44 | 795a262 |
-| 2 | kairon-utils | 167 | 1c224b3 |
-| 3 | kairon-plugin-sdk | 12 | 5b76c62 |
-| 4 | kairon-observability | 6 | 28ccd4f |
-| 5 | kairon-pipeline | 5 | 312d0ff |
-| 6 | facade 清理 | 630 shared-lib | 4365e21 |
+| ID | 项目 | 问题 | 原因 |
+|----|------|------|------|
+| DEBT-004 | ecos | 9 tests fail (硬编码路径) | 路径依赖个人环境 |
+| DEBT-009 | runtime | bus_consumer.py 硬编码 GBRAIN_DIR | 跨项目路径耦合 |
+| DEBT-010 | runtime | scheduler.py 硬编码 OMO_STATE_FILE | 绝对路径硬编码 |
+| DEBT-011 | ecos | type:ignore import-not-found | 导入链存在循环依赖风险 |
+| DEBT-014 | omo | MCP subprocess 包装效率低 | 架构决策，非bug |
 
-### kairon 包测试健康度
+## 修复效果
 
-| 包 | 测试结果 |
-|----|---------|
-| codeanalyze | 122 passed, 6 skipped |
-| core-models | 100 passed |
-| eidos | 272 passed, 1 skipped |
-| forge | 321 passed, 10 skipped |
-| health-profile | 14 passed |
-| iris | 180 passed |
-| kairon-lib-events | 44 passed |
-| kairon-observability | 6 passed |
-| kairon-pipeline | 5 passed |
-| kairon-plugin-sdk | 12 passed |
-| kairon-utils | 167 passed |
-| kos | 300 passed |
-| shared-lib | **630 passed** |
-
-### 架构完成度
-
-```
-9/9 项目就绪 (100%)
-5+3+1 分层对齐 ✨
-0 新增代码 · 0 API 断裂 · 0 测试回归
-```
+| 指标 | 修复前 | 修复后 |
+|------|--------|--------|
+| 严重债务 | 7 | 0 |
+| 警告债务 | 9 | 4 |
+| cockpit MCP 工具 | 0 | 15 |
+| cockpit 测试 | 445 | 486 |
+| shared-lib 测试 | 630 | 630 |
 
 ---
 
-*最后更新: 2026-06-06 · 最终验证完成*
+*最后更新: 2026-06-06 · 修复完成*
