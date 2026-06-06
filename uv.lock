@@ -31,6 +31,7 @@ members = [
     "iris",
     "kairon",
     "kairon-lib-events",
+    "kairon-plugin-sdk",
     "kairon-utils",
     "kos",
     "kronos",
@@ -3014,6 +3015,34 @@ dev = [
 ]
 
 [package.metadata]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.4.2" }]
+
+[[package]]
+name = "kairon-plugin-sdk"
+version = "0.4.0"
+source = { editable = "packages/kairon-plugin-sdk" }
+
+[package.optional-dependencies]
+cli = [
+    { name = "click" },
+    { name = "pyyaml" },
+    { name = "requests" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "click", marker = "extra == 'cli'", specifier = ">=8.0" },
+    { name = "pyyaml", marker = "extra == 'cli'", specifier = ">=6.0" },
+    { name = "requests", marker = "extra == 'cli'", specifier = ">=2.0" },
+]
+provides-extras = ["cli"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest", specifier = ">=8.4.2" }]
@@ -7298,6 +7327,7 @@ version = "0.4.0"
 source = { editable = "packages/shared-lib" }
 dependencies = [
     { name = "kairon-lib-events" },
+    { name = "kairon-plugin-sdk" },
     { name = "kairon-utils" },
 ]
 
@@ -7310,6 +7340,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "kairon-lib-events", editable = "packages/kairon-lib-events" },
+    { name = "kairon-plugin-sdk", editable = "packages/kairon-plugin-sdk" },
     { name = "kairon-utils", editable = "packages/kairon-utils" },
 ]
 
