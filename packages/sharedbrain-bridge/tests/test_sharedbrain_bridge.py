@@ -1,15 +1,19 @@
-"""Basic tests for sharedbrain-bridge package."""
+"""Basic tests for sharedbrain-bridge package — DEPRECATED stub.
+
+SharedBrain has been decommissioned (Phase 31, 2026-06-06).
+Verified: BYPASS-003, BYPASS-004, BYPASS-005 resolved.
+"""
 
 from __future__ import annotations
 
 from sharedbrain_bridge import cli, eu, gbrain_client, immune, sync
-from sharedbrain_bridge.eu import DEFAULT_AGORA, DEFAULT_SB, EUBridge
+from sharedbrain_bridge.eu import EUBridge
 from sharedbrain_bridge.immune import ImmuneBridge
 from sharedbrain_bridge.sync import SyncBridge
 
 
 class TestSharedBrainBridgeBasic:
-    """Core functionality and edge case tests."""
+    """Core functionality and edge case tests for deprecated stub."""
 
     def test_imports(self):
         """All expected modules are importable."""
@@ -17,11 +21,11 @@ class TestSharedBrainBridgeBasic:
         assert ImmuneBridge is not None
         assert SyncBridge is not None
 
-    def test_eu_bridge_defaults(self):
-        """EUBridge with default endpoints."""
+    def test_eu_bridge_defaults_empty(self):
+        """EUBridge with default endpoints — no hardcoded localhost (BYPASS-004/005 resolved)."""
         eb = EUBridge()
-        assert eb.agora == DEFAULT_AGORA
-        assert eb.sb == DEFAULT_SB
+        assert eb.agora == ""
+        assert eb.sb == ""
 
     def test_eu_bridge_custom(self):
         """EUBridge with custom endpoints."""
@@ -33,11 +37,13 @@ class TestSharedBrainBridgeBasic:
         """ImmuneBridge initializes."""
         ib = ImmuneBridge()
         assert ib is not None
+        assert ib.sb == ""  # no hardcoded localhost (BYPASS-005 resolved)
 
     def test_sync_bridge_init(self):
         """SyncBridge initializes."""
         sb = SyncBridge()
         assert sb is not None
+        assert sb.sb == ""  # no hardcoded localhost (BYPASS-003/005 resolved)
 
     def test_cli_module(self):
         """CLI module is importable."""

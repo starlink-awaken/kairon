@@ -32,26 +32,31 @@ class TestServerImports:
     def test_neural_center_type(self):
         """neural_center should be a NeuralCenter instance."""
         from core_models.neural_center import NeuralCenter
+
         assert isinstance(neural_center, NeuralCenter)
 
     def test_circuit_engine_type(self):
         """circuit_engine should be a CircuitEngine instance."""
         from core_models.circuit_engine import CircuitEngine
+
         assert isinstance(circuit_engine, CircuitEngine)
 
     def test_neuron_pool_type(self):
         """neuron_pool should be a NeuronPool instance."""
         from core_models.neuron_pool import NeuronPool
+
         assert isinstance(neuron_pool, NeuronPool)
 
     def test_main_async_function(self):
         """main() should be a callable coroutine function."""
         import asyncio
+
         assert asyncio.iscoroutinefunction(main)
 
     def test_handler_functions_are_async(self):
         """All HTTP handler should be async functions."""
         import asyncio
+
         assert asyncio.iscoroutinefunction(handle_health)
         assert asyncio.iscoroutinefunction(handle_register)
         assert asyncio.iscoroutinefunction(handle_list_services)

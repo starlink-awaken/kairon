@@ -1,23 +1,33 @@
-"""Immune Audit Bridge — kairon knowledge → SharedBrain D-Immunity."""
+"""Immune Audit Bridge — DEPRECATED.
 
-import json
+SharedBrain has been decommissioned. This module is a no-op stub retained for
+import compatibility.
+
+Debt resolved: BYPASS-005 (hardcoded DEFAULT_SB localhost:7421)
+Deprecated at: 2026-06-06 (Phase 31 cleanup)
+"""
+
 import logging
-from urllib.request import Request, urlopen
 
 _log = logging.getLogger(__name__)
-DEFAULT_SB = "http://localhost:7421"
+
+# SharedBrain has been decommissioned — DEFAULT_SB constant intentionally removed.
+# BYPASS-005 resolved: no more hardcoded localhost:7421 reference.
 
 
 class ImmuneBridge:
-    def __init__(self, sharedbrain=DEFAULT_SB):
+    """Immune Audit Bridge stub.
+
+    SharedBrain has been decommissioned. All methods return safe no-op responses.
+    This class is retained for import compatibility only.
+    """
+
+    def __init__(self, sharedbrain: str = "") -> None:
+        if sharedbrain:
+            _log.warning("ImmuneBridge: SharedBrain has been decommissioned. Connection argument is ignored.")
         self.sb = sharedbrain
 
     def audit(self, content: str, title: str = "", source: str = "") -> dict:
-        try:
-            payload = json.dumps({"content": content, "title": title, "source": source}).encode()
-            req = Request(f"{self.sb}/api/v1/immunity/audit", data=payload, method="POST")  # noqa: S310
-            req.add_header("Content-Type", "application/json")
-            resp = urlopen(req, timeout=10)  # noqa: S310
-            return json.loads(resp.read().decode())
-        except Exception as e:
-            return {"risk": "UNKNOWN", "error": str(e)}
+        """No-op stub — SharedBrain is decommissioned."""
+        _log.debug("ImmuneBridge.audit: SharedBrain decommissioned, skipping immune audit.")
+        return {"risk": "UNKNOWN", "error": "SharedBrain decommissioned"}

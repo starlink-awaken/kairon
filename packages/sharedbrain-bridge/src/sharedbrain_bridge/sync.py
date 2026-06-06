@@ -1,40 +1,42 @@
-"""Batch Sync Bridge — kairon eidos ↔ SharedBrain D-Memory."""
+"""Batch Sync Bridge — DEPRECATED.
 
-import hashlib
-import json
+SharedBrain has been decommissioned. This module is a no-op stub retained for
+import compatibility.
+
+Debt resolved: BYPASS-005 (hardcoded DEFAULT_SB localhost:7421)
+               BYPASS-003 (SharedBrain organs path dependency)
+Deprecated at: 2026-06-06 (Phase 31 cleanup)
+"""
+
 import logging
-from pathlib import Path
 from typing import Any
-from urllib.request import Request, urlopen
 
 _log = logging.getLogger(__name__)
-DEFAULT_SB = "http://localhost:7421"
-SHAREDBRAIN_ORGANS = Path(__file__).resolve().parents[3] / "SharedBrain" / "organs"  # auto-detect from package location
+
+# SharedBrain has been decommissioned.
+# DEFAULT_SB constant and SHAREDBRAIN_ORGANS path intentionally removed.
+# BYPASS-003/005 resolved: no more hardcoded localhost:7421 or organs path references.
 
 
 class SyncBridge:
-    def __init__(self, sharedbrain=DEFAULT_SB):
+    """Batch Sync Bridge stub.
+
+    SharedBrain has been decommissioned. All methods return safe no-op responses.
+    This class is retained for import compatibility only.
+    """
+
+    def __init__(self, sharedbrain: str = "") -> None:
+        if sharedbrain:
+            _log.warning("SyncBridge: SharedBrain has been decommissioned. Connection argument is ignored.")
         self.sb = sharedbrain
 
     def get_active_organs(self) -> list[dict[str, Any]]:
-        organs: list[dict[str, Any]] = []
-        if not SHAREDBRAIN_ORGANS.exists():
-            return organs
-        for d in sorted(SHAREDBRAIN_ORGANS.iterdir()):
-            if d.is_dir() and d.name.startswith("D_"):
-                sf = d / ".organ_status"
-                organs.append({"name": d.name, "status": sf.read_text().strip() if sf.exists() else "active"})
-        return organs
+        """No-op stub — SharedBrain organs directory no longer exists."""
+        _log.debug("SyncBridge.get_active_organs: SharedBrain decommissioned, returning empty list.")
+        return []
 
     def batch_sync_to_memory(self, organs: list[dict[str, Any]] | None = None) -> dict[str, Any]:
-        if organs is None:
-            organs = self.get_active_organs()
-        fp = hashlib.sha256(json.dumps(organs, sort_keys=True).encode()).hexdigest()
-        try:
-            payload = json.dumps({"organs": organs, "fingerprint": fp}).encode()
-            req = Request(f"{self.sb}/api/v1/memory/sync", data=payload, method="POST")  # noqa: S310
-            req.add_header("Content-Type", "application/json")
-            resp = urlopen(req, timeout=10)  # noqa: S310
-            return {"synced": resp.status == 200, "count": len(organs), "fp": fp}
-        except Exception as e:
-            return {"synced": False, "error": str(e), "count": len(organs), "fp": fp}
+        """No-op stub — SharedBrain is decommissioned."""
+        _log.debug("SyncBridge.batch_sync_to_memory: SharedBrain decommissioned, skipping sync.")
+        count = len(organs) if organs is not None else 0
+        return {"synced": False, "error": "SharedBrain decommissioned", "count": count, "fp": ""}

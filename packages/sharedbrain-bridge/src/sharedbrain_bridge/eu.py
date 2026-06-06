@@ -1,17 +1,21 @@
-"""EU Pricing Bridge — kairon pipeline → SharedBrain D-Economy.
+"""EU Pricing Bridge — DEPRECATED.
 
-Provides EU (Energy Unit) balance checks and consumption tracking
-for kairon pipeline operations.
+SharedBrain has been decommissioned. This module is a no-op stub retained for
+import compatibility. All EU pricing logic should be migrated to kairon's
+internal accounting mechanisms (see X3-NO_COSTING debt item).
+
+Debt resolved: BYPASS-004 (hardcoded DEFAULT_AGORA localhost:7430)
+               BYPASS-005 (hardcoded DEFAULT_SB localhost:7421)
+Deprecated at: 2026-06-06 (Phase 31 cleanup)
 """
 
-import json
 import logging
-from urllib.request import Request, urlopen
 
 _log = logging.getLogger(__name__)
 
-DEFAULT_AGORA = "http://localhost:7430"
-DEFAULT_SB = "http://localhost:7421"
+# SharedBrain has been decommissioned — these constants are intentionally removed.
+# BYPASS-004/005 resolved: no more hardcoded localhost references.
+
 PRICING = {
     "minerva_research": 10,
     "ontoderive_engine": 5,
@@ -23,29 +27,25 @@ PRICING = {
 
 
 class EUBridge:
-    def __init__(self, agora=DEFAULT_AGORA, sharedbrain=DEFAULT_SB):
+    """EU Pricing Bridge stub.
+
+    SharedBrain has been decommissioned. All methods return safe no-op responses.
+    This class is retained for import compatibility only.
+    """
+
+    def __init__(self, agora: str = "", sharedbrain: str = "") -> None:
+        if agora or sharedbrain:
+            _log.warning("EUBridge: SharedBrain has been decommissioned. Connection arguments are ignored.")
         self.agora = agora
         self.sb = sharedbrain
 
     def check_balance(self, caller: str) -> dict:
-        try:
-            url = f"{self.sb}/api/v1/economy/balance?caller={caller}"
-            resp = urlopen(Request(url, method="GET"), timeout=5)  # noqa: S310
-            data = json.loads(resp.read().decode())
-            return {"balance": data.get("balance", 100), "limit": data.get("limit", 1000), "ok": True}
-        except Exception as e:
-            return {"balance": 100, "limit": 1000, "ok": False, "error": str(e)}
+        """No-op stub — returns unlimited balance since SharedBrain is decommissioned."""
+        _log.debug("EUBridge.check_balance: SharedBrain decommissioned, returning stub balance.")
+        return {"balance": 1000, "limit": 1000, "ok": False, "error": "SharedBrain decommissioned"}
 
     def consume(self, caller: str, operation: str) -> dict:
+        """No-op stub — SharedBrain is decommissioned."""
         cost = PRICING.get(operation, 1)
-        balance = self.check_balance(caller)
-        if balance["balance"] < cost:
-            return {"success": False, "error": f"Insufficient EU: need {cost}, have {balance['balance']}"}
-        try:
-            payload = json.dumps({"caller": caller, "cost": cost, "operation": operation}).encode()
-            req = Request(f"{self.sb}/api/v1/economy/consume", data=payload, method="POST")  # noqa: S310
-            req.add_header("Content-Type", "application/json")
-            resp = urlopen(req, timeout=5)  # noqa: S310
-            return {"success": resp.status == 200, "cost": cost, "balance_after": balance["balance"] - cost}
-        except Exception as e:
-            return {"success": False, "error": str(e)}
+        _log.debug("EUBridge.consume: SharedBrain decommissioned, skipping EU consumption.")
+        return {"success": False, "cost": cost, "error": "SharedBrain decommissioned"}
