@@ -1,6 +1,6 @@
 # CLAUDE.md — kairon
 
-> 知识工程与研究栈 · 23 包 Python monorepo（治理中，原 31 包名册中的 8 包已归档：6 包早期 + kairon-assistant/kairon-voice 于 P28-W2）
+> 知识工程与研究栈 · 23 包 Python monorepo（治理中，原 31 包名册中的 10 包已归档：6 包早期 + kairon-assistant/kairon-voice 于 P28-W2 + kaironcloud-billing 于 P28-W6 + metaos 于 P30-W1 拆出为独立项目 `projects/metaos`）
 > 根工作区文档：`../CLAUDE.md`（全局）、`../AGENTS.md`（开发指南）、`../LAYER-INDEX.md`（架构分层）
 
 ---
@@ -22,9 +22,9 @@ make lint
 make format
 ```
 
-## 包结构（25 包）
+## 包结构（24 包）
 
-### L1 — 知识工程核心（11 包）
+### L1 — 知识工程核心（10 包）
 
 | 包 | 路径 | 说明 |
 |----|------|------|
@@ -38,7 +38,7 @@ make format
 | forge | `packages/forge/` | 89 tools（无 MCP @tool） |
 | codeanalyze | `packages/codeanalyze/` | 代码分析 |
 | kronos | `packages/kronos/` | 9 tools |
-| metaos | `packages/metaos/` | 基础工具（sys.path 已修复） |
+| ~~metaos~~ | **已拆出 (P30-W1)** | 移至 `projects/metaos/` 独立项目（编排引擎） |
 
 ### L2 — 集成层（1 包）
 
@@ -71,7 +71,7 @@ make format
 | ecos | `packages/ecos/` | 生态系统管理 |
 | cron-service | `packages/cron-service/` | 定时任务调度 |
 | eu-pricing | `packages/eu-pricing/` | EU 定价 |
-| kaironcloud-billing | `packages/kaironcloud-billing/` | 云计费 |
+| ~~kaironcloud-billing~~ | **已归档 (P28-W6)** | 1 软依赖（agora try/except）|
 | ~~kairon-assistant~~ | **已归档 (P28-W2)** | 0 外部 import、whisper 缺依赖 |
 | ~~kairon-voice~~ | **已归档 (P28-W2)** | 0 外部 import、自包含 |
 | symphony-protocol | `packages/symphony-protocol/` | 协议层 |
@@ -84,6 +84,12 @@ make format
 | kairon-assistant | `projects/_archived/kairon-archived-pkg-kairon-assistant-2026-06-05/kairon-assistant/` | 0 外部 import、whisper 缺依赖、3 tests、孤儿包 |
 | kairon-voice | `projects/_archived/kairon-archived-pkg-kairon-voice-2026-06-05/kairon-voice/` | 0 外部 import、自包含、3 tests、孤儿包 |
 
+### 已归档（P28-W6 · 2026-06-05）
+
+| 原包 | 归档位置 | 原因 |
+|------|---------|------|
+| kaironcloud-billing | `projects/_archived/kairon-archived-pkg-kaironcloud-billing-2026-06-05/kaironcloud-billing/` | 1 软依赖（agora/router.py:406 try/except）、5 tests、28 src、孤儿包 |
+
 ### 已归档（former agentmesh）
 
 agentmesh 的 5 个子系统已 100% 迁移至 kairon：
@@ -95,6 +101,12 @@ agentmesh 的 5 个子系统已 100% 迁移至 kairon：
 | MCP 网关 | `agora` |
 | Orchestrator | `llm-gateway` |
 | Forge | `forge` |
+
+### 已拆出（P30-W1 · 2026-06-06）
+
+| 原包 | 新位置 | 原因 |
+|------|--------|------|
+| metaos | `projects/metaos/` | 编排引擎（决策门控/免疫/路由），非知识工程功能，拆为独立项目（v3 架构方案） |
 
 ## 架构主线
 
