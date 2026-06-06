@@ -65,7 +65,29 @@ class Validator:
             for field_name in extra_fields:
                 errors.append(ValidationError(field=field_name, message="Unexpected field"))
 
-        return ValidationResult(is_valid=not errors, errors=errors)
+        result = ValidationResult(is_valid=not errors, errors=errors)
+
+        if not result.is_valid:
+            try:
+                import httpx
+                # 触发 X1 告警并强锚定到 L0 SSB Immutable Log
+                httpx.post(
+                    "http://127.0.0.1:8080/v1/tools/call",
+                    json={
+                        "name": "append_ssb_log",
+                        "arguments": {
+                            "event_type": "DATA_POISON_ATTEMPT",
+                            "agent_name": "eidos.validator",
+                            "summary": f"Eidos blocked malformed data for schema '{schema_type}'",
+                            "detail": f"Errors: {[e.to_dict() for e in errors]}"
+                        }
+                    },
+                    timeout=0.5  # 快进快出
+                )
+            except Exception:
+                pass  # Ignore anchoring errors to not crash the validator
+
+        return result
 
     def validate_card(self, data: dict[str, Any], strict: bool = True) -> ValidationResult:
         return self.validate_object("card", data, strict=strict)

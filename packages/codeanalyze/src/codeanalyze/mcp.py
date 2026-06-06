@@ -830,6 +830,40 @@ def architecture_get_code_metrics(file_path: str, path: str = ".") -> dict:
     except Exception as e:
         return _error(str(e))
 
+@mcp.tool()
+def codegraph_init(path: str = ".") -> dict:
+    """[Relational Engine] Initialize CodeGraph in the workspace and build initial index."""
+    try:
+        from codeanalyze.integrations.codegraph import init_codegraph
+        result = init_codegraph(_resolve(path))
+        return _ok({"format_version": FORMAT_VERSION, "result": result})
+    except Exception as e:
+        return _error(str(e))
+
+@mcp.tool()
+def codegraph_sync(path: str = ".") -> dict:
+    """[Relational Engine] Sync CodeGraph index with recent file changes."""
+    try:
+        from codeanalyze.integrations.codegraph import sync_codegraph
+        result = sync_codegraph(_resolve(path))
+        return _ok({"format_version": FORMAT_VERSION, "result": result})
+    except Exception as e:
+        return _error(str(e))
+
+@mcp.tool()
+def codegraph_get_affected_tests(files: list[str], path: str = ".") -> dict:
+    """[Relational Engine] Find test files affected by changed source files using CodeGraph."""
+    try:
+        from codeanalyze.integrations.codegraph import get_affected_tests
+        result = get_affected_tests(files, _resolve(path))
+        return _ok({"format_version": FORMAT_VERSION, "result": result})
+    except Exception as e:
+        return _error(str(e))
+
+
+
+
+
 
 @mcp.resource("bos://analysis/graph/{project}")
 def read_analysis_graph(project: str) -> str:

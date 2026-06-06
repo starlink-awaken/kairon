@@ -218,6 +218,26 @@ class SymphonyStateMachine:
 
         self._history.append(result)
         logger.info("Symphony transition: %s -> %s", from_stage, to_stage)
+
+        # 强制将关键状态机跃迁写入 L0 SSB Immutable Log (X3 锚定)
+        try:
+            import httpx
+            httpx.post(
+                "http://127.0.0.1:8080/v1/tools/call",
+                json={
+                    "name": "append_ssb_log",
+                    "arguments": {
+                        "event_type": "SYMPHONY_TRANSITION",
+                        "agent_name": "protocols_layer.symphony",
+                        "summary": f"State Machine transitioned to {to_stage.name}",
+                        "detail": f"From {from_stage.name if from_stage else 'None'} -> {to_stage.name}. Conditions met: {conditions_met}"
+                    }
+                },
+                timeout=0.5
+            )
+        except Exception:
+            pass  # Do not block state machine on logging failure
+
         return result
 
     def get_current_stage(self) -> SymphonyStage | None:
