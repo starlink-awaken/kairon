@@ -1,6 +1,6 @@
 # AGENTS.md — kairon
 
-> Knowledge & Research Operating Stack: 30 包 Python monorepo（2026-06-06 shared-lib 拆出 5 子包）
+> Knowledge & Research Operating Stack: 25 包 Python monorepo · 5+3+1 架构 L2 引擎面
 
 如果你不是 Claude Code，从这里开始。Claude Code 会自动读取 `CLAUDE.md`。
 
@@ -12,42 +12,56 @@ make test           # 全量测试
 make lint           # Ruff 检查
 ```
 
-## 项目概览
+## 5+3+1 架构位置
 
-kairon 是一个 30 包的 Python monorepo，托管在 `projects/kairon/`。
-包间依赖通过 uv workspace 管理（详见 `pyproject.toml` `[tool.uv.workspace]`）。
-**`core-models` 是整个 monorepo 的依赖基座**，当前 checkout 中 8 个活跃包直接依赖它。
+kairon 是 **L2 知识引擎面**，与以下项目协同：
 
-6 大分组：
-- **L0 基础** — kairon-lib-events, kairon-utils, kairon-plugin-sdk, kairon-observability, kairon-pipeline（2026-06-06 从 shared-lib 拆出）
-- **L1 知识工程** — eidos, ontoderive, kos, minerva, sophia, iris, ssot, forge, codeanalyze, kronos, metaos, cron-service
-- **L2 集成** — sharedbrain-bridge, llm-gateway
-- **L3 Agent** — agent-runtime, agora, llm-gateway
-- **Infra** — shared-lib, core-models, engine-core
-- **业务支撑** — kaironcloud-billing, symphony-protocol
-- **P28-W2 已归档** — kairon-assistant, kairon-voice（2026-06-05 移入 `projects/_archived/`）
+```
+L3 cockpit ── 统一入口 (CLI + Web)
+   │
+I0 agora ──── MCP Hub (独立项目)
+   │
+L2 ┌ omo · 治理面
+   ├ kairon · 引擎面 (本仓库)
+   ├ metaos · 编排引擎
+   └ gbrain · 知识数据库
+   │
+L1 runtime ── 运行时基础设施
+   │
+L0 ┌ protocols · 协议 YAML
+   └ ecos · SSB 协议核心
+```
 
-当前 checkout 之外，近期文档和历史中仍引用过 `agent-hub`、`eu-pricing`、`gc-engine`、`observability`、`pontus`、`sharedbrain-standalone`。不要默认这些包在当前树中仍然存在，先以 live 目录为准。
+## 包清单 (25 包)
 
-## 架构文档
+### L0 基础 (5 包, 从 shared-lib 拆出)
+- kairon-lib-events, kairon-utils, kairon-plugin-sdk, kairon-observability, kairon-pipeline
 
-| 文档 | 路径 | 说明 |
-|------|------|------|
-| 架构审计 | `docs/architecture_audit.md` | 2026-06-04 v2 |
-| 跨项目接缝 | `docs/cross_project_boundary_audit.md` | kairon / agentmesh / SharedBrain / .omo |
-| 整改路线 | `docs/governance_plan.md` | P0 / P1 / P2 |
-| 债务台账 | `.omo/kairon-debt-registry.yaml` | 实时债务追踪 |
+### L1/2 知识工程 (20 包)
+- eidos (35K), kos (14K), minerva (25K), ontoderive (6K), sophia (1.4K), kronos, iris
+- ssot (14K), forge (8K), codeanalyze, core-models (1.6K), llm-gateway, llm-gateway-kernel
+- shared-lib, engine-core, sharedbrain-bridge, health-profile
+- symphony-protocol, sot-bridge, protocols-layer
 
-## CI
+## 测试与 CI
 
-- **kairon 内部 CI**: `.github/workflows/ci.yml` — lint + codeanalyze + test-all
-- **根工作区 CI**: `.github/workflows/pytest.yml` + `phase11-ci.yml`
+- 框架: pytest + uv
+- `make test` — 全量测试 (packages/*/)
+- `make test-fast` — 仅单元测试
+- `make test-diff` — 仅测试修改的包
+- `make lint` — Ruff 检查
+- 覆盖率门禁: 70%
 
-## 入口文档
+## 已归档 (P28-W2 ~ P31-W0)
 
-| 受众 | 文档 |
-|------|------|
-| Claude Code | `CLAUDE.md` |
-| 其他 Agent | 本文件 |
-| 包配置 | `packages/*/pyproject.toml` |
-| 测试运行 | `make test` / `make test-fast` |
+| 包 | 去向 |
+|----|------|
+| agora | → `projects/agora/` (I0 MCP Hub) |
+| metaos | → `projects/metaos/` (L2 编排引擎) |
+| ecos | → `projects/ecos/` (L0 SSB 协议) |
+| wksp | → `projects/cockpit/` (L3 统一入口) |
+| cron-service | → `projects/runtime/` (L1 调度器) |
+| agent-runtime | → `projects/runtime/` + `projects/cockpit/` |
+| kairon-assistant | → `projects/_archived/` |
+| kairon-voice | → `projects/_archived/` |
+| kaironcloud-billing | → `projects/_archived/` |
