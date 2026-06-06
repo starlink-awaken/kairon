@@ -31,8 +31,8 @@ llm-gateway list
 # Generate from prompt
 llm-gateway generate "What is the capital of France?"
 
-# Generate with specific model
-llm-gateway generate --model deepseek-chat "Explain quantum computing"
+# Generate with specific model (model depends on available providers)
+llm-gateway generate --model llama3.2 "Explain quantum computing"
 ```
 
 ### MCP (Model Context Protocol)
@@ -100,6 +100,13 @@ User → API (CLI / MCP / HTTP / Python)
      Provider implementations (Ollama, OpenAI, Anthropic, ...)
          ↓
      LLM API
+```
+
+## Running Tests
+
+```bash
+pip install pytest
+pytest tests/ -v
 ```
 
 ## License
