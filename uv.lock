@@ -31,6 +31,7 @@ members = [
     "iris",
     "kairon",
     "kairon-lib-events",
+    "kairon-observability",
     "kairon-plugin-sdk",
     "kairon-utils",
     "kos",
@@ -3008,6 +3009,21 @@ dev = [{ name = "mypy", specifier = ">=2.1.0" }]
 name = "kairon-lib-events"
 version = "0.4.0"
 source = { editable = "packages/kairon-lib-events" }
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.4.2" }]
+
+[[package]]
+name = "kairon-observability"
+version = "0.4.0"
+source = { editable = "packages/kairon-observability" }
 
 [package.dev-dependencies]
 dev = [
@@ -7327,6 +7343,7 @@ version = "0.4.0"
 source = { editable = "packages/shared-lib" }
 dependencies = [
     { name = "kairon-lib-events" },
+    { name = "kairon-observability" },
     { name = "kairon-plugin-sdk" },
     { name = "kairon-utils" },
 ]
@@ -7340,6 +7357,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "kairon-lib-events", editable = "packages/kairon-lib-events" },
+    { name = "kairon-observability", editable = "packages/kairon-observability" },
     { name = "kairon-plugin-sdk", editable = "packages/kairon-plugin-sdk" },
     { name = "kairon-utils", editable = "packages/kairon-utils" },
 ]

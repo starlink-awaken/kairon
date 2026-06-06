@@ -50,9 +50,10 @@ import json
 import time
 from datetime import UTC, datetime
 
+from kairon_observability.monitoring_metrics import HarvestMetrics, MetricsCollector
+
 from kairon_lib.extractors.base import StructuredKnowledge
 from kairon_lib.extractors.html_extractor import HtmlContentExtractor
-from kairon_lib.monitoring.metrics import HarvestMetrics, MetricsCollector
 from kairon_lib.orchestrator import HarvestOrchestrator
 from kairon_lib.quality.gate import QualityGate
 from kairon_lib.sources.connectors import RawContent
