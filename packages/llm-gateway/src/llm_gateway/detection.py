@@ -94,18 +94,18 @@ def create_provider(provider_type: str, **kwargs: Any) -> LLMProvider | None:
 
     Returns
     -------
-    An instance or ``None`` if the provider type is unknown or its
-    dependencies cannot be imported.
+    An LLMProvider instance. Returns ``NoneProvider`` if the provider
+    type is unknown or its dependencies cannot be imported.
     """
     cls = _import_provider_class(provider_type)
     if cls is None:
         _log.warning("Unknown provider type: %s", provider_type)
-        return None
+        return NoneProvider()
     try:
         return cls(**kwargs)  # type: ignore[arg-type]
     except Exception as exc:
         _log.warning("Failed to instantiate provider %s: %s", provider_type, exc)
-        return None
+        return NoneProvider()
 
 
 def detect_backends() -> list[LLMProvider]:
