@@ -1,6 +1,6 @@
 # AGENTS.md — kairon
 
-> Knowledge & Research Operating Stack: 23 包 Python monorepo（以当前 checkout 为准；P28-W2 已归档 2 包；P30-W1 拆出 wksp → projects/cockpit/）
+> Knowledge & Research Operating Stack: 30 包 Python monorepo（2026-06-06 shared-lib 拆出 5 子包）
 
 如果你不是 Claude Code，从这里开始。Claude Code 会自动读取 `CLAUDE.md`。
 
@@ -14,15 +14,16 @@ make lint           # Ruff 检查
 
 ## 项目概览
 
-kairon 是一个 25 包的 Python monorepo，托管在 `projects/kairon/`。
+kairon 是一个 30 包的 Python monorepo，托管在 `projects/kairon/`。
 包间依赖通过 uv workspace 管理（详见 `pyproject.toml` `[tool.uv.workspace]`）。
 **`core-models` 是整个 monorepo 的依赖基座**，当前 checkout 中 8 个活跃包直接依赖它。
 
-5 大分组：
+6 大分组：
+- **L0 基础** — kairon-lib-events, kairon-utils, kairon-plugin-sdk, kairon-observability, kairon-pipeline（2026-06-06 从 shared-lib 拆出）
 - **L1 知识工程** — eidos, ontoderive, kos, minerva, sophia, iris, ssot, forge, codeanalyze, kronos, metaos, cron-service
 - **L2 集成** — sharedbrain-bridge, llm-gateway
 - **L3 Agent** — agent-runtime, agora, llm-gateway
-- **Infra** — shared-lib, core-models, engine-core, ecos
+- **Infra** — shared-lib, core-models, engine-core
 - **业务支撑** — kaironcloud-billing, symphony-protocol
 - **P28-W2 已归档** — kairon-assistant, kairon-voice（2026-06-05 移入 `projects/_archived/`）
 

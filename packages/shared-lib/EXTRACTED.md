@@ -5,6 +5,18 @@
 **Target**: kairon `packages/shared-lib/src/kairon_lib/`
 **Tests**: kairon `packages/shared-lib/tests/`
 
+## 2026-06-06 Update: Sub-package Extraction
+
+以下模块已从 shared-lib 拆分为独立包（参 shared-lib/README.md）：
+
+| Phase | 新包 | 模块 |
+|-------|------|------|
+| 1 | kairon-lib-events | events |
+| 2 | kairon-utils | utils + errors |
+| 3 | kairon-plugin-sdk | plugin_sdk |
+| 4 | kairon-observability | observability + monitoring |
+| 5 | kairon-pipeline | sources + extractors + quality + integration |
+
 ---
 
 ## Extraction Summary

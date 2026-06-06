@@ -1,6 +1,6 @@
 # CLAUDE.md — kairon
 
-> 知识工程与研究栈 · 20 包 Python monorepo（治理中，原 31 包名册中的 13 包已拆出/归档：6 包早期 + kairon-assistant/kairon-voice 于 P28-W2 + kaironcloud-billing 于 P28-W6 + metaos/cron-service/wksp 于 P30 拆出 + ecos 于 P31-W0 拆出）
+> 知识工程与研究栈 · 30 包 Python monorepo（2026-06-06 从 shared-lib 拆出 5 个子包）
 > 根工作区文档：`../CLAUDE.md`（全局）、`../AGENTS.md`（开发指南）、`../LAYER-INDEX.md`（架构分层）
 
 ---
@@ -22,7 +22,17 @@ make lint
 make format
 ```
 
-## 包结构（20 包）
+## 包结构（30 包）
+
+### L0 — 基础依赖（5 包，2026-06-06 从 shared-lib 拆出）
+
+| 包 | 路径 | 说明 |
+|----|------|------|
+| kairon-lib-events | `packages/kairon-lib-events/` | 事件总线模型（BOSEvent, EventBusProtocol） |
+| kairon-utils | `packages/kairon-utils/` | 通用工具库（日志/重试/限流/错误分类/SQLite） |
+| kairon-plugin-sdk | `packages/kairon-plugin-sdk/` | 插件 SDK（BosPlugin, PluginContext） |
+| kairon-observability | `packages/kairon-observability/` | 可观测性套件（指标/告警/异常检测/仪表板/SLO） |
+| kairon-pipeline | `packages/kairon-pipeline/` | D-Harvest 数据管道（数据源/提取器/质量门/集成） |
 
 ### L1 — 知识工程核心（10 包）
 
@@ -63,7 +73,7 @@ make format
 
 | 包 | 路径 | 说明 |
 |----|------|------|
-| shared-lib | `packages/shared-lib/` | 共享工具库（273 文件，26 测试） |
+| shared-lib | `packages/shared-lib/` | 共享工具库（core/governance/cognitive/audit，已拆出 5 子包至 L0） |
 | core-models | `packages/core-models/` | 核心数据模型 |
 | engine-core | `packages/engine-core/` | 引擎核心 |
 | observability | `packages/observability/` | 可观测性 |
@@ -134,7 +144,7 @@ minerva, ontoderive, sharedbrain-bridge, sharedbrain-standalone
 |------|-----|------|
 | 🟢 成熟 | agora (v2.0.0), minerva (v0.11.0), forge (v1.3.0), ssot (v1.0.0) | 独立版本号，测试完备 |
 | 🟡 发展中 | kos (v2.0.0), ontoderive (v3.6.4), sophia (v0.2.1) | 活跃迭代 |
-| 🔴 早期 | core-models (v0.1.0), shared-lib (v0.1.0) | 快速变化，接口不稳定 |
+| 🔴 早期 | core-models (v0.1.0), shared-lib (v0.4.0，已拆出 5 子包） |
 | ⚪ 待评估 | kairon-assistant, kairon-voice | 来自外部集成，需验证 |
 
 ### LLM 统一
