@@ -202,8 +202,27 @@ def serve() -> int:
 
 __all__ = ["serve", "_call_action", "_package_info", "_DISPATCH"]
 
+def main() -> int:
+    """CLI + stdio serve 统一入口."""
+    import sys
+    from pathlib import Path
+
+    # 非 serve 命令（如 toolforge / derive / check 等）委托给完整 CLI
+    if len(sys.argv) > 1 and sys.argv[1] != "serve":
+        # 确保 engine 包在 path 中 (__main__.py 在 src/ontoderive/, engine 在项目根)
+        _pkg_root = Path(__file__).resolve().parent.parent.parent
+        if str(_pkg_root) not in sys.path:
+            sys.path.insert(0, str(_pkg_root))
+        from engine.cli import main as _cli_main  # type: ignore[import-not-found]
+
+        _cli_main()
+        return 0
+    from kairon_utils.stdio_rpc import run_stdio_main
+
+    return run_stdio_main(serve)
+
+
 if __name__ == "__main__":
     import sys
 
-    from kairon_utils.stdio_rpc import run_stdio_main
-    sys.exit(run_stdio_main(serve))
+    sys.exit(main())
