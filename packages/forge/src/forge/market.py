@@ -16,21 +16,28 @@ Forge Market — GitHub 工具市场安装器
 from __future__ import annotations
 
 import json
-import os
 import shutil
 import subprocess
 import sys
-import tempfile
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from forge.forge_config import REGISTRY as TOOLS_REGISTRY, ASSET_REGISTRY, FORGE_ROOT, SCRIPTS_DIR
+from forge.forge_config import FORGE_ROOT
+from forge.forge_config import REGISTRY as TOOLS_REGISTRY
 
 # ── 默认安装目标 ──
 # 注意: ~/SharedWork → /Volumes/SharedWork (可能未挂载)
 # 使用 ~/.local/share/forge/market/ 作为本地安装目标
 INSTALL_DIR = Path.home() / ".local" / "share" / "forge" / "market"
+
+# ── Capabilities root — patchable for tests ──
+# Mirrors agora.mcp.forge_loader.CAPS_ROOT so tests can monkeypatch this module.
+try:
+    from agora.mcp.forge_loader import CAPS_ROOT, MARKET_REGISTRY
+except ImportError:
+    CAPS_ROOT = Path.home() / ".omo" / "capabilities"
+    MARKET_REGISTRY = CAPS_ROOT / "market.json"
 
 
 def _load_tools_registry() -> dict:
@@ -61,7 +68,7 @@ def _github_url_to_name(url: str) -> str:
 
 def _validate_repo_structure(repo_path: Path) -> list[str]:
     """Validate that the cloned repo has a recognizable structure.
-    
+
     Returns list of issues (empty = valid).
     """
     issues = []
@@ -347,22 +354,131 @@ def cli(args: list[str]) -> int:
     return 0
 
 
+# ── Local tool management (CAPS_ROOT / market.json) ─────────────────
+# These complement the git-based install() with a local-path install workflow.
+# CAPS_ROOT and MARKET_REGISTRY are module-level and patchable by tests.
+
+def _load_market() -> list[dict]:
+    """Load market.json, returning list of tool entries."""
+    if MARKET_REGISTRY.exists():
+        try:
+            return json.loads(MARKET_REGISTRY.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            return []
+    return []
+
+
+def _save_market(tools: list[dict]) -> None:
+    """Save tool list to market.json."""
+    MARKET_REGISTRY.parent.mkdir(parents=True, exist_ok=True)
+    MARKET_REGISTRY.write_text(json.dumps(tools, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def install_local_tool(
+    name: str,
+    source_path: str,
+    bos_uri: str = "",
+    description: str = "",
+) -> dict:
+    """Install a tool from a local path into CAPS_ROOT/market.json.
+
+    Returns:
+        dict with 'installed'/'error' keys.
+    """
+    # Validate name
+    valid, err = validate_tool_name(name)
+    if not valid:
+        return {"error": err}
+
+    src = Path(source_path)
+    if not src.exists():
+        return {"error": "source_not_found", "path": source_path}
+
+    # Install target
+    target = CAPS_ROOT / name
+    target.mkdir(parents=True, exist_ok=True)
+
+    if src.is_dir():
+        for item in src.iterdir():
+            dest = target / item.name
+            if item.is_dir():
+                shutil.copytree(item, dest, dirs_exist_ok=True)
+            else:
+                shutil.copy2(item, dest)
+    else:
+        shutil.copy2(src, target / src.name)
+
+    # Update market.json (upsert)
+    tools = _load_market()
+    existing = next((t for t in tools if t.get("name") == name), None)
+    entry = {
+        "name": name,
+        "path": str(target),
+        "bos_uri": bos_uri,
+        "description": description,
+        "installed_at": datetime.now().isoformat(),
+    }
+    if existing:
+        tools = [entry if t.get("name") == name else t for t in tools]
+    else:
+        tools.append(entry)
+    _save_market(tools)
+
+    return {"installed": name, "path": str(target), "bos_uri": bos_uri}
+
+
+def remove_tool(name: str) -> bool:
+    """Remove a tool from CAPS_ROOT and market.json.
+
+    Returns True if found and removed, False if not found.
+    """
+    tools = _load_market()
+    before = len(tools)
+    tools = [t for t in tools if t.get("name") != name]
+    if len(tools) == before:
+        return False
+    _save_market(tools)
+
+    target = CAPS_ROOT / name
+    if target.exists():
+        shutil.rmtree(target, ignore_errors=True)
+
+    return True
+
+
+def list_tools() -> list[dict]:
+    """List all tools in market.json."""
+    return _load_market()
+
+
 # ── Stub exports for backward-compat tests (P33-W5 migration) ──
 # validate_bos_uri / validate_tool_name / MARKET_REGISTRY migrated to
 # agora.ssrf_guard + agora.core.service_base + agora.mcp.bos_resolver.
 
-def validate_bos_uri(uri: str) -> bool:
-    """Validate BOS URI format. Delegates to ssrf_guard if available."""
-    try:
-        from agora.ssrf_guard import validate_external_url
-        validate_external_url(uri)
-        return True
-    except (ImportError, ValueError):
-        return uri.startswith("bos://") or uri.startswith("http")
+def validate_bos_uri(uri: str) -> tuple[bool, str]:
+    """Validate BOS URI format. Returns (valid, error_message)."""
+    if not uri.startswith("bos://"):
+        return False, "invalid_bos_uri: must start with bos://"
+    parts = uri[6:].split("/")
+    if len(parts) < 2 or not parts[0]:
+        return False, "invalid_bos_uri: missing domain or path"
+    allowed_domains = {"memory", "omo", "analysis", "persona", "forge"}
+    domain = parts[0].lower()
+    if domain not in allowed_domains:
+        return False, f"invalid_bos_uri: unknown domain '{parts[0]}'"
+    return True, ""
 
-def validate_tool_name(name: str) -> bool:
-    """Validate tool name is alphanumeric with hyphens/underscores."""
-    return bool(name) and all(c.isalnum() or c in "-_" for c in name)
+
+def validate_tool_name(name: str) -> tuple[bool, str]:
+    """Validate tool name is kebab-case (lowercase alphanumeric with hyphens).
+    Returns (valid, error_message).
+    """
+    import re
+    if not name:
+        return False, "invalid_tool_name: empty name"
+    if not re.match(r'^[a-z0-9]+(-[a-z0-9]+)*$', name):
+        return False, f"invalid_tool_name: '{name}' must be kebab-case (lowercase, hyphens only, no underscores)"
+    return True, ""
 
 try:
     from agora.mcp.bos_resolver import POC_SERVICES
