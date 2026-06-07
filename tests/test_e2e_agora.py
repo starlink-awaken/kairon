@@ -1,5 +1,9 @@
 """Agora E2E tests — MCP tool infrastructure."""
 
+import pytest
+
+pytest.importorskip("agora", reason="requires agora package (cross-project dependency)")
+
 
 class TestAgora:
     """Test agora bootstrap and service discovery."""

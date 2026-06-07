@@ -23,8 +23,8 @@ def test_core_models():
 
 
 def test_llm_gateway():
-    from llm_gateway.provider import MockLLMProvider
-    assert MockLLMProvider().provider_name == "mock"
+    m = _import("llm_gateway.provider")
+    assert m.MockLLMProvider().provider_name == "mock"
 
 
 def test_shared_lib():

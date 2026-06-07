@@ -13,6 +13,13 @@ Chains:
 
 from __future__ import annotations
 
+import pytest
+
+# 这些测试依赖 workspace 中其他项目的包; 不在 kairon 标准测试路径中运行
+pytest.importorskip("agora", reason="requires agora package (cross-project dependency)")
+pytest.importorskip("engine_core", reason="requires engine_core package (not yet in kairon)")
+pytest.importorskip("llm_gateway", reason="requires llm_gateway package (not yet in kairon)")
+
 # ═══════════════════════════════════════════════════════════════════
 # Chain 1: Agora → Agent-Runtime
 # ═══════════════════════════════════════════════════════════════════

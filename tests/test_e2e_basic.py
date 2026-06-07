@@ -1,5 +1,9 @@
 """Basic E2E integration tests — verify core system wiring."""
 
+import pytest
+
+pytest.importorskip("pontus", reason="requires pontus package (not yet in kairon)")
+
 
 class TestCoreImports:
     """Verify all core packages can be imported without errors."""
@@ -42,9 +46,11 @@ class TestAgentRuntime:
     """Test agent-runtime basic types and creation."""
 
     def test_task_status(self):
-        assert TaskStatus.PENDING is not None  # noqa: F821
-        assert TaskStatus.RUNNING is not None  # noqa: F821
+        from agent_runtime.types import TaskStatus  # type: ignore[import-not-found]
+        assert TaskStatus.PENDING is not None
+        assert TaskStatus.RUNNING is not None
 
     def test_task_def(self):
-        t = TaskDef(id="test-1", action="test", agent_id="worker-1")  # noqa: F821
+        from agent_runtime.types import TaskDef  # type: ignore[import-not-found]
+        t = TaskDef(id="test-1", action="test", agent_id="worker-1")
         assert t.id == "test-1"
