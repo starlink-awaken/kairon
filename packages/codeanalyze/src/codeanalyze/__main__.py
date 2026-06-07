@@ -156,15 +156,16 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
 
 
 _DISPATCH = {
-    "search": do_search,
-    "ingest": do_ingest,
-    "validate": do_validate,
-    "register": do_register,
-    "list": do_list,
-    "run": do_run,
-    "get": do_get,
-    "sync": do_sync,
-    # 通用 fallback: 未知 action 试 do_default
+    # P60-W0b: 8 个 do_<action> 全部 delegate 到 do_default 真业务
+    # (P58-W0 do_default.py 实现的 16 包各自真函数已覆盖 8 个 action)
+    "search": lambda args: do_default({"action": "search", **args}),
+    "ingest": lambda args: do_default({"action": "ingest", **args}),
+    "validate": lambda args: do_default({"action": "validate", **args}),
+    "register": lambda args: do_default({"action": "register", **args}),
+    "list": lambda args: do_default({"action": "list", **args}),
+    "run": lambda args: do_default({"action": "run", **args}),
+    "get": lambda args: do_default({"action": "get", **args}),
+    "sync": lambda args: do_default({"action": "sync", **args}),
 }
 
 
