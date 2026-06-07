@@ -19,6 +19,8 @@ jobs:
         run: uv sync
       - name: Lint
         run: uv run ruff check packages/
+      - name: Contract Gatekeeper
+        run: python scripts/contract_gatekeeper.py packages/
 
   test-codeanalyze:
     runs-on: ubuntu-latest
