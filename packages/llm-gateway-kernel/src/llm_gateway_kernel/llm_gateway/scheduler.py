@@ -39,6 +39,19 @@ class ModelScheduler:
         self._load_map: dict[str, LoadInfo] = {}
         self._refresh_task: asyncio.Task[None] | None = None
 
+    @classmethod
+    def from_m1_dir(cls, m1_dir: str, config: SchedulerConfig | None = None) -> ModelScheduler:
+        """Create a ModelScheduler initialized with SSOT models from an M1 directory.
+
+        Note: The caller still needs to `await registry.refresh()` or `start_auto_refresh()`
+        to discover the models.
+        """
+        from .ssot_loader import load_ssot_models
+
+        registry = ModelRegistry()
+        load_ssot_models(registry, m1_dir)
+        return cls(registry, config)
+
     async def select_model(
         self,
         request: ModelRequest,
@@ -57,10 +70,7 @@ class ModelScheduler:
         merged_policy = policy or ModelRoutePolicy(strategy=self._config.default_policy)
 
         candidates = [
-            m
-            for m in all_models
-            if m.is_available
-            and all(c in m.capabilities for c in request.required_capabilities)
+            m for m in all_models if m.is_available and all(c in m.capabilities for c in request.required_capabilities)
         ]
         if not candidates:
             return None

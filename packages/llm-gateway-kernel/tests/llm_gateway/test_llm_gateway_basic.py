@@ -17,7 +17,7 @@ from llm_gateway_kernel.llm_gateway import (
     create_provider,
     detect_backends,
 )
-from llm_gateway_kernel.llm_gateway.circuit_breaker import CircuitBreakerConfig
+from llm_gateway_kernel.llm_gateway.circuit_breaker import CircuitBreaker, CircuitBreakerConfig
 from llm_gateway_kernel.llm_gateway.policies import list_policies, register_policy, score_models
 from llm_gateway_kernel.llm_gateway.registry import ModelRegistry
 from llm_gateway_kernel.llm_gateway.retry import RetryConfig
@@ -73,7 +73,7 @@ class TestLlmGatewayBasic:
 
     def test_circuit_breaker_defaults(self):
         """CircuitBreaker with default config."""
-        cb = CircuitBreaker(name="test")  # noqa: F821
+        cb = CircuitBreaker(name="test")
         assert cb.state == "closed"
         assert cb.name == "test"
 

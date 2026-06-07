@@ -16,6 +16,7 @@ class CircuitBreakerConfig:
     failure_threshold: int = 3
     reset_timeout_ms: int = 30_000
     half_open_max_requests: int = 1
+
     def __init__(
         self,
         failure_threshold: int = 3,

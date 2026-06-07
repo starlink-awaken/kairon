@@ -97,10 +97,7 @@ class OnDemandBinding(BindingStrategy):
         candidates = list(available_workers)
 
         if self.prefer_idle:
-            idle = [
-                w for w in candidates
-                if hasattr(w, "status") and str(w.status).lower() == "workerstatus.idle"
-            ]
+            idle = [w for w in candidates if hasattr(w, "status") and str(w.status).lower() == "workerstatus.idle"]
             if idle:
                 candidates = idle
 

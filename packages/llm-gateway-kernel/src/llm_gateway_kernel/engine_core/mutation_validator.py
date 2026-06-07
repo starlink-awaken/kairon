@@ -43,6 +43,7 @@ Constraint: "[!!] MUTATION_SAFEGUARD"
 
 _log = logging.getLogger(__name__)
 
+
 class MutationValidator:
     def __init__(self, root_dir: str | Path | None = None) -> None:
         super().__init__()
@@ -97,6 +98,7 @@ class MutationValidator:
                 return False, result.stderr
         except (subprocess.CalledProcessError, OSError) as e:
             return False, str(e)
+
 
 _log = logging.getLogger(__name__)
 

@@ -18,11 +18,7 @@ from typing import Any
 import pytest
 
 EXEC_SCHEDULER_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "src"
-    / "llm_gateway_kernel"
-    / "engine_core"
-    / "execution_scheduler.py"
+    Path(__file__).resolve().parents[2] / "src" / "llm_gateway_kernel" / "engine_core" / "execution_scheduler.py"
 )
 
 SOURCE_TEXT = EXEC_SCHEDULER_PATH.read_text(encoding="utf-8")
@@ -104,16 +100,8 @@ class TestExecutionSchedulerImport:
     @pytest.fixture(scope="class")
     def scheduler_module(self) -> Any:
         # Ensure _compat is loaded first
-        compat_path = (
-            Path(__file__).resolve().parents[2]
-            / "src"
-            / "llm_gateway_kernel"
-            / "engine_core"
-            / "_compat.py"
-        )
-        spec_c = importlib.util.spec_from_file_location(
-            "engine_core._compat", str(compat_path)
-        )
+        compat_path = Path(__file__).resolve().parents[2] / "src" / "llm_gateway_kernel" / "engine_core" / "_compat.py"
+        spec_c = importlib.util.spec_from_file_location("engine_core._compat", str(compat_path))
         if spec_c and spec_c.loader:
             compat_mod = importlib.util.module_from_spec(spec_c)
             sys.modules["engine_core._compat"] = compat_mod
@@ -132,9 +120,7 @@ class TestExecutionSchedulerImport:
 
         # The module doesn't import a base class directly - let's see if it
         # inherits from one defined in the module itself
-        spec = importlib.util.spec_from_file_location(
-            "engine_core.execution_scheduler", str(EXEC_SCHEDULER_PATH)
-        )
+        spec = importlib.util.spec_from_file_location("engine_core.execution_scheduler", str(EXEC_SCHEDULER_PATH))
         if spec is None:
             pytest.skip("Could not create module spec for execution_scheduler.py")
         mod = importlib.util.module_from_spec(spec)

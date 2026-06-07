@@ -39,6 +39,7 @@ class TaskNode:
     status: str = "pending"
     metadata: dict = field(default_factory=dict)
 
+
 class TaskDAG:
     """Directed acyclic graph for task dependency tracking and scheduling.
 

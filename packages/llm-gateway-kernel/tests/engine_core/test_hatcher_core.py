@@ -18,19 +18,13 @@ from typing import Any
 import pytest
 
 HATCHER_CORE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "src"
-    / "llm_gateway_kernel"
-    / "engine_core"
-    / "hatcher_core.py"
+    Path(__file__).resolve().parents[2] / "src" / "llm_gateway_kernel" / "engine_core" / "hatcher_core.py"
 )
 
 
 def test_source_file_exists():
     """The source file must exist on disk."""
-    assert HATCHER_CORE_PATH.is_file(), (
-        f"hatcher_core.py not found at {HATCHER_CORE_PATH}"
-    )
+    assert HATCHER_CORE_PATH.is_file(), f"hatcher_core.py not found at {HATCHER_CORE_PATH}"
 
 
 # Parse method signatures directly from the source file
@@ -115,9 +109,7 @@ class TestHatcherCoreImports:
             if mod_name not in sys.modules:
                 sys.modules[mod_name] = type(sys)(mod_name)
 
-        spec = importlib.util.spec_from_file_location(
-            "engine_core.hatcher_core", str(HATCHER_CORE_PATH)
-        )
+        spec = importlib.util.spec_from_file_location("engine_core.hatcher_core", str(HATCHER_CORE_PATH))
         if spec is None:
             pytest.skip("Could not create module spec for hatcher_core.py")
         mod = importlib.util.module_from_spec(spec)

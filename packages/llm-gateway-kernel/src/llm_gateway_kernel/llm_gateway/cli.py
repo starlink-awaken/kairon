@@ -8,6 +8,7 @@ Usage:
     llm-gateway mcp                      Start MCP server
     llm-gateway serve --port 9090        Start HTTP server
 """
+
 from __future__ import annotations
 
 import argparse
@@ -56,6 +57,7 @@ def cmd_generate(prompt: str, model: str | None, provider_name: str | None) -> i
 
 def cmd_mcp() -> int:
     from .mcp_server import main as mcp_main
+
     mcp_main()
     return 0
 
@@ -63,6 +65,7 @@ def cmd_mcp() -> int:
 def cmd_serve(port: int) -> int:
     """Start a simple HTTP server for LLM generation."""
     from .http_server import serve
+
     serve(port)
     return 0
 

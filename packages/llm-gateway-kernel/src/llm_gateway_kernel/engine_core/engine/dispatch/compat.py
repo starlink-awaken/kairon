@@ -216,4 +216,3 @@ class ExecutionCompatHelper:
             data = [{"worker_id": "unknown", "state": "ACTIVE", "eu_budget": 20.0}]
 
         return {"status": "success", "data": data}
-

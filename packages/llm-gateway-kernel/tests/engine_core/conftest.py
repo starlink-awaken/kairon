@@ -3,6 +3,7 @@
 Provides load_module() to import engine-core modules directly,
 bypassing the broken __init__.py import chain (kairon_lib not available).
 """
+
 from __future__ import annotations
 
 import importlib.util
@@ -21,13 +22,7 @@ def load_module(module_name: str, file_name: str) -> Any:
     Returns:
         Loaded module object.
     """
-    mod_path = (
-        Path(__file__).resolve().parents[2]
-        / "src"
-        / "llm_gateway_kernel"
-        / "engine_core"
-        / file_name
-    )
+    mod_path = Path(__file__).resolve().parents[2] / "src" / "llm_gateway_kernel" / "engine_core" / file_name
     spec = importlib.util.spec_from_file_location(module_name, str(mod_path))
     if spec is None:
         raise ImportError(f"Could not find spec for {module_name} at {mod_path}")

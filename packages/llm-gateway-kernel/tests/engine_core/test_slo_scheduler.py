@@ -14,11 +14,7 @@ from typing import Any
 import pytest
 
 SLO_SCHEDULER_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "src"
-    / "llm_gateway_kernel"
-    / "engine_core"
-    / "slo_scheduler.py"
+    Path(__file__).resolve().parents[2] / "src" / "llm_gateway_kernel" / "engine_core" / "slo_scheduler.py"
 )
 
 SOURCE_TEXT = SLO_SCHEDULER_PATH.read_text(encoding="utf-8")
@@ -33,9 +29,7 @@ class TestTaskSLO:
 
     @pytest.fixture(scope="class")
     def module(self) -> Any:
-        spec = importlib.util.spec_from_file_location(
-            "engine_core.slo_scheduler", str(SLO_SCHEDULER_PATH)
-        )
+        spec = importlib.util.spec_from_file_location("engine_core.slo_scheduler", str(SLO_SCHEDULER_PATH))
         if spec is None:
             pytest.skip("Could not create module spec for slo_scheduler.py")
         mod = importlib.util.module_from_spec(spec)
@@ -63,6 +57,7 @@ class TestTaskSLO:
     def test_is_dataclass(self, module: Any):
         slo = module.TaskSLO(task_id="t1", deadline_ms=1000, priority=2)
         import dataclasses
+
         assert dataclasses.is_dataclass(slo)
 
     def test_is_distinct_type(self, module: Any):
@@ -78,9 +73,7 @@ class TestScheduleResult:
 
     @pytest.fixture(scope="class")
     def module(self) -> Any:
-        spec = importlib.util.spec_from_file_location(
-            "engine_core.slo_scheduler", str(SLO_SCHEDULER_PATH)
-        )
+        spec = importlib.util.spec_from_file_location("engine_core.slo_scheduler", str(SLO_SCHEDULER_PATH))
         if spec is None:
             pytest.skip("Could not create module spec for slo_scheduler.py")
         mod = importlib.util.module_from_spec(spec)
@@ -91,18 +84,14 @@ class TestScheduleResult:
         return mod
 
     def test_can_instantiate(self, module: Any):
-        result = module.ScheduleResult(
-            task_id="t1", assigned_at=100.0, estimated_completion=150.0, slo_met=True
-        )
+        result = module.ScheduleResult(task_id="t1", assigned_at=100.0, estimated_completion=150.0, slo_met=True)
         assert result.task_id == "t1"
         assert result.assigned_at == 100.0
         assert result.estimated_completion == 150.0
         assert result.slo_met is True
 
     def test_is_distinct_type(self, module: Any):
-        result = module.ScheduleResult(
-            task_id="t1", assigned_at=100.0, estimated_completion=150.0, slo_met=True
-        )
+        result = module.ScheduleResult(task_id="t1", assigned_at=100.0, estimated_completion=150.0, slo_met=True)
         assert type(result).__name__ == "ScheduleResult"
 
     def test_module_identity(self, module: Any):
@@ -114,9 +103,7 @@ class TestSLOScheduler:
 
     @pytest.fixture(scope="class")
     def module(self) -> Any:
-        spec = importlib.util.spec_from_file_location(
-            "engine_core.slo_scheduler", str(SLO_SCHEDULER_PATH)
-        )
+        spec = importlib.util.spec_from_file_location("engine_core.slo_scheduler", str(SLO_SCHEDULER_PATH))
         if spec is None:
             pytest.skip("Could not create module spec for slo_scheduler.py")
         mod = importlib.util.module_from_spec(spec)

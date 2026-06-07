@@ -14,11 +14,7 @@ from typing import Any
 import pytest
 
 LIFECYCLE_EVENTS_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "src"
-    / "llm_gateway_kernel"
-    / "engine_core"
-    / "lifecycle_events.py"
+    Path(__file__).resolve().parents[2] / "src" / "llm_gateway_kernel" / "engine_core" / "lifecycle_events.py"
 )
 
 SOURCE_TEXT = LIFECYCLE_EVENTS_PATH.read_text(encoding="utf-8")
@@ -50,9 +46,7 @@ class TestSwarmEventEmitterImportAndInstantiate:
 
     @pytest.fixture(scope="class")
     def emitter_module(self) -> Any:
-        spec = importlib.util.spec_from_file_location(
-            "engine_core.lifecycle_events", str(LIFECYCLE_EVENTS_PATH)
-        )
+        spec = importlib.util.spec_from_file_location("engine_core.lifecycle_events", str(LIFECYCLE_EVENTS_PATH))
         if spec is None:
             pytest.skip("Could not create module spec for lifecycle_events.py")
         mod = importlib.util.module_from_spec(spec)

@@ -49,11 +49,14 @@ except (ImportError, ModuleNotFoundError):
         @classmethod
         def get_instance(cls) -> InferenceOracle:
             raise ImportError("nucleus.Z_Microkernel.infrastructure.oracle.inference_oracle is unavailable")
+
+
 _log = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Enums & Data Classes
 # ---------------------------------------------------------------------------
+
 
 class ComplexityLevel(Enum):
     """Intent complexity tier used to drive execution routing."""
@@ -61,6 +64,7 @@ class ComplexityLevel(Enum):
     SIMPLE = "SIMPLE"
     MODERATE = "MODERATE"
     COMPLEX = "COMPLEX"
+
 
 @dataclass
 class ClassificationResult:
@@ -74,6 +78,7 @@ class ClassificationResult:
 
     def __str__(self) -> str:
         return f"{self.level.value} (confidence: {self.confidence:.2f}) — {self.rationale}"
+
 
 # ---------------------------------------------------------------------------
 # Heuristic Rule Sets (Enhanced v1.1)
@@ -225,6 +230,7 @@ _DEFAULT_ROLES: dict[ComplexityLevel, list[str]] = {
 # ---------------------------------------------------------------------------
 # IntentClassifier
 # ---------------------------------------------------------------------------
+
 
 class IntentClassifier:
     """

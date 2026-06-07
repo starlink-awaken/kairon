@@ -26,10 +26,12 @@ class ContextInjector:
         env = dict(os.environ)
         env["BOS_PERSONA"] = persona
         env["BOS_SANDBOX"] = sandbox_path
-        env["BOS_WORKER_CONTEXT"] = json.dumps({
-            "persona_path": os.path.join(sandbox_path, "persona.md"),
-            "workspace_path": sandbox_path,
-        })
+        env["BOS_WORKER_CONTEXT"] = json.dumps(
+            {
+                "persona_path": os.path.join(sandbox_path, "persona.md"),
+                "workspace_path": sandbox_path,
+            }
+        )
         return env
 
     @staticmethod

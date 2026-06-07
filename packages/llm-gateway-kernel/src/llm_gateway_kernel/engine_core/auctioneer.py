@@ -40,9 +40,7 @@ class TaskAuctioneer:
         if not valid:
             return None
 
-        strategy_fn = getattr(
-            self, f"_strategy_{self.config.strategy}", self._strategy_highest_bid
-        )
+        strategy_fn = getattr(self, f"_strategy_{self.config.strategy}", self._strategy_highest_bid)
         return strategy_fn(valid)
 
     def _strategy_highest_bid(self, bids: list[dict[str, Any]]) -> dict[str, Any]:

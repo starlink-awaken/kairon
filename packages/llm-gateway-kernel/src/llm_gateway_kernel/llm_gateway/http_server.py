@@ -3,6 +3,7 @@
 Provides a lightweight HTTP server (stdlib only) that exposes
 :func:`detect_backends` and :func:`create_provider` as REST endpoints.
 """
+
 from __future__ import annotations
 
 import json

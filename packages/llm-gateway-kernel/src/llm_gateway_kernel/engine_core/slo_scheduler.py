@@ -38,6 +38,7 @@ class TaskSLO:
     priority: int
     preemptible: bool = False
 
+
 @dataclass
 class ScheduleResult:
     """Result of scheduling a task."""
@@ -46,6 +47,7 @@ class ScheduleResult:
     assigned_at: float
     estimated_completion: float
     slo_met: bool
+
 
 class SLOScheduler:
     """Scheduler that respects service-level objectives (deadline + priority).

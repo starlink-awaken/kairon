@@ -39,6 +39,7 @@ class SessionContext:
     parent_session: str | None = None
     tags: list[str] = field(default_factory=list)
 
+
 class SessionContextStore:
     """In-memory store for cross-session context with lineage tracking,
     snapshotting, and context compression.

@@ -34,6 +34,7 @@ Authority: organs/D-Execution/AGENTS.md
 
 _log = logging.getLogger(__name__)
 
+
 class MessageBroker:
     """
     In-memory message broker for role communication.

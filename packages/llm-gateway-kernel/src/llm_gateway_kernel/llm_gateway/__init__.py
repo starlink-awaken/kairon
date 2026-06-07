@@ -51,6 +51,7 @@ from .providers.gemini_provider import GeminiProvider
 from .providers.hitl_provider import HitlLLMProvider
 from .providers.ollama_provider import OllamaProvider
 from .providers.openai_provider import OpenAIProvider
+from .ssot_loader import load_ssot_models
 
 __version__ = "0.4.0"
 
@@ -66,6 +67,7 @@ __all__ = (  # noqa: RUF022
     "ToolResult",
     "create_provider",
     "detect_backends",
+    "load_ssot_models",
     # ── Concrete providers ──
     "AnthropicProvider",
     "DeepSeekProvider",

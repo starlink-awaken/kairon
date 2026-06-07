@@ -200,16 +200,18 @@ class TestNoneProvider:
 class TestDetection:
     def test_create_provider_known(self):
         from llm_gateway_kernel.llm_gateway.detection import create_provider
+        from llm_gateway_kernel.llm_gateway.provider import NoneProvider
 
         p = create_provider("mock")
-        # mock is not in the registry, so should return None
-        assert p is None
+        # mock is not in the registry, so should return NoneProvider
+        assert isinstance(p, NoneProvider)
 
     def test_create_provider_unknown(self):
         from llm_gateway_kernel.llm_gateway.detection import create_provider
+        from llm_gateway_kernel.llm_gateway.provider import NoneProvider
 
         p = create_provider("nonexistent")
-        assert p is None
+        assert isinstance(p, NoneProvider)
 
     def test_detect_backends_returns_list(self):
         from llm_gateway_kernel.llm_gateway.detection import detect_backends

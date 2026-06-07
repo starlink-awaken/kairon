@@ -41,6 +41,7 @@ def _managed_connection(conn: sqlite3.Connection) -> Generator[sqlite3.Connectio
     finally:
         conn.close()
 
+
 # =============================================================================
 # 0. 形式化摘要 ≝
 # =============================================================================
@@ -444,7 +445,9 @@ class PerceptionManager:
         """
         import hashlib
 
-        event_id = hashlib.md5(f"{event_type}_{time.time()}_{json.dumps(event_data)}".encode(), usedforsecurity=False).hexdigest()
+        event_id = hashlib.md5(
+            f"{event_type}_{time.time()}_{json.dumps(event_data)}".encode(), usedforsecurity=False
+        ).hexdigest()
 
         # 添加到事件队列
         event = {

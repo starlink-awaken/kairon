@@ -18,9 +18,7 @@ class RetryConfig:
     max_retries: int = 3
     base_delay_ms: float = 500.0
     max_delay_ms: float = 10_000.0
-    retryable_statuses: list[int] = field(
-        default_factory=lambda: [429, 500, 502, 503, 504]
-    )
+    retryable_statuses: list[int] = field(default_factory=lambda: [429, 500, 502, 503, 504])
     call_timeout_ms: float = 30_000.0
     total_timeout_ms: float = 120_000.0
 

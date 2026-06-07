@@ -18,11 +18,7 @@ from typing import Any
 import pytest
 
 COMPAT_LIFECYCLE_MANAGER_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "src"
-    / "llm_gateway_kernel"
-    / "engine_core"
-    / "lifecycle_manager.py"
+    Path(__file__).resolve().parents[2] / "src" / "llm_gateway_kernel" / "engine_core" / "lifecycle_manager.py"
 )
 
 IMPL_LIFECYCLE_MANAGER_PATH = (
@@ -47,11 +43,8 @@ def _find_class(name: str) -> ast.ClassDef:
 
 def _class_method_names(name: str) -> set[str]:
     node = _find_class(name)
-    return {
-        child.name
-        for child in node.body
-        if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef))
-    }
+    return {child.name for child in node.body if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef))}
+
 
 def test_source_file_exists():
     assert COMPAT_LIFECYCLE_MANAGER_PATH.is_file()
@@ -129,10 +122,10 @@ class TestSwarmLifecycleManagerDataClasses:
         assert _find_class("WorkerState").name == "WorkerState"
 
     def test_worker_state_values(self):
-        assert "HATCHING = \"HATCHING\"" in SOURCE_TEXT
-        assert "ACTIVE = \"ACTIVE\"" in SOURCE_TEXT
-        assert "STARVING = \"STARVING\"" in SOURCE_TEXT
-        assert "REAPED = \"REAPED\"" in SOURCE_TEXT
+        assert 'HATCHING = "HATCHING"' in SOURCE_TEXT
+        assert 'ACTIVE = "ACTIVE"' in SOURCE_TEXT
+        assert 'STARVING = "STARVING"' in SOURCE_TEXT
+        assert 'REAPED = "REAPED"' in SOURCE_TEXT
 
 
 class TestSwarmLifecycleManagerSubcomponents:
@@ -182,16 +175,8 @@ class TestSwarmLifecycleManagerImport:
     @pytest.fixture(scope="class")
     def lifecycle_module(self) -> Any:
         # Need _compat loaded first
-        compat_path = (
-            Path(__file__).resolve().parents[2]
-            / "src"
-            / "llm_gateway_kernel"
-            / "engine_core"
-            / "_compat.py"
-        )
-        spec_c = importlib.util.spec_from_file_location(
-            "engine_core._compat", str(compat_path)
-        )
+        compat_path = Path(__file__).resolve().parents[2] / "src" / "llm_gateway_kernel" / "engine_core" / "_compat.py"
+        spec_c = importlib.util.spec_from_file_location("engine_core._compat", str(compat_path))
         if spec_c and spec_c.loader:
             compat_mod = importlib.util.module_from_spec(spec_c)
             sys.modules["engine_core._compat"] = compat_mod

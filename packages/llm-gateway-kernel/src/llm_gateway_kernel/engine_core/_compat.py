@@ -19,6 +19,7 @@ _log = logging.getLogger(__name__)
 
 # ── Core Types ────────────────────────────────────────────────────────────
 
+
 class TaskType(StrEnum):
     """Task type classification. TODO: reconcile with real enum from SharedBrain."""
 
@@ -39,6 +40,7 @@ class TaskType(StrEnum):
     DEPLOYMENT = "DEPLOYMENT"
     UNKNOWN = "UNKNOWN"
 
+
 class WorkerState(StrEnum):
     """Worker lifecycle state."""
 
@@ -51,6 +53,7 @@ class WorkerState(StrEnum):
     TERMINATED = "TERMINATED"
     REAPED = "REAPED"
 
+
 class Priority(StrEnum):
     """Task priority level."""
 
@@ -58,6 +61,7 @@ class Priority(StrEnum):
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
     CRITICAL = "CRITICAL"
+
 
 class GovernanceAction(StrEnum):
     """Governance action type for lifecycle management."""
@@ -70,6 +74,7 @@ class GovernanceAction(StrEnum):
     RESTORE = "RESTORE"
     FREEZE = "FREEZE"
     RECLAIM = "RECLAIM"
+
 
 class GovernanceState:
     """Governance state for lifecycle with action application."""
@@ -92,11 +97,13 @@ class GovernanceState:
     def CRITICAL(cls) -> GovernanceState:  # noqa: N802
         return cls("CRITICAL")
 
+
 class _GovernanceStatusEnum(StrEnum):
     NORMAL = "NORMAL"
     DEGRADED = "DEGRADED"
     CRITICAL = "CRITICAL"
     RECOVERY = "RECOVERY"
+
 
 class GovernanceEvent:
     """Event emitted after a governance action is applied."""
@@ -106,12 +113,15 @@ class GovernanceEvent:
         self.reason = reason
         self.actor_id = actor_id
 
+
 # ── Data Classes ──────────────────────────────────────────────────────────
+
 
 class Receipt(NamedTuple):
     """Receipt returned when a worker accepts an envelope."""
 
     envelope_id: str
+
 
 class MessageEnvelope:
     """Message envelope for worker communication."""
@@ -131,6 +141,7 @@ class MessageEnvelope:
         for k, v in kwargs.items():
             setattr(self, k, v)
 
+
 class SynapseAgentCard:
     """Agent card describing a synapse worker's capabilities."""
 
@@ -148,6 +159,7 @@ class SynapseAgentCard:
         self.max_eu_budget = max_eu_budget
         for k, v in kwargs.items():
             setattr(self, k, v)
+
 
 class PlannedStep:
     """A single planned step from the local planner."""
@@ -172,6 +184,7 @@ class PlannedStep:
         self.estimated_eu = estimated_eu
         self.suggested_capability = suggested_capability
         self.rollback_plan = rollback_plan
+
 
 class ExecutionPlan:
     """Execution plan containing multiple planned steps."""
@@ -198,6 +211,7 @@ class ExecutionPlan:
         self.fallback_used = fallback_used
         self.reasoning = reasoning
 
+
 class TaskResult(NamedTuple):
     """Result of a task execution."""
 
@@ -208,7 +222,9 @@ class TaskResult(NamedTuple):
     worker_id: str = ""
     eu_consumed: float = 0.0
 
+
 # ── Type stubs ────────────────────────────────────────────────────────────
+
 
 class ISynapseWorker:
     """Stub interface for synapse workers."""
@@ -221,6 +237,7 @@ class ISynapseWorker:
 
     def heartbeat(self) -> dict[str, Any]:
         return {"status": "ok"}
+
 
 class WorkerHandle:
     """Stub worker handle for lifecycle tracking."""
@@ -285,6 +302,7 @@ class WorkerHandle:
     def eu_budget(self, value: float) -> None:
         self._eu_budget = value
 
+
 class WorkerBundle:
     """Bundle of a worker handle and its metadata."""
 
@@ -334,7 +352,9 @@ class AgentDaemonBase:
     def get_health_report(self) -> dict[str, Any]:
         return {}
 
+
 # ── Path / Config ─────────────────────────────────────────────────────────
+
 
 class ProjectPaths:
     """Stub project path resolver."""
@@ -349,8 +369,10 @@ class ProjectPaths:
     def get_db_path(cls, name: str, *args: str) -> str:
         return name
 
+
 class Infrastructure:
     """Stub infrastructure config."""
+
 
 class InferenceOracle:
     """Stub inference oracle."""
@@ -362,6 +384,7 @@ class InferenceOracle:
     def infer(self, *args: Any, **kwargs: Any) -> Any:
         return None
 
+
 class ResultBus:
     """Stub result bus."""
 
@@ -371,6 +394,7 @@ class ResultBus:
 
     def drain_results(self, worker_id: str) -> list[Any]:
         return []
+
 
 class Gateway:
     """Stub gateway reference."""
@@ -382,6 +406,7 @@ class Gateway:
     @classmethod
     def call(cls, *args: Any, **kwargs: Any) -> Any:
         return None
+
 
 class BOSUri:
     """Stub BOS URI."""
@@ -396,6 +421,7 @@ class BOSUri:
     def parse(cls, uri: str) -> BOSUri:
         return cls()
 
+
 class CapabilityRegistry:
     """Stub capability registry."""
 
@@ -405,11 +431,13 @@ class CapabilityRegistry:
     def select_for_task(self, **kwargs: Any) -> Any:
         return None
 
+
 class KnowledgeEnhancementMixin:
     """Stub knowledge enhancement mixin."""
 
     def enhance_task_with_knowledge(self, task_payload: dict[str, Any], persona: str, cwd: str) -> None:
         pass
+
 
 class ContextInjector:
     """Stub context injector."""
@@ -422,6 +450,7 @@ class ContextInjector:
     def generate_hifi_prompt(cls, **kwargs: Any) -> str:
         return ""
 
+
 class AssociationEngine:
     """Stub association engine."""
 
@@ -429,9 +458,11 @@ class AssociationEngine:
     def get_instance(cls) -> AssociationEngine:
         return cls()
 
+
 # ── Functions ─────────────────────────────────────────────────────────────
 
 _synapse_registry_cache: Any | None = None
+
 
 def get_synapse_registry() -> Any:
     """Stub — returns the synapse registry (cached)."""
@@ -440,17 +471,21 @@ def get_synapse_registry() -> Any:
         _synapse_registry_cache = _SynapseRegistryStub()
     return _synapse_registry_cache
 
+
 def get_spore_gateway() -> Any:
     """Stub — returns a spore gateway object."""
     return _SporeGatewayStub()
+
 
 def get_synapse_router() -> Any:
     """Stub — returns a synapse router."""
     return _SynapseRouterStub()
 
+
 def get_path_resolver() -> Any:
     """Stub — returns a path resolver."""
     return None
+
 
 class _BOSAgentRouterBridge:
     """Stub agent router bridge."""
@@ -458,13 +493,17 @@ class _BOSAgentRouterBridge:
     def agent_send_envelope(self, envelope: Any) -> Any:
         return None
 
+
 bos_agent_router_bridge = _BOSAgentRouterBridge()
+
 
 def managed_connection(uri: str = "", **kwargs: Any) -> Any:
     """Stub — returns a managed connection."""
     return None
 
+
 # ── Internal Stubs ────────────────────────────────────────────────────────
+
 
 class _SporeGatewayStub:
     """Internal stub for spore gateway."""
@@ -472,17 +511,20 @@ class _SporeGatewayStub:
     def get_component(self, name: str) -> Any:
         return _TransportStub()
 
+
 class _SynapseRouterStub:
     """Internal stub for synapse router."""
 
     def route(self, envelope: MessageEnvelope) -> Any:
         return None
 
+
 class _TransportStub:
     """Internal stub for message transport."""
 
     def deliver_frame(self, *args: Any, **kwargs: Any) -> Any:
         return None
+
 
 class _SynapseRegistryStub:
     """Internal stub for synapse registry."""
@@ -496,6 +538,7 @@ class _SynapseRegistryStub:
 
 class RegistryAgentCard:
     """Stub for nucleus.Z_Microkernel.organs.capability_registry.AgentCard."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         pass
 

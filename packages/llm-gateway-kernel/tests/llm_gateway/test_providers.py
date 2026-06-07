@@ -1,4 +1,5 @@
 """Tests for llm-gateway provider ABC."""
+
 from __future__ import annotations
 
 from llm_gateway_kernel.llm_gateway.provider import LLMRequest, LLMResponse, MockLLMProvider, NoneProvider
@@ -32,6 +33,7 @@ def test_llm_request_custom():
 
 def test_mock_generate():
     import asyncio
+
     p = MockLLMProvider()
     req = LLMRequest(prompt="What is kairon?")
     resp = asyncio.run(p.generate(req))
