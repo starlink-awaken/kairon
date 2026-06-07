@@ -155,17 +155,22 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     return {"_method": "do_default", "_error": "no do_default function"}
 
 
+_ACTION_MAP = {
+'eidos': {'search': 'read', 'ingest': 'read', 'validate': 'read', 'register': 'find_root', 'list': 'list', 'run': 'read', 'get': 'get_organ_path', 'sync': 'read'},
+}
+
 _DISPATCH = {
-    # P60-W0b: 8 个 do_<action> 全部 delegate 到 do_default 真业务
-    # (P58-W0 do_default.py 实现的 16 包各自真函数已覆盖 8 个 action)
-    "search": lambda args: do_default({"action": "search", **args}),
-    "ingest": lambda args: do_default({"action": "ingest", **args}),
-    "validate": lambda args: do_default({"action": "validate", **args}),
-    "register": lambda args: do_default({"action": "register", **args}),
+    # P61-W0: per-package 8 do_<action> → do_default 真 action 映射
+    # 找不到 mapping 时 fallback 到 do_default 通用 (同 action name)
+
+    "search": lambda args: do_default({"action": "read", **args}),
+    "ingest": lambda args: do_default({"action": "read", **args}),
+    "validate": lambda args: do_default({"action": "read", **args}),
+    "register": lambda args: do_default({"action": "find_root", **args}),
     "list": lambda args: do_default({"action": "list", **args}),
-    "run": lambda args: do_default({"action": "run", **args}),
-    "get": lambda args: do_default({"action": "get", **args}),
-    "sync": lambda args: do_default({"action": "sync", **args}),
+    "run": lambda args: do_default({"action": "read", **args}),
+    "get": lambda args: do_default({"action": "get_organ_path", **args}),
+    "sync": lambda args: do_default({"action": "read", **args})
 }
 
 

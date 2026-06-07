@@ -155,17 +155,22 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     return {"_method": "do_default", "_error": "no do_default function"}
 
 
+_ACTION_MAP = {
+'ontoderive': {'search': 'list_components', 'ingest': 'detector', 'validate': 'validator', 'register': 'list_components', 'list': 'list_components', 'run': 'detector', 'get': 'list_components', 'sync': 'detector'},
+}
+
 _DISPATCH = {
-    # P60-W0b: 8 个 do_<action> 全部 delegate 到 do_default 真业务
-    # (P58-W0 do_default.py 实现的 16 包各自真函数已覆盖 8 个 action)
-    "search": lambda args: do_default({"action": "search", **args}),
-    "ingest": lambda args: do_default({"action": "ingest", **args}),
-    "validate": lambda args: do_default({"action": "validate", **args}),
-    "register": lambda args: do_default({"action": "register", **args}),
-    "list": lambda args: do_default({"action": "list", **args}),
-    "run": lambda args: do_default({"action": "run", **args}),
-    "get": lambda args: do_default({"action": "get", **args}),
-    "sync": lambda args: do_default({"action": "sync", **args}),
+    # P61-W0: per-package 8 do_<action> → do_default 真 action 映射
+    # 找不到 mapping 时 fallback 到 do_default 通用 (同 action name)
+
+    "search": lambda args: do_default({"action": "list_components", **args}),
+    "ingest": lambda args: do_default({"action": "detector", **args}),
+    "validate": lambda args: do_default({"action": "validator", **args}),
+    "register": lambda args: do_default({"action": "list_components", **args}),
+    "list": lambda args: do_default({"action": "list_components", **args}),
+    "run": lambda args: do_default({"action": "detector", **args}),
+    "get": lambda args: do_default({"action": "list_components", **args}),
+    "sync": lambda args: do_default({"action": "detector", **args})
 }
 
 
