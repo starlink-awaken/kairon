@@ -480,8 +480,4 @@ def validate_tool_name(name: str) -> tuple[bool, str]:
         return False, f"invalid_tool_name: '{name}' must be kebab-case (lowercase, hyphens only, no underscores)"
     return True, ""
 
-try:
-    from agora.mcp.bos_resolver import POC_SERVICES
-    MARKET_REGISTRY = POC_SERVICES
-except ImportError:
-    MARKET_REGISTRY: dict = {}
+
