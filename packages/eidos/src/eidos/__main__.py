@@ -205,8 +205,8 @@ def _call_action(action: str, args: dict[str, Any]) -> dict[str, Any]:
 
 # P57-W0: 自动 import 包内 do_default 真业务
 try:
-    from . import do_default as _pkg_do_default  # type: ignore[import-not-found]
-    globals()["do_default"] = _pkg_do_default
+    from .do_default import do_default as _pkg_fn  # type: ignore[import-not-found]
+    globals()["do_default"] = _pkg_fn
 except ImportError:
     pass
 
@@ -217,8 +217,8 @@ def serve() -> int:
 
     # P57-W0: 自动 import 包内 do_default 真业务 (eidos.list_available_organs 等)
     try:
-        from . import do_default as _pkg_do_default  # type: ignore[import-not-found]
-        globals()["do_default"] = _pkg_do_default
+        from .do_default import do_default as _pkg_fn  # type: ignore[import-not-found]
+        globals()["do_default"] = _pkg_fn
     except ImportError:
         pass
 
