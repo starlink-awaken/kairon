@@ -1,59 +1,38 @@
-"""kairon/minerva stdio MCP server (POC).
+"""P49-W0: kairon 包 __main__.py v3 — 1 行复用 omo_stdio_rpc.
 
-读取 stdin 的 JSON 请求, 写入 stdout 的 JSON 响应.
-战役 1 阶段: 进程可 spawn + alive 即可; 完整 MCP 协议 W4.5+.
+P48-W3: POC echo 模式 (-30 行).
+P49-simplify pass 1: 加 _package_info + 真 import (-80 行).
+P49-W0: 1 行用 omo_stdio_rpc 共用 helper (跨仓复制 omo.omo_stdio_rpc 模板).
 
-调用: python -m minerva serve --action <action>
+用法:
+  python -m <package> serve      # stdin JSON-RPC serve 模式 (供 agora daemon 派发)
+
+协议 (P33-W4):
+  stdin:  {"action": "X", "args": {...}}\\n
+  stdout: {"status": "ok", "result": ...}\\n
+  close:  {"action": "QUIT"}\\n
 """
 from __future__ import annotations
 
-import argparse
-import json
-import sys
+from typing import Any
 
 
-def _serve(action: str) -> int:
-    """POC stdio 协议: stdin JSON 行 → stdout JSON 行."""
-    for line in sys.stdin:
-        line = line.strip()
-        if not line:
-            continue
-        try:
-            req = json.loads(line)
-        except json.JSONDecodeError as exc:
-            err = {
-                "status": "error",
-                "service": "kairon-minerva",
-                "action": action,
-                "error": f"invalid_json: {exc}",
-            }
-            sys.stdout.write(json.dumps(err, ensure_ascii=False) + "\n")
-            sys.stdout.flush()
-            continue
-        resp = {
-            "status": "ok",
-            "service": "kairon-minerva",
-            "action": action,
-            "request_id": req.get("request_id", ""),
-            "result": {
-                "message": f"minerva {action} invoked",
-                "echo_args": req.get("args", []),
-            },
-        }
-        sys.stdout.write(json.dumps(resp, ensure_ascii=False) + "\n")
-        sys.stdout.flush()
-    return 0
+def _call_action(action: str, args: dict[str, Any]) -> dict[str, Any]:
+    """P49-W0: kairon 包通用 dispatch. 返 package info + echo."""
+    return {
+        "package": __name__.split(".")[0],
+        "action_dispatched": action,
+        "args_echo": args,
+    }
 
 
-def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(prog="kairon-minerva")
-    parser.add_argument("command", choices=["serve"], help="POC: only 'serve'")
-    parser.add_argument("--action", required=True, help="research/...")
-    args = parser.parse_args(argv)
-    if args.command == "serve":
-        return _serve(args.action)
-    return 1
+def serve() -> int:
+    """P49-W0: serve 入口 (跨仓用 omo_stdio_rpc 模板)."""
+    # 跨仓复用: 此处不直接 import omo, 因 kairon 仓是独立 venv
+    # omo_stdio_rpc 模板已 cp 到 kairon-utils/src/kairon_utils/stdio_rpc.py
+    from kairon_utils.stdio_rpc import run_stdio_dispatch  # type: ignore[import-not-found]
+
+    return run_stdio_dispatch(_call_action)
 
 
-if __name__ == "__main__":
-    sys.exit(main())
+__all__ = ["serve", "_call_action"]
