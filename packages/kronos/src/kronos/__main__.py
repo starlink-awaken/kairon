@@ -1,56 +1,38 @@
-"""Kairon package __main__.py — stdio JSON-RPC serve mode (P48-W3 / P33-W4).
+"""P49-W0: kairon 包 __main__.py v3 — 1 行复用 omo_stdio_rpc.
 
-Usage:
-  python -m <package>            # 包默认入口 (P33 时代 CLI)
-  python -m <package> serve      # stdio JSON-RPC serve 模式 (供 agora daemon 派发)
+P48-W3: POC echo 模式 (-30 行).
+P49-simplify pass 1: 加 _package_info + 真 import (-80 行).
+P49-W0: 1 行用 omo_stdio_rpc 共用 helper (跨仓复制 omo.omo_stdio_rpc 模板).
 
-协议 (P33-W4 stdio JSON-RPC 简化):
-  - 客户端写: {"action": "X", "args": {...}}\\n
-  - 服务端响应: {"status": "ok", "result": ...}\\n 或 {"status": "error", "error": "..."}\\n
-  - 客户端关闭: {"action": "QUIT"}\\n
+用法:
+  python -m <package> serve      # stdin JSON-RPC serve 模式 (供 agora daemon 派发)
+
+协议 (P33-W4):
+  stdin:  {"action": "X", "args": {...}}\\n
+  stdout: {"status": "ok", "result": ...}\\n
+  close:  {"action": "QUIT"}\\n
 """
 from __future__ import annotations
 
-import json
-import sys
+from typing import Any
+
+
+def _call_action(action: str, args: dict[str, Any]) -> dict[str, Any]:
+    """P49-W0: kairon 包通用 dispatch. 返 package info + echo."""
+    return {
+        "package": __name__.split(".")[0],
+        "action_dispatched": action,
+        "args_echo": args,
+    }
 
 
 def serve() -> int:
-    """P48-W3 stdio JSON-RPC serve 入口.
+    """P49-W0: serve 入口 (跨仓用 omo_stdio_rpc 模板)."""
+    # 跨仓复用: 此处不直接 import omo, 因 kairon 仓是独立 venv
+    # omo_stdio_rpc 模板已 cp 到 kairon-utils/src/kairon_utils/stdio_rpc.py
+    from kairon_utils.stdio_rpc import run_stdio_dispatch  # type: ignore[import-not-found]
 
-    POC: action 名 + args 直接 echo, 让 agora daemon 派发能正常返.
-    实际各 action 业务逻辑可后续按需在此 dispatch.
-    """
-    for line in sys.stdin:
-        line = line.strip()
-        if not line:
-            continue
-        if line == "QUIT":
-            break
-        try:
-            req = json.loads(line)
-        except json.JSONDecodeError as exc:
-            sys.stdout.write(
-                json.dumps({"status": "error", "error": f"json_decode: {exc}"}) + "\n"
-            )
-            sys.stdout.flush()
-            continue
-        action = req.get("action", "")
-        args = req.get("args", {}) or {}
-        # POC 行为: echo 返 ok, 不做具体业务
-        # (P33-W4 时代各包 serve --action 实际是各包特定实现,
-        #  P48-W3 简化为统一 echo 模式, 让 agora 派发链路通)
-        resp = {
-            "status": "ok",
-            "result": {
-                "package": __name__.split(".")[0],
-                "action": action,
-                "args_echo": args,
-            },
-        }
-        sys.stdout.write(json.dumps(resp, ensure_ascii=False, default=str) + "\n")
-        sys.stdout.flush()
-    return 0
+    return run_stdio_dispatch(_call_action)
 
 
-__all__ = ["serve"]
+__all__ = ["serve", "_call_action"]
