@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "kairon"
-version = "0.1.0"
+version = "0.1.1"
 description = "Kairon — Knowledge & Research Operating Stack: ontology, research, MCP ecosystem"
 license = {text = "MIT"}
 requires-python = ">=3.10"
@@ -40,16 +40,6 @@ Changelog = "https://github.com/starlink-awaken/kairon/blob/main/CHANGELOG.md"
 
 [tool.uv.workspace]
 members = ["packages/*"]
-# P31-W1 CLEANUP-SHIM (2026-06-06): 6 个原包 src/ 已删，目录保留作档案。
-# exclude 段防止 uv 解析为 workspace 成员。
-exclude = [
-    "packages/sophia",
-    "packages/symphony-protocol",
-    "packages/ssot",
-    "packages/sharedbrain-bridge",
-    "packages/llm-gateway",
-    "packages/engine-core",
-]
 
 [tool.uv.sources]
 core-models = { workspace = true }
@@ -67,12 +57,7 @@ kairon-utils = { workspace = true }
 kairon-plugin-sdk = { workspace = true }
 kairon-observability = { workspace = true }
 kairon-pipeline = { workspace = true }
-sot-bridge = { workspace = true }
 health-profile = { workspace = true }
-llm-gateway-kernel = { workspace = true }
-ssot-kernel = { workspace = true }
-protocols-layer = { workspace = true }
-shared-lib = { workspace = true }
 
 [tool.pytest.ini_options]
 testpaths = ["packages/*/tests"]
