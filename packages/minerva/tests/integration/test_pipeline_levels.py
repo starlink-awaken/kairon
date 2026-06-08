@@ -5,7 +5,8 @@ import shutil
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
-from tests.conftest import _has_module
+
+from .._helpers import _has_module
 
 
 class TestPipelineLevels:

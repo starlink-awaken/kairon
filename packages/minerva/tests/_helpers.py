@@ -1,4 +1,4 @@
-"""Shared pytest fixtures and skip condition helpers for Minerva tests."""
+"""Minerva test helpers."""
 
 import os
 import shutil
