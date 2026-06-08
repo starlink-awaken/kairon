@@ -134,7 +134,7 @@ def do_sync(args: dict[str, Any]) -> dict[str, Any]:
                 result = instance.sync(args)
                 return {"_method": "sync", "_class": name, "result": str(result)[:500]}
     except Exception as exc:
-        return {"_method": "sync", "_error": f"{type(exc).__name_}: {exc}"}
+        return {"_method": "sync", "_error": f"{type(exc).__name__}: {exc}"}
     return {"_method": "sync", "_error": "no class with sync method"}
 
 
@@ -220,12 +220,11 @@ except ImportError:
 def serve() -> int:
     """P55-W0 serve 入口 (复用 kairon_utils.stdio_rpc).
     P63-W0-D: daemon_mode=True (launchd plist 没 pipe stdin, EOF sleep + retry).
+    P68-W1: restart_delay_sec=60 (sleep 60s + exit, 配 launchd KeepAlive 周期重启).
     """
     from kairon_utils.stdio_rpc import run_stdio_dispatch  # type: ignore[import-not-found]
 
     return run_stdio_dispatch(_call_action, daemon_mode=True, restart_delay_sec=60)
-
-    return run_stdio_dispatch(_call_action)
 
 
 __all__ = ["serve", "_call_action", "_package_info", "_DISPATCH", "do_default"]
