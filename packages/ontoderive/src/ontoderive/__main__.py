@@ -223,7 +223,7 @@ def serve() -> int:
     """
     from kairon_utils.stdio_rpc import run_stdio_dispatch  # type: ignore[import-not-found]
 
-    return run_stdio_dispatch(_call_action, daemon_mode=True)
+    return run_stdio_dispatch(_call_action, daemon_mode=True, restart_delay_sec=60)
 
     return run_stdio_dispatch(_call_action)
 

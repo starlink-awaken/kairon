@@ -230,7 +230,7 @@ def serve() -> int:
     except ImportError:
         pass
 
-    return run_stdio_dispatch(_call_action, daemon_mode=True)
+    return run_stdio_dispatch(_call_action, daemon_mode=True, restart_delay_sec=60)
 
 
 __all__ = ["serve", "_call_action", "_package_info", "_DISPATCH", "do_default"]
