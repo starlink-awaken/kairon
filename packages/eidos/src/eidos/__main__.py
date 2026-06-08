@@ -218,7 +218,9 @@ except ImportError:
 
 
 def serve() -> int:
-    """P55-W0 serve 入口 (复用 kairon_utils.stdio_rpc)."""
+    """P55-W0 serve 入口 (复用 kairon_utils.stdio_rpc).
+    P63-W0-D: daemon_mode=True (launchd plist 没 pipe stdin, EOF sleep + retry).
+    """
     from kairon_utils.stdio_rpc import run_stdio_dispatch  # type: ignore[import-not-found]
 
     # P57-W0: 自动 import 包内 do_default 真业务 (eidos.list_available_organs 等)
@@ -228,7 +230,7 @@ def serve() -> int:
     except ImportError:
         pass
 
-    return run_stdio_dispatch(_call_action)
+    return run_stdio_dispatch(_call_action, daemon_mode=True)
 
 
 __all__ = ["serve", "_call_action", "_package_info", "_DISPATCH", "do_default"]
