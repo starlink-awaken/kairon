@@ -38,9 +38,9 @@ http:
   - port: 8765
     protocol: FastAPI
     owner: minerva
-  - port: 8080
+  - port: 8081
     protocol: web_server
-    owner: ontoderive [⚠ 与 agora 冲突]
+    owner: ontoderive
   - port: 9290
     protocol: http.server
     owner: llm-gateway-kernel
