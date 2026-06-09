@@ -36,14 +36,13 @@ mcp:
 
 http:
   - port: 8765
+    enforcement: env-only   # 默认值不直连,生产 env 注入
     protocol: FastAPI
     owner: minerva
   - port: 8081
+    enforcement: env-only   # 默认值不直连,生产 env 注入
     protocol: web_server
     owner: ontoderive
-  - port: 9290
-    protocol: http.server
-    owner: llm-gateway-kernel
 
 dependencies:
   runtime: [fastmcp, httpx, structlog, pydantic, pyyaml, rich, openai, ...]
