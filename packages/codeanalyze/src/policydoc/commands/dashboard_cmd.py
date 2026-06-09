@@ -1,5 +1,6 @@
 """policydoc: dashboard — 政策文档知识图谱仪表盘"""
 
+import os
 import webbrowser
 from pathlib import Path
 
@@ -18,7 +19,7 @@ def _validate_path(path: str) -> Path:
 
 @click.command()
 @click.argument("path", default=".")
-@click.option("--port", default=3456, help="仪表盘端口")
+@click.option("--port", default=int(os.environ.get("DASHBOARD_PORT", "3456")), help="仪表盘端口")
 @click.option("--force", is_flag=True, help="强制生成独立 HTML")
 @click.option("--open", "-o", "open_browser", is_flag=True, help="生成后自动在浏览器中打开")
 def dashboard(path: str, port: int, force: bool, open_browser: bool = False):
