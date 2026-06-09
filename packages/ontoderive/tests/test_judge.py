@@ -1,12 +1,18 @@
 """
-测试 intelligence/judge.py — OntoDeriveJudge 评估器
+测试 intelligence/judge.py - OntoDeriveJudge 评估器
 """
 
-from intelligence.judge import JudgeResult, OntoDeriveJudge  # type: ignore[import-not-found]
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+
+
+from engine.intelligence.judge import JudgeResult, OntoDeriveJudge  # type: ignore[import-not-found]
 
 
 class TestJudgeResult:
-    """JudgeResult — 判断结果数据类"""
+    """JudgeResult - 判断结果数据类"""
 
     def test_basic_construction(self):
         r = JudgeResult(
@@ -35,7 +41,7 @@ class TestJudgeResult:
 
 
 class TestOntoDeriveJudge:
-    """OntoDeriveJudge — 知识质量评估器 (无 LLM 回退)"""
+    """OntoDeriveJudge - 知识质量评估器 (无 LLM 回退)"""
 
     def test_judge_project_no_enhancer_fallback(self, tmp_project):
         """LLM 不可用时 judge_project 返回 fallback 字典"""

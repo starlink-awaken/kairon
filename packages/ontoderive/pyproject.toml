@@ -36,13 +36,13 @@ llm = ["openai"]
 web = ["fastapi", "uvicorn"]
 
 [project.scripts]
-ontoderive = "engine.cli:main"
+ontoderive = "ontoderive.__main__:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["engine"]
+packages = ["src/ontoderive"]
 
 [tool.hatch.version]
-path = "engine/__init__.py"
+path = "src/ontoderive/__init__.py"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

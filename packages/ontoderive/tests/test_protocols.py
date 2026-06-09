@@ -1,9 +1,15 @@
 """
-测试 foundation/protocols.py — 接口协议抽象类
+测试 foundation/protocols.py - 接口协议抽象类
 """
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+
+
 import pytest
-from foundation.protocols import (  # type: ignore[import-not-found]
+from engine.foundation.protocols import (  # type: ignore[import-not-found]
     AnalysisResult,
     DeriveInterface,
     PipelineObservable,
@@ -13,7 +19,7 @@ from foundation.protocols import (  # type: ignore[import-not-found]
 
 
 class TestDeriveInterface:
-    """DeriveInterface — 推导引擎接口"""
+    """DeriveInterface - 推导引擎接口"""
 
     def test_cannot_instantiate_abstract(self):
         """抽象类不能直接实例化"""
@@ -60,7 +66,7 @@ class TestDeriveInterface:
 
 
 class TestToolForgeInterface:
-    """ToolForgeInterface — 工具匹配接口"""
+    """ToolForgeInterface - 工具匹配接口"""
 
     def test_abstract_methods_required(self):
         """必须实现 select / match / to_inference_guide"""
@@ -85,7 +91,7 @@ class TestToolForgeInterface:
 
 
 class TestPipelineObservable:
-    """PipelineObservable — 管道事件接口"""
+    """PipelineObservable - 管道事件接口"""
 
     def test_abstract_methods(self):
         with pytest.raises(TypeError):
@@ -113,7 +119,7 @@ class TestPipelineObservable:
 
 
 class TestPipelineStage:
-    """PipelineStage — 管道阶段基类"""
+    """PipelineStage - 管道阶段基类"""
 
     def test_abstract_run_required(self):
         with pytest.raises(TypeError):
@@ -135,7 +141,7 @@ class TestPipelineStage:
 
 
 class TestAnalysisResult:
-    """AnalysisResult — 统一分析结果"""
+    """AnalysisResult - 统一分析结果"""
 
     def test_passed_when_all_checks_pass(self):
         result = AnalysisResult(

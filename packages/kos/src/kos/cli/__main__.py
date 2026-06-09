@@ -147,7 +147,13 @@ def _format_domains_table(data: dict):  # type: ignore[no-untyped-def, type-arg]
 
 def _format_status_table(data: dict):  # type: ignore[no-untyped-def, type-arg]
     """Human-readable system status."""
+    if data is None:
+        print("KOS status unavailable — database not found or KOS_HOME not set.")
+        print("Set KOS_HOME or run 'kos index' first.")
+        return
     db = data.get("retrieval_db", {})
+    if db is None:
+        db = {}
     domains = data.get("domains", [])
 
     print(BOLD("\n╔══ KOS System Status ══╗"))  # type: ignore[no-untyped-call]

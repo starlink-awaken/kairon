@@ -149,6 +149,7 @@ def create_default_pipeline(
     glm_llm_client=None,
     kos_save_enabled: bool = False,
     immune_audit_enabled: bool = False,
+    vault_sink_enabled: bool = False,
 ) -> Pipeline:
     """Create pipeline with default stage configurations for each level.
 
@@ -174,6 +175,7 @@ def create_default_pipeline(
         OutputStageImpl,
         QualityGateStageImpl,
     )
+    from minerva.sinks.vault_sink import VaultSinkStage  # type: ignore[import-not-found]
 
     # L3/L4 use cloud client for enterprise reasoning (DeepSeek V4 Pro).
     # Falls back to local qwen3.6:27b if cloud is unavailable.
@@ -263,5 +265,10 @@ def create_default_pipeline(
             else:
                 # Append at end if no quality gate
                 stages[level] = stages[level] + [ImmuneAuditStage()]
+
+    if vault_sink_enabled:
+        # Append VaultSinkStage after all output stages
+        for level in list(stages):
+            stages[level] = stages[level] + [VaultSinkStage()]
 
     return Pipeline(stages)

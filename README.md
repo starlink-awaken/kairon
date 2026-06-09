@@ -1,6 +1,8 @@
 # kairon
 
-> Knowledge & Research Operating Stack — 25 包 Python monorepo
+> kairon 已从 25 包收敛至 16 包。agora/metaos/ecos/runtime/cockpit 已拆分为独立项目，agent-runtime/sharedbrain-bridge 等已归档。详见 `docs/live_inventory.md`
+
+> Knowledge & Research Operating Stack — 16 包 Python monorepo
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.13+-blue.svg)]()
@@ -8,7 +10,7 @@
 [![lint](https://img.shields.io/badge/lint-0%20errors-brightgreen)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-kairon 是一个基于 uv workspace 的 Python 知识工程与研究栈，覆盖知识提取、本体推导、MCP 服务、Agent 运行时、研究管线和桥接能力。
+kairon 是一个基于 uv workspace 的 Python 知识工程与研究栈，覆盖知识提取、本体推导、研究管线和桥接能力。
 
 ## 快速开始
 
@@ -31,15 +33,23 @@ make format
 
 ```
 kairon/
-├── packages/              # 25 个活跃 Python 包
-│   ├── eidos/             # 知识建模 (7 MCP tools)
-│   ├── kos/               # 搜索索引 (26 tools)
-│   ├── agora/             # MCP 服务发现 + 断路器
-│   ├── minerva/           # 推理引擎 (5 super-tools)
-│   ├── agent-runtime/     # Agent 执行引擎
+├── packages/              # 16 个活跃 Python 包
+│   ├── codeanalyze/       # 代码结构分析
 │   ├── core-models/       # 核心数据模型（依赖基座）
-│   ├── shared-lib/        # 共享工具库 (~120 模块)
-│   └── ...                # 详见 docs/architecture_audit.md
+│   ├── eidos/             # 知识建模 (7 MCP tools)
+│   ├── forge/             # 工具与集市面
+│   ├── health-profile/    # 健康摘要辅助
+│   ├── iris/              # 研究/连接器支持
+│   ├── kairon-lib-events/ # 事件原语
+│   ├── kairon-observability/ # 可观测性辅助
+│   ├── kairon-pipeline/   # 管线辅助
+│   ├── kairon-plugin-sdk/ # 插件集成面
+│   ├── kairon-utils/      # 共享工具层
+│   ├── kos/               # 跨域搜索与检索 (26 tools)
+│   ├── kronos/            # 摄取管线
+│   ├── minerva/           # 深度研究与知识管线 (5 super-tools)
+│   ├── ontoderive/        # 本体推导
+│   └── sophia/            # 符号化研究运行时
 ├── Makefile               # 构建/测试/格式化
 ├── pyproject.toml         # 项目配置和依赖
 ├── CLAUDE.md              # Claude Code 入口

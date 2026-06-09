@@ -1,245 +1,83 @@
 # CLAUDE.md — kairon
 
-> 知识工程与研究栈 · 25 包 Python monorepo
-> 根工作区文档：`../CLAUDE.md`（全局, 含 §0 启动强制指令）、`../AGENTS.md`（开发指南）、`../LAYER-INDEX.md`（架构分层）
-> **Agent 必须**: 先读 `../CLAUDE.md` §0, 通过 cockpit MCP `workspace_context` 获取当前上下文再开始工作
+> 知识工程与研究栈 · 16 个 live installable Python packages
+> 根工作区文档：`../CLAUDE.md`、`../AGENTS.md`、`../LAYER-INDEX.md`
+> 当前 live inventory、架构和边界以 `docs/live_inventory.md`、`docs/architecture_audit.md`、`docs/cross_project_boundary_audit.md` 为准
 
----
+## 启动前提
 
-## 快速开始
+1. 先读根工作区 `../CLAUDE.md`
+2. 把 `packages/*/pyproject.toml` 视为唯一 live package truth source
+3. 不要把 Agora route alias、旧 phase 文档、历史迁移叙事当成当前仓库拓扑事实
+
+## 当前仓库定位
+
+`kairon` 现在主要是 **L2 知识引擎仓库**，不是旧阶段里那个同时承载 runtime、gateway、bridge、SSOT 的大一统 monorepo。
+
+当前 live package 只剩 16 个，分成三层：
+
+### 基础与共用 primitives
+
+- `core-models`
+- `health-profile`
+- `kairon-lib-events`
+- `kairon-observability`
+- `kairon-pipeline`
+- `kairon-plugin-sdk`
+- `kairon-utils`
+
+### 知识与研究引擎
+
+- `codeanalyze`
+- `eidos`
+- `iris`
+- `kos`
+- `kronos`
+- `minerva`
+- `ontoderive`
+- `sophia`
+
+### 对外能力面
+
+- `forge`
+
+## 重要边界
+
+- `aetherforge` 已是独立 sibling project，LLM gateway 正在往它收敛
+- `agora` route/service registry 里仍有 `sharedbrain-bridge`、`sot-bridge`、`engine-core`、`protocols-layer`、`ssot` 等历史别名
+- 这些名字 **不是** 当前 `kairon` live installable package
+- `SharedBrain` 现在更接近历史概念边界或外部数据边界，而不是当前 `kairon` 仓内 live package surface
+
+## 工作约束
+
+- 改架构、inventory、boundary 相关内容时，优先同步这些文件：
+  - `AGENTS.md`
+  - `docs/live_inventory.md`
+  - `docs/architecture_audit.md`
+  - `docs/cross_project_boundary_audit.md`
+  - `docs/agora_route_drift_audit.md`
+- 不要重新引入已经删掉的 workspace 成员声明
+- 不要把 compatibility alias 写成 live capability
+
+## 常用命令
 
 ```bash
-# 安装依赖
 uv sync
-
-# 全量测试（遍历所有包）
 make test
-
-# 快速测试（跳过 integration/benchmarks）
 make test-fast
-
-# Lint + 格式化
 make lint
 make format
 ```
 
-## 包结构（19 包 · 2026-06-06 P31-W1 CLEANUP-SHIM 后）
+## 当前已知事实
 
-### L0 — 基础依赖（5 包，2026-06-06 从 shared-lib 拆出）
+- `pyproject.toml` 的 `requires-python` 是 `>=3.10` (各包的 ruff 配置 target-version 为 py313)
+- Ruff target 仍是 `py313`
+- `tool.uv.workspace.members = ["packages/*"]`
+- 已删掉的旧包残留不应再出现在 workspace source/exclude 中
 
-| 包 | 路径 | 说明 |
-|----|------|------|
-| kairon-lib-events | `packages/kairon-lib-events/` | 事件总线模型（BOSEvent, EventBusProtocol） |
-| kairon-utils | `packages/kairon-utils/` | 通用工具库（日志/重试/限流/错误分类/SQLite） |
-| kairon-plugin-sdk | `packages/kairon-plugin-sdk/` | 插件 SDK（BosPlugin, PluginContext） |
-| kairon-observability | `packages/kairon-observability/` | 可观测性套件（指标/告警/异常检测/仪表板/SLO） |
-| kairon-pipeline | `packages/kairon-pipeline/` | D-Harvest 数据管道（数据源/提取器/质量门/集成） |
+## 验证口径
 
-### L1 — 知识工程核心（10 包）
-
-| 包 | 路径 | 说明 |
-|----|------|------|
-| eidos | `packages/eidos/` | 7 MCP 工具 |
-| ontoderive | `packages/ontoderive/` | 本体推导（含 1,920 JSON 推导日志） |
-| kos | `packages/kos/` | KOS 搜索索引（26 tools） |
-| minerva | `packages/minerva/` | 5 super-tools |
-| protocols-layer | `packages/protocols-layer/` | 协议层（sophia 范式编译 + symphony 协议，P31-W1 合并 1） |
-| iris | `packages/iris/` | 8 tools |
-| ssot | `packages/ssot/` | 单一事实源（6 tools） |
-| forge | `packages/forge/` | 89 tools（无 MCP @tool） |
-| codeanalyze | `packages/codeanalyze/` | 代码分析 |
-| kronos | `packages/kronos/` | 9 tools |
-| ~~metaos~~ | **已拆出 (P30-W1)** | 移至 `projects/metaos/` 独立项目（编排引擎） |
-
-### L2 — 集成层（1 包）
-
-| 包 | 路径 | 说明 |
-|----|------|------|
-| sharedbrain-bridge | `packages/sharedbrain-bridge/` | × SharedBrain 桥接（EU/免疫/同步） |
-| ~~sharedbrain-standalone~~ | 已归档 | 代码合入 sharedbrain-bridge |
-
-### L3 — Agent 层（4 包）
-
-| 包 | 路径 | 说明 |
-|----|------|------|
-| agent-runtime | `packages/agent-runtime/` | Agent 执行引擎（原 agentmesh Engine） |
-| agent-hub | `packages/agent-hub/` | Agent 注册中心 |
-| agora | `packages/agora/` | MCP 服务发现 + 代理 + 断路器（7430/7431） |
-| llm-gateway | `packages/llm-gateway/` | LLM 路由 + 配额管理 |
-| ~~wksp~~ | **已拆出 (P30-W1)** | 移至 `projects/cockpit/` 独立项目（CLI + Web UI 统一研究驾驶舱，吸收 hermes-console 为 web/） |
-
-> 注：kairon-assistant / kairon-voice 已于 P28-W2 归档（见下方"已归档（P28-W2）"段）。
-
-### L4/Infra — 支撑层
-
-| 包 | 路径 | 说明 |
-|----|------|------|
-| shared-lib | `packages/shared-lib/` | 共享工具库（core/governance/cognitive/audit，已拆出 5 子包至 L0） |
-| core-models | `packages/core-models/` | 核心数据模型 |
-| engine-core | `packages/engine-core/` | 引擎核心 |
-| observability | `packages/observability/` | 可观测性 |
-| gc-engine | `packages/gc-engine/` | 垃圾回收引擎 |
-| ~~ecos~~ | **已拆出 (P31-W0)** | 移至 `projects/ecos/` 独立项目（SSB 协议 + 涌现计算，v3 0 依赖 0 被依赖） |
-| cron-service | `packages/cron-service/` | 定时任务调度（P30-M2.1 物理迁移至 runtime，目录占位待清理） |
-| eu-pricing | `packages/eu-pricing/` | EU 定价 |
-| ~~kaironcloud-billing~~ | **已归档 (P28-W6)** | 1 软依赖（agora try/except）|
-| ~~kairon-assistant~~ | **已归档 (P28-W2)** | 0 外部 import、whisper 缺依赖 |
-| ~~kairon-voice~~ | **已归档 (P28-W2)** | 0 外部 import、自包含 |
-| ~~sophia~~ | **已合并 (P31-W1)** | 移入 `packages/protocols-layer/src/protocols_layer/sophia/`（6 个月 shim 保留）|
-| ~~symphony-protocol~~ | **已合并 (P31-W1)** | 移入 `packages/protocols-layer/src/protocols_layer/symphony/`（6 个月 shim 保留）|
-| pontus | `packages/pontus/` | Pontus 模块 |
-
-### 已归档（P28-W2 · 2026-06-05）
-
-| 原包 | 归档位置 | 原因 |
-|------|---------|------|
-| kairon-assistant | `projects/_archived/kairon-archived-pkg-kairon-assistant-2026-06-05/kairon-assistant/` | 0 外部 import、whisper 缺依赖、3 tests、孤儿包 |
-| kairon-voice | `projects/_archived/kairon-archived-pkg-kairon-voice-2026-06-05/kairon-voice/` | 0 外部 import、自包含、3 tests、孤儿包 |
-
-### 已归档（P28-W6 · 2026-06-05）
-
-| 原包 | 归档位置 | 原因 |
-|------|---------|------|
-| kaironcloud-billing | `projects/_archived/kairon-archived-pkg-kaironcloud-billing-2026-06-05/kaironcloud-billing/` | 1 软依赖（agora/router.py:406 try/except）、5 tests、28 src、孤儿包 |
-
-### 已归档（former agentmesh）
-
-agentmesh 的 5 个子系统已 100% 迁移至 kairon：
-
-| 原 agentmesh 组件 | kairon 对应包 |
-|-------------------|---------------|
-| Engine | `agent-runtime` |
-| Agent Hub | `agent-hub` |
-| MCP 网关 | `agora` |
-| Orchestrator | `llm-gateway` |
-| Forge | `forge` |
-
-### 已拆出（P30-W1 · 2026-06-06）
-
-| 原包 | 新位置 | 原因 |
-|------|--------|------|
-| metaos | `projects/metaos/` | 编排引擎（决策门控/免疫/路由），非知识工程功能，拆为独立项目（v3 架构方案） |
-| wksp | `projects/cockpit/` | 工作区管理 + 吸收 hermes-console 为 web/，统一为 cockpit 独立项目 |
-
-### 已拆出（P31-W0 · 2026-06-06）
-
-| 原包 | 新位置 | 原因 |
-|------|--------|------|
-| ecos | `projects/ecos/` | L0 协议编织层（SSB 协议 + 涌现计算）。v3 终态标注"0 依赖、0 被依赖"，纯自包含协议核心，6,288 行源码独立。P30 决策文档未列，补做。 |
-
-### 已合并（P31-W1 · 2026-06-06）
-
-| 原包 | 新位置 | 原因 |
-|------|--------|------|
-| sophia | `packages/protocols-layer/src/protocols_layer/sophia/` | 范式编译（compiler/learner/symbols/kems_runtime/MCP server），与 symphony-protocol 同属协议/规则层，合并为 protocols-layer（22→23 包） |
-| symphony-protocol | `packages/protocols-layer/src/protocols_layer/symphony/` | 状态机/Agent 匹配/触发器引擎，与 sophia 合并为 protocols-layer |
-| ssot | `packages/sot-bridge/src/sot_bridge/ssot_kernel/` | 单一事实源（17,649 行, 10 tests），与 sharedbrain-bridge 合并为 sot-bridge |
-| sharedbrain-bridge | `packages/sot-bridge/src/sot_bridge/sharedbrain_bridge/` | × SharedBrain 桥接（1,063 行, 4 tests；Phase 31 stubify），与 ssot 合并为 sot-bridge |
-| llm-gateway | `packages/llm-gateway-kernel/src/llm_gateway_kernel/llm_gateway/` | LLM 路由 + 配额管理（2,560 行），与 engine-core 合并为 llm-gateway-kernel |
-| engine-core | `packages/llm-gateway-kernel/src/llm_gateway_kernel/engine_core/` | 引擎核心（25,641 行, 132 src files），与 llm-gateway 合并为 llm-gateway-kernel |
-
-### P31-W1 CLEANUP-SHIM 收官（2026-06-06）
-
-3 组合并完成后，6 个原包 src/ **立即删除（0 保留期，AST 实证 0 跨包 import）**：
-
-- kairon 物理目录 25 → 19（src/ 消失 6 个，目录保留 `pyproject.toml` 作档案）
-- 6 个原包目录仍含 `pyproject.toml` + `.pytest_cache` / `.omc` 等历史缓存，**不会被 uv 解析为 workspace 成员**（`[tool.uv.workspace] exclude` 段阻断）
-- 消费者迁移:
-  - `iris/pyproject.toml`: `ssot-kernel` → `sot-bridge`
-  - `minerva/pyproject.toml`: `paradigm = ["sophia>=0.2.0"]` → `paradigm = ["protocols-layer"]`
-- 旧 `import sophia` / `import ssot_kernel` / `import engine_core` 等 6 个旧名 ModuleNotFoundError（**破坏面 0**，AST 实证 0 跨包 import）
-
-## 架构主线
-
-### 依赖根：core-models
-
-`core-models` 是整个 monorepo 的依赖基座，9 个包直接依赖它：
-
-```
-agora, codeanalyze, eidos, eu-pricing, kronos,
-minerva, ontoderive, sharedbrain-bridge, sharedbrain-standalone
-```
-
-包间交叉依赖较少，多数通过 core-models 间接耦合。
-
-### 成熟度梯队
-
-| 梯队 | 包 | 特征 |
-|------|-----|------|
-| 🟢 成熟 | agora (v2.0.0), minerva (v0.11.0), forge (v1.3.0), ssot (v1.0.0) | 独立版本号，测试完备 |
-| 🟡 发展中 | kos (v2.0.0), ontoderive (v3.6.4), sophia (v0.2.1) | 活跃迭代 |
-| 🔴 早期 | core-models (v0.1.0), shared-lib (v0.4.0，已拆出 5 子包） |
-| ⚪ 待评估 | kairon-assistant, kairon-voice | 来自外部集成，需验证 |
-
-### LLM 统一
-
-4 路 LLM 抽象已统一为 **`llm-gateway`**（2026-06-04）：
-
-| 旧实现 | 适配器 | 状态 |
-|--------|--------|------|
-| ontoderive `BaseProvider` | `OntoderiveProvider` | ✅ |
-| minerva `OpenAICompatibleClient` | `MinervaProvider` | ✅ |
-| ssot `LLMBackend` | `SSOTProvider` | ✅ |
-
-新代码优先使用 `from llm_gateway.providers.legacy_*_adapter import *`。
-
-## 测试惯例
-
-- **框架**: pytest + uv
-- **运行**: `make test`（遍历 `packages/*/` 执行 `python3 -m pytest tests/ -q`）
-- **快速模式**: `make test-fast`（跳过 `tests/integration/` 和 `tests/benchmarks/`）
-- **配置**: 根 `pyproject.toml` 中 `[tool.pytest.ini_options]` → `testpaths = ["packages/*/tests"]`；各包另有独立 `[tool.pytest.ini_options]`
-- **命名**: 统一 `test_*.py` 模式
-- **conftest**: 6 个包有 conftest.py（agora, engine-core, eu-pricing, kos, minerva, ontoderive）— *2026-06-06: ecos 拆出后移除*
-- **覆盖率门禁**: fail_under 70%
-- **wksp 是唯一无 tests/ 目录的包** — 测试覆盖为零
-  - *2026-06-06 更新：wksp 已拆出至 `projects/cockpit/`，kairon 改为 23 包（移除 wksp）*
-
-## 编码规范
-
-| 规则 | 值 |
-|------|-----|
-| Python 版本 | 3.13+ |
-| 行宽 | 120 |
-| 格式化 | `ruff format` (双引号) |
-| 检查 | `ruff check`（select: E,F,W,I,N,UP,S,PLE,RUF100） |
-| 导入排序 | isort（通过 ruff 启用） |
-| 自定义忽略 | S101,S603,S607,S108,S110,S314,S608,E402,E501,SIM115,N806,N813,UP047 |
-| 类型检查 | mypy（namespace_packages + explicit_package_bases） |
-| 覆盖率 | fail_under 70%（`[tool.coverage.report]`） |
-| 包管理 | uv（非 pip/poetry） |
-| Lint 状态 | **`ruff check packages/` → 0 errors**（2026-06-04 归零） |
-
-## 关键文件
-
-| 文件 | 作用 |
-|------|------|
-| `pyproject.toml` | SSOT: 包清单、依赖、工具配置、mypy 路径 |
-| `Makefile` | 测试/格式化/清理命令 |
-| `packages/*/pyproject.toml` | 各包独立配置和依赖 |
-| `packages/*/tests/` | 各包测试目录 |
-| `docs/architecture_audit.md` | 架构审计报告（2026-06-02） |
-| `docs/governance_plan.md` | 治理规划 |
-| `docker/docker-compose.e2e.yml` | E2E 测试环境编排 |
-
-## CI
-
-kairon 拥有独立于根工作区的 CI 流水线：
-
-| 配置 | 路径 | 说明 |
-|------|------|------|
-| CI | `.github/workflows/ci.yml` | lint + codeanalyze 多版本矩阵（3.10–3.13） |
-
-根工作区的 `.github/workflows/` 含 **18 个全局 workflow**（2026-06-06 补齐 5 项独立项目 CI），9/9 项目全覆盖。
-
-## Gotchas
-
-1. **uv 是唯一包管理器** — 不要用 pip/poetry，`uv sync` 安装，`uv add <pkg>` 添加
-2. **ontoderive 有 1,920 JSON 推导日志** — `_derivation_logs/` 在 git 中但不是核心代码
-3. **agora 依赖运行中服务** — 测试需要 MCP 端点，部分测试跳过
-4. **mypy 严格模式** — namespace_packages 需要显式配置 mypy_path
-5. **包间依赖通过 workspace 引用** — `[tool.uv.sources]` 定义内部包来源
-6. **wksp 包零测试** — `packages/wksp/` 没有 `tests/` 目录
-   - *2026-06-06：wksp 已拆出至 `projects/cockpit/`，kairon 不再 ship wksp*
-7. **根目录遗留修复脚本** — 约 8 个 `_fix_*.py` 脚本（fix_imports, mypy_suppress 等），是 mypy 迁移残留
-8. **CI 已覆盖全工作区** — 2026-06-06 补齐 5 独立项目 CI, 9/9 项目拥有流水线
+- package count：直接扫 `packages/*/pyproject.toml`
+- route truth：同时看 `src/agora-routes.json` 和 `src/agora/l0_registry_overrides.yaml`
+- service truth：看 `src/agora-services.json`，但要区分 live target 和 compatibility alias

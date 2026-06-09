@@ -2,7 +2,7 @@ import json
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "engine"))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 from engine.core.derive import OntoDerive
 
 

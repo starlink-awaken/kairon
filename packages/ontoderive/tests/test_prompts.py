@@ -1,10 +1,16 @@
 """
-测试 intelligence/prompts.py — 提示词模板系统
+测试 intelligence/prompts.py - 提示词模板系统
 """
+
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+
 
 import json
 
-from intelligence.prompts import (  # type: ignore[import-not-found]
+from engine.intelligence.prompts import (  # type: ignore[import-not-found]
     CHECK_CONTRADICTION,
     DERIVE_INSIGHTS,
     DOMAIN_PRESETS,
@@ -18,7 +24,7 @@ from intelligence.prompts import (  # type: ignore[import-not-found]
 
 
 class TestPromptTemplate:
-    """PromptTemplate — 提示词模板数据类"""
+    """PromptTemplate - 提示词模板数据类"""
 
     def test_render_replaces_variables(self):
         """render 应替换 {var} 占位符"""
@@ -118,7 +124,7 @@ class TestDomainPresets:
 
 
 class TestGetTemplate:
-    """get_template — 模板获取与领域定制"""
+    """get_template - 模板获取与领域定制"""
 
     def test_get_known_template(self):
         tmpl = get_template("derive_insights")
@@ -145,7 +151,7 @@ class TestGetTemplate:
 
 
 class TestExportAllTemplates:
-    """export_all_templates — 导出为 JSON"""
+    """export_all_templates - 导出为 JSON"""
 
     def test_returns_valid_json(self):
         result = export_all_templates()

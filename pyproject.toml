@@ -62,7 +62,7 @@ health-profile = { workspace = true }
 [tool.pytest.ini_options]
 testpaths = ["packages/*/tests"]
 minversion = "7.0"
-addopts = "-v --tb=short -q"
+addopts = "-v --tb=short -q --ignore=tests/scripts --import-mode=importlib"
 
 [tool.coverage.run]
 source = ["packages"]

@@ -1179,6 +1179,95 @@
       "notes": "generated fixture",
       "added": "2026-01-01",
       "updated": "2026-06-04"
+    },
+    {
+      "id": "mcp-servers",
+      "name": "mcp-servers",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP",
+        "Market"
+      ],
+      "capabilities": [
+        "market-installed"
+      ],
+      "source": {
+        "provider": "github-market",
+        "url": "https://github.com/modelcontextprotocol/servers",
+        "path": "/Users/xiamingxing/.local/share/forge/market/mcp-servers"
+      },
+      "description": "# Model Context Protocol servers\n\nThis repository is a collection of *reference implementations* for the [Model Context Protocol](https://modelcontextprotocol.io/) (MCP), as well as references to comm",
+      "added": "2026-06-07",
+      "updated": "2026-06-07"
+    },
+    {
+      "id": "wps-office-mcp",
+      "name": "WPS Office MCP",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP",
+        "WPS",
+        "Office"
+      ],
+      "capabilities": [
+        "excel",
+        "word",
+        "ppt",
+        "document"
+      ],
+      "source": {
+        "provider": "local",
+        "path": "/Users/xiamingxing/ToolBox/wps-office-mcp/"
+      },
+      "description": "WPS Office MCP Server — 243 工具操控 Excel/Word/PPT",
+      "added": "2026-06-07",
+      "updated": "2026-06-07"
+    },
+    {
+      "id": "wps-skills",
+      "name": "WPS Skills",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "Skill",
+        "WPS",
+        "Office"
+      ],
+      "capabilities": [
+        "skill",
+        "workflow"
+      ],
+      "source": {
+        "provider": "local",
+        "path": "/Users/xiamingxing/ToolBox/wps-skills/"
+      },
+      "description": "WPS Office × AI 助手 MCP 框架 — wps-claude-addon + wps-claude-assistant",
+      "added": "2026-06-07",
+      "updated": "2026-06-07"
+    },
+    {
+      "id": "bos-skill-cli",
+      "name": "BOS Skill CLI",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "CLI",
+        "Skill"
+      ],
+      "capabilities": [
+        "skill",
+        "search",
+        "install"
+      ],
+      "source": {
+        "provider": "local",
+        "path": "/Users/xiamingxing/ToolBox/bos-skill-cli/"
+      },
+      "description": "Skills 管理 CLI/TUI — 搜索/暂存/promote/回退 skill 包",
+      "added": "2026-06-07",
+      "updated": "2026-06-07"
     }
   ],
   "event_log": [

@@ -73,6 +73,51 @@ def get_graph_stats():
 def capture_tool(*_args, **_kwargs):
     return {"status": "captured_stub"}
 
+
+@mcp.tool()
+def market_install(repo_url: str, alias: str = "") -> str:
+    """Install a tool from GitHub into the Forge market.
+
+    Args:
+        repo_url: GitHub repository URL (https://github.com/owner/repo)
+        alias: Optional short name (defaults to repo name)
+
+    Returns:
+        JSON string with install result
+    """
+    from forge.market import install as _market_install
+    name = alias or None
+    result = _market_install(repo_url, name)
+    return json.dumps(result, ensure_ascii=False)
+
+
+@mcp.tool()
+def market_list() -> str:
+    """List all installed market packages.
+
+    Returns:
+        JSON string with list of installed packages
+    """
+    from forge.market import list_installed
+    packages = list_installed()
+    return json.dumps(packages, ensure_ascii=False)
+
+
+@mcp.tool()
+def market_remove(name: str) -> str:
+    """Remove an installed market package.
+
+    Args:
+        name: Package name to remove
+
+    Returns:
+        JSON string with removal result
+    """
+    from forge.market import remove as _market_remove
+    result = _market_remove(name)
+    return json.dumps(result, ensure_ascii=False)
+
+
 def main():
     mcp.run()
 

@@ -367,6 +367,12 @@ def cmd_sniff(*_):
         print("\n运行 forge install 选择安装缺失组件")
 
 
+def cmd_market(args: list[str]):
+    """GitHub 工具市场 — install/list/remove"""
+    from forge.market import cli as _market_cli
+    sys.exit(_market_cli(args))
+
+
 def cmd_install(args: list[str]):
     """交互式安装器 — 嗅探 + 安装"""
     # 如果指定了具体项，直接安装
@@ -548,6 +554,7 @@ def cmd_help():
     print("  forge sniff              # 环境嗅探")
     print("  forge install            # 一键安装器")
     print("  forge capture            # 记新工具（10 秒）")
+    print("  forge market             # 工具市场 install/list/remove")
     print("  forge status             # 看数据")
     print("  forge routine            # 日常流程")
     print("  forge schedule           # 配置定时任务")
@@ -703,7 +710,7 @@ def _build_command_map() -> dict:
         reg(name, "noargs", globals()[f"cmd_{name}"])
     for name in ("health", "dashboard", "list"):
         reg(name, "args", globals()[f"cmd_{name}"])
-    for name in ("verify", "schedule", "sniff", "install"):
+    for name in ("verify", "schedule", "sniff", "install", "market"):
         reg(name, "args", globals()[f"cmd_{name}"])
 
     reg("capture", "args", cmd_capture)

@@ -1,15 +1,21 @@
 """
-测试 foundation/rule_loader.py — 规则加载器
+测试 foundation/rule_loader.py - 规则加载器
 """
+
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+
 
 import json
 
 import pytest
-from foundation.rule_loader import RuleLoader  # type: ignore[import-not-found]
+from engine.foundation.rule_loader import RuleLoader  # type: ignore[import-not-found]
 
 
 class TestRuleLoader:
-    """RuleLoader — 从 YAML/JSON 加载推理规则"""
+    """RuleLoader - 从 YAML/JSON 加载推理规则"""
 
     def test_load_json_rules(self, tmp_path):
         """能从 JSON 文件加载规则列表"""
@@ -50,6 +56,7 @@ class TestRuleLoader:
   category: deduction
   confidence: 0.95
 """
+
         fp = tmp_path / "rules.yaml"
         fp.write_text(yaml_text)
 

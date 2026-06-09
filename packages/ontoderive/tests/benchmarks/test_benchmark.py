@@ -11,7 +11,13 @@ import time
 from pathlib import Path
 
 import pytest
-from engine.core.derive import OntoDerive
+
+try:
+    from engine.core.derive import OntoDerive
+    _ENGINE_AVAILABLE = True
+except ImportError:
+    OntoDerive = None
+    _ENGINE_AVAILABLE = False
 
 Z_PARK = Path(__file__).parent.parent.parent / "examples" / "z-park"
 

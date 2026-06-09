@@ -134,7 +134,7 @@ def do_sync(args: dict[str, Any]) -> dict[str, Any]:
                 result = instance.sync(args)
                 return {"_method": "sync", "_class": name, "result": str(result)[:500]}
     except Exception as exc:
-        return {"_method": "sync", "_error": f"{type(exc).__name_}: {exc}"}
+        return {"_method": "sync", "_error": f"{type(exc).__name__}: {exc}"}
     return {"_method": "sync", "_error": "no class with sync method"}
 
 

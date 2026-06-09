@@ -24,6 +24,7 @@ def build_parser() -> argparse.ArgumentParser:
     # research
     r = sub.add_parser("research", help="Execute deep research")
     r.add_argument("query", nargs="?", help="Research question (or use --template)")
+    r.add_argument("--json", action="store_true", help="JSON output")
     r.add_argument(
         "--level",
         default="auto",
@@ -41,6 +42,7 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--eidos-output", type=str, help="导出为 Eidos KnowledgeCard 的目录路径")
     r.add_argument("--pipeline-input", help="pipeline input file")
     r.add_argument("--pipeline-output", help="pipeline output file")
+    r.add_argument("--vault-sink", action="store_true", help="开启 Vault 归档 (research → L4 Markdown)")
 
     # mcp
     sub.add_parser("mcp", help="Start MCP server for agent integration")
@@ -222,6 +224,7 @@ async def _run_research(args):
         nlp_pipeline_zh=nlp_zh,
         cloud_llm_client=cloud_llm,
         glm_llm_client=long_context,
+        vault_sink_enabled=getattr(args, "vault_sink", False),
     )
     ctx = await pipeline.run(args.query, level, triage_obj)
     results = getattr(ctx, "search_results", []) or []

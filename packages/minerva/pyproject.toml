@@ -39,11 +39,11 @@ dependencies = [
     "ddgs>=8.0",
     "ujson>=5.12.1",
     "urllib3>=2.7.0",
+    "kairon-observability>=0.4.0",
 ]
 
 [project.optional-dependencies]
 eidos = ["eidos>=0.1.0"]
-paradigm = ["protocols-layer"]
 tier2 = [
     "graphiti-core[neo4j]>=0.28",
     "semantica>=0.4.0",

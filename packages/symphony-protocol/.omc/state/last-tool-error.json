@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"PYTHONPATH=src python3 -c \\\"from symphony_protocol.models import SymphonyStage; print('OK')\\\" 2>&1\",\"description\":\"Debug symphony import\"}",
-  "error": "Exit code 1\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    from symphony_protocol.models import SymphonyStage; print('OK')\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/xiamingxing/Workspace/projects/kairon/packages/symphony-protocol/src/symphony_protocol/__init__.py\", line 3, in <module>\n    from .models import (\n    ...<14 lines>...\n    )\nImportError: cannot import name 'StageHistoryEntry' from 'symphony_protocol.models' (/Users/xiamingxin...",
-  "timestamp": "2026-06-02T06:38:37.603Z",
-  "retry_count": 1
-}

@@ -46,3 +46,6 @@ packages/shared-lib/data/db/
 # Environment
 .env
 .env.local
+
+# Lock files (managed by root uv.lock)
+uv.lock

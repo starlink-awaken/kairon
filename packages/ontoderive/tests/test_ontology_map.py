@@ -1,10 +1,16 @@
 """
-测试 foundation/ontology_map.py — 本体映射与格式导出
+测试 foundation/ontology_map.py - 本体映射与格式导出
 """
+
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+
 
 import json
 
-from foundation.ontology_map import (  # type: ignore[import-not-found]
+from engine.foundation.ontology_map import (  # type: ignore[import-not-found]
     RELATION_MAPPINGS,
     TYPE_MAPPINGS,
     OntologyMapper,
@@ -32,7 +38,7 @@ class MockInference:
 
 
 class TestOntologyMapper:
-    """OntologyMapper — 类型映射与格式导出"""
+    """OntologyMapper - 类型映射与格式导出"""
 
     def setup_method(self):
         self.mapper = OntologyMapper()
@@ -125,7 +131,7 @@ class TestOntologyMapper:
 
 
 class TestRDFTriple:
-    """RDFTriple — 数据类"""
+    """RDFTriple - 数据类"""
 
     def test_default_datatype_is_empty_string(self):
         t = RDFTriple(subject="s", predicate="p", object="o")

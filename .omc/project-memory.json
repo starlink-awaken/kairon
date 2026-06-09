@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1780546887146,
+  "lastScanned": 1780835344371,
   "projectRoot": "/Users/xiamingxing/Workspace/projects/kairon",
   "techStack": {
     "languages": [
@@ -27,7 +27,7 @@
   },
   "build": {
     "buildCommand": "make build",
-    "testCommand": "echo \"=== cockpit ===\"; cd /Users/xiamingxing/Workspace/projects/cockpit && uv run python -m pytest tests/ -q 2>&1 | tail -3; echo \"=== runtime ===\"; cd /Users/xiamingxing/Workspace/projects/runtime && uv run python -m pytest tests/ -q 2>&1 | tail -3",
+    "testCommand": "uv run ruff check packages/ --statistics 2>&1 | tail -3 && echo \"---\" && uv run python -m pytest packages/minerva/tests/integration/test_pipeline_levels.py -q --no-header 2>&1 | tail -5",
     "lintCommand": "ruff check",
     "devCommand": null,
     "scripts": {}
@@ -44,10 +44,14 @@
     "mainDirectories": [
       "docs",
       "examples",
+      "scripts",
       "src",
       "tests"
     ],
-    "gitBranches": null
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
   },
   "customNotes": [],
   "directoryMap": {
@@ -55,23 +59,30 @@
       "path": "_derivation_logs",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1780546887129,
+      "lastAccessed": 1780835344359,
       "keyFiles": [
         "insight-derive-46c51c1b1d6c.json"
       ]
+    },
+    "_staging": {
+      "path": "_staging",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1780835344359,
+      "keyFiles": []
     },
     "data": {
       "path": "data",
       "purpose": "Data files",
       "fileCount": 0,
-      "lastAccessed": 1780546887130,
+      "lastAccessed": 1780835344360,
       "keyFiles": []
     },
     "dist": {
       "path": "dist",
       "purpose": "Distribution/build output",
       "fileCount": 3,
-      "lastAccessed": 1780546887130,
+      "lastAccessed": 1780835344360,
       "keyFiles": [
         "kairon-0.1.0-py3-none-any.whl",
         "kairon-0.1.0.tar.gz"
@@ -81,7 +92,7 @@
       "path": "docker",
       "purpose": null,
       "fileCount": 3,
-      "lastAccessed": 1780546887130,
+      "lastAccessed": 1780835344361,
       "keyFiles": [
         "Dockerfile.e2e",
         "docker-compose.e2e.yml",
@@ -91,10 +102,13 @@
     "docs": {
       "path": "docs",
       "purpose": "Documentation",
-      "fileCount": 2,
-      "lastAccessed": 1780546887131,
+      "fileCount": 12,
+      "lastAccessed": 1780835344361,
       "keyFiles": [
+        "agora_route_drift_audit.md",
+        "api_reference.md",
         "architecture_audit.md",
+        "cross_project_boundary_audit.md",
         "governance_plan.md"
       ]
     },
@@ -102,45 +116,72 @@
       "path": "examples",
       "purpose": "Example code",
       "fileCount": 0,
-      "lastAccessed": 1780546887131,
+      "lastAccessed": 1780835344361,
       "keyFiles": []
     },
     "graphify-out": {
       "path": "graphify-out",
       "purpose": null,
       "fileCount": 3,
-      "lastAccessed": 1780546887131,
+      "lastAccessed": 1780835344361,
+      "keyFiles": []
+    },
+    "organs": {
+      "path": "organs",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1780835344361,
       "keyFiles": []
     },
     "packages": {
       "path": "packages",
       "purpose": null,
-      "fileCount": 3,
-      "lastAccessed": 1780546887131,
+      "fileCount": 0,
+      "lastAccessed": 1780835344362,
+      "keyFiles": []
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 8,
+      "lastAccessed": 1780835344362,
       "keyFiles": [
-        "agora-audit.db",
-        "agora.db",
-        "kairon-10pkg-analysis.md"
+        "adr_collect.py",
+        "agora_route_generator.py",
+        "contract_gatekeeper.py",
+        "count_pkg_files.sh",
+        "e2e_health_demo.py"
       ]
     },
     "src": {
       "path": "src",
       "purpose": "Source code",
       "fileCount": 0,
-      "lastAccessed": 1780546887131,
+      "lastAccessed": 1780835344362,
       "keyFiles": []
     },
     "tests": {
       "path": "tests",
       "purpose": "Test files",
-      "fileCount": 5,
-      "lastAccessed": 1780546887132,
+      "fileCount": 7,
+      "lastAccessed": 1780835344362,
       "keyFiles": [
         "__init__.py",
+        "test_cross_package_integration.py",
         "test_e2e_agora.py",
         "test_e2e_basic.py",
-        "test_e2e_knowledge.py",
-        "test_root_package.py"
+        "test_e2e_knowledge.py"
+      ]
+    },
+    "tests/scripts": {
+      "path": "tests/scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 6,
+      "lastAccessed": 1780835344363,
+      "keyFiles": [
+        "test_adr_collect.py",
+        "test_agora_route_generator.py",
+        "test_e2e_health_demo.py"
       ]
     }
   },
@@ -212,6 +253,12 @@
       "type": "file"
     },
     {
+      "path": "packages/core-models/src/core_models/__init__.py",
+      "accessCount": 5,
+      "lastAccessed": 1780835568675,
+      "type": "file"
+    },
+    {
       "path": "packages/engine-core/src/engine_core/perception_manager.py",
       "accessCount": 4,
       "lastAccessed": 1780547461758,
@@ -233,12 +280,6 @@
       "path": "packages/engine-core/src/engine_core/worker_profile.py",
       "accessCount": 4,
       "lastAccessed": 1780547795710,
-      "type": "file"
-    },
-    {
-      "path": "packages/core-models/src/core_models/__init__.py",
-      "accessCount": 4,
-      "lastAccessed": 1780551604594,
       "type": "file"
     },
     {

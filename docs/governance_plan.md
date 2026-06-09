@@ -58,6 +58,7 @@ This is no longer a phase-fiction document. It is a repair plan tied to the live
 - **Verification**:
   - migration table matches live package tree
   - no docs point to missing package targets
+- **Status**: ✅ **已解决 (2026-06-09)** — agentmesh 迁移对照表已更新为当前实际位置 (agora→`projects/agora/`, agent-runtime→`projects/runtime/`+`projects/cockpit/`, llm-gateway→`projects/aetherforge/`, agent-hub 标注为未落地)
 - **Cross-project coordination**: yes, archive docs and `.omo` references
 
 ## P1: Clarify Architecture

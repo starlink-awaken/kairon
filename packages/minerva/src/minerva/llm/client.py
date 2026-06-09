@@ -40,16 +40,16 @@ class OpenAICompatibleClient:
 
     async def generate(
         self,
-        system: str | None,
         prompt: str,
+        system: str | None = None,
         temperature: float = 0.7,
         max_tokens: int = 4096,
     ) -> str:
         """Send chat completion request. Returns raw text response.
 
         Args:
-            system: System prompt (optional, None to omit)
             prompt: User prompt
+            system: System prompt (optional, None to omit)
             temperature: Sampling temperature (0.0-2.0)
             max_tokens: Maximum tokens in response
 

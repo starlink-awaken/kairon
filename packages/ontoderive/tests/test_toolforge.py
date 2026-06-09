@@ -5,7 +5,7 @@
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "engine"))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import pytest
 from engine.toolforge.matcher import ToolForge, _tokenize

@@ -1,6 +1,6 @@
 # AGENTS.md — kairon
 
-> Knowledge & Research Operating Stack: 25 包 Python monorepo · 5+3+1 架构 L2 引擎面
+> Knowledge & Research Operating Stack: 16 个 live installable Python packages · 5+3+1 架构 L2 引擎面
 
 如果你不是 Claude Code，从这里开始。Claude Code 会自动读取 `CLAUDE.md`。
 
@@ -32,16 +32,31 @@ L0 ┌ protocols · 协议 YAML
    └ ecos · SSB 协议核心
 ```
 
-## 包清单 (25 包)
+## 包清单 (16 live installable packages)
 
-### L0 基础 (5 包, 从 shared-lib 拆出)
-- kairon-lib-events, kairon-utils, kairon-plugin-sdk, kairon-observability, kairon-pipeline
+### 基础与共用 primitives (7)
+- `core-models`
+- `health-profile`
+- `kairon-lib-events`
+- `kairon-observability`
+- `kairon-pipeline`
+- `kairon-plugin-sdk`
+- `kairon-utils`
 
-### L1/2 知识工程 (20 包)
-- eidos (35K), kos (14K), minerva (25K), ontoderive (6K), sophia (1.4K), kronos, iris
-- ssot (14K), forge (8K), codeanalyze, core-models (1.6K), llm-gateway, llm-gateway-kernel
-- shared-lib, engine-core, sharedbrain-bridge, health-profile
-- symphony-protocol, sot-bridge, protocols-layer
+### 知识与研究引擎 (8)
+- `codeanalyze`
+- `eidos`
+- `iris`
+- `kos`
+- `kronos`
+- `minerva`
+- `ontoderive`
+- `sophia`
+
+### 对外能力面 (1)
+- `forge`
+
+> 当前 live inventory 以 `packages/*/pyproject.toml` 为准。详见 [docs/live_inventory.md](/Users/xiamingxing/Workspace/projects/kairon/docs/live_inventory.md:1)。
 
 ## 测试与 CI
 
@@ -65,3 +80,38 @@ L0 ┌ protocols · 协议 YAML
 | kairon-assistant | → `projects/_archived/` |
 | kairon-voice | → `projects/_archived/` |
 | kaironcloud-billing | → `projects/_archived/` |
+
+## 当前边界说明
+
+- `kairon` 现在主要承担知识引擎职责，不再是完整 runtime/gateway/bridge 大一统仓库。
+- LLM gateway 正在收敛到 `projects/aetherforge/`，不要再把 `llm-gateway` 当成 live package truth。
+- Agora 路由表里仍保留 `engine-core`、`sharedbrain-bridge`、`ssot`、`sot-bridge`、`protocols-layer` 等历史别名；它们不是当前 `kairon` live installable package。
+- 架构与跨项目边界请优先看：
+  - [docs/architecture_audit.md](/Users/xiamingxing/Workspace/projects/kairon/docs/architecture_audit.md:1)
+  - [docs/agora_route_drift_audit.md](/Users/xiamingxing/Workspace/projects/kairon/docs/agora_route_drift_audit.md:1)
+  - [docs/cross_project_boundary_audit.md](/Users/xiamingxing/Workspace/projects/kairon/docs/cross_project_boundary_audit.md:1)
+
+
+## BOS Services
+
+kairon 通过 Agora Service Mesh 对外提供的 BOS URI 服务。
+Agent 通过 `resolve_bos_uri()` 或 `read_resource()` 调用。
+
+### 记忆域 (memory)
+- `bos://memory/kos/search` — KOS 跨域语义搜索 (poc, stdio)
+- `bos://memory/kos/query` — KOS 精确查询 (poc, stdio)
+- `bos://memory/kronos/ingest` — Kronos 知识摄取 (poc, stdio)
+
+### 分析域 (analysis)
+- `bos://analysis/minerva/research` — Minerva 深度研究 (poc, stdio)
+- `bos://analysis/minerva/draft` — Minerva 草稿 (poc, stdio)
+- `bos://analysis/minerva/audit` — Minerva 审计 (poc, stdio)
+- `bos://analysis/ontoderive/align` — Ontoderive 文档对齐 (poc, stdio)
+- `bos://analysis/codeanalyze/scan` — CodeAnalyze 代码扫描 (poc, stdio)
+- `bos://analysis/eidos/validate` — Eidos Schema 校验 (poc, stdio)
+
+### 人格域 (persona)
+- `bos://persona/sot-bridge/` — SSOT 桥接 (poc, stdio)
+
+### 治理域 (omo)
+- `bos://omo/eidos/pipeline` — Eidos 多工具编排链 (poc, stdio)

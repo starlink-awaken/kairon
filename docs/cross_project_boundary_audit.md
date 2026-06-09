@@ -1,94 +1,111 @@
 # Kairon Cross-Project Boundary Audit
 
-> Scope: `kairon <-> agentmesh`, `kairon <-> SharedBrain`, `kairon <-> .omo`
-> Audit date: 2026-06-04
+> Scope: `kairon` as the center, covering `agora`, `aetherforge`, `agentmesh`, `SharedBrain`, and workspace governance docs
+> Audit date: 2026-06-07
 
-## 1. `kairon <-> agentmesh`
-
-### Live evidence
-
-- `/Users/xiamingxing/Workspace/projects/agentmesh/README.md` states the project is archived and **100% migrated to kairon**
-- the migration table maps:
-  - Engine -> `packages/agent-runtime/`
-  - Agent Registry -> `packages/agent-hub/`
-  - Gateway -> `packages/agora/`
-  - Toolkit -> `packages/forge/`
-  - Model-Orchestrator -> `packages/llm-gateway/`
-
-### Audit finding
-
-The declared migration target is internally inconsistent with the live tree.
-
-- `agent-runtime`, `agora`, `forge`, `llm-gateway` exist
-- `agent-hub` does **not** exist in the current live `packages/` inventory
-
-### Implication
-
-The migration story is only partially trustworthy. Any architecture conclusion that assumes "agentmesh migration complete" without reconciling the missing `agent-hub` target is overstated.
-
-### Required remediation
-
-- confirm whether `agent-hub` was deleted, merged, or never landed in this checkout
-- update the agentmesh migration map after the repo-side truth is fixed
-
-## 2. `kairon <-> SharedBrain`
+## 1. `kairon <-> agora`
 
 ### Live evidence
 
-- current `projects/` tree has no `projects/SharedBrain/`
-- `packages/sharedbrain-bridge/README.md` still describes a bridge between `kairon` and `SharedBrain`
-- `.omo/_truth/INVENTORY.md` still models `projects/SharedBrain/` as a live workspace project
+- Agora route table still exposes historical names such as `engine-core`, `sharedbrain-bridge`, `protocols-layer`, `ssot`, and `sot-bridge`
+- current compatibility routing now collapses the bridge side onto one backend name: `sot-bridge-persona`
+- current `kairon` tree has no live installable packages for those names
+- route aliases for `llm-gateway` already point toward `aetherforge-gateway`, but `llm_generate` still points at `llm-gateway`
 
-### Audit finding
+### Finding
 
-The bridge package still exists, but the sibling-project boundary it is supposed to bridge is no longer present in the live tree.
+Agora is carrying both live convergence and a partially normalized compatibility topology at the same time.
 
-### Implication
+### Risk
 
-There are only two coherent possibilities:
+**P0**: users and planners can infer a false service topology from the registry.
 
-1. `SharedBrain` is now an externalized runtime/data concept, not a sibling repo
-2. the workspace inventory is stale and the repo structure is incomplete
-
-Until that is resolved, `sharedbrain-bridge` is semantically under-specified.
-
-### Required remediation
-
-- rewrite `sharedbrain-bridge` package docs around the actual upstream contract
-- stop describing `SharedBrain` as a live repo if it is no longer in the working tree
-
-## 3. `kairon <-> .omo`
+## 2. `kairon <-> aetherforge`
 
 ### Live evidence
 
-- `.omo/_truth/INVENTORY.md` still claims:
-  - 5 embedded subrepos including `SharedBrain`
-  - `kairon` has 31 Python packages
-- several `.omo` standards and tests still reference `projects/SharedBrain/` and older agentmesh topology
-- current `.omo/state/system.yaml` is already on phase 26, so older phase-level narratives are not the live operating truth anymore
+- `projects/aetherforge/` now exists as a first-class repo
+- service registry describes `aetherforge-gateway` as the replacement for `llm-gateway-kernel`
+- `projects/runtime/pyproject.toml` now depends on `aetherforge-gateway`
 
-### Audit finding
+### Finding
 
-`.omo` is currently a mixed-quality governance layer:
+LLM gateway responsibilities are no longer meaningfully inside `kairon`. They are converging into a sibling project.
 
-- strong at preserving prior decisions and historical rollout traces
-- weak as a current inventory authority for `kairon`
+### Risk
 
-### Implication
+**P0** if docs keep treating `llm-gateway` as a live `kairon` capability surface.
 
-If `.omo` is allowed to keep stale topology facts while `kairon` evolves quickly, governance will overstate system readiness and understate repo debt.
+## 3. `kairon <-> agentmesh`
 
-### Required remediation
+### Live evidence
 
-- do not mirror the full audit report into `.omo`
-- register only evidence pointers and remediation tasks in `.omo`
-- update `.omo` inventory claims only after repo-side package truth is confirmed
+- archived `agentmesh` documentation still claims 100% migration into `kairon`
+- the current `kairon` tree no longer contains several historical migration targets that older narratives depend on
 
-## 4. Boundary Risk Summary
+### Finding
 
-| Seam | Risk | Why |
+The migration story is historical, not current topology truth. It should not be used as an architecture source without revalidation. **2026-06-09**: migration map in `_archived/agentmesh-shell-2026-06-05/README.md` has been updated to reflect current project locations.
+
+### Risk
+
+~~**P1**: migration docs overstate how much of the old mesh/runtime surface still lives inside `kairon`.~~ **已解决** — 迁移文档已更新。
+
+## 4. `kairon <-> SharedBrain`
+
+### Live evidence
+
+- current workspace no longer contains a live `SharedBrain` repo under `projects/`
+- route and service narratives still use `sharedbrain-bridge` and `sot-bridge` names
+- current `kairon` tree has no live `sharedbrain-bridge` package
+
+### Finding
+
+SharedBrain is now a conceptual or data boundary, not a live sibling package boundary inside `kairon`. 原始代码归档于 `projects/_archived/SharedBrain-original/` 和 `projects/_archived/SharedBrain-code/`。
+
+### Risk
+
+**P1**: stale bridge language makes the system look more integrated than it is.
+
+## 5. `kairon <-> workspace governance docs`
+
+### Live evidence
+
+- workspace [AGENTS.md](/Users/xiamingxing/Workspace/AGENTS.md:1) previously carried the same stale package-count drift and needed a truth reset
+- repo [AGENTS.md](/Users/xiamingxing/Workspace/projects/kairon/AGENTS.md:1) still said 25 before this audit refresh
+- earlier audit docs still reason from deleted package names
+
+### Finding
+
+Governance and onboarding docs were using stale topology as if it were live fact.
+
+### Risk
+
+**P0**: bad planning input, bad routing assumptions, and false confidence in repo capabilities.
+
+## 6. Boundary Summary
+
+| Seam | Status | Main issue |
 |---|---|---|
-| `kairon <-> agentmesh` | P0 | migration map points to at least one missing target |
-| `kairon <-> SharedBrain` | P1 | bridge exists but upstream project boundary is stale |
-| `kairon <-> .omo` | P0 | governance inventory is no longer a trustworthy live topology source |
+| `kairon <-> agora` | unstable | route aliases outlive live package topology |
+| `kairon <-> aetherforge` | converging | gateway truth moved faster than docs |
+| `kairon <-> agentmesh` | historical only | migration map is no longer a live architecture source |
+| `kairon <-> SharedBrain` | under-specified | bridge naming survives after package boundary disappeared |
+| `kairon <-> workspace governance docs` | stale | package counts and capability map drifted |
 
+## 7. Required Actions
+
+### P0
+
+- refresh all package-count claims to 16 live installable packages
+- stop treating deleted package names as live architecture anchors
+- align Agora LLM routes with `aetherforge-gateway`
+
+### P1
+
+- rewrite SharedBrain and SSOT language around current sibling-project boundaries
+- tag compatibility aliases as compatibility aliases in route docs
+
+### P2
+
+- generate boundary inventories from live repos and registries instead of hand-maintained prose

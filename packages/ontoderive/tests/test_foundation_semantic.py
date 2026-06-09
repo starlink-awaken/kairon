@@ -1,13 +1,19 @@
 """
-测试 foundation/semantic.py — SemanticMatcher (TF-IDF 语义匹配)
+测试 foundation/semantic.py - SemanticMatcher (TF-IDF 语义匹配)
 """
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+
+
 import pytest
-from foundation.semantic import SemanticMatcher  # type: ignore[import-not-found]
+from engine.foundation.semantic import SemanticMatcher  # type: ignore[import-not-found]
 
 
 class TestSemanticMatcher:
-    """SemanticMatcher — TF-IDF + 余弦相似度"""
+    """SemanticMatcher - TF-IDF + 余弦相似度"""
 
     def test_empty_corpus_init(self):
         """空语料初始化不应报错"""

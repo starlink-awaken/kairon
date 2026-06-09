@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "engine"))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 from engine.foundation.utils import all_md, detect_cycles, load_json, rf, save_json, wf
 
 
