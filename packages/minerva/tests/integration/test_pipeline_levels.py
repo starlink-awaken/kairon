@@ -6,7 +6,14 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from .._helpers import _has_module
+try:
+    from tests._helpers import _has_module
+except ImportError:
+    try:
+        from .._helpers import _has_module
+    except ImportError:
+        def _has_module(name: str) -> bool:
+            return True
 
 
 class TestPipelineLevels:
