@@ -1,0 +1,27 @@
+digraph BayesianNetwork {
+  rankdir=LR;
+  node [shape=box];
+  "D-F1" [label="D-F1\n产品月活用户\nP=0.95", fillcolor=green, style=filled];
+  "D-F2" [label="D-F2\n月营收\nP=0.95", fillcolor=green, style=filled];
+  "D-F3" [label="D-F3\n用户NPS\nP=0.95", fillcolor=green, style=filled];
+  "D-F4" [label="D-F4\n竞品NPS\nP=0.95", fillcolor=green, style=filled];
+  "D-F5" [label="D-F5\n研发团队\nP=0.95", fillcolor=green, style=filled];
+  "D-F6" [label="D-F6\n月均线上故障\nP=0.95", fillcolor=green, style=filled];
+  "D-F7" [label="D-F7\n测试覆盖率\nP=0.95", fillcolor=green, style=filled];
+  "D-F8" [label="D-F8\n代码技术债务\nP=0.95", fillcolor=green, style=filled];
+  "INF-L1：产品稳定性是当前最紧迫问题" [label="INF-L1：产品稳定性是当前最紧迫问题\nINF-L1：产品稳定性是当前最紧迫问题\nP=0.85", fillcolor=blue, style=filled];
+  "INF-L2：应加速新功能开发以追赶竞品NPS差距" [label="INF-L2：应加速新功能开发以追赶竞品NPS差距\nINF-L2：应加速新功能开发以追赶竞品\nP=0.85", fillcolor=blue, style=filled];
+  "INF-L3：技术债务是根本瓶颈，必须优先清理" [label="INF-L3：技术债务是根本瓶颈，必须优先清理\nINF-L3：技术债务是根本瓶颈，必须优\nP=0.85", fillcolor=blue, style=filled];
+  "D-F1" -> "INF-L2：应加速新功能开发以追赶竞品NPS差距";
+  "D-F2" -> "INF-L2：应加速新功能开发以追赶竞品NPS差距";
+  "D-F3" -> "INF-L1：产品稳定性是当前最紧迫问题";
+  "D-F3" -> "INF-L2：应加速新功能开发以追赶竞品NPS差距";
+  "D-F4" -> "INF-L1：产品稳定性是当前最紧迫问题";
+  "D-F4" -> "INF-L2：应加速新功能开发以追赶竞品NPS差距";
+  "D-F5" -> "INF-L2：应加速新功能开发以追赶竞品NPS差距";
+  "D-F6" -> "INF-L1：产品稳定性是当前最紧迫问题";
+  "D-F6" -> "INF-L3：技术债务是根本瓶颈，必须优先清理";
+  "D-F7" -> "INF-L1：产品稳定性是当前最紧迫问题";
+  "D-F7" -> "INF-L3：技术债务是根本瓶颈，必须优先清理";
+  "D-F8" -> "INF-L3：技术债务是根本瓶颈，必须优先清理";
+}

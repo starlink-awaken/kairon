@@ -1,51 +1,55 @@
-# Python
+# ── Python ──
 __pycache__/
 *.py[cod]
+*$py.class
 *.egg-info/
-.venv/
-.ruff_cache/
-.pytest_cache/
-*.egg
+.eggs/
 dist/
 build/
+*.egg
 
-# IDE
-.vscode/
+# ── Virtual environment ──
+.venv/
+venv/
+.venv.bak/
+
+# ── uv ──
+uv.lock
+
+# ── IDE ──
 .idea/
+.vscode/
 *.swp
 *.swo
+*~
 
-# OS
+# ── OS ──
 .DS_Store
 Thumbs.db
 
-# SQLite artifacts
-*.db
-*.db-shm
-*.db-wal
-
-# Runtime logs
-*.jsonl
-agora-*.json
-
-# Tool runtime state
-.omc/
-.omo/
-.claude/worktrees/
-
-# Derived/generated data
-_derivation_logs/
-examples/**/_derivation_logs/
-packages/ontoderive/_derivation_logs/
-packages/ontoderive/examples/**/_derivation_logs/
-
-# Package-local runtime data
-data/db/
-packages/shared-lib/data/db/
-
-# Environment
+# ── Environment & Secrets ──
 .env
-.env.local
+.env.*
+*.key
+*.pem
+credentials.json
+*.cred
+auth.json
 
-# Lock files (managed by root uv.lock)
-uv.lock
+# ── Testing & Coverage ──
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# ── Build artifacts ──
+*.so
+*.dylib
+*.dll
+
+# ── Docker ──
+.docker/

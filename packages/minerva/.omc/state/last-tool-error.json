@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"head -10 /Users/xiamingxing/Workspace/projects/kairon/packages/agora/agora-routes.json && echo \\\"---\\\" && uv run python -c \\\"\\nimport json\\nfrom collections import Counter\\nr = json.load(o...",
+  "error": "Exit code 1\n{\n  \"routes\": {\n    \"a2a_cancel_task\": \"agora-internal\",\n    \"a2a_get_task\": \"agora-internal\",\n    \"a2a_list_tasks\": \"agora-internal\",\n    \"a2a_send_task\": \"agora-internal\",\n    \"add_route\": \"agora-internal\",\n    \"agora_execute\": \"agora-internal\",\n    \"analyze_project\": \"codeanalyze-mcp\",\n    \"audit_project\": \"codeanalyze-mcp\",\n---\nTraceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    svcs = Counter(r.values())\n  File \"/Users/xiamingxing/.local/share/uv/python...",
+  "timestamp": "2026-06-05T13:47:26.575Z",
+  "retry_count": 2
+}
