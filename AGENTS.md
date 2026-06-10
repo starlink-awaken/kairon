@@ -85,7 +85,7 @@ L0 ┌ protocols · 协议 YAML
 
 - `kairon` 现在主要承担知识引擎职责，不再是完整 runtime/gateway/bridge 大一统仓库。
 - LLM gateway 正在收敛到 `projects/aetherforge/`，不要再把 `llm-gateway` 当成 live package truth。
-- Agora 路由表里仍保留 `engine-core`、`sharedbrain-bridge`、`ssot`、`sot-bridge`、`protocols-layer` 等历史别名；它们不是当前 `kairon` live installable package。
+- Agora POC_SERVICES 路由表中仍保留 `sot-bridge`、`sot-bridge-persona`、`protocols-layer` 等历史 BOS URI（指向 poc/stdio 传输层），它们不是当前 `kairon` live installable package。
 - 架构与跨项目边界请优先看：
   - [docs/architecture_audit.md](/Users/xiamingxing/Workspace/projects/kairon/docs/architecture_audit.md:1)
   - [docs/agora_route_drift_audit.md](/Users/xiamingxing/Workspace/projects/kairon/docs/agora_route_drift_audit.md:1)
