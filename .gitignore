@@ -53,3 +53,5 @@ coverage.xml
 
 # ── Docker ──
 .docker/
+
+.claude/
