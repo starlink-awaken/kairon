@@ -28,6 +28,8 @@ class ParadigmContext:
     paradigm_result: ParadigmResult
     max_iterations: int = 3
     iteration: int = 0
+    completion_met: bool = False
+    verification_passed: bool = True
     stage_history: list[dict] = field(default_factory=list)
     paradigm_prompts: dict[str, str] = field(default_factory=dict)
 
