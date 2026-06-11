@@ -329,7 +329,7 @@ class ImplementationScanner:
 
         # 普通参数
         for arg in node.args.args:
-            param = {"name": arg.arg}
+            param: dict[str, Any] = {"name": arg.arg}
             if hasattr(arg, "annotation") and arg.annotation:
                 try:
                     param["type"] = ast.unparse(arg.annotation)
