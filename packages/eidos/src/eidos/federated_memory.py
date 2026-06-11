@@ -199,7 +199,8 @@ class CRDTSet:
             elif entry1:
                 merged.add(entry1)
             else:
-                merged.add(entry2)
+                if entry2 is not None:
+                    merged.add(entry2)
 
         # 合并删除标记
         merged._removals = self._removals | other._removals
