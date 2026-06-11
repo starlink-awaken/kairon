@@ -144,7 +144,9 @@ class AppendOnlyLog:
         """原子清空文件. 返回清空前 records 数."""
         if not self.path.exists():
             return 0
-        n = len(self.read_all())
+        # 一次 IO 算行数 (避免先 read_all() 再 write_text("") 的双 IO)
+        with open(self.path, "rb") as f:
+            n = sum(1 for _ in f)
         self.path.write_text("", encoding="utf-8")
         return n
 
@@ -160,12 +162,11 @@ class AppendOnlyLog:
         self.path.rename(backup)
         return True
 
-    def group_by(self, field: str, *, path: Path | None = None) -> dict[str, int]:
+    def group_by(self, field: str) -> dict[str, int]:
         """按 field 分组统计 record 数."""
-        log = AppendOnlyLog(path) if path is not None else self
         from collections import defaultdict
         counter: dict[str, int] = defaultdict(int)
-        for r in log.read_all():
+        for r in self.read_all():
             v = r.get(field, "<missing>")
             counter[str(v)] += 1
         return dict(counter)
