@@ -7,6 +7,8 @@ from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
+from kairon_utils import atomic_write_json
+
 
 class FieldType(StrEnum):
     STRING = "string"
@@ -174,7 +176,7 @@ class SchemaRegistry:
             "_format_version": "1",
             "schemas": {name: s.to_dict() for name, s in self._registry.items()},
         }
-        path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+        atomic_write_json(path, data)
         return str(path)
 
     @classmethod

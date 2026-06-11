@@ -20,6 +20,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Protocol
 
+from kairon_utils import atomic_write_json
+
 from .archetype_loader import ArchetypeLoader, get_archetype_loader
 from .storage_dal import SQLiteError, SQLiteRelationalProvider  # type: ignore[import-not-found]
 
@@ -389,7 +391,7 @@ class MemoryManager(_OrganBase):
             "task_id": self.task_id,
             "updated_at": time.time(),
         }
-        file_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        atomic_write_json(file_path, payload)
 
     def read_consensus(self, key: str, default: JSONValue | None = None) -> JSONValue | None:
         """读取共识记忆"""
