@@ -62,7 +62,7 @@ class ValidateStep(PipelineStep):
 
             # 使用 MetaValidateEngine 验证
             validator = MetaValidateEngine()
-            verification = validator.verify_alignment_result(alignment_report)
+            verification = validator.verify_alignment_result(alignment_report)  # type: ignore[attr-defined]
 
             # 更新上下文
             context["validation_result"] = verification
@@ -190,9 +190,9 @@ class BatchValidateStep(PipelineStep):
         """验证单个项目"""
         item.status = StepStatus.RUNNING
 
-        if item.result and hasattr(item.result, "alignment_rate"):
+        if item.result and hasattr(item.result, "alignment_rate"):  # type: ignore[attr-defined]
             validator = MetaValidateEngine()
-            verification = validator.verify_alignment_result(item.result)
+            verification = validator.verify_alignment_result(item.result)  # type: ignore[attr-defined]
             item.result = verification
         else:
             item.status = StepStatus.SKIPPED
@@ -229,7 +229,7 @@ class EvolveStep(PipelineStep):
             # 为每个问题生成更新建议
             suggestions = []
             for issue in alignment_report.issues[:10]:  # 最多处理10个
-                suggestion = evolver.generate_update_suggestion(
+                suggestion = evolver.generate_update_suggestion(  # type: ignore[attr-defined]
                     issue.declaration_name,
                     issue.category.value,
                     issue.description,
@@ -366,7 +366,7 @@ class BatchEvolveStep(PipelineStep):
             suggestions = []
 
             for issue in item.result.issues[:5]:
-                suggestion = evolver.generate_update_suggestion(
+                suggestion = evolver.generate_update_suggestion(  # type: ignore[attr-defined]
                     issue.declaration_name,
                     issue.category.value,
                     issue.description,

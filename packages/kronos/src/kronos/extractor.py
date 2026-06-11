@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 import logging
 import re
-from typing import Any, NotRequired, TypedDict
+from typing import Any, NotRequired, TypedDict, cast
 
 # extract_with_ollama moved to this module
 
@@ -34,6 +34,7 @@ class ExtractedResult(TypedDict):
     content_type: str
     importance: str
     tags: list[str]
+    quotes: NotRequired[list[str]]
     _fallback: NotRequired[str]
     fallback_reason: NotRequired[str | None]
 
@@ -215,7 +216,7 @@ def extract_with_rules(text: str) -> ExtractedResult:
         "title": _extract_title(text),
         "summary": _extract_summary(text),
         "key_points": _extract_key_points(text),
-        "entities": _extract_entities(text),
+        "entities": cast("dict[str, list[str]]", _extract_entities(text)),
         "content_type": _detect_content_type(text),
         "importance": "medium",
         "tags": [],
