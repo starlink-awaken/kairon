@@ -228,9 +228,8 @@ class TelegramConnector(BaseConnector):
                 params["offset"] = int(cursor)
             except (ValueError, TypeError):
                 pass
-
         try:
-            result = self._call_api("getUpdates", params)
+            result: list[dict[str, Any]] | dict[str, Any] = self._call_api("getUpdates", params)
         except RuntimeError:
             logger.exception("Failed to fetch Telegram messages")
             return []
@@ -266,7 +265,7 @@ class TelegramConnector(BaseConnector):
 
         # Try to find the message by scanning recent updates
         try:
-            result = self._call_api(
+            result: list[dict[str, Any]] | dict[str, Any] = self._call_api(
                 "getUpdates",
                 {
                     "chat_id": target_chat,
@@ -321,7 +320,7 @@ class TelegramConnector(BaseConnector):
             if self._last_update_id > 0:
                 params["offset"] = self._last_update_id + 1
 
-            result = self._call_api("getUpdates", params)
+            result: list[dict[str, Any]] | dict[str, Any] = self._call_api("getUpdates", params)
         except RuntimeError as e:
             return SyncResult(
                 connector_name=self.name,
@@ -330,7 +329,7 @@ class TelegramConnector(BaseConnector):
                 message=f"Sync failed: {e}",
             )
 
-        updates = result if isinstance(result, list) else []
+        updates: list[dict[str, Any]] = result if isinstance(result, list) else []
         new_messages = 0
         for update in updates:
             msg = update.get("message") or update.get("channel_post") or update.get("edited_message")
