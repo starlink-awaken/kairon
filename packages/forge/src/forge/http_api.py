@@ -330,7 +330,7 @@ class ForgeAPIHandler(BaseHTTPRequestHandler):
 
     # ─── GET ───
 
-    def do_GET(self):
+    def do_GET(self) -> None:
         if not _check_auth(self):
             return error(self, "unauthorized", 401)
         path, qs = self._parse_path()
