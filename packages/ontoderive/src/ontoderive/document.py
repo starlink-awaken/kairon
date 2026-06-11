@@ -145,9 +145,9 @@ class DocumentMetadata:
             owner=fm.get("Owner", "@Unassigned"),
             authority=fm.get("Authority", ""),
             layer=str(fm.get("Layer", "")),
-            updated=fm.get("Updated", fm.get("Created", "")),
-            created=fm.get("Created", ""),
-            summary=fm.get("Summary", fm.get("description", "")),
+            updated=str(fm.get("Updated", fm.get("Created", ""))),
+            created=str(fm.get("Created", "")),
+            summary=str(fm.get("Summary", fm.get("description", ""))),
             tags=fm.get("Tags", []),
             extra=fm,  # 保留原始数据
         )
