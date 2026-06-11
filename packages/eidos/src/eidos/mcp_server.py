@@ -40,7 +40,7 @@ def handle_list(params: dict | None = None) -> dict:
             fields_payload: list[dict[str, Any]] = []
             fields = getattr(schema, "fields", None)
             if isinstance(fields, dict):
-                iterable = fields.values()
+                iterable: Any = fields.values()
             else:
                 iterable = fields or []
             for field in iterable:
@@ -459,7 +459,7 @@ def main() -> None:
         line = line.strip()
         if not line:
             continue
-        resp = {"jsonrpc": "2.0", "id": None}
+        resp: dict[str, Any] = {"jsonrpc": "2.0", "id": None}
         try:
             request = json.loads(line)
             if not isinstance(request, dict) or "method" not in request:
