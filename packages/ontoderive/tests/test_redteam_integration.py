@@ -3,9 +3,9 @@
 from engine.core.derive import OntoDerive
 
 
-def test_derive_pipeline_facts_isolation():
+def test_derive_pipeline_facts_isolation(z_park_path):
     """验证自我修复: _derive_bayesian 异常后 _facts 不被污染"""
-    od = OntoDerive("examples/z-park")
+    od = OntoDerive(str(z_park_path))
     # derive() 应正常完成，返回结构完整的 summary
     s = od.derive()
     assert "facts" in s
@@ -14,18 +14,18 @@ def test_derive_pipeline_facts_isolation():
     assert "analysis_mode" in s
 
 
-def test_derive_pipeline_full_output():
+def test_derive_pipeline_full_output(z_park_path):
     """管线完整输出验证"""
-    od = OntoDerive("examples/z-park")
+    od = OntoDerive(str(z_park_path))
     s = od.derive()
     assert s["facts"] >= 2
     assert isinstance(s.get("derived_conclusions"), list)
     assert isinstance(s.get("derivation_hints"), list)
 
 
-def test_derive_called_twice_same_objects():
+def test_derive_called_twice_same_objects(z_park_path):
     """同一 OntoDerive 实例连续调用两次 derive()"""
-    od = OntoDerive("examples/z-park")
+    od = OntoDerive(str(z_park_path))
     s1 = od.derive()
     s2 = od.derive()
     # 两次结果应自洽（同一项目）

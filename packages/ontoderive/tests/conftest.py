@@ -26,3 +26,17 @@ def tmp_project(tmp_path):
         "| 编号 | 数据 | 数值 | 来源 |\n|------|------|------|------|\n| D-F1 | 测试事实 | 100 | 测试 |\n"
     )
     return tmp_path
+
+
+@pytest.fixture
+def mock_enhancer():
+    """返回一个模拟的 LLM enhancer，供 test_analytics.py / test_insight.py 使用"""
+
+    class _MockEnhancer:
+        available = True
+        model = "mock-model"
+
+        def _call(self, prompt, system="", temperature=0.3):
+            return "模拟分析结论：建议增加事实引用"
+
+    return _MockEnhancer()

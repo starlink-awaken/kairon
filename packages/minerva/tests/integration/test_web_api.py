@@ -32,8 +32,15 @@ from fastapi.testclient import TestClient
 
 
 @pytest.fixture
-def client():
-    """Create test client with mocked executor."""
+def client(monkeypatch):
+    """Create test client with mocked executor and API key configured."""
+    monkeypatch.setenv("MINERVA_API_KEY", "test-key")
+    # Ensure fresh module state so middleware picks up the env var
+    import importlib
+
+    import minerva.web.app
+
+    importlib.reload(minerva.web.app)
     from minerva.web.app import _executor_ref, app
 
     class MockExec:
@@ -53,7 +60,7 @@ def client():
             return {"status": "completed"}
 
     _executor_ref["executor"] = MockExec()
-    with TestClient(app) as c:
+    with TestClient(app, headers={"X-API-Key": "test-key"}) as c:
         yield c
     _executor_ref.clear()
 

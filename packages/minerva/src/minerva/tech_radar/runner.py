@@ -28,12 +28,11 @@ def _resolve_workspace_root() -> Path | None:
         return Path(env)
 
     cwd = Path.cwd()
-    candidates = [cwd, *cwd.parents]
-    deepest: Path | None = None
-    for parent in candidates:
+    # Walk up from cwd; return the FIRST (deepest/closest) match
+    for parent in [cwd, *cwd.parents]:
         if (parent / ".omo" / "_delivery").is_dir():
-            deepest = parent
-    return deepest
+            return parent
+    return None
 
 
 def _default_output_path(date: str) -> Path:

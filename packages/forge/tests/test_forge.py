@@ -739,8 +739,12 @@ class TestQueryGraph:
 
         # Direct function test
         import json
+        from pathlib import Path
 
-        g = json.loads(open("graph/graph.json").read())
+        graph_path = Path(__file__).resolve().parent.parent / "graph" / "graph.json"
+        if not graph_path.exists():
+            pytest.skip("graph.json not found — run forge build-graph first")
+        g = json.loads(graph_path.read_text())
         nodes = [n for n in g["nodes"] if "pdf" in n["label"].lower()]
         assert len(nodes) > 0, "Should find PDF-related nodes"
 
