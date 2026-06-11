@@ -112,7 +112,7 @@ class CircuitBreaker:
         self.failure_threshold = failure_threshold
         self.timeout_seconds = timeout_seconds
         self.failures = 0
-        self.last_failure_time = None
+        self.last_failure_time: float | None = None
         self.state = "CLOSED"  # CLOSED, OPEN, HALF_OPEN
 
     async def acquire(self, source_id: str) -> bool:

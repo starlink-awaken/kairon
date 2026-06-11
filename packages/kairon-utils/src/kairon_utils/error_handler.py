@@ -75,7 +75,7 @@ class ErrorHandler:
         }
 
         if context:
-            log_context.update(context)
+            log_context.update(context)  # type: ignore[arg-type]
 
         if source_id:
             log_context["source_id"] = source_id
@@ -83,14 +83,14 @@ class ErrorHandler:
         if category in (ErrorCategory.TRANSIENT, ErrorCategory.RATE_LIMIT):
             _logger.warning(
                 f"Retryable error in {self.component_name}: {category.value} - {recovery_action}",
-                context=log_context,
+                context=log_context,  # type: ignore[arg-type]
             )
         elif category == ErrorCategory.VALIDATION_ERROR:
-            _logger.warning(f"Validation error in {self.component_name}: {type(error).__name__}", context=log_context)
+            _logger.warning(f"Validation error in {self.component_name}: {type(error).__name__}", context=log_context)  # type: ignore[arg-type]
         else:
             _logger.error(
                 f"Non-retryable error in {self.component_name}: {category.value}",
-                context=log_context,
+                context=log_context,  # type: ignore[arg-type]
                 exc_info=error,
             )
 
@@ -129,7 +129,7 @@ class ErrorHandler:
             f"Operation failed for {source_id}: {error}",
             context={
                 "source_id": source_id,
-                "error_type": result["category"].value,
+                'error_type': result['category'].value,  # type: ignore[attr-defined]
                 "event": "operation_failed",
             },
         )
@@ -229,7 +229,7 @@ class ErrorContext:
         self.reraise = reraise
         self.handler = create_error_handler(component_name)
         self.error_occurred = False
-        self.error_result = None
+        self.error_result: ErrorResult | None = None
 
     def __enter__(self) -> "ErrorContext":
         """Enter context."""
@@ -246,7 +246,7 @@ class ErrorContext:
             self.error_occurred = True
             error = exc_val
 
-            self.error_result = self.handler.handle_error(error, context=self.context, source_id=self.source_id)
+            self.error_result = self.handler.handle_error(error, context=self.context, source_id=self.source_id)  # type: ignore[arg-type]
 
             if not self.reraise:
                 return True  # Suppress exception

@@ -137,7 +137,7 @@ class ConcurrencyManager:
         async with self._semaphore:
             try:
                 # 创建任务
-                task = asyncio.create_task(operation(source_id))
+                task: asyncio.Task = asyncio.create_task(operation(source_id))  # type: ignore[arg-type]
                 self._active_tasks.add(task)
 
                 # 执行并处理超时
@@ -188,7 +188,7 @@ class ConcurrencyManager:
         batch_result = ConcurrentBatchResult()
 
         # 创建所有任务
-        tasks = [self.execute(operation, source_id, per_source_timeout) for source_id in source_ids]
+        tasks = [asyncio.create_task(self.execute(operation, source_id, per_source_timeout)) for source_id in source_ids]
 
         try:
             # 使用 asyncio.gather 并行执行所有任务
