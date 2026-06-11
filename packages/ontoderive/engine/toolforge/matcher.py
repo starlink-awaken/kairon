@@ -56,7 +56,7 @@ def _compute_idf(docs, vocab):
 try:
     from ..protocols import ToolForgeInterface  # type: ignore[import-not-found]
 except ImportError:
-    from engine.foundation.protocols import ToolForgeInterface  # type: ignore[import-not-found]
+    from engine.foundation.protocols import ToolForgeInterface  # type: ignore[import-not-found,assignment]
 
 
 class ToolForge(ToolForgeInterface):
