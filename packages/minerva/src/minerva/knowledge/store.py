@@ -726,7 +726,7 @@ class LanceDBVectorStore:
                 self._table = db.create_table("entities", rows, mode="overwrite")
             else:
                 self._table = db.open_table("entities")
-                self._table.add(rows)
+                self._table.add(rows)  # type: ignore[attr-defined]
         except Exception:
             pass
 
