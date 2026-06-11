@@ -30,7 +30,7 @@ class TriageResult:
     level: ResearchLevel
     scores: dict[str, int]
     cost_estimate: float
-    model_plan: dict[str, str]
+    model_plan: dict[str, str | None]
     search_plan: list[str]
     warnings: list[str] = field(default_factory=list)
 
@@ -149,7 +149,7 @@ class TriageRouter:
     }
 
     # --- Model plans per level ---
-    LEVEL_MODELS = {
+    LEVEL_MODELS: dict[ResearchLevel, dict[str, str | None]] = {
         ResearchLevel.L0: {
             "agent": "qwen3.6:35b-a3b-coding-nvfp4",
             "reasoning": None,
@@ -202,7 +202,7 @@ class TriageRouter:
             scores=scores,
             cost_estimate=cost_est,
             model_plan={},
-            search_plan={},
+            search_plan=[],
             warnings=warnings,
             total_score=total,
         )
@@ -339,7 +339,7 @@ class TriageRouter:
         boosted = dict(scores)
         for pattern, dimension, boost in BOOST_PATTERNS:
             if re.search(pattern, lower):
-                boosted[dimension] = min(5, boosted[dimension] + boost)
+                boosted[dimension] = min(5, int(boosted[dimension] + boost))
         return boosted
 
     def _compute_total(self, scores: dict[str, int]) -> float:
