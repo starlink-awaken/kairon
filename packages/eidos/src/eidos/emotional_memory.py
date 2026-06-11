@@ -452,7 +452,7 @@ class EmotionalMemory:
         if self._db_initialized or self._db_provider is None:
             return
         try:
-            os.makedirs(os.path.dirname(self._db_path), exist_ok=True)  # type: ignore[arg-type]
+            os.makedirs(os.path.dirname(self._db_path), exist_ok=True)  # type: ignore[type-var]
             provider = self._db_provider
             provider.execute(
                 """

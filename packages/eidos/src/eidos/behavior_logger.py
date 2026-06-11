@@ -467,7 +467,7 @@ class BehaviorLogger:
 
         top_sessions: list[dict[str, Any]] = sorted(
             [{"session_id": sid, "count": cnt} for sid, cnt in session_counts.items()],
-            key=lambda x: x["count"],  # type: ignore[arg-type]
+            key=lambda x: x["count"],  # type: ignore[return-value]
             reverse=True,
         )[:5]
 
