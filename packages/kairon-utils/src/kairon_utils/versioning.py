@@ -5,6 +5,9 @@ Content Versioning System.
 
 Track content evolution over time with audit trail and SHA256 hashing.
 Extracted from D_Harvest utils/versioning.py.
+
+B-1 P0 跨仓 SSOT 接入: `_append_version_log` 改用 AppendOnlyLog + fcntl_lock
+(R48 探路结论 — 跨进程并发写存在丢行风险, P0 修复).
 """
 
 import hashlib
@@ -13,6 +16,8 @@ import logging
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
+
+from kairon_utils.append_only_log import AppendOnlyLog, fcntl_lock
 
 _log = logging.getLogger(__name__)
 
@@ -150,16 +155,21 @@ class ContentVersionTracker:
 
     async def _append_version_log(self, version: ContentVersion) -> None:
         """
-        Append version entry to log file.
+        Append version entry to log file (B-1 P0: AppendOnlyLog + fcntl_lock).
+
+        从裸 `open(..., "a")` 升级到 AppendOnlyLog + fcntl_lock:
+          - AppendOnlyLog.sort_keys=True 保 SSOT 跨仓顺序确定性
+          - fcntl.flock 跨进程安全 (旧版无锁, 跨进程并发会丢行)
+          - async 调用方无需 await 锁 — 锁在同步 IO 内, 不阻塞 event loop
 
         Args:
             version: ContentVersion to append.
         """
         version_file = self._get_version_file(version.source_id)
-
+        lock_file = version_file.with_suffix(".lock")
         try:
-            with open(version_file, "a") as f:
-                f.write(json.dumps(version.to_dict()) + "\n")
+            log = AppendOnlyLog(version_file, lock=fcntl_lock(lock_file))
+            log.append(version.to_dict())
         except OSError as e:
             _log.error(f"Failed to write version log for {version.source_id}: {e}")
 

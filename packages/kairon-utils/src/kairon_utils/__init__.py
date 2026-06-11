@@ -4,6 +4,7 @@ Provides logging, retry, rate limiting, error handling, concurrency,
 deduplication, versioning, rollback, and SQLite utilities.
 """
 
+from kairon_utils.append_only_log import AppendOnlyLog, fcntl_lock
 from kairon_utils.concurrent import (
     ConcurrencyManager,
     ConcurrentBatchResult,
@@ -39,6 +40,9 @@ from kairon_utils.sqlite_utils import managed_connection
 from kairon_utils.versioning import ContentVersion, ContentVersionTracker
 
 __all__ = [
+    # append_only_log (B-1 P0 跨仓 SSOT)
+    "AppendOnlyLog",
+    "fcntl_lock",
     # concurrent
     "ConcurrencyManager",
     "ConcurrentBatchResult",

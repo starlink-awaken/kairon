@@ -163,8 +163,14 @@ class EidosToBosAdapter:
         return results
 
     def _write_jsonl(self, record: dict[str, Any], filename: str) -> dict[str, Any]:
+        """B-1 P0: 改用 AppendOnlyLog + fcntl_lock (跨进程并发安全).
+
+        旧版裸 `open(file_path, "a")` 存在丢行风险, 跨 kairon + eidos 多进程
+        并发时可能产生交错半行. AppendOnlyLog 提供 fcntl.flock 跨进程锁.
+        """
+        from kairon_utils import AppendOnlyLog, fcntl_lock
+
         file_path = SHAREDBRAIN_DATA_DIR / filename
-        file_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(file_path, "a") as f:
-            f.write(json.dumps(record, ensure_ascii=False) + "\n")
+        log = AppendOnlyLog(file_path, lock=fcntl_lock(file_path.with_suffix(".lock")))
+        log.append(record)
         return {"file": str(file_path), "record_id": record.get("task_id", "")}
