@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Any, Generator
+from typing import Any
 
 try:
     from rich import box
@@ -52,7 +53,7 @@ def print_pipeline_header(query: str, level: str):
 
 
 @contextmanager
-def live_pipeline_display() -> Generator[Any, None, None]:
+def live_pipeline_display() -> Generator[Any]:
     """Show live pipeline progress with stage status + scrolling log panel."""
     if not RICH_AVAILABLE:
         yield None
