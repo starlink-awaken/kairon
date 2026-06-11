@@ -155,21 +155,27 @@ class ContentVersionTracker:
 
     async def _append_version_log(self, version: ContentVersion) -> None:
         """
-        Append version entry to log file (B-1 P0: AppendOnlyLog + fcntl_lock).
+        Append version entry to log file (B-1 + E3 P0: AppendOnlyLog + fcntl_lock + asyncio.to_thread).
 
-        从裸 `open(..., "a")` 升级到 AppendOnlyLog + fcntl_lock:
+        从裸 `open(..., "a")` 升级:
           - AppendOnlyLog.sort_keys=True 保 SSOT 跨仓顺序确定性
           - fcntl.flock 跨进程安全 (旧版无锁, 跨进程并发会丢行)
-          - async 调用方无需 await 锁 — 锁在同步 IO 内, 不阻塞 event loop
+          - asyncio.to_thread 包装 fcntl 同步锁 → event loop 不阻塞 (E3 P0)
 
         Args:
             version: ContentVersion to append.
         """
+        import asyncio
+
         version_file = self._get_version_file(version.source_id)
         lock_file = version_file.with_suffix(".lock")
-        try:
+
+        def _do_append() -> None:
             log = AppendOnlyLog(version_file, lock=fcntl_lock(lock_file))
             log.append(version.to_dict())
+
+        try:
+            await asyncio.to_thread(_do_append)
         except OSError as e:
             _log.error(f"Failed to write version log for {version.source_id}: {e}")
 
