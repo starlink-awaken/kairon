@@ -91,7 +91,7 @@ class Parser:
     VALID_FACT_PREFIXES = {"D-F", "P-F"}
 
     def __init__(self, filename="") -> None:
-        self.tokens = []
+        self.tokens: list[Token] = []
         self.idx = 0
         self.filename = filename
         self.errors: list[ParseError] = []
