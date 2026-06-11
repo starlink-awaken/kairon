@@ -78,7 +78,7 @@ class TypeCheckResult:
 
 
 class TypeValidator:
-    def __init__(self):
+    def __init__(self) -> None:
         self.results: list[TypeCheckResult] = []
 
     def check_id(self, node_id: str, declared_meta_type: str = "", file: str = "", line: int = 0) -> TypeCheckResult:
