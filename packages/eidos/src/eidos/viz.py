@@ -142,7 +142,7 @@ def render_pipeline(
     return "\n".join(lines)
 
 
-FORMATS = {
+FORMATS: dict[str, Any] = {
     "class": render_class_diagram,
     "graph": render_ontology_graph,
     "state": render_state_diagram,
