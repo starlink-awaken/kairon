@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from typing import Any
 
-
 # BloodType is Literal["A","B","AB","O","未知"] — not iterable, so list explicitly
 BLOOD_TYPES: list[str] = ["A", "B", "AB", "O", "未知"]
 
@@ -12,7 +11,6 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     """P58-W0 health_profile do_default: 真调 HealthCheckRecord / HealthProfile / BloodType."""
     try:
         from health_profile import (
-            BloodType,
             HealthCheckRecord,
             HealthProfile,
             VaccinationRecord,
