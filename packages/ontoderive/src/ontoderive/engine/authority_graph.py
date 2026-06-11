@@ -246,12 +246,13 @@ class AuthorityGraph:
         circular_deps = [list(cycle) for cycle in nx.simple_cycles(self.graph)]
 
         # 根文档：入度高，出度也高（影响力大）
-        root_docs = sorted(
-            [(n, d) for n, d in self.graph.nodes(data=True)],
-            key=lambda x: x[1].get("referenced_by_count", 0),
-            reverse=True,
-        )[:10]
-        root_docs = [n for n, _ in root_docs]
+        root_docs: list[str] = [
+            n for n, d in sorted(
+                [(n, d) for n, d in self.graph.nodes(data=True)],
+                key=lambda x: x[1].get("referenced_by_count", 0),
+                reverse=True,
+            )
+        ][:10]
 
         # 叶文档：只被引用，不引用别人
         leaf_docs = []

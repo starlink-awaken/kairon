@@ -4,6 +4,10 @@ from __future__ import annotations
 from typing import Any
 
 
+# BloodType is Literal["A","B","AB","O","未知"] — not iterable, so list explicitly
+BLOOD_TYPES: list[str] = ["A", "B", "AB", "O", "未知"]
+
+
 def do_default(args: dict[str, Any]) -> dict[str, Any]:
     """P58-W0 health_profile do_default: 真调 HealthCheckRecord / HealthProfile / BloodType."""
     try:
@@ -21,7 +25,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
         if action == "schema":
             return {
                 "_method": "do_default", "_action": "schema",
-                "BloodType_values": [bt.value for bt in BloodType],
+                "BloodType_values": BLOOD_TYPES,
                 "HealthCheckRecord_fields": list(HealthCheckRecord.__dataclass_fields__.keys()),
                 "HealthProfile_fields": list(HealthProfile.__dataclass_fields__.keys()),
                 "VaccinationRecord_fields": list(VaccinationRecord.__dataclass_fields__.keys()),
@@ -29,7 +33,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
         if action == "blood_types":
             return {
                 "_method": "do_default", "_action": "blood_types",
-                "types": [bt.value for bt in BloodType],
+                "types": BLOOD_TYPES,
             }
         return {"_method": "do_default", "_error": f"unknown action: {action}"}
     except Exception as exc:

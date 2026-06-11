@@ -83,11 +83,11 @@ def write_json(profile: HealthProfile, path: str | bytes) -> None:
     """便捷：直接写入文件。"""
     from pathlib import Path
 
-    Path(path).write_text(to_json(profile), encoding="utf-8")
+    Path(path).write_text(to_json(profile), encoding="utf-8")  # type: ignore[arg-type]
 
 
 def read_json(path: str | bytes) -> HealthProfile:
     """便捷：直接从文件读。"""
     from pathlib import Path
 
-    return from_json(Path(path).read_text(encoding="utf-8"))
+    return from_json(Path(path).read_text(encoding="utf-8"))  # type: ignore[arg-type]
