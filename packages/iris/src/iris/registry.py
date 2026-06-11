@@ -14,7 +14,7 @@ class ConnectorRegistry:
     lookup, listing, and batch operations.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._connectors: dict[str, BaseConnector] = {}
 
     def register(self, connector: BaseConnector) -> None:
