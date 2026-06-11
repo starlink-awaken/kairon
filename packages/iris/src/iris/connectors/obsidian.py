@@ -205,7 +205,7 @@ class ObsidianConnector(BaseConnector):
 
     def search(self, query: str, limit: int = 10) -> list[Note]:
         files = self._walk_md_files()
-        results = []
+        results: list[Note] = []
         query_lower = query.lower()
         for f in files:
             if len(results) >= limit:
