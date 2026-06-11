@@ -7,7 +7,7 @@ name = "kairon"
 version = "0.1.1"
 description = "Kairon — Knowledge & Research Operating Stack: ontology, research, MCP ecosystem"
 license = {text = "MIT"}
-requires-python = ">=3.10"
+requires-python = ">=3.13"
 authors = [
     {name = "Workspace Team"},
 ]
