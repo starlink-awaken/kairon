@@ -65,7 +65,7 @@ class RuleEngine:
         results = engine.evaluate(entities)
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.rules: list[Rule] = []
         self._register_default_rules()
 

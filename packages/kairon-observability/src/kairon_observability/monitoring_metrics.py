@@ -64,11 +64,11 @@ class MetricsCollector:
             lines.append(f"# TYPE {safe_name} counter")
             lines.append(f"{safe_name} {value}")
 
-        for name, value in sorted(self._gauges.items()):
+        for name, val in sorted(self._gauges.items()):
             safe_name = name.replace(" ", "_").replace("-", "_")
             lines.append(f"# HELP {safe_name} Gauge metric")
             lines.append(f"# TYPE {safe_name} gauge")
-            lines.append(f"{safe_name} {value}")
+            lines.append(f"{safe_name} {val}")
 
         for name, observations in sorted(self._histograms.items()):
             safe_name = name.replace(" ", "_").replace("-", "_")

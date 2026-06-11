@@ -160,8 +160,8 @@ def format_insight_report(report: InsightReport) -> str:
 
     if report.contradictions:
         lines.append(f"\n🔍 矛盾 ({len(report.contradictions)}):")
-        for c in report.contradictions:
-            lines.append(f"  • {c}")
+        for cont in report.contradictions:
+            lines.append(f"  • {cont}")
 
     if report.gaps:
         lines.append(f"\n📋 缺口 ({len(report.gaps)}):")

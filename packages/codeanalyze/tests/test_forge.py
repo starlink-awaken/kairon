@@ -175,7 +175,7 @@ class TestGuardrailDecorator:
         """装饰器 rescue 参数控制是否修复字符串返回。"""
 
         @guardrail(rescue=True, max_retries=1)
-        def string_return() -> dict:
+        def string_return() -> str:
             return '{"status": "ok", "value": 42}'
 
         result = string_return()
@@ -184,7 +184,7 @@ class TestGuardrailDecorator:
 
     def test_no_rescue_when_disabled(self):
         @guardrail(rescue=False, max_retries=1)
-        def string_return() -> dict:
+        def string_return() -> str:
             return '{"status": "ok"}'
 
         result = string_return()

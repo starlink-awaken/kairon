@@ -6,7 +6,7 @@ from typing import Any
 
 
 class TokenJuicer:
-    def __init__(self):
+    def __init__(self) -> None:
         self._dedup_hashes: set[str] = set()
 
     def compress(self, text: str) -> dict[str, Any]:
