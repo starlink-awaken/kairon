@@ -19,7 +19,7 @@ except ImportError:
 
 
 class KnowledgeTM:
-    def __init__(self, project_root):
+    def __init__(self, project_root) -> None:
         self.root = Path(project_root)
         self.log_dir = self.root / "_derivation_logs"
         self.log_dir.mkdir(parents=True, exist_ok=True)
