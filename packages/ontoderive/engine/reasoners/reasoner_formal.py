@@ -28,7 +28,7 @@ class FormalReasoner:
         "classification": "实例归类: properties → inferred type",
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.conclusions: list[FormalConclusion] = []
 
     def reason(self, knowledge) -> list[FormalConclusion]:
