@@ -83,14 +83,15 @@ class RuleLoader:
                 key, _, val = line.partition(":")
                 key, val = key.strip(), val.strip()
                 if val.startswith('"') and val.endswith('"'):
-                    val = val[1:-1]
+                    current[key] = val[1:-1]
                 elif val.startswith("[") and val.endswith("]"):
-                    val = [v.strip().strip('"') for v in val[1:-1].split(",")]
+                    current[key] = [v.strip().strip('"') for v in val[1:-1].split(",")]
                 elif val.replace(".", "").isdigit():
-                    val = float(val) if "." in val else int(val)
+                    current[key] = float(val) if "." in val else int(val)
                 elif val in ("true", "false"):
-                    val = val == "true"
-                current[key] = val
+                    current[key] = val == "true"
+                else:
+                    current[key] = val
         if current:
             rules.append(dict(current))
         self.rules.extend(self._validate(rules))
