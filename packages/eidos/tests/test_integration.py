@@ -6,6 +6,7 @@ import sqlite3
 import sys
 from pathlib import Path
 from types import ModuleType, SimpleNamespace
+from typing import Any
 
 from eidos.schema import FieldType, Schema, SchemaField, SchemaRegistry
 from eidos.validator import Validator
@@ -30,7 +31,7 @@ def make_knowledge_card_schema() -> Schema:
     )
 
 
-def make_knowledge_card_payload() -> dict[str, str]:
+def make_knowledge_card_payload() -> dict[str, Any]:
     return {
         "id": "kc-001",
         "title": "KOS + Eidos",
@@ -97,7 +98,7 @@ def install_fake_eidos_validator(monkeypatch, schema: Schema):
     def validate_object(data):
         return Validator(registry).validate_object(schema.name, data).is_valid
 
-    fake_validator.validate_object = validate_object
+    fake_validator.validate_object = validate_object  # type: ignore[attr-defined]
     monkeypatch.setitem(sys.modules, "eidos.validator", fake_validator)
     return fake_validator
 
