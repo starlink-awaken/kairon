@@ -415,7 +415,7 @@ class ImpactAnalyzer:
         if self._test_file_cache is not None:
             return self._test_file_cache
 
-        test_files = []
+        test_files: list[Path] = []
         root_path = Path(os.environ.get("BOS_ROOT", "."))
         tests_dir = root_path / "tests"
 

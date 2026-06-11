@@ -38,6 +38,11 @@ class Entity:
     entity_type: str = ""
     properties: dict[str, Any] = field(default_factory=dict)
 
+    @property
+    def entity_id(self) -> str:
+        """Alias for id field, used by semantic search and other callers."""
+        return self.id
+
 
 @dataclass
 class Relation:
@@ -68,6 +73,18 @@ class GraphStore:
 
     def add_relation(self, relation: Relation) -> None:
         """Add a relation to the graph store."""
+
+    def ping(self) -> bool:
+        """Check if the graph store is reachable."""
+        return True
+
+    def get_relations_for_entity(self, entity_id: str) -> list[Relation]:
+        """Get all relations for a given entity."""
+        return []
+
+    def search_entities(self, limit: int = 100) -> list[Entity]:
+        """Search entities in the graph store."""
+        return []
 
 
 __all__ = [

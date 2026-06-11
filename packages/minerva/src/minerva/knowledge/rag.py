@@ -19,7 +19,7 @@ try:
 
     _embedding_cache: TTLCache = TTLCache(maxsize=1000, ttl=3600)
 except ImportError:
-    _embedding_cache: dict = {}  # Fallback if cachetools unavailable
+    _embedding_cache: dict = {}  # type: ignore[no-redef]  # Fallback if cachetools unavailable
 
 
 class RAGContextBuilder:

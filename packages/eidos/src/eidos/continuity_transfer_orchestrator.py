@@ -46,8 +46,8 @@ class TransferTask:
     progress: float = 0.0
     result: dict[str, Any] | None = None
     error: str | None = None
-    created_at: float = None
-    updated_at: float = None
+    created_at: float | None = None
+    updated_at: float | None = None
 
 
 @dataclass
@@ -60,7 +60,7 @@ class TransferResult:
     relations_transferred: int
     validation_passed: bool
     metrics: dict[str, float]
-    timestamp: float = None
+    timestamp: float | None = None
 
 
 class TransferOrchestrator:
@@ -68,6 +68,7 @@ class TransferOrchestrator:
 
     def __init__(self, metadata_path: str) -> None:
         self.status = "active"
+        self.metadata_path = metadata_path
 
         # 任务队列
         self.tasks: dict[str, TransferTask] = {}

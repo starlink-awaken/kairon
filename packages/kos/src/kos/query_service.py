@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 _log = logging.getLogger(__name__)
 
 SIMILARITY_THRESHOLD = 0.3
-NumericArray = npt.NDArray[np.float32] | npt.NDArray[np.float64]
+type NumericArray = npt.NDArray[np.float32] | npt.NDArray[np.float64]
 RowDict = dict[str, object]
 RowMapping = Mapping[str, object]
 MetadataDict = dict[str, object]

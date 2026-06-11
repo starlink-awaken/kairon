@@ -255,7 +255,8 @@ class KnowledgeStore:
             _log.info(f"Stored knowledge item #{item_id}: {uri}")
 
             # 发布知识创建事件（异步，fire-and-forget）
-            _publish_knowledge_created_event(item_id, uri, title, quality_score, metadata)
+            if item_id is not None:
+                _publish_knowledge_created_event(item_id, uri, title, quality_score, metadata)
 
             # 触发增量索引更新（异步，fire-and-forget）
             if item_id is not None:
@@ -384,7 +385,7 @@ class KnowledgeStore:
 
         # 构建查询
         conditions = ["quality_score >= ?"]
-        params = [min_quality]
+        params: list[Any] = [min_quality]
 
         # FIX: Escape LIKE wildcard characters to prevent injection
         if source_uri:

@@ -341,13 +341,13 @@ class DocGenerator:
             # 导入
             if module.imports or module.from_imports:
                 lines.append("**导入**:")
-                for imp in module.imports:
-                    lines.append(f"- `import {imp}`")
-                for imp in module.from_imports:
-                    if imp["asname"]:
-                        lines.append(f"- `from {imp['module']} import {imp['name']} as {imp['asname']}`")
+                for imp_mod in module.imports:
+                    lines.append(f"- `import {imp_mod}`")
+                for imp_from in module.from_imports:
+                    if imp_from["asname"]:
+                        lines.append(f"- `from {imp_from['module']} import {imp_from['name']} as {imp_from['asname']}`")
                     else:
-                        lines.append(f"- `from {imp['module']} import {imp['name']}`")
+                        lines.append(f"- `from {imp_from['module']} import {imp_from['name']}`")
                 lines.append("")
 
             # 类

@@ -397,7 +397,7 @@ class AlignmentEngine:
             from ..doc_extractor import DocStatementExtractor  # type: ignore[import-not-found]
 
             self._doc_extractor = DocStatementExtractor()
-        return self._doc_extractor
+        return self._doc_extractor  # type: ignore[return-value]
 
     def _get_impl_scanner(self) -> ImplementationScanner:
         """获取实现扫描器（延迟加载）"""
@@ -405,7 +405,7 @@ class AlignmentEngine:
             from ..impl_scanner import ImplementationScanner  # type: ignore[import-not-found]
 
             self._impl_scanner = ImplementationScanner(self.root)
-        return self._impl_scanner
+        return self._impl_scanner  # type: ignore[return-value]
 
     def _get_diff_analyzer(self) -> DiffAnalyzer:
         """获取差异分析器（延迟加载）"""
@@ -413,6 +413,6 @@ class AlignmentEngine:
             from ..diff_analyzer import DiffAnalyzer  # type: ignore[import-not-found]
 
             self._diff_analyzer = DiffAnalyzer()
-        return self._diff_analyzer
+        return self._diff_analyzer  # type: ignore[return-value]
 
 __all__ = ["AlignmentEngine"]

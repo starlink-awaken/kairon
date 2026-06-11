@@ -4,6 +4,7 @@ import hashlib
 import logging
 import os
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -513,7 +514,7 @@ class IncrementalIndexer:
         for unit in ["B", "KB", "MB", "GB"]:
             if size_bytes < 1024:
                 return f"{size_bytes:.1f} {unit}"
-            size_bytes /= 1024
+            size_bytes //= 1024
         return f"{size_bytes:.1f} TB"
 
     def batch_index_with_progress(
@@ -521,7 +522,7 @@ class IncrementalIndexer:
         file_paths: list[str],
         extractor: TreeSitterExtractor,
         batch_size: int = 100,
-        progress_callback: callable | None = None,
+        progress_callback: Callable[..., None] | None = None,
         force_full: bool = False,
     ) -> IndexingResult:
         """

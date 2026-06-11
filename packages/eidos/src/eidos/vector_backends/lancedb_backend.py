@@ -37,8 +37,8 @@ try:
 
     LANCEDB_AVAILABLE = True
 except ImportError:
-    lancedb: Any = None
-    SentenceTransformer: Any = None
+    lancedb: Any = None  # type: ignore[no-redef]
+    SentenceTransformer: Any = None  # type: ignore[no-redef]
     LANCEDB_AVAILABLE = False
 
 

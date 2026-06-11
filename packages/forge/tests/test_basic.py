@@ -10,7 +10,7 @@ FORGE = shutil.which("forge") or shutil.which("forge-bridge")
 
 def _run_cli(*args: str) -> tuple[int, str]:
     proc = subprocess.run(
-        [FORGE, *args],
+        [FORGE, *args],  # type: ignore[list-item]
         capture_output=True,
         text=True,
         check=False,

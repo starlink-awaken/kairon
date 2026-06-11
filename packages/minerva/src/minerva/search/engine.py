@@ -79,7 +79,7 @@ class SearchEngine:
             if isinstance(results, Exception):
                 logger.warning("backend_search_failed", backend=backends[i], error=str(results))
                 continue
-            all_results.extend(results)
+            all_results.extend(results)  # type: ignore[arg-type]
 
         # Deduplicate by URL
         seen_urls = set()
@@ -90,7 +90,7 @@ class SearchEngine:
                 unique_results.append(r)
 
         # RRF fusion ranking
-        fused = self._rrf_fuse(unique_results, results_per_backend)
+        fused = self._rrf_fuse(unique_results, results_per_backend)  # type: ignore[arg-type]
 
         return fused[:max_results]
 

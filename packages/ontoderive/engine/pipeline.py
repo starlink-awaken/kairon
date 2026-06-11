@@ -54,7 +54,7 @@ from .pipeline_models import (
     StepResult,  # noqa: F401
     StepStatus,
 )
-from .pipeline_steps import (
+from .pipeline_steps import (  # type: ignore[attr-defined]
     AgentContextStep,
     AlignStep,
     BatchAlignStep,
@@ -426,8 +426,8 @@ def create_scan_pipeline(
     pipeline = Pipeline(root, max_workers=max_workers)
     pipeline.add_step(
         ScanStep(
-            docs_dir=Path(docs_dir) if docs_dir else None,
-            code_dir=Path(code_dir) if code_dir else None,
+            docs_dir=Path(docs_dir) if docs_dir else None,  # type: ignore[call-arg]
+            code_dir=Path(code_dir) if code_dir else None,  # type: ignore[call-arg]
             parallel=parallel,
             max_workers=max_workers,
         )
@@ -463,8 +463,8 @@ def create_full_pipeline(
 
     pipeline.add_step(
         ScanStep(
-            docs_dir=Path(docs_dir) if docs_dir else None,
-            code_dir=Path(code_dir) if code_dir else None,
+            docs_dir=Path(docs_dir) if docs_dir else None,  # type: ignore[call-arg]
+            code_dir=Path(code_dir) if code_dir else None,  # type: ignore[call-arg]
             parallel=parallel,
             max_workers=max_workers,
         )

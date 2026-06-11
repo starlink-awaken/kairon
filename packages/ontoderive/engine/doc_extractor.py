@@ -349,7 +349,7 @@ class DocStatementExtractor:
 
     def _extract_config_declarations(self, content: str, lines: list[str], source_file: Path) -> list[Declaration]:
         """提取配置声明（YAML schema）"""
-        declarations = []
+        declarations: list[Declaration] = []
 
         if yaml is None:
             return declarations
@@ -381,7 +381,7 @@ class DocStatementExtractor:
 
     def _extract_constraint_declarations(self, content: str, lines: list[str], source_file: Path) -> list[Declaration]:
         """提取约束声明"""
-        declarations = []
+        declarations: list[Declaration] = []
 
         # 匹配约束模式
         # - 必须...
@@ -433,7 +433,7 @@ class DocStatementExtractor:
     def _extract_description(self, lines: list[str], current_line: int) -> str:
         """从上下文提取描述"""
         # 向前查找描述（最多 3 行）
-        description_lines = []
+        description_lines: list[str] = []
         for i in range(current_line - 1, max(current_line - 4, -1), -1):
             line = lines[i].strip()
             if line and not line.startswith("#"):

@@ -128,7 +128,7 @@ class ApiSourceConnector(ISourceConnector):
 
     async def fetch(self) -> RawContent:
         """Fetch content from configured API endpoint with retry logic"""
-        last_error = None
+        last_error: Exception | None = None
 
         # 使用共享的HTTP客户端池 - 这个SB优化避免重复创建TCP连接
         client = HTTPClientPool.get_client(self.config)
@@ -136,11 +136,11 @@ class ApiSourceConnector(ISourceConnector):
         for attempt in range(self.config.max_retries):
             try:
                 # 构建请求headers
-                headers = dict(self.config.headers)
+                headers = dict(self.config.headers or {})
                 headers = self._add_auth_headers(headers)
 
                 # 构建请求参数
-                params = dict(self.config.params)
+                params = dict(self.config.params or {})
 
                 # 处理分页
                 if self.config.pagination_type == "none":
@@ -228,13 +228,13 @@ class ApiSourceConnector(ISourceConnector):
             auth = (self.config.username, self.config.password)
 
         if method.upper() == "GET":
-            response = await client.get(url, params=params, auth=auth)
+            response = await client.get(url, params=params, auth=auth)  # type: ignore[arg-type]
         elif method.upper() == "POST":
-            response = await client.post(url, params=params, json=json_body, auth=auth)
+            response = await client.post(url, params=params, json=json_body, auth=auth)  # type: ignore[arg-type]
         elif method.upper() == "PUT":
-            response = await client.put(url, params=params, json=json_body, auth=auth)
+            response = await client.put(url, params=params, json=json_body, auth=auth)  # type: ignore[arg-type]
         elif method.upper() == "DELETE":
-            response = await client.delete(url, params=params, auth=auth)
+            response = await client.delete(url, params=params, auth=auth)  # type: ignore[arg-type]
         else:
             raise ValueError(f"Unsupported HTTP method: {method}")
 
@@ -266,7 +266,7 @@ class ApiSourceConnector(ISourceConnector):
 
     async def _fetch_query_pagination(self, client: httpx.AsyncClient, initial_params: dict) -> list:
         """Fetch data using query parameter pagination (e.g., ?page=1, ?page=2)"""
-        all_items = []
+        all_items: list[Any] = []
 
         for page in range(1, self.config.max_pages + 1):
             params = dict(initial_params)
@@ -277,7 +277,7 @@ class ApiSourceConnector(ISourceConnector):
                 client, self.config.url, self.config.method, params, self.config.json_body
             )
 
-            data = await self._process_response(response)
+            data: Any = await self._process_response(response)
 
             # Handle different response structures
             if isinstance(data, list):
@@ -287,7 +287,7 @@ class ApiSourceConnector(ISourceConnector):
                 all_items.extend(items)
             elif isinstance(data, dict):
                 # Try common keys for paginated responses
-                items = data.get("items", data.get("results", data.get("data", [])))
+                items = data.get("items", data.get("results", data.get("data", []))) or []
                 if not items:
                     break
                 all_items.extend(items)
@@ -302,7 +302,7 @@ class ApiSourceConnector(ISourceConnector):
 
     async def _fetch_cursor_pagination(self, client: httpx.AsyncClient, initial_params: dict) -> list:
         """Fetch data using cursor-based pagination"""
-        all_items = []
+        all_items: list[Any] = []
         cursor = None
 
         for _ in range(self.config.max_pages):
@@ -315,11 +315,11 @@ class ApiSourceConnector(ISourceConnector):
                 client, self.config.url, self.config.method, params, self.config.json_body
             )
 
-            data = await self._process_response(response)
+            data: Any = await self._process_response(response)
 
             # Handle different response structures
             if isinstance(data, dict):
-                items = data.get("items", data.get("results", data.get("data", [])))
+                items = data.get("items", data.get("results", data.get("data", []))) or []
                 if not items:
                     break
                 all_items.extend(items)
@@ -335,14 +335,14 @@ class ApiSourceConnector(ISourceConnector):
 
     async def _fetch_link_pagination(self, client: httpx.AsyncClient, initial_params: dict) -> list:
         """Fetch data using Link header pagination (GitHub style)"""
-        all_items = []
+        all_items: list[Any] = []
         url = self.config.url
 
         for _ in range(self.config.max_pages):
             response = await client.get(url, params=initial_params)
             response.raise_for_status()
 
-            data = await self._process_response(response)
+            data: Any = await self._process_response(response)
 
             # Handle different response structures
             if isinstance(data, list):
@@ -351,7 +351,7 @@ class ApiSourceConnector(ISourceConnector):
                     break
                 all_items.extend(items)
             elif isinstance(data, dict):
-                items = data.get("items", data.get("results", data.get("data", [])))
+                items = data.get("items", data.get("results", data.get("data", []))) or []
                 if not items:
                     break
                 all_items.extend(items)
@@ -385,7 +385,7 @@ class ApiSourceConnector(ISourceConnector):
                 return response.status_code < 500
             except Exception:
                 # Fall back to GET with minimal data
-                params = dict(self.config.params)
+                params = dict(self.config.params or {})
                 # Limit to 1 item for health check
                 if self.config.pagination_type != "none":
                     params["limit"] = 1

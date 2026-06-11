@@ -120,7 +120,7 @@ class _MetaPersistenceMixin:
         else:
             gts = self.ground_truths
 
-        results = {
+        results: dict[str, Any] = {
             "total": len(gts),
             "passed": 0,
             "failed": 0,

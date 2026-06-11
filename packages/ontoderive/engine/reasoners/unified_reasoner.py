@@ -154,7 +154,7 @@ class UnifiedReasoner:
 
     def summary(self) -> dict:
         total = len(self._last_results)
-        by_source = {}
+        by_source: dict[str, int] = {}
         for r in self._last_results:
             by_source[r.source] = by_source.get(r.source, 0) + 1
         return {"total": total, "by_source": by_source}

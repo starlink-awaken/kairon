@@ -17,7 +17,7 @@ import uuid
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
-from typing import Any, Protocol
+from typing import Any, Protocol, cast
 
 from eidos.organs.storage_dal import SQLiteError, SQLiteRelationalProvider  # type: ignore[import-not-found]
 
@@ -307,15 +307,15 @@ class SQLiteCheckpointStorage:
         data: dict[str, object] = row if isinstance(row, dict) else dict(row) if isinstance(row, Mapping) else {}
 
         return SessionCheckpoint(
-            checkpoint_id=data["checkpoint_id"],
-            session_id=data["session_id"],
-            version=data["version"],
-            working_data=json.loads(data["working_data"]) if data["working_data"] else {},
-            memory_snapshot=json.loads(data["memory_snapshot"]) if data["memory_snapshot"] else {},
-            task_context=json.loads(data["task_context"]) if data["task_context"] else None,
-            created_at=datetime.fromisoformat(data["created_at"]),
-            size_bytes=data.get("size_bytes", 0),
-            description=data.get("description", ""),
+            checkpoint_id=cast(str, data["checkpoint_id"]),
+            session_id=cast(str, data["session_id"]),
+            version=cast(int, data["version"]),
+            working_data=json.loads(cast(str, data["working_data"])) if data["working_data"] else {},
+            memory_snapshot=json.loads(cast(str, data["memory_snapshot"])) if data["memory_snapshot"] else {},
+            task_context=json.loads(cast(str, data["task_context"])) if data["task_context"] else None,
+            created_at=datetime.fromisoformat(cast(str, data["created_at"])),
+            size_bytes=cast(int, data.get("size_bytes", 0)),
+            description=cast(str, data.get("description", "")),
         )
 
 

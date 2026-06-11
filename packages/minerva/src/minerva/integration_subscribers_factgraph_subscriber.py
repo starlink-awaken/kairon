@@ -330,7 +330,7 @@ class FactGraphSubscriber(BaseSubscriber):
         Returns:
             三元组列表 (subject, predicate, object, metadata)
         """
-        triples = []
+        triples: list[tuple[str, str, str, dict[str, Any] | None]] = []
         item_id = str(item["id"])
         uri = item["uri"]
         title = item["title"]
@@ -369,7 +369,7 @@ class FactGraphSubscriber(BaseSubscriber):
                     subject,
                     "dct_description",
                     body_preview,
-                    {"source": "harvest", "truncated": len(str(body)) > 2000},
+                    {"source": "harvest", "truncated": str(len(str(body)) > 2000).lower()},
                 )
             )
 
@@ -426,12 +426,14 @@ class FactGraphSubscriber(BaseSubscriber):
 
         if fact_list:
             try:
-                self._fg.add_facts(fact_list, _remote_sync=False)
+                if self._fg is not None:
+                    self._fg.add_facts(fact_list, _remote_sync=False)
             except AttributeError:
                 # 回退到逐个插入
                 for subj, pred, obj, metadata in fact_list:
                     try:
-                        self._fg.add_fact(subj, pred, obj, metadata)
+                        if self._fg is not None:
+                            self._fg.add_fact(subj, pred, obj, metadata)
                     except (AttributeError, OSError, RuntimeError, TypeError, ValueError) as exc:
                         _log.warning(f"Failed to insert triple ({subj}, {pred}, {obj}): {exc}")
 

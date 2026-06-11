@@ -126,7 +126,7 @@ def cmd_status() -> dict:  # type: ignore[type-arg]
     minerva_domain = manifest.get("domains", {}).get("minerva", {})
 
     # Check KOS index for minerva documents
-    index_status = {"documents": 0}
+    index_status: dict[str, Any] = {"documents": 0}
     try:
         db_path = get_artifact_path("retrievalDatabase")
         if db_path.exists():  # type: ignore[attr-defined]
@@ -135,10 +135,10 @@ def cmd_status() -> dict:  # type: ignore[type-arg]
             docs = conn.execute(
                 "SELECT title, kind, updated_at FROM documents WHERE zone='minerva' ORDER BY updated_at DESC LIMIT 5"
             ).fetchall()
-            index_status = {"documents": count, "recent": [dict(d) for d in docs]}  # type: ignore[dict[Any, Any]
+            index_status = {"documents": count, "recent": [dict(d) for d in docs]}
             conn.close()
     except Exception as e:
-        index_status = {"error": str(e)}  # type: ignore[dict-item]
+        index_status = {"error": str(e)}
 
     return {
         "minerva_zone": minerva_zone.get("label", "not configured"),

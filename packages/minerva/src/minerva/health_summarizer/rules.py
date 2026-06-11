@@ -95,7 +95,7 @@ def check_checkup_due(
     else:
         return  # 6 个月内，无需提醒
     yield HealthAlert(
-        severity=severity,
+        severity=severity,  # type: ignore[arg-type]
         category="checkup",
         member_id=profile.member_id,
         member_name=profile.name,

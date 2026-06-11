@@ -352,6 +352,7 @@ class EmbeddingManager:
 
         if self._model is None:
             self._model = SentenceTransformer(self.model_name)
+            assert self._model is not None
             self._vector_dim = self._model.get_sentence_embedding_dimension()
         return self._model
 
@@ -752,7 +753,7 @@ def quick_search(query: str, documents: list[str], top_k: int = 5, **kwargs: Any
     for i, doc in enumerate(documents):
         # We need a dummy GraphStore or to bypass it.
         # For simple string searches, we just wrap them in dummy Entities
-        entity = Entity(entity_id=str(i), name=f"doc_{i}", properties={"docstring": doc})
+        entity = Entity(id=str(i), name=f"doc_{i}", properties={"docstring": doc})
         # If we bypass graph_store (which is None here)
         engine.embedding_manager.embed_entity(entity)
         # We must index them since we're not using GraphStore db

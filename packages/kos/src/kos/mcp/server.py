@@ -190,7 +190,7 @@ def tool_search_knowledge(  # type: ignore[no-untyped-def]
             placeholders = ",".join(["?" for _ in domain_list])
             domain_filter = f"AND d.zone IN ({placeholders})"
             params.extend(domain_list)
-        rows = []
+        rows: list[sqlite3.Row] = []
         seen_doc_ids = set()
         like_sql = f"""SELECT d.doc_id,d.title,d.kind,d.zone,d.status,d.canonical_path,d.trust_level,d.updated_at,
                    CASE WHEN d.body IS NOT NULL AND d.body != ''
@@ -527,7 +527,7 @@ def tool_full_sync(background: bool = True, confirmed: bool = False) -> dict[str
         }
 
     # ── Synchronous mode ────────────────────────────────
-    result = {"indexer": None, "ontology": None}
+    result: dict[str, Any] = {"indexer": None, "ontology": None}
     idx = tool_run_indexer(incremental=True, background=False)
     result["indexer"] = idx
     if idx.get("status") != "completed":

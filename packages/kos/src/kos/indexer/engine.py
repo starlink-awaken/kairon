@@ -299,8 +299,8 @@ class GongwenDocxHandler(FormatHandler):
         if title:
             parts.append(f"# {title}")
 
-        chapters = []
-        current_chapter = {"title": "总则", "articles": []}
+        chapters: list[dict[str, Any]] = []
+        current_chapter: dict[str, Any] = {"title": "总则", "articles": []}
 
         for p in paragraphs:
             text = p["text"]
@@ -313,7 +313,7 @@ class GongwenDocxHandler(FormatHandler):
 
             art_match = re.match(r"(第[一二三四五六七八九十百千]+条)\s*(.+)", text)
             if art_match:
-                current_chapter["articles"].append(f"{art_match.group(1)} {art_match.group(2)[:200]}")  # type: ignore[str, unused-ignore]
+                current_chapter["articles"].append(f"{art_match.group(1)} {art_match.group(2)[:200]}")
 
         if current_chapter["articles"]:
             chapters.append(current_chapter)
@@ -378,7 +378,7 @@ class GongwenDocxHandler(FormatHandler):
             doc = Document(str(p))
 
             # Parse paragraph styles (max 500 paragraphs to prevent hang on huge docs)
-            paragraphs = []  # type: ignore[<type>, unused-ignore]
+            paragraphs: list[dict[str, Any]] = []
             for para in doc.paragraphs:
                 if len(paragraphs) > 500:
                     break

@@ -277,8 +277,8 @@ class NKSMonitor:
             error_rate = recent_errors / max(total_ops, 1)
 
             # System metrics
-            memory_mb = 0
-            cpu_percent = 0
+            memory_mb: float = 0
+            cpu_percent: float = 0
             if PSUTIL_AVAILABLE:
                 try:
                     process = psutil.Process()

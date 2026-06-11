@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import atexit
 import contextlib
-import logging
 
 import httpx
 
@@ -15,7 +14,6 @@ from bs4 import BeautifulSoup
 
 from minerva.search.engine import SearchResult  # type: ignore[import-not-found]
 
-_log = logging.getLogger(__name__)
 _log = _structlog.get_logger(__name__)
 
 _client_cache: dict[str, httpx.AsyncClient] = {}
@@ -255,10 +253,10 @@ async def search_arxiv(query: str, max_results: int = 10) -> list[SearchResult]:
             if link_el is None:
                 link_el = entry.find("atom:link", ns)
             published_el = entry.find("atom:published", ns)
-            authors = [
-                a.find("atom:name", ns).text
+            authors: list[str] = [
+                t
                 for a in entry.findall("atom:author", ns)
-                if a.find("atom:name", ns) is not None
+                if (el := a.find("atom:name", ns)) is not None and (t := el.text or "") is not None
             ]
 
             title = title_el.text.strip() if title_el is not None and title_el.text else ""

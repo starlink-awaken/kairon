@@ -512,14 +512,14 @@ def main() -> None:
     results = engine.fix_all(issues, dry_run=args.dry_run)
 
     # Print results summary
-    applied = [r for r in results if r.applied]
-    skipped = [r for r in results if not r.applied]
+    applied = [r for r in results if r.success]
+    skipped = [r for r in results if not r.success]
     print(f"\n{'=' * 60}")
     print(f"Results: {len(applied)} applied, {len(skipped)} skipped")
     for r in applied:
         print(f"  ✅ {r.fix_type.value}: {r.file_path}")
     for r in skipped:
-        print(f"  ⏭️  {r.fix_type.value}: {r.file_path} — {r.error or 'skipped'}")
+        print(f"  ⏭️  {r.fix_type.value}: {r.file_path} — {r.error_message or 'skipped'}")
 
     # Export report if requested
     if args.output:
@@ -534,8 +534,8 @@ def main() -> None:
                 {
                     "file": str(r.file_path),
                     "fix_type": r.fix_type.value,
-                    "applied": r.applied,
-                    "error": r.error,
+                    "success": r.success,
+                    "error": r.error_message,
                 }
                 for r in results
             ],

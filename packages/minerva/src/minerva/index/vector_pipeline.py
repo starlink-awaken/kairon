@@ -125,7 +125,7 @@ class VectorEmbeddingPipeline:
         self._timeout = timeout_ms / 1000.0
         self._enable_fallback = enable_fallback
 
-        self._adapter = None
+        self._adapter: _EmbeddingAdapter | None = None
         self._index_path = Path(".omc/cache/vectors")
         self._index_path.mkdir(parents=True, exist_ok=True)
         self._index_file = self._index_path / "vector_index.pkl"
@@ -247,7 +247,7 @@ class VectorEmbeddingPipeline:
                 if isinstance(result, Exception):
                     item_id = batch[j][0]
                     results.append(EmbeddingResult(item_id=item_id, success=False, error=str(result)))
-                else:
+                elif isinstance(result, EmbeddingResult):
                     results.append(result)
 
             # 批次间隔，避免过载
@@ -331,7 +331,7 @@ class VectorEmbeddingPipeline:
     def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         index = self._load_index()
-        adapter_stats = {}
+        adapter_stats: dict[str, Any] = {}
         if self._adapter:
             adapter_stats = self._adapter.get_stats()
 

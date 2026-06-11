@@ -144,9 +144,7 @@ class FaultTolerancePolicy:
     """
 
     def __init__(self, config: PolicyConfig | None = None) -> None:
-        super().__init__(
-            metadata_path="organs/D-Logos/organs/fault_tolerance_policy.py",
-        )
+        super().__init__()
         self._config = config or PolicyConfig()
         self._system_health: float = 1.0
         self._stats: dict[str, int] = {

@@ -1,5 +1,5 @@
 {
-  "derived_at": "2026-06-09T14:41:12.929530",
+  "derived_at": "2026-06-11T09:25:44.309574",
   "facts": 8,
   "entities": 0,
   "inferences": 3,
@@ -80,13 +80,13 @@
       "derives_from": [
         "D-F2",
         "D-F4",
-        "D-F5",
         "D-F1",
+        "D-F5",
         "D-F3"
       ],
       "confidence": 0.9,
       "source": "rule_engine",
-      "derivation_trail": "R7: D-F2→D-F4→D-F5→D-F1",
+      "derivation_trail": "R7: D-F2→D-F4→D-F1→D-F5",
       "type": "modus_ponens_valid"
     },
     {
@@ -158,14 +158,14 @@
       "certainty": "probable",
       "method": "structural_hole",
       "derives_from": [
-        "D-F6",
-        "D-F3",
         "D-F4",
+        "D-F3",
+        "D-F6",
         "D-F7"
       ],
       "confidence": 0.65,
       "source": "rule_engine",
-      "derivation_trail": "R17: D-F6→D-F3→D-F4→D-F7",
+      "derivation_trail": "R17: D-F4→D-F3→D-F6→D-F7",
       "type": "structural_hole"
     },
     {
@@ -175,13 +175,13 @@
       "derives_from": [
         "D-F2",
         "D-F4",
-        "D-F5",
         "D-F1",
+        "D-F5",
         "D-F3"
       ],
       "confidence": 0.65,
       "source": "rule_engine",
-      "derivation_trail": "R17: D-F2→D-F4→D-F5→D-F1",
+      "derivation_trail": "R17: D-F2→D-F4→D-F1→D-F5",
       "type": "structural_hole"
     },
     {

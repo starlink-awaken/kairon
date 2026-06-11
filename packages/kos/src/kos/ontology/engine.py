@@ -603,7 +603,7 @@ def list_entities(entity_type: str | None = None):  # type: ignore[unknown]
 # ── Main ─────────────────────────────────────────────────
 
 
-def enrich() -> None:  # type: ignore[no-untyped-def]
+def enrich() -> dict[str, Any]:  # type: ignore[no-untyped-def]
     """Link entities to indexed documents via text search."""
     conn = get_db()  # type: ignore[no-untyped-call]
     init_schema(conn)  # type: ignore[no-untyped-call]
@@ -672,11 +672,11 @@ def graph(entity_type: str = None):  # type: ignore[unknown]
 def _record_source_mtimes(conn) -> None:  # type: ignore[no-untyped-def]
     """Persist current entitySources file mtimes into kos_ontology_meta."""
     now = datetime.now().isoformat()
-    meta = {"rebuilt_at": now, "sources": {}}
+    meta: dict[str, Any] = {"rebuilt_at": now, "sources": {}}
     for fp in entity_files():
         p = Path(fp)
         if p.exists():
-            meta["sources"][fp] = p.stat().st_mtime  # type: ignore[str, unused-ignore]
+            meta["sources"][fp] = p.stat().st_mtime
     conn.execute(
         "INSERT OR REPLACE INTO kos_ontology_meta (key,value) VALUES (?,?)", ("source_mtimes", json.dumps(meta))
     )
@@ -700,7 +700,7 @@ def check_stale() -> dict[str, Any]:  # type: ignore[no-untyped-def]
         return {"stale": True, "reason": "never_built", "changes": []}
 
     last = json.loads(row["value"])
-    changes = []
+    changes: list[dict[str, Any]] = []
     for fp in entity_files():
         p = Path(fp)
         if not p.exists():

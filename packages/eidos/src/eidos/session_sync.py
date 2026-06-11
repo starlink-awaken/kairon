@@ -36,9 +36,9 @@ try:
 
     _HAS_CONFLICT_RESOLUTION = True
 except ImportError:
-    ConflictResolution: Any = None
-    ResolutionStrategy: Any = None
-    VectorClock: Any = None
+    ConflictResolution: Any = None  # type: ignore[no-redef]
+    ResolutionStrategy: Any = None  # type: ignore[no-redef]
+    VectorClock: Any = None  # type: ignore[no-redef]
     _HAS_CONFLICT_RESOLUTION = False
 
 

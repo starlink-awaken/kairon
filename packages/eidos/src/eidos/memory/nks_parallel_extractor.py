@@ -63,7 +63,7 @@ except ImportError:
         def close(self) -> None:
             pass
 
-        def __enter__(self) -> tqdm:
+        def __enter__(self) -> tqdm:  # type: ignore[valid-type]
             return self
 
         def __exit__(self, *args: Any) -> None:

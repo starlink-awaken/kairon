@@ -195,20 +195,20 @@ class AutoPatcher:
             self._provider = CognitiveLoopKnowledgeProvider()
 
             # 保存原始方法
-            self._original_think = cognitive_loop_class._run_think
+            self._original_think = getattr(cognitive_loop_class, "_run_think")
 
             # 使用 weakref 引用类，避免循环引用
             self._cognitive_loop_ref = weakref.ref(cognitive_loop_class)
 
             # 安装增强方法
-            cognitive_loop_class._run_think = self._create_enhanced_think()
+            setattr(cognitive_loop_class, "_run_think", self._create_enhanced_think())
 
             # 添加知识查询方法
-            cognitive_loop_class.query_knowledge = self._create_query_knowledge()
+            setattr(cognitive_loop_class, "query_knowledge", self._create_query_knowledge())
 
             # 添加补丁标记
-            cognitive_loop_class._harvest_patch_version = PATCH_VERSION
-            cognitive_loop_class._harvest_patch_installed_at = datetime.now(UTC).isoformat()
+            setattr(cognitive_loop_class, "_harvest_patch_version", PATCH_VERSION)
+            setattr(cognitive_loop_class, "_harvest_patch_installed_at", datetime.now(UTC).isoformat())
 
             # 更新状态
             self._status = PatchStatus(
@@ -256,7 +256,7 @@ class AutoPatcher:
         try:
             # 恢复原始方法
             if self._original_think is not None:
-                cognitive_loop_class._run_think = self._original_think
+                setattr(cognitive_loop_class, "_run_think", self._original_think)
 
             # 移除添加的方法
             for attr in [

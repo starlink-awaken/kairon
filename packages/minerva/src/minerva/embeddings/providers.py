@@ -179,7 +179,7 @@ class OpenAIEmbeddingProvider(BaseEmbeddingProvider):
 
         # 根据模型确定维度
         if dimension is None:
-            dimension = self.MODEL_DIMENSIONS.get(self._model, 1536)
+            dimension = self.MODEL_DIMENSIONS.get(self._model or "", 1536)
 
         super().__init__(dimension)
         self._base_url = base_url

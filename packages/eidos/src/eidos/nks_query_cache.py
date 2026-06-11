@@ -224,17 +224,17 @@ class QueryCache:
 
         # Handle PathResult
         if isinstance(result, PathResult):
-            for node in result.nodes:
-                if node.entity:
-                    entity_ids.add(node.entity.entity_id)
+            for node in result.nodes:  # type: ignore[attr-defined]
+                if node.entity:  # type: ignore[attr-defined]
+                    entity_ids.add(node.entity.entity_id)  # type: ignore[attr-defined]
                 if node.edge:
                     relation_ids.add(node.edge.relation_id)
             return entity_ids, relation_ids
 
         # Handle CallGraphNode
         if isinstance(result, CallGraphNode):
-            if result.entity:
-                entity_ids.add(result.entity.entity_id)
+            if result.entity:  # type: ignore[attr-defined]
+                entity_ids.add(result.entity.entity_id)  # type: ignore[attr-defined]
             return entity_ids, relation_ids
 
         # Handle Entity (duck typing for flexibility)

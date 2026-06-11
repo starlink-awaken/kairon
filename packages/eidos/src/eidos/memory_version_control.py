@@ -259,8 +259,8 @@ class VersionControl:
 
     def merge_branch(self, source_branch_id: str, target_branch_id: str, merge_strategy: str = "auto") -> MergeResult:
         """合并分支（简化实现）"""
-        conflicts = []
-        merged_versions = []
+        conflicts: list[Any] = []
+        merged_versions: list[Any] = []
 
         # 查找源分支的所有版本
         source_versions = self._get_branch_versions(source_branch_id)
@@ -351,7 +351,7 @@ class VersionControl:
 
     def _dict_diff(self, dict_a: dict[str, Any], dict_b: dict[str, Any]) -> dict[str, list]:
         """计算字典差异"""
-        diff = {"added": [], "removed": [], "modified": []}
+        diff: dict[str, list[Any]] = {"added": [], "removed": [], "modified": []}
         all_keys = set(dict_a.keys()) | set(dict_b.keys())
         for key in all_keys:
             if key not in dict_a:

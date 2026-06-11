@@ -3,9 +3,10 @@ from __future__ import annotations
 import json
 import logging
 import time
-from collections import defaultdict
+from collections import defaultdict, deque
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 
@@ -421,7 +422,7 @@ class KnowledgeGraphEngine:
             adjacency[relation.target_entity].append(relation.source_entity)
 
         # BFS 搜索
-        queue = deque([(source_entity, [])])
+        queue: deque[tuple[Any, list[Any]]] = deque([(source_entity, [])])
         visited = {source_entity}
         paths = []
 

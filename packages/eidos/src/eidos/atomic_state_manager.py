@@ -344,6 +344,9 @@ class AtomicStateManager:
             if not role_id:
                 return False, f"Session {session_id} not found"
 
+        # role_id is guaranteed str at this point
+        assert role_id is not None
+
         try:
             # 2. 锁定 Role
             role_lock = self._get_role_lock(role_id)
@@ -374,7 +377,7 @@ class AtomicStateManager:
 
                 self._record_transaction(
                     role_id=role_id,
-                    worker_id=worker_id,
+                    worker_id=worker_id,  # type: ignore[arg-type]
                     session_id=session_id,
                     status=TransactionStatus.COMMITTED,
                 )

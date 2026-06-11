@@ -124,7 +124,7 @@ class WebSourceConnector(ISourceConnector):
 
     async def fetch(self) -> RawContent:
         """Fetch content from configured URL with retry logic and connection pool"""
-        last_error = None
+        last_error: Exception | None = None
 
         for attempt in range(self.config.max_retries):
             try:
