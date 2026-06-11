@@ -267,7 +267,7 @@ class SyncEngine:
             item = self._wpsnote.get_item(change.item_id)
             if item is None:
                 # Was deleted between detection and processing
-                obs_path: str | None = self.id_map.get_obsidian_path(change.item_id)
+                obs_path = self.id_map.get_obsidian_path(change.item_id)
                 if obs_path:
                     # Find the Obsidian item by path
                     self._delete_obsidian_by_path(obs_path)
