@@ -189,7 +189,7 @@ def build_cache_plan(url: str) -> FetchPlan:
 # ═══════════════════════════════════════════════════
 
 
-def build_cloakbrowser_plan(url: str) -> FetchPlan:  # noqa: F811
+def build_cloakbrowser_plan(url: str) -> FetchPlan:
     """通过 CloakBrowser 浏览器自动化抓取"""
     return FetchPlan(
         url=url,
