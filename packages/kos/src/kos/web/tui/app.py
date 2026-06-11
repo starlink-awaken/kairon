@@ -38,7 +38,7 @@ except ImportError:
     TEXTUAL_OK = False
 
 
-def _get_onto_db() -> DB:
+def _get_onto_db() -> sqlite3.Connection:
     """Get SQLite connection to KOS retrieval DB (contains ontology tables)."""
     from config import get_vault_ops_dir  # type: ignore[import-not-found]
 
