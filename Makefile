@@ -87,3 +87,19 @@ clean:
 	find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
 	find . -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
 	rm -rf .venv/
+
+# E2E: 容器化集成测试 (Postgres + gbrain + kairon)
+test-e2e:
+	@echo "=== E2E 容器化测试 ==="
+	cd docker && docker compose up --build --abort-on-container-exit --exit-code-from kairon-test
+	cd docker && docker compose down -v
+	@echo "=== E2E 完成 ==="
+
+# E2E: 仅启动环境 (不运行测试)
+e2e-up:
+	cd docker && docker compose up -d --build
+	@echo "E2E 环境已启动: postgres:5433, gbrain:3000"
+
+# E2E: 停止环境
+e2e-down:
+	cd docker && docker compose down -v
