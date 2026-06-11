@@ -24,7 +24,7 @@ from engine.theories.analytics_patterns import (
 
 
 class _MockEngine:
-    patterns = []
+    patterns: list[str] = []
     enhancer = None
     matcher = None
 
