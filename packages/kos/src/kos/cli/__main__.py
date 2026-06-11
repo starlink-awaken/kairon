@@ -30,22 +30,22 @@ from typing import Any
 from kos.meta_types import FILTERABLE_META_TYPES_HELP  # type: ignore[import-not-found]
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-get_workspace_manifest = None
-get_artifact_path = None
-get_vault_ops_dir = None
+get_workspace_manifest = None  # type: ignore[no-redef]
+get_artifact_path = None  # type: ignore[no-redef]
+get_vault_ops_dir = None  # type: ignore[no-redef]
 try:
-    from kos.config import (  # type: ignore[import-not-found]
+    from kos.config import (  # type: ignore[import-not-found, no-redef]
         get_artifact_path,
         get_vault_ops_dir,
         get_workspace_manifest,
     )
 except ImportError:
     try:
-        from config import (  # type: ignore[import-not-found]
+        from config import (  # type: ignore[import-not-found, no-redef]
             get_artifact_path,
             get_vault_ops_dir,
             get_workspace_manifest,
-        )  # type: ignore[import-not-found]
+        )  # type: ignore[import-not-found, no-redef]
     except ImportError:
         KOS_READY = False
     else:
@@ -184,7 +184,7 @@ def _format_search_table(data: dict):  # type: ignore[no-untyped-def, type-arg]
     print(DIM(f"    {count} results") + "\n")  # type: ignore[no-untyped-call]
 
     # Group by zone
-    by_zone = {}  # type: ignore[<type>, <type>]
+    by_zone: dict[str, list[dict[str, Any]]] = {}
     for r in results:
         by_zone.setdefault(r["zone"], []).append(r)
 
@@ -303,7 +303,7 @@ def cmd_search(  # type: ignore[no-untyped-def]
     status=None,
     meta_type=None,
     pipeline_output=None,
-) -> None:
+) -> dict[str, Any]:
     """Cross-domain full-text search with optional metadata filters."""
     if not query or not query.strip():
         print("搜索查询不能为空。用法: kos search '<关键词>'")

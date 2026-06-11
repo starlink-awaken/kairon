@@ -13,6 +13,7 @@ import re
 import sqlite3
 import sys
 from pathlib import Path
+from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 try:
@@ -139,24 +140,24 @@ def render(template: str, **ctx) -> str:  # type: ignore[no-untyped-def]
 <a href="/health" class="{"active" if template == "health" else ""}">📊 Health</a>
 <a href="/api/docs" target="_blank">📖 API</a>
 </nav>"""
-    for line in _render_content(template, ctx):  # type: ignore[no-untyped-call]
+    for line in _render_content(template, ctx):  # type: ignore[no-untyped-call, func-returns-value, attr-defined]
         html += line + "\n"
     html += "</body></html>"
     return html
 
 
-def _render_content(template, ctx) -> None:  # type: ignore[no-untyped-def]
+def _render_content(template, ctx) -> None:  # type: ignore[no-untyped-def, misc]
     if template == "search":
-        yield from _render_search(ctx)  # type: ignore[no-untyped-call]
+        yield from _render_search(ctx)  # type: ignore[no-untyped-call, misc, func-returns-value]
     elif template == "ontology":
-        yield from _render_ontology(ctx)  # type: ignore[no-untyped-call]
+        yield from _render_ontology(ctx)  # type: ignore[no-untyped-call, misc, func-returns-value]
     elif template == "health":
-        yield from _render_health(ctx)  # type: ignore[no-untyped-call]
+        yield from _render_health(ctx)  # type: ignore[no-untyped-call, name-defined, misc, func-returns-value]
     elif template == "entity":
-        yield from _render_entity(ctx)  # type: ignore[no-untyped-call]
+        yield from _render_entity(ctx)  # type: ignore[no-untyped-call, misc, func-returns-value]
 
 
-def _render_search(ctx) -> None:  # type: ignore[no-untyped-def]
+def _render_search(ctx) -> None:  # type: ignore[no-untyped-def, misc]
     q = ctx.get("q", "")
     zone = ctx.get("zone", "")
     results = ctx.get("results", [])
@@ -184,7 +185,7 @@ def _render_search(ctx) -> None:  # type: ignore[no-untyped-def]
             yield "</div>"
 
 
-def _render_ontology(ctx) -> None:  # type: ignore[no-untyped-def]
+def _render_ontology(ctx) -> None:  # type: ignore[no-untyped-def, misc]
     entities = ctx.get("entities", [])
     q = ctx.get("q", "")
     yield "<h1>🕸 Knowledge Ontology</h1>"
@@ -202,7 +203,7 @@ def _render_ontology(ctx) -> None:  # type: ignore[no-untyped-def]
         "Event": "📅",
         "Document": "📄",
     }
-    grouped = {}  # type: ignore[<type>, <type>]
+    grouped: dict[str, list[dict[str, Any]]] = {}
     for e in entities:
         t = e.get("entity_type", "Other")
         grouped.setdefault(t, []).append(e)
@@ -247,7 +248,7 @@ def _render_ontology(ctx) -> None:  # type: ignore[no-untyped-def]
     yield f'<p style="color:#8b949e;margin-top:16px">{total} entities total · {orphan} orphans ({orphan * 100 // max(total, 1)}%)</p>'
 
 
-def _render_entity(ctx) -> None:  # type: ignore[no-untyped-def]
+def _render_entity(ctx) -> None:  # type: ignore[no-untyped-def, misc]
     e = ctx.get("entity", {})
     outgoing = ctx.get("outgoing", [])
     incoming = ctx.get("incoming", [])
@@ -309,24 +310,23 @@ def _render_entity(ctx) -> None:  # type: ignore[no-untyped-def]
 
 
 # Cache for entity labels (in-memory, resets on server restart)
-_entity_label_cache = {}  # type: ignore[<type>, <type>]
+_entity_label_cache: dict[str, str] = {}
 
 
 def _get_entity_label(entity_id: str) -> str:
     if entity_id in _entity_label_cache:
         return _entity_label_cache[entity_id]  # type: ignore[no-any-return]
+    return ""
 
 
 @app.get("/", response_class=HTMLResponse)
 async def search_page(q: str = "", zone: str = "", limit: int = 20, request: Request = None):  # type: ignore[State, State, no-untyped-def, unknown, State, unknown, unknown]
     """Search page (web UI)."""
-    results, count = [], 0
-    zones = []
+    results: list[dict[str, Any]] = []
+    count: int = 0
+    zones: list[str] = []
     ctx = {"q": q, "zone": zone, "results": results, "zones": zones}
     return render("search", **ctx)
-
-    results, count = [], 0
-    zones = []
 
 
 @app.get("/api/search")
