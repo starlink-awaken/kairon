@@ -204,7 +204,7 @@ def init_schema(conn) -> None:  # type: ignore[no-untyped-def]
 # ── Step 1: Extract entities from source files ───────────
 
 
-def extract() -> None:  # type: ignore[no-untyped-def]
+def extract() -> dict[str, Any]:  # type: ignore[no-untyped-def]
     conn = get_db()  # type: ignore[no-untyped-call]
     init_schema(conn)  # type: ignore[no-untyped-call]
     now = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -411,7 +411,7 @@ def extract() -> None:  # type: ignore[no-untyped-def]
 # ── Step 2: Infer relations from indexed documents ───────
 
 
-def infer() -> dict[str, int]:  # type: ignore[no-untyped-def]
+def infer() -> dict[str, Any]:  # type: ignore[no-untyped-def]
     conn = get_db()  # type: ignore[no-untyped-call]
     init_schema(conn)  # type: ignore[no-untyped-call]
     now = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -536,7 +536,7 @@ def find_path(from_id: str, to_id: str) -> dict[str, Any] | None:  # type: ignor
     edges = conn.execute("SELECT source_id,predicate,target_id FROM kos_relations").fetchall()
     conn.close()
 
-    adj = {}  # type: ignore[<type>, <type>]
+    adj: dict[str, list[tuple[str, str]]] = {}
     for s, p, t in edges:
         adj.setdefault(s, []).append((t, p))
 
@@ -558,7 +558,7 @@ def find_path(from_id: str, to_id: str) -> dict[str, Any] | None:  # type: ignor
 # ── Step 5: Discover implicit connections ────────────────
 
 
-def discover() -> list[dict[str, Any]]:  # type: ignore[no-untyped-def]
+def discover() -> dict[str, Any]:  # type: ignore[no-untyped-def]
     conn = get_db()  # type: ignore[no-untyped-call]
     # Find entities that co-occur in same docs but have no explicit relation
     implicit = conn.execute("""
@@ -584,7 +584,7 @@ def discover() -> list[dict[str, Any]]:  # type: ignore[no-untyped-def]
     }
 
 
-def list_entities(entity_type: str = None):  # type: ignore[unknown]
+def list_entities(entity_type: str | None = None):  # type: ignore[unknown]
     conn = get_db()  # type: ignore[no-untyped-call]
     init_schema(conn)  # type: ignore[no-untyped-call]
     if entity_type:
