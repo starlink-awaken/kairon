@@ -156,7 +156,7 @@ class DocumentMetadata:
         """序列化为 YAML frontmatter"""
         import yaml
 
-        data = {
+        data: dict[str, Any] = {
             "Type": self.doc_type,
             "Status": self.status,
             "Version": self.version,
@@ -453,7 +453,7 @@ class DocumentFactory:
         """根据路径创建文档对象"""
         ext = path.suffix.lower()
         doc_class = cls._registry.get(ext, MarkdownDocument)  # 默认使用 Markdown
-        return doc_class(path)
+        return doc_class(path)  # type: ignore[call-arg]
 
     @classmethod
     def get_document_type(cls, path: Path) -> DocumentType:
