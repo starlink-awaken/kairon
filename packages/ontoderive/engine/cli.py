@@ -29,7 +29,7 @@ def _json_output(status: str, data: dict | None = None, error: str | None = None
     """生成带有版本头的 JSON 输出。"""
     import json
 
-    payload = {
+    payload: dict[str, Any] = {
         "format_version": FORMAT_VERSION,
         "status": status,
     }
