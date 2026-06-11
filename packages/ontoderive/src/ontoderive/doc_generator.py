@@ -323,11 +323,11 @@ class DocGenerator:
                 lines.append("**导入**:")
                 for imp in module.imports:
                     lines.append(f"- `import {imp}`")
-                for imp in module.from_imports:
-                    if imp["asname"]:
-                        lines.append(f"- `from {imp['module']} import {imp['name']} as {imp['asname']}`")
+                for from_imp in module.from_imports:
+                    if from_imp["asname"]:
+                        lines.append(f"- `from {from_imp['module']} import {from_imp['name']} as {from_imp['asname']}`")
                     else:
-                        lines.append(f"- `from {imp['module']} import {imp['name']}`")
+                        lines.append(f"- `from {from_imp['module']} import {from_imp['name']}`")
                 lines.append("")
 
             # 类
