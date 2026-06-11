@@ -86,9 +86,9 @@ async def search_web_search_prime(
                 if isinstance(item, dict):
                     results.append(
                         SearchResult(
-                            title=item.get("title", ""),
-                            url=item.get("url", item.get("link", "")),
-                            snippet=item.get("snippet", item.get("content", ""))[:500],
+                            title=item.get("title", "") or "",
+                            url=item.get("url") or item.get("link") or "",
+                            snippet=(item.get("snippet") or item.get("content") or "")[:500],
                             source="zhipu-search",
                         )
                     )
