@@ -305,7 +305,7 @@ class SyncEngine:
 
         elif change.type == ChangeType.DELETED:
             # WPS Note item was deleted — remove from Obsidian too
-            obs_path: str | None = self.id_map.get_obsidian_path(change.item_id)
+            obs_path = self.id_map.get_obsidian_path(change.item_id)
             if obs_path:
                 self._delete_obsidian_by_path(obs_path)
                 self.id_map.remove(obs_path)
