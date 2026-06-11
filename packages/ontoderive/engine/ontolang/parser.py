@@ -90,7 +90,7 @@ class Parser:
     VALID_ENTITY_PREFIXES = {"ORG", "ROL", "PRJ", "POL", "DAT"}
     VALID_FACT_PREFIXES = {"D-F", "P-F"}
 
-    def __init__(self, filename=""):
+    def __init__(self, filename="") -> None:
         self.tokens = []
         self.idx = 0
         self.filename = filename
