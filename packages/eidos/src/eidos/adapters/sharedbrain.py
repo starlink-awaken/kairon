@@ -626,7 +626,7 @@ def batch_import_organs(
     all_cards: list[dict] = []
     all_facts: list[dict] = []
     all_nodes: list[dict] = []
-    summary: dict[str, dict[str, int]] = {}
+    summary: dict[str, dict[str, Any]] = {}
 
     for name in organ_names:
         data = read_organ_data(name, sharedbrain_root)
@@ -671,7 +671,7 @@ SHAREDBRAIN_ORGANS = Path(
 
 
 def get_active_organs() -> list[dict[str, Any]]:
-    organs = []
+    organs: list[dict[str, Any]] = []
     if not SHAREDBRAIN_ORGANS.exists():
         return organs
     for organ_dir in sorted(SHAREDBRAIN_ORGANS.iterdir()):
@@ -715,7 +715,7 @@ def batch_organs_to_kos_index(kos_index_path: str | Path = "kos_entities") -> di
     }
     (index_path / "_manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False))
 
-    status_counts = {}
+    status_counts: dict[str, int] = {}
     for e in entities:
         s = e["status"]
         status_counts[s] = status_counts.get(s, 0) + 1
