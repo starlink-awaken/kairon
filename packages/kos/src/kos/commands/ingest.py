@@ -20,9 +20,9 @@ from kos.meta_types import infer_meta_type  # type: ignore[import-not-found]
 from typing import Callable, Any
 
 try:
-    from eidos.protocols.contracts import validate_contract_payload
+    from eidos.protocols.contracts import validate_contract_payload  # type: ignore[no-redef]
 except ImportError:
-    validate_contract_payload: Callable[[str, dict[str, Any]], list[str]] | None = None
+    validate_contract_payload = None  # type: ignore[no-redef]
 
 EIDOS_AVAILABLE = True
 
