@@ -181,6 +181,6 @@ def test_blood_type_literal_validation() -> None:
     # 非法值：mypy 在静态层拒绝，运行时 Python dataclass Literal 不会强校验
     # 但 Pydantic 模式下会抛错。我们用 try/except 确认行为。
     try:
-        HealthProfile(member_id="m", name="x", birth_date=date(2000, 1, 1), blood_type="X")
+        HealthProfile(member_id="m", name="x", birth_date=date(2000, 1, 1), blood_type="X")  # type: ignore[arg-type]
     except TypeError:
         pytest.fail("dataclass 不应在运行时拒绝 Literal 非法值 —— 此用例为兼容性记录")
