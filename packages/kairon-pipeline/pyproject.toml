@@ -19,6 +19,9 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
 ]
+dependencies = [
+    "bus-foundation",
+]
 
 [dependency-groups]
 dev = [
@@ -27,6 +30,9 @@ dev = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/kairon_pipeline"]
+
+[tool.uv.sources]
+bus-foundation = { path = "../../../bus-foundation" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
