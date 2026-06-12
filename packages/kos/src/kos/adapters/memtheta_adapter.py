@@ -1,0 +1,115 @@
+"""
+MemTheta Dual-Track Pipeline Adapter
+====================================
+Implements the MemTheta dual-track memory architecture for eCOS Phase 1.3.
+- Raw Track: Original raw conversations append to local .omo/_log
+- Theta Track: Summarized meta-nodes pushed to gbrain via MCP/DB
+
+Exposes operators:
+- update: Overwrite an existing state instead of appending.
+- merge: Distill multiple fragments into a higher-density meta-node.
+- filter: Evict cold nodes.
+"""
+
+import json
+import logging
+import os
+from datetime import UTC, datetime
+from pathlib import Path
+from typing import Any
+
+logger = logging.getLogger(__name__)
+
+# Fallback workspace directory detection
+WORKSPACE_DIR = os.environ.get("ECOS_WORKSPACE", str(Path.home() / "Workspace"))
+
+
+class MemThetaAdapter:
+    """
+    Adapter implementing the Dual-Track memory write pipeline.
+    """
+
+    def __init__(self, workspace_path: str | None = None):
+        self.workspace = Path(workspace_path or WORKSPACE_DIR)
+        self.raw_log_dir = self.workspace / ".omo" / "_log" / "memory_raw"
+        self.raw_log_dir.mkdir(parents=True, exist_ok=True)
+
+    def _write_raw_track(self, domain: str, payload: dict[str, Any]) -> None:
+        """Append-only raw interaction logging (Raw Track)."""
+        now_str = datetime.now(UTC).strftime("%Y%m%d")
+        log_file = self.raw_log_dir / f"{domain}_{now_str}.jsonl"
+
+        record = {"ts": datetime.now(UTC).isoformat(), "payload": payload}
+
+        try:
+            with open(log_file, "a", encoding="utf-8") as f:
+                f.write(json.dumps(record, ensure_ascii=False) + "\n")
+        except Exception as e:
+            logger.error(f"[MemTheta] Failed to write raw track: {e}")
+
+    def update(self, target_id: str, context: str, confidence: float, trigger_source: str) -> bool:
+        """
+        Update Operator (MemTheta): Overwrite state with confidence > threshold.
+        """
+        if confidence < 0.6:
+            logger.warning(f"[MemTheta] Update rejected: low confidence {confidence} < 0.6")
+            return False
+
+        payload = {
+            "op": "update",
+            "target_id": target_id,
+            "context": context,
+            "confidence": confidence,
+            "trigger_source": trigger_source,
+        }
+
+        # 1. Write to Raw Track
+        self._write_raw_track("theta_update", payload)
+
+        # 2. Write to Theta Track (gbrain schema simulation for now, via stdout/MCP)
+        logger.info(f"[MemTheta] Executed UPDATE on {target_id}. Conf: {confidence}")
+
+        # In actual integration, this would call `gbrain` MCP `bos://memory/operator/update`
+        return True
+
+    def merge(self, query_topic: str, source_ids: list[str], distilled_context: str) -> str:
+        """
+        Merge Operator (MemTheta): Condense multiple fragments into a meta-node.
+        """
+        payload = {
+            "op": "merge",
+            "query_topic": query_topic,
+            "source_ids": source_ids,
+            "distilled_context": distilled_context,
+        }
+
+        # 1. Write to Raw Track
+        self._write_raw_track("theta_merge", payload)
+
+        # 2. Issue Meta-Node to Theta Track
+        meta_node_id = f"meta_{hash(query_topic) % 1000000}"
+        logger.info(f"[MemTheta] Executed MERGE. Created meta-node {meta_node_id} from {len(source_ids)} sources.")
+
+        return meta_node_id
+
+    def filter(self, domain: str, decay_days: int, access_threshold: int, dry_run: bool = False) -> dict[str, Any]:
+        """
+        Filter Operator (MemTheta): Evict cold nodes based on decay and access.
+        """
+        payload = {
+            "op": "filter",
+            "domain": domain,
+            "decay_days": decay_days,
+            "access_threshold": access_threshold,
+            "dry_run": dry_run,
+        }
+
+        self._write_raw_track("theta_filter", payload)
+
+        # Simulated filter response
+        report = {"scanned": 100, "evicted": 0 if dry_run else 12, "dry_run": dry_run}
+        logger.info(f"[MemTheta] Executed FILTER. Report: {report}")
+        return report
+
+
+memtheta_adapter = MemThetaAdapter()

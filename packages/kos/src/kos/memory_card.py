@@ -57,13 +57,25 @@ def segment_text(text: str, title: str = "") -> list[dict]:
 
 
 def save_card(card: dict) -> dict:
+    from kos.adapters.memtheta_adapter import memtheta_adapter
+
     CARD_DIR.mkdir(parents=True, exist_ok=True)
     slug = re.sub(r"[^a-zA-Z0-9_\u4e00-\u9fff]+", "_", card["title"][:30])
     ts = time.strftime("%Y%m%d_%H%M%S")
     fname = f"{ts}_{slug}.md"
     content = f"---\ntitle: {card['title']}\ntimestamp: {card['timestamp']}\ntokens: {card['tokens']}\n---\n\n{card['content']}"
+
+    # 1. Backward compat local fallback
     (CARD_DIR / fname).write_text(content, encoding="utf-8")
     card["file"] = fname
+
+    # 2. Dual-Track Pipeline: Write raw trace and push Theta state
+    # We treat save_card as an implicit "Update" operator with default confidence
+    # for the given file slug.
+    memtheta_adapter.update(
+        target_id=fname, context=card["content"], confidence=0.8, trigger_source="memory_card.save_card"
+    )
+
     return card
 
 
