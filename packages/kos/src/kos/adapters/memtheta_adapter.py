@@ -14,7 +14,6 @@ Exposes operators:
 import json
 import logging
 import os
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -31,21 +30,19 @@ class MemThetaAdapter:
 
     def __init__(self, workspace_path: str | None = None):
         self.workspace = Path(workspace_path or WORKSPACE_DIR)
-        self.raw_log_dir = self.workspace / ".omo" / "_log" / "memory_raw"
-        self.raw_log_dir.mkdir(parents=True, exist_ok=True)
 
-    def _write_raw_track(self, domain: str, payload: dict[str, Any]) -> None:
-        """Append-only raw interaction logging (Raw Track)."""
-        now_str = datetime.now(UTC).strftime("%Y%m%d")
-        log_file = self.raw_log_dir / f"{domain}_{now_str}.jsonl"
-
-        record = {"ts": datetime.now(UTC).isoformat(), "payload": payload}
-
+    def _emit_omo_event(self, domain: str, payload: dict[str, Any]) -> None:
+        """X1/X4 Governance: Emit raw track via OMO Event Bus."""
+        import subprocess
         try:
-            with open(log_file, "a", encoding="utf-8") as f:
-                f.write(json.dumps(record, ensure_ascii=False) + "\n")
+            subprocess.run([
+                "omo", "event", "emit",
+                "--type", f"memory.{domain}",
+                "--source", "memtheta",
+                "--payload", json.dumps(payload, ensure_ascii=False)
+            ], check=True, capture_output=True, text=True)
         except Exception as e:
-            logger.error(f"[MemTheta] Failed to write raw track: {e}")
+            logger.error(f"[MemTheta] X1 Governance failure - could not emit OMO event: {e}")
 
     def update(self, target_id: str, context: str, confidence: float, trigger_source: str) -> bool:
         """
@@ -63,8 +60,8 @@ class MemThetaAdapter:
             "trigger_source": trigger_source,
         }
 
-        # 1. Write to Raw Track
-        self._write_raw_track("theta_update", payload)
+        # 1. Write to Raw Track (X1 Governance)
+        self._emit_omo_event("update", payload)
 
         # 2. Write to Theta Track (gbrain schema simulation for now, via stdout/MCP)
         logger.info(f"[MemTheta] Executed UPDATE on {target_id}. Conf: {confidence}")
@@ -83,8 +80,8 @@ class MemThetaAdapter:
             "distilled_context": distilled_context,
         }
 
-        # 1. Write to Raw Track
-        self._write_raw_track("theta_merge", payload)
+        # 1. Write to Raw Track (X1 Governance)
+        self._emit_omo_event("merge", payload)
 
         # 2. Issue Meta-Node to Theta Track
         meta_node_id = f"meta_{hash(query_topic) % 1000000}"
@@ -104,7 +101,8 @@ class MemThetaAdapter:
             "dry_run": dry_run,
         }
 
-        self._write_raw_track("theta_filter", payload)
+        # 1. Write to Raw Track (X1 Governance)
+        self._emit_omo_event("filter", payload)
 
         # Simulated filter response
         report = {"scanned": 100, "evicted": 0 if dry_run else 12, "dry_run": dry_run}
