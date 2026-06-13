@@ -649,7 +649,7 @@ class ResearchExecutor:
         }
         log_path = self.state_dir / "execution_log.jsonl"
         log_path.parent.mkdir(parents=True, exist_ok=True)
-        # 原子追加: 使用 O_APPEND 模式确保多进程安全
+        # 使用原子追加确保多进程安全
         with open(log_path, "a") as f:
             f.write(json.dumps(entry) + "\n")
 
@@ -665,7 +665,7 @@ class ResearchExecutor:
             "timestamp": datetime.now(UTC).isoformat(),
         }
         self.notifications.append(notification)
-        # Persist using atomic write
+        # 使用原子写入持久化
         notif_path = self.state_dir / "notifications.json"
         notif_path.parent.mkdir(parents=True, exist_ok=True)
         with open(notif_path, "a") as f:
