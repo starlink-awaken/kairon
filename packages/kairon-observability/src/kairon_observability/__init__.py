@@ -31,4 +31,7 @@ __all__ = [
     "SLODefinition",
     "SLOBreach",
     "SLOTracker",
+    "get_tracer",
+    "setup_tracing",
 ]
+from .tracing import get_tracer, setup_tracing

@@ -29,6 +29,9 @@ classifiers = [
 ]
 readme = "README.md"
 dependencies = [
+    "opentelemetry-api>=1.42.1",
+    "opentelemetry-exporter-otlp>=1.42.1",
+    "opentelemetry-sdk>=1.42.1",
     "socksio>=1.0.0",
 ]
 
