@@ -2,13 +2,16 @@
 
 > Knowledge & Research Operating Stack: 16 个 live installable Python packages · 5+3+1 架构 L2 引擎面
 
-如果你不是 Claude Code，从这里开始。Claude Code 会自动读取 `CLAUDE.md`。
+如果你不是 Claude Code，从这里开始。Claude Code 会自动读 `CLAUDE.md`。
 
 ## 快速安装
 
 ```bash
 uv sync             # 安装所有包依赖
 make test           # 全量测试
+make test-fast      # 单元测试 (跳过集成/基准)
+make test-diff      # 差异测试 (仅修改的包)
+make test-e2e       # E2E 测试 (Postgres+gbrian+kairon 容器化)
 make lint           # Ruff 检查
 ```
 
@@ -115,3 +118,20 @@ Agent 通过 `resolve_bos_uri()` 或 `read_resource()` 调用。
 
 ### 治理域 (omo)
 - `bos://omo/eidos/pipeline` — Eidos 多工具编排链 (poc, stdio)
+
+
+## Bus foundation (跨仓依赖)
+
+本项目通过 `kairon_pipeline/bus_adapter.py` 接入 [bus-foundation](https://github.com/starlink-awaken/omostation/tree/main/projects/bus-foundation) (R66 独立仓):
+
+```python
+from bus_foundation import publish, subscribe, schedule, BusEnvelope
+```
+
+- **Public API**: `publish` / `subscribe` / `schedule` / `BusEnvelope` / `EventType`
+- **零 agora 依赖**: bus-foundation 是 standalone Python package
+- **公共 API 冻结 6 月** (从 2026-06-12 起)
+- **L0 协议层提升**: 评估 R70-R72, 决策 **Path C: Defer Indefinitely** (见 `projects/bus-foundation/docs/ADR-0003-no-l0-promotion.md`)
+- **修改 bus-foundation**: 提 PR 到 `projects/bus-foundation/`, 改完跑该项目的 `uv run pytest -q` 验证
+
+> 不要直接 import `agora.bus` (那是 backward-compat shim)。新代码用 `from bus_foundation import ...`。
