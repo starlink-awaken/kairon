@@ -55,3 +55,7 @@ coverage.xml
 .docker/
 
 .claude/
+
+# ── Local OMC runtime state ──
+.omc/sessions/
+.omc/state/checkpoints/

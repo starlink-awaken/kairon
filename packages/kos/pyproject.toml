@@ -19,6 +19,7 @@ dependencies = [
     "PyMuPDF>=1.23.0",
     "openpyxl>=3.1.0",
     "jieba>=0.42",
+    "mem0ai",
 ]
 
 [project.scripts]

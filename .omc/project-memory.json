@@ -27,7 +27,7 @@
   },
   "build": {
     "buildCommand": "make build",
-    "testCommand": "uv run ruff check packages/ --statistics 2>&1 | tail -3 && echo \"---\" && uv run python -m pytest packages/minerva/tests/integration/test_pipeline_levels.py -q --no-header 2>&1 | tail -5",
+    "testCommand": "cd /Users/xiamingxing/Workspace/projects/kairon\nuv run pytest packages/kairon-pipeline/tests/test_bus_adapter.py -v 2>&1 | tail -25",
     "lintCommand": "ruff check",
     "devCommand": null,
     "scripts": {}

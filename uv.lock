@@ -437,7 +437,7 @@ wheels = [
 
 [[package]]
 name = "bus-foundation"
-version = "0.1.0"
+version = "0.1.1"
 source = { directory = "../bus-foundation" }
 dependencies = [
     { name = "pydantic" },
@@ -2808,6 +2808,7 @@ dependencies = [
     { name = "httpx" },
     { name = "kairon-lib-events" },
     { name = "kairon-observability" },
+    { name = "kairon-utils" },
     { name = "kos" },
     { name = "lancedb" },
     { name = "pydantic" },
@@ -2851,6 +2852,7 @@ requires-dist = [
     { name = "httpx", specifier = ">=0.27" },
     { name = "kairon-lib-events", editable = "packages/kairon-lib-events" },
     { name = "kairon-observability", editable = "packages/kairon-observability" },
+    { name = "kairon-utils", editable = "packages/kairon-utils" },
     { name = "kos", editable = "packages/kos" },
     { name = "lancedb", specifier = ">=0.21" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0" },
