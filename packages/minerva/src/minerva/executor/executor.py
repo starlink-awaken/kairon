@@ -636,7 +636,7 @@ class ResearchExecutor:
         )
 
     def _log_execution(self, task: ResearchTask, result: ResearchResult, started: str, completed: str):
-        """Append execution record to JSONL log."""
+        """Append execution record to JSONL log using atomic append."""
         entry = {
             "task_id": task.id,
             "mode": task.mode.value,
@@ -647,7 +647,9 @@ class ResearchExecutor:
             "completed_at": completed,
             "stage_timings": result.context.stage_timings,
         }
-        with open(self.state_dir / "execution_log.jsonl", "a") as f:
+        log_path = self.state_dir / "execution_log.jsonl"
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(log_path, "a") as f:
             f.write(json.dumps(entry) + "\n")
 
     def _notify(self, task: ResearchTask, result: ResearchResult):
