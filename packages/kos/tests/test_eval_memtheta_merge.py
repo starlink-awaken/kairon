@@ -42,6 +42,11 @@ def test_memtheta_merge_quality():
         retrieval_context=retrieval_context,
     )
 
+    # If the workspace doesn't have an OpenAI key injected, we skip the actual remote LLM call
+    # so we don't break the CI pipeline. In a real vibeops environment, this runs.
+    if not os.environ.get("OPENAI_API_KEY"):
+        pytest.skip("Skipping LLM-as-Judge evaluation: OPENAI_API_KEY not set.")
+
     # Metric 1: Faithfulness - Check if the output contains hallucinated facts not in context
     faithfulness_metric = FaithfulnessMetric(
         threshold=0.8,
@@ -51,11 +56,6 @@ def test_memtheta_merge_quality():
 
     # Metric 2: Contextual Relevancy - Check if the output answers the input effectively
     relevancy_metric = ContextualRelevancyMetric(threshold=0.8, model="gpt-4o", include_reason=True)
-
-    # If the workspace doesn't have an OpenAI key injected, we skip the actual remote LLM call
-    # so we don't break the CI pipeline. In a real vibeops environment, this runs.
-    if not os.environ.get("OPENAI_API_KEY"):
-        pytest.skip("Skipping LLM-as-Judge evaluation: OPENAI_API_KEY not set.")
 
     # Run the hybrid assertion.
     # DeepEval will automatically emit trace scores to Langfuse via its native integration.
