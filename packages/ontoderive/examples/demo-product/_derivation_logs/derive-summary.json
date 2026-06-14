@@ -1,5 +1,5 @@
 {
-  "derived_at": "2026-06-11T10:21:15.659955",
+  "derived_at": "2026-06-14T09:08:27.072732",
   "facts": 8,
   "entities": 0,
   "inferences": 3,
@@ -63,14 +63,14 @@
       "certainty": "certain",
       "method": "modus_ponens_valid",
       "derives_from": [
-        "D-F7",
-        "D-F6",
         "D-F3",
-        "D-F4"
+        "D-F7",
+        "D-F4",
+        "D-F6"
       ],
       "confidence": 0.9,
       "source": "rule_engine",
-      "derivation_trail": "R7: D-F7→D-F6→D-F3→D-F4",
+      "derivation_trail": "R7: D-F3→D-F7→D-F4→D-F6",
       "type": "modus_ponens_valid"
     },
     {
@@ -78,15 +78,15 @@
       "certainty": "certain",
       "method": "modus_ponens_valid",
       "derives_from": [
-        "D-F2",
         "D-F1",
-        "D-F3",
         "D-F5",
+        "D-F3",
+        "D-F2",
         "D-F4"
       ],
       "confidence": 0.9,
       "source": "rule_engine",
-      "derivation_trail": "R7: D-F2→D-F1→D-F3→D-F5",
+      "derivation_trail": "R7: D-F1→D-F5→D-F3→D-F2",
       "type": "modus_ponens_valid"
     },
     {
@@ -94,13 +94,13 @@
       "certainty": "certain",
       "method": "modus_ponens_valid",
       "derives_from": [
-        "D-F7",
         "D-F6",
-        "D-F8"
+        "D-F8",
+        "D-F7"
       ],
       "confidence": 0.9,
       "source": "rule_engine",
-      "derivation_trail": "R7: D-F7→D-F6→D-F8",
+      "derivation_trail": "R7: D-F6→D-F8→D-F7",
       "type": "modus_ponens_valid"
     },
     {
@@ -127,30 +127,30 @@
       "type": "shared_premise"
     },
     {
-      "conclusion": "推论'INF-L1：产品稳定性是当前最紧迫问题'和'INF-L3：技术债务是根本瓶颈，必须优先清理'共享2个前提(['D-F7', 'D-F6'])",
+      "conclusion": "推论'INF-L1：产品稳定性是当前最紧迫问题'和'INF-L3：技术债务是根本瓶颈，必须优先清理'共享2个前提(['D-F6', 'D-F7'])",
       "certainty": "probable",
       "method": "shared_premise",
       "derives_from": [
-        "D-F7",
-        "D-F6"
+        "D-F6",
+        "D-F7"
       ],
       "confidence": 0.75,
       "source": "rule_engine",
-      "derivation_trail": "R2: D-F7→D-F6",
+      "derivation_trail": "R2: D-F6→D-F7",
       "type": "shared_premise"
     },
     {
-      "conclusion": "最具影响力的前提: D-F7(被2个推论引用); D-F6(被2个推论引用); D-F3(被2个推论引用)",
+      "conclusion": "最具影响力的前提: D-F3(被2个推论引用); D-F7(被2个推论引用); D-F4(被2个推论引用)",
       "certainty": "probable",
       "method": "influence_analysis",
       "derives_from": [
+        "D-F3",
         "D-F7",
-        "D-F6",
-        "D-F3"
+        "D-F4"
       ],
       "confidence": 0.8,
       "source": "rule_engine",
-      "derivation_trail": "R10: D-F7→D-F6→D-F3",
+      "derivation_trail": "R10: D-F3→D-F7→D-F4",
       "type": "influence_analysis"
     },
     {
@@ -158,14 +158,14 @@
       "certainty": "probable",
       "method": "structural_hole",
       "derives_from": [
-        "D-F7",
         "D-F6",
         "D-F3",
-        "D-F4"
+        "D-F4",
+        "D-F7"
       ],
       "confidence": 0.65,
       "source": "rule_engine",
-      "derivation_trail": "R17: D-F7→D-F6→D-F3→D-F4",
+      "derivation_trail": "R17: D-F6→D-F3→D-F4→D-F7",
       "type": "structural_hole"
     },
     {
@@ -173,15 +173,15 @@
       "certainty": "probable",
       "method": "structural_hole",
       "derives_from": [
-        "D-F2",
         "D-F1",
-        "D-F3",
         "D-F5",
+        "D-F3",
+        "D-F2",
         "D-F4"
       ],
       "confidence": 0.65,
       "source": "rule_engine",
-      "derivation_trail": "R17: D-F2→D-F1→D-F3→D-F5",
+      "derivation_trail": "R17: D-F1→D-F5→D-F3→D-F2",
       "type": "structural_hole"
     },
     {
@@ -189,13 +189,13 @@
       "certainty": "probable",
       "method": "structural_hole",
       "derives_from": [
-        "D-F7",
         "D-F6",
+        "D-F7",
         "D-F8"
       ],
       "confidence": 0.65,
       "source": "rule_engine",
-      "derivation_trail": "R17: D-F7→D-F6→D-F8",
+      "derivation_trail": "R17: D-F6→D-F7→D-F8",
       "type": "structural_hole"
     },
     {

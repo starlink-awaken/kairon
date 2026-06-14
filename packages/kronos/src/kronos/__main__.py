@@ -227,3 +227,8 @@ def serve() -> int:
 
 
 __all__ = ["serve", "_call_action", "_package_info", "_DISPATCH", "do_default"]
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(serve())
+
