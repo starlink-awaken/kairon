@@ -1,7 +1,7 @@
 """sophia 基础测试"""
 
 from sophia import cli
-from sophia.compiler import Compiler
+from sophia.compiler import compile_paradigm_sync
 
 
 class TestCompiler:
@@ -9,12 +9,7 @@ class TestCompiler:
 
     def test_import(self):
         """测试导入"""
-        assert Compiler is not None
-
-    def test_compiler_init(self):
-        """测试编译器初始化"""
-        compiler = Compiler()
-        assert compiler is not None
+        assert compile_paradigm_sync is not None
 
 
 class TestCLI:
