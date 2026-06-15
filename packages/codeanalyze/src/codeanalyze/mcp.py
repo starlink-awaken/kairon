@@ -875,7 +875,7 @@ def read_analysis_graph(project: str) -> str:
         import os
 
         from codeanalyze.analyzers.understand import UnderstandAdapter
-        workspace_root = os.environ.get("WORKSPACE_ROOT", "/Users/xiamingxing/Workspace")
+        workspace_root = os.environ.get("WORKSPACE_ROOT", str(Path.home() / "Workspace"))
         adapter = UnderstandAdapter(workspace_root=_resolve(workspace_root))
         diagram = adapter.generate_architecture_diagram(project)
         return diagram
@@ -890,7 +890,7 @@ def read_analysis_metrics(file: str) -> str:
         import urllib.parse
         file = urllib.parse.unquote(file)
         import os
-        workspace_root = os.environ.get("WORKSPACE_ROOT", "/Users/xiamingxing/Workspace")
+        workspace_root = os.environ.get("WORKSPACE_ROOT", str(Path.home() / "Workspace"))
         from codeanalyze.analyzers.understand import UnderstandAdapter
         adapter = UnderstandAdapter(workspace_root=_resolve(workspace_root))
         result = adapter.get_code_metrics(file)

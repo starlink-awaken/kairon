@@ -51,7 +51,7 @@ class PatternLearner:
                 hour_counts[dt.hour] += 1
                 weekday_counts[dt.weekday()] += 1
                 dt = None
-            except:  # noqa: E722  # noqa: E722
+            except Exception:
                 pass
 
         # Detect daily patterns (same hour, repeated daily)
@@ -109,5 +109,5 @@ class PatternLearner:
                     capture_output=True,
                     timeout=5,
                 )
-            except:  # noqa: E722  # noqa: E722
+            except Exception:
                 pass
