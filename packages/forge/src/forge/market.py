@@ -36,7 +36,7 @@ INSTALL_DIR = Path.home() / ".local" / "share" / "forge" / "market"
 try:
     from agora.mcp.forge_loader import CAPS_ROOT, MARKET_REGISTRY
 except ImportError:
-    CAPS_ROOT = Path.home() / ".omo" / "capabilities"
+    CAPS_ROOT = Path.home() / "Workspace" / ".omo" / "capabilities"
     MARKET_REGISTRY = CAPS_ROOT / "market.json"
 
 
