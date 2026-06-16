@@ -1,0 +1,67 @@
+# kairon — Architecture
+
+> **Layer**: L2 引擎面  
+> **Role**: 知识工程与研究引擎 / 19+ packages monorepo  
+> **Stack**: Python 3.13+, uv workspace, pytest  
+> **Health**: ~4000 tests, 99.8% pass
+>
+> 系统全景参见：[`docs/ARCHITECTURE-DIAGRAM.md`](../docs/ARCHITECTURE-DIAGRAM.md)
+
+---
+
+## 1. 内部架构
+
+```mermaid
+
+graph TB
+    Agora[agora I0]
+    subgraph Kairon["kairon packages/"]
+        KOS[kos]
+        MIN[minerva]
+        EID[eidos]
+        KRO[kronos]
+        ONT[ontoderive]
+        CA[codeanalyze]
+        IRIS[iris]
+        FORGE[forge]
+    end
+    GBR[gbrain]
+    ECOS[ecos MOF]
+
+    Agora -->|bos://memory/*| KOS
+    Agora -->|bos://analysis/*| MIN
+    Agora -->|bos://analysis/*| ONT
+    Agora -->|bos://analysis/*| CA
+    Agora -->|bos://capability/*| FORGE
+    KOS --> GBR
+    MIN --> ONT
+    KRO --> GBR
+    EID --> ECOS
+
+```
+
+## 2. 入口
+
+| Type | Entry | Port / Notes |
+|:--|:--|:--|
+| CLI | `per-package (kos, kronos, minerva, ...)` |  |
+| BOS | `bos://memory/*, bos://analysis/*, bos://persona/*` |  |
+
+## 3. 核心模块
+
+| Module | Responsibility |
+|:--|:--|
+| `packages/kos/` | 跨域语义搜索 / KOS 知识图谱 |
+| `packages/minerva/` | 深度研究引擎 |
+| `packages/eidos/` | Schema 约束与建模 |
+| `packages/kronos/` | 知识摄取管线 |
+| `packages/ontoderive/` | 本体推导与推理 |
+| `packages/codeanalyze/` | AST 代码分析 |
+| `packages/forge/` | Agent/工具集市 |
+| `packages/iris/` | 发现与召回 |
+
+## 4. 测试
+
+```bash
+cd projects/kairon && make test-diff  # or make test
+```
