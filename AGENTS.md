@@ -59,7 +59,7 @@ L0 ┌ protocols · 协议 YAML
 ### 对外能力面 (1)
 - `forge`
 
-> 当前 live inventory 以 `packages/*/pyproject.toml` 为准。详见 [docs/live_inventory.md](/Users/xiamingxing/Workspace/projects/kairon/docs/live_inventory.md:1)。
+> 当前 live inventory 以 `packages/*/pyproject.toml` 为准。详见 [docs/live_inventory.md](docs/live_inventory.md)。
 
 ## 测试与 CI
 
@@ -90,9 +90,9 @@ L0 ┌ protocols · 协议 YAML
 - LLM gateway 正在收敛到 `projects/aetherforge/`，不要再把 `llm-gateway` 当成 live package truth。
 - Agora POC_SERVICES 路由表中仍保留 `sot-bridge`、`sot-bridge-persona`、`protocols-layer` 等历史 BOS URI（指向 poc/stdio 传输层），它们不是当前 `kairon` live installable package。
 - 架构与跨项目边界请优先看：
-  - [docs/architecture_audit.md](/Users/xiamingxing/Workspace/projects/kairon/docs/architecture_audit.md:1)
-  - [docs/agora_route_drift_audit.md](/Users/xiamingxing/Workspace/projects/kairon/docs/agora_route_drift_audit.md:1)
-  - [docs/cross_project_boundary_audit.md](/Users/xiamingxing/Workspace/projects/kairon/docs/cross_project_boundary_audit.md:1)
+  - [docs/architecture_audit.md](docs/architecture_audit.md)
+  - [docs/agora_route_drift_audit.md](docs/agora_route_drift_audit.md)
+  - [docs/cross_project_boundary_audit.md](docs/cross_project_boundary_audit.md)
 
 
 ## BOS Services

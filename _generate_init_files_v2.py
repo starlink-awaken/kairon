@@ -14,12 +14,9 @@ point to actual content in subdirectories. This script:
 from __future__ import annotations
 
 import ast
-import os
 from pathlib import Path
 
-LIB_DIR = Path(
-    "/Users/xiamingxing/Workspace/projects/kairon/packages/shared-lib/src/kairon_lib"
-)
+LIB_DIR = Path(__file__).resolve().parent / "packages" / "shared-lib" / "src" / "kairon_lib"
 
 # Subdirectories (all already exist with content files)
 SUBDIRS = ["governance", "audit", "cognitive", "metrics", "core"]
@@ -122,7 +119,6 @@ def main():
         stub_content = f'"""Backward-compat re-export."""\nfrom {import_target} import *  # noqa: F401, F403\n'
         with open(filepath, "w") as f:
             f.write(stub_content)
-        modname = filename.replace(".py", "")
         print(f"  Stubbed {filename} -> {import_target}")
 
     # Step 2: Generate/update __init__.py for each subdirectory

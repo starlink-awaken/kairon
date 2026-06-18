@@ -1,7 +1,7 @@
 """HealthProfile demo —— Phase 28 W1 底座验收。
 
 执行：
-    cd /Users/xiamingxing/Workspace/projects/kairon
+    cd projects/kairon
     uv run python scripts/health_profile_demo.py
 """
 from __future__ import annotations

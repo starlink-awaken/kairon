@@ -22,11 +22,11 @@ logger = logging.getLogger(__name__)
 def _try_import_bus():
     """Lazy import so kairon-pipeline tests can run without agora installed."""
     try:
-        from bus_foundation import BusEnvelope, publish  # type: ignore
+        from bus_foundation.facade import event as bus_event
 
-        return BusEnvelope, publish
+        return bus_event
     except ImportError:
-        return None, None
+        return None
 
 
 def emit_event(
@@ -37,20 +37,21 @@ def emit_event(
 ) -> str | None:
     """Emit a kairon-pipeline event into the agora bus.
 
-    Returns the event id, or None if agora.bus is not importable.
+    Returns the event type, or None if agora.bus is not importable.
     """
-    bus_envelope, bus_publish = _try_import_bus()
-    if bus_envelope is None or bus_publish is None:
+    bus_event = _try_import_bus()
+    if bus_event is None:
         logger.debug("agora_bus_unavailable_skipping_event type=%s", event_type)
         return None
-    envelope = bus_envelope(
-        type=event_type,
-        source=source,
-        payload=payload or {},
-        trace_id=trace_id,
-    )
+
     try:
-        return bus_publish(envelope)
+        bus_event.publish(
+            topic=event_type,
+            payload=payload or {},
+            source_uri=f"bos://capability/pipeline/{source}",
+            trace_id=trace_id,
+        )
+        return event_type
     except Exception as e:
         logger.warning("kairon_pipeline_bus_emit_failed type=%s err=%s", event_type, e)
         return None

@@ -3,7 +3,8 @@
 > **Layer**: L2 引擎面  
 > **Role**: 知识工程与研究引擎 / 19+ packages monorepo  
 > **Stack**: Python 3.13+, uv workspace, pytest  
-> **Health**: ~4000 tests, 99.8% pass
+> **Health**: See local CI and package-level verification
+> **SSOT**: 运行时健康、测试规模、包数量以本项目 CI、本地测试命令和 workspace governance SSOT 为准
 >
 > 系统全景参见：[`docs/ARCHITECTURE-DIAGRAM.md`](../docs/ARCHITECTURE-DIAGRAM.md)
 
