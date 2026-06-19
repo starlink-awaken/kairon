@@ -28,14 +28,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Application Frameworks",
 ]
 readme = "README.md"
-dependencies = [
-    "deepeval>=4.0.6",
-    "langfuse>=4.7.1",
-    "opentelemetry-api>=1.42.1",
-    "opentelemetry-exporter-otlp>=1.42.1",
-    "opentelemetry-sdk>=1.42.1",
-    "socksio>=1.0.0",
-]
+dependencies = []
 
 [project.urls]
 Homepage = "https://github.com/starlink-awaken/omostation"
