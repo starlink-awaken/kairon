@@ -1,7 +1,7 @@
 """Tests for RuleReasoner — 规则推导引擎"""
 
-from engine.reasoners.reasoner import RuleReasoner
-from engine.reasoners.reasoner_utils import default_rules
+from ontoderive.reasoners.reasoner import RuleReasoner
+from ontoderive.reasoners.reasoner_utils import default_rules
 
 
 def test_default_rules_loaded():

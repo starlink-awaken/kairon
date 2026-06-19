@@ -1,11 +1,8 @@
 """事实提取器测试"""
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from engine.extractor import ContextExtractor
+from ontoderive.extractor import ContextExtractor
 
 
 def test_extractor_init():

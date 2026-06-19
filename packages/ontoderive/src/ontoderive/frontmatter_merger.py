@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-#!/usr/bin/env python3
 """
 ---
 Type: Module
@@ -54,10 +53,7 @@ try:
 except ImportError:
     yaml = None  # type: ignore
 
-if __package__ in {None, ""}:
-    from frontmatter_detector import FrontmatterDetector  # type: ignore[import-not-found]
-else:
-    from .frontmatter_detector import FrontmatterDetector
+from ontoderive.frontmatter_detector import FrontmatterDetector  # type: ignore[import-not-found]
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 _log = logging.getLogger(__name__)

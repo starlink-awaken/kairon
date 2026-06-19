@@ -1,11 +1,8 @@
 """类型系统测试"""
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from engine.foundation.typesystem import META_TYPES, PREFIX_TO_META, TypeValidator
+from ontoderive.foundation.typesystem import META_TYPES, PREFIX_TO_META, TypeValidator
 
 
 def test_meta_types_defined():

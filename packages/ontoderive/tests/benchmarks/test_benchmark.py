@@ -13,7 +13,7 @@ from pathlib import Path
 import pytest
 
 try:
-    from engine.core.derive import OntoDerive
+    from ontoderive.core.derive import OntoDerive
     _ENGINE_AVAILABLE = True
 except ImportError:
     OntoDerive = None

@@ -2,14 +2,11 @@
 测试 foundation/semantic.py - SemanticMatcher (TF-IDF 语义匹配)
 """
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
 
 
 import pytest
-from engine.foundation.semantic import SemanticMatcher  # type: ignore[import-not-found]
+from ontoderive.foundation.semantic import SemanticMatcher  # type: ignore[import-not-found]
 
 
 class TestSemanticMatcher:

@@ -1,7 +1,7 @@
 """Tests for UnifiedReasoner + ReasoningSelector + ContentCanonicalizer"""
 
-from engine.reasoners.reasoning import ContentCanonicalizer, DataProfile, ReasoningSelector
-from engine.reasoners.unified_reasoner import UnifiedConclusion, UnifiedReasoner
+from ontoderive.reasoners.reasoning import ContentCanonicalizer, DataProfile, ReasoningSelector
+from ontoderive.reasoners.unified_reasoner import UnifiedConclusion, UnifiedReasoner
 
 
 class TestUnifiedConclusion:

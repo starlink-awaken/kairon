@@ -4,12 +4,9 @@
 
 __all__ = []
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from engine.theories.ontolang import OntoLangParser
+from ontoderive.theories.ontolang import OntoLangParser
 
 
 def test_test_suite():
@@ -94,13 +91,13 @@ protocol P-001 : Constraint {}"""
 
 
 # =============================================================================
-# Tests for engine.ontolang.__init__ (deprecated v2 module)
+# Tests for ontoderive.ontolang.__init__ (deprecated v2 module)
 # =============================================================================
 
 
 def test_ontolang_v2_parser_parse():
     """OntoLangParserV2.parse() should return AST objects"""
-    from engine.ontolang import OntoLangParserV2
+    from ontoderive.ontolang import OntoLangParserV2
 
     p = OntoLangParserV2()
     ast = p.parse("entity ORG-Test : Organization {}")
@@ -111,7 +108,7 @@ def test_ontolang_v2_parser_parse():
 
 def test_ontolang_v2_parser_filename():
     """OntoLangParserV2 should accept a filename parameter"""
-    from engine.ontolang import OntoLangParserV2
+    from ontoderive.ontolang import OntoLangParserV2
 
     p = OntoLangParserV2(filename="test.onto")
     ast = p.parse("entity ORG-Test : Organization {}")
@@ -121,7 +118,7 @@ def test_ontolang_v2_parser_filename():
 
 def test_ontolang_v2_validate_clean():
     """OntoLangParserV2.validate() with valid AST should return empty list"""
-    from engine.ontolang import OntoLangParserV2
+    from ontoderive.ontolang import OntoLangParserV2
 
     p = OntoLangParserV2()
     ast = p.parse("entity ORG-Test : Organization {}")
@@ -131,7 +128,7 @@ def test_ontolang_v2_validate_clean():
 
 def test_ontolang_v2_validate_errors():
     """OntoLangParserV2.validate() with invalid AST should return SemanticErrors"""
-    from engine.ontolang import OntoLangParserV2
+    from ontoderive.ontolang import OntoLangParserV2
 
     p = OntoLangParserV2()
     ast = p.parse("entity BAD-X : Bad {}")
@@ -142,7 +139,7 @@ def test_ontolang_v2_validate_errors():
 
 def test_ontolang_v2_validate_fact_error():
     """OntoLangParserV2 validate catches invalid fact IDs"""
-    from engine.ontolang import OntoLangParserV2
+    from ontoderive.ontolang import OntoLangParserV2
 
     p = OntoLangParserV2()
     ast = p.parse("fact X-F1 : Data {}")
@@ -152,7 +149,7 @@ def test_ontolang_v2_validate_fact_error():
 
 def test_ontolang_v2_test_suite():
     """OntoLangParserV2.test_suite() should parse and validate a built-in test source"""
-    from engine.ontolang import OntoLangParserV2
+    from ontoderive.ontolang import OntoLangParserV2
 
     p = OntoLangParserV2()
     legacy_ast, errors, parse_errors = p.test_suite()
@@ -168,7 +165,7 @@ def test_ontolang_v2_test_suite():
 
 def test_ontolang_v2_test_suite_entity_ids():
     """OntoLangParserV2.test_suite() produces entity IDs (Chinese chars split by Lexer)"""
-    from engine.ontolang import OntoLangParserV2
+    from ontoderive.ontolang import OntoLangParserV2
 
     p = OntoLangParserV2()
     legacy_ast, _, _ = p.test_suite()
@@ -179,7 +176,7 @@ def test_ontolang_v2_test_suite_entity_ids():
 
 def test_ontolang_v2_test_suite_fact_ids():
     """OntoLangParserV2.test_suite() should produce specific fact IDs"""
-    from engine.ontolang import OntoLangParserV2
+    from ontoderive.ontolang import OntoLangParserV2
 
     p = OntoLangParserV2()
     legacy_ast, _, _ = p.test_suite()
@@ -190,7 +187,7 @@ def test_ontolang_v2_test_suite_fact_ids():
 
 def test_ontolang_v1_compat_parser():
     """OntoLangParser (v1 compat) should parse and return legacy dict format"""
-    from engine.ontolang import OntoLangParser
+    from ontoderive.ontolang import OntoLangParser
 
     p = OntoLangParser()
     ast = p.parse("entity ORG-Test : Test {}")
@@ -203,7 +200,7 @@ def test_ontolang_v1_compat_parser():
 
 def test_ontolang_v1_compat_errors_propagated():
     """OntoLangParser (v1 compat) should report parse errors in the dict"""
-    from engine.ontolang import OntoLangParser
+    from ontoderive.ontolang import OntoLangParser
 
     p = OntoLangParser()
     ast = p.parse("@ unexpected")
@@ -212,7 +209,7 @@ def test_ontolang_v1_compat_errors_propagated():
 
 def test_ontolang_v1_validate_ast():
     """OntoLangParser (v1 compat) validate with AST object"""
-    from engine.ontolang import OntoLangParser, OntoLangParserV2
+    from ontoderive.ontolang import OntoLangParser, OntoLangParserV2
 
     v2 = OntoLangParserV2()
     ast = v2.parse("entity ORG-Test : Test {}")
@@ -223,7 +220,7 @@ def test_ontolang_v1_validate_ast():
 
 def test_ontolang_v1_validate_dict_valid():
     """OntoLangParser (v1 compat) validate with clean dict"""
-    from engine.ontolang import OntoLangParser
+    from ontoderive.ontolang import OntoLangParser
 
     p = OntoLangParser()
     ast = {
@@ -238,7 +235,7 @@ def test_ontolang_v1_validate_dict_valid():
 
 def test_ontolang_v1_validate_dict_invalid_entity():
     """OntoLangParser (v1 compat) validate dict catches bad entity prefix"""
-    from engine.ontolang import OntoLangParser
+    from ontoderive.ontolang import OntoLangParser
 
     p = OntoLangParser()
     ast = {
@@ -254,7 +251,7 @@ def test_ontolang_v1_validate_dict_invalid_entity():
 
 def test_ontolang_v1_validate_dict_invalid_fact():
     """OntoLangParser (v1 compat) validate dict catches bad fact ID pattern"""
-    from engine.ontolang import OntoLangParser
+    from ontoderive.ontolang import OntoLangParser
 
     p = OntoLangParser()
     ast = {
@@ -270,7 +267,7 @@ def test_ontolang_v1_validate_dict_invalid_fact():
 
 def test_ontolang_v1_validate_dict_missing_derives_from():
     """OntoLangParser (v1 compat) validate dict catches missing derives_from"""
-    from engine.ontolang import OntoLangParser
+    from ontoderive.ontolang import OntoLangParser
 
     p = OntoLangParser()
     ast = {
@@ -286,7 +283,7 @@ def test_ontolang_v1_validate_dict_missing_derives_from():
 
 def test_ontolang_v1_validate_dict_inference_with_raw_covers_derives_from():
     """Inference with 'raw' field containing 'derives_from' should pass validation"""
-    from engine.ontolang import OntoLangParser
+    from ontoderive.ontolang import OntoLangParser
 
     p = OntoLangParser()
     ast = {
@@ -308,7 +305,7 @@ def test_ontolang_v1_validate_dict_inference_with_raw_covers_derives_from():
 
 def test_ontolang_v1_compat_test_suite():
     """OntoLangParser (v1 compat) test_suite should return legacy AST"""
-    from engine.ontolang import OntoLangParser
+    from ontoderive.ontolang import OntoLangParser
 
     p = OntoLangParser()
     ast = p.test_suite()
@@ -325,7 +322,7 @@ def test_ontolang_v1_compat_test_suite():
 
 def test_ontolang_v1_compat_test_suite_errors():
     """OntoLangParser (v1 compat) test_suite populates self.errors (CN_TEXT parse issues expected)"""
-    from engine.ontolang import OntoLangParser
+    from ontoderive.ontolang import OntoLangParser
 
     p = OntoLangParser()
     _ = p.test_suite()
@@ -334,7 +331,7 @@ def test_ontolang_v1_compat_test_suite_errors():
 
 def test_ontolang_v1_compat_test_suite_warnings():
     """OntoLangParser (v1 compat) test_suite should have warnings attribute"""
-    from engine.ontolang import OntoLangParser
+    from ontoderive.ontolang import OntoLangParser
 
     p = OntoLangParser()
     _ = p.test_suite()
@@ -343,8 +340,8 @@ def test_ontolang_v1_compat_test_suite_warnings():
 
 
 def test_ontolang_init_all_contains_expected():
-    """engine.ontolang.__all__ should contain all expected public names"""
-    from engine.ontolang import __all__
+    """ontoderive.ontolang.__all__ should contain all expected public names"""
+    from ontoderive.ontolang import __all__
 
     expected = {
         "AST",
@@ -369,24 +366,24 @@ def test_ontolang_init_all_contains_expected():
 
 
 def test_ontolang_init_module_reexports():
-    """Key classes should be directly accessible from engine.ontolang"""
-    import engine.ontolang
+    """Key classes should be directly accessible from ontoderive.ontolang"""
+    import ontoderive.ontolang
 
-    assert engine.ontolang.Lexer is not None
-    assert engine.ontolang.Parser is not None
-    assert engine.ontolang.SemanticAnalyzer is not None
-    assert engine.ontolang.OntoLangParserV2 is not None
-    assert engine.ontolang.OntoLangParser is not None
-    assert engine.ontolang.EntityDef is not None
-    assert engine.ontolang.FactDef is not None
-    assert engine.ontolang.InferenceDef is not None
-    assert engine.ontolang.ProtocolDef is not None
-    assert engine.ontolang.RelationDef is not None
+    assert ontoderive.ontolang.Lexer is not None
+    assert ontoderive.ontolang.Parser is not None
+    assert ontoderive.ontolang.SemanticAnalyzer is not None
+    assert ontoderive.ontolang.OntoLangParserV2 is not None
+    assert ontoderive.ontolang.OntoLangParser is not None
+    assert ontoderive.ontolang.EntityDef is not None
+    assert ontoderive.ontolang.FactDef is not None
+    assert ontoderive.ontolang.InferenceDef is not None
+    assert ontoderive.ontolang.ProtocolDef is not None
+    assert ontoderive.ontolang.RelationDef is not None
 
 
 def test_ontolang_v2_parse_multiple_no_crash():
     """OntoLangParserV2 should handle complex multi-line input without crashing"""
-    from engine.ontolang import OntoLangParserV2
+    from ontoderive.ontolang import OntoLangParserV2
 
     p = OntoLangParserV2()
     source = """
@@ -414,7 +411,7 @@ protocol P-001 : Constraint { constraint: "x > 0" }
 
 def test_ontolang_v1_validate_dict_with_derives_from_field():
     """Inference dict with 'derives_from' key (not nested in raw) should pass"""
-    from engine.ontolang import OntoLangParser
+    from ontoderive.ontolang import OntoLangParser
 
     p = OntoLangParser()
     ast = {

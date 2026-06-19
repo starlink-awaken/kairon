@@ -1,8 +1,5 @@
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from engine.foundation.utils import all_md, detect_cycles, load_json, rf, save_json, wf
+from ontoderive.foundation.utils import all_md, detect_cycles, load_json, rf, save_json, wf
 
 
 def test_rf_file_exists(z_park_path):

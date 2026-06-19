@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"ls .venv/bin/python 2>/dev/null || echo \\\"NO VENV\\\" && which python3 && ls pyproject.toml\",\"description\":\"Check Python environment\"}",
-  "error": "Exit code 2\nNO VENV\n/opt/homebrew/bin/python3\n\"pyproject.toml\": No such file or directory (os error 2)",
-  "timestamp": "2026-05-20T01:26:44.496Z",
-  "retry_count": 1
-}

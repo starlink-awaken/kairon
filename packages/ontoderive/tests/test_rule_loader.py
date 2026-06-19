@@ -2,16 +2,13 @@
 测试 foundation/rule_loader.py - 规则加载器
 """
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
 
 
 import json
 
 import pytest
-from engine.foundation.rule_loader import RuleLoader  # type: ignore[import-not-found]
+from ontoderive.foundation.rule_loader import RuleLoader  # type: ignore[import-not-found]
 
 
 class TestRuleLoader:

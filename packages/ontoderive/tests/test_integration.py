@@ -1,14 +1,11 @@
 """集成测试 — 生态无关的核心流程"""
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
 def test_multi_hop_derivation():
     """多层推导链：D-F→INF-L1→INF-L2"""
-    from engine.theories.bayesian import BayesianNetwork
+    from ontoderive.theories.bayesian import BayesianNetwork
 
     bn = BayesianNetwork()
     bn.add_fact("D-F1", 0.95, "事实1")

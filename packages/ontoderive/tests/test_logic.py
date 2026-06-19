@@ -1,11 +1,9 @@
+from pathlib import Path
 """逻辑蕴含图测试"""
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from engine.theories.logic import EntailmentGraph, build_from_project
+from ontoderive.theories.logic import EntailmentGraph, build_from_project
 
 
 def test_empty_graph():

@@ -1,10 +1,10 @@
 """Tests for ToolForge MCP server shim — 委托至统一MCP"""
 
-from engine.toolforge.mcp_server import handle_request
+from ontoderive.toolforge.mcp_server import handle_request
 
 
 def test_can_import():
-    from engine.toolforge import mcp_server
+    from ontoderive.toolforge import mcp_server
 
     assert mcp_server is not None
 

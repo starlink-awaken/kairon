@@ -2,15 +2,12 @@
 测试 foundation/ontology_map.py - 本体映射与格式导出
 """
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
 
 
 import json
 
-from engine.foundation.ontology_map import (  # type: ignore[import-not-found]
+from ontoderive.foundation.ontology_map import (  # type: ignore[import-not-found]
     RELATION_MAPPINGS,
     TYPE_MAPPINGS,
     OntologyMapper,

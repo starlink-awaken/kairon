@@ -1,7 +1,7 @@
 """Tests for OntoLang code generator"""
 
-from engine.ontolang.ast import AST, EntityDef
-from engine.ontolang.codegen import to_json, to_legacy_ast, to_markdown
+from ontoderive.ontolang.ast import AST, EntityDef
+from ontoderive.ontolang.codegen import to_json, to_legacy_ast, to_markdown
 
 
 def test_to_markdown_empty():

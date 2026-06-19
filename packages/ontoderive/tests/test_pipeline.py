@@ -1,11 +1,8 @@
 """Pipeline端到端测试"""
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from engine.core.pipeline import DerivePipeline
+from ontoderive.core.pipeline import DerivePipeline
 
 
 def test_pipeline_create():

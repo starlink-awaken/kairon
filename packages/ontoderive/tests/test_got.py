@@ -1,6 +1,6 @@
 """Tests for GoT (Graph of Thoughts) — 图思维推理引擎"""
 
-from engine.intelligence.got import GraphOfThoughts
+from ontoderive.intelligence.got import GraphOfThoughts
 
 
 class MockGraph:

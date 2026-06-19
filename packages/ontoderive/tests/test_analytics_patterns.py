@@ -1,12 +1,9 @@
 """Unit tests for analytics_patterns module-level functions"""
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 # detect/analyze functions take `engine` but don't use it — expected pattern
 
 import pytest
-from engine.theories.analytics_patterns import (
+from ontoderive.theories.analytics_patterns import (
     _extract_num,
     _find_entity_for_fact,
     _is_dict,

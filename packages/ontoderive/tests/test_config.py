@@ -1,11 +1,8 @@
 """配置系统测试"""
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from engine.foundation.config import Config
+from ontoderive.foundation.config import Config
 
 
 def test_config_defaults():

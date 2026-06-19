@@ -1,4 +1,4 @@
-.PHONY: test lint install clean
+.PHONY: test lint install clean typecheck typecheck-report
 
 # Install all packages in monorepo
 install:
@@ -79,6 +79,23 @@ lint:
 # Format all packages with ruff
 format:
 	ruff format packages/
+
+# Typecheck all packages with mypy strict (DEBT-CI-MYPY-STRICT: 本地试点, CI 待启用)
+typecheck:
+	@echo "=== mypy strict 全量检查 ==="; \
+	fail=0; \
+	for pkg in packages/*/; do \
+		name=$$(basename $$pkg); \
+		echo "--- [$$name] ---"; \
+		if ! (cd $$pkg && uv run mypy src --namespace-packages --explicit-package-bases --exclude tests/ 2>/dev/null); then \
+			fail=1; \
+		fi; \
+	done; \
+	test $$fail -eq 0
+
+# Typecheck report: per-package mypy error count (服务 mypy strict 推进诊断)
+typecheck-report:
+	@uv run python scripts/mypy_report.py
 
 # Clean build artifacts
 clean:

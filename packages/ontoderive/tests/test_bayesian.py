@@ -2,12 +2,9 @@
 测试贝叶斯层
 """
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from engine.theories.bayesian import BayesianLayer
+from ontoderive.theories.bayesian import BayesianLayer
 
 
 def test_scan_facts(z_park_path):

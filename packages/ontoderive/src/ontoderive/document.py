@@ -56,7 +56,6 @@ from uuid import uuid4
 import yaml
 
 # Event bus integration via kairon-lib-events
-# Uses the canonical BOSEvent from kairon_events and the global EventBus registry.
 from kairon_events import BOSEvent, get_global_event_bus
 
 
@@ -67,13 +66,8 @@ class EventType(StrEnum):
     DOC_AFTER_UPDATE = "doc.after_update"
 
 
-def get_event_bus() -> Any:  # type: ignore[no-redef]
-    """Return the global EventBus, or a dummy bus if unavailable.
-
-    The returned object provides ``publish(BOSEvent)``.
-    If the global EventBus is not registered a no-op dummy is returned
-    so callers do not need to guard every publish call.
-    """
+def get_event_bus() -> Any:
+    """Return the global EventBus, or a dummy bus if unavailable."""
     if get_global_event_bus is None:
         return _DummyBus()
     bus = get_global_event_bus()
@@ -85,7 +79,7 @@ def get_event_bus() -> Any:  # type: ignore[no-redef]
 class _DummyBus:
     """Silent no-op bus returned when the real EventBus is unavailable."""
 
-    def publish(self, event: Any) -> None:  # type: ignore[unused-var]
+    def publish(self, event: object) -> None:
         pass
 
 
@@ -145,9 +139,9 @@ class DocumentMetadata:
             owner=fm.get("Owner", "@Unassigned"),
             authority=fm.get("Authority", ""),
             layer=str(fm.get("Layer", "")),
-            updated=str(fm.get("Updated", fm.get("Created", ""))),
-            created=str(fm.get("Created", "")),
-            summary=str(fm.get("Summary", fm.get("description", ""))),
+            updated=str(fm.get("Updated", fm.get("Created", "")) or ""),
+            created=str(fm.get("Created", "") or ""),
+            summary=str(fm.get("Summary", fm.get("description", "")) or ""),
             tags=fm.get("Tags", []),
             extra=fm,  # 保留原始数据
         )
@@ -175,8 +169,7 @@ class DocumentMetadata:
             if key not in data:
                 data[key] = value
 
-        result: str = yaml.dump(data, default_flow_style=False, allow_unicode=True, sort_keys=False)
-        return result
+        return yaml.dump(data, default_flow_style=False, allow_unicode=True, sort_keys=False)
 
     def is_valid(self) -> bool:
         """检查元数据是否有效"""

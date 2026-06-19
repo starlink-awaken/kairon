@@ -1,11 +1,8 @@
 """文件监听器测试"""
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from engine.watcher import FileWatcher
+from ontoderive.watcher import FileWatcher
 
 
 def test_watcher_init(tmp_path):

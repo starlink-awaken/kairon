@@ -2,12 +2,9 @@
 测试数据模型模块
 """
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from engine.foundation.models import (
+from ontoderive.foundation.models import (
     CheckResult,
     DeriveSnapshot,
     Entity,

@@ -2,13 +2,10 @@
 测试 intelligence/judge.py - OntoDeriveJudge 评估器
 """
 
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent))
 
 
-from engine.intelligence.judge import JudgeResult, OntoDeriveJudge  # type: ignore[import-not-found]
+
+from ontoderive.intelligence.judge import JudgeResult, OntoDeriveJudge  # type: ignore[import-not-found]
 
 
 class TestJudgeResult:

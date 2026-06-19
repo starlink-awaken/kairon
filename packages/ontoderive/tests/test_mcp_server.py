@@ -1,6 +1,6 @@
 """MCP服务器测试"""
 
-from engine.mcp_server import TOOL_DEFS, handle_mcp_request
+from ontoderive.mcp_server import TOOL_DEFS, handle_mcp_request
 
 
 def test_tools_list():

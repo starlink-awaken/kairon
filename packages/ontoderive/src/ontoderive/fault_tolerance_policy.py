@@ -23,7 +23,6 @@ Authority: organs/D-Logos/AGENTS.md
 ---
 """
 
-
 import logging
 import re
 from dataclasses import dataclass, field
@@ -42,7 +41,7 @@ class EventType(StrEnum):
     DOC_AFTER_UPDATE = "doc.after_update"
 
 
-def get_event_bus() -> Any:  # type: ignore[no-redef]
+def get_event_bus() -> object:  # type: ignore[no-redef]
     """Return the global EventBus, or a dummy bus if unavailable."""
     if get_global_event_bus is None:
         return _DummyBus()
@@ -55,17 +54,16 @@ def get_event_bus() -> Any:  # type: ignore[no-redef]
 class _DummyBus:
     """Silent no-op bus returned when the real EventBus is unavailable."""
 
-    def subscribe(self, event_type: Any, handler: Any) -> None:  # type: ignore[unused-var]
+    def subscribe(self, event_type: object, handler: object) -> None:  # type: ignore[unused-var]
         return None
 
     def subscribe_async(  # type: ignore[unused-var]
-        self, event_type: Any, handler: Any
+        self, event_type: object, handler: object
     ) -> None:
         return None
 
 
 _log = logging.getLogger(__name__)
-
 
 # ---------------------------------------------------------------------------
 # 1. Data Models
@@ -146,6 +144,7 @@ class FaultTolerancePolicy:
     """
 
     def __init__(self, config: PolicyConfig | None = None) -> None:
+        super().__init__()
         self._config = config or PolicyConfig()
         self._system_health: float = 1.0
         self._stats: dict[str, int] = {
@@ -167,7 +166,7 @@ class FaultTolerancePolicy:
             bus.subscribe(EventType.DOC_BEFORE_UPDATE, self._on_doc_before_update)
             bus.subscribe(EventType.DOC_AFTER_UPDATE, self._on_doc_after_update)
 
-    def _on_doc_before_update(self, event: Any) -> None:
+    def _on_doc_before_update(self, event: object) -> None:
         """Handle doc-before-update: run alignment check via fault-tolerance evaluation."""
         payload = getattr(event, "payload", {}) or {}
         doc_id = payload.get("doc_id", "unknown")
@@ -186,7 +185,7 @@ class FaultTolerancePolicy:
                 decision.reason,
             )
 
-    def _on_doc_after_update(self, event: Any) -> None:
+    def _on_doc_after_update(self, event: object) -> None:
         """Handle doc-after-update: record stats and log the completion."""
         payload = getattr(event, "payload", {}) or {}
         doc_id = payload.get("doc_id", "unknown")
@@ -284,8 +283,7 @@ class FaultTolerancePolicy:
     def get_retry_delay(self, context: FaultContext) -> float:
         """Exponential back-off: ``base * 2^retry_count`` capped at 60 s."""
         delay = self._config.base_retry_delay * (2**context.retry_count)
-        result: float = min(delay, 60.0)
-        return result
+        return min(delay, 60.0)
 
     def register_critical_operation(self, operation: str) -> None:
         """Mark *operation* so that it is always evaluated as fail-closed."""
@@ -312,7 +310,7 @@ class FaultTolerancePolicy:
         params = params or {}
         handler_name = f"_handle_{action}"
         if hasattr(self, handler_name):
-            return getattr(self, handler_name)(params)  # type: ignore[no-any-return]
+            return getattr(self, handler_name)(params)
         return {"status": "error", "message": f"Unknown action: {action}"}
 
     def _handle_evaluate(self, params: dict[str, Any]) -> dict[str, Any]:

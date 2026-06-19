@@ -2,12 +2,9 @@
 测试控制论层
 """
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from engine.theories.controller import PIDController
+from ontoderive.theories.controller import PIDController
 
 
 def test_analyze_empty(tmp_path):

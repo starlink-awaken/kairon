@@ -1,9 +1,6 @@
 import json
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from engine.core.derive import OntoDerive
+from ontoderive.core.derive import OntoDerive
 
 
 def test_init_project(tmp_path):

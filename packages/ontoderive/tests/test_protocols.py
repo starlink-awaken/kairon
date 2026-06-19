@@ -2,14 +2,11 @@
 测试 foundation/protocols.py - 接口协议抽象类
 """
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
 
 
 import pytest
-from engine.foundation.protocols import (  # type: ignore[import-not-found]
+from ontoderive.foundation.protocols import (  # type: ignore[import-not-found]
     AnalysisResult,
     DeriveInterface,
     PipelineObservable,

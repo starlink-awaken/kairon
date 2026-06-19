@@ -9,7 +9,7 @@ Covers:
 - Error handling (malformed input, invalid prefixes, missing fields)
 """
 
-from engine.ontolang.ast import (
+from ontoderive.ontolang.ast import (
     AST,
     EntityDef,
     FactDef,
@@ -20,8 +20,8 @@ from engine.ontolang.ast import (
     SemanticError,
     SourcePos,
 )
-from engine.ontolang.parser import Lexer, Parser
-from engine.ontolang.semantic import SemanticAnalyzer
+from ontoderive.ontolang.parser import Lexer, Parser
+from ontoderive.ontolang.semantic import SemanticAnalyzer
 
 # =============================================================================
 # Lexer Tests

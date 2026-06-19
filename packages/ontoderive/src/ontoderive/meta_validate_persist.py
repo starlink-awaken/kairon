@@ -24,7 +24,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from engine.organs.meta_validate_types import (  # type: ignore[import-not-found]
+from ontoderive.meta_validate_types import (  # type: ignore[import-not-found]
     GroundTruth,
 )
 
@@ -116,7 +116,7 @@ class _MetaPersistenceMixin:
             验证结果字典
         """
         if gt_id:
-            gts: dict[str, GroundTruth | None] = {gt_id: self.ground_truths.get(gt_id)}
+            gts = {gt_id: self.ground_truths.get(gt_id)}
         else:
             gts = self.ground_truths
 

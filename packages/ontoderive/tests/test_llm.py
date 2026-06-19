@@ -3,7 +3,7 @@
 import os
 from unittest.mock import MagicMock, patch
 
-from engine.intelligence.llm import LLMEnhancer
+from ontoderive.intelligence.llm import LLMEnhancer
 
 
 class TestLLMEnhancerInit:
@@ -205,14 +205,14 @@ class TestLLMEnhancerEdgeCases:
             assert not e.available
 
     def test_get_enhancer_returns_singleton(self):
-        from engine.intelligence.llm import get_enhancer
+        from ontoderive.intelligence.llm import get_enhancer
 
         e1 = get_enhancer()
         e2 = get_enhancer()
         assert e1 is e2
 
     def test_get_enhancer_force(self):
-        from engine.intelligence.llm import get_enhancer
+        from ontoderive.intelligence.llm import get_enhancer
 
         e1 = get_enhancer()
         e2 = get_enhancer(force=True)

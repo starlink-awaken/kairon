@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"echo \\\"=== git tracked 状态 (.env.example 应 tracked) ===\\\" && for p in family-hub runtime cockpit observability; do git ls-files --error-unmatch \\\"projects/$p/.env.example\\\" >/dev/null 2>&1 ...",
+  "error": "Exit code 2\n=== git tracked 状态 (.env.example 应 tracked) ===\n  projects/family-hub/.env.example: [untracked]\n  projects/runtime/.env.example: [untracked]\n  projects/cockpit/.env.example: [untracked]\n  projects/observability/.env.example: [untracked]\n\n=== 反查明文 password/空 secret 是否清除 (期望无输出) ===\nrg: projects/family-hub/.env.example: No such file or directory (os error 2)\nrg: projects/runtime/.env.example: No such file or directory (os error 2)\nrg: projects/cockpit/.env.example: No such file or dire...",
+  "timestamp": "2026-06-19T14:06:40.292Z",
+  "retry_count": 1
+}

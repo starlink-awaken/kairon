@@ -1,10 +1,7 @@
 """AnalyticsEngine 测试 --- A1~A12 全分析模式 + 辅助函数"""
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from engine.theories.analytics import (
+from ontoderive.theories.analytics import (
     AnalyticalPattern,
     AnalyticsEngine,
     analyze_agency,
@@ -36,7 +33,7 @@ from engine.theories.analytics import (
     detect_supply_risk,
     detect_tech_disruption,
 )
-from engine.theories.analytics_patterns import (
+from ontoderive.theories.analytics_patterns import (
     _extract_num,
     _find_entity_for_fact,
     _iter_facts,

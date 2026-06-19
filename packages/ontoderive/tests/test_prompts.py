@@ -2,15 +2,12 @@
 测试 intelligence/prompts.py - 提示词模板系统
 """
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
 
 
 import json
 
-from engine.intelligence.prompts import (  # type: ignore[import-not-found]
+from ontoderive.intelligence.prompts import (  # type: ignore[import-not-found]
     CHECK_CONTRADICTION,
     DERIVE_INSIGHTS,
     DOMAIN_PRESETS,

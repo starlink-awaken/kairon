@@ -1,10 +1,8 @@
-import os
-import sys
 from pathlib import Path
+import os
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "engine"))
 os.environ.setdefault("ONTODERIVE_LLM_BACKEND", "none")
 
 @pytest.fixture(scope="session")

@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import logging
-
-_log = logging.getLogger(__name__)
 """
 ---
 Type: Module
@@ -58,6 +55,7 @@ MetaEvolveEngine.auto_update(suggestions, approve_callback) → UpdateResult
 
 import ast
 import difflib
+import logging
 import re
 import time
 import uuid
@@ -65,6 +63,8 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
+
+_log = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Enumerations
@@ -616,7 +616,7 @@ class MetaEvolveEngine:
     """
 
     def __init__(self) -> None:
-        self.status = "active"  # was super().__init__(metadata_path=...)
+        self.status = "active"
         self._analyzer = ChangeSemanticsAnalyzer()
         self._generator = UpdateSuggestionGenerator()
         self._learner = UpdatePatternLearner()

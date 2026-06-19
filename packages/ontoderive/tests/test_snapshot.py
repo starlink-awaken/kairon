@@ -1,9 +1,7 @@
+from pathlib import Path
 """E2E快照测试 — 确保重构不改变输出质量"""
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
 ZPARK = str(Path(__file__).parent.parent / "examples" / "z-park")
 DEMO = str(Path(__file__).parent.parent / "examples" / "demo-product")
@@ -11,7 +9,7 @@ DEMO = str(Path(__file__).parent.parent / "examples" / "demo-product")
 
 def test_zpark_derive_snapshot():
     """z-park: 结构分析输出完整性"""
-    from engine.core.derive import OntoDerive
+    from ontoderive.core.derive import OntoDerive
 
     s = OntoDerive(ZPARK).derive()
     assert s["facts"] >= 6
@@ -24,7 +22,7 @@ def test_zpark_derive_snapshot():
 
 def test_demo_derive_snapshot():
     """demo-product: 推导结论质量"""
-    from engine.core.derive import OntoDerive
+    from ontoderive.core.derive import OntoDerive
 
     s = OntoDerive(DEMO).derive()
     assert s["facts"] >= 6
@@ -37,7 +35,7 @@ def test_demo_derive_snapshot():
 
 def test_zpark_check_snapshot():
     """z-park: 规约检查完整性"""
-    from engine.core.derive import OntoDerive
+    from ontoderive.core.derive import OntoDerive
 
     results = OntoDerive(ZPARK).check()
     assert len(results) == 13
@@ -47,7 +45,7 @@ def test_zpark_check_snapshot():
 
 def test_demo_check_snapshot():
     """demo-product: 规约检查完整性"""
-    from engine.core.derive import OntoDerive
+    from ontoderive.core.derive import OntoDerive
 
     results = OntoDerive(DEMO).check()
     assert len(results) == 13
@@ -57,7 +55,7 @@ def test_demo_check_snapshot():
 
 def test_derive_output_schema():
     """derive()输出结构一致性"""
-    from engine.core.derive import OntoDerive
+    from ontoderive.core.derive import OntoDerive
 
     for case in [ZPARK, DEMO]:
         s = OntoDerive(case).derive()
@@ -76,7 +74,7 @@ def test_derive_output_schema():
 
 def test_reasoner_output_quality():
     """RuleReasoner输出不含跨维度噪声"""
-    from engine.core.derive import OntoDerive
+    from ontoderive.core.derive import OntoDerive
 
     s = OntoDerive(DEMO).derive()
     for c in s.get("derived_conclusions", []):

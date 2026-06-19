@@ -1,7 +1,7 @@
 """SemanticMatcher 测试 — TF-IDF + 余弦相似度"""
 
 import pytest
-from engine.foundation.semantic import SemanticMatcher
+from ontoderive.foundation.semantic import SemanticMatcher
 
 
 class TestTokenization:

@@ -1,6 +1,6 @@
 """Tests for Formalizer — 符号化引擎 (Phase 1+2)"""
 
-from engine.reasoners.formalize import (
+from ontoderive.reasoners.formalize import (
     Formalizer,
     FormalKnowledge,
     SymbolicEntity,

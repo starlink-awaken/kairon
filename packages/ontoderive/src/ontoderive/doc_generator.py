@@ -19,7 +19,33 @@ from dataclasses import dataclass, field
 from datetime import date, datetime
 from pathlib import Path
 
-"""基于代码 AST 自动生成文档模板，不调用外部 API。
+"""
+---
+Type: Organ
+Status: ACTIVE
+Version: 1.0.0
+Owner: '@Sisyphus'
+Layer: L3
+Constraint: '[!!] AUTO_ADDED_METADATA'
+Summary: 'Auto-generated metadata for doc_generator.py'
+Tags:
+- auto-metadata
+Authority: organs/D-Logos/AGENTS.md
+---
+"""
+# =============================================================================
+# 0. 形式化摘要 ≝
+# =============================================================================
+# Doc Generator ≡ Generator
+# 内涵 ≝ {Doc, Generator}
+# 外延 ≝ {e | e ∈ D-Logos ∧ implements(e, DocGenerator)}
+# 功能 ⊢ {Doc_Generator, Init_Doc, Validate_Generator}
+# =============================================================================
+
+
+"""文档生成器 (DocGenerator)
+
+基于代码 AST 自动生成文档模板，不调用外部 API。
 
 功能:
 - 使用 Python ast 模块解析代码
@@ -44,7 +70,7 @@ _log = logging.getLogger(__name__)
 
 @dataclass
 class ParsedEntity:
-    """Represents a parsed code entity (class/function/method)."""
+    """解析后的代码实体"""
 
     name: str
     type: str  # "class", "function", "method"
@@ -76,12 +102,6 @@ class DocGenerator:
     """
 
     def __init__(self, root_dir: Path | None = None) -> None:
-        self.status = "active"  # was super().__init__(metadata_path=...)
-        """初始化文档生成器
-
-        Args:
-            root_dir: 项目根目录，用于解析相对导入
-        """
         self.root_dir = root_dir or Path.cwd()
 
     def parse_file(self, file_path: str | Path) -> ParsedModule:
@@ -321,13 +341,13 @@ class DocGenerator:
             # 导入
             if module.imports or module.from_imports:
                 lines.append("**导入**:")
-                for imp in module.imports:
-                    lines.append(f"- `import {imp}`")
-                for from_imp in module.from_imports:
-                    if from_imp["asname"]:
-                        lines.append(f"- `from {from_imp['module']} import {from_imp['name']} as {from_imp['asname']}`")
+                for imp_mod in module.imports:
+                    lines.append(f"- `import {imp_mod}`")
+                for imp_from in module.from_imports:
+                    if imp_from["asname"]:
+                        lines.append(f"- `from {imp_from['module']} import {imp_from['name']} as {imp_from['asname']}`")
                     else:
-                        lines.append(f"- `from {from_imp['module']} import {from_imp['name']}`")
+                        lines.append(f"- `from {imp_from['module']} import {imp_from['name']}`")
                 lines.append("")
 
             # 类

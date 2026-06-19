@@ -1,9 +1,9 @@
+from pathlib import Path
 """Tests for Insight, InsightCache, and InsightEngine"""
 
 import json
-from pathlib import Path
 
-from engine.intelligence.insight import Insight, InsightCache, InsightEngine
+from ontoderive.intelligence.insight import Insight, InsightCache, InsightEngine
 
 
 class TestInsight:

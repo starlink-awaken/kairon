@@ -2,12 +2,9 @@
 测试信息论层
 """
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from engine.theories.metrics import MetricsLayer
+from ontoderive.theories.metrics import MetricsLayer
 
 
 def test_compute_kqi(z_park_path):

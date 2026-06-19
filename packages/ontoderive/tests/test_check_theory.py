@@ -1,6 +1,6 @@
 """Tests for check_theory — C-09~C-13 理论层规约检查"""
 
-from engine.core.check_theory import (
+from ontoderive.core.check_theory import (
     THEORY_CHECKS,
     check_bayesian,
     check_metrics,

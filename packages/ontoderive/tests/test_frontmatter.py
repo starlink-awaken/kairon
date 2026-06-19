@@ -1,10 +1,10 @@
+from pathlib import Path
 """Tests for frontmatter detection — extracted from SharedBrain D_Logos."""
 
 import datetime
 import tempfile
-from pathlib import Path
 
-from engine.frontmatter import DetectionResult, FrontmatterBlock, FrontmatterDetector
+from ontoderive.frontmatter import DetectionResult, FrontmatterBlock, FrontmatterDetector
 
 
 def make_md(content: str) -> Path:

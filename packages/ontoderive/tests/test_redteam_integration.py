@@ -1,6 +1,6 @@
 """RedTeam: 跨方法状态污染集成测试"""
 
-from engine.core.derive import OntoDerive
+from ontoderive.core.derive import OntoDerive
 
 
 def test_derive_pipeline_facts_isolation(z_park_path):

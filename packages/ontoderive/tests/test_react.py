@@ -1,6 +1,6 @@
 """Tests for ReAct (Reasoning + Acting) — 推理行动引擎"""
 
-from engine.intelligence.react import ReActEngine
+from ontoderive.intelligence.react import ReActEngine
 
 
 class MockEnhancer:

@@ -1,6 +1,6 @@
 """Tests for FormalPipeline — 四阶段形式化推理管线"""
 
-from engine.reasoners.pipeline_v4 import FormalPipeline
+from ontoderive.reasoners.pipeline_v4 import FormalPipeline
 
 
 def test_pipeline_creates():

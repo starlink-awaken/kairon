@@ -1,16 +1,14 @@
+from pathlib import Path
 """E2E集成测试 — 全流程Pipeline+生态+MCP"""
 
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
 ZPARK = str(Path(__file__).parent.parent / "examples" / "z-park")
 
 
 def test_e2e_derive_check_roundtrip():
     """完整推导+检查+报告闭环"""
-    from engine.core.derive import OntoDerive
+    from ontoderive.core.derive import OntoDerive
 
     od = OntoDerive(ZPARK)
     s = od.derive()
@@ -24,7 +22,7 @@ def test_e2e_derive_check_roundtrip():
 
 def test_e2e_pipeline_full():
     """Pipeline六阶段全流程"""
-    from engine.core.pipeline import DerivePipeline
+    from ontoderive.core.pipeline import DerivePipeline
 
     pipe = DerivePipeline(ZPARK)
     pipe.set_goal("分析中关村", "科技园区")
@@ -35,8 +33,8 @@ def test_e2e_pipeline_full():
 
 def test_e2e_toolforge_derive_link():
     """ToolForge匹配→指导→derive"""
-    from engine.core.derive import OntoDerive
-    from engine.toolforge.matcher import ToolForge
+    from ontoderive.core.derive import OntoDerive
+    from ontoderive.toolforge.matcher import ToolForge
 
     tf = ToolForge()
     tools = tf.select("中关村科技园区分析")
@@ -50,7 +48,7 @@ def test_e2e_toolforge_derive_link():
 
 def test_e2e_mcp_pipeline_status():
     """MCP bridge routes to the FastMCP-native tool surface."""
-    from engine.mcp_server import handle_mcp_request
+    from ontoderive.mcp_server import handle_mcp_request
 
     result = handle_mcp_request(
         {"id": 99, "method": "tools/call", "params": {"name": "pipeline_status", "arguments": {}}}
@@ -61,8 +59,8 @@ def test_e2e_mcp_pipeline_status():
 
 def test_e2e_typesystem_pipeline():
     """TypeValidator→check→C-07闭环"""
-    from engine.core.derive import OntoDerive
-    from engine.foundation.typesystem import TypeValidator
+    from ontoderive.core.derive import OntoDerive
+    from ontoderive.foundation.typesystem import TypeValidator
 
     tv = TypeValidator()
     r = tv.check_id("D-F1")

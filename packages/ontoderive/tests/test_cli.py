@@ -9,7 +9,7 @@ PYTHON = sys.executable
 
 def test_cli_init(tmp_path):
     result = subprocess.run(
-        [PYTHON, "engine/cli.py", "init", str(tmp_path / "test-proj")],
+        [PYTHON, "-m", "ontoderive.cli", "init", str(tmp_path / "test-proj")],
         capture_output=True,
         text=True,
         cwd=str(Path(__file__).parent.parent),
@@ -20,7 +20,7 @@ def test_cli_init(tmp_path):
 
 def test_cli_check():
     result = subprocess.run(
-        [PYTHON, "engine/cli.py", "check", "--project", "examples/z-park"],
+        [PYTHON, "-m", "ontoderive.cli", "check", "--project", "examples/z-park"],
         capture_output=True,
         text=True,
         cwd=str(Path(__file__).parent.parent),
@@ -31,7 +31,7 @@ def test_cli_check():
 
 def test_cli_derive():
     result = subprocess.run(
-        [PYTHON, "engine/cli.py", "derive", "--project", "examples/z-park"],
+        [PYTHON, "-m", "ontoderive.cli", "derive", "--project", "examples/z-park"],
         capture_output=True,
         text=True,
         cwd=str(Path(__file__).parent.parent),
@@ -41,7 +41,7 @@ def test_cli_derive():
 
 def test_cli_rounds():
     result = subprocess.run(
-        [PYTHON, "engine/cli.py", "rounds", "--project", "examples/z-park", "--rounds", "2"],
+        [PYTHON, "-m", "ontoderive.cli", "rounds", "--project", "examples/z-park", "--rounds", "2"],
         capture_output=True,
         text=True,
         cwd=str(Path(__file__).parent.parent),
@@ -52,7 +52,7 @@ def test_cli_rounds():
 
 def test_cli_toolforge():
     result = subprocess.run(
-        [PYTHON, "engine/cli.py", "toolforge", "分析市场"],
+        [PYTHON, "-m", "ontoderive.cli", "toolforge", "分析市场"],
         capture_output=True,
         text=True,
         cwd=str(Path(__file__).parent.parent),
@@ -63,7 +63,7 @@ def test_cli_toolforge():
 
 def test_cli_help_mentions_fastmcp_surface():
     result = subprocess.run(
-        [PYTHON, "engine/cli.py", "-h"],
+        [PYTHON, "-m", "ontoderive.cli", "-h"],
         capture_output=True,
         text=True,
         cwd=str(Path(__file__).parent.parent),
