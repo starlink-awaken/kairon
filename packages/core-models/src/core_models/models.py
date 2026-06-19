@@ -76,7 +76,7 @@ class Provenance:
     extracted_at: str = ""
     notes: str = ""
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if not self.extracted_at:
             self.extracted_at = datetime.now().isoformat()
 
@@ -98,7 +98,7 @@ class Entity:
     source_line: int = 0
     created_at: str = ""
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if not self.created_at:
             self.created_at = datetime.now().isoformat()
 
@@ -180,7 +180,7 @@ class KnowledgeGraph:
     source_files: dict[str, dict] = field(default_factory=dict)
     metadata: dict = field(default_factory=dict)
 
-    def add_entity(self, entity: Entity, source_file: str = ""):
+    def add_entity(self, entity: Entity, source_file: str = "") -> None:
         self.entities[entity.id] = entity
         src = source_file or entity.source_path or (entity.provenance.source_file if entity.provenance else "")
         if src:
@@ -204,10 +204,10 @@ class KnowledgeGraph:
                 )
             )
 
-    def add_relation(self, relation: Relation):
+    def add_relation(self, relation: Relation) -> None:
         self.relations.append(relation)
 
-    def merge(self, other: KnowledgeGraph):
+    def merge(self, other: KnowledgeGraph) -> None:
         for eid, entity in other.entities.items():
             if eid not in self.entities:
                 self.entities[eid] = entity
@@ -234,7 +234,7 @@ class KnowledgeGraph:
             "relations": [r.to_dict() for r in self.relations],
         }
 
-    def to_json(self, indent=2, ensure_ascii=False):
+    def to_json(self, indent: int = 2, ensure_ascii: bool = False) -> str:
         return json.dumps(self.to_dict(), ensure_ascii=ensure_ascii, indent=indent)
 
     def to_json_ld(self, graph_url: str = "") -> dict:

@@ -17,20 +17,20 @@ class CapabilitySchema:
 class CapabilityRegistry:
     """Register and discover agent capabilities."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._index: dict[str, set[str]] = {}  # type: ignore[annotation-unchecked]
         self._schemas: dict[str, CapabilitySchema] = {}  # type: ignore[annotation-unchecked]
         self._agents: dict[str, dict] = {}  # type: ignore[annotation-unchecked]
 
-    def register_schema(self, schema: CapabilitySchema):
+    def register_schema(self, schema: CapabilitySchema) -> None:
         self._schemas[schema.name] = schema
 
-    def register_agent(self, agent_id: str, capabilities: list[str], metadata: dict | None = None):
+    def register_agent(self, agent_id: str, capabilities: list[str], metadata: dict | None = None) -> None:
         self._agents[agent_id] = metadata or {}
         for cap in capabilities:
             self._index.setdefault(cap, set()).add(agent_id)
 
-    def deregister_agent(self, agent_id: str):
+    def deregister_agent(self, agent_id: str) -> None:
         for cap_set in self._index.values():
             cap_set.discard(agent_id)
         self._agents.pop(agent_id, None)
