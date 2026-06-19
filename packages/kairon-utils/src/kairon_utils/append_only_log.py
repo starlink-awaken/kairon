@@ -97,7 +97,7 @@ class AppendOnlyLog:
             record = record.model_dump()
 
         if schema is not None:
-            schema.model_validate(record)
+            schema.model_validate(record)  # type: ignore[attr-defined]
 
         self.path.parent.mkdir(parents=True, exist_ok=True)
         # §12.1.4 跨仓 4 不变量: sort_keys=True 保 SSOT 跨仓顺序确定性

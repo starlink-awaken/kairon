@@ -228,7 +228,8 @@ class AnomalyDetector:
         """Return the current rolling standard deviation."""
         if self._count < 2:
             return 0.0
-        return (self._m2 / (self._count - 1)) ** 0.5
+        result: float = (self._m2 / (self._count - 1)) ** 0.5
+        return result
 
     def get_rolling_median(self) -> float:
         """Return the median of recent values in the sliding window."""

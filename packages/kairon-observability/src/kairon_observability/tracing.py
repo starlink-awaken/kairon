@@ -46,7 +46,7 @@ def setup_tracing(service_name: str) -> None:
     except Exception as e:
         logger.error(f"[OTLP] Failed to initialize tracing: {e}")
 
-def get_tracer(name: str):
+def get_tracer(name: str) -> trace.Tracer:
     """Get a tracer instance for the current module."""
     if not _TRACING_INITIALIZED:
         # Optionally auto-initialize if not explicitly done
