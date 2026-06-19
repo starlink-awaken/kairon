@@ -194,7 +194,7 @@ class OpenAIEmbeddingProvider(BaseEmbeddingProvider):
             except ImportError as e:
                 raise ImportError("openai package is required. Install with: pip install openai") from e
 
-            client_kwargs = {
+            client_kwargs: dict[str, Any] = {
                 "api_key": self._api_key,
                 "timeout": self._timeout,
             }

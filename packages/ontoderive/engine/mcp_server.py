@@ -7,6 +7,7 @@ python3 engine/mcp_server.py --port 8321          # SSE"""
 import argparse
 import sys
 from pathlib import Path
+from typing import Any
 
 _PROJECT_ROOT = str(Path(__file__).parent.parent)
 if _PROJECT_ROOT not in sys.path:
@@ -208,7 +209,7 @@ def pipeline_status() -> dict:
     }
 
 
-_TOOL_HANDLERS = {
+_TOOL_HANDLERS: dict[str, Any] = {
     "derive": derive,
     "trace": trace,
     "validate": validate,
@@ -220,7 +221,8 @@ _TOOL_HANDLERS = {
 def _call_tool(name: str, arguments: dict | None = None) -> dict | list[dict]:
     if name not in _TOOL_HANDLERS:
         raise KeyError(f"Unknown tool: {name}")
-    return _TOOL_HANDLERS[name](**(arguments or {}))
+    handler = _TOOL_HANDLERS[name]
+    return handler(**(arguments or {}))
 
 
 def handle_mcp_request(request: dict) -> dict:

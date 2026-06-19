@@ -1,19 +1,6 @@
 {
   "entries": [
     {
-      "timestamp": "2026-05-27T08:51:27.456344",
-      "kqi": 0.4542,
-      "entropy": 4.0827,
-      "mean_confidence": 0.9241,
-      "n_facts": 8,
-      "n_inferences": 2,
-      "n_entities": 0,
-      "n_scheme_files": 1,
-      "coverage": 0.625,
-      "density": 0.25,
-      "max_chain_depth": 1
-    },
-    {
       "timestamp": "2026-05-27T17:30:23.774743",
       "kqi": 0.4542,
       "entropy": 4.0827,
@@ -1289,6 +1276,19 @@
     },
     {
       "timestamp": "2026-06-14T09:08:27.009906",
+      "kqi": 0.4542,
+      "entropy": 4.0827,
+      "mean_confidence": 0.9241,
+      "n_facts": 8,
+      "n_inferences": 2,
+      "n_entities": 0,
+      "n_scheme_files": 1,
+      "coverage": 0.625,
+      "density": 0.25,
+      "max_chain_depth": 1
+    },
+    {
+      "timestamp": "2026-06-19T12:17:10.175947",
       "kqi": 0.4542,
       "entropy": 4.0827,
       "mean_confidence": 0.9241,

@@ -26,18 +26,15 @@ VAULT_OPS_DIR = get_vault_ops_dir()
 try:
     import uvicorn
 except ImportError:
-    uvicorn = None
+    uvicorn = None  # type: ignore[assignment]
 
 try:
     from fastapi import FastAPI, Query, Request
     from fastapi.responses import HTMLResponse, JSONResponse
-except ImportError:
-    FastAPI = None
-
-    from fastapi.responses import HTMLResponse, JSONResponse
-
     HAS_FASTAPI = True
 except ImportError:
+    FastAPI = None  # type: ignore[assignment,misc]
+    from fastapi.responses import HTMLResponse, JSONResponse  # type: ignore[import-not-found]
     HAS_FASTAPI = False
 
 app = FastAPI(title="KOS Dashboard", version="2.0")
