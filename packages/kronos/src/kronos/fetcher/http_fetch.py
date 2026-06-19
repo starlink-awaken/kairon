@@ -45,9 +45,10 @@ def _try_scrapling_fetch(url: str, timeout: int = 15) -> str | None:
         from scrapling.fetchers import StealthyFetcher  # type: ignore[import-not-found]
 
         f = StealthyFetcher()
-        resp = f.get(url, timeout=timeout)
+        resp = f.get(url, timeout=timeout)  # type: ignore[attr-defined]
         if resp and resp.status == 200 and len(resp.text) > 200:
-            return resp.text
+            text_val: str = resp.text
+            return text_val
     except ImportError:
         pass  # scrapling 或 curl_cffi 未安装
     except Exception as e:
@@ -88,7 +89,8 @@ def _html_to_markdown(html: str) -> str:
         h.ignore_links = False
         h.ignore_images = True
         h.body_width = 0
-        return h.handle(html)[:50000]
+        result: str = h.handle(html)[:50000]
+        return result
     except ImportError:
         return _strip_html(html)
 

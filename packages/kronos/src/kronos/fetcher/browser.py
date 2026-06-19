@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any, cast
 
 from ..fetch_router import FetchPlan, _classify
 from .classify import FetchLayer
@@ -38,12 +39,14 @@ def _try_cloakbrowser(url: str, timeout: int = 60) -> str | None:
                     page.goto(url, wait_until="networkidle"),
                     timeout=timeout,
                 )
-                content = await page.content()
+                raw_content: Any = await page.content()
+                content: str = raw_content
                 return content
             finally:
                 await browser.close()
 
-        return asyncio.run(_fetch())
+        result: str | None = cast(str | None, asyncio.run(_fetch()))
+        return result
     except ImportError:
         pass
     except Exception as e:
@@ -64,13 +67,15 @@ def _try_playwright(url: str, timeout: int = 60) -> str | None:
                 try:
                     page = await browser.new_page()
                     await page.goto(url, wait_until="networkidle", timeout=30000)
-                    content = await page.content()
+                    raw_content: Any = await page.content()
+                    content: str = raw_content
                     return content
                 finally:
                     await browser.close()
 
         content = asyncio.run(_fetch())
-        return content
+        result: str | None = cast(str | None, content)
+        return result
     except ImportError:
         pass  # Playwright 未安装
     except Exception as e:

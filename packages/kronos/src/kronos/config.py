@@ -20,7 +20,8 @@ class KronosConfig:
         config_path = Path.home() / ".kronos" / "config.json"
         if config_path.exists():
             try:
-                return json.loads(config_path.read_text())
+                data: dict[str, Any] = json.loads(config_path.read_text())
+                return data
             except Exception:
                 pass
         return {}
@@ -28,14 +29,16 @@ class KronosConfig:
     @property
     def vault_path(self) -> str:
         """Obsidian vault 根目录"""
-        return self._data.get(
+        val: str = self._data.get(
             "vault_path",
             os.path.expanduser("~/Library/Mobile Documents/iCloud~md~obsidian/Documents"),
         )
+        return val
 
     @property
     def workspace_path(self) -> str:
-        return self._data.get("workspace_path", os.path.expanduser("~/Workspace"))
+        val: str = self._data.get("workspace_path", os.path.expanduser("~/Workspace"))
+        return val
 
     @property
     def concepts_dir(self) -> str:
@@ -47,11 +50,13 @@ class KronosConfig:
 
     @property
     def ollama_url(self) -> str:
-        return self._data.get("ollama_url", "http://localhost:11434")
+        val: str = self._data.get("ollama_url", "http://localhost:11434")
+        return val
 
     @property
     def default_model(self) -> str:
-        return self._data.get("default_model", "qwen3.5:4b")
+        val: str = self._data.get("default_model", "qwen3.5:4b")
+        return val
 
     @property
     def fetch_timeout(self) -> int:

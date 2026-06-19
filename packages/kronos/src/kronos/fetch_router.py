@@ -16,7 +16,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import re
-from typing import NotRequired, TypedDict
+from typing import Any, NotRequired, TypedDict, cast
 
 logger = logging.getLogger(__name__)
 
@@ -43,25 +43,29 @@ from kronos.fetcher.errors import (  # type: ignore[import-not-found]
 def _is_error_page(content: str) -> bool:
     from kronos.fetcher.errors import _is_error_page as _impl
 
-    return _impl(content)
+    result: bool = _impl(content)
+    return result
 
 
 def diagnose_fetch_error(error: Exception) -> dict[str, str]:
     from kronos.fetcher.errors import diagnose_fetch_error as _impl
 
-    return _impl(error)
+    result: dict[str, str] = _impl(error)
+    return result
 
 
 def extract_image_urls(html: str) -> list[str]:
     from kronos.fetcher.errors import extract_image_urls as _impl
 
-    return _impl(html)
+    result: list[str] = _impl(html)
+    return result
 
 
 def is_image_url(url: str) -> bool:
     from kronos.fetcher.errors import is_image_url as _impl
 
-    return _impl(url)
+    result: bool = _impl(url)
+    return result
 
 MCP_TOOLS: list[MCPTool] = [
     MCPTool(
@@ -144,9 +148,10 @@ def _try_scrapling_fetch(url: str, timeout: int = 15) -> str | None:
         from scrapling.fetchers import StealthyFetcher  # type: ignore[import-not-found]
 
         f = StealthyFetcher()
-        resp = f.get(url, timeout=timeout)
+        resp = f.get(url, timeout=timeout)  # type: ignore[attr-defined]
         if resp and resp.status == 200 and len(resp.text) > 200:
-            return resp.text
+            text_val: str = resp.text
+            return text_val
     except ImportError:
         pass  # scrapling 或 curl_cffi 未安装
     except Exception as e:
@@ -189,7 +194,8 @@ def _html_to_markdown(html: str) -> str:
         h.ignore_links = False
         h.ignore_images = True
         h.body_width = 0
-        return h.handle(html)[:50000]
+        result: str = h.handle(html)[:50000]
+        return result
     except ImportError:
         return _strip_html(html)
 
@@ -280,12 +286,14 @@ def _try_cloakbrowser(url: str, timeout: int = 60) -> str | None:
                     page.goto(url, wait_until="networkidle"),
                     timeout=timeout,
                 )
-                content = await page.content()
+                raw_content: Any = await page.content()
+                content: str = raw_content
                 return content
             finally:
                 await browser.close()
 
-        return asyncio.run(_fetch())
+        result: str | None = cast(str | None, asyncio.run(_fetch()))
+        return result
     except ImportError:
         pass
     except Exception as e:
@@ -306,13 +314,15 @@ def _try_playwright(url: str, timeout: int = 60) -> str | None:
                 try:
                     page = await browser.new_page()
                     await page.goto(url, wait_until="networkidle", timeout=30000)
-                    content = await page.content()
+                    raw_content: Any = await page.content()
+                    content: str = raw_content
                     return content
                 finally:
                     await browser.close()
 
         content = asyncio.run(_fetch())
-        return content
+        result: str | None = cast(str | None, content)
+        return result
     except ImportError:
         pass  # Playwright 未安装
     except Exception as e:
@@ -575,21 +585,24 @@ def _detect_ollama_model() -> str:
     """委派到 extractor"""
     from kronos.extractor import _detect_ollama_model
 
-    return _detect_ollama_model()
+    result: str = _detect_ollama_model()
+    return result
 
 
 def call_ollama(prompt: str, model: str | None = None, system_prompt: str | None = None) -> str:
     """委派到 extractor"""
     from kronos.extractor import call_ollama
 
-    return call_ollama(prompt, model, system_prompt)
+    result: str = call_ollama(prompt, model, system_prompt)
+    return result
 
 
 def extract_with_ollama(text: str, model: str | None = None) -> dict:
     """委派到 extractor"""
     from kronos.extractor import extract_with_ollama
 
-    return extract_with_ollama(text, model)
+    result: dict = extract_with_ollama(text, model)
+    return result
 
 
 def batch_fetch(urls: list[str], max_concurrent: int = 3, save_dir: str | None = None) -> list[dict]:

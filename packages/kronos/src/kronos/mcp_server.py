@@ -241,7 +241,7 @@ def kronos_insight(title: str, content: str = "", importance: str = "medium") ->
     )
 
 
-def main():
+def main() -> None:
     """Run MCP server in stdio mode."""
     if "--help" in sys.argv or "-h" in sys.argv:
         print("Kronos MCP Server (FastMCP)")

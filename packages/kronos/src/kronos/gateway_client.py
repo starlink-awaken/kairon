@@ -53,7 +53,8 @@ def _call_mcp_tool(tool_name: str, arguments: dict[str, Any] | None = None, time
             timeout=timeout,
         )
         result = json.loads(proc.stdout)
-        return result.get("result", {})
+        parsed: dict[str, Any] = result.get("result", {})
+        return parsed
     except Exception as e:
         return {"error": str(e)}
 

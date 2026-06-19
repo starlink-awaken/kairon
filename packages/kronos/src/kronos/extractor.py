@@ -347,16 +347,19 @@ def _detect_ollama_model() -> str:
 
         resp = httpx.get("http://localhost:11434/api/tags", timeout=3)
         if resp.status_code == 200:
-            models = resp.json().get("models", [])
+            resp_data: dict[str, Any] = resp.json()
+            models = resp_data.get("models", [])
             preferred = ["qwen3.5:4b", "qwen3.5:9b", "qwen3-coder-next", "gemma4:e2b", "llama3.2:3b"]
             for name in preferred:
                 for m in models:
                     if m.get("name", "").startswith(name):
-                        _DEFAULT_OLLAMA_MODEL = m["name"]
-                        return m["name"]
+                        model_name: str = m["name"]
+                        _DEFAULT_OLLAMA_MODEL = model_name
+                        return model_name
             if models:
-                _DEFAULT_OLLAMA_MODEL = models[0]["name"]
-                return models[0]["name"]
+                first_model: str = models[0]["name"]
+                _DEFAULT_OLLAMA_MODEL = first_model
+                return first_model
     except Exception:
         pass
     return "qwen2.5:7b"
@@ -375,7 +378,9 @@ def call_ollama(prompt: str, model: str | None = None, system_prompt: str | None
         resp = httpx.post("http://localhost:11434/api/generate", json=payload, timeout=120)
         if resp.status_code != 200:
             return f"[Ollama HTTP {resp.status_code}: {resp.text[:200]}"
-        return resp.json().get("response", "")
+        resp_data: dict[str, Any] = resp.json()
+        response_text: str = resp_data.get("response", "")
+        return response_text
     except ImportError:
         return "[Ollama 需要 httpx: pip install httpx]"
     except Exception as e:
@@ -406,7 +411,8 @@ def extract_with_ollama(text: str, model: str | None = None) -> ExtractedResult 
     try:
         json_match = re.search(r"\{.*\}", response, re.DOTALL)
         if json_match:
-            return json.loads(json_match.group())
+            result: ExtractedResult | ErrorResult = json.loads(json_match.group())
+            return result
         return {"error": "模型返回非 JSON 格式", "raw": response[:300]}
     except Exception as e:
         return {"error": str(e), "raw": response[:200]}

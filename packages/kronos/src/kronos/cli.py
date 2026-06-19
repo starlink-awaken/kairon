@@ -36,7 +36,7 @@ def _show_fetch_plan(url: str) -> None:
 
 
 @click.group()
-def cli():
+def cli() -> None:
     """Kronos — 全自动知识摄取管线
 
     L0 原生 HTTP 自动抓取，失败自动降级到 6 层 fallback 链。
@@ -44,7 +44,7 @@ def cli():
 
 
 @cli.command()
-def status():
+def status() -> None:
     """显示服务状态和集成信息"""
     methods = list_all_methods()
     l1_count = sum(1 for m in methods if m["layer"] == "L1_MCP")
@@ -73,7 +73,7 @@ def status():
 @cli.command()
 @click.argument("url")
 @click.option("--plan", "dry_run", is_flag=True, help="只出方案不执行")
-def fetch(url: str, dry_run: bool = False):
+def fetch(url: str, dry_run: bool = False) -> None:
     """5 层自动抓取 URL"""
     ctype = content_type_label(plan_for_url(url).content_type)
     click.echo("📥  Kronos v0.4 — 自动抓取管线")
@@ -94,7 +94,7 @@ def fetch(url: str, dry_run: bool = False):
     click.echo("🔧  尝试 L0 原生 HTTP...")
     _spinning = True
 
-    def _spinner():
+    def _spinner() -> None:
         for c in "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏":
             if not _spinning:
                 break
@@ -184,14 +184,14 @@ def fetch(url: str, dry_run: bool = False):
 
 @cli.command()
 @click.argument("url")
-def route(url: str):
+def route(url: str) -> None:
     """查看 URL 的完整 fallback 链"""
     _show_fetch_plan(url)
 
 
 @cli.command()
 @click.argument("query", nargs=-1, required=True)
-def search(query: tuple[str, ...]):
+def search(query: tuple[str, ...]) -> None:
     """DuckDuckGo 免费搜索"""
     q = " ".join(query)
     try:
@@ -210,7 +210,7 @@ def search(query: tuple[str, ...]):
 
 @cli.command()
 @click.option("--save", is_flag=True, help="保存内容到桌面")
-def batch(save: bool):
+def batch(save: bool) -> None:
     """批量处理 pending 列表"""
     from kronos.config import get_config  # type: ignore[import-not-found]
 
@@ -264,7 +264,7 @@ def batch(save: bool):
 @cli.command()
 @click.argument("title")
 @click.argument("content", nargs=-1, required=False)
-def insight(title: str, content: tuple[str, ...] | None = None):
+def insight(title: str, content: tuple[str, ...] | None = None) -> None:
     """生成洞察报告"""
     body = " ".join(content) if content else ""
     if not body and not sys.stdin.isatty():
@@ -276,7 +276,7 @@ def insight(title: str, content: tuple[str, ...] | None = None):
 
 
 @cli.command()
-def tools():
+def tools() -> None:
     """列出所有抓取方法"""
     for m in list_all_methods():
         click.echo(f"  [{m['layer']}] {m['name']}")
@@ -284,7 +284,7 @@ def tools():
 
 
 @cli.command()
-def layers():
+def layers() -> None:
     """架构说明"""
     click.echo("""
 Kronos 抓取引擎 — 全自动顺序尝试
