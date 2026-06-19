@@ -68,6 +68,7 @@ L0 ┌ protocols · 协议 YAML
 - `make test-fast` — 仅单元测试
 - `make test-diff` — 仅测试修改的包
 - `make lint` — Ruff 检查
+- `make typecheck` / `uv run mypy` — mypy strict 试点 (当前 kairon-lib-events / health-profile / kairon-pipeline / plugin-sdk / sophia 等包已启用)
 - 覆盖率门禁: 70%
 
 ## 已归档 (P28-W2 ~ P31-W0)

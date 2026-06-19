@@ -67,6 +67,7 @@ make test
 make test-fast
 make lint
 make format
+make typecheck  # mypy strict 试点
 ```
 
 ## 当前已知事实
