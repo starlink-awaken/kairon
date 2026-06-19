@@ -19,7 +19,7 @@ from typing import Any
 logger = logging.getLogger(__name__)
 
 
-def _try_import_bus():
+def _try_import_bus() -> Any:
     """Lazy import so kairon-pipeline tests can run without agora installed."""
     try:
         from bus_foundation.facade import event as bus_event
