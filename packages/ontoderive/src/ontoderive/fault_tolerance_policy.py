@@ -284,7 +284,8 @@ class FaultTolerancePolicy:
     def get_retry_delay(self, context: FaultContext) -> float:
         """Exponential back-off: ``base * 2^retry_count`` capped at 60 s."""
         delay = self._config.base_retry_delay * (2**context.retry_count)
-        return min(delay, 60.0)
+        result: float = min(delay, 60.0)
+        return result
 
     def register_critical_operation(self, operation: str) -> None:
         """Mark *operation* so that it is always evaluated as fail-closed."""
@@ -311,7 +312,7 @@ class FaultTolerancePolicy:
         params = params or {}
         handler_name = f"_handle_{action}"
         if hasattr(self, handler_name):
-            return getattr(self, handler_name)(params)
+            return getattr(self, handler_name)(params)  # type: ignore[no-any-return]
         return {"status": "error", "message": f"Unknown action: {action}"}
 
     def _handle_evaluate(self, params: dict[str, Any]) -> dict[str, Any]:

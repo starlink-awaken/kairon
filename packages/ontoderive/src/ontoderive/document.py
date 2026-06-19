@@ -175,7 +175,8 @@ class DocumentMetadata:
             if key not in data:
                 data[key] = value
 
-        return yaml.dump(data, default_flow_style=False, allow_unicode=True, sort_keys=False)
+        result: str = yaml.dump(data, default_flow_style=False, allow_unicode=True, sort_keys=False)
+        return result
 
     def is_valid(self) -> bool:
         """检查元数据是否有效"""
