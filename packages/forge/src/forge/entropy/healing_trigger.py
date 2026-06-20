@@ -10,6 +10,7 @@ import json
 import logging
 import os
 from pathlib import Path
+from typing import Any, cast
 from urllib.request import Request, urlopen
 
 import yaml
@@ -24,7 +25,7 @@ class SharedBrainHealingTrigger:
 
     RULES: dict[str, str]
 
-    def __init__(self, agora_endpoint=None, timeout=5):
+    def __init__(self, agora_endpoint: str | None = None, timeout: int = 5) -> None:
         if agora_endpoint is None:
             agora_endpoint = os.environ.get("AGORA_ENDPOINT", "http://localhost:7430")
         self.endpoint = agora_endpoint.rstrip("/")
@@ -34,7 +35,7 @@ class SharedBrainHealingTrigger:
     def _load_rules(self) -> dict[str, str]:
         if RULES_FILE.exists():
             try:
-                return yaml.safe_load(RULES_FILE.read_text()).get("rules", {})
+                return cast("dict", yaml.safe_load(RULES_FILE.read_text()).get("rules", {}))
             except Exception:
                 pass
         return {
@@ -43,7 +44,7 @@ class SharedBrainHealingTrigger:
             "organ_cpu_spike": "sharedbrain/genesis/cool-down --organ {organ}",
         }
 
-    def trigger(self, anomaly_type: str, organ: str, **context) -> dict:
+    def trigger(self, anomaly_type: str, organ: str, **context: Any) -> dict:
         """Trigger self-healing for a detected anomaly.
 
         Returns the response from SharedBrain D-Genesis.

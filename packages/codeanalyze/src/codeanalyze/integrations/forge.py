@@ -12,6 +12,7 @@ import logging
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from typing import Any, cast
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +84,7 @@ def rescue_json(text: str) -> dict | None:
 
     # Step 1: 直接解析
     try:
-        return json.loads(text)
+        return cast("dict[str, Any]", json.loads(text))
     except json.JSONDecodeError:
         pass
 
@@ -91,7 +92,7 @@ def rescue_json(text: str) -> dict | None:
     cleaned = re.sub(r"^```(?:json)?\s*\n?", "", text.strip(), flags=re.MULTILINE)
     cleaned = re.sub(r"\n```\s*$", "", cleaned, flags=re.MULTILINE)
     try:
-        result = json.loads(cleaned)
+        result = cast("dict[str, Any]", json.loads(cleaned))
         _stats.rescued_parses += 1
         return result
     except json.JSONDecodeError:
@@ -101,7 +102,7 @@ def rescue_json(text: str) -> dict | None:
     for pattern in [r"\{[^{}]*\}", r"\[[^\[\]]*\]"]:
         for match in re.finditer(pattern, cleaned, re.DOTALL):
             try:
-                result = json.loads(match.group())
+                result = cast("dict[str, Any]", json.loads(match.group()))
                 _stats.rescued_parses += 1
                 return result
             except json.JSONDecodeError:
@@ -194,7 +195,7 @@ def guardrail(
             required_steps=required_steps or [],
         )
 
-        def wrapper(*args, **kwargs) -> dict:
+        def wrapper(*args: Any, **kwargs: Any) -> dict:
             _stats.total_calls += 1
 
             # 执行工具调用（带重试）

@@ -24,7 +24,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-from cron_utils import (  # type: ignore[import-not-found]
+from forge.cron_utils import (
     DISABLED_DIR,
     LAUNCH_AGENTS,
     REGISTRY_FILE,
@@ -42,7 +42,6 @@ from cron_utils import (  # type: ignore[import-not-found]
     validate_script_name,
     validate_task_name,
 )
-
 from forge.forge_config import FORGE_ROOT  # type: ignore[import-not-found]
 
 # ── cron-manager 特有助手 ──

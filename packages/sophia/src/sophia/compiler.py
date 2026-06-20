@@ -10,6 +10,7 @@ Both paths filter BASE_TRANSITIONS to include only rules for selected operations
 from __future__ import annotations
 
 import logging
+from typing import Protocol
 
 from .symbols import (
     BASE_TRANSITIONS,
@@ -18,6 +19,14 @@ from .symbols import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+class _LLMClientProtocol(Protocol):
+    """LLM client 结构契约 — compiler 只依赖 generate 方法, 不耦合具体实现 (如 _LLMClient)."""
+
+    async def generate(
+        self, system: str, prompt: str, temperature: float, max_tokens: int
+    ) -> str: ...
 
 # Pre-built operation sets for common research patterns
 _OPS_DEFAULT = [
@@ -73,7 +82,7 @@ def recompile_from_dict(data: dict) -> ParadigmProgram:
     return ParadigmProgram.from_dict(data)
 
 
-async def compile_paradigm(llm_client, query: str) -> ParadigmProgram:
+async def compile_paradigm(llm_client: _LLMClientProtocol | None, query: str) -> ParadigmProgram:
     """Compile a paradigm program for the given research question.
 
     Tries LLM-based compilation first. Falls back to rule-based if LLM
@@ -96,7 +105,7 @@ async def compile_paradigm(llm_client, query: str) -> ParadigmProgram:
     return compile_paradigm_sync(query)
 
 
-async def _llm_compile(llm_client, query: str) -> ParadigmProgram:
+async def _llm_compile(llm_client: _LLMClientProtocol, query: str) -> ParadigmProgram:
     """LLM-driven compilation: analyze question, output ops as JSON."""
     import json
 

@@ -34,7 +34,7 @@ get_workspace_manifest = None  # type: ignore[no-redef]
 get_artifact_path = None  # type: ignore[no-redef]
 get_vault_ops_dir = None  # type: ignore[no-redef]
 try:
-    from kos.config import (  # type: ignore[import-not-found, no-redef]
+    from kos.config import (  # type: ignore[import-not-found, no-redef, assignment]
         get_artifact_path,
         get_vault_ops_dir,
         get_workspace_manifest,
@@ -118,7 +118,7 @@ from kos.adapters import MinervaAdapter, NullMinerva  # type: ignore[import-not-
 _MINERVA = None
 
 
-def _get_minerva() -> MinervaAdapter | NullMinerva:  # type: ignore[no-untyped-def]
+def _get_minerva() -> Any:
     global _MINERVA
     if _MINERVA is None:
         _MINERVA = MinervaAdapter.discover() or NullMinerva
@@ -467,7 +467,7 @@ def _format_research_output(data: dict):  # type: ignore[no-untyped-def, type-ar
 # ── Main ────────────────────────────────────────────────
 
 
-def main():  # type: ignore[unknown]
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="KOS CLI — Knowledge Operating System v2.0",
         formatter_class=argparse.RawDescriptionHelpFormatter,

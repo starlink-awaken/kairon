@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import re
 from abc import ABC, abstractmethod
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -56,7 +57,7 @@ class BaseConnector(ABC):
         folder: str | None = None,
         subdir: str | None = None,
         chat_id: str | None = None,
-    ) -> list[KnowledgeArtifact]:
+    ) -> Sequence[KnowledgeArtifact]:
         """List items from the platform, with optional pagination.
 
         Override in platform-specific connectors. Default returns empty list.
@@ -72,7 +73,7 @@ class BaseConnector(ABC):
         """
         return None
 
-    def search(self, query: str, limit: int = 10) -> list[KnowledgeArtifact]:
+    def search(self, query: str, limit: int = 10) -> Sequence[KnowledgeArtifact]:
         """Search platform content by query string.
 
         Override in platform-specific connectors. Default returns empty list.

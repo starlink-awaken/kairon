@@ -16,7 +16,10 @@ from __future__ import annotations
 import hashlib
 import logging
 import re
-from typing import Any, NotRequired, TypedDict, cast
+from typing import TYPE_CHECKING, Any, NotRequired, TypedDict, cast
+
+if TYPE_CHECKING:
+    from kronos.extractor import ErrorResult, ExtractedResult
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +35,8 @@ class FetchResult(TypedDict, total=False):
     title: NotRequired[str]
     error: NotRequired[str]
     plan: NotRequired[list[dict]]
+    _content_hash: str  # batch_fetch 内容指纹
+    saved_to: str  # batch_fetch 保存路径
 
 
 from kronos.fetcher.classify import ContentType, FetchLayer, FetchPlan, MCPTool  # type: ignore[import-not-found]
@@ -497,7 +502,7 @@ def plan_for_url(url: str) -> FetchPlan:
 def execute_fallback_chain(url: str) -> list[dict]:
     """生成完整的 fallback 链方案列表(供 CLI/MCP 输出)"""
     results = []
-    plan = plan_for_url(url)
+    plan: FetchPlan | None = plan_for_url(url)
     depth = 1
     while plan:
         results.append(
@@ -597,12 +602,11 @@ def call_ollama(prompt: str, model: str | None = None, system_prompt: str | None
     return result
 
 
-def extract_with_ollama(text: str, model: str | None = None) -> dict:
+def extract_with_ollama(text: str, model: str | None = None) -> ExtractedResult | ErrorResult:
     """委派到 extractor"""
-    from kronos.extractor import extract_with_ollama
+    from kronos.extractor import extract_with_ollama as _impl
 
-    result: dict = extract_with_ollama(text, model)
-    return result
+    return _impl(text, model)
 
 
 def batch_fetch(urls: list[str], max_concurrent: int = 3, save_dir: str | None = None) -> list[dict]:

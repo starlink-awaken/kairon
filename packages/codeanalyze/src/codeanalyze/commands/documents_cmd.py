@@ -16,7 +16,7 @@ from codeanalyze.documents.official import (  # type: ignore[import-not-found]
 @click.argument("path", default=".")
 @click.option("--output", "-o", default=None, help="报告输出路径")
 @click.option("--levels", is_flag=True, help="按政策层级分类展示")
-def documents(path: str, output: str | None, levels: bool):
+def documents(path: str, output: str | None, levels: bool) -> None:
     """分析公文/政策文档项目（如国转中心政策法规目录）。
 
     自动提取：

@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+from collections.abc import Mapping
 from typing import Any, NotRequired, TypedDict, cast
 
 # extract_with_ollama moved to this module
@@ -273,7 +274,7 @@ def _default_result(reason: str = "unknown") -> ExtractedResult:
 class ExtractedContent:
     """提取结果的结构化封装"""
 
-    def __init__(self, raw: dict[str, Any]):
+    def __init__(self, raw: Mapping[str, Any]):
         self.title = raw.get("title", "未命名")
         self.summary = raw.get("summary", "")
         self.key_points = raw.get("key_points", [])

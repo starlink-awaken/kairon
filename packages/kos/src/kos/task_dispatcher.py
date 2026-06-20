@@ -46,7 +46,7 @@ class TaskDispatcher:
         d.stats()                # queue breakdown
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.queues: dict[Priority, list[Task]] = {p: [] for p in Priority}
         self.running: Task | None = None
         self._id_counter = 0

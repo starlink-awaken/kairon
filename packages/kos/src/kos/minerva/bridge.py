@@ -31,7 +31,7 @@ VAULT_OPS_DIR = get_vault_ops_dir()
 # Unified Minerva adapter (version-aware discovery)
 from kos.adapters import MinervaAdapter, NullMinerva  # type: ignore[import-not-found]
 from kos.config import get_artifact_path, get_workspace_manifest
-from typing import Any
+from typing import Any, cast
 
 _MINERVA = None  # lazy singleton
 
@@ -75,7 +75,7 @@ def cmd_search(query: str, level: str = "L2", max_cost: float = 1.0) -> dict:  #
         if r.returncode == 0:
             result = json.loads(r.stdout)
             result["_backend"] = "kos-local"
-            return result  # type: ignore[Any, Any]
+            return cast("dict[Any, Any]", result)
         return {"error": "Minerva unavailable and KOS fallback failed", "query": query}
 
     print(f"🔬 Minerva research: {query} (level={level})", file=sys.stderr)
@@ -181,7 +181,7 @@ def cmd_report() -> dict:  # type: ignore[type-arg]
     }
 
 
-def main():  # type: ignore[unknown]
+def main() -> None:
     cmd = sys.argv[1] if len(sys.argv) > 1 else "status"
     rest = sys.argv[2:] if len(sys.argv) > 2 else []
 

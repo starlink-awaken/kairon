@@ -267,7 +267,7 @@ class SyncEngine:
             item = self._wpsnote.get_item(change.item_id)
             if item is None:
                 # Was deleted between detection and processing
-                obs_path = self.id_map.get_obsidian_path(change.item_id)
+                obs_path = cast("str", self.id_map.get_obsidian_path(change.item_id))
                 if obs_path:
                     # Find the Obsidian item by path
                     self._delete_obsidian_by_path(obs_path)
@@ -277,7 +277,7 @@ class SyncEngine:
                 return
 
             # Get the corresponding Obsidian path
-            obs_path = self.id_map.get_obsidian_path(change.item_id)
+            obs_path = cast("str", self.id_map.get_obsidian_path(change.item_id))
             if obs_path is None:
                 # No mapping — treat as create
                 self._process_wpsnote_change(
@@ -305,7 +305,7 @@ class SyncEngine:
 
         elif change.type == ChangeType.DELETED:
             # WPS Note item was deleted — remove from Obsidian too
-            obs_path = self.id_map.get_obsidian_path(change.item_id)
+            obs_path = cast("str", self.id_map.get_obsidian_path(change.item_id))
             if obs_path:
                 self._delete_obsidian_by_path(obs_path)
                 self.id_map.remove(obs_path)

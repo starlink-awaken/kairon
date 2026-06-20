@@ -21,7 +21,7 @@ from codeanalyze.reports.insights import analyze as analyze_insights
 @click.argument("path", default=".")
 @click.option("--docs", is_flag=True, help="是否分析文档文件")
 @click.option("--output", "-o", default=None, help="报告输出路径")
-def analyze(path: str, docs: bool, output: str | None):
+def analyze(path: str, docs: bool, output: str | None) -> None:
     """运行全部分析工具（Graphify + GitNexus + Serena + 可选文档）。"""
     root = _validate_path(path)
     ws = detect_workspace(path)
@@ -148,7 +148,7 @@ def analyze(path: str, docs: bool, output: str | None):
 
 @click.command()
 @click.argument("path", default=".")
-def graph(path: str):
+def graph(path: str) -> None:
     """仅运行 Graphify 语义图谱分析。
 
     注意: 此命令是 'codeanalyze analyze' 的子集，即将废弃。
@@ -175,7 +175,7 @@ def graph(path: str):
 @click.command()
 @click.argument("path", default=".")
 @click.option("--force", is_flag=True, help="强制重建索引")
-def deps(path: str, force: bool):
+def deps(path: str, force: bool) -> None:
     """仅运行 GitNexus 依赖图分析。
 
     注意: 此命令是 'codeanalyze analyze' 的子集，即将废弃。
@@ -205,7 +205,7 @@ def deps(path: str, force: bool):
 @click.command()
 @click.argument("path", default=".")
 @click.option("--output", "-o", default=None, help="输出路径")
-def docs(path: str, output: str | None):
+def docs(path: str, output: str | None) -> None:
     """对文档文件运行结构化分析。
 
     注意: 此命令是 'codeanalyze analyze --docs' 的子集，即将废弃。
@@ -228,7 +228,7 @@ def docs(path: str, output: str | None):
 @click.argument("path", default=".")
 @click.option("--output", "-o", default=None, help="报告输出路径")
 @click.option("--docs", is_flag=True, help="包含文档分析")
-def report(path: str, output: str | None, docs: bool):
+def report(path: str, output: str | None, docs: bool) -> None:
     """仅生成综合分析报告（不重新运行分析）。"""
     root = _validate_path(path)
     detect_workspace(path)

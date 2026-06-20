@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import Any
+from typing import Any, cast
 
 import httpx
 
@@ -95,7 +95,7 @@ class McpClient:
     def list_tools(self) -> list[dict[str, Any]]:
         """List all available tools from the server."""
         result = self._request("tools/list", {})
-        return result.get("tools", [])
+        return cast("list[dict[str, Any]]", result.get("tools", []))
 
     def call_tool(
         self,
@@ -193,7 +193,7 @@ class McpClient:
                 err.get("data"),
             )
 
-        return sse_data.get("result", {})
+        return cast("dict[str, Any]", sse_data.get("result", {}))
 
     @staticmethod
     def _parse_sse(text: str) -> dict[str, Any] | None:
@@ -225,7 +225,7 @@ class McpClient:
         if data_lines:
             raw = "".join(data_lines)
             try:
-                return json.loads(raw)
+                return cast("dict[str, Any] | None", json.loads(raw))
             except json.JSONDecodeError:
                 return None
 

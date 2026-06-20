@@ -18,7 +18,7 @@ import json
 import logging
 import os
 import urllib.request
-from typing import Any
+from typing import Any, cast
 
 from iris.base import BaseConnector, SyncResult  # type: ignore[import-not-found]
 from iris.config import IrisConfig  # type: ignore[import-not-found]
@@ -106,7 +106,7 @@ class WXReadConnector(BaseConnector):
         # Step 1: Get bookshelf
         shelf = _api_call("/shelf/sync")
         if not shelf:
-            return items
+            return cast("list[KnowledgeArtifact]", items)
 
         books = []
         for key in ("books", "albums"):
@@ -148,7 +148,7 @@ class WXReadConnector(BaseConnector):
                     )
                 )
 
-        return items[:limit]
+        return cast("list[KnowledgeArtifact]", items[:limit])
 
     def get_item(self, id: str) -> KnowledgeArtifact | None:
         """Get a specific book's highlights."""
@@ -163,7 +163,7 @@ class WXReadConnector(BaseConnector):
         results = _api_call("/store/search", keyword=query, count=limit)
         items: list[Highlight] = []
         if not results or not results.get("books"):
-            return items
+            return cast("list[KnowledgeArtifact]", items)
 
         for b in results["books"][:limit]:
             bid = b.get("bookId", "")
@@ -186,7 +186,7 @@ class WXReadConnector(BaseConnector):
                 )
             )
 
-        return items[:limit]
+        return cast("list[KnowledgeArtifact]", items[:limit])
 
     def status(self) -> dict[str, Any]:
         configured = self.is_available()

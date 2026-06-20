@@ -57,7 +57,7 @@ class ParadigmLearner:
         self._cache_mtime = newest
         return traces
 
-    def record(self, trace: ResearchTrace):
+    def record(self, trace: ResearchTrace) -> None:
         """Record a research trace for learning."""
         trace.timestamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         entry = {

@@ -35,6 +35,7 @@ import urllib.parse
 from collections import Counter
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from typing import Any, cast
 
 from forge.forge_config import (  # type: ignore[import-not-found]
     ALLOWED_CORS_ORIGINS,
@@ -71,7 +72,7 @@ def resolve_cors_origin(request_origin: str | None) -> str:
 
 def load_registry() -> dict:
     try:
-        return json.loads(REGISTRY.read_text())
+        return cast("dict", json.loads(REGISTRY.read_text()))
     except (FileNotFoundError, json.JSONDecodeError):
         return {"tools": [], "schema_version": "?", "event_log": []}
 
@@ -79,7 +80,7 @@ def load_registry() -> dict:
 def load_graph() -> dict:
     if GRAPH.exists():
         try:
-            return json.loads(GRAPH.read_text())
+            return cast("dict", json.loads(GRAPH.read_text()))
         except json.JSONDecodeError:
             pass
     return {"nodes": [], "edges": [], "stats": {}}
@@ -258,7 +259,7 @@ def export_assets(
 # ─── HTTP Handler ────────────────────────────
 
 
-def respond(handler, data, status=200):
+def respond(handler: BaseHTTPRequestHandler, data: object, status: int = 200) -> None:
     handler.send_response(status)
     handler.send_header("Content-Type", "application/json; charset=utf-8")
     handler.send_header("Access-Control-Allow-Origin", resolve_cors_origin(handler.headers.get("Origin")))
@@ -268,7 +269,7 @@ def respond(handler, data, status=200):
     handler.wfile.write(json.dumps(data, ensure_ascii=False).encode())
 
 
-def respond_csv(handler, csv_text: str, filename: str):
+def respond_csv(handler: BaseHTTPRequestHandler, csv_text: str, filename: str) -> None:
     handler.send_response(200)
     handler.send_header("Content-Type", "text/csv; charset=utf-8")
     handler.send_header("Content-Disposition", f'attachment; filename="{filename}"')
@@ -277,15 +278,15 @@ def respond_csv(handler, csv_text: str, filename: str):
     handler.wfile.write(csv_text.encode("utf-8"))
 
 
-def error(handler, msg, status=400):
+def error(handler: BaseHTTPRequestHandler, msg: str, status: int = 400) -> None:
     respond(handler, {"error": msg}, status)
 
 
-def _check_auth(handler) -> bool:
+def _check_auth(handler: BaseHTTPRequestHandler) -> bool:
     if not TOKEN and not REQUIRE_TOKEN:
         return True
     auth = handler.headers.get("Authorization", "")
-    return auth == f"Bearer {TOKEN}"
+    return bool(auth == f"Bearer {TOKEN}")
 
 
 def query_graph(query: str) -> list[dict]:
@@ -323,7 +324,7 @@ class ForgeAPIHandler(BaseHTTPRequestHandler):
             return None
         if length:
             try:
-                return json.loads(self.rfile.read(length))
+                return cast("dict", json.loads(self.rfile.read(length)))
             except json.JSONDecodeError:
                 return {}
         return {}
@@ -476,7 +477,7 @@ class ForgeAPIHandler(BaseHTTPRequestHandler):
 
     # ─── POST ───
 
-    def do_POST(self):
+    def do_POST(self) -> None:
         if not _check_auth(self):
             return error(self, "unauthorized", 401)
         path, qs = self._parse_path()
@@ -503,14 +504,14 @@ class ForgeAPIHandler(BaseHTTPRequestHandler):
 
         error(self, f"not found: {path}", 404)
 
-    def do_OPTIONS(self):
+    def do_OPTIONS(self) -> None:
         self.send_response(204)
         self.send_header("Access-Control-Allow-Origin", resolve_cors_origin(self.headers.get("Origin")))
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
         self.end_headers()
 
-    def log_message(self, fmt, *args):
+    def log_message(self, fmt: str, *args: Any) -> None:
         print(
             f"[{datetime.now().strftime('%H:%M:%S')}] {args[0] if args else ''} {args[1] if len(args) > 1 else ''} {args[2] if len(args) > 2 else ''}"
         )
@@ -519,7 +520,7 @@ class ForgeAPIHandler(BaseHTTPRequestHandler):
 # ─── 启动 ────────────────────────────────────
 
 
-def main():
+def main() -> None:
     global REQUIRE_TOKEN
     port = PORT
     daemon = False

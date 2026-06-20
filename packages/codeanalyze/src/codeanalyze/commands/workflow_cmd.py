@@ -9,7 +9,7 @@ from codeanalyze.workflows import analyze_impact, generate_onboarding_context  #
 
 
 @click.group(name="workflow")
-def workflow_group():
+def workflow_group() -> None:
     """高级分析工作流 (组合多种工具)。"""
     pass
 
@@ -17,7 +17,7 @@ def workflow_group():
 @workflow_group.command("onboarding")
 @click.argument("path", default=".")
 @click.option("--output", "-o", help="输出目录")
-def onboarding(path: str, output: str | None):
+def onboarding(path: str, output: str | None) -> None:
     """为 AI 构建项目全貌上下文。"""
     root = Path(path).resolve()
     console.print(f"[cyan]🚀 正在为 {root.name} 构建 Onboarding 上下文...[/]")
@@ -39,7 +39,7 @@ def onboarding(path: str, output: str | None):
 @click.argument("symbol")
 @click.argument("path", default=".")
 @click.option("--lang", "-l", required=True, help="代码语言 (py, js, ts 等)")
-def impact(symbol: str, path: str, lang: str):
+def impact(symbol: str, path: str, lang: str) -> None:
     """分析符号的变更影响面。"""
     console.print(f"[cyan]🔍 分析符号 '{symbol}' 的影响面...[/]")
 

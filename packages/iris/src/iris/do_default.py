@@ -29,7 +29,8 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             }
         if action == "commands":
             parser = build_parser()
-            sub_actions = sorted(parser._actions[-1].choices.keys()) if hasattr(parser, "_actions") else []
+            _last = parser._actions[-1] if parser._actions else None
+            sub_actions = sorted(_last.choices) if _last and _last.choices else []
             return {
                 "_method": "do_default", "_action": "commands",
                 "commands": sub_actions, "count": len(sub_actions),

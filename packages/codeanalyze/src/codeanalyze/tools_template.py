@@ -142,14 +142,16 @@ async def _fetch_some_data(query: str, limit: int) -> list:
 # ── 入口点 ──────────────────────────────────────────
 
 
-def main():
+def main() -> None:
     """运行 MCP server（stdio 模式，供 Agora 集成）。"""
     mcp.run()
 
 
-def http_main():
+def http_main() -> None:
     """运行 MCP server（HTTP 模式）。"""
-    mcp.run_http(host="127.0.0.1", port=8765)
+    import asyncio
+
+    asyncio.run(mcp.run_http_async(host="127.0.0.1", port=8765))
 
 
 if __name__ == "__main__":

@@ -14,7 +14,7 @@ import json
 import logging
 import os
 from datetime import UTC
-from typing import Any
+from typing import Any, cast
 
 from iris.base import BaseConnector  # type: ignore[import-not-found]
 from iris.config import IrisConfig  # type: ignore[import-not-found]
@@ -61,7 +61,7 @@ def _extract_notes_from_list(raw: dict[str, Any]) -> list[dict[str, Any]]:
         if isinstance(item, dict) and item.get("type") == "text":
             try:
                 data = json.loads(item["text"])
-                return data.get("notes", [])
+                return cast("list[dict[str, Any]]", data.get("notes", []))
             except (json.JSONDecodeError, KeyError):
                 continue
     return []
@@ -77,7 +77,7 @@ def _extract_single_result(raw: dict[str, Any]) -> dict[str, Any] | None:
                 break
     if text:
         try:
-            return json.loads(text)
+            return cast("dict[str, Any] | None", json.loads(text))
         except json.JSONDecodeError:
             pass
     return raw
@@ -178,7 +178,7 @@ class WPSNoteConnector(BaseConnector):
             logger.exception("WPS Note MCP server unavailable")
         return self._available
 
-    def list_items(self, limit: int = 20, cursor: str | None = None) -> list[Note]:
+    def list_items(self, limit: int = 20, cursor: str | None = None, **kwargs: Any) -> list[Note]:
         """List notes from WPS Note Cloud."""
         params: dict[str, Any] = {"limit": min(limit, 100)}
         if cursor:
@@ -229,9 +229,10 @@ class WPSNoteConnector(BaseConnector):
 
     def create_item(
         self,
-        title: str,
+        title: str = "",
         content: str = "",
         tags: list[str] | None = None,
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """Create a new WPS note with title, content, and optional tags.
 

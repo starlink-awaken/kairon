@@ -19,7 +19,7 @@ from codeanalyze.documents.deepwiki import (  # type: ignore[import-not-found]
 @click.argument("path", default=".")
 @click.option("--output", "-o", default=None, help="Wiki 输出路径")
 @click.option("--api", is_flag=True, help="强制使用 DeepWiki-Open API（需设置 DEEPWIKI_OPEN_URL）")
-def wiki(path: str, output: str | None, api: bool):
+def wiki(path: str, output: str | None, api: bool) -> None:
     """生成项目 Wiki 文档。
 
     优先使用 DeepWiki-Open（如已部署），否则基于 Graphify/GitNexus 分析结果

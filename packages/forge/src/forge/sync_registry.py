@@ -18,12 +18,13 @@ import json
 import subprocess
 import sys
 from datetime import datetime
+from typing import cast
 
 from forge.forge_config import FORGE_ROOT, REGISTRY  # type: ignore[import-not-found]
 
 
 def _load() -> dict:
-    return json.loads(REGISTRY.read_text())
+    return cast("dict", json.loads(REGISTRY.read_text()))
 
 
 def _save(reg: dict) -> None:

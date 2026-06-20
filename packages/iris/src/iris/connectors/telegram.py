@@ -26,7 +26,7 @@ import json
 import logging
 import os
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, cast
 
 import httpx
 
@@ -115,14 +115,14 @@ class TelegramConnector(BaseConnector):
 
     def _get_bot_token(self) -> str:
         """Resolve bot token: env var > config file."""
-        return os.environ.get(
+        return os.environ.get(  # type: ignore[no-any-return]
             "IRIS_TELEGRAM_BOT_TOKEN",
             self._config.get("telegram.bot_token", default=""),
         )
 
     def _get_chat_id(self) -> str:
         """Resolve chat ID: env var > config file."""
-        return os.environ.get(
+        return os.environ.get(  # type: ignore[no-any-return]
             "IRIS_TELEGRAM_CHAT_ID",
             self._config.get("telegram.chat_id", default=""),
         )
@@ -172,7 +172,7 @@ class TelegramConnector(BaseConnector):
             desc = data.get("description", "unknown error")
             raise RuntimeError(f"Telegram API error: {desc}")
 
-        return data.get("result", {})
+        return cast("dict[str, Any]", data.get("result", {}))
 
     # ------------------------------------------------------------------
     # BaseConnector interface
@@ -202,6 +202,7 @@ class TelegramConnector(BaseConnector):
         limit: int = 20,
         cursor: str | None = None,
         chat_id: str | None = None,
+        **kwargs: Any,
     ) -> list[Note]:
         """List recent messages from a Telegram chat.
 
@@ -412,7 +413,7 @@ class TelegramConnector(BaseConnector):
             "date": result.get("date", 0),
         }
 
-    def create_item(self, title: str, content: str = "", **kwargs: Any) -> dict[str, Any]:
+    def create_item(self, title: str = "", content: str = "", **kwargs: Any) -> dict[str, Any]:
         """Send a message (alias for send_message).
 
         Title is prefixed to content if both are provided.

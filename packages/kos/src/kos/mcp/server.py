@@ -16,7 +16,7 @@ import sys
 import threading
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 # ── Path setup ──────────────────────────────────────────
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -48,7 +48,7 @@ _bg_tasks: dict[str, dict] = {}
 _bg_lock = threading.Lock()
 
 
-def _bg_run(task_id: str, fn) -> None:
+def _bg_run(task_id: str, fn: Any) -> None:
     """Run a function in background thread and store result in _bg_tasks."""
     try:
         result = fn()
@@ -61,7 +61,7 @@ def _bg_run(task_id: str, fn) -> None:
             _bg_tasks[task_id] = {"_status": "error", "_error": str(e), "_ts": datetime.now().isoformat()}
 
 
-def _require_ready(result=None) -> dict[str, Any] | None:  # type: ignore[unused-ignore]
+def _require_ready(result: Any = None) -> dict[str, Any] | None:
     """Decorator-like check: if KOS not ready, return error immediately."""
     if not KOS_READY:
         return KOS_INIT_ERROR
@@ -107,7 +107,7 @@ def read_jsonrpc() -> dict[str, Any]:
     line = sys.stdin.readline()
     if not line:
         sys.exit(0)
-    return json.loads(line)  # type: ignore[Any, Any]
+    return cast("dict[str, Any]", json.loads(line))
 
 
 # ── Tool implementations ─────────────────────────────────
@@ -317,7 +317,7 @@ def tool_onto(cmd: str, entity_type: str = "", confirmed: bool = False) -> dict[
         db_path = get_artifact_path("retrievalDatabase")
 
         # ── Helper: init ontology schema if needed ──────────
-        def _ensure_onto_schema(conn):
+        def _ensure_onto_schema(conn: Any) -> None:
             conn.executescript("""
                 CREATE TABLE IF NOT EXISTS kos_entities (
                     entity_id   TEXT PRIMARY KEY,
@@ -610,7 +610,7 @@ def tool_research_now(query: str, level: str = "auto", max_cost: float = 1.0) ->
     adapter = _get_minerva()  # type: ignore[no-untyped-call]
     if not adapter.health()["available"]:
         return {"error": "Minerva not available. Install: pip install minerva", "status": "unavailable"}
-    return adapter.research(query, level=level, max_cost=max_cost, timeout=600, cwd=str(SCRIPT_DIR))  # type: ignore[Any, Any]
+    return cast("dict", adapter.research(query, level=level, max_cost=max_cost, timeout=600, cwd=str(SCRIPT_DIR)))
 
 
 def tool_semantic_search(query: str, limit: int = 10) -> dict:  # type: ignore[type-arg]
@@ -627,7 +627,7 @@ def tool_semantic_search(query: str, limit: int = 10) -> dict:  # type: ignore[t
             if r.returncode == 0 and r.stdout.strip():
                 data = json.loads(r.stdout)
                 if data.get("results"):
-                    return data  # type: ignore[Any, Any]
+                    return cast("dict", data)
     except Exception:
         pass
     # Fallback to KOS FTS5

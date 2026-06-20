@@ -107,6 +107,7 @@ class LocalFilesConnector(BaseConnector):
         cursor: str | None = None,
         tag: str | None = None,
         subdir: str | None = None,
+        **kwargs: Any,
     ) -> list[Note]:
         """List notes with optional tag and subdirectory filtering."""
         files = self._walk_md_files(subdir=subdir)

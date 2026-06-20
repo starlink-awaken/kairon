@@ -3,8 +3,14 @@
 from __future__ import annotations
 
 import os
+from typing import TYPE_CHECKING
 
 from fastmcp import FastMCP
+
+if TYPE_CHECKING:
+    from openai import AsyncOpenAI
+
+    from .learner import ParadigmLearner
 
 FORMAT_VERSION = "sophia-v1"
 
@@ -19,7 +25,7 @@ _learner_instance = None
 _llm_client_instance = None
 
 
-def _get_learner():
+def _get_learner() -> ParadigmLearner:
     global _learner_instance
     if _learner_instance is None:
         from .learner import ParadigmLearner
@@ -31,7 +37,7 @@ def _get_learner():
 class _LLMClient:
     """LLM client wrapper using AsyncOpenAI, cached at module level."""
 
-    def __init__(self, oai_client):
+    def __init__(self, oai_client: AsyncOpenAI) -> None:
         self._oai = oai_client
 
     async def generate(
@@ -53,7 +59,7 @@ class _LLMClient:
         return resp.choices[0].message.content or ""
 
 
-def _get_llm_client():
+def _get_llm_client() -> _LLMClient | None:
     """Lazy-init AsyncOpenAI client, cached for server lifetime."""
     global _llm_client_instance
     if _llm_client_instance is None:
@@ -280,8 +286,9 @@ def suggest_paradigm(query: str) -> dict:
     )
 
 
-def main():
+def main() -> int:
     mcp.run()
+    return 0
 
 
 if __name__ == "__main__":

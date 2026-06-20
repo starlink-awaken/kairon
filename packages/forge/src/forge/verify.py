@@ -13,12 +13,13 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+from typing import cast
 
 from forge.forge_config import ADAPTERS_DIR, FORGE_ROOT, GRAPH, REGISTRY, SCRIPTS_DIR  # type: ignore[import-not-found]
 
 
 def _load() -> dict:
-    return json.loads(REGISTRY.read_text())
+    return cast("dict", json.loads(REGISTRY.read_text()))
 
 
 def _check(desc: str, ok: bool, details: str = "") -> bool:
@@ -58,7 +59,7 @@ def _jq(expr: str, data: dict) -> str | int | list:
 
     # .schema_version
     if expr == '.schema_version // "?"':
-        return data.get("schema_version", "?")
+        return cast("str | int | list", data.get("schema_version", "?"))
 
     # .event_log | length
     if expr == ".event_log | length":
@@ -84,11 +85,11 @@ def _jq(expr: str, data: dict) -> str | int | list:
 
     # .tools[].stats.total_nodes // 0
     if expr == ".stats.total_nodes // 0":
-        return data.get("stats", {}).get("total_nodes", 0)
+        return cast("int", data.get("stats", {}).get("total_nodes", 0))
 
     # .stats.total_edges
     if expr == ".stats.total_edges // 0":
-        return data.get("stats", {}).get("total_edges", 0)
+        return cast("int", data.get("stats", {}).get("total_edges", 0))
 
     return 0
 

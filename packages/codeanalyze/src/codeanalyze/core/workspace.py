@@ -57,7 +57,7 @@ class WorkspaceInfo:
     is_go: bool = False
     is_jvm: bool = False
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.language_guesses is None:
             self.language_guesses = []
 

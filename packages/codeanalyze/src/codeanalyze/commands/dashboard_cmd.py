@@ -14,7 +14,7 @@ from codeanalyze.commands.common import _validate_path, console  # type: ignore[
 @click.option("--port", default=int(os.environ.get("DASHBOARD_PORT", "3456")), help="仪表盘端口")
 @click.option("--force", is_flag=True, help="强制生成独立 HTML（即使 UAD 已安装）")
 @click.option("--open", "-o", "open_browser", is_flag=True, help="生成后自动在浏览器中打开")
-def dashboard(path: str, port: int, force: bool, open_browser: bool = False):
+def dashboard(path: str, port: int, force: bool, open_browser: bool = False) -> None:
     """启动交互式知识图谱仪表盘。
 
     优先使用 Understand Anything 的原生仪表盘。

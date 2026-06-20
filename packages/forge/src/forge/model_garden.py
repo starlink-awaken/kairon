@@ -14,7 +14,7 @@ TASK_MODEL_MAP = {
 
 
 class ModelGarden:
-    def __init__(self):
+    def __init__(self) -> None:
         self._models: list[dict[str, Any]] = []
         self._benchmarks: dict[str, dict[str, float]] = {}
 
@@ -41,7 +41,7 @@ class ModelGarden:
         self._models.append(model)
         return model
 
-    def add_benchmark(self, model: str, metric: str, score: float):
+    def add_benchmark(self, model: str, metric: str, score: float) -> None:
         if model not in self._benchmarks:
             self._benchmarks[model] = {}
         self._benchmarks[model][metric] = score

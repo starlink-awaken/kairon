@@ -1,4 +1,5 @@
 from pathlib import Path
+
 """Tests for Insight, InsightCache, and InsightEngine"""
 
 import json

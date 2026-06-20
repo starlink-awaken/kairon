@@ -23,6 +23,7 @@ import json
 import subprocess
 import sys
 from datetime import UTC, date, datetime
+from typing import cast
 
 from forge.forge_config import FORGE_ROOT, REGISTRY  # type: ignore[import-not-found]
 
@@ -40,7 +41,7 @@ def _load_registry() -> dict:
     with open(REGISTRY) as f:
         fcntl.flock(f, fcntl.LOCK_SH)
         data = json.load(f)
-    return data
+    return cast("dict", data)
 
 
 def _save_registry(data: dict) -> None:

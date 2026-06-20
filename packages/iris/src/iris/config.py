@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 _SENSITIVE_KEYS = {"wxread.cookie"}
 _SENSITIVE_ENV_PATTERNS = ("COOKIE", "TOKEN", "SECRET", "PASSWORD", "KEY")
@@ -90,7 +90,7 @@ class IrisConfig:
     @property
     def local_files_dir(self) -> str:
         """Get local files directory path (with env override)."""
-        return self.get(
+        return self.get(  # type: ignore[no-any-return]
             "local_files.directory",
             default=str(Path.home() / "Documents/notes"),
         )
@@ -98,7 +98,7 @@ class IrisConfig:
     @property
     def obsidian_vault(self) -> str:
         """Get Obsidian vault path (with env override)."""
-        return self.get(
+        return self.get(  # type: ignore[no-any-return]
             "obsidian.vault",
             default=str(DEFAULT_OBSIDIAN_VAULT),
         )
@@ -114,7 +114,7 @@ class IrisConfig:
         pw = get_password("wxread_cookie")
         if pw is not None:
             return pw
-        return self.get("wxread.cookie", default="")
+        return cast("str", self.get("wxread.cookie", default=""))
 
     @property
     def verbose(self) -> bool:

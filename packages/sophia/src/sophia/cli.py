@@ -62,7 +62,7 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
-def main():
+def main() -> int:
     parser = build_parser()
     args = parser.parse_args()
 
@@ -118,8 +118,8 @@ def main():
             if args.json:
                 print(json.dumps(scores, ensure_ascii=False, indent=2))
             elif scores:
-                for op, score in sorted(scores.items(), key=lambda x: -x[1]):
-                    print(f"  {op}: {score:.1f}")
+                for op_name, score in sorted(scores.items(), key=lambda x: -x[1]):
+                    print(f"  {op_name}: {score:.1f}")
             else:
                 print("  No traces recorded yet.")
         elif args.learn_cmd == "suggest":

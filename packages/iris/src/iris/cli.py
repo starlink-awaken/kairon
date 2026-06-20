@@ -19,7 +19,11 @@ import argparse
 import json
 import re
 import sys
-from typing import NoReturn
+from typing import TYPE_CHECKING, Any, NoReturn
+
+if TYPE_CHECKING:
+    from iris.base import BaseConnector
+    from iris.registry import ConnectorRegistry
 
 from iris import __version__  # type: ignore[import-not-found]
 from iris.config import IrisConfig  # type: ignore[import-not-found]
@@ -100,7 +104,7 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _get_registry():
+def _get_registry() -> ConnectorRegistry:
     """Lazy import to avoid circular deps at module level."""
     from iris.registry import ConnectorRegistry  # type: ignore[import-not-found]
 
@@ -109,14 +113,14 @@ def _get_registry():
     return registry
 
 
-def _register_all_connectors(registry):
+def _register_all_connectors(registry: ConnectorRegistry) -> None:
     """Register all available connectors."""
     from iris.connectors import register_all  # type: ignore[import-not-found]
 
     register_all(registry)
 
 
-def _get_available_connector(registry, name, use_json):
+def _get_available_connector(registry: ConnectorRegistry, name: str, use_json: bool) -> BaseConnector | None:
     """Get a connector by name. If not found or unavailable, print status and return None."""
     connector = registry.get(name)
     if not connector:
@@ -131,7 +135,7 @@ def _get_available_connector(registry, name, use_json):
     return connector
 
 
-def cmd_list(args, config):
+def cmd_list(args: argparse.Namespace, config: IrisConfig) -> None:
     """Handle `iris list`."""
     registry = _get_registry()
 
@@ -170,7 +174,7 @@ def cmd_list(args, config):
         _print(results, args.json)
 
 
-def cmd_search(args, config):
+def cmd_search(args: argparse.Namespace, config: IrisConfig) -> None:
     """Handle `iris search <platform> <query>`."""
     registry = _get_registry()
     connector = _get_available_connector(registry, args.platform, args.json)
@@ -180,7 +184,7 @@ def cmd_search(args, config):
     _print([item.to_dict() for item in items], args.json)
 
 
-def cmd_get(args, config):
+def cmd_get(args: argparse.Namespace, config: IrisConfig) -> None:
     """Handle `iris get <platform> <id>`."""
     registry = _get_registry()
     connector = _get_available_connector(registry, args.platform, args.json)
@@ -202,14 +206,14 @@ def cmd_get(args, config):
         _print({"error": f"Item {args.id} not found on {args.platform}"}, args.json)
 
 
-def cmd_status(args, config):
+def cmd_status(args: argparse.Namespace, config: IrisConfig) -> None:
     """Handle `iris status`."""
     registry = _get_registry()
     results = registry.status_all()
     _print(results, args.json)
 
 
-def cmd_sync(args, config):
+def cmd_sync(args: argparse.Namespace, config: IrisConfig) -> None:
     """Handle `iris sync`."""
     if args.bidirectional:
         _run_bidirectional_sync(args, config)
@@ -228,7 +232,7 @@ def cmd_sync(args, config):
     _print(results, args.json)
 
 
-def _run_bidirectional_sync(args, config):
+def _run_bidirectional_sync(args: argparse.Namespace, config: IrisConfig) -> None:
     """Execute bidirectional sync between Obsidian and WPS Note."""
     from iris.connectors.obsidian import ObsidianConnector  # type: ignore[import-not-found]
     from iris.connectors.wpsnote import WPSNoteConnector  # type: ignore[import-not-found]
@@ -251,7 +255,7 @@ def _run_bidirectional_sync(args, config):
         _print_sync_bidirectional(result)
 
 
-def _print_sync_bidirectional(result):
+def _print_sync_bidirectional(result: Any) -> None:
     """Print bidirectional sync results in human-readable format."""
 
     d = result.to_dict()
@@ -270,7 +274,7 @@ def _print_sync_bidirectional(result):
     print()
 
 
-def cmd_export(args, config):
+def cmd_export(args: argparse.Namespace, config: IrisConfig) -> None:
     """Handle `iris export`."""
     registry = _get_registry()
     connector = registry.get(args.platform)
@@ -287,7 +291,7 @@ def cmd_export(args, config):
             sys.stdout.write("\n")
 
 
-def cmd_config(args, config):
+def cmd_config(args: argparse.Namespace, config: IrisConfig) -> None:
     """Handle `iris config`."""
     if args.action == "set":
         if not args.key or not args.value:
@@ -298,7 +302,7 @@ def cmd_config(args, config):
         _print(config.to_dict(), args.json)
 
 
-def cmd_init(args, config):
+def cmd_init(args: argparse.Namespace, config: IrisConfig) -> None:
     """Handle `iris init`."""
     from iris.adapters.ssot import SSOTDomainAdapter  # type: ignore[import-not-found]
 
@@ -316,7 +320,7 @@ def cmd_init(args, config):
         _print({"initialized": len(paths), "domains": paths}, args.json)
 
 
-def cmd_adapters(args, config):
+def cmd_adapters(args: argparse.Namespace, config: IrisConfig) -> None:
     """Handle `iris adapters`."""
     from iris.adapters.eidos import EidosAdapter
     from iris.adapters.ssot import SSOTDomainAdapter
@@ -342,7 +346,7 @@ def cmd_adapters(args, config):
     _print(result, args.json)
 
 
-def cmd_validate(args, config):
+def cmd_validate(args: argparse.Namespace, config: IrisConfig) -> None:
     """Handle `iris validate <file>`."""
     from iris.adapters.eidos import EidosAdapter
 
@@ -367,7 +371,7 @@ def cmd_validate(args, config):
     _print(result, args.json)
 
 
-def _print(data, use_json: bool):
+def _print(data: Any, use_json: bool) -> None:
     """Print output — JSON or human-readable."""
     if use_json:
         print(json.dumps(data, ensure_ascii=False, indent=2))
@@ -375,7 +379,7 @@ def _print(data, use_json: bool):
         _print_human(data)
 
 
-def _print_human(data):
+def _print_human(data: Any) -> None:
     """Print human-readable output."""
     if isinstance(data, list):
         if not data:
@@ -394,7 +398,7 @@ def _print_human(data):
         print(data)
 
 
-def _print_connectors(items: list[dict]):
+def _print_connectors(items: list[dict]) -> None:
     """Print connector status table."""
     for item in items:
         avail = "✅" if item.get("available", False) else "❌"
@@ -402,7 +406,7 @@ def _print_connectors(items: list[dict]):
         print(f"  {avail} {item['name']:<12} ({item['display_name']}) {extras}")
 
 
-def _print_sync_results(items: list[dict]):
+def _print_sync_results(items: list[dict]) -> None:
     """Print sync result lines."""
     for item in items:
         status = "✅" if item.get("success") else "❌"
@@ -410,7 +414,7 @@ def _print_sync_results(items: list[dict]):
         print(f"  {status} {item['connector']}: {msg}")
 
 
-def _print_items(items: list[dict]):
+def _print_items(items: list[dict]) -> None:
     """Print a list of note/article/highlight items as a human-friendly table."""
     for i, item in enumerate(items):
         _print_note_item(item)
@@ -418,7 +422,7 @@ def _print_items(items: list[dict]):
             print()
 
 
-def _print_note_item(item: dict):
+def _print_note_item(item: dict) -> None:
     """Print a single note-like item in human-readable format."""
     title = item.get("title", "(untitled)")
     note_id = item.get("id", "")
@@ -457,7 +461,7 @@ def _print_note_item(item: dict):
             print(f"     {snippet}")
 
 
-def _print_detail(item: dict):
+def _print_detail(item: dict) -> None:
     """Print a single detail dict (for get/config/validate commands)."""
     if "error" in item:
         print(f"  Error: {item['error']}")
@@ -496,7 +500,7 @@ def _error(msg: str, use_json: bool) -> NoReturn:
     sys.exit(1)
 
 
-def main():
+def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
     config = IrisConfig()

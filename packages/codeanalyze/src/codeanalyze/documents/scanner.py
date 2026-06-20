@@ -3,6 +3,7 @@
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 _CATEGORY_PREFIX = {
     "00": "中心介绍/总览",
@@ -45,7 +46,7 @@ _SUPERSEDES_PATTERN = re.compile(r"(?:supersedes|版本|v)(\d+)", re.IGNORECASE)
 _VERSION_PATTERN = re.compile(r"v?(\d+(?:\.\d+)*)", re.IGNORECASE)
 
 
-def _version_sort_key(doc) -> tuple:
+def _version_sort_key(doc: Any) -> tuple:
     """Sort versions: int-like first, semver fallback."""
     v = doc.version or "0"
     parts = v.split(".")

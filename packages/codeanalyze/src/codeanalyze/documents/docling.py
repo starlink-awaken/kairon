@@ -1,5 +1,7 @@
 """Docling / Docling-Graph 分析适配器"""
 
+from typing import cast
+
 from codeanalyze.core.registry import ToolInfo  # type: ignore[import-not-found]
 
 
@@ -34,7 +36,7 @@ def convert_to_markdown(file_path: str) -> str | None:
 
         converter = DocumentConverter()
         result = converter.convert(file_path)
-        return result.document.export_to_markdown()
+        return cast("str", result.document.export_to_markdown())
     except Exception:
         return None
 

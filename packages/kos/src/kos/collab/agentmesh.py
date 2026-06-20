@@ -6,6 +6,7 @@ Silently skips when AGENTMESH_API_URL or API_KEY is not configured (dev mode).
 
 import logging
 import os
+from typing import cast
 
 AGENTMESH_URL = os.environ.get("AGENTMESH_API_URL", "http://localhost:3000")
 API_KEY = os.environ.get("API_KEY", "")
@@ -30,7 +31,7 @@ def dispatch_to_agentmesh(task_data: dict) -> str | None:
             timeout=10,
         )
         resp.raise_for_status()
-        return resp.json().get("task_id")
+        return cast("str | None", resp.json().get("task_id"))
     except ImportError:
         # Fallback: urllib when httpx is not available
         import json as _json
@@ -50,7 +51,7 @@ def dispatch_to_agentmesh(task_data: dict) -> str | None:
         try:
             with urllib.request.urlopen(req, timeout=10) as resp:  # noqa: S310
                 body = _json.loads(resp.read().decode())
-                return body.get("task_id")
+                return cast("str | None", body.get("task_id"))
         except urllib.error.URLError:
             return None
     except Exception as e:

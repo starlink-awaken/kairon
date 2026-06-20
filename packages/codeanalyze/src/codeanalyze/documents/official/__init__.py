@@ -3,6 +3,8 @@
 保持向后兼容：所有公开 API 在此 re-export。
 """
 
+from typing import Any
+
 from codeanalyze.documents.official.models import PolicyDocument, PolicyGraph  # type: ignore[import-not-found]
 from codeanalyze.documents.official.parsers import (  # type: ignore[import-not-found]
     _clean_title,
@@ -21,7 +23,7 @@ from codeanalyze.documents.official.pipeline import (  # type: ignore[import-not
 _extract_file_content = extract_file_content
 
 
-def _try_llm_fallback(*a):
+def _try_llm_fallback(*a: Any) -> None:
     return None  # moved to parsers
 
 

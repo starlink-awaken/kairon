@@ -273,7 +273,7 @@ def status() -> dict:  # type: ignore[type-arg]
 # ── Main ───────────────────────────────────────────────
 
 
-def main():  # type: ignore[unknown]
+def main() -> None:
     cmd = sys.argv[1] if len(sys.argv) > 1 else "status"
     domain = None
     limit = 10

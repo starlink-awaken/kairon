@@ -23,7 +23,7 @@ def pack(
     include: tuple[str, ...],
     ignore: tuple[str, ...],
     stats_only: bool,
-):
+) -> None:
     """将代码库打包为 LLM 友好格式 (repomix)。
 
     用于将整个项目转换为单个 XML/Markdown 文件喂给大语言模型。

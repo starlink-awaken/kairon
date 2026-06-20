@@ -125,19 +125,19 @@ def export_md(q: str, domains: str = "") -> str:
 
 
 class KOSHandler(BaseHTTPRequestHandler):
-    def _json(self, data, code=200) -> None:
+    def _json(self, data: object, code: int = 200) -> None:
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
         self.wfile.write(json.dumps(data, ensure_ascii=False, indent=2).encode())
 
-    def _text(self, text, code=200, ct="text/markdown") -> None:
+    def _text(self, text: str, code: int = 200, ct: str = "text/markdown") -> None:
         self.send_response(code)
         self.send_header("Content-Type", ct)
         self.end_headers()
         self.wfile.write(text.encode())
 
-    def do_GET(self):  # type: ignore[unknown]
+    def do_GET(self) -> None:
         parsed = urlparse(self.path)
         params = parse_qs(parsed.query)
         path = parsed.path.rstrip("/")
@@ -175,7 +175,7 @@ class KOSHandler(BaseHTTPRequestHandler):
                 {"endpoints": ["/search?q=xx", "/status", "/digest", "/diff?days=7", "/history", "/export?q=xx"]}
             )
 
-    def do_POST(self):  # type: ignore[unknown]
+    def do_POST(self) -> None:
         if self.path.rstrip("/") == "/ingest":
             length = int(self.headers.get("Content-Length", 0))
             body = json.loads(self.rfile.read(length)) if length else {}

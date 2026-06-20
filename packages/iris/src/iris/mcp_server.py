@@ -12,7 +12,7 @@ Tools:
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from iris.config import IrisConfig  # type: ignore[import-not-found]
 
@@ -23,7 +23,7 @@ _registry = None
 _config = None
 
 
-def _ensure_registry():
+def _ensure_registry() -> Any:
     global _registry
     if _registry is None:
         from iris.connectors import register_all  # type: ignore[import-not-found]
@@ -34,7 +34,7 @@ def _ensure_registry():
     return _registry
 
 
-def _ensure_config():
+def _ensure_config() -> Any:
     global _config
     if _config is None:
         _config = IrisConfig()
@@ -44,7 +44,7 @@ def _ensure_config():
 _eidos = None
 
 
-def _ensure_eidos():
+def _ensure_eidos() -> Any:
     global _eidos
     if _eidos is None:
         from iris.adapters.eidos import EidosAdapter  # type: ignore[import-not-found]
@@ -59,7 +59,7 @@ def _ensure_eidos():
 def list_connectors() -> list[dict[str, Any]]:
     """List all registered connectors with their availability status."""
     registry = _ensure_registry()
-    return registry.status_all()
+    return cast("list[dict[str, Any]]", registry.status_all())
 
 
 def connector_status(name: str) -> dict[str, Any]:
@@ -115,7 +115,7 @@ def get_item(platform: str, id: str) -> dict[str, Any]:
                 "validation_errors": validation.get("errors", []),
             }
         card["_validation"] = validation
-    return card
+    return cast("dict[str, Any]", card)
 
 
 def search(platform: str, query: str, limit: int = 10) -> list[dict[str, Any]]:
@@ -173,16 +173,16 @@ def validate(data: dict[str, Any], schema_type: str = "KnowledgeCard") -> dict[s
     eidos = _ensure_eidos()
     st = schema_type.lower()
     if "card" in st or "knowledge" in st:
-        return eidos.validate_knowledge_card(data)
+        return cast("dict[str, Any]", eidos.validate_knowledge_card(data))
     elif "fact" in st:
-        return eidos.validate_fact(data)
+        return cast("dict[str, Any]", eidos.validate_fact(data))
     elif "node" in st or "ontology" in st:
-        return eidos.validate_ontology_node(data)
+        return cast("dict[str, Any]", eidos.validate_ontology_node(data))
     else:
         return {"is_valid": False, "errors": [f"Unknown schema type: {schema_type}"]}
 
 
-def main():
+def main() -> None:
     """Start iris MCP server using FastMCP."""
     try:
         from fastmcp import FastMCP

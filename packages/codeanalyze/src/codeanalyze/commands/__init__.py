@@ -1,5 +1,7 @@
 """Commands package — register all CLI commands for codeanalyze (code-focused)."""
 
+import click
+
 from .analyze_cmd import analyze, deps, docs, graph, report
 from .ast_cmd import ast
 from .cgc_cmd import cgc_group
@@ -14,7 +16,7 @@ from .status_cmd import status
 from .workflow_cmd import workflow_group
 
 
-def register_commands(cli):
+def register_commands(cli: click.Group) -> None:
     """Register all commands on the Click group."""
     cli.add_command(status, "status")
     cli.add_command(analyze, "analyze")

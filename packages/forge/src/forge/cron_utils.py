@@ -16,7 +16,7 @@ import re
 import subprocess
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 # ── 安全校验 ──
 
@@ -103,7 +103,7 @@ def load_registry() -> dict:
             return {}
         with REGISTRY_FILE.open("rb") as f:
             fcntl.flock(f, fcntl.LOCK_SH)
-            return json.load(f)
+            return cast("dict", json.load(f))
     except FileNotFoundError:
         print(f"❌ registry 不存在: {REGISTRY_FILE}")
         return {}
@@ -123,7 +123,7 @@ def save_registry(reg: dict) -> None:
 
 def get_cron_items(reg: dict) -> list[dict]:
     if reg.get("version") == 4 and "entities" in reg:
-        return reg["entities"].get("cron", {}).get("items", [])
+        return cast("list[dict]", reg["entities"].get("cron", {}).get("items", []))
     return []
 
 

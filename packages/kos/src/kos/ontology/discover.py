@@ -4,7 +4,7 @@ Adapted from SPEC-v0.1.md §4.5.
 """
 
 from collections import deque
-from typing import Any
+from typing import Any, cast
 
 
 def discover_implicit_relations(threshold: int = 3) -> list[dict[str, Any]]:
@@ -61,7 +61,7 @@ def shortest_path(from_id: str, to_id: str) -> list[dict[str, str]] | None:
             edge = {"source": row["source_id"], "relation": row["relation_type"], "target": row["target_id"]}
             if neighbor == to_id:
                 conn.close()
-                return path + [edge]
+                return cast("list[dict[str, str]] | None", path + [edge])
             if neighbor not in visited:
                 visited.add(neighbor)
                 queue.append((neighbor, path + [edge]))

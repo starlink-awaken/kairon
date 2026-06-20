@@ -14,21 +14,17 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     action = args.get("action", "list")
     try:
         if action == "list":
-            tools = cmd_list([])
-            return {
-                "_method": "do_default", "_action": "list",
-                "tools_count": len(tools) if isinstance(tools, (list, dict)) else None,
-                "tools": tools if isinstance(tools, (list, dict)) else str(tools)[:500],
-            }
+            cmd_list([])
+            return {"_method": "do_default", "_action": "list", "executed": True}
         if action == "health":
-            health = cmd_health([])
-            return {"_method": "do_default", "_action": "health", "health": str(health)[:500]}
+            cmd_health([])
+            return {"_method": "do_default", "_action": "health", "executed": True}
         if action == "status":
-            status = cmd_status()
-            return {"_method": "do_default", "_action": "status", "status": str(status)[:500]}
+            cmd_status()
+            return {"_method": "do_default", "_action": "status", "executed": True}
         if action == "market":
-            market = cmd_market([])
-            return {"_method": "do_default", "_action": "market", "market": str(market)[:500]}
+            cmd_market([])
+            return {"_method": "do_default", "_action": "market", "executed": True}
         return {"_method": "do_default", "_error": f"unknown action: {action}"}
     except Exception as exc:
         return {"_method": "do_default", "_action": action, "_error": f"{type(exc).__name__}: {exc}"}

@@ -17,7 +17,7 @@ class EidosAdapter:
     Registry and validator are cached after first use.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._eidos_available = self._check_eidos()
         self._registry = None
         self._validator = None
@@ -30,7 +30,7 @@ class EidosAdapter:
         except ImportError:
             return False
 
-    def _ensure_validator(self):
+    def _ensure_validator(self) -> Any:
         """Lazy-init and cache eidos registry + validator."""
         if self._validator is None and self._eidos_available:
             from eidos.registry import create_registry

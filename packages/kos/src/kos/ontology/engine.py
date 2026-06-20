@@ -15,7 +15,7 @@ from kos.config import get_vault_ops_dir  # type: ignore[unused-ignore, import-n
 
 import hashlib
 import json
-from typing import Any, Optional
+from typing import Any, cast
 import re
 import sqlite3
 import sys
@@ -51,7 +51,7 @@ def _manifest() -> dict[str, Any]:  # type: ignore[no-untyped-def]
     global _MANIFEST
     if _MANIFEST is None:
         _MANIFEST = get_workspace_manifest()
-    return _MANIFEST
+    return cast("dict[str, Any]", _MANIFEST)
 
 
 def _entity_sources() -> list[str]:  # type: ignore[no-untyped-def]
@@ -61,7 +61,7 @@ def _entity_sources() -> list[str]:  # type: ignore[no-untyped-def]
             "manifest 'entitySources' is empty or missing. "
             "Run 'kos init' to scaffold a workspace, or add entitySources to your manifest."
         )
-    return sources
+    return cast("list[str]", sources)
 
 
 def entity_files() -> list[str]:  # type: ignore[no-untyped-def]
@@ -584,7 +584,7 @@ def discover() -> dict[str, Any]:  # type: ignore[no-untyped-def]
     }
 
 
-def list_entities(entity_type: str | None = None):  # type: ignore[unknown]
+def list_entities(entity_type: str | None = None) -> dict:
     conn = get_db()  # type: ignore[no-untyped-call]
     init_schema(conn)  # type: ignore[no-untyped-call]
     if entity_type:
@@ -643,7 +643,7 @@ def enrich() -> dict[str, Any]:  # type: ignore[no-untyped-def]
     return {"enriched": enriched, "timestamp": now}
 
 
-def graph(entity_type: str = None):  # type: ignore[unknown]
+def graph(entity_type: str | None = None) -> dict:
     """Generate Mermaid graph of entity relations."""
     conn = get_db()  # type: ignore[no-untyped-call]
     edges = conn.execute("SELECT source_id,predicate,target_id FROM kos_relations").fetchall()
@@ -733,7 +733,7 @@ def rebuild() -> dict[str, Any]:  # type: ignore[no-untyped-def]
     return {"cleared": True, "extracted": r1["extracted"], "enriched": r2.get("enriched", 0)}
 
 
-def main():  # type: ignore[unknown]
+def main() -> None:
     cmd = sys.argv[1] if len(sys.argv) > 1 else "list"
 
     if cmd == "rebuild":

@@ -14,7 +14,7 @@ class AuditGroup:
     passed: int = 0
     failed: int = 0
 
-    def add_check(self, label: str, passed: bool, detail: str = ""):
+    def add_check(self, label: str, passed: bool, detail: str = "") -> None:
         self.checks.append({"label": label, "passed": passed, "detail": detail})
         if passed:
             self.passed += 1
@@ -36,7 +36,7 @@ class AuditReport:
     total_passed: int = 0
     total_failed: int = 0
 
-    def add_group(self, group: AuditGroup):
+    def add_group(self, group: AuditGroup) -> None:
         self.groups.append(group)
         self.total_checks += group.passed + group.failed
         self.total_passed += group.passed

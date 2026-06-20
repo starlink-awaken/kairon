@@ -47,7 +47,7 @@ def mermaid_id(s: str) -> str:
     return s.replace("-", "_").replace(":", "_")
 
 
-def generate_html(graph_path: str, output: str):
+def generate_html(graph_path: str, output: str) -> None:
     """生成自包含 HTML 可视化页面"""
     g = json.loads(Path(graph_path).read_text())
 
@@ -132,7 +132,7 @@ def generate_html(graph_path: str, output: str):
     print("   浏览器打开查看交互图谱")
 
 
-def generate_mermaid(graph_path: str, output: str, max_nodes: int = 100):
+def generate_mermaid(graph_path: str, output: str, max_nodes: int = 100) -> None:
     """生成 Mermaid 格式图"""
     g = json.loads(Path(graph_path).read_text())
 
@@ -166,7 +166,7 @@ def generate_mermaid(graph_path: str, output: str, max_nodes: int = 100):
     print(f"   节点: {len(nodes)}, 边: {len(edges)} (截取前 {max_nodes} 节点)")
 
 
-def main():
+def main() -> None:
     args = sys.argv[1:]
     if "--help" in args:
         print("用法: python3 src/graph_viz.py --output <path.html> [--max-nodes 100]")

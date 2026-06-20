@@ -1,4 +1,5 @@
 from pathlib import Path
+
 """逻辑蕴含图测试"""
 
 

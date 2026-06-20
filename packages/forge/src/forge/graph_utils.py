@@ -8,6 +8,7 @@ import json
 import re
 from collections import Counter
 from pathlib import Path
+from typing import cast
 
 
 def kebab(s: str) -> str:
@@ -105,9 +106,9 @@ def get_related_by_type(
 
 def load_registry(path: str | Path) -> dict:
     """加载 tools-registry.json"""
-    return json.loads(Path(path).read_text())
+    return cast("dict", json.loads(Path(path).read_text()))
 
 
 def load_graph(path: str | Path) -> dict:
     """加载 graph.json"""
-    return json.loads(Path(path).read_text())
+    return cast("dict", json.loads(Path(path).read_text()))

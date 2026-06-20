@@ -124,12 +124,12 @@ def _load_implicit_connections() -> list[dict]:  # type: ignore[type-arg]
 class EntityListWidget(Static):
     """Left panel: scrollable entity list."""
 
-    def __init__(self):  # type: ignore[unknown]
+    def __init__(self) -> None:
         super().__init__("Loading entities...")
-        self.entities = []
+        self.entities: list[dict] = []
         self.selected_index = 0
 
-    def on_mount(self):  # type: ignore[unknown]
+    def on_mount(self) -> None:
         self.refresh_entities()
 
     def refresh_entities(self, filter_text: str = "") -> None:
@@ -154,19 +154,19 @@ class EntityListWidget(Static):
             lines.append(line)
         self.update("\n".join(lines))
 
-    def move_up(self):  # type: ignore[unknown]
+    def move_up(self) -> None:
         if self.entities:
             self.selected_index = (self.selected_index - 1) % len(self.entities)
             self.refresh_entities()
 
-    def move_down(self):  # type: ignore[unknown]
+    def move_down(self) -> None:
         if self.entities:
             self.selected_index = (self.selected_index + 1) % len(self.entities)
             self.refresh_entities()
 
     def get_selected(self) -> dict | None:  # type: ignore[type-arg]
         if self.entities and 0 <= self.selected_index < len(self.entities):
-            return self.entities[self.selected_index]  # type: ignore[Any, Any]
+            return self.entities[self.selected_index]
         return None
 
 
@@ -288,19 +288,19 @@ class GraphExplorerApp(App):  # type: ignore[type-arg]
         yield self.graph_panel
         yield Footer()
 
-    def on_mount(self):  # type: ignore[unknown]
+    def on_mount(self) -> None:
         self.title = "KOS Graph Explorer"
         self.entity_list.focus()
 
-    def action_move_down(self):  # type: ignore[unknown]
+    def action_move_down(self) -> None:
         self.entity_list.move_down()  # type: ignore[no-untyped-call]
         self._show_selected()
 
-    def action_move_up(self):  # type: ignore[unknown]
+    def action_move_up(self) -> None:
         self.entity_list.move_up()  # type: ignore[no-untyped-call]
         self._show_selected()
 
-    def action_select_entity(self):  # type: ignore[unknown]
+    def action_select_entity(self) -> None:
         self._show_selected(full=True)
 
     def _show_selected(self, full: bool = False) -> None:
@@ -312,22 +312,22 @@ class GraphExplorerApp(App):  # type: ignore[type-arg]
                 self.graph_panel.show_graph(entity["entity_id"], entity["label"])
             self.sub_title = f"Entity: {entity['label']}"
 
-    def action_refresh(self):  # type: ignore[unknown]
+    def action_refresh(self) -> None:
         self.entity_list.refresh_entities()
         self._show_selected(full=True)
 
-    def action_search_entity(self):  # type: ignore[unknown]
+    def action_search_entity(self) -> None:
         # Simple: just refresh with no filter
         self.entity_list.refresh_entities()
         self.notify("Type to filter entities (not yet implemented)", timeout=2)
 
-    def action_find_path(self):  # type: ignore[unknown]
+    def action_find_path(self) -> None:
         if not self.current_entity_id:
             self.notify("Select an entity first")
             return
         self.notify(f"Path finding from {self.current_entity_id} (enter target ID)")
 
-    def action_discover(self):  # type: ignore[unknown]
+    def action_discover(self) -> None:
         try:
             data = _run_onto("discover")  # type: ignore[name-defined]
             connections = data.get("implicit_connections", [])
@@ -343,11 +343,11 @@ class GraphExplorerApp(App):  # type: ignore[type-arg]
         except Exception:
             self.notify("Discovery failed")
 
-    def action_quit(self):  # type: ignore[unknown]
+    def action_quit(self) -> None:
         self.exit()
 
 
-def main():  # type: ignore[unknown]
+def main() -> None:
     view = "graph"
     for i, a in enumerate(sys.argv):
         if a == "--view" and i + 1 < len(sys.argv):

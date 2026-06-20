@@ -17,7 +17,7 @@ import logging
 import os
 import urllib.request
 from datetime import datetime
-from typing import Any
+from typing import Any, cast
 
 from iris.base import BaseConnector, SyncResult  # type: ignore[import-not-found]
 from iris.config import IrisConfig  # type: ignore[import-not-found]
@@ -176,7 +176,7 @@ class PocketConnector(BaseConnector):
         val = os.environ.get(env_var)
         if val:
             return val
-        return self._config.get(config_key, default="")
+        return cast("str", self._config.get(config_key, default=""))
 
     # ── Availability ────────────────────────────────────────────
 
@@ -186,7 +186,7 @@ class PocketConnector(BaseConnector):
 
     # ── List items ──────────────────────────────────────────────
 
-    def list_items(self, limit: int = 20, cursor: str | None = None) -> list[Bookmark]:
+    def list_items(self, limit: int = 20, cursor: str | None = None, **kwargs: Any) -> list[Bookmark]:
         """List unread bookmarks from Pocket, newest first.
 
         Args:

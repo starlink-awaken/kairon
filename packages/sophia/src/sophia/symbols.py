@@ -97,19 +97,19 @@ def gate_always(ctx: dict) -> bool:
 
 
 def gate_has_sources(ctx: dict) -> bool:
-    return ctx.get("source_count", 0) >= 2
+    return bool(ctx.get("source_count", 0) >= 2)
 
 
 def gate_has_entities(ctx: dict) -> bool:
-    return ctx.get("entity_count", 0) > 0
+    return bool(ctx.get("entity_count", 0) > 0)
 
 
 def gate_has_contradictions(ctx: dict) -> bool:
-    return ctx.get("contradiction_count", 0) > 0
+    return bool(ctx.get("contradiction_count", 0) > 0)
 
 
 def gate_quality_pass(ctx: dict) -> bool:
-    return ctx.get("quality_score", 0) >= 60
+    return bool(ctx.get("quality_score", 0) >= 60)
 
 
 # ═══════════════════════════════════════════════════════════════════════

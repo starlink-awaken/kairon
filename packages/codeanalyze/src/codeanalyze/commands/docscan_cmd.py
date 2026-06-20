@@ -14,7 +14,7 @@ from codeanalyze.documents.scanner import analyze_wiki_structure, scan_directory
 @click.option("--wiki", is_flag=True, help="详细分析 wiki 结构完整性")
 @click.option("--versions", is_flag=True, help="列出版本链")
 @click.option("--output", "-o", default=None, help="报告输出路径")
-def docscan(path: str, wiki: bool, versions: bool, output: str | None):
+def docscan(path: str, wiki: bool, versions: bool, output: str | None) -> None:
     """扫描文档项目（如国转中心）的结构并生成分析报告。
 
     自动识别文件类型、分类目录、版本链、wiki 结构完整性.

@@ -15,7 +15,7 @@ from __future__ import annotations
 import logging
 import os
 from datetime import datetime
-from typing import Any
+from typing import Any, cast
 
 import httpx
 
@@ -52,7 +52,7 @@ def _polar_get(endpoint: str, api_key: str, params: dict[str, Any] | None = None
     try:
         response = httpx.get(url, headers=headers, params=params, timeout=POLAR_API_TIMEOUT)
         response.raise_for_status()
-        return response.json()
+        return cast("dict[str, Any] | None", response.json())
     except httpx.HTTPStatusError as e:
         logger.warning("Polar.sh API HTTP error [%s]: %s %s", endpoint, e.response.status_code, e.response.text)
         return None
@@ -150,7 +150,7 @@ class PolarConnector(BaseConnector):
         val = os.environ.get(env_var)
         if val:
             return val
-        return self._config.get(config_key, default="")
+        return cast("str", self._config.get(config_key, default=""))
 
     # ── Availability ────────────────────────────────────────────
 
@@ -160,7 +160,7 @@ class PolarConnector(BaseConnector):
 
     # ── List items ──────────────────────────────────────────────
 
-    def list_items(self, limit: int = 20, cursor: str | None = None) -> list[Article]:
+    def list_items(self, limit: int = 20, cursor: str | None = None, **kwargs: Any) -> list[Article]:
         """List articles from Polar.sh, with optional pagination.
 
         Args:

@@ -19,7 +19,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 try:
     from kos.config import get_artifact_path, get_vault_ops_dir, get_workspace_manifest  # type: ignore[import-not-found]
 except ImportError:
-    from config import get_artifact_path, get_vault_ops_dir, get_workspace_manifest  # type: ignore[import-not-found]
+    from config import get_artifact_path, get_vault_ops_dir, get_workspace_manifest  # type: ignore[import-not-found, no-redef]
 
 VAULT_OPS_DIR = get_vault_ops_dir()
 
@@ -317,7 +317,7 @@ def _get_entity_label(entity_id: str) -> str:
 
 
 @app.get("/", response_class=HTMLResponse)
-async def search_page(q: str = "", zone: str = "", limit: int = 20, request: Request = None):  # type: ignore[State, State, no-untyped-def, unknown, State, unknown, unknown]
+async def search_page(q: str = "", zone: str = "", limit: int = 20, request: Request | None = None) -> Any:
     """Search page (web UI)."""
     results: list[dict[str, Any]] = []
     count: int = 0

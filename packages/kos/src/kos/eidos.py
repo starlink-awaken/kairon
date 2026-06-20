@@ -11,7 +11,7 @@ import logging
 import subprocess
 import sys
 import warnings
-from typing import Any
+from typing import Any, cast
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +49,7 @@ def _mcp_call(tool: str, **kwargs: Any) -> dict[str, Any]:
             timeout=15,
         )
         raw = json.loads(proc.stdout.strip())
-        return raw.get("result", {})
+        return cast("dict[str, Any]", raw.get("result", {}))
     except Exception:
         logger.debug("eidos MCP call failed for %s", tool)
         return {}
@@ -59,7 +59,7 @@ def _mcp_result_text(r: dict[str, Any]) -> str:
     """Extract text content from a tools/call response."""
     content = r.get("content") or [{}]
     if isinstance(content, list) and content:
-        return content[0].get("text", "{}")
+        return cast("str", content[0].get("text", "{}"))
     return "{}"
 
 

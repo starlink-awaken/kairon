@@ -17,10 +17,10 @@ if str(_src_dir) not in sys.path:
     sys.path.insert(0, str(_src_dir))
 
 # Import local helpers after path setup
-from graph_utils import compute_capability_overlap, kebab  # type: ignore[import-not-found]
+from forge.graph_utils import compute_capability_overlap, kebab
 
 
-def build(reg_path: str, graph_path: str, dry_run: bool = False):
+def build(reg_path: str, graph_path: str, dry_run: bool = False) -> dict:
     reg = json.loads(Path(reg_path).read_text())
     # 加共享锁读
     with Path(reg_path).open("rb") as f:
@@ -32,12 +32,12 @@ def build(reg_path: str, graph_path: str, dry_run: bool = False):
     edges = []
     seen_nodes = set()
 
-    def add_node(nid, ntype, label):
+    def add_node(nid: str, ntype: str, label: str) -> None:
         if nid not in seen_nodes:
             seen_nodes.add(nid)
             nodes.append({"id": nid, "type": ntype, "label": str(label)[:120]})
 
-    def add_edge(src, tgt, rel):
+    def add_edge(src: str, tgt: str, rel: str) -> None:
         edges.append({"source": src, "target": tgt, "relation": rel})
 
     # --- Tool 节点 ---

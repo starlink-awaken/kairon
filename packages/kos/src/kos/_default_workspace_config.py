@@ -6,7 +6,7 @@ Override by placing a workspace_config.py in your KOS_HOME directory.
 import json
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 
 def get_workspace_manifest() -> dict[str, Any]:
@@ -15,7 +15,7 @@ def get_workspace_manifest() -> dict[str, Any]:
     if kos_home:
         manifest_path = Path(kos_home) / "manifest.json"
         if manifest_path.exists():  # type: ignore[Any, Any]
-            return json.loads(manifest_path.read_text())
+            return cast("dict[str, Any]", json.loads(manifest_path.read_text()))
         # Auto-create default manifest with workspace zone
         default = {
             "name": "kos-default",

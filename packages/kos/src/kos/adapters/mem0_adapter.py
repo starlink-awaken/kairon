@@ -5,7 +5,7 @@ Provides a dual-track memory pipeline interface wrapping Mem0.
 Implemented for Phase 1 decoupling and memory engine evaluation.
 """
 import logging
-from typing import Any
+from typing import Any, cast
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +56,7 @@ class Mem0Adapter:
         if not self.enabled or not self.memory:
             return []
         try:
-            return self.memory.search(query, user_id=user_id, limit=limit)
+            return cast("list[dict[str, Any]]", self.memory.search(query, user_id=user_id, limit=limit))
         except Exception as e:
             logger.error(f"Mem0 search_memory failed: {e}")
             return []
@@ -65,7 +65,7 @@ class Mem0Adapter:
         if not self.enabled or not self.memory:
             return []
         try:
-            return self.memory.get_all(user_id=user_id)
+            return cast("list[dict[str, Any]]", self.memory.get_all(user_id=user_id))
         except Exception as e:
             logger.error(f"Mem0 get_all failed: {e}")
             return []
@@ -74,7 +74,7 @@ class Mem0Adapter:
         if not self.enabled or not self.memory:
             return []
         try:
-            return self.memory.history(memory_id)
+            return cast("list[dict[str, Any]]", self.memory.history(memory_id))
         except Exception as e:
             logger.error(f"Mem0 history failed: {e}")
             return []

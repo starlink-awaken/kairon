@@ -52,6 +52,7 @@ import sys
 import time
 from datetime import datetime
 from pathlib import Path
+from typing import cast
 
 from forge.forge_config import ASSET_REGISTRY as REGISTRY_FILE  # type: ignore[import-not-found]
 
@@ -150,19 +151,19 @@ def _get_items(reg: dict) -> list[dict]:
                 item["_category"] = cat
                 items.append(item)
         return items
-    return reg.get("assets", [])
+    return cast("list[dict]", reg.get("assets", []))
 
 
 def _get_entities(reg: dict) -> dict:
     """Get entities dict from v4 registry."""
     if reg.get("version") == 4 and "entities" in reg:
-        return reg["entities"]
+        return cast("dict", reg["entities"])
     return {}
 
 
 def _get_item_id(item: dict) -> str:
     """Get the identifier for an item (supports both id and name)."""
-    return item.get("id") or item.get("name", "?")
+    return cast("str", item.get("id") or item.get("name", "?"))
 
 
 # ── 数据 ──
@@ -186,7 +187,7 @@ def _load() -> dict:
         return reg
     with REGISTRY_FILE.open("rb") as f:
         fcntl.flock(f, fcntl.LOCK_SH)
-        return json.load(f)
+        return cast("dict", json.load(f))
 
 
 def _save(reg: dict) -> None:

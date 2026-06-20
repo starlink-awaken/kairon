@@ -32,7 +32,7 @@ def search(
     context: int,
     max: int,
     json_flag: bool,
-):
+) -> None:
     """使用 ripgrep 在代码库中快速搜索。
 
     比 grep 快 10x，自动跳过 .gitignore 中的目录。

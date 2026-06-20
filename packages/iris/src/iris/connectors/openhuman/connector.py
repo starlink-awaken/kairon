@@ -25,7 +25,7 @@ import logging
 import os
 import time
 import urllib.request
-from typing import Any
+from typing import Any, cast
 
 from iris.base import BaseConnector, SyncResult  # type: ignore[import-not-found]
 from iris.models import KnowledgeArtifact, Note  # type: ignore[import-not-found]
@@ -84,7 +84,7 @@ class OpenHumanConnector(BaseConnector):
         )
         try:
             with urllib.request.urlopen(req, timeout=CONNECTION_TIMEOUT) as resp:  # noqa: S310
-                return json.loads(resp.read().decode())
+                return cast("dict[str, Any]", json.loads(resp.read().decode()))
         except json.JSONDecodeError as e:
             return {"error": f"Invalid JSON response: {e}"}
         except urllib.error.URLError as e:

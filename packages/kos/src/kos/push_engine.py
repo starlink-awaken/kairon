@@ -23,7 +23,7 @@ def pattern_to_rule(pattern: dict) -> dict:
     return rule
 
 
-def apply_rule(rule: dict):
+def apply_rule(rule: dict) -> None:
     """Register rule in hermes-ops config via MCP"""
     try:
         script = textwrap.dedent("""\
@@ -46,7 +46,7 @@ def apply_rule(rule: dict):
         pass
 
 
-def push_notification(title: str, message: str):
+def push_notification(title: str, message: str) -> None:
     """Trigger desktop push notification"""
     try:
         data = json.dumps({"title": title, "message": message})
@@ -55,7 +55,7 @@ def push_notification(title: str, message: str):
         pass
 
 
-def process_patterns(patterns: list[dict]):
+def process_patterns(patterns: list[dict]) -> list[dict]:
     """Main: patterns in → rules out → push triggered"""
     if not patterns:
         push_notification("Pattern Learner", "No patterns detected yet. Need more data.")
@@ -69,7 +69,7 @@ def process_patterns(patterns: list[dict]):
     return rules
 
 
-def simulate():
+def simulate() -> list[dict]:
     from kos.pattern_learner import PatternLearner  # type: ignore[import-not-found]
 
     pl = PatternLearner()

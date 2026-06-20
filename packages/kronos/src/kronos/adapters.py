@@ -5,6 +5,7 @@
 """
 
 import hashlib
+from collections.abc import Mapping
 from typing import Any
 
 # kronos 内部 content_type → Eidos KnowledgeCard source_type 映射
@@ -17,7 +18,7 @@ _CONTENT_TYPE_MAP: dict[str, str] = {
 
 
 def to_knowledge_card(
-    extraction: dict[str, Any],
+    extraction: Mapping[str, Any],
     source: str,
     *,
     content: str | None = None,

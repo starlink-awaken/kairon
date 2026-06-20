@@ -1,4 +1,4 @@
-.PHONY: test lint install clean typecheck typecheck-report
+.PHONY: test lint install clean typecheck typecheck-report typecheck-gate typecheck-gate-update
 
 # Install all packages in monorepo
 install:
@@ -80,22 +80,33 @@ lint:
 format:
 	ruff format packages/
 
-# Typecheck all packages with mypy strict (DEBT-CI-MYPY-STRICT: 本地试点, CI 待启用)
+# Typecheck all packages with mypy strict (DEBT-CI-MYPY-STRICT).
+# 真相调法 MYPYPATH=src: 修旧 `mypy src` 假绿 (mypy 解析不出跨包 import 当 Any 静默通过,
+# 仅 minerva/sophia 撞模块映射冲突才报错). 真实存量 1245 errors (见 mypy-baseline.yaml),
+# 故此 target 现会红 — CI 用 typecheck-gate 卡增量, 开发用此 target 看真错误.
 typecheck:
-	@echo "=== mypy strict 全量检查 ==="; \
+	@echo "=== mypy strict 真相检查 (MYPYPATH=src) ==="; \
 	fail=0; \
 	for pkg in packages/*/; do \
 		name=$$(basename $$pkg); \
 		echo "--- [$$name] ---"; \
-		if ! (cd $$pkg && uv run mypy src --namespace-packages --explicit-package-bases --exclude tests/ 2>/dev/null); then \
+		if ! (cd $$pkg && MYPYPATH=src uv run mypy src --namespace-packages --explicit-package-bases --exclude tests/); then \
 			fail=1; \
 		fi; \
 	done; \
 	test $$fail -eq 0
 
-# Typecheck report: per-package mypy error count (服务 mypy strict 推进诊断)
+# Typecheck report: per-package mypy error count (真相调法, 服务推进诊断)
 typecheck-report:
 	@uv run python scripts/mypy_report.py
+
+# Typecheck regression gate: 卡增量不卡存量 (CI 友好, baseline 见 mypy-baseline.yaml)
+typecheck-gate:
+	@uv run python scripts/mypy_report.py --baseline mypy-baseline.yaml
+
+# 刷新 baseline (修了真错误后降数; mypy 版本漂移误报时同样刷新)
+typecheck-gate-update:
+	@uv run python scripts/mypy_report.py --baseline mypy-baseline.yaml --update
 
 # Clean build artifacts
 clean:

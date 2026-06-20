@@ -13,7 +13,7 @@ console = Console()
 
 @click.group()
 @click.version_option(version=__version__)
-def cli():
+def cli() -> None:
     """统一代码与文档分析工具箱。
 
     将 Graphify、GitNexus、Serena、Docling 等工具

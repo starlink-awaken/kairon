@@ -313,7 +313,7 @@ def suggest() -> dict:  # type: ignore[type-arg]
 # ── Run All ───────────────────────────────────────────────
 
 
-def run_all():  # type: ignore[unknown]
+def run_all() -> None:
     result = {
         "maintenance_run": datetime.now().isoformat(),
         "kos_version": "1.0",

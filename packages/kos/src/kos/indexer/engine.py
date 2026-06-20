@@ -27,7 +27,7 @@ import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from kos.config import get_vault_ops_dir  # type: ignore[[, unused-ignore]
 
@@ -80,13 +80,13 @@ class MarkdownHandler(FormatHandler):
     extensions = {".md", ".txt", ".markdown", ".mdx"}
     priority = 100
 
-    def extract_text(self, p) -> str:
+    def extract_text(self, p: Path) -> str:
         try:
             return p.read_text(encoding="utf-8")[:8000]
         except Exception:
             return f"[{p.suffix}: {p.name}]"
 
-    def extract_metadata(self, p) -> dict:
+    def extract_metadata(self, p: Path) -> dict:
         try:
             content = p.read_text(encoding="utf-8")
         except Exception:
@@ -110,7 +110,7 @@ class DocxHandler(FormatHandler):
     extensions = {".docx"}
     priority = 80
 
-    def extract_text(self, p) -> str:
+    def extract_text(self, p: Path) -> str:
         try:
             from docx import Document
 
@@ -119,7 +119,7 @@ class DocxHandler(FormatHandler):
         except Exception:
             return f"[docx: {p.name}]"
 
-    def extract_metadata(self, p) -> dict:
+    def extract_metadata(self, p: Path) -> dict:
         try:
             from docx import Document
 
@@ -135,7 +135,7 @@ class GongwenDocxHandler(FormatHandler):
     extensions = {".docx"}
     priority = 85  # Higher than generic DocxHandler(80)
 
-    def can_handle(self, p) -> bool:
+    def can_handle(self, p: Path) -> bool:
         # Activate for gongwen and guozhuan zone docx files
         if p.suffix.lower() not in self.extensions:
             return False
@@ -371,7 +371,7 @@ class GongwenDocxHandler(FormatHandler):
 
         return "\n".join(parts)[:8000]
 
-    def extract_text(self, p) -> str:
+    def extract_text(self, p: Path) -> str:
         try:
             from docx import Document
 
@@ -415,7 +415,7 @@ class GongwenDocxHandler(FormatHandler):
         except Exception:
             return f"[docx: {p.name}]"
 
-    def extract_metadata(self, p) -> dict:
+    def extract_metadata(self, p: Path) -> dict:
         try:
             from docx import Document
 
@@ -455,7 +455,7 @@ class PdfHandler(FormatHandler):
     extensions = {".pdf"}
     priority = 70
 
-    def extract_text(self, p) -> str:
+    def extract_text(self, p: Path) -> str:
         # Tier 1: MinerU (best quality, Markdown output)
         try:
             from magic_pdf.tools.common import do_parse  # type: ignore[import-untyped, import-not-found]
@@ -463,7 +463,7 @@ class PdfHandler(FormatHandler):
             result = do_parse(str(p))
             md = result.get("markdown", "") or result.get("content", "")
             if md and len(md) > 50:
-                return md[:8000]
+                return cast("str", md[:8000])
         except Exception:
             pass
 
@@ -478,7 +478,7 @@ class PdfHandler(FormatHandler):
         except Exception:
             return f"[pdf: {p.name}]"
 
-    def extract_metadata(self, p) -> dict:
+    def extract_metadata(self, p: Path) -> dict:
         try:
             import fitz
 
@@ -494,7 +494,7 @@ class XlsxHandler(FormatHandler):
     extensions = {".xlsx", ".xls"}
     priority = 60
 
-    def extract_text(self, p) -> str:
+    def extract_text(self, p: Path) -> str:
         try:
             import openpyxl  # type: ignore[unknown]
 
@@ -513,7 +513,7 @@ class XlsxHandler(FormatHandler):
         except Exception:
             return f"[xlsx: {p.name}]"
 
-    def extract_metadata(self, p) -> dict:
+    def extract_metadata(self, p: Path) -> dict:
         try:
             import openpyxl
 
@@ -529,13 +529,13 @@ class GenericHandler(FormatHandler):
     extensions = set()  # handles everything
     priority = 0
 
-    def can_handle(self, p) -> bool:
+    def can_handle(self, p: Path) -> bool:
         return True
 
-    def extract_text(self, p) -> str:
+    def extract_text(self, p: Path) -> str:
         return f"[{p.suffix}: {p.name}]"
 
-    def extract_metadata(self, p) -> dict:
+    def extract_metadata(self, p: Path) -> dict:
         return {"title": p.name}
 
 
@@ -610,7 +610,7 @@ def _print_dep_status(status: dict):  # type: ignore[no-untyped-def, type-arg]
             print(f"    → pip install {pkg} --break-system-packages", file=sys.stderr)
 
 
-def _verify_db_integrity(conn) -> None:
+def _verify_db_integrity(conn: Any) -> None:
     """Verify SQLite database integrity before indexing.
     Auto-repairs with VACUUM if corruption is detected.
     """
@@ -640,7 +640,7 @@ def get_handler(file_path: Path) -> FormatHandler:
 
 
 class KosIndexer:
-    def __init__(self):  # type: ignore[unknown]
+    def __init__(self) -> None:
         self.manifest = get_workspace_manifest()
         self.db_path = get_artifact_path("retrievalDatabase")
         self.now = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -708,7 +708,7 @@ class KosIndexer:
         abs_path: Path,
         zone_id: str,
         strategy: str,
-        existing_hash: str = None,  # type: ignore[unknown]
+        existing_hash: str | None = None,
     ) -> dict:  # type: ignore[type-arg]
         """Process a single file (stat + hash + extract). No DB access."""
         if strategy == "skip":
@@ -883,7 +883,7 @@ class KosIndexer:
                             continue
                         yield rel, abs_path
 
-    def index(self, incremental: bool = False, domain_filter: str = None, jobs: int = 4) -> dict[str, Any]:  # type: ignore[unknown]
+    def index(self, incremental: bool = False, domain_filter: str | None = None, jobs: int = 4) -> dict[str, Any]:
         # Check dependencies first — prevent silent handler failures
         _print_dep_status(check_handler_deps())
         conn = self._connect()  # type: ignore[no-untyped-call]

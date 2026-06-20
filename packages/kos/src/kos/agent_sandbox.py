@@ -28,7 +28,7 @@ class AgentSandbox:
             └────────────────────────────────────────────────────┘
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.agents: dict[str, dict[str, Any]] = {}
 
     # ── Internal helpers ──

@@ -7,7 +7,7 @@ Linux: uses Secret Service (gnome-keyring / kwallet).
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 _KEYRING_SERVICE = "iris"
 _KEYRING_ENABLED = {"1", "true", "yes", "on"}
@@ -36,7 +36,7 @@ def get_password(key: str) -> str | None:
     if kr is None:
         return None
     try:
-        return kr.get_password(_KEYRING_SERVICE, key)
+        return cast("str | None", kr.get_password(_KEYRING_SERVICE, key))
     except Exception:
         return None
 

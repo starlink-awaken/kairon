@@ -131,7 +131,7 @@ def sample_validate(
 # ── 入口点 ──────────────────────────────────────────
 
 
-def main():
+def main() -> None:
     """运行 MCP server（stdio 模式，供 Agora 集成）。"""
     from iris.mcp_server import main as iris_main  # type: ignore[import-not-found]
 

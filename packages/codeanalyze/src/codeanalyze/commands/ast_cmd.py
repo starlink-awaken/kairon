@@ -23,7 +23,7 @@ def ast(
     strict: bool,
     max: int,
     json_flag: bool,
-):
+) -> None:
     """使用 ast-grep (sg) 进行 AST 结构化搜索。
 
     比纯文本 ripgrep 更精确，能匹配 "$FUNC($___)" 等语法结构。

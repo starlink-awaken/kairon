@@ -6,6 +6,7 @@ Uses JSONFileStore for durable storage of the mapping table.
 from __future__ import annotations
 
 from pathlib import Path
+from typing import cast
 
 from iris.store import JSONFileStore  # type: ignore[import-not-found]
 
@@ -54,14 +55,14 @@ class IdMapping:
 
         Returns None if no mapping exists.
         """
-        return self._store.get(self._obsidian_key(obsidian_path))
+        return cast("str | None", self._store.get(self._obsidian_key(obsidian_path)))
 
     def get_obsidian_path(self, wpsnote_id: str) -> str | None:
         """Look up Obsidian path from a WPS Note ID.
 
         Returns None if no mapping exists.
         """
-        return self._store.get(self._wpsnote_key(wpsnote_id))
+        return cast("str | None", self._store.get(self._wpsnote_key(wpsnote_id)))
 
     def remove(self, obsidian_path: str) -> None:
         """Delete a mapping by Obsidian path.

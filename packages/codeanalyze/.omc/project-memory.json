@@ -1,0 +1,203 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1781883499372,
+  "projectRoot": "/Users/xiamingxing/Workspace/projects/kairon/packages/codeanalyze",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Python",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "pyproject.toml"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "pytest",
+        "version": null,
+        "category": "testing"
+      }
+    ],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": "cd \"/Users/xiamingxing/Workspace/projects/kairon/packages/codeanalyze\" || exit 1\nPY=\"/Users/xiamingxing/Workspace/projects/kairon/.venv/bin/python\"\necho \"=== codeanalyze 测试 (逻辑验证, 避开 CLI subprocess SIGKILL) ===\"\nPYTHONPATH=src \"$PY\" -m pytest tests/ -q --tb=line --ignore=tests/test_policydoc.py 2>&1 | tail -25",
+    "lintCommand": "ruff check",
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "src",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1781883499363,
+      "keyFiles": []
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 13,
+      "lastAccessed": 1781883499363,
+      "keyFiles": [
+        "test_basic.py",
+        "test_commands_common.py",
+        "test_crg_graph.py",
+        "test_documents_base.py",
+        "test_eidos.py"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src/codeanalyze/core/results.py",
+      "accessCount": 7,
+      "lastAccessed": 1781884037184,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/mcp.py",
+      "accessCount": 7,
+      "lastAccessed": 1781884155798,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/integrations/forge.py",
+      "accessCount": 6,
+      "lastAccessed": 1781884040241,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/commands/analyze_cmd.py",
+      "accessCount": 6,
+      "lastAccessed": 1781884043318,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/commands/export_cmd.py",
+      "accessCount": 4,
+      "lastAccessed": 1781884045839,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/analyzers/ripgrep.py",
+      "accessCount": 4,
+      "lastAccessed": 1781884289764,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/reports/audit/models.py",
+      "accessCount": 3,
+      "lastAccessed": 1781884047331,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/tools_template.py",
+      "accessCount": 3,
+      "lastAccessed": 1781884157789,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/documents/scanner.py",
+      "accessCount": 3,
+      "lastAccessed": 1781884284974,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/documents/official/__init__.py",
+      "accessCount": 3,
+      "lastAccessed": 1781884286626,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/documents/docling.py",
+      "accessCount": 3,
+      "lastAccessed": 1781884288880,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/core/workspace.py",
+      "accessCount": 2,
+      "lastAccessed": 1781884048336,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/commands/serve_cmd.py",
+      "accessCount": 2,
+      "lastAccessed": 1781884158408,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/commands/install_cmd.py",
+      "accessCount": 2,
+      "lastAccessed": 1781884159223,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/commands/docscan_cmd.py",
+      "accessCount": 2,
+      "lastAccessed": 1781884160107,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/commands/dashboard_cmd.py",
+      "accessCount": 2,
+      "lastAccessed": 1781884161079,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/commands/audit_cmd.py",
+      "accessCount": 2,
+      "lastAccessed": 1781884162083,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/commands/wiki_cmd.py",
+      "accessCount": 2,
+      "lastAccessed": 1781884162952,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/commands/documents_cmd.py",
+      "accessCount": 2,
+      "lastAccessed": 1781884163862,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/commands/repomix_cmd.py",
+      "accessCount": 2,
+      "lastAccessed": 1781884164424,
+      "type": "file"
+    },
+    {
+      "path": "src/codeanalyze/commands/ast_cmd.py",
+      "accessCount": 2,
+      "lastAccessed": 1781884165000,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

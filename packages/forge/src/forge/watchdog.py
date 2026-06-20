@@ -21,6 +21,7 @@ import signal
 import subprocess
 import sys
 import time
+from typing import Any
 
 from forge.forge_config import LOG_DIR, SRC  # type: ignore[import-not-found]
 
@@ -32,7 +33,7 @@ HEALTH_CHECK = SRC / "health_check.py"
 _last_healthy = None
 
 
-def _setup_logging(*, console: bool = True):
+def _setup_logging(*, console: bool = True) -> None:
     """配置日志：文件日志 + 可选控制台输出"""
     LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 
@@ -52,7 +53,7 @@ def _setup_logging(*, console: bool = True):
     )
 
 
-def _send_notification(message: str, notify_type: str):
+def _send_notification(message: str, notify_type: str) -> None:
     """通过配置的渠道发送通知。缺失环境变量时静默降级。"""
     if notify_type in ("ntfy", "both"):
         topic = os.environ.get("NTFY_TOPIC")
@@ -102,7 +103,7 @@ def _run_health_check() -> tuple[bool, str]:
         return False, f"health_check.py 错误: {e}"
 
 
-def _daemonize():
+def _daemonize() -> None:
     """Double-fork 达到守护进程化（脱离控制终端）。"""
     try:
         pid = os.fork()
@@ -138,11 +139,11 @@ def _daemonize():
         os.dup2(se.fileno(), sys.stderr.fileno())
 
 
-def _write_pid():
+def _write_pid() -> None:
     PID_FILE.write_text(str(os.getpid()))
 
 
-def _remove_pid():
+def _remove_pid() -> None:
     try:
         if PID_FILE.exists():
             PID_FILE.unlink()
@@ -150,13 +151,13 @@ def _remove_pid():
         pass
 
 
-def _signal_handler(signum, frame):
+def _signal_handler(signum: int, frame: Any) -> None:
     logging.info("收到信号 %d，正在关闭", signum)
     _remove_pid()
     sys.exit(0)
 
 
-def main():
+def main() -> int:
     import argparse
 
     parser = argparse.ArgumentParser(

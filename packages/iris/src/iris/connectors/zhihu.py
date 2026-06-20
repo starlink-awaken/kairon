@@ -18,7 +18,7 @@ import json
 import logging
 import os
 import re
-from typing import Any
+from typing import Any, cast
 
 from iris.base import BaseConnector, SyncResult  # type: ignore[import-not-found]
 from iris.config import IrisConfig  # type: ignore[import-not-found]
@@ -50,7 +50,7 @@ class ZhihuConnector(BaseConnector):
 
             result = execute_fetch(url, cookie=self._cookie)
             if result and result.get("content"):
-                return result["content"]
+                return cast("str | None", result["content"])
         except ImportError:
             pass
         except Exception as e:
@@ -68,7 +68,7 @@ class ZhihuConnector(BaseConnector):
                 headers["Cookie"] = self._cookie
             req = urllib.request.Request(url, headers=headers)  # noqa: S310
             resp = urllib.request.urlopen(req, timeout=15)  # noqa: S310
-            return resp.read().decode("utf-8", errors="replace")
+            return cast("str", resp.read().decode("utf-8", errors="replace"))
         except Exception as e:
             logger.debug("Direct HTTP fetch failed: %s", e)
             return None
@@ -124,11 +124,11 @@ class ZhihuConnector(BaseConnector):
             import urllib.request
 
             resp = urllib.request.urlopen(f"{ZHIHU_HOST}/robots.txt", timeout=5)  # noqa: S310
-            return resp.status == 200
+            return cast("bool", resp.status == 200)
         except Exception:
             return False
 
-    def list_items(self, limit: int = 20, cursor: str | None = None) -> list[Article]:
+    def list_items(self, limit: int = 20, cursor: str | None = None, **kwargs: Any) -> list[Article]:
         """Not available without auth — Zhihu doesn't have a public feed API."""
         return []
 

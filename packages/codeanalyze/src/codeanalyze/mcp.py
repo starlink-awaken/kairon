@@ -9,6 +9,7 @@ Or manually via Agora's MCP:
 from pathlib import Path
 
 from codeanalyze import __version__  # type: ignore[import-not-found]
+from codeanalyze.core.results import KnowledgeGraph  # type: ignore[import-not-found]
 from codeanalyze.integrations.forge import guardrail  # type: ignore[import-not-found]
 
 try:
@@ -54,7 +55,7 @@ def _ok(data: dict) -> dict:
     return {"status": "ok", **data}
 
 
-def _run_eidos_export(kg, root: Path) -> dict:
+def _run_eidos_export(kg: KnowledgeGraph, root: Path) -> dict:
     """运行 Eidos 格式转换 + Schema 校验。"""
     import json as _json
 
@@ -81,7 +82,7 @@ def _run_eidos_export(kg, root: Path) -> dict:
     }
 
 
-def _md_summary(kg) -> str:
+def _md_summary(kg: KnowledgeGraph) -> str:
     """生成 Markdown 摘要。"""
     lines = [
         "# 知识图谱导出报告",
@@ -899,7 +900,7 @@ def read_analysis_metrics(file: str) -> str:
         return f"Error getting metrics: {str(e)}"
 
 
-def main():
+def main() -> None:
     """Run the MCP server in stdio mode (for Agora integration)."""
     mcp.run()
 
@@ -910,7 +911,7 @@ def health_check() -> str:
     return "ok"
 
 
-def http_main():
+def http_main() -> None:
     """Run the MCP server in HTTP mode."""
     import asyncio
 

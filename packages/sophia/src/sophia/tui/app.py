@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 
-def main():
+def main() -> int:
     """Interactive paradigm explorer TUI."""
     try:
         from rich import box

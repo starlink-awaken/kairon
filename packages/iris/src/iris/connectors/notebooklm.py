@@ -37,7 +37,7 @@ class NotebookLMConnector(BaseConnector):
     name = "notebooklm"
     display_name = "NotebookLM"
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._adapter = None
         self._available = False
         self._init_adapter()

@@ -7,9 +7,10 @@ with hardcoded imports as fallback.
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
+    from iris.base import BaseConnector  # type: ignore[import-not-found]
     from iris.registry import ConnectorRegistry  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
@@ -79,8 +80,8 @@ def _register_fallback(registry: ConnectorRegistry) -> None:
     registry.register(AppleNotesConnector())
     registry.register(GitHubConnector())
     registry.register(RssConnector())
-    registry.register(DingTalkConnector())
-    registry.register(FeishuConnector())
+    registry.register(cast("BaseConnector", DingTalkConnector()))
+    registry.register(cast("BaseConnector", FeishuConnector()))
 
 
 def register_all(registry: ConnectorRegistry) -> None:

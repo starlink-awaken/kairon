@@ -31,8 +31,8 @@ class Pattern:
 
 
 class PatternLearner:
-    def __init__(self):
-        self.patterns = []
+    def __init__(self) -> None:
+        self.patterns: list[Pattern] = []
 
     def learn_from_iris(self, iris_data: list[dict]) -> list[dict]:
         """Analyze timestamped events to find patterns"""
@@ -92,7 +92,7 @@ class PatternLearner:
                 sample_data.append({"time": f"2026-05-{14 + i // 2:02d}T{h:02d}:00:00", "source": "simulated"})
         return self.learn_from_iris(sample_data)
 
-    def emit_to_ops(self, patterns: list[dict]):
+    def emit_to_ops(self, patterns: list[dict]) -> None:
         """Send patterns to hermes-ops as MCP events"""
         hermes_src = os.path.expanduser("~/Workspace/ops/src")
         for p in patterns:

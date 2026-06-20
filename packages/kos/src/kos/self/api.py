@@ -8,7 +8,7 @@ import json
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import yaml
 
@@ -105,7 +105,7 @@ def _read_profile() -> dict[str, Any]:
                 data = json.load(f)
             if data:
                 db.save_profile(data)
-                return data
+                return cast("dict[str, Any]", data)
         except (json.JSONDecodeError, OSError):
             pass
 

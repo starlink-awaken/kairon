@@ -12,7 +12,7 @@ from codeanalyze.reports.audit import run_audit  # type: ignore[import-not-found
 @click.command()
 @click.argument("path", default=".")
 @click.option("--output", "-o", default=None, help="报告输出路径")
-def audit(path: str, output: str | None):
+def audit(path: str, output: str | None) -> None:
     """运行知识审计——交叉验证原始文档与 Wiki 知识库的一致性。
 
     检查以下维度:

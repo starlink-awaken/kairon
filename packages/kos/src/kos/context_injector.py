@@ -15,7 +15,7 @@ import threading
 import time
 from dataclasses import dataclass
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, cast
 
 _log = logging.getLogger(__name__)
 
@@ -104,8 +104,8 @@ class HarvestContextInjector:
             from kos.freshness import FreshnessManager  # type: ignore[import-not-found]
             from kos.query_service import KnowledgeQueryService  # type: ignore[import-not-found]
 
-            self._query_service = KnowledgeQueryService(memory_graph)
-            self._freshness = FreshnessManager(memory_graph)
+            self._query_service: Any = KnowledgeQueryService(memory_graph)
+            self._freshness: Any = FreshnessManager(memory_graph)
         except (ImportError, RuntimeError, ValueError, KeyError) as exc:
             _log.warning(
                 "HarvestContextInjector: falling back to no-op services because resolution failed: %s",
@@ -230,7 +230,7 @@ class HarvestContextInjector:
                         attempt + 1,
                     )
 
-                return results
+                return cast("list[Any]", results)
 
             except (
                 ImportError,
@@ -316,7 +316,7 @@ class HarvestContextInjector:
                 limit=_MAX_INJECT_TRIPLES,
                 time_window_hours=168,
             )
-            return results
+            return cast("list[tuple[Any, ...]]", results)
         except (ImportError, AttributeError, TypeError, ValueError, OSError, RuntimeError) as exc:
             _log.warning("Knowledge retrieval failed (degrading gracefully): %s", exc)
             return []

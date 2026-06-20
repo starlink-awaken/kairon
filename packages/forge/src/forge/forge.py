@@ -86,7 +86,9 @@ import stat
 import subprocess
 import sys
 import time
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
 from forge.forge_config import ADAPTERS_DIR as ADAPTERS  # type: ignore[import-not-found]
 from forge.forge_config import FORGE_ROOT as TOOLBOX
@@ -125,7 +127,7 @@ VERIFY_COMMANDS = {
 }
 
 
-def cmd_status():
+def cmd_status() -> None:
     """项目状态概览"""
     reg_path = TOOLBOX / "tools-registry.json"
     try:
@@ -154,7 +156,7 @@ def cmd_status():
     print(f"  路径: {TOOLBOX}")
 
 
-def cmd_capture(args: list[str]):
+def cmd_capture(args: list[str]) -> None:
     """记下新工具（sediment-capture 的友好入口）"""
     if not args or args[0] in ("--help", "-h"):
         print("用法: ./forge.sh capture --name <id> --desc '<描述>' --steps '[步骤]'")
@@ -171,12 +173,12 @@ def cmd_capture(args: list[str]):
     _run_script("sediment-capture", args)
 
 
-def cmd_health(args: list[str] | None = None):
+def cmd_health(args: list[str] | None = None) -> None:
     """健康检查"""
     subprocess.run([sys.executable, str(SRC / "health_check.py")] + (args or []), cwd=TOOLBOX)
 
 
-def cmd_list(args: list[str] | None = None):
+def cmd_list(args: list[str] | None = None) -> None:
     """List registered tools as JSON."""
     from mcp_server import list_tools  # type: ignore[import-not-found]
 
@@ -194,7 +196,7 @@ def cmd_list(args: list[str] | None = None):
     print(json.dumps({"tools": list_tools(limit=limit)}, ensure_ascii=False))
 
 
-def cmd_dashboard(_args: list[str] | None = None):
+def cmd_dashboard(_args: list[str] | None = None) -> None:
     """启动 Web 仪表盘"""
     import webbrowser
 
@@ -222,7 +224,7 @@ def cmd_dashboard(_args: list[str] | None = None):
     print(f"   API 已启动 (PID: {proc.pid})")
 
 
-def cmd_verify(args: list[str]):
+def cmd_verify(args: list[str]) -> None:
     """运行验证"""
     phase = args[0] if args else "all"
     if phase == "all":
@@ -236,7 +238,7 @@ def cmd_verify(args: list[str]):
         sys.exit(1)
 
 
-def cmd_schedule(args: list[str]):
+def cmd_schedule(args: list[str]) -> None:
     """配置每日巡更定时任务"""
     if "--show" in args:
         print("当前 cron 配置:")
@@ -261,7 +263,7 @@ def cmd_schedule(args: list[str]):
     print("  两周后:       forge status     # 看 event_log + telemetry")
 
 
-def cmd_routine():
+def cmd_routine() -> None:
     """显示每日例行流程"""
     print("=== Forge 日常操作 ===")
     print()
@@ -291,7 +293,7 @@ def cmd_routine():
     print("  event_log 和 telemetry 会告诉你    # 决定 Phase 5 方向")
 
 
-def cmd_sniff(*_):
+def cmd_sniff(*_: object) -> None:
     """环境嗅探 — 检测当前系统有哪些工具/依赖可用"""
     print("=== Forge 环境嗅探 ===")
     print()
@@ -367,13 +369,13 @@ def cmd_sniff(*_):
         print("\n运行 forge install 选择安装缺失组件")
 
 
-def cmd_market(args: list[str]):
+def cmd_market(args: list[str]) -> None:
     """GitHub 工具市场 — install/list/remove"""
     from forge.market import cli as _market_cli
     sys.exit(_market_cli(args))
 
 
-def cmd_install(args: list[str]):
+def cmd_install(args: list[str]) -> None:
     """交互式安装器 — 嗅探 + 安装"""
     # 如果指定了具体项，直接安装
     if args:
@@ -464,7 +466,7 @@ def cmd_install(args: list[str]):
         print("未知选择，退出")
 
 
-def _install_symlink():
+def _install_symlink() -> None:
     """安装全局 forge 命令"""
     local_bin = Path.home() / ".local/bin"
     local_bin.mkdir(parents=True, exist_ok=True)
@@ -477,7 +479,7 @@ def _install_symlink():
     print("   现在可以在终端直接使用: forge help")
 
 
-def _install_mcp_config():
+def _install_mcp_config() -> None:
     """注册 MCP 到 Claude Desktop"""
     claude_config = Path.home() / "Library/Application Support/Claude/claude_desktop_config.json"
     claude_config.parent.mkdir(parents=True, exist_ok=True)
@@ -506,7 +508,7 @@ def _install_mcp_config():
     print("   重启 Claude Desktop 生效")
 
 
-def _install_cron():
+def _install_cron() -> None:
     """配置每日健康检查定时任务"""
     health_script = str(SCRIPTS / "health-check.sh")
     log_file = str(TOOLBOX / "logs" / "health.log")
@@ -531,7 +533,7 @@ def _install_cron():
         print(f"   手动添加: (crontab -l; echo '{cron_line}') | crontab -")
 
 
-def _install_deps():
+def _install_deps() -> None:
     """安装 Python 依赖"""
     deps = ["fastmcp"]
     for dep in deps:
@@ -547,7 +549,7 @@ def _install_deps():
             print(f"⚠️  安装 {dep} 失败: {r.stderr.strip()[:80]}")
 
 
-def cmd_help():
+def cmd_help() -> None:
     print(__doc__)
     print("常用:")
     print("  forge health             # 每日巡更（5 分钟）")
@@ -581,7 +583,7 @@ def _discover_scripts() -> dict:
 _DISCOVERED_SCRIPTS = _discover_scripts()
 
 
-def _run_script(name: str, args: list[str]):
+def _run_script(name: str, args: list[str]) -> None:
     entry = COMMANDS.get(name)
     if not entry:
         script_path = _DISCOVERED_SCRIPTS.get(name)
@@ -631,7 +633,7 @@ def _setup_completion() -> bool:
         return False
 
 
-def main():
+def main() -> None:
     args = sys.argv[1:]
 
     # 自动补全（在帮助和命令解析之前）
@@ -702,7 +704,7 @@ def _build_command_map() -> dict:
     """构建统一命令注册表。"""
     c: dict = {}
 
-    def reg(name, kind, *data):
+    def reg(name: str, kind: str, *data: Any) -> None:
         c[name] = (kind, *data)
 
     # 1. 内建命令
@@ -716,8 +718,8 @@ def _build_command_map() -> dict:
     reg("capture", "args", cmd_capture)
 
     # 反熵子命令：直接调 Python 跳过 shell
-    def _entropy_cmd(action):
-        def _run(args):
+    def _entropy_cmd(action: str) -> Callable[[list[str]], None]:
+        def _run(args: list[str]) -> None:
             subprocess.run([sys.executable, str(SRC / "entropy.py"), action] + args, cwd=TOOLBOX)
 
         return _run

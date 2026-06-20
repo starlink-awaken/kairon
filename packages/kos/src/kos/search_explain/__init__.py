@@ -251,7 +251,7 @@ def explain_search(
     return {"query": query, "results": results, "count": len(results), "ollama_available": has_ollama, "_model": model}
 
 
-def main():  # type: ignore[unknown]
+def main() -> None:
     query = sys.argv[1] if len(sys.argv) > 1 else ""
     limit = 10
     model = None

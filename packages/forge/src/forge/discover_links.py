@@ -15,16 +15,17 @@ import tempfile
 from collections import defaultdict
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import cast
 
 from forge.forge_config import GRAPH, REGISTRY  # type: ignore[import-not-found]
 
 
 def _load_graph() -> dict:
-    return json.loads(GRAPH.read_text())
+    return cast("dict", json.loads(GRAPH.read_text()))
 
 
 def _load_registry() -> dict:
-    return json.loads(REGISTRY.read_text())
+    return cast("dict", json.loads(REGISTRY.read_text()))
 
 
 def _save_registry(reg: dict) -> None:

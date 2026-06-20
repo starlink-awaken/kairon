@@ -173,6 +173,7 @@ class ObsidianConnector(BaseConnector):
         cursor: str | None = None,
         tag: str | None = None,
         folder: str | None = None,
+        **kwargs: Any,
     ) -> list[Note]:
         """List notes with optional tag and folder filtering."""
         files = self._walk_md_files(folder=folder)
@@ -301,10 +302,11 @@ class ObsidianConnector(BaseConnector):
 
     def create_item(
         self,
-        title: str,
+        title: str = "",
         content: str = "",
         tags: list[str] | None = None,
         path: str | None = None,
+        **kwargs: Any,
     ) -> Note:
         """Create a new .md file in the vault.
 

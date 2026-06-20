@@ -15,10 +15,10 @@ SOURCE_AUTHORITY = {
 
 
 class TrustLayer:
-    def __init__(self):
+    def __init__(self) -> None:
         self.scores: dict[str, float] = {}
 
-    def score_entity(self, entity_id: str, source_type: str, cross_validated=False, age_days=0) -> dict:
+    def score_entity(self, entity_id: str, source_type: str, cross_validated: bool = False, age_days: int = 0) -> dict:
         base = SOURCE_AUTHORITY.get(source_type, 0.2)
         if cross_validated:
             base = min(1.0, base + 0.1)
@@ -32,7 +32,7 @@ class TrustLayer:
     def get_score(self, entity_id: str) -> float:
         return self.scores.get(entity_id, 0.2)
 
-    def propagate(self, graph: dict[str, list[str]], steps=2) -> dict[str, float]:
+    def propagate(self, graph: dict[str, list[str]], steps: int = 2) -> dict[str, float]:
         for _ in range(steps):
             new = dict(self.scores)
             for node, neighbors in graph.items():
@@ -42,7 +42,7 @@ class TrustLayer:
             self.scores = new
         return dict(self.scores)
 
-    def filter(self, min_score=0.3) -> dict[str, float]:
+    def filter(self, min_score: float = 0.3) -> dict[str, float]:
         return {k: v for k, v in self.scores.items() if v >= min_score}
 
     def stats(self) -> dict:

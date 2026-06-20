@@ -11,6 +11,7 @@ import shutil
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 
 @dataclass
@@ -241,7 +242,7 @@ def _parse_text_output(result: RgResult, stdout: str) -> None:
 def search_files(
     pattern: str,
     path: str = ".",
-    **kwargs,
+    **kwargs: Any,
 ) -> list[dict]:
     """搜索并返回结构化结果列表（兼容实体格式）。"""
     result = search(pattern, path, **kwargs)

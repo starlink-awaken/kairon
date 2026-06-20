@@ -21,7 +21,7 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from forge.forge_config import FORGE_ROOT
 from forge.forge_config import REGISTRY as TOOLS_REGISTRY
@@ -43,7 +43,7 @@ except ImportError:
 def _load_tools_registry() -> dict:
     """Load the main tools-registry.json."""
     if TOOLS_REGISTRY.exists():
-        return json.loads(TOOLS_REGISTRY.read_text(encoding="utf-8"))
+        return cast("dict", json.loads(TOOLS_REGISTRY.read_text(encoding="utf-8")))
     return {"schema_version": "1.2", "tools": []}
 
 
@@ -362,7 +362,7 @@ def _load_market() -> list[dict]:
     """Load market.json, returning list of tool entries."""
     if MARKET_REGISTRY.exists():
         try:
-            return json.loads(MARKET_REGISTRY.read_text(encoding="utf-8"))
+            return cast("list[dict]", json.loads(MARKET_REGISTRY.read_text(encoding="utf-8")))
         except (json.JSONDecodeError, OSError):
             return []
     return []

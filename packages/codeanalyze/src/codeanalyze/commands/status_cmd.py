@@ -8,7 +8,7 @@ from codeanalyze.core.registry import build_registry  # type: ignore[import-not-
 
 
 @click.command()
-def status():
+def status() -> None:
     """显示已安装/可用的分析工具。"""
     from rich.panel import Panel
 

@@ -7,12 +7,13 @@ import click
 from rich.panel import Panel
 
 from codeanalyze.commands.common import _validate_path, console  # type: ignore[import-not-found]
+from codeanalyze.core.results import KnowledgeGraph  # type: ignore[import-not-found]
 from codeanalyze.documents.official import analyze_policy_directory  # type: ignore[import-not-found]
 from codeanalyze.integrations.forge import guardrail  # type: ignore[import-not-found]
 from codeanalyze.reports.export import merge_code_kg, policy_graph_to_kg  # type: ignore[import-not-found]
 
 
-def _md_summary(kg) -> str:
+def _md_summary(kg: KnowledgeGraph) -> str:
     lines = [
         "# 知识图谱导出报告",
         "## 概览",
@@ -63,7 +64,7 @@ def _md_summary(kg) -> str:
     help="summary=摘要(类型分布), condensed=精简(-SourceFile), full=全量",
 )
 @guardrail(required_steps=["analyze", "export"], max_retries=2)
-def export(path: str, output_format: str, output: str | None, code: bool, eidos: bool, pretty: bool, mode: str):
+def export(path: str, output_format: str, output: str | None, code: bool, eidos: bool, pretty: bool, mode: str) -> None:
     """导出结构化知识图谱（JSON/JSON-LD/Cypher/Markdown）。
 
     将所有分析结果转为统一的 Entity-Relation 模型，

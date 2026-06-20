@@ -8,7 +8,7 @@ g = json.loads(GRAPH.read_text())
 reg = json.loads(REGISTRY.read_text())
 
 
-def rec_by_tool(tid):
+def rec_by_tool(tid: str) -> None:
     nodes = g["nodes"]
     tn = [n for n in nodes if n["id"] == tid and n["type"] == "Tool"]
     if not tn:
@@ -22,7 +22,7 @@ def rec_by_tool(tid):
             aids.add(e["target"])
         elif e["target"] == t["id"]:
             aids.add(e["source"])
-    bt = {}
+    bt: dict[str, list[dict]] = {}
     for n in nodes:
         if n["id"] in aids:
             bt.setdefault(n["type"], []).append(n)
@@ -44,7 +44,7 @@ def rec_by_tool(tid):
     print("  共", len(aids), "个关联节点")
 
 
-def rec_freq():
+def rec_freq() -> None:
     tu = [
         (t, t.get("telemetry", {}).get("use_count", 0))
         for t in reg["tools"]

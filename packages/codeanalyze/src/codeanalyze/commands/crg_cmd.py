@@ -8,7 +8,7 @@ from codeanalyze.core.registry import build_registry  # type: ignore[import-not-
 
 
 @click.group()
-def crg():
+def crg() -> None:
     """Tree-sitter 持久化知识图谱 (code-review-graph)。
 
     基于 Tree-sitter 的代码结构分析工具。
@@ -18,7 +18,7 @@ def crg():
 
 @crg.command("build")
 @click.argument("path", default=".")
-def crg_build(path: str):
+def crg_build(path: str) -> None:
     """构建 Tree-sitter 知识图谱（增量构建，不会清空已有数据）。"""
     root = _validate_path(path)
     reg = build_registry()
@@ -39,7 +39,7 @@ def crg_build(path: str):
 
 @crg.command("update")
 @click.argument("path", default=".")
-def crg_update(path: str):
+def crg_update(path: str) -> None:
     """增量更新图谱（仅重分析变化文件）。"""
     root = _validate_path(path)
     console.print(f"[bold cyan]▶ 增量更新: {root}[/]")
@@ -53,7 +53,7 @@ def crg_update(path: str):
 
 @crg.command("status")
 @click.argument("path", default=".")
-def crg_status(path: str):
+def crg_status(path: str) -> None:
     """查看图谱统计信息。"""
     root = _validate_path(path)
     console.print(f"[bold cyan]▶ code-review-graph 状态: {root}[/]")
@@ -72,7 +72,7 @@ def crg_status(path: str):
 @crg.command("visualize")
 @click.argument("path", default=".")
 @click.option("--output", "-o", default=None, help="输出 HTML 路径")
-def crg_viz(path: str, output: str | None):
+def crg_viz(path: str, output: str | None) -> None:
     """生成交互式 HTML 图谱可视化。"""
     root = _validate_path(path)
     console.print(f"[bold cyan]▶ 生成图谱可视化: {root}[/]")

@@ -12,7 +12,7 @@ from codeanalyze.core.registry import build_registry  # type: ignore[import-not-
 @click.option("--minimal", is_flag=True, help="仅安装核心依赖")
 @click.option("--code", is_flag=True, help="仅安装代码分析工具")
 @click.option("--docs", is_flag=True, help="仅安装文档分析工具")
-def install(all_flag: bool, minimal: bool, code: bool, docs: bool):
+def install(all_flag: bool, minimal: bool, code: bool, docs: bool) -> None:
     """一键安装可选分析工具。
 
     探测缺失工具并打印安装命令。不会自动运行 pip/npm，

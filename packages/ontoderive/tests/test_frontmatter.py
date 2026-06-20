@@ -1,4 +1,5 @@
 from pathlib import Path
+
 """Tests for frontmatter detection — extracted from SharedBrain D_Logos."""
 
 import datetime

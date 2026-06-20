@@ -21,7 +21,7 @@ from urllib.parse import urlparse
 SCRIPT_DIR = Path(__file__).resolve().parent
 
 from kos.config import get_artifact_path, get_workspace_manifest  # type: ignore[import-not-found]
-from typing import Any, Optional
+from typing import Any, Optional, cast
 
 INBOX = Path.home() / "Documents" / "KOS-Inbox"
 INBOX.mkdir(parents=True, exist_ok=True)
@@ -33,7 +33,7 @@ DEDUP_FILE = INBOX / ".dedup.json"
 def _load_dedup() -> dict:  # type: ignore[type-arg]
     if DEDUP_FILE.exists():
         try:
-            return json.loads(DEDUP_FILE.read_text())  # type: ignore[Any, Any]
+            return cast("dict[Any, Any]", json.loads(DEDUP_FILE.read_text()))
         except Exception:
             return {}
     return {}
@@ -52,7 +52,7 @@ def _is_duplicate(text: str) -> dict | None:  # type: ignore[type-arg]
     h = _hash_content(text)
     dedup = _load_dedup()
     if h in dedup:
-        return dedup[h]  # type: ignore[Any, Any]
+        return cast("dict[Any, Any]", dedup[h])
     return None
 
 
@@ -250,7 +250,7 @@ def analyze_ingest(item: dict[str, Any]) -> dict[str, Any]:
     return analysis
 
 
-def main():  # type: ignore[unknown]
+def main() -> None:
     if len(sys.argv) < 2:
         print("Usage: kos ingest <text|url|filepath> [...]")
         print("  kos ingest '今天开会讨论了数字化平台方案'")

@@ -40,7 +40,7 @@ class Protocols:
 
 
 class KemsRuntime:
-    def __init__(self):
+    def __init__(self) -> None:
         self.planes = Planes()
         self.chains = Chains()
         self.protocols = Protocols()

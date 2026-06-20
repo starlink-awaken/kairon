@@ -1,0 +1,107 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1781928451280,
+  "projectRoot": "/Users/xiamingxing/Workspace/projects/kairon/packages/kos",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Python",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "pyproject.toml"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "fastapi",
+        "version": null,
+        "category": "backend"
+      }
+    ],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": "pytest",
+    "lintCommand": "ruff check",
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "src",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1781928451273,
+      "keyFiles": []
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 25,
+      "lastAccessed": 1781928451273,
+      "keyFiles": [
+        "_env.py",
+        "test_adapters.py",
+        "test_agent_sandbox.py",
+        "test_cli.py",
+        "test_commands_business.py"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src/kos/web/app.py",
+      "accessCount": 2,
+      "lastAccessed": 1781928939874,
+      "type": "file"
+    },
+    {
+      "path": "src/kos/context_injector.py",
+      "accessCount": 2,
+      "lastAccessed": 1781928939928,
+      "type": "file"
+    },
+    {
+      "path": "src/kos/trust_layer.py",
+      "accessCount": 1,
+      "lastAccessed": 1781928790854,
+      "type": "file"
+    },
+    {
+      "path": "src/kos/cli/__main__.py",
+      "accessCount": 1,
+      "lastAccessed": 1781928837866,
+      "type": "file"
+    },
+    {
+      "path": "src/kos/commands/ingest.py",
+      "accessCount": 1,
+      "lastAccessed": 1781928939942,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

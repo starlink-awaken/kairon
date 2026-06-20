@@ -11,7 +11,7 @@ from codeanalyze.core.registry import build_registry  # type: ignore[import-not-
 
 
 @click.group(name="cgc")
-def cgc_group():
+def cgc_group() -> None:
     """CodeGraphContext 语义属性图操作。
 
     使用 tree-sitter 和 SCIP 构建支持大语言模型精确查询的代码知识图谱。
@@ -21,7 +21,7 @@ def cgc_group():
 
 @cgc_group.command("init")
 @click.argument("path", default=".")
-def cgc_init(path: str):
+def cgc_init(path: str) -> None:
     """初始化或更新代码库的语义图。"""
     reg = build_registry()
     tool = reg.tools.get("codegraphcontext")
@@ -48,7 +48,7 @@ def cgc_init(path: str):
 @cgc_group.command("query")
 @click.argument("query_str")
 @click.argument("path", default=".")
-def cgc_query(query_str: str, path: str):
+def cgc_query(query_str: str, path: str) -> None:
     """执行 Cypher/Kuzu 查询获取代码关系。"""
     result = cgc.query(query_str, path)
 

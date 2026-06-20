@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import importlib.util
 import json
@@ -306,7 +307,7 @@ def ingest_command(args) -> dict[str, Any]:  # type: ignore[no-untyped-def]
     return result
 
 
-def import_schema_command(args) -> int:
+def import_schema_command(args: argparse.Namespace) -> int:
     """Import an Eidos Schema definition into KOS storage.
 
     This creates the storage tables/indices based on the schema's field definitions.
