@@ -21,7 +21,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-cli = ["click>=8.0", "pyyaml>=6.0", "requests>=2.0"]
+cli = ["click>=8.0", "pyyaml>=6.0.3", "requests>=2.34.2"]
 
 [dependency-groups]
 dev = [
