@@ -10,7 +10,6 @@ from __future__ import annotations
 # =============================================================================
 
 """
-from typing import Any
 ---
 Type: Organ
 Status: ACTIVE
@@ -28,7 +27,7 @@ import re
 from dataclasses import dataclass, field
 from enum import Enum, StrEnum
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 # Event bus integration via kairon-lib-events
 from kairon_events import BOSEvent, get_global_event_bus
@@ -283,7 +282,7 @@ class FaultTolerancePolicy:
     def get_retry_delay(self, context: FaultContext) -> float:
         """Exponential back-off: ``base * 2^retry_count`` capped at 60 s."""
         delay = self._config.base_retry_delay * (2**context.retry_count)
-        return min(delay, 60.0)
+        return cast("float", min(delay, 60.0))
 
     def register_critical_operation(self, operation: str) -> None:
         """Mark *operation* so that it is always evaluated as fail-closed."""
@@ -310,7 +309,7 @@ class FaultTolerancePolicy:
         params = params or {}
         handler_name = f"_handle_{action}"
         if hasattr(self, handler_name):
-            return getattr(self, handler_name)(params)
+            return cast("dict[str, Any]", getattr(self, handler_name)(params))
         return {"status": "error", "message": f"Unknown action: {action}"}
 
     def _handle_evaluate(self, params: dict[str, Any]) -> dict[str, Any]:

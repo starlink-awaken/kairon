@@ -9,6 +9,7 @@ import time
 from collections.abc import Generator
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any, cast
 
 from eidos.organs.storage_dal import SQLiteError, SQLiteRelationalProvider  # type: ignore[import-not-found]
 
@@ -163,7 +164,7 @@ class AgentFileSystem:
 
     def _fetch_one(self, sql: str, params: tuple = ()) -> dict | None:
         with self._db_lock:
-            return self._db.fetch_one(sql, params)
+            return cast("dict[Any, Any] | None", self._db.fetch_one(sql, params))
 
     def _fetch_all(self, sql: str, params: tuple = ()) -> list[dict]:
         with self._db_lock:

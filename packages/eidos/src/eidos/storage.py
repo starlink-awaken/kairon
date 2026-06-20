@@ -13,7 +13,7 @@ from __future__ import annotations
 import json
 import sqlite3
 from pathlib import Path
-from typing import Protocol
+from typing import Any, Protocol, cast
 
 from eidos.errors import EidosError, ErrorCode  # type: ignore[import-not-found]
 
@@ -56,7 +56,7 @@ class JSONFileBackend:
         if not path.exists():
             return None
         try:
-            return json.loads(path.read_text())
+            return cast("dict[Any, Any] | None", json.loads(path.read_text()))
         except (json.JSONDecodeError, OSError) as exc:
             raise EidosError(
                 ErrorCode.STORAGE_READ_FAILED,
@@ -207,13 +207,13 @@ class KOSLibraryBackend:
     def search(self, query: str, limit: int = 10) -> list[dict]:
         """Search KOS knowledge base. Returns [] if KOS unavailable."""
         if self._kos_available:
-            return self._search(query=query, limit=limit)
+            return cast("list[dict[Any, Any]]", self._search(query=query, limit=limit))
         return []
 
     def stats(self) -> dict:
         """Get KOS statistics. Returns {'total': 0} if KOS unavailable."""
         if self._kos_available:
-            return self._stats()
+            return cast("dict[Any, Any]", self._stats())
         return {"total": 0}
 
 

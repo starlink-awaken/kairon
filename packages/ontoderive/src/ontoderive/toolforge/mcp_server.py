@@ -8,13 +8,14 @@ ToolForge MCP Server — 委托给统一 OntoDerive FastMCP bridge
 import json
 import sys
 from pathlib import Path
+from typing import Any, cast
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from mcp_server import handle_mcp_request  # type: ignore[import-not-found]
 
 
 def handle_request(request: dict) -> dict:
-    return handle_mcp_request(request)
+    return cast("dict[Any, Any]", handle_mcp_request(request))
 
 
 if __name__ == "__main__":

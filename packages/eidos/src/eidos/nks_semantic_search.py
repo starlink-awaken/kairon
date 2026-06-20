@@ -23,9 +23,10 @@ import logging
 import time
 from collections import OrderedDict
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
+from numpy import dtype, ndarray
 
 from eidos.organs.storage_dal import SQLiteError, SQLiteRelationalProvider  # type: ignore[import-not-found]
 
@@ -236,7 +237,7 @@ class EmbeddingCache:
                 # Cache hit - move to end (most recently used)
                 self._memory_cache.move_to_end(entity.entity_id)
                 self._cache_hits += 1
-                return entry["vector"]
+                return cast("ndarray[tuple[Any, ...], dtype[Any]] | None", entry["vector"])
             else:
                 # Hash mismatch - remove stale entry
                 old_vec = self._memory_cache.pop(entity.entity_id)
@@ -377,11 +378,11 @@ class EmbeddingManager:
         model = self._get_model()
         vec = model.encode(text, normalize_embeddings=True)
         self.cache.set(entity, vec.astype(np.float32))
-        return vec.astype(np.float32)
+        return cast("ndarray[tuple[Any, ...], dtype[Any]]", vec.astype(np.float32))
 
     def embed_query(self, query: str) -> np.ndarray:
         model = self._get_model()
-        return model.encode(query, normalize_embeddings=True).astype(np.float32)
+        return cast("ndarray[tuple[Any, ...], dtype[Any]]", model.encode(query, normalize_embeddings=True).astype(np.float32))
 
     @staticmethod
     def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
