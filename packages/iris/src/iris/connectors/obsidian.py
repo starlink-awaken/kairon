@@ -173,6 +173,8 @@ class ObsidianConnector(BaseConnector):
         cursor: str | None = None,
         tag: str | None = None,
         folder: str | None = None,
+        subdir: str | None = None,
+        chat_id: str | None = None,
         **kwargs: Any,
     ) -> list[Note]:
         """List notes with optional tag and folder filtering."""
@@ -424,7 +426,7 @@ class ObsidianConnector(BaseConnector):
             updated_at=now,
         )
 
-    def delete_item(self, id: str, soft: bool = True) -> bool:
+    def delete_item(self, item_id: str, soft: bool = True, **kwargs: Any) -> bool:
         """Delete a note from the vault.
 
         Args:
@@ -435,7 +437,7 @@ class ObsidianConnector(BaseConnector):
         Returns:
             True if deletion succeeded, False if note not found.
         """
-        rel = self._id_to_path(id)
+        rel = self._id_to_path(item_id)
         if rel is None:
             return False
 
@@ -456,7 +458,7 @@ class ObsidianConnector(BaseConnector):
                 tags=fm.get("tags", []),
                 created_at=fm.get("created", fm.get("date", fm.get("created_at", ""))),
                 updated_at=now,
-                iris_id=id,
+                iris_id=item_id,
                 status="deleted",
             )
             markdown = f"{new_fm}\n\n{body}" if body else f"{new_fm}\n"

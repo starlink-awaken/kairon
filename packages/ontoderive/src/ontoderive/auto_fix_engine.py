@@ -40,7 +40,6 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any
 
 try:
     import yaml
@@ -48,6 +47,8 @@ except ImportError:
     yaml = None  # type: ignore
 
 # Import QualityIssue from quality_probe
+from typing import Any
+
 from .quality_probe import QualityIssue
 
 _log = logging.getLogger(__name__)

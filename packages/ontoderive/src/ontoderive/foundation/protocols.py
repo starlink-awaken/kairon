@@ -74,7 +74,7 @@ class PipelineStage(ABC):
 class AnalysisResult:
     """Minerva/Sophia 可消费的统一分析结果"""
 
-    def __init__(self, summary: dict, checks: list[dict], toolforge_matches: list[dict] | None = None):
+    def __init__(self, summary: dict, checks: list[dict], toolforge_matches: list[dict] | None = None) -> None:
         self.summary = summary
         self.checks = checks
         self.toolforge_matches = toolforge_matches or []

@@ -11,6 +11,7 @@ L1 中文命名实体识别 — NER (零外部API, jieba可选)
 """
 
 import re
+from typing import Any
 
 # 组织名后缀 — 匹配以这些词结尾的名词短语
 _ORG_SUFFIXES = (
@@ -94,7 +95,7 @@ _LOC_SUFFIXES = (
 )
 
 
-def _extract_entities_by_suffix(text: str, suffixes: tuple, prefix="ORG"):
+def _extract_entities_by_suffix(text: str, suffixes: tuple, prefix: Any = "ORG") -> Any:
     """通用后缀匹配: 提取以指定后缀结尾的2-8字名词短语"""
     entities = []
     for suffix in suffixes:
@@ -107,7 +108,7 @@ def _extract_entities_by_suffix(text: str, suffixes: tuple, prefix="ORG"):
     return entities
 
 
-def extract_entities(text: str, use_jieba=True) -> list:
+def extract_entities(text: str, use_jieba: Any = True) -> list:
     """提取文本中的命名实体, 返回 [(entity_name, entity_type), ...]"""
     entities = []
 

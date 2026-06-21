@@ -256,7 +256,7 @@ class GraphusionEngine:
             source_files=[candidate.source_file] if candidate.source_file else [],
             merged_from=[],
             is_canonical=True,
-            created_at=time.time(),
+            created_at=str(time.time()),
         )
 
     def resolve_relation(self, candidate: CandidateRelation, entity_id_map: dict[str, str]) -> Relation | None:
@@ -328,7 +328,7 @@ class GraphusionEngine:
             source_files=[candidate.source_file] if candidate.source_file else [],
             confidence=candidate.confidence,
             is_canonical=True,
-            created_at=time.time(),
+            created_at=str(time.time()),
         )
 
     def fuse(

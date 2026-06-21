@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"echo \\\"=== obsidian 378-385 + 458-463 ===\\\"; sed -n '378,385p;458,463p' \\\"/Users/xiamingxing/Workspace/projects/kairon/packages/iris/src/iris/connectors/obsidian.py\\\"; echo \\\"=== telegram ...",
+  "error": "Exit code 1\n=== obsidian 378-385 + 458-463 ===\n\n        Returns:\n            Updated Note, or None if note doesn't exist.\n        \"\"\"\n        rel = self._id_to_path(item_id)\n        if rel is None:\n            return None\n\n                tags=fm.get(\"tags\", []),\n                created_at=fm.get(\"created\", fm.get(\"date\", fm.get(\"created_at\", \"\"))),\n                updated_at=now,\n                iris_id=id,\n                status=\"deleted\",\n            )\n=== telegram 448-453 ===\n\n        params...",
+  "timestamp": "2026-06-20T23:35:19.418Z",
+  "retry_count": 1
+}

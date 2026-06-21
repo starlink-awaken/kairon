@@ -58,7 +58,7 @@ class StalenessChecker:
         report_dir: str = "~/knowledge/reports",
         warn_days: int = 90,
         critical_days: int = 180,
-    ):
+    ) -> None:
         self.report_dir = Path(report_dir).expanduser()
         self.warn_days = warn_days
         self.critical_days = critical_days

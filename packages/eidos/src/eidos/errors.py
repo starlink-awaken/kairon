@@ -53,7 +53,7 @@ class ErrorCode(StrEnum):
 class EidosError(Exception):
     """Base exception for all Eidos errors with structured error code."""
 
-    def __init__(self, code: ErrorCode, message: str, details: dict | None = None):
+    def __init__(self, code: ErrorCode, message: str, details: dict | None = None) -> None:
         self.code = code
         self.details = details or {}
         super().__init__(f"[{code.value}] {message}")
@@ -68,7 +68,7 @@ class EidosWarning(UserWarning):
     Examples: LLM fallback, storage fallback, deprecated path.
     """
 
-    def __init__(self, code: ErrorCode, message: str, details: dict | None = None):
+    def __init__(self, code: ErrorCode, message: str, details: dict | None = None) -> None:
         self.code = code
         self.details = details or {}
         super().__init__(f"[{code.value}] {message}")

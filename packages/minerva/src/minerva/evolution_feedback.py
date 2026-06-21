@@ -141,10 +141,7 @@ class EvolutionFeedback:
 
             insights: list[str] = []
             for exp in candidates[:n]:
-                insight = (
-                    f"[score={exp.score:.2f}] When {exp.pattern}, "
-                    f"the outcome was: {exp.outcome}"
-                )
+                insight = f"[score={exp.score:.2f}] When {exp.pattern}, the outcome was: {exp.outcome}"
                 if exp.tags:
                     insight += f" (tags: {', '.join(exp.tags)})"
                 insights.append(insight)

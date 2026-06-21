@@ -11,6 +11,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))  # 项目根
 sys.path.insert(0, str(Path(__file__).parent))  # engine/
+from typing import Any
+
 from toolforge.matcher import ToolForge  # type: ignore[import-not-found]
 
 from ontoderive.core.derive import OntoDerive  # type: ignore[import-not-found]
@@ -18,11 +20,11 @@ from ontoderive.core.derive import OntoDerive  # type: ignore[import-not-found]
 tf = ToolForge()
 
 
-def respond(req_id, result):
+def respond(req_id: Any, result: Any) -> Any:
     return json.dumps({"jsonrpc": "2.0", "id": req_id, "result": result}, ensure_ascii=False)
 
 
-def err(req_id, code, message):
+def err(req_id: Any, code: Any, message: Any) -> Any:
     return json.dumps({"jsonrpc": "2.0", "id": req_id, "error": {"code": code, "message": message}}, ensure_ascii=False)
 
 
@@ -229,35 +231,35 @@ TOOL_DEFS = [
 # ── 工具处理器 ──
 
 
-def _handle_init(args, req_id):
+def _handle_init(args: Any, req_id: Any) -> Any:
     name = args.get("name", "demo")
     od = OntoDerive(name)
     od.derive()
     return respond(req_id, {"output": f"项目'{name}'已初始化，目录: facts/entities/inferences/scheme/"})
 
 
-def _handle_derive(args, req_id):
+def _handle_derive(args: Any, req_id: Any) -> Any:
     project = args.get("project", ".")
     od = OntoDerive(project)
     result = od.derive()
     return respond(req_id, {"output": str(result)[:1000]})
 
 
-def _handle_check(args, req_id):
+def _handle_check(args: Any, req_id: Any) -> Any:
     project = args.get("project", ".")
     od = OntoDerive(project)
     result = od.check()
     return respond(req_id, {"output": str(result)[:1000]})
 
 
-def _handle_generate(args, req_id):
+def _handle_generate(args: Any, req_id: Any) -> Any:
     project = args.get("project", ".")
     od = OntoDerive(project)
     result = od.generate_report()
     return respond(req_id, {"output": str(result)[:1000]})
 
 
-def _handle_rounds(args, req_id):
+def _handle_rounds(args: Any, req_id: Any) -> Any:
     project = args.get("project", ".")
     rounds = args.get("rounds", 3)
     od = OntoDerive(project)
@@ -265,7 +267,7 @@ def _handle_rounds(args, req_id):
     return respond(req_id, {"output": f"{rounds}轮迭代完成，日志在 _derivation_logs/"})
 
 
-def _handle_analyze(args, req_id):
+def _handle_analyze(args: Any, req_id: Any) -> Any:
     project = args.get("project", ".")
     goal = args.get("goal", "")
     context = args.get("context", "")
@@ -289,7 +291,7 @@ def _handle_analyze(args, req_id):
     )
 
 
-def _handle_config(args, req_id):
+def _handle_config(args: Any, req_id: Any) -> Any:
     project = args.get("project", ".")
     from ontoderive.foundation.config import Config  # type: ignore[import-not-found]
 
@@ -297,7 +299,7 @@ def _handle_config(args, req_id):
     return respond(req_id, cfg)
 
 
-def _handle_delta(args, req_id):
+def _handle_delta(args: Any, req_id: Any) -> Any:
     project = args.get("project", ".")
     from ontoderive.theories.turing_k import KnowledgeTM  # type: ignore[import-not-found]
 
@@ -306,7 +308,7 @@ def _handle_delta(args, req_id):
     return respond(req_id, d)
 
 
-def _handle_analytics(args, req_id):
+def _handle_analytics(args: Any, req_id: Any) -> Any:
     project = args.get("project", ".")
     od = OntoDerive(project)
     r = od.derive()
@@ -314,7 +316,7 @@ def _handle_analytics(args, req_id):
     return respond(req_id, {"analytics_count": len(ae_conclusions), "conclusions": ae_conclusions[:10]})
 
 
-def _handle_relations(args, req_id):
+def _handle_relations(args: Any, req_id: Any) -> Any:
     project = args.get("project", ".")
     od = OntoDerive(project)
     r = od.derive()
@@ -322,7 +324,7 @@ def _handle_relations(args, req_id):
     return respond(req_id, {"relations_count": len(rel_conclusions), "conclusions": rel_conclusions[:10]})
 
 
-def _handle_export(args, req_id):
+def _handle_export(args: Any, req_id: Any) -> Any:
     project = args.get("project", ".")
     fmt = args.get("format", "html")
     od = OntoDerive(project)
@@ -342,7 +344,7 @@ def _handle_export(args, req_id):
     return respond(req_id, {"format": fmt, "output": output[:3000], "length": len(output)})
 
 
-def _handle_toolforge_match(args, req_id):
+def _handle_toolforge_match(args: Any, req_id: Any) -> Any:
     goal = args.get("goal", "")
     context = args.get("context", "")
     mode = args.get("mode", "keyword")
@@ -350,7 +352,7 @@ def _handle_toolforge_match(args, req_id):
     return respond(req_id, result)
 
 
-def _handle_toolforge_select(args, req_id):
+def _handle_toolforge_select(args: Any, req_id: Any) -> Any:
     goal = args.get("goal", "")
     context = args.get("context", "")
     top_n = args.get("top_n", 5)
@@ -359,7 +361,7 @@ def _handle_toolforge_select(args, req_id):
     return respond(req_id, result)
 
 
-def _handle_toolforge_guide(args, req_id):
+def _handle_toolforge_guide(args: Any, req_id: Any) -> Any:
     goal = args.get("goal", "")
     context = args.get("context", "")
     mode = args.get("mode", "keyword")
@@ -370,7 +372,7 @@ def _handle_toolforge_guide(args, req_id):
 # ── 写入工具处理器 (v3.6 NEW) ──
 
 
-def _handle_write_fact(args, req_id):
+def _handle_write_fact(args: Any, req_id: Any) -> Any:
     project = Path(args.get("project", "."))
     fid = args.get("fid", "")
     desc = args.get("description", "")
@@ -397,7 +399,7 @@ def _handle_write_fact(args, req_id):
     return respond(req_id, {"output": f"事实{fid}已写入 {file_path.name}"})
 
 
-def _handle_write_inference(args, req_id):
+def _handle_write_inference(args: Any, req_id: Any) -> Any:
     project = Path(args.get("project", "."))
     inf_id = args.get("inf_id", "")
     title = args.get("title", "")
@@ -417,7 +419,7 @@ def _handle_write_inference(args, req_id):
     return respond(req_id, {"output": f"推论{inf_id}已写入 {file_path.name}"})
 
 
-def _handle_write_scheme(args, req_id):
+def _handle_write_scheme(args: Any, req_id: Any) -> Any:
     project = Path(args.get("project", "."))
     title = args.get("title", "")
     content = args.get("content", "")
@@ -457,7 +459,7 @@ TOOL_HANDLERS = {
 }
 
 
-def handle_request(req):
+def handle_request(req: Any) -> Any:
     req_id = req.get("id")
     method = req.get("method", "")
     params = req.get("params", {})

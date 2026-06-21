@@ -40,7 +40,7 @@ def _json_output(status: str, data: dict | None = None, error: str | None = None
     return json.dumps(payload, ensure_ascii=False, indent=2)
 
 
-def main():
+def main() -> None:
     """统一 CLI 入口"""
     import argparse
 

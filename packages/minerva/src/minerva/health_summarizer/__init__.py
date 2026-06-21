@@ -6,6 +6,7 @@ P28-W4: 北极星场景 C 落地第一步。
 - renderer: 渲染 Markdown（按紧急/即将/一般分桶）
 - runner: CLI 入口（支持 cron 调度）
 """
+
 from __future__ import annotations
 
 from minerva.health_summarizer.renderer import DEFAULT_OUTPUT, render

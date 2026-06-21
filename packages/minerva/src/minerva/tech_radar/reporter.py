@@ -42,7 +42,9 @@ def generate_report(items: list[TechItem], run_date: str | None = None) -> str:
             score_bar = "🔴" if item.relevance_score >= 0.6 else "🟡"
             title_short = item.title[:60] + ("…" if len(item.title) > 60 else "")
             url_md = f"[link]({item.url})" if item.url else "-"
-            lines.append(f"| {idx} | {title_short} | {item.source} | {score_bar} {item.relevance_score:.2f} | {url_md} |")
+            lines.append(
+                f"| {idx} | {title_short} | {item.source} | {score_bar} {item.relevance_score:.2f} | {url_md} |"
+            )
     else:
         lines.append("_本次未发现高相关度升级候选。_")
 
@@ -55,7 +57,9 @@ def generate_report(items: list[TechItem], run_date: str | None = None) -> str:
     ]
 
     for source, source_items in by_source.items():
-        source_label = {"arxiv": "ArXiv 论文", "github": "GitHub Trending", "huggingface": "HuggingFace 模型"}.get(source, source)
+        source_label = {"arxiv": "ArXiv 论文", "github": "GitHub Trending", "huggingface": "HuggingFace 模型"}.get(
+            source, source
+        )
         lines += [f"### {source_label} ({len(source_items)} 条)", ""]
         for item in source_items[:10]:
             score_str = f"[{item.relevance_score:.2f}]" if item.relevance_score > 0 else ""
@@ -74,7 +78,9 @@ def generate_report(items: list[TechItem], run_date: str | None = None) -> str:
 
     if candidates:
         for idx, item in enumerate(candidates[:3], 1):
-            lines.append(f"{idx}. **{item.title[:60]}** — 相关度 {item.relevance_score:.2f}，建议评估是否可引入 omostation ({item.source})")
+            lines.append(
+                f"{idx}. **{item.title[:60]}** — 相关度 {item.relevance_score:.2f}，建议评估是否可引入 omostation ({item.source})"
+            )
     else:
         lines.append("_暂无高优先级行动项。_")
 

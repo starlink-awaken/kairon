@@ -93,7 +93,7 @@ class BaseConnector(ABC):
             message="Sync not yet implemented for this connector (V0.2).",
         )
 
-    def create_item(self, **kwargs: Any) -> Any:
+    def create_item(self, **kwargs: Any) -> None:
         """Create a new item on the platform.
 
         Subclasses that support write operations should override this.
@@ -107,7 +107,7 @@ class BaseConnector(ABC):
         """
         raise NotImplementedError(f"{type(self).__name__} does not support delete_item")
 
-    def update_item(self, item_id: str, data: dict[str, Any]) -> Any:
+    def update_item(self, item_id: str, data: dict[str, Any]) -> None:
         """Update an existing item on the platform.
 
         Subclasses that support write operations should override this.

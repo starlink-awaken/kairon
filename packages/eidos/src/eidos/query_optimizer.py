@@ -32,7 +32,7 @@ Authority: organs/D-Memory/AGENTS.md
 
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import Any
+from typing import Any, cast
 
 _log = logging.getLogger(__name__)
 
@@ -122,7 +122,7 @@ class QueryOptimizer:
                         timeout,
                     )
 
-        return self.aggregate_results(results)["results"]
+        return cast("list[dict[str, Any]]", self.aggregate_results(results)["results"])
 
     def aggregate_results(self, results: list[Any]) -> dict[str, Any]:
         """
@@ -154,7 +154,7 @@ class QueryOptimizer:
         # Score-based ranking: sort by 'score' descending when available
         def _sort_key(item: Any) -> float:
             if isinstance(item, dict):
-                return -(item.get("score", 0.0))
+                return cast("float", -(item.get("score", 0.0)))
             return 0.0
 
         aggregated.sort(key=_sort_key)

@@ -6,7 +6,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from importlib import import_module
 from multiprocessing import cpu_count
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from eidos.graph_store import CandidateEntity, CandidateRelation  # type: ignore[import-not-found]
 
@@ -145,7 +145,7 @@ def _load_extractor_class(extractor_class_name: str) -> type:
     )
     class_name = extractor_class_name if extractor_class_name in extractor_modules else "TreeSitterExtractor"
     module = import_module(module_name)
-    return getattr(module, class_name)
+    return cast("type", getattr(module, class_name))
 
 
 def _extract_file_worker(file_path: str, extractor_class_name: str) -> tuple[str, list[dict], list[dict], str | None]:

@@ -10,11 +10,12 @@ import math
 import re
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
 CATALOG_PATH = Path(__file__).parent / "catalog.json"
 
 
-def _tokenize(text):
+def _tokenize(text: Any) -> Any:
     """中英文混合分词：英文按词，中文生成bigram+unigram提高召回"""
     tokens = []
     text_lower = text.lower()
@@ -28,23 +29,23 @@ def _tokenize(text):
     return tokens
 
 
-def _build_vocab(docs):
-    vocab = {}
+def _build_vocab(docs: Any) -> Any:
+    vocab: dict[Any, Any] = {}
     for tokens in docs:
         for t in set(tokens):
             vocab[t] = vocab.get(t, 0) + 1
     return {term: idx for idx, term in enumerate(sorted(vocab))}
 
 
-def _compute_tf(tokens, vocab_size):
-    tf = defaultdict(float)
+def _compute_tf(tokens: Any, vocab_size: Any) -> Any:
+    tf: defaultdict[str, float] = defaultdict(float)
     total = len(tokens) or 1
     for t in tokens:
         tf[t] += 1.0 / total
     return tf
 
 
-def _compute_idf(docs, vocab):
+def _compute_idf(docs: Any, vocab: Any) -> Any:
     n = len(docs)
     idf = {}
     for term, idx in vocab.items():
@@ -62,14 +63,14 @@ except ImportError:
 class ToolForge(ToolForgeInterface):
     """思维工具匹配引擎 v2 — TF-IDF + 关键词双模式"""
 
-    def __init__(self, catalog_path=None):
+    def __init__(self, catalog_path: Any = None) -> None:
         path = Path(catalog_path) if catalog_path else CATALOG_PATH
         self.catalog = json.loads(path.read_text()) if path.exists() else {"tools": []}
         self._tools = self.catalog.get("tools", [])
         self._tool_by_id = {t["id"]: t for t in self._tools}
         self._build_tfidf_index()
 
-    def _build_tfidf_index(self):
+    def _build_tfidf_index(self) -> None:
         self._tool_docs = []
         for t in self._tools:
             doc = " ".join(t.get("keywords", [])) + " " + t["name"] + " " + t.get("description", "")
@@ -87,7 +88,7 @@ class ToolForge(ToolForgeInterface):
                     vec[self._vocab[term]] = freq * self._idf.get(term, 1.0)
             self._tool_vecs.append(vec)
 
-    def _tfidf_vector(self, tokens):
+    def _tfidf_vector(self, tokens: Any) -> Any:
         tf = _compute_tf(tokens, len(self._vocab))
         vec = [0.0] * len(self._vocab)
         for term, freq in tf.items():
@@ -95,13 +96,13 @@ class ToolForge(ToolForgeInterface):
                 vec[self._vocab[term]] = freq * self._idf.get(term, 1.0)
         return vec
 
-    def _cosine(self, a, b):
+    def _cosine(self, a: Any, b: Any) -> Any:
         dot = sum(x * y for x, y in zip(a, b))
         norm_a = math.sqrt(sum(x * x for x in a)) or 1
         norm_b = math.sqrt(sum(x * x for x in b)) or 1
         return dot / (norm_a * norm_b)
 
-    def _tfidf_match(self, goal, context=""):
+    def _tfidf_match(self, goal: Any, context: Any = "") -> Any:
         query_tokens = _tokenize(f"{goal} {context}")
         if not query_tokens:
             return []
@@ -114,11 +115,11 @@ class ToolForge(ToolForgeInterface):
         results.sort(key=lambda x: x[1], reverse=True)
         return results
 
-    def _keyword_match(self, goal, context=""):
+    def _keyword_match(self, goal: Any, context: Any = "") -> Any:
         search_text = f"{goal} {context}".lower()
         results = []
         for tool in self._tools:
-            score = 0
+            score = 0.0
             matched = []
             for kw in tool.get("keywords", []):
                 if kw.lower() in search_text:
@@ -132,7 +133,7 @@ class ToolForge(ToolForgeInterface):
         results.sort(key=lambda x: x[1], reverse=True)
         return results
 
-    def match(self, goal, context="", limit=3, mode="keyword"):
+    def match(self, goal: Any, context: Any = "", limit: Any = 3, mode: Any = "keyword") -> Any:
         """匹配工具，按类别分组，返回含 why_matched 的结果"""
         if mode == "tfidf" or mode == "hybrid":
             tfidf_results = self._tfidf_match(goal, context)
@@ -164,7 +165,7 @@ class ToolForge(ToolForgeInterface):
         else:
             combined = [{"tool": t, "score": s, "why": f"关键词匹配: {','.join(m[:5])}"} for t, s, m in kw_results]
 
-        results = {
+        results: dict[str, Any] = {
             "methodologies": [],
             "strategies": [],
             "patterns": [],
@@ -189,7 +190,7 @@ class ToolForge(ToolForgeInterface):
                 )
         return results
 
-    def select(self, goal, context="", top_n=5, mode="keyword"):
+    def select(self, goal: Any, context: Any = "", top_n: Any = 5, mode: Any = "keyword") -> Any:
         """跨类别 Top-N 扁平列表"""
         matched = self.match(goal, context, limit=top_n, mode=mode)
         all_tools = []
@@ -198,7 +199,7 @@ class ToolForge(ToolForgeInterface):
         all_tools.sort(key=lambda x: x["score"], reverse=True)
         return all_tools[:top_n]
 
-    def to_inference_guide(self, goal, context="", mode="tfidf"):
+    def to_inference_guide(self, goal: Any, context: Any = "", mode: Any = "tfidf") -> Any:
         """生成推导指导 — framework_map 从 catalog 动态构建"""
         matched = self.match(goal, context, limit=5, mode=mode)
         lines = [
@@ -235,7 +236,7 @@ class ToolForge(ToolForgeInterface):
 
         return "\n".join(lines)
 
-    def report(self, goal, context="", mode="tfidf"):
+    def report(self, goal: Any, context: Any = "", mode: Any = "tfidf") -> Any:
         """终端输出匹配报告"""
         matched = self.match(goal, context, mode=mode)
         print(f"\n{'═' * 50}")

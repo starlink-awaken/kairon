@@ -140,9 +140,7 @@ class TieredStorage:
         # Hot -> Warm
         hot_count = len(self._tiers[StorageTier.HOT])
         if hot_count > self._policy.max_hot_entries:
-            overflow = sorted(
-                self._tiers[StorageTier.HOT].values(), key=lambda e: e.last_accessed
-            )
+            overflow = sorted(self._tiers[StorageTier.HOT].values(), key=lambda e: e.last_accessed)
             to_demote = hot_count - self._policy.max_hot_entries
             for entry in overflow[:to_demote]:
                 del self._tiers[StorageTier.HOT][entry.entry_id]
@@ -152,9 +150,7 @@ class TieredStorage:
         # Warm -> Cold
         warm_count = len(self._tiers[StorageTier.WARM])
         if warm_count > self._policy.max_warm_entries:
-            overflow = sorted(
-                self._tiers[StorageTier.WARM].values(), key=lambda e: e.last_accessed
-            )
+            overflow = sorted(self._tiers[StorageTier.WARM].values(), key=lambda e: e.last_accessed)
             to_demote = warm_count - self._policy.max_warm_entries
             for entry in overflow[:to_demote]:
                 del self._tiers[StorageTier.WARM][entry.entry_id]

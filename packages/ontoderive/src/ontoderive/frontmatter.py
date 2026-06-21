@@ -42,7 +42,7 @@ class DetectionResult:
     recommendation: str = ""
     scan_duration_ms: float = 0.0
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.blocks is None:
             self.blocks = []
 

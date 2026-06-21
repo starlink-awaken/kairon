@@ -8,6 +8,7 @@ for hybrid retrieval, with LRU embedding cache to avoid redundant computation.
 from __future__ import annotations
 
 import hashlib
+from typing import Any
 
 import structlog
 
@@ -25,7 +26,7 @@ except ImportError:
 class RAGContextBuilder:
     """Retrieve relevant knowledge entries and build context for LLM prompts."""
 
-    def __init__(self, knowledge_store=None, vector_store=None, top_k: int = 5):
+    def __init__(self, knowledge_store: Any = None, vector_store: Any = None, top_k: int = 5) -> None:
         self.kb = knowledge_store
         self.vs = vector_store
         self.top_k = top_k
@@ -41,7 +42,7 @@ class RAGContextBuilder:
 
         entries: list[dict] = []
 
-        async def _semantic():
+        async def _semantic() -> Any:
             if self.vs:
                 try:
                     return await self.vs.search(query, top_k=self.top_k)
@@ -49,7 +50,7 @@ class RAGContextBuilder:
                     return []
             return []
 
-        async def _fulltext():
+        async def _fulltext() -> Any:
             if self.kb:
                 try:
                     return await self.kb.search(query, mode="fulltext", top_k=self.top_k)
@@ -96,6 +97,6 @@ def get_cached_embedding(text: str) -> list[float] | None:
     return _embedding_cache.get(_cache_key(text))
 
 
-def set_cached_embedding(text: str, vector: list[float]):
+def set_cached_embedding(text: str, vector: list[float]) -> None:
     """Store embedding in LRU cache."""
     _embedding_cache[_cache_key(text)] = vector

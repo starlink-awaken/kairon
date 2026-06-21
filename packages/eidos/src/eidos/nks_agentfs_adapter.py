@@ -24,6 +24,7 @@ Authority: organs/D-Memory/AGENTS.md
 # =============================================================================
 
 from pathlib import Path
+from typing import cast
 
 from eidos.organs.nks.agent_file_system import (  # type: ignore[import-not-found]
     AgentFileSystem,
@@ -58,30 +59,30 @@ class AgentFSAdapter:
         metadata: dict | None = None,
         op_id: str | None = None,
     ) -> FileNode:
-        return self._fs.write_file(path, content, content_type, metadata, op_id)
+        return self._fs.write_file(path, cast("str", content), content_type, metadata, op_id)
 
     def read_file(self, path: str) -> bytes:
-        return self._fs.read_file(path)
+        return cast("bytes", self._fs.read_file(path))
 
     def delete_file(self, path: str, op_id: str | None = None) -> bool:
         return self._fs.delete_file(path, op_id)
 
     def get_file_node(self, path: str) -> FileNode | None:
-        return self._fs.get_file_node(path)
+        return cast("FileNode | None", self._fs.get_file_node(path))
 
     def list_files(self, directory: str = "") -> list[FileNode]:
-        return self._fs.list_files(directory)
+        return cast("list[FileNode]", self._fs.list_files(directory))
 
     # --- Snapshot / audit ---
 
     def create_snapshot(self, description: str = "", metadata: dict | None = None) -> Snapshot:
-        return self._fs.create_snapshot(description, metadata)
+        return cast("Snapshot", self._fs.create_snapshot(description, metadata))
 
     def get_snapshot(self, snapshot_id: str) -> Snapshot | None:
-        return self._fs.get_snapshot(snapshot_id)
+        return cast("Snapshot | None", self._fs.get_snapshot(snapshot_id))
 
     def list_snapshots(self, limit: int = 100) -> list[Snapshot]:
-        return self._fs.list_snapshots(limit)
+        return cast("list[Snapshot]", self._fs.list_snapshots(limit))
 
     def get_operations_log(
         self,
@@ -89,9 +90,9 @@ class AgentFSAdapter:
         snapshot_id: str | None = None,
         limit: int = 1000,
     ) -> list[OperationLog]:
-        return self._fs.get_operations_log(since, snapshot_id, limit)
+        return cast("list[OperationLog]", self._fs.get_operations_log(since, snapshot_id, limit))
 
     # --- Health ---
 
     def ping(self) -> bool:
-        return self._fs.ping()
+        return cast("bool", self._fs.ping())

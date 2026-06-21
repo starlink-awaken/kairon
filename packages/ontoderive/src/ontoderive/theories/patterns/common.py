@@ -1,6 +1,8 @@
 """Analysis patterns"""
 
 import re
+from collections.abc import Iterator
+from typing import Any
 
 from ontoderive.foundation.semantic import SemanticMatcher  # type: ignore[import-not-found]
 
@@ -8,11 +10,11 @@ from ontoderive.foundation.semantic import SemanticMatcher  # type: ignore[impor
 #############################################
 
 
-def _is_dict(val):
+def _is_dict(val: Any) -> Any:
     return isinstance(val, dict)
 
 
-def _iter_facts(facts):
+def _iter_facts(facts: Any) -> Iterator[Any]:
     """安全迭代facts — 过滤非dict值"""
     if not isinstance(facts, dict):
         return
@@ -21,7 +23,7 @@ def _iter_facts(facts):
             yield fid, info
 
 
-def _extract_num(val):
+def _extract_num(val: Any) -> Any:
     """从值中提取数字"""
     if isinstance(val, (int, float)):
         return float(val)
@@ -31,7 +33,7 @@ def _extract_num(val):
     return float(m.group(1)) if m else 0.0
 
 
-def _find_entity_for_fact(fid, desc, entities, matcher=None):
+def _find_entity_for_fact(fid: Any, desc: Any, entities: Any, matcher: Any = None) -> Any:
     """根据事实描述找到对应实体ID — 语义匹配优先"""
     if not isinstance(entities, dict):
         return fid
@@ -55,7 +57,7 @@ def _find_entity_for_fact(fid, desc, entities, matcher=None):
 #############################################
 
 
-def detect_capacity_constraint(engine, facts, entities, relations):
+def detect_capacity_constraint(engine: Any, facts: Any, entities: Any, relations: Any) -> bool:
     """检测: 利用率>90%供给紧张 或 利用率<60%产能过剩 或 库存偏离基准"""
     for fid, info in _iter_facts(facts):
         desc = info.get("desc", "") + info.get("description", "")
@@ -73,7 +75,7 @@ def detect_capacity_constraint(engine, facts, entities, relations):
     return False
 
 
-def analyze_capacity(engine, facts, entities, relations, enhancer):
+def analyze_capacity(engine: Any, facts: Any, entities: Any, relations: Any, enhancer: Any) -> Any:
     results = []
     for fid, info in _iter_facts(facts):
         desc = info.get("desc", "") + info.get("description", "")
@@ -127,7 +129,7 @@ def analyze_capacity(engine, facts, entities, relations, enhancer):
 # ═══ A2: 供应链风险放大 ═══
 
 
-def detect_supply_risk(engine, facts, entities, relations):
+def detect_supply_risk(engine: Any, facts: Any, entities: Any, relations: Any) -> Any:
     """检测: 存在depends_on链 + 交付/库存异常"""
     has_chain = any(r.get("relation_type") == "depends_on" for r in (relations or []))
     has_issue = any(
@@ -137,13 +139,13 @@ def detect_supply_risk(engine, facts, entities, relations):
     return has_chain and has_issue
 
 
-def analyze_supply_chain(engine, facts, entities, relations, enhancer):
+def analyze_supply_chain(engine: Any, facts: Any, entities: Any, relations: Any, enhancer: Any) -> Any:
     results = []
     # 语义匹配器: 基于事实描述
     descs = [info.get("desc", "") for _, info in _iter_facts(facts)]
     matcher = SemanticMatcher(descs if descs else ["default"])
     # 构建依赖图
-    deps = {}
+    deps: dict[Any, Any] = {}
     for r in relations or []:
         if r.get("relation_type") == "depends_on":
             deps.setdefault(r["subject"], []).append((r["object"], 1.0))
@@ -184,7 +186,7 @@ def analyze_supply_chain(engine, facts, entities, relations, enhancer):
 # ═══ A3: 代理问题 ═══
 
 
-def detect_agency_issue(engine, facts, entities, relations):
+def detect_agency_issue(engine: Any, facts: Any, entities: Any, relations: Any) -> bool:
     """检测: X employs Y, 且Y的工作输出实际服务于Z(≠X)"""
     employs_pairs = [(r["subject"], r["object"]) for r in (relations or []) if r.get("relation_type") == "employs"]
     if not employs_pairs:
@@ -201,7 +203,7 @@ def detect_agency_issue(engine, facts, entities, relations):
     return False
 
 
-def analyze_agency(engine, facts, entities, relations, enhancer):
+def analyze_agency(engine: Any, facts: Any, entities: Any, relations: Any, enhancer: Any) -> Any:
     results = []
     employs_pairs = [(r["subject"], r["object"]) for r in (relations or []) if r.get("relation_type") == "employs"]
     for employer, employee in employs_pairs:
@@ -234,10 +236,10 @@ def analyze_agency(engine, facts, entities, relations, enhancer):
 # ═══ A4: 激励不相容 ═══
 
 
-def detect_incentive_issue(engine, facts, entities, relations):
+def detect_incentive_issue(engine: Any, facts: Any, entities: Any, relations: Any) -> Any:
     """检测: 多实体共享资源(语义关联) + 有不同的事实描述"""
     # 找共享同一目标实体的多个主体
-    targets = {}
+    targets: dict[Any, Any] = {}
     for r in relations or []:
         obj = r.get("object", "")
         targets.setdefault(obj, []).append(r.get("subject", ""))
@@ -245,13 +247,13 @@ def detect_incentive_issue(engine, facts, entities, relations):
     return len(shared_resources) >= 1
 
 
-def analyze_incentive(engine, facts, entities, relations, enhancer):
+def analyze_incentive(engine: Any, facts: Any, entities: Any, relations: Any, enhancer: Any) -> Any:
     results = []
     # 匹配器: 用事实描述语料
     fact_desc = [f.get("desc", "") for f in facts.values() if isinstance(f, dict)]
     matcher = SemanticMatcher(fact_desc if fact_desc else ["default"])
 
-    targets = {}
+    targets: dict[Any, Any] = {}
     for r in relations or []:
         obj = r.get("object", "")
         targets.setdefault(obj, []).append(r.get("subject", ""))
@@ -259,7 +261,7 @@ def analyze_incentive(engine, facts, entities, relations, enhancer):
     shared = [(t, subs) for t, subs in targets.items() if len(subs) >= 2]
     for target, subjects in shared:
         # 检测: 共享同一资源的实体是否有语义差异大的事实
-        subj_facts = {}
+        subj_facts: dict[Any, Any] = {}
         for fid, info in _iter_facts(facts):
             desc = info.get("desc", "")
             for subj in subjects:
@@ -289,7 +291,7 @@ def analyze_incentive(engine, facts, entities, relations, enhancer):
 # ═══ A5: 补救规划 ═══
 
 
-def detect_remediation_needed(engine, facts, entities, relations):
+def detect_remediation_needed(engine: Any, facts: Any, entities: Any, relations: Any) -> bool:
     """检测: 存在'问题'/'审计'/'整改'相关事实或推论"""
     for _, info in _iter_facts(facts):
         desc = info.get("desc", "") + info.get("description", "")
@@ -298,8 +300,8 @@ def detect_remediation_needed(engine, facts, entities, relations):
     return False
 
 
-def analyze_remediation(engine, facts, entities, relations, enhancer):
-    results = []
+def analyze_remediation(engine: Any, facts: Any, entities: Any, relations: Any, enhancer: Any) -> Any:
+    results: list[Any] = []
     problems = []
     team_size, months = 4, 6  # 默认值
     for fid, info in _iter_facts(facts):

@@ -6,6 +6,7 @@ import re
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from typing import Any
 
 
 @dataclass
@@ -33,7 +34,7 @@ _ARXIV_URL = (
 )
 
 
-async def fetch_arxiv(client) -> list[TechItem]:
+async def fetch_arxiv(client: Any) -> list[TechItem]:
     """从 ArXiv 拉取最新 cs.AI/cs.IR/cs.MA/cs.LG 论文。"""
     try:
         resp = await client.get(_ARXIV_URL, timeout=20)
@@ -58,14 +59,16 @@ async def fetch_arxiv(client) -> list[TechItem]:
         cats = [c.get("term", "") for c in entry.findall(f"{{{_ARXIV_NS}}}category")]
 
         if title:
-            items.append(TechItem(
-                title=title,
-                description=description,
-                url=url,
-                source="arxiv",
-                tags=cats,
-                published_at=published,
-            ))
+            items.append(
+                TechItem(
+                    title=title,
+                    description=description,
+                    url=url,
+                    source="arxiv",
+                    tags=cats,
+                    published_at=published,
+                )
+            )
 
     return items
 
@@ -95,18 +98,20 @@ def _parse_github_trending(html: str, language: str) -> list[TechItem]:
         desc_match = re.search(r'<p\s[^>]*class="col-9[^"]*"[^>]*>\s*(.*?)\s*</p>', block, re.DOTALL)
         description = re.sub(r"<[^>]+>", "", desc_match.group(1)).strip() if desc_match else ""
 
-        items.append(TechItem(
-            title=repo_path,
-            description=description[:300],
-            url=f"https://github.com/{repo_path}",
-            source="github",
-            tags=[language],
-            published_at=datetime.now(UTC).strftime("%Y-%m-%d"),
-        ))
+        items.append(
+            TechItem(
+                title=repo_path,
+                description=description[:300],
+                url=f"https://github.com/{repo_path}",
+                source="github",
+                tags=[language],
+                published_at=datetime.now(UTC).strftime("%Y-%m-%d"),
+            )
+        )
     return items
 
 
-async def fetch_github_trending(client) -> list[TechItem]:
+async def fetch_github_trending(client: Any) -> list[TechItem]:
     """从 GitHub Trending 拉取 Python/TypeScript 本周热门仓库。"""
     items: list[TechItem] = []
     for url in _GITHUB_TRENDING_URLS:
@@ -116,12 +121,14 @@ async def fetch_github_trending(client) -> list[TechItem]:
             resp.raise_for_status()
             items.extend(_parse_github_trending(resp.text, lang))
         except Exception as exc:
-            items.append(TechItem(
-                title=f"GitHub Trending {lang} fetch failed",
-                description=str(exc),
-                url=url,
-                source="github",
-            ))
+            items.append(
+                TechItem(
+                    title=f"GitHub Trending {lang} fetch failed",
+                    description=str(exc),
+                    url=url,
+                    source="github",
+                )
+            )
     return items
 
 
@@ -130,7 +137,7 @@ async def fetch_github_trending(client) -> list[TechItem]:
 _HF_API_URL = "https://huggingface.co/api/models?sort=trending&limit=20&full=false"
 
 
-async def fetch_huggingface(client) -> list[TechItem]:
+async def fetch_huggingface(client: Any) -> list[TechItem]:
     """从 HuggingFace 拉取 trending 模型/工具。"""
     try:
         resp = await client.get(_HF_API_URL, timeout=20)
@@ -147,18 +154,21 @@ async def fetch_huggingface(client) -> list[TechItem]:
         likes = model.get("likes", 0)
         downloads = model.get("downloads", 0)
 
-        items.append(TechItem(
-            title=model_id,
-            description=f"pipeline={pipeline_tag} likes={likes} downloads={downloads}",
-            url=f"https://huggingface.co/{model_id}",
-            source="huggingface",
-            tags=[pipeline_tag] + tags[:5],
-            published_at=model.get("lastModified", "")[:10],
-        ))
+        items.append(
+            TechItem(
+                title=model_id,
+                description=f"pipeline={pipeline_tag} likes={likes} downloads={downloads}",
+                url=f"https://huggingface.co/{model_id}",
+                source="huggingface",
+                tags=[pipeline_tag] + tags[:5],
+                published_at=model.get("lastModified", "")[:10],
+            )
+        )
     return items
 
 
 # ── 入口 ──────────────────────────────────────────────────────────────────
+
 
 async def fetch_all(sources: list[str] | None = None) -> list[TechItem]:
     """并发抓取所有数据源，返回合并结果。"""

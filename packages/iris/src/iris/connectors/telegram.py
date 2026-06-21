@@ -201,6 +201,9 @@ class TelegramConnector(BaseConnector):
         self,
         limit: int = 20,
         cursor: str | None = None,
+        tag: str | None = None,
+        folder: str | None = None,
+        subdir: str | None = None,
         chat_id: str | None = None,
         **kwargs: Any,
     ) -> list[Note]:
@@ -454,7 +457,7 @@ class TelegramConnector(BaseConnector):
         self._call_api("editMessageText", params)
         return {"message_id": id, "updated": True}
 
-    def delete_item(self, id: str) -> bool:
+    def delete_item(self, item_id: str, **kwargs: Any) -> bool:
         """Delete a message (only works for bot's own messages)."""
         target_chat = self._get_chat_id()
         if not target_chat:
@@ -464,7 +467,7 @@ class TelegramConnector(BaseConnector):
                 "deleteMessage",
                 {
                     "chat_id": target_chat,
-                    "message_id": int(id) if str(id).isdigit() else id,
+                    "message_id": int(item_id) if str(item_id).isdigit() else item_id,
                 },
             )
             return True

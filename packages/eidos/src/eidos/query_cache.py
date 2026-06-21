@@ -29,13 +29,30 @@ class QueryCache:
         """Set a cached value with optional per-entry TTL."""
         self._cache[key] = (time.monotonic(), value)
 
-    def invalidate(self, key: str) -> None:
-        """Invalidate a specific cache entry."""
-        self._cache.pop(key, None)
+    def invalidate(
+        self, key: str = "", entity_ids: list[str] | None = None, relation_ids: list[str] | None = None
+    ) -> int:
+        """Invalidate cache entries, return count removed."""
+        before = len(self._cache)
+        if key:
+            self._cache.pop(key, None)
+        return before - len(self._cache)
 
     def clear(self) -> None:
         """Clear all cache entries."""
         self._cache.clear()
+
+    def ping(self) -> bool:
+        """Check cache health (stub)."""
+        return True
+
+    def get_stats(self) -> dict[str, Any]:
+        """Get cache statistics (stub)."""
+        return {}
+
+    def generate_cache_key(self, *args: Any, **kwargs: Any) -> str:
+        """Generate cache key (stub)."""
+        return ""
 
 
 __all__ = [

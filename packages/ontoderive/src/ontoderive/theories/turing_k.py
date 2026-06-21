@@ -9,6 +9,7 @@ import datetime
 import hashlib
 import json
 from pathlib import Path
+from typing import Any
 
 try:
     from .models import DeriveSnapshot  # type: ignore[import-not-found]
@@ -19,14 +20,14 @@ except ImportError:
 
 
 class KnowledgeTM:
-    def __init__(self, project_root) -> None:
+    def __init__(self, project_root: Any) -> None:
         self.root = Path(project_root)
         self.log_dir = self.root / "_derivation_logs"
         self.log_dir.mkdir(parents=True, exist_ok=True)
         self._states: list[DeriveSnapshot] = []
         self._load_history()
 
-    def _load_history(self):
+    def _load_history(self) -> None:
         snapshots = sorted(self.log_dir.glob("snapshot-*.json"))
         for s in snapshots:
             try:
@@ -43,7 +44,7 @@ class KnowledgeTM:
             except Exception:
                 pass
 
-    def snapshot(self):
+    def snapshot(self) -> Any:
         """创建当前知识状态快照（基于模型，非MD5）"""
         import re
 
@@ -128,7 +129,7 @@ class KnowledgeTM:
         )
         return state
 
-    def delta(self):
+    def delta(self) -> dict[str, Any]:
         """计算最近两次状态的差异"""
         if len(self._states) < 2:
             return {"type": "no_history", "changes": []}
@@ -150,7 +151,7 @@ class KnowledgeTM:
                 )
         return {"type": "delta", "changes": changes, "timestamp": curr.timestamp}
 
-    def should_halt(self, epsilon=0):
+    def should_halt(self, epsilon: Any = 0) -> Any:
         """停机检测：最近两次状态无变化"""
         if len(self._states) < 3:
             return False
@@ -160,7 +161,7 @@ class KnowledgeTM:
         changes = d["changes"]
         return len(changes) == 0 or all(abs(c["delta"]) <= epsilon for c in changes)
 
-    def diff(self):
+    def diff(self) -> Any:
         """比较最新两次快照（兼容原api）"""
         snapshots = sorted(self.log_dir.glob("snapshot-*.json"))
         if len(snapshots) < 2:
@@ -189,7 +190,7 @@ class KnowledgeTM:
             print(f"  {c['type']:8s} {c['file']}")
         return changes
 
-    def replay(self):
+    def replay(self) -> Any:
         snapshots = sorted(self.log_dir.glob("snapshot-*.json"))
         print(f"[turing] 📜 推导时间线({len(snapshots)}步):")
         for i, s in enumerate(snapshots):

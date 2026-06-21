@@ -31,7 +31,7 @@ import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import StrEnum
-from typing import Any
+from typing import Any, cast
 
 _log = logging.getLogger(__name__)
 
@@ -428,7 +428,7 @@ class HabitLearner:
             deviation = abs(pattern.period_seconds - ideal) / ideal
             period_score = max(0.0, 1.0 - deviation)
 
-        return round(freq_score * 0.6 + period_score * 0.4, 3)
+        return cast("float", round(freq_score * 0.6 + period_score * 0.4, 3))
 
     def _infer_habit_type(self, pattern: Pattern) -> HabitType:
         """Infer the most likely habit type from pattern metadata."""

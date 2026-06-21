@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 @dataclass
 class CandidateEntity:
     """A candidate entity extracted during NKS pipeline processing."""
+
     entity_id: str
     name: str
     properties: dict = field(default_factory=dict)
@@ -21,12 +22,14 @@ class CandidateEntity:
 @dataclass
 class CandidateRelation:
     """A candidate relation extracted during NKS pipeline processing."""
+
     source_id: str
     target_id: str
     relation_type: str
     properties: dict = field(default_factory=dict)
     source_file: str = ""
     weight: float = 1.0
+    confidence: float = 1.0
 
 
 __all__ = [

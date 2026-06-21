@@ -13,6 +13,7 @@ from typing import Any
 @dataclass
 class EnhancedSession:
     """An enhanced session with metadata, checkpoints, and persistence support."""
+
     session_id: str
     user_id: str = ""
     state: dict[str, Any] = field(default_factory=dict)

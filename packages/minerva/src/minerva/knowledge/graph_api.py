@@ -4,12 +4,13 @@ from __future__ import annotations
 
 import asyncio
 import os
+from typing import Any
 
 
 class GraphDataAccessor:
     """Fetch nodes and edges from Neo4j for D3.js visualization."""
 
-    def __init__(self, uri: str = "", user: str = "neo4j", password: str = ""):
+    def __init__(self, uri: str = "", user: str = "neo4j", password: str = "") -> None:
         self.uri = uri or os.environ.get("NEO4J_URI", "bolt://localhost:7687")
         self.user = user
         self.password = password or os.environ.get("NEO4J_PASSWORD", "changeme")
@@ -18,12 +19,12 @@ class GraphDataAccessor:
 
         atexit.register(self.close)
 
-    def close(self):
+    def close(self) -> None:
         if self._driver:
             self._driver.close()
             self._driver = None
 
-    def _get_driver(self):
+    def _get_driver(self) -> Any:
         if self._driver is None:
             try:
                 from neo4j import GraphDatabase  # type: ignore[import-not-found]
@@ -50,7 +51,7 @@ class GraphDataAccessor:
         except Exception:
             return {"nodes": [], "edges": [], "error": "Query failed"}
 
-    def _query_neo4j(self, driver, limit: int) -> tuple[list, list]:
+    def _query_neo4j(self, driver: Any, limit: int) -> tuple[list, list]:
         with driver.session() as session:
             node_result = session.run(
                 "MATCH (n) RETURN id(n) AS id, labels(n) AS labels, properties(n) AS props LIMIT $limit",

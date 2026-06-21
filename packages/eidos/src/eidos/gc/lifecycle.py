@@ -274,17 +274,19 @@ class LifecycleManager:
         """Return all tracked entries as dicts suitable for JSON output."""
         result: list[dict] = []
         for entry_id, rec in self._records.items():
-            result.append({
-                "entry_id": entry_id,
-                "created_at": datetime.fromtimestamp(rec.created_at, tz=UTC).isoformat(),
-                "last_accessed": datetime.fromtimestamp(rec.last_accessed, tz=UTC).isoformat(),
-                "last_modified": datetime.fromtimestamp(rec.last_modified, tz=UTC).isoformat(),
-                "access_count": rec.access_count,
-                "importance": rec.importance,
-                "decay_score": round(self.get_decay_score(entry_id), 4),
-                "stage": self._stages.get(entry_id, "unknown"),
-                "ttl_remaining": self.get_ttl_remaining(entry_id),
-            })
+            result.append(
+                {
+                    "entry_id": entry_id,
+                    "created_at": datetime.fromtimestamp(rec.created_at, tz=UTC).isoformat(),
+                    "last_accessed": datetime.fromtimestamp(rec.last_accessed, tz=UTC).isoformat(),
+                    "last_modified": datetime.fromtimestamp(rec.last_modified, tz=UTC).isoformat(),
+                    "access_count": rec.access_count,
+                    "importance": rec.importance,
+                    "decay_score": round(self.get_decay_score(entry_id), 4),
+                    "stage": self._stages.get(entry_id, "unknown"),
+                    "ttl_remaining": self.get_ttl_remaining(entry_id),
+                }
+            )
         return result
 
     def find_collectable(self, threshold: float | None = None) -> list[str]:

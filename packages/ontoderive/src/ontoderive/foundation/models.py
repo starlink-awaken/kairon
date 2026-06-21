@@ -42,7 +42,7 @@ class Fact:
     confidence: float = 0.95  # 置信度 [0,1]
     type: str = "data"  # data / policy
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if hasattr(self, "type") and self.type:
             self.type = _normalize_type(str(self.type))
 
@@ -56,7 +56,7 @@ class Entity:
     count: str = ""  # 数量
     facts_ref: list[str] = field(default_factory=list)  # 引用的事实ID
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.entity_type = _normalize_type(self.entity_type)
 
 
@@ -71,7 +71,7 @@ class Inference:
     text: str = ""  # 推论全文
     tags: list[str] = field(default_factory=list)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.meta_type = _normalize_type(self.meta_type)
 
 
@@ -85,7 +85,7 @@ class Scheme:
     meta_type: str = "document"
     file_path: str = ""  # 源文件路径
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.meta_type = _normalize_type(self.meta_type)
 
 

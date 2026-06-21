@@ -48,7 +48,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import StrEnum
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 logger = logging.getLogger(__name__)
 
@@ -413,7 +413,7 @@ class WebhookAlertChannel(AlertChannel):
             )
 
             with urllib.request.urlopen(req, timeout=self.timeout) as response:  # noqa: S310
-                return response.status == 200
+                return cast("bool", response.status == 200)
 
         except (OSError, urllib.error.URLError, ValueError, TypeError) as e:
             logger.error(f"Webhook send failed: {e}")

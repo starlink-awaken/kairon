@@ -8,10 +8,11 @@ OntoDerive Judge — LLM驱动的真实推导与评估
 import json
 import re
 from pathlib import Path
+from typing import Any
 
 
 class JudgeResult:
-    def __init__(self, category, passed, confidence, reasoning, cites):
+    def __init__(self, category: Any, passed: Any, confidence: Any, reasoning: Any, cites: Any) -> None:
         self.category = category
         self.passed = passed
         self.confidence = confidence  # 0-1
@@ -22,7 +23,7 @@ class JudgeResult:
 class OntoDeriveJudge:
     """LLM驱动的知识质量评估器"""
 
-    def __init__(self, project_root, enhancer=None):
+    def __init__(self, project_root: Any, enhancer: Any = None) -> None:
         self.root = Path(project_root)
         self.enhancer = enhancer
         if enhancer is None:
@@ -33,17 +34,17 @@ class OntoDeriveJudge:
             except Exception:
                 self.enhancer = None
 
-    def _rf(self, path):
+    def _rf(self, path: Any) -> Any:
         p = Path(path) if isinstance(path, str) else path
         return p.read_text("utf-8", errors="ignore") if p.exists() else ""
 
-    def _all_md(self, directory):
+    def _all_md(self, directory: Any) -> Any:
         dp = Path(directory)
         return sorted(dp.rglob("*.md")) if dp.exists() else []
 
-    def _collect_project_context(self):
+    def _collect_project_context(self) -> Any:
         """收集项目上下文"""
-        ctx = {"facts": {}, "inferences": {}, "schemes": {}}
+        ctx: dict[str, Any] = {"facts": {}, "inferences": {}, "schemes": {}}
 
         for f in self._all_md(self.root / "facts"):
             text = self._rf(f)
@@ -66,7 +67,7 @@ class OntoDeriveJudge:
 
     # ── 真实推导：从已知事实/推论生成新结论 ──
 
-    def derive_new_insights(self):
+    def derive_new_insights(self) -> Any:
         """LLM基于现有事实和推论，生成人可能忽略的新洞察"""
         ctx = self._collect_project_context()
         if not self.enhancer or not self.enhancer.available:
@@ -104,7 +105,7 @@ class OntoDeriveJudge:
 
     # ── 真实评估：判断推论质量 ──
 
-    def evaluate_inference_quality(self, inference_title, inference_text, derives_from):
+    def evaluate_inference_quality(self, inference_title: Any, inference_text: Any, derives_from: Any) -> Any:
         """评估单条推论的质量：逻辑连贯性、证据充分性、可证伪性"""
         if not self.enhancer or not self.enhancer.available:
             return None
@@ -137,7 +138,7 @@ class OntoDeriveJudge:
                     pass
         return None
 
-    def evaluate_all_inferences(self):
+    def evaluate_all_inferences(self) -> Any:
         """评估所有推论，返回质量报告"""
         ctx = self._collect_project_context()
         results = {}
@@ -149,7 +150,7 @@ class OntoDeriveJudge:
 
     # ── 真实判断：项目整体质量评估 ──
 
-    def judge_project(self):
+    def judge_project(self) -> Any:
         """
         综合评估项目质量。
         不是"13/13通过"的格式检查，而是基于LLM的内容质量判断。

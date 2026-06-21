@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 
 class NodeType(Enum):
@@ -18,7 +19,7 @@ class SourcePos:
     col: int
     file: str = ""
 
-    def __str__(self):
+    def __str__(self) -> Any:
         return f"{self.file}:{self.line}:{self.col}" if self.file else f"L{self.line}:C{self.col}"
 
 

@@ -1,6 +1,7 @@
 """Analytics reasoning rules."""
 
 import re
+from typing import Any
 
 from .common import (
     closest_known,
@@ -10,7 +11,7 @@ from .common import (
 )
 
 
-def change_detection(engine, facts):
+def change_detection(engine: Any, facts: Any) -> Any:
     """检测事实中的时间戳字段, 如果存在则分析变化趋势"""
     results = []
     dated = []
@@ -37,7 +38,7 @@ def change_detection(engine, facts):
 # ═══ R16: 一致性分析 (Consistency Analysis) ═══
 
 
-def consistency_analysis(engine, inferences, facts):
+def consistency_analysis(engine: Any, inferences: Any, facts: Any) -> Any:
     """检测体系内部的一致性: 置信度/KQI/覆盖率是否自洽"""
     results = []
     n_inf = len(inferences)
@@ -84,13 +85,13 @@ def consistency_analysis(engine, inferences, facts):
 # ═══ R17: 结构洞检测 (Structural Holes) ═══
 
 
-def structural_holes(engine, inferences):
+def structural_holes(engine: Any, inferences: Any) -> Any:
     """检测网络中的结构洞: 移除某个节点后图会断裂成几个连通分量"""
-    results = []
+    results: list[Any] = []
     if not inferences:
         return results
     # 构建引用图
-    graph = {}
+    graph: dict[Any, Any] = {}
     for title, info in inferences.items():
         deps = [d for d in info.get("derives_from", []) if d in inferences or d.startswith(("D-F", "P-F"))]
         for dep in deps:
@@ -130,14 +131,14 @@ _INVERSE_RELATIONS = {
 }
 
 
-def relation_reasoning(engine, relations):
+def relation_reasoning(engine: Any, relations: Any) -> Any:
     """关系推理 — 传递性+逆关系+域约束检测"""
-    results = []
+    results: list[Any] = []
     if not relations:
         return results
 
     # 构建关系图
-    rel_graph = {}  # {subject: [(relation_type, object), ...]}
+    rel_graph: dict[Any, Any] = {}  # {subject: [(relation_type, object), ...]}
     for rel in relations:
         s, r, o = rel.get("subject", ""), rel.get("relation_type", ""), rel.get("object", "")
         if s and o:
@@ -221,7 +222,7 @@ def relation_reasoning(engine, relations):
 # ═══ R18: 约束传播 (Constraint Propagation) ═══
 
 
-def constraint_propagation(engine, inferences, facts):
+def constraint_propagation(engine: Any, inferences: Any, facts: Any) -> Any:
     """基于规约阈值传播约束: 断言追溯率<阈值→触发改善建议"""
     results = []
     # 统计断言数
@@ -258,7 +259,7 @@ def constraint_propagation(engine, inferences, facts):
 # ═══ R7: 假言推理 (Modus Ponens/Tollens) ═══
 
 
-def modus_ponens_check(engine, inferences, facts):
+def modus_ponens_check(engine: Any, inferences: Any, facts: Any) -> Any:
     """如果A成立且A→B, 则B成立。检测蕴含链的假设满足度"""
     results = []
     for title, info in inferences.items():
@@ -291,7 +292,7 @@ def modus_ponens_check(engine, inferences, facts):
 # ═══ R8: 传递推理 (Transitive Closure) ═══
 
 
-def transitive_closure(engine, inferences, facts):
+def transitive_closure(engine: Any, inferences: Any, facts: Any) -> Any:
     """A→B→C, 则A间接影响C。计算传递闭包"""
     results = []
     for title, info in inferences.items():
@@ -356,9 +357,9 @@ for _parent, _subs in ONTOLOGY_HIERARCHY.items():
         _PREFIX_TO_PARENT[_sub] = _parent
 
 
-def subsumption_check(engine, inferences, facts):
+def subsumption_check(engine: Any, inferences: Any, facts: Any) -> Any:
     """增强包含推理 — 分类建议+新类型检测+误分类检测"""
-    results = []
+    results: list[Any] = []
     all_ids = list(inferences.keys()) + list(facts.keys())
     type_map = {}
     for id_str in all_ids:
@@ -367,7 +368,7 @@ def subsumption_check(engine, inferences, facts):
 
     # 统计: 正确的标准 = 前缀在_ID_PREFIX_MAP中
     known_prefixes = set(_ID_PREFIX_MAP.keys())
-    unknown_prefixes = {}
+    unknown_prefixes: dict[Any, Any] = {}
     correct = 0
 
     for id_str, prefix in type_map.items():
@@ -422,10 +423,10 @@ def subsumption_check(engine, inferences, facts):
     return results
 
 
-def influence_analysis(engine, inferences, facts):
+def influence_analysis(engine: Any, inferences: Any, facts: Any) -> Any:
     """计算每个事实/推论的'影响力' = 被多少推论直接/间接引用"""
     results = []
-    influence = {}
+    influence: dict[Any, Any] = {}
     for title, info in inferences.items():
         for dep in info.get("derives_from", []):
             influence[dep] = influence.get(dep, 0) + 1
@@ -447,7 +448,7 @@ def influence_analysis(engine, inferences, facts):
 # ═══ R11: 冗余检测 (Redundancy Check) ═══
 
 
-def redundancy_check(engine, inferences):
+def redundancy_check(engine: Any, inferences: Any) -> Any:
     """检测推论间的冗余 — 共享3+前提且文本相似"""
     results = []
     inf_list = list(inferences.items())
@@ -472,9 +473,9 @@ def redundancy_check(engine, inferences):
 # ═══ R12: 覆盖度分析 (Coverage Analysis) ═══
 
 
-def coverage_analysis(engine, inferences, facts):
+def coverage_analysis(engine: Any, inferences: Any, facts: Any) -> Any:
     """分析事实被推论引用的覆盖率"""
-    results = []
+    results: list[Any] = []
     if not facts:
         return results
     cited = set()
@@ -496,7 +497,7 @@ def coverage_analysis(engine, inferences, facts):
     return results
 
 
-def numeric_derive(engine, facts):
+def numeric_derive(engine: Any, facts: Any) -> Any:
     """R1: 数值比较推导 — 三段论最直接的体现"""
     results = []
     numeric = {}

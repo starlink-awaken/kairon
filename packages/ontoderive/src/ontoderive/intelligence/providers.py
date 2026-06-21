@@ -8,6 +8,7 @@ import subprocess
 import sys
 import urllib.request
 from abc import ABC, abstractmethod
+from typing import Any, cast
 
 
 def _standard_llm_provider() -> str:
@@ -22,7 +23,7 @@ def _standard_llm_api_key() -> str | None:
 class BaseProvider(ABC):
     """LLM provider 抽象基类"""
 
-    def __init__(self, model: str = "", base_url: str = ""):
+    def __init__(self, model: str = "", base_url: str = "") -> None:
         self.model = model
         self.base_url = base_url
 
@@ -34,7 +35,7 @@ class BaseProvider(ABC):
 
 
 class OllamaProvider(BaseProvider):
-    def call(self, prompt, system="", temperature=0.3):
+    def call(self, prompt: Any, system: Any = "", temperature: Any = 0.3) -> Any:
         full_prompt = f"{system}\n\n{prompt}" if system else prompt
         try:
             r = subprocess.run(
@@ -47,7 +48,7 @@ class OllamaProvider(BaseProvider):
         except (FileNotFoundError, subprocess.TimeoutExpired, TimeoutError):
             return None
 
-    def probe(self):
+    def probe(self) -> Any:
         if not self.model:
             # auto-select
             self.model = _auto_select_ollama_model()
@@ -76,7 +77,7 @@ def _auto_select_ollama_model() -> str:
 
 
 class OpenAIProvider(BaseProvider):
-    def call(self, prompt, system="", temperature=0.3):
+    def call(self, prompt: Any, system: Any = "", temperature: Any = 0.3) -> Any:
         try:
             from openai import OpenAI  # type: ignore[import-not-found]
 
@@ -89,7 +90,7 @@ class OpenAIProvider(BaseProvider):
             elif self.base_url:
                 client_kwargs["api_key"] = "litellm"
 
-            client = OpenAI(**client_kwargs)
+            client = OpenAI(**cast("Any", client_kwargs))
             resp = client.chat.completions.create(
                 model=self.model or os.environ.get("ONTODERIVE_LLM_MODEL", "gpt-4o-mini"),
                 messages=[{"role": "system", "content": system}, {"role": "user", "content": prompt}],
@@ -101,12 +102,12 @@ class OpenAIProvider(BaseProvider):
             print(f"[llm] OpenAI调用失败: {e}", file=sys.stderr)
             return None
 
-    def probe(self):
+    def probe(self) -> Any:
         return bool(_standard_llm_api_key() or os.environ.get("OPENAI_API_KEY") or self.base_url)
 
 
 class AnthropicProvider(BaseProvider):
-    def call(self, prompt, system="", temperature=0.3):
+    def call(self, prompt: Any, system: Any = "", temperature: Any = 0.3) -> Any:
         try:
             import anthropic  # type: ignore[import-not-found]
 
@@ -126,7 +127,7 @@ class AnthropicProvider(BaseProvider):
             print(f"[llm] Anthropic调用失败: {e}", file=sys.stderr)
             return None
 
-    def probe(self):
+    def probe(self) -> Any:
         return bool(
             os.environ.get("ANTHROPIC_API_KEY") or (_standard_llm_provider() == "anthropic" and _standard_llm_api_key())
         )
@@ -135,7 +136,7 @@ class AnthropicProvider(BaseProvider):
 class LocalProvider(BaseProvider):
     """本地 OpenAI 兼容 API (ollama/lmstudio 等)"""
 
-    def call(self, prompt, system="", temperature=0.3):
+    def call(self, prompt: Any, system: Any = "", temperature: Any = 0.3) -> Any:
         payload = {"model": self.model, "input": prompt}
         if system:
             payload["system_prompt"] = system
@@ -155,17 +156,17 @@ class LocalProvider(BaseProvider):
             print(f"[llm] 本地API调用失败: {e}", file=sys.stderr)
             return None
 
-    def probe(self):
+    def probe(self) -> bool:
         return True  # connection already verified during detection
 
 
 class NoneProvider(BaseProvider):
     """空实现 — 静默降级"""
 
-    def call(self, prompt, system="", temperature=0.3):
+    def call(self, prompt: Any, system: Any = "", temperature: Any = 0.3) -> None:
         return None
 
-    def probe(self):
+    def probe(self) -> bool:
         return False
 
 

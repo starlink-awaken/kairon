@@ -33,7 +33,7 @@ class StorageBackend(Protocol):
 class JSONFileBackend:
     """Per-key JSON file storage under a base directory."""
 
-    def __init__(self, base_path: str | Path | None = None):
+    def __init__(self, base_path: str | Path | None = None) -> None:
         self.base_path = Path(base_path or Path.home() / ".eidos" / "store")
         self.base_path.mkdir(parents=True, exist_ok=True)
 
@@ -90,7 +90,7 @@ class SQLiteBackend:
     ``~/.kos/index.sqlite`` for KOS data locality but can be overridden.
     """
 
-    def __init__(self, db_path: str | Path | None = None):
+    def __init__(self, db_path: str | Path | None = None) -> None:
         self.db_path = Path(db_path or Path.home() / ".kos" / "index.sqlite")
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -177,7 +177,7 @@ class KOSLibraryBackend:
     it operates as a pure SQLite storage with no search/stats capability.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._fallback = SQLiteBackend()
         self._kos_available = False
         try:

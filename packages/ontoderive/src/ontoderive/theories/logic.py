@@ -9,6 +9,7 @@ OntoDerive 逻辑层 — 蕴含图分析
 """
 
 from collections import defaultdict
+from typing import Any
 
 from ontoderive.foundation.utils import detect_cycles  # type: ignore[import-not-found]
 
@@ -16,30 +17,30 @@ from ontoderive.foundation.utils import detect_cycles  # type: ignore[import-not
 class EntailmentGraph:
     """蕴含图：节点=事实+推论，边=derives_from"""
 
-    def __init__(self):
-        self.nodes = {}  # id -> {type(fact|inference), label}
-        self.edges = defaultdict(list)  # from -> [to]
-        self.reverse = defaultdict(list)  # to -> [from]
+    def __init__(self) -> None:
+        self.nodes: dict[Any, Any] = {}  # id -> {type(fact|inference), label}
+        self.edges: defaultdict[str, list[Any]] = defaultdict(list)  # from -> [to]
+        self.reverse: defaultdict[str, list[Any]] = defaultdict(list)  # to -> [from]
 
-    def add_node(self, nid, ntype="fact", label=""):
+    def add_node(self, nid: Any, ntype: Any = "fact", label: Any = "") -> None:
         self.nodes[nid] = {"type": ntype, "label": label}
         self.edges.setdefault(nid, [])
 
-    def add_edge(self, from_id, to_id):
+    def add_edge(self, from_id: Any, to_id: Any) -> None:
         if from_id in self.nodes and to_id in self.nodes:
             self.edges[from_id].append(to_id)
             self.reverse[to_id].append(from_id)
 
-    def detect_cycles(self):
+    def detect_cycles(self) -> Any:
         return detect_cycles(self.nodes, self.edges)
 
-    def chain_depths(self):
+    def chain_depths(self) -> Any:
         """计算每个节点的推导链深度（从根事实出发的最长路径）"""
         roots = [n for n, info in self.nodes.items() if info["type"] == "fact" and not self.reverse.get(n)]
-        depth = {}
+        depth: dict[Any, Any] = {}
         visited = set()
 
-        def dfs(u, d):
+        def dfs(u: Any, d: Any) -> None:
             depth[u] = max(depth.get(u, 0), d)
             if u in visited:
                 return
@@ -61,7 +62,7 @@ class EntailmentGraph:
             "per_node": {n: d for n, d in depth.items()},
         }
 
-    def bottlenecks(self):
+    def bottlenecks(self) -> Any:
         """检测瓶颈节点（出度最高的前5个）"""
         if not self.edges:
             return []
@@ -69,7 +70,7 @@ class EntailmentGraph:
         out_degrees.sort(key=lambda x: x[1], reverse=True)
         return [{"node": n, "out_degree": d, "label": self.nodes[n]["label"]} for n, d in out_degrees[:5] if d > 0]
 
-    def redundant_paths(self):
+    def redundant_paths(self) -> Any:
         """检测冗余路径（同一对节点间存在多条路径）"""
         redundant = []
         checked = set()
@@ -83,10 +84,10 @@ class EntailmentGraph:
                     redundant.append({"from": u, "to": v, "path_count": len(paths), "paths": paths})
         return redundant[:10]
 
-    def _find_paths(self, start, end, max_paths=3):
-        paths = []
+    def _find_paths(self, start: Any, end: Any, max_paths: Any = 3) -> Any:
+        paths: list[Any] = []
 
-        def dfs(u, path, visited):
+        def dfs(u: Any, path: Any, visited: Any) -> None:
             if len(paths) >= max_paths:
                 return
             if u == end and len(path) > 0:
@@ -99,7 +100,7 @@ class EntailmentGraph:
         dfs(start, [], {start})
         return paths
 
-    def to_graphml(self):
+    def to_graphml(self) -> Any:
         lines = [
             '<?xml version="1.0" encoding="UTF-8"?>',
             '<graphml xmlns="http://graphml.graphdrawing.org/xmlns">',
@@ -119,7 +120,7 @@ class EntailmentGraph:
         lines.append("</graphml>")
         return "\n".join(lines)
 
-    def stats(self):
+    def stats(self) -> dict[str, Any]:
         cycles = self.detect_cycles()
         depths = self.chain_depths()
         bn = self.bottlenecks()
@@ -141,7 +142,7 @@ class EntailmentGraph:
             "contradictions": contradictions,
         }
 
-    def find_contradictions(self, enhancer=None):
+    def find_contradictions(self, enhancer: Any = None) -> Any:
         """检测矛盾推论：共享事实+对立词 或 否定模式 或 多层共享"""
         inf_nodes = [(nid, info) for nid, info in self.nodes.items() if info["type"] == "inference"]
         opposite_pairs = [
@@ -253,7 +254,7 @@ class EntailmentGraph:
         return contradictions
 
 
-def build_from_project(project_root):
+def build_from_project(project_root: Any) -> Any:
     """从OntoDerive项目目录构建蕴含图"""
     import re
     from pathlib import Path

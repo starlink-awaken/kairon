@@ -65,7 +65,7 @@ class PipelineMetrics:
 class BusinessMetricsCollector:
     """Minerva业务指标采集器"""
 
-    def __init__(self, storage_path: str | None = None):
+    def __init__(self, storage_path: str | None = None) -> None:
         """
         初始化指标采集器
 
@@ -376,7 +376,7 @@ def get_metrics_collector() -> BusinessMetricsCollector:
 
 
 # 便捷函数
-def record_research_attempt(success: bool, error: str | None = None, **kwargs) -> None:
+def record_research_attempt(success: bool, error: str | None = None, **kwargs: Any) -> None:
     """记录研究尝试（便捷函数）"""
     collector = get_metrics_collector()
     collector.record_research_attempt(success, error, **kwargs)

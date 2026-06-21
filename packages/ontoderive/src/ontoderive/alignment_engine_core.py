@@ -30,7 +30,7 @@ Layer: L3
 
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 from .alignment_models import (
     AlignmentCategory,
@@ -46,6 +46,7 @@ if TYPE_CHECKING:
     from .doc_extractor import DocStatementExtractor
     from .impl_scanner import ImplementationScanner
 _log = logging.getLogger(__name__)
+
 
 class AlignmentEngine:
     """
@@ -120,7 +121,7 @@ class AlignmentEngine:
                     decision.allow,
                     decision.reason,
                 )
-                return decision.allow
+                return cast("bool", decision.allow)
             except Exception:
                 _log.warning(
                     "FaultTolerancePolicy unavailable during document access check; defaulting to deny",
@@ -414,5 +415,6 @@ class AlignmentEngine:
 
             self._diff_analyzer = DiffAnalyzer()
         return self._diff_analyzer  # type: ignore[return-value]
+
 
 __all__ = ["AlignmentEngine"]

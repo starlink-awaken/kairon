@@ -18,6 +18,7 @@
 import json
 import re
 from pathlib import Path
+from typing import Any
 
 _RULES_DIR = Path(__file__).parent / "rules"
 _HAS_NUM_RE = re.compile(r"\d+\.?\d*")
@@ -27,7 +28,7 @@ _NUM_CMP_RE = re.compile(r"(\w+)\s*(>=|<=|>|<|==|!=)\s*(\d+)")
 class RuleLoader:
     """从YAML/JSON声明文件加载推理规则"""
 
-    def __init__(self, rules_dir: str | None = None):
+    def __init__(self, rules_dir: str | None = None) -> None:
         self.rules_dir = Path(rules_dir) if rules_dir else _RULES_DIR
         self.rules: list[dict] = []
         self._loaded = False
@@ -199,13 +200,13 @@ class RuleLoader:
 
     # ── 规则执行 ──
 
-    def evaluate(self, rule: dict, facts: dict, inferences: dict, **kwargs) -> dict | None:
+    def evaluate(self, rule: dict, facts: dict, inferences: dict, **kwargs: Any) -> dict | None:
         """完整规则评估: 前提匹配 → 模板化 → 结论"""
         if not self.match_premises(rule, facts, inferences):
             return None
         return self.to_conclusion(rule, **kwargs)
 
-    def evaluate_all(self, facts: dict, inferences: dict, **kwargs) -> list[dict]:
+    def evaluate_all(self, facts: dict, inferences: dict, **kwargs: Any) -> list[dict]:
         """评估所有已加载规则, 返回匹配的结论列表"""
         results = []
         for rule in self.rules:
@@ -221,7 +222,7 @@ class RuleLoader:
         return results
 
     @staticmethod
-    def to_conclusion(rule: dict, **kwargs) -> dict | None:
+    def to_conclusion(rule: dict, **kwargs: Any) -> dict | None:
         """将规则模板化为结论, 缺kwargs时用规则名作为结论"""
         template = rule.get("conclusion_template", rule.get("name", ""))
         try:

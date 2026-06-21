@@ -197,7 +197,7 @@ class GCEngine:
             self._total_cycles += 1
             self._cycle_durations.append(elapsed)
             if len(self._cycle_durations) > self._MAX_CYCLE_HISTORY:
-                self._cycle_durations = self._cycle_durations[-self._MAX_CYCLE_HISTORY:]
+                self._cycle_durations = self._cycle_durations[-self._MAX_CYCLE_HISTORY :]
 
         return swept
 

@@ -13,6 +13,7 @@ from typing import Any
 @dataclass
 class MemoryEntry:
     """A single memory entry with content, metadata, and tier information."""
+
     id: str
     content: str
     tier: str = "hot"  # hot, warm, cold, archive
@@ -20,6 +21,8 @@ class MemoryEntry:
     created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
     last_accessed: str = field(default_factory=lambda: datetime.utcnow().isoformat())
     metadata: dict[str, Any] = field(default_factory=dict)
+    timestamp: float = 0.0
+    token_count: int = 0
 
 
 class ContextCompressor:
@@ -37,6 +40,10 @@ class ContextCompressor:
     def get(self, entry_id: str) -> MemoryEntry | None:
         """Get a memory entry by ID."""
         return self._entries.get(entry_id)
+
+    def summarize_batch(self, entries: list[Any]) -> None:
+        """Summarize a batch of entries (stub)."""
+        return None
 
     def _maybe_compact(self) -> None:
         """Evict oldest cold entries if over capacity."""

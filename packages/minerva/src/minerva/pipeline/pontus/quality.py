@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable, Hashable
 from datetime import UTC, datetime
 from difflib import SequenceMatcher
-from typing import Any
+from typing import Any, cast
 
 
 class QualityValidator:
@@ -95,9 +95,6 @@ class Deduplicator:
                 seen.add(key)
                 result.append(entry)
         return result
-
-
-
 
 
 class DetailedFormatValidator:
@@ -225,8 +222,7 @@ class DetailedFormatValidator:
 
     def validate_format(self, data: dict[str, Any], schema: dict[str, Any]) -> bool:
         """Quick bool check - delegates to validate_detailed."""
-        return self.validate_detailed(data, schema)["valid"]
-
+        return cast("bool", self.validate_detailed(data, schema)["valid"])
 
 
 class SourceTrustScorer:
@@ -243,7 +239,8 @@ class SourceTrustScorer:
         score = scorer.trust_score("api-a")  # 0.0 - 1.0
         all_scores = scorer.all_scores()
     """
-    def __init__(self, decay_days: float = 30.0):
+
+    def __init__(self, decay_days: float = 30.0) -> None:
         if decay_days <= 0:
             raise ValueError("decay_days must be positive")
         self.decay_days = decay_days
@@ -251,17 +248,21 @@ class SourceTrustScorer:
 
     def record_success(self, source: str, timestamp: datetime | None = None) -> None:
         """Record a successful ingestion from a source."""
-        self._sources.setdefault(source, []).append({
-            "success": True,
-            "timestamp": timestamp or datetime.now(UTC),
-        })
+        self._sources.setdefault(source, []).append(
+            {
+                "success": True,
+                "timestamp": timestamp or datetime.now(UTC),
+            }
+        )
 
     def record_failure(self, source: str, timestamp: datetime | None = None) -> None:
         """Record a failed ingestion from a source."""
-        self._sources.setdefault(source, []).append({
-            "success": False,
-            "timestamp": timestamp or datetime.now(UTC),
-        })
+        self._sources.setdefault(source, []).append(
+            {
+                "success": False,
+                "timestamp": timestamp or datetime.now(UTC),
+            }
+        )
 
     def trust_score(self, source: str) -> float:
         """Return trust score for a source in [0.0, 1.0].
@@ -321,7 +322,6 @@ class SourceTrustScorer:
             self._sources.pop(source, None)
 
 
-
 class CrossSourceDeduplicator:
     """Deduplicate entries across multiple data sources with fuzzy matching.
 
@@ -342,7 +342,7 @@ class CrossSourceDeduplicator:
         # result["stats"]["duplicates_removed"] -> 1
     """
 
-    def __init__(self, similarity_threshold: float = 0.8):
+    def __init__(self, similarity_threshold: float = 0.8) -> None:
         if not 0 < similarity_threshold <= 1:
             raise ValueError("similarity_threshold must be in (0, 1]")
         self.similarity_threshold = similarity_threshold
@@ -355,7 +355,9 @@ class CrossSourceDeduplicator:
         return SequenceMatcher(None, str(a), str(b)).ratio()
 
     def _field_overlap_confidence(
-        self, a: dict[str, Any], b: dict[str, Any],
+        self,
+        a: dict[str, Any],
+        b: dict[str, Any],
         shared_fields: list[str],
     ) -> float:
         """Calculate confidence score based on shared field overlap."""
@@ -428,16 +430,20 @@ class CrossSourceDeduplicator:
             kept = seen[key]
             shared = [k for k in entry if k in kept and k != source_field]
             confidence = self._field_overlap_confidence(kept, entry, shared)
-            groups.append({
-                "kept": kept,
-                "removed": [entry],
-                "confidence": confidence,
-                "matched_fields": shared,
-            })
+            groups.append(
+                {
+                    "kept": kept,
+                    "removed": [entry],
+                    "confidence": confidence,
+                    "matched_fields": shared,
+                }
+            )
 
         # Now check for fuzzy matches among entries with different keys
         list(seen.values()) + [
-            e for e in entries if not any(
+            e
+            for e in entries
+            if not any(
                 e.get(source_key_fields.get(e.get(source_field, "unknown"), default_key_field))  # type: ignore[arg-type]
                 for _ in [1]
             )
@@ -509,12 +515,14 @@ class CrossSourceDeduplicator:
                 kept = cluster[0]
                 removed = cluster[1:]
                 confidence = self._field_overlap_confidence(kept, removed[0], compare_fields)
-                groups.append({
-                    "kept": kept,
-                    "removed": removed,
-                    "confidence": confidence,
-                    "matched_fields": compare_fields,
-                })
+                groups.append(
+                    {
+                        "kept": kept,
+                        "removed": removed,
+                        "confidence": confidence,
+                        "matched_fields": compare_fields,
+                    }
+                )
                 unique.append(kept)
             else:
                 unique.append(entry_a)

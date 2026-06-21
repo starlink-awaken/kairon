@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import threading
+from typing import Any
 
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -30,7 +31,7 @@ def _get_od(project: str | None = None) -> OntoDerive:
 
 
 @app.get("/api/status")
-async def api_status(project: str = ""):
+async def api_status(project: str = "") -> Any:
     od = _get_od(project or None)
     try:
         r = od.derive()
@@ -48,19 +49,19 @@ async def api_status(project: str = ""):
 
 
 @app.get("/api/derive")
-async def api_derive(project: str = ""):
+async def api_derive(project: str = "") -> Any:
     od = _get_od(project or None)
     return od.derive()
 
 
 @app.get("/api/check")
-async def api_check(project: str = ""):
+async def api_check(project: str = "") -> Any:
     od = _get_od(project or None)
     return od.check()
 
 
 @app.get("/api/export")
-async def api_export(project: str = "", fmt: str = "json"):
+async def api_export(project: str = "", fmt: str = "json") -> Any:
     od = _get_od(project or None)
     r = od.derive()
     from ontoderive.core.export import to_html, to_json  # type: ignore[import-not-found]
@@ -76,7 +77,7 @@ async def api_export(project: str = "", fmt: str = "json"):
 
 
 @app.post("/mcp")
-async def mcp_call(request: Request):
+async def mcp_call(request: Request) -> Any:
     """JSON-RPC compatibility bridge backed by the FastMCP tool surface."""
     body = await request.json()
     body["jsonrpc"] = "2.0"
@@ -84,7 +85,7 @@ async def mcp_call(request: Request):
 
 
 @app.get("/mcp/tools")
-async def mcp_tools():
+async def mcp_tools() -> dict[str, Any]:
     """返回 FastMCP-native 工具列表 — 供 AgentMesh 注册"""
     return {"tools": TOOL_DEFS}
 
@@ -193,11 +194,11 @@ loadTools();
 
 
 @app.get("/", response_class=HTMLResponse)
-async def dashboard():
+async def dashboard() -> Any:
     return DASHBOARD_HTML
 
 
-def serve(project: str = ".", host: str = "127.0.0.1", port: int = 8080, watch: bool = True):
+def serve(project: str = ".", host: str = "127.0.0.1", port: int = 8080, watch: bool = True) -> None:
     """启动 Web 服务"""
     global _project_path
     _project_path = project

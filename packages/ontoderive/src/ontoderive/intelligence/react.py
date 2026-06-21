@@ -7,6 +7,7 @@ LLM在OntoDerive的工具系统上交替推理和行动。
 
 import re
 from pathlib import Path
+from typing import Any
 
 
 class ReActEngine:
@@ -22,12 +23,12 @@ class ReActEngine:
         "compute_kqi": {"args": [], "desc": "计算KQI知识质量指数"},
     }
 
-    def __init__(self, project_root, enhancer):
+    def __init__(self, project_root: Any, enhancer: Any) -> None:
         self.root = Path(project_root)
         self.llm = enhancer
-        self.history = []  # [(thought, action, observation), ...]
+        self.history: list[Any] = []  # [(thought, action, observation), ...]
 
-    def _build_action_prompt(self):
+    def _build_action_prompt(self) -> Any:
         tools = "\n".join(
             f"- {name}({', '.join(info['args'])}): {info['desc']}" for name, info in self.ACTION_SCHEMA.items()
         )
@@ -49,7 +50,7 @@ Action: FINISH
 
 当前任务: 分析项目的知识工程质量。从check_reference开始。"""
 
-    def run(self, max_steps=5):
+    def run(self, max_steps: Any = 5) -> dict[str, Any]:
         """ReAct主循环"""
         system = self._build_action_prompt()
 
@@ -76,7 +77,7 @@ Action: FINISH
 
         return {"verdict": f"ReAct分析完成({len(self.history)}步)", "steps": len(self.history), "history": self.history}
 
-    def _parse_result(self, text):
+    def _parse_result(self, text: Any) -> tuple[Any, ...]:
         """解析LLM的Thought/Action"""
         thought = ""
         action_name = None
@@ -95,7 +96,7 @@ Action: FINISH
 
         return thought, action_name, action_arg
 
-    def _execute(self, name, arg):
+    def _execute(self, name: Any, arg: Any) -> dict[str, Any]:
         """执行Action"""
         try:
             if name == "read_fact":
@@ -181,7 +182,7 @@ Action: FINISH
             return {"error": str(e)}
         return {"error": f"未知Action: {name}"}
 
-    def _exists(self, ref_id):
+    def _exists(self, ref_id: Any) -> bool:
         """检查ID是否存在"""
         for d in ["facts", "inferences", "entities"]:
             for f in (self.root / d).rglob("*.md"):

@@ -6,6 +6,7 @@ OntoDerive 配置系统
 
 import os
 from pathlib import Path
+from typing import Any
 
 DEFAULTS = {
     "toolforge_mode": "keyword",  # keyword | tfidf | hybrid
@@ -20,7 +21,7 @@ DEFAULTS = {
 }
 
 
-def _load_yaml(path):
+def _load_yaml(path: Any) -> Any:
     try:
         import yaml
 
@@ -38,7 +39,7 @@ def _load_yaml(path):
         return {}
 
 
-def _deep_merge(base, override):
+def _deep_merge(base: Any, override: Any) -> Any:
     for k, v in override.items():
         if isinstance(v, dict) and isinstance(base.get(k), dict):
             base[k] = _deep_merge(base[k].copy(), v)
@@ -48,7 +49,7 @@ def _deep_merge(base, override):
 
 
 class Config:
-    def __init__(self, project_root=None, cli_args=None):
+    def __init__(self, project_root: Any = None, cli_args: Any = None) -> None:
         self._cfg = DEFAULTS.copy()
         self._cfg["project_root"] = project_root
 
@@ -68,7 +69,7 @@ class Config:
 
         # 3. 环境变量覆盖 (ONTO_ 前缀)
         for key in ["ONTO_TOOLFORGE_MODE", "ONTO_TOOLFORGE_TOP_N", "ONTO_DERIVE_ITERATIONS"]:
-            env_val = os.environ.get(key)
+            env_val: str | int | None = os.environ.get(key)
             if env_val is not None:
                 config_key = key.lower().replace("onto_", "")
                 try:
@@ -77,14 +78,14 @@ class Config:
                     pass
                 self._cfg[config_key] = env_val
 
-    def get(self, key, default=None):
+    def get(self, key: Any, default: Any = None) -> Any:
         return self._cfg.get(key, default)
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: Any) -> Any:
         return self._cfg[key]
 
-    def __contains__(self, key):
+    def __contains__(self, key: Any) -> Any:
         return key in self._cfg
 
-    def to_dict(self):
+    def to_dict(self) -> Any:
         return self._cfg.copy()

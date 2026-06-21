@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from typing import Any
 
 from ontoderive.core.derive import OntoDerive  # type: ignore[import-not-found]
 
@@ -24,7 +25,9 @@ def _run_toolforge(project: str, goal: str, tool_context: str) -> None:
             print(f"      {t['id']} {t['name']} (匹配度:{t['score']})")
 
 
-def cmd_derive(project, auto, with_tools, goal, tool_context, pipeline_input, pipeline_output):
+def cmd_derive(
+    project: Any, auto: Any, with_tools: Any, goal: Any, tool_context: Any, pipeline_input: Any, pipeline_output: Any
+) -> None:
     """正向推导 (pipeline:json 感知)"""
     od = OntoDerive(project)
 
@@ -69,7 +72,7 @@ def cmd_derive(project, auto, with_tools, goal, tool_context, pipeline_input, pi
         od.derive()
 
 
-def cmd_analyze(project, force):
+def cmd_analyze(project: Any, force: Any) -> None:
     """全量分析: 推导+LLM洞察(自动检测)"""
     print("[analyze] 全量分析: 结构推导 + LLM洞察(自动检测LLM)...")
     from ontoderive.intelligence.llm import get_enhancer  # type: ignore[import-not-found]
@@ -83,19 +86,19 @@ def cmd_analyze(project, force):
     od.analyze()
 
 
-def cmd_check(project):
+def cmd_check(project: Any) -> None:
     """规约检查"""
     od = OntoDerive(project)
     od.check()
 
 
-def cmd_rounds(project, n):
+def cmd_rounds(project: Any, n: Any) -> None:
     """多轮迭代"""
     od = OntoDerive(project)
     od.run_rounds(n)
 
 
-def cmd_generate(project, export):
+def cmd_generate(project: Any, export: Any) -> None:
     """生成推导报告"""
     from ontoderive.core.derive import OntoDerive
 

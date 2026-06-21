@@ -19,7 +19,7 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-AX01-10_holographic_metadata_axio
 
 
 import logging
-from typing import Any
+from typing import Any, cast
 
 _log = logging.getLogger(__name__)
 
@@ -46,7 +46,7 @@ class _MetaBenchmarkMixin:
             matched_count = 8
 
         valid, _ = self._verify_syntax(MockReport())
-        return valid
+        return cast("bool", valid)
 
     def _test_syntax_optional_fields(self) -> bool:
         """测试语法检查：可选字段"""
@@ -58,7 +58,7 @@ class _MetaBenchmarkMixin:
             unmatched_doc_count = 2
 
         valid, _ = self._verify_syntax(MockReport())
-        return valid
+        return cast("bool", valid)
 
     def _test_logic_matched_unmatched(self) -> bool:
         """测试逻辑检查：matched + unmatched <= total"""
@@ -69,7 +69,7 @@ class _MetaBenchmarkMixin:
             unmatched_doc_count = 2
 
         valid, _ = self._verify_logic(MockReport())
-        return valid
+        return cast("bool", valid)
 
     def _test_logic_alignment_rate(self) -> bool:
         """测试逻辑检查：对齐率计算"""
@@ -80,7 +80,7 @@ class _MetaBenchmarkMixin:
             unmatched_doc_count = 5
 
         valid, _ = self._verify_logic(MockReport())
-        return valid
+        return cast("bool", valid)
 
     def _test_fp_deprecated(self) -> bool:
         """测试误报检测：deprecated"""
@@ -88,7 +88,7 @@ class _MetaBenchmarkMixin:
         class MockIssue:
             description = "deprecated API"
 
-        return self._is_likely_false_positive(MockIssue())
+        return cast("bool", self._is_likely_false_positive(MockIssue()))
 
     def _test_fp_optional(self) -> bool:
         """测试误报检测：optional"""
@@ -96,22 +96,22 @@ class _MetaBenchmarkMixin:
         class MockIssue:
             description = "optional parameter"
 
-        return self._is_likely_false_positive(MockIssue())
+        return cast("bool", self._is_likely_false_positive(MockIssue()))
 
     def _test_fn_public(self) -> bool:
         """测试漏报检测：public"""
         entity = {"name": "public_api", "id": "api-1"}
-        return self._is_likely_false_negative(entity)
+        return cast("bool", self._is_likely_false_negative(entity))
 
     def _test_fn_api(self) -> bool:
         """测试漏报检测：api"""
         entity = {"name": "get_user", "id": "api-2"}
-        return self._is_likely_false_negative(entity)
+        return cast("bool", self._is_likely_false_negative(entity))
 
     def _test_confidence_calc(self) -> bool:
         """测试置信度计算"""
         confidence = self._calculate_confidence(True, True, True, 0, 0)
-        return confidence.score >= 0.7
+        return cast("bool", confidence.score >= 0.7)
 
     def _test_gt_save_load(self) -> bool:
         """测试基准真值保存/加载"""
@@ -158,4 +158,4 @@ class _MetaBenchmarkMixin:
     def _test_f1_score(self) -> bool:
         """测试F1分数计算"""
         confidence = self._calculate_confidence(True, True, True, 0, 0)
-        return 0.0 <= confidence.f1_score <= 1.0
+        return cast("bool", 0.0 <= confidence.f1_score <= 1.0)

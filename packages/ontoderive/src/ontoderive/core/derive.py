@@ -17,6 +17,7 @@ import datetime
 import re
 import sys
 from pathlib import Path
+from typing import Any
 
 try:
     from .utils import all_md, load_json, rf, save_json, wf  # type: ignore[import-not-found]
@@ -32,7 +33,7 @@ except ImportError:
 
 
 class OntoDerive(DeriveInterface):
-    def __init__(self, project_root):
+    def __init__(self, project_root: Any) -> None:
         self.root = Path(project_root)
         self.facts_dir = self.root / "facts"
         self.entities_dir = self.root / "entities"
@@ -44,7 +45,7 @@ class OntoDerive(DeriveInterface):
         self._facts: dict = {"data": {}, "policy": {}}
         self._loaded_rules = self._init_rules()  # v3.4: 加载YAML规则
 
-    def _init_rules(self):
+    def _init_rules(self) -> Any:
         """加载声明式YAML规则 (v3.4)"""
         try:
             from ontoderive.foundation.rule_loader import RuleLoader  # type: ignore[import-not-found]
@@ -58,7 +59,7 @@ class OntoDerive(DeriveInterface):
         except Exception:
             return []
 
-    def derive(self):
+    def derive(self) -> Any:
         """正向推导 — 事实扫描 + 多引擎推理"""
         summary = self._derive_baseline()
         self._derive_bayesian(summary)
@@ -74,7 +75,7 @@ class OntoDerive(DeriveInterface):
         )
         return summary
 
-    def _derive_baseline(self):
+    def _derive_baseline(self) -> Any:
         """扫描事实/实体/推论基线"""
         print("[derive] 事实基座扫描...")
         from ontoderive.foundation.utils import scan_facts_from_md
@@ -103,7 +104,7 @@ class OntoDerive(DeriveInterface):
         }
         return summary
 
-    def _derive_bayesian(self, summary):
+    def _derive_bayesian(self, summary: Any) -> None:
         """贝叶斯置信度传播"""
         # v2.1: 集成贝叶斯置信度分布+逻辑链深度
         try:
@@ -124,7 +125,7 @@ class OntoDerive(DeriveInterface):
 
             print(f"[derive] Bayesian skip: {e}", file=sys.stderr)
 
-    def _derive_entailment(self, summary):
+    def _derive_entailment(self, summary: Any) -> None:
         """逻辑依赖图分析"""
         try:
             from ontoderive.theories.logic import build_from_project  # type: ignore[import-not-found]
@@ -141,7 +142,7 @@ class OntoDerive(DeriveInterface):
 
             print(f"[derive] Logic skip: {e}", file=sys.stderr)
 
-    def _derive_hints(self, summary):
+    def _derive_hints(self, summary: Any) -> None:
         """内容推导 + DAG矛盾检测"""
         # v2.3: 内容推导 — 规则引擎 + DAG分析
         derivation_hints = []
@@ -180,7 +181,7 @@ class OntoDerive(DeriveInterface):
         if derivation_hints:
             summary["derivation_hints"] = derivation_hints[:15]
 
-    def _derive_unified(self, summary):
+    def _derive_unified(self, summary: Any) -> None:
         """统一推理引擎"""
         # v3.4: 统一推理引擎 (RuleReasoner + FormalReasoner + AnalyticsEngine)
         try:
@@ -216,7 +217,7 @@ class OntoDerive(DeriveInterface):
             uc_list = ur.reason(
                 self._facts["data"],
                 inferences_dict,
-                relations=relations if relations else None,
+                relations=relations or [],
                 enhancer=self._try_llm(),
             )
             summary["derived_conclusions"] = [uc.to_dict() for uc in uc_list[:25]]
@@ -225,7 +226,7 @@ class OntoDerive(DeriveInterface):
 
         save_json(self.log_dir / "derive-summary.json", summary)
 
-    def derive_formal(self, text=None):
+    def derive_formal(self, text: Any = None) -> Any:
         """
         v3.2: 形式化推理 — 四阶段管线。
         Phase1: LLM提取(降级规则) → Phase2: 符号化 → Phase3: 形式推理 → Phase4: 解读
@@ -239,7 +240,7 @@ class OntoDerive(DeriveInterface):
         all_text = "\n".join(rf(f) for f in all_md(self.root) if "_derivation_logs" not in str(f))
         return pipeline.run(all_text)
 
-    def analyze(self):
+    def analyze(self) -> Any:
         """
         v3.1: 完整分析 — 结构分析 + LLM洞察推导。
         这是OntoDerive的"真实推导"入口。需要LLM后端。
@@ -274,7 +275,7 @@ class OntoDerive(DeriveInterface):
             print(f"[analyze] ⚠️ LLM调用失败: {e}")
         return summary
 
-    def _try_llm(self):
+    def _try_llm(self) -> Any:
         try:
             from ontoderive.intelligence.llm import get_enhancer  # type: ignore[import-not-found]
 
@@ -283,7 +284,7 @@ class OntoDerive(DeriveInterface):
         except Exception:
             return None
 
-    def check(self):
+    def check(self) -> Any:
         print("[check] 执行规约检查...")
         try:
             from .check import run_check
@@ -293,14 +294,14 @@ class OntoDerive(DeriveInterface):
             self.root, self.facts_dir, self.entities_dir, self.inferences_dir, self.scheme_dir, self.log_dir
         )[0]
 
-    def run_rounds(self, rounds=3):
+    def run_rounds(self, rounds: Any = 3) -> None:
         for rnd in range(1, rounds + 1):
             print(f"\n Round {rnd}/{rounds}")
             self.derive()
             self.check()
         print(f"[rounds] ✅ {rounds}轮迭代完成")
 
-    def generate_report(self):
+    def generate_report(self) -> Any:
         summary = load_json(self.log_dir / "derive-summary.json") or {}
         checks = load_json(self.log_dir / "check-result.json") or {"details": []}
         report = f"""---
@@ -322,7 +323,7 @@ generated: {datetime.datetime.now().isoformat()}
         print(f"[report] 报告: {self.log_dir / 'report.md'}")
         return report
 
-    def resolve(self):
+    def resolve(self) -> Any:
         checks = load_json(self.log_dir / "check-result.json") or {}
         fixed = 0
         for d in checks.get("details", []):
@@ -339,7 +340,7 @@ generated: {datetime.datetime.now().isoformat()}
 
 
 # CLI入口 (v2.2: 委托给cli.py)
-def main():
+def main() -> None:
     try:
         from .cli import main as _main  # type: ignore[import-not-found]
     except ImportError:
@@ -350,4 +351,5 @@ def main():
 if __name__ == "__main__":
     import sys
 
-    sys.exit(main())
+    main()
+    sys.exit(0)

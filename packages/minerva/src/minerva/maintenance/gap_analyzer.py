@@ -50,7 +50,7 @@ class GapAnalyzer:
     - Language coverage: Chinese vs English sources?
     """
 
-    def __init__(self, report_dir: str = "~/knowledge/reports"):
+    def __init__(self, report_dir: str = "~/knowledge/reports") -> None:
         self.report_dir = Path(report_dir).expanduser()
 
     def scan(self) -> GapReport:

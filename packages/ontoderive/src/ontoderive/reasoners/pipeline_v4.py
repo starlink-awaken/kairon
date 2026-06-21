@@ -8,14 +8,15 @@ Phase 4: LLM解读 → 自然语言报告
 """
 
 from pathlib import Path
+from typing import Any
 
 
 class FormalPipeline:
     """四阶段形式化推理管线"""
 
-    def __init__(self, enhancer=None):
+    def __init__(self, enhancer: Any = None) -> None:
         self.enhancer = enhancer
-        self.results = {}
+        self.results: dict[Any, Any] = {}
 
     def run(self, text: str) -> dict:
         """执行完整四阶段管线"""
@@ -55,7 +56,7 @@ class FormalPipeline:
             },
         }
 
-    def _interpret(self, conclusions, knowledge) -> str:
+    def _interpret(self, conclusions: Any, knowledge: Any) -> str:
         """Phase 4: 将形式结论解读为自然语言报告"""
         lines = ["# 形式化知识推理报告\n"]
         lines.append("## 知识规模\n")
@@ -99,7 +100,7 @@ class FormalPipeline:
 
         return "\n".join(lines)
 
-    def save_report(self, output_dir, report_text=""):
+    def save_report(self, output_dir: Any, report_text: Any = "") -> None:
         """保存报告到文件"""
         out = Path(output_dir)
         out.mkdir(parents=True, exist_ok=True)

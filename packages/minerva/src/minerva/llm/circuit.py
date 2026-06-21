@@ -41,7 +41,7 @@ class CircuitBreaker:
             breaker.failure()
     """
 
-    def __init__(self, provider: str, failure_threshold: int = 3, cooldown_seconds: float = 60.0):
+    def __init__(self, provider: str, failure_threshold: int = 3, cooldown_seconds: float = 60.0) -> None:
         self.provider = provider
         self.threshold = failure_threshold
         self.cooldown = cooldown_seconds
@@ -51,12 +51,12 @@ class CircuitBreaker:
         """Check if a call should be allowed. Returns False if circuit is open."""
         return not self._state.is_open
 
-    def success(self):
+    def success(self) -> None:
         """Reset failure count on successful call."""
         self._state.failures = 0
         self._state.open_until = 0.0
 
-    def failure(self):
+    def failure(self) -> None:
         """Record a failure. Opens circuit if threshold reached."""
         self._state.failures += 1
         self._state.last_failure = time.monotonic()

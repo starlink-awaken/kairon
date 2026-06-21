@@ -62,23 +62,23 @@ type MemoryMetadata = Mapping[str, JSONValue]
 
 
 def build_default_unified_memory_api() -> UnifiedMemoryAPI:
-    from eidos.organs import (  # type: ignore[import-not-found]
+    from eidos import (  # type: ignore[import-not-found]
         unified_memory_api_defaults as defaults_module,
     )
 
-    return defaults_module.build_default_unified_memory_api()
+    return cast("UnifiedMemoryAPI", defaults_module.build_default_unified_memory_api())
 
 
 def get_default_unified_memory_api() -> UnifiedMemoryAPI:
-    from eidos.organs import (
+    from eidos import (
         unified_memory_api_defaults as defaults_module,
     )
 
-    return defaults_module.get_default_unified_memory_api()
+    return cast("UnifiedMemoryAPI", defaults_module.get_default_unified_memory_api())
 
 
 def reset_default_unified_memory_api() -> None:
-    from eidos.organs import (
+    from eidos import (
         unified_memory_api_defaults as defaults_module,
     )
 
@@ -169,9 +169,17 @@ class _SubsystemProtocol(Protocol):
 
     def keyword_search(self, q: str, limit: int) -> list[dict]: ...  # noqa: E704
     def query(self, q: str, limit: int) -> list[dict]: ...  # noqa: E704
-    def find_paths(self, q: str) -> Any: ...  # noqa: E704
+    def find_paths(self, q: str) -> None: ...  # noqa: E704
     def read(self, key: str) -> str | None: ...  # noqa: E704
-    def write(self, key: str, value: str, importance: float = ..., ttl: float = ..., sacred: bool = ..., tags: list[str] | None = ...) -> None: ...  # noqa: E704
+    def write(
+        self,
+        key: str,
+        value: str,
+        importance: float = ...,
+        ttl: float = ...,
+        sacred: bool = ...,
+        tags: list[str] | None = ...,
+    ) -> None: ...  # noqa: E704
     def forget(self, key: str) -> bool: ...  # noqa: E704
     def consolidate(self, key: str) -> bool: ...  # noqa: E704
     def consolidate_to_ltm(self) -> None: ...  # noqa: E704
@@ -365,7 +373,7 @@ class UnifiedMemoryAPI:
                           :exc:`asyncio.TimeoutError` if the deadline is
                           exceeded before all subsystems respond.
         """
-        return run_sync(asyncio.wait_for(self.query(q, memory_types, limit), timeout=timeout))
+        return cast("QueryResult", run_sync(asyncio.wait_for(self.query(q, memory_types, limit), timeout=timeout)))
 
     def health_check(self) -> dict:
         """Return operational health metrics for this unified memory bus.

@@ -9,19 +9,18 @@ from __future__ import annotations
 import sqlite3
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any
 
 
 class IStorageProvider(ABC):
     @abstractmethod
-    def connect(self, db_path: str) -> Any: ...
+    def connect(self, db_path: str) -> None: ...
     @abstractmethod
     def close(self) -> None: ...
 
 
 class IRelationalProvider(ABC):
     @abstractmethod
-    def execute(self, sql: str, params: tuple = ()) -> Any: ...
+    def execute(self, sql: str, params: tuple = ()) -> None: ...
     @abstractmethod
     def fetch_all(self, sql: str, params: tuple = ()) -> list[dict]: ...
     @abstractmethod

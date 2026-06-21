@@ -116,10 +116,12 @@ def main(
 ) -> None:
     """CLI 入口（被 minerva cli.py 调用）。"""
     src_list = [s.strip() for s in sources.split(",")] if sources else None
-    result = asyncio.run(run(
-        output_path=output,
-        sources=src_list,
-        relevance_threshold=threshold,
-        dry_run=dry_run,
-    ))
+    result = asyncio.run(
+        run(
+            output_path=output,
+            sources=src_list,
+            relevance_threshold=threshold,
+            dry_run=dry_run,
+        )
+    )
     print(f"\n[tech-radar] 完成 — 候选: {result['candidate_count']} 条，报告: {result['report_path'] or '(dry-run)'}")

@@ -150,7 +150,7 @@ FORMATS: dict[str, Any] = {
 }
 
 
-def render(viz_type: str, **kwargs) -> str:
+def render(viz_type: str, **kwargs: Any) -> str:
     """Convenience wrapper — render any diagram by type.
 
     Args:

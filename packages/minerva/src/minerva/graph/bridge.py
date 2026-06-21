@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass
@@ -29,7 +30,7 @@ class GraphEntity:
     confidence: str = "MEDIUM"
 
     @classmethod
-    def from_kb_entity(cls, entity) -> GraphEntity:
+    def from_kb_entity(cls, entity: Any) -> GraphEntity:
         """Create GraphEntity from minerva.knowledge.store.Entity."""
         return cls(
             id=entity.id,
@@ -54,7 +55,7 @@ class GraphRelation:
     confidence: str = "MEDIUM"
 
     @classmethod
-    def from_relation(cls, relation) -> GraphRelation:
+    def from_relation(cls, relation: Any) -> GraphRelation:
         """Create GraphRelation from minerva.knowledge.store.Relation."""
         return cls(
             source_id=getattr(relation, "subject_id", ""),
@@ -74,7 +75,7 @@ class GraphBridge:
     Tier-2 dependency: degrades gracefully when Neo4j is unavailable.
     """
 
-    def __init__(self, config: GraphConfig | None = None):
+    def __init__(self, config: GraphConfig | None = None) -> None:
         self.config = config or GraphConfig()
         self._driver = None
         self._connected = False
@@ -98,7 +99,7 @@ class GraphBridge:
             self._connected = False
             return False
 
-    async def disconnect(self):
+    async def disconnect(self) -> None:
         """Close the Neo4j connection."""
         if self._driver:
             await self._driver.close()

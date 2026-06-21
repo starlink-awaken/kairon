@@ -89,17 +89,19 @@ class HtmlContentExtractor(IContentExtractor):
         # Extract title from HTML or use URL
         title = self._extract_title(html, raw.uri)
 
-        return [StructuredKnowledge(
-            title=title,
-            body=body,
-            uri=raw.uri,
-            metadata={
-                "content_type": raw.content_type,
-                "original_length": len(html),
-                "extracted_length": len(body),
-                "extraction_method": "html_text_extractor",
-            },
-        )]
+        return [
+            StructuredKnowledge(
+                title=title,
+                body=body,
+                uri=raw.uri,
+                metadata={
+                    "content_type": raw.content_type,
+                    "original_length": len(html),
+                    "extracted_length": len(body),
+                    "extraction_method": "html_text_extractor",
+                },
+            )
+        ]
 
     def _extract_title(self, html: str, fallback_uri: str) -> str:
         """Extract title from HTML or generate from URI"""

@@ -32,11 +32,11 @@ class AuditEntry:
 class AuditLogger:
     """Write and query audit logs."""
 
-    def __init__(self, db_path: str | None = None):
+    def __init__(self, db_path: str | None = None) -> None:
         self._db_path = db_path or str(_DB_PATH)
         self._ensure_schema()
 
-    def _ensure_schema(self):
+    def _ensure_schema(self) -> None:
         conn = sqlite3.connect(self._db_path)
         try:
             conn.execute("""

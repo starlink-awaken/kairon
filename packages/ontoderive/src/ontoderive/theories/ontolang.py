@@ -8,17 +8,18 @@ OntoDerive 形式语言层 — OntoLang解析器（v1兼容接口）
 
 import re
 from importlib import import_module
+from typing import Any
 
 _ontolang_v2 = import_module("ontoderive.ontolang")
 
 
 class OntoLangParser:
-    def __init__(self):
+    def __init__(self) -> None:
         self.v2 = _ontolang_v2.OntoLangParserV2()
-        self.errors = []
-        self.warnings = []
+        self.errors: list[Any] = []
+        self.warnings: list[Any] = []
 
-    def parse(self, source):
+    def parse(self, source: Any) -> Any:
         ast = self.v2.parse(source)
         # 转换为v1兼容格式
         legacy = _ontolang_v2.to_legacy_ast(ast)
@@ -29,13 +30,13 @@ class OntoLangParser:
         )
         return legacy
 
-    def validate(self, ast):
+    def validate(self, ast: Any) -> Any:
         # ast是dict格式（v1兼容），需要转换
         if isinstance(ast, dict):
             return self._validate_dict(ast)
         return self.v2.validate(ast)
 
-    def _validate_dict(self, ast):
+    def _validate_dict(self, ast: Any) -> Any:
         errors = []
         for e in ast.get("entities", []):
             prefix = e["id"].split("-")[0] if "-" in e["id"] else ""
@@ -49,7 +50,7 @@ class OntoLangParser:
                 errors.append(f"E{f.get('line', 0)}: '{f['id']}' 事实ID格式无效")
         return errors
 
-    def test_suite(self):
+    def test_suite(self) -> Any:
         legacy_ast, errors, parse_errors = self.v2.test_suite()
         self.errors = ["parse_error"] * parse_errors
         return legacy_ast

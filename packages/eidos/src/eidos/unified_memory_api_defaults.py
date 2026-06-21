@@ -30,8 +30,8 @@ def _build_default_fact_graph() -> Any:
 
 
 def _build_default_nks_query_engine() -> Any:
-    from eidos.organs.nks.graph_store import GraphStore  # type: ignore[import-not-found]
-    from eidos.organs.nks.query_engine import GraphQueryEngine  # type: ignore[import-not-found]
+    from eidos.graph_store import GraphStore  # type: ignore[import-not-found]
+    from eidos.query_engine import GraphQueryEngine  # type: ignore[import-not-found]
 
     store = GraphStore("eidos/nks_graph.db")
     return GraphQueryEngine(store)

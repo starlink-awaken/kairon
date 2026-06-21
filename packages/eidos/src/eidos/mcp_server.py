@@ -214,7 +214,7 @@ def handle_define(params: dict | None = None) -> dict:
             )
         )
 
-    schema = Schema(name=name, version="1.0", fields=fields)
+    schema = Schema(name=name, version="1.0", fields={f.name: f for f in fields})
     sr = SchemaRegistry()
     sr.register(schema)
     return {"format_version": FORMAT_VERSION, "name": name, "fields": len(fields), "status": "registered"}

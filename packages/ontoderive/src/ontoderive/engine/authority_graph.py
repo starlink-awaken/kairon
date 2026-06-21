@@ -247,7 +247,8 @@ class AuthorityGraph:
 
         # 根文档：入度高，出度也高（影响力大）
         root_docs: list[str] = [
-            n for n, d in sorted(
+            n
+            for n, d in sorted(
                 [(n, d) for n, d in self.graph.nodes(data=True)],
                 key=lambda x: x[1].get("referenced_by_count", 0),
                 reverse=True,

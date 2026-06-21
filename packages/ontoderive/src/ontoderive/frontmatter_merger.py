@@ -46,12 +46,13 @@ import sys
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any
 
 try:
     import yaml
 except ImportError:
     yaml = None  # type: ignore
+
+from typing import Any
 
 from ontoderive.frontmatter_detector import FrontmatterDetector  # type: ignore[import-not-found]
 

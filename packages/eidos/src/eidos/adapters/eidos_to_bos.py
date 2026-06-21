@@ -14,7 +14,7 @@ import json
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 from urllib.request import Request, urlopen
 
 _log = logging.getLogger(__name__)
@@ -72,7 +72,7 @@ class DerivationResult:
 
 
 class EidosToBosAdapter:
-    def __init__(self, mcp_endpoint: str = AGORA_MCP_ENDPOINT):
+    def __init__(self, mcp_endpoint: str = AGORA_MCP_ENDPOINT) -> None:
         self.mcp_endpoint = mcp_endpoint
         self._agora_available = self._check_agora()
 
@@ -120,7 +120,7 @@ class EidosToBosAdapter:
         try:
             req = Request(f"{self.mcp_endpoint}/health", method="GET")  # noqa: S310
             resp = urlopen(req, timeout=2)  # noqa: S310
-            return resp.status == 200
+            return cast("bool", resp.status == 200)
         except Exception:
             _log.warning("Agora MCP not reachable — using file fallback")
             return False

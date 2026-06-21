@@ -30,7 +30,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from enum import Enum
 from threading import Lock
-from typing import Any
+from typing import Any, cast
 
 _log = logging.getLogger(__name__)
 
@@ -556,7 +556,7 @@ class ConflictResolution:
         for v in versions:
             vid = v.get("device_id") or v.get("source_node_id")
             if vid and vid != winner_id:
-                return vid
+                return cast("str | None", vid)
         return None
 
     def _load_history(self) -> None:

@@ -21,11 +21,12 @@ except ImportError:
 console = Console() if RICH_AVAILABLE else None
 
 
-def print_banner():
+def print_banner() -> None:
     """Print Minerva startup banner."""
     if not RICH_AVAILABLE:
         print("=== Minerva Deep Research ===")
         return
+    assert console is not None
     console.print()
     console.print(
         Panel.fit(
@@ -37,7 +38,7 @@ def print_banner():
     console.print()
 
 
-def print_pipeline_header(query: str, level: str):
+def print_pipeline_header(query: str, level: str) -> None:
     """Print research pipeline start."""
     if not RICH_AVAILABLE:
         print(f"\nResearch: {query} [Level: {level}]")
@@ -73,10 +74,10 @@ def live_pipeline_display() -> Generator[Any]:
     header = Panel("[bold cyan]Minerva Research Pipeline[/bold cyan]", style="cyan", padding=(0, 1))
     footer = Panel("[dim]Running...[/dim]", style="dim", padding=(0, 1))
 
-    stage_info = {"stages": [], "current": ""}
+    stage_info: dict[str, Any] = {"stages": [], "current": ""}
     log_lines: list[str] = []
 
-    def render_stages():
+    def render_stages() -> Any:
         lines = []
         for s in stage_info["stages"][-9:]:
             icon = "✓" if s.get("done") else ("✗" if s.get("failed") else "◌")
@@ -89,7 +90,7 @@ def live_pipeline_display() -> Generator[Any]:
             border_style="blue",
         )
 
-    def render_log():
+    def render_log() -> Any:
         visible = log_lines[-10:] or ["[dim]Waiting for stages...[/dim]"]
         return Panel("\n".join(visible), title="Log", border_style="green")
 
@@ -100,12 +101,12 @@ def live_pipeline_display() -> Generator[Any]:
         layout["footer"].update(footer)
 
         class StageTracker:
-            def add_stage(self, name, elapsed=0, done=False):
+            def add_stage(self, name: Any, elapsed: Any = 0, done: Any = False) -> None:
                 stage_info["stages"].append({"name": name, "elapsed": elapsed, "done": done})
                 stage_info["current"] = name
                 layout["stages"].update(render_stages())
 
-            def mark_done(self, name, elapsed=0):
+            def mark_done(self, name: Any, elapsed: Any = 0) -> None:
                 for s in stage_info["stages"]:
                     if s["name"] == name:
                         s["done"] = True
@@ -120,7 +121,7 @@ def live_pipeline_display() -> Generator[Any]:
                     Panel(f"[dim]Completed: {completed}/{total}[/dim]", style="dim", padding=(0, 1))
                 )
 
-            def mark_failed(self, name, error=""):
+            def mark_failed(self, name: Any, error: Any = "") -> None:
                 for s in stage_info["stages"]:
                     if s["name"] == name:
                         s["failed"] = True
@@ -129,7 +130,7 @@ def live_pipeline_display() -> Generator[Any]:
                 layout["stages"].update(render_stages())
                 layout["log"].update(render_log())
 
-            def log(self, message):
+            def log(self, message: Any) -> None:
                 log_lines.append(f"[dim]{message}[/dim]")
                 layout["log"].update(render_log())
 
@@ -143,7 +144,7 @@ def print_stats_panel(
     entity_count: int,
     total_time: float,
     cost: float = 0.0,
-):
+) -> None:
     """Print post-run statistics panel with ASCII bar chart."""
     if not RICH_AVAILABLE:
         print(f"\nTotal: {total_time:.1f}s | Sources: {source_count} | Entities: {entity_count} | Cost: ${cost:.2f}")
@@ -181,7 +182,7 @@ def print_summary_table(
     source_count: int,
     entity_count: int,
     total_time: float,
-):
+) -> None:
     """Print a rich summary table."""
     if not RICH_AVAILABLE:
         print(f"\nTotal: {total_time:.1f}s | Sources: {source_count} | Entities: {entity_count}")

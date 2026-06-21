@@ -12,16 +12,17 @@ import hashlib
 import subprocess
 import time
 from pathlib import Path
+from typing import Any
 
 
 class FileWatcher:
-    def __init__(self, project_root, watch_dirs=None):
+    def __init__(self, project_root: Any, watch_dirs: Any = None) -> None:
         self.root = Path(project_root)
         self.watch_dirs = watch_dirs or ["facts", "entities", "inferences", "scheme"]
-        self.hashes = {}
+        self.hashes: dict[Any, Any] = {}
         self._snapshot()
 
-    def _snapshot(self):
+    def _snapshot(self) -> None:
         """记录当前所有文件哈希"""
         self.hashes = {}
         for d in self.watch_dirs:
@@ -32,13 +33,13 @@ class FileWatcher:
                 if f.is_file():
                     self.hashes[str(f.relative_to(self.root))] = self._hash(f)
 
-    def _hash(self, filepath):
+    def _hash(self, filepath: Any) -> Any:
         try:
             return hashlib.md5(Path(filepath).read_bytes()).hexdigest()  # noqa: S324
         except OSError:
             return ""
 
-    def check(self):
+    def check(self) -> Any:
         """检查是否有文件变化，返回变化列表"""
         changes = []
         for d in self.watch_dirs:
@@ -60,7 +61,7 @@ class FileWatcher:
         self._snapshot()
         return changes
 
-    def watch(self, interval=5, auto_run=True):
+    def watch(self, interval: Any = 5, auto_run: Any = True) -> None:
         """持续监听，检测到变化时自动执行推导和检查"""
         print(f"[watcher] 👀 监听中... (间隔{interval}秒, 目录: {self.watch_dirs})")
         print("[watcher]   按 Ctrl+C 停止")

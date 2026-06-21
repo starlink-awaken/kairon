@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from typing import Any
 
 import structlog
 
@@ -34,10 +35,11 @@ class ResearchContext:
     sub_questions: list[str] = field(default_factory=list)
     search_results: list[dict] = field(default_factory=list)
     extracted_content: list[str] = field(default_factory=list)
-    entities: list[dict] = field(default_factory=list)
+    entities: list[Any] = field(default_factory=list)
     relations: list[dict] = field(default_factory=list)
     contradictions: list[dict] = field(default_factory=list)
     report: str | None = None
+    deep_analysis: str = ""
     report_path: str | None = None
 
     # Stage metadata (flags, audit results, etc.)
@@ -79,7 +81,7 @@ class Pipeline:
         ctx = await pipeline.run("What is MoE?", ResearchLevel.L2)
     """
 
-    def __init__(self, stages: dict[ResearchLevel, list[IPipelineStage]]):
+    def __init__(self, stages: dict[ResearchLevel, list[IPipelineStage]]) -> None:
         self.stages = stages
 
     async def run(self, query: str, level: ResearchLevel, triage: TriageResult) -> ResearchContext:
@@ -139,14 +141,14 @@ class QualityGateError(Exception):
 
 
 def create_default_pipeline(
-    llm_client,
-    search_engine,
-    nlp_pipeline,
-    knowledge_store,
-    creative_tool=None,
-    nlp_pipeline_zh=None,
-    cloud_llm_client=None,
-    glm_llm_client=None,
+    llm_client: Any = None,
+    search_engine: Any = None,
+    nlp_pipeline: Any = None,
+    knowledge_store: Any = None,
+    creative_tool: Any = None,
+    nlp_pipeline_zh: Any = None,
+    cloud_llm_client: Any = None,
+    glm_llm_client: Any = None,
     kos_save_enabled: bool = False,
     immune_audit_enabled: bool = False,
     vault_sink_enabled: bool = False,

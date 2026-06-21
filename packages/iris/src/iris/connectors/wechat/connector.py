@@ -113,10 +113,7 @@ class WeChatConnector(BaseConnector):
 
     def search(self, query: str, limit: int = 10) -> list[KnowledgeArtifact]:
         needle = query.lower()
-        return [
-            item for item in self.list_items(limit=1000)
-            if needle in cast(Note, item).content.lower()
-        ][:limit]
+        return [item for item in self.list_items(limit=1000) if needle in cast(Note, item).content.lower()][:limit]
 
     def query(self, q: str) -> list[dict[str, Any]]:
         return [item.to_dict() for item in self.search(q, limit=20)]

@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 import os
 import time
+from typing import Any
 
 from fastapi import Request
 from fastapi.responses import JSONResponse
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 class InputGuardMiddleware(BaseHTTPMiddleware):
     """Enforce input limits on all requests."""
 
-    async def dispatch(self, request: Request, call_next):
+    async def dispatch(self, request: Request, call_next: Any) -> Any:
         # Query string length limit
         if len(request.url.query) > 4096:
             return JSONResponse({"error": "Query string too long (>4KB)"}, status_code=414)
@@ -37,7 +38,7 @@ class InputGuardMiddleware(BaseHTTPMiddleware):
 class RateLimiter:
     """Simple in-memory token bucket rate limiter."""
 
-    def __init__(self, max_requests: int = 30, window_seconds: float = 60.0):
+    def __init__(self, max_requests: int = 30, window_seconds: float = 60.0) -> None:
         self.max_requests = max_requests
         self.window = window_seconds
         self._buckets: dict[str, list[float]] = {}
@@ -63,7 +64,7 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
 
     _PUBLIC_PATHS = {"/health", "/", "/docs", "/openapi.json"}
 
-    def __init__(self, app, api_key: str | None = None):
+    def __init__(self, app: Any, api_key: str | None = None) -> None:
         super().__init__(app)
         self.api_key = api_key or os.environ.get("MINERVA_API_KEY", "")
         if not self.api_key:
@@ -71,7 +72,7 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
                 "MINERVA_API_KEY not set — ALL API requests will be rejected. Set MINERVA_API_KEY to enable access."
             )
 
-    async def dispatch(self, request, call_next):
+    async def dispatch(self, request: Any, call_next: Any) -> Any:
         # Allow public paths without auth
         if request.url.path in self._PUBLIC_PATHS:
             return await call_next(request)
@@ -109,7 +110,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
     _TRUSTED_PROXIES = {"127.0.0.1", "::1"}
 
-    def __init__(self, app, limiter: RateLimiter | None = None):
+    def __init__(self, app: Any, limiter: RateLimiter | None = None) -> None:
         super().__init__(app)
         self.limiter = limiter or RateLimiter()
 
@@ -122,7 +123,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                 return forwarded.split(",")[0].strip()
         return client_host
 
-    async def dispatch(self, request: Request, call_next):
+    async def dispatch(self, request: Request, call_next: Any) -> Any:
         if request.url.path.startswith("/api/research"):
             key = self._client_ip(request)
             if not self.limiter.acquire(key):

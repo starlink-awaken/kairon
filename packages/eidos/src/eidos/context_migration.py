@@ -129,6 +129,7 @@ class ContextMigration:
         self.organ_id = f"eidos-{id(self):x}"
         self._status = "active"
         self._metabolic_budget = 1000.0
+
     # --------------------------------------------------------------------------
     # Build migration bundle
     # --------------------------------------------------------------------------

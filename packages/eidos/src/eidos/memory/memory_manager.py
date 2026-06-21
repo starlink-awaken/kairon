@@ -18,7 +18,7 @@ from collections.abc import Generator
 from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, Protocol, cast
 
 from kairon_utils import atomic_write_json
 
@@ -83,6 +83,7 @@ class _OrganBase:
 @dataclass
 class MemoryMount:
     """Describes a mounted memory view."""
+
     mount_type: str
     mount_id: str
     source: str
@@ -106,6 +107,7 @@ class MemoryMount:
 @dataclass
 class MemorySovereigntyContext:
     """Request-scoped sovereignty context for memory consumers."""
+
     owner_id: str
     primary_scope: str
     role_id: str = ""
@@ -121,7 +123,7 @@ class SecurityManagerProtocol(Protocol):
 
 
 class SQLiteConnectionProtocol(Protocol):
-    def execute(self, statement: str, parameters: tuple[object, ...] = ()) -> Any: ...
+    def execute(self, statement: str, parameters: tuple[object, ...] = ()) -> None: ...
 
     def commit(self) -> None: ...
 
@@ -335,7 +337,7 @@ class MemoryManager(_OrganBase):
                 """,
                 (now, key),
             )
-        return json.loads(row["value"])
+        return cast("JSONValue | None", json.loads(row["value"]))
 
     def delete_private(self, key: str) -> None:
         """删除私有记忆条目"""
@@ -368,7 +370,7 @@ class MemoryManager(_OrganBase):
             row = conn.execute("SELECT value FROM shared_memory WHERE key = ?", (key,)).fetchone()
             if row is None:
                 return default
-        return json.loads(row["value"])
+        return cast("JSONValue | None", json.loads(row["value"]))
 
     def clear_shared(self) -> None:
         """清空共享记忆（任务完成时调用）"""
@@ -400,7 +402,7 @@ class MemoryManager(_OrganBase):
             return default
         try:
             payload = json.loads(file_path.read_text(encoding="utf-8"))
-            return payload.get("value", default)
+            return cast("JSONValue | None", payload.get("value", default))
         except (json.JSONDecodeError, OSError):
             return default
 
@@ -412,7 +414,7 @@ class MemoryManager(_OrganBase):
         Alpha 阶段：复用 ArchetypeLoader 的 law 读取能力。
         Beta 阶段将集成向量数据库语义检索。
         """
-        return self._loader.get_law_archetypes()
+        return cast("dict[str, object]", self._loader.get_law_archetypes())
 
     # ── 统一读取接口（自动查找合适层级）────────────────────────
 

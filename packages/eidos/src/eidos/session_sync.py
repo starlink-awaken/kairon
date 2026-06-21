@@ -20,7 +20,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from threading import Lock
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 _log = logging.getLogger(__name__)
 
@@ -460,7 +460,7 @@ class SessionSync:
             return None
         if device_id not in self._vector_clocks:
             self._vector_clocks[device_id] = VectorClock()
-        return self._vector_clocks[device_id]
+        return cast("VectorClock | None", self._vector_clocks[device_id])
 
     def sync_vector_clock(self, device_id: str, remote_clock: dict[str, int]) -> None:
         """Merge a remote vector clock into the local one."""

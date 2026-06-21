@@ -1,5 +1,7 @@
 """推理规则函数"""
 
+from typing import Any
+
 # =============================================
 # 模块级常量
 # =============================================
@@ -92,7 +94,7 @@ for _parent, _subs in ONTOLOGY_HIERARCHY.items():
 # =============================================
 
 
-def detect_domain(engine, value, label):
+def detect_domain(engine: Any, value: Any, label: Any) -> Any:
     """从值和标签中检测语义域, 优先用值的显式单位"""
     vs = str(value)
     for suffix, domain in VALUE_UNIT_MAP.items():
@@ -104,14 +106,14 @@ def detect_domain(engine, value, label):
     return None
 
 
-def char_overlap(engine, label_a, label_b):
+def char_overlap(engine: Any, label_a: Any, label_b: Any) -> Any:
     """检测两个标签的共同CJK字符数 ≥ 阈值"""
     chars_a = {c for c in label_a if "一" <= c <= "鿿" and c not in _STOP_CHARS}
     chars_b = {c for c in label_b if "一" <= c <= "鿿" and c not in _STOP_CHARS}
     return len(chars_a & chars_b) >= 2
 
 
-def comparable(engine, label_a, label_b, val_a=None, val_b=None):
+def comparable(engine: Any, label_a: Any, label_b: Any, val_a: Any = None, val_b: Any = None) -> Any:
     """判断两个事实是否可比较 — 域匹配+字符重叠"""
     if val_a is not None and val_b is not None:
         dom_a = detect_domain(engine, val_a, label_a)
@@ -130,7 +132,7 @@ def comparable(engine, label_a, label_b, val_a=None, val_b=None):
     return False
 
 
-def find_chain(engine, node, inferences, visited):
+def find_chain(engine: Any, node: Any, inferences: Any, visited: Any) -> Any:
     if node in visited or node not in inferences:
         return [node]
     visited.add(node)
@@ -146,7 +148,7 @@ def find_chain(engine, node, inferences, visited):
 # ═══ R15: 变化检测 (Change Detection / 时态推理) ═══
 
 
-def extract_prefix(engine, id_str):
+def extract_prefix(engine: Any, id_str: Any) -> Any:
     """从ID中提取完整前缀模式 (如 D-F1→D-F, ORG-xxx→ORG-)"""
     # 按长度降序匹配, 优先匹配更长模式 (INF-V2- 优先于 INF-)
     for prefix in sorted(_ID_PREFIX_MAP.keys(), key=lambda x: -len(x)):
@@ -156,7 +158,7 @@ def extract_prefix(engine, id_str):
     return id_str.split("-")[0] if "-" in id_str else id_str[:3]
 
 
-def guess_parent(engine, prefix, type_map):
+def guess_parent(engine: Any, prefix: Any, type_map: Any) -> Any:
     """根据前缀模式猜测最可能的父类型 — 基于ID前缀→类型映射"""
     known = _ID_PREFIX_MAP
     # 直接匹配: 如果前缀以已知前缀开头, 返回对应类型
@@ -173,7 +175,7 @@ def guess_parent(engine, prefix, type_map):
     return best
 
 
-def closest_known(engine, prefix):
+def closest_known(engine: Any, prefix: Any) -> Any:
     """找到最相似的已知ID前缀"""
     best, best_score = "ORG-", 0
     for kp in _ID_PREFIX_MAP:
@@ -187,7 +189,7 @@ def closest_known(engine, prefix):
 # ═══ R10: 影响传播 (Influence Analysis) ═══
 
 
-def calc_depth(engine, node, inferences, depths, visited):
+def calc_depth(engine: Any, node: Any, inferences: Any, depths: Any, visited: Any) -> Any:
     if node in visited or node not in inferences:
         depths[node] = 0
         return 0
@@ -203,7 +205,7 @@ def calc_depth(engine, node, inferences, depths, visited):
 # ═══ R19: 案例推理 CBR (Case-Based Reasoning) ═══
 
 
-def disjunctive_syllogism(engine, inferences):
+def disjunctive_syllogism(engine: Any, inferences: Any) -> Any:
     """A或B的推论结构: 如果两个推论引用相同事实但结论方向不同, 检测是否存在'排中'结构"""
     results = []
     inf_list = list(inferences.items())
@@ -241,7 +243,7 @@ def disjunctive_syllogism(engine, inferences):
 # ═══ R14: 假言三段论 (Hypothetical Syllogism Chain) ═══
 
 
-def hypothetical_syllogism(engine, inferences):
+def hypothetical_syllogism(engine: Any, inferences: Any) -> Any:
     """IF A THEN B, IF B THEN C → IF A THEN C 检测跨层推导链并计算衰减系数"""
     results = []
     for title, info in inferences.items():

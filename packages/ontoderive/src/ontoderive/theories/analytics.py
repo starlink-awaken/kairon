@@ -11,6 +11,7 @@
 
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import Any
 
 from .analytics_patterns import (
     analyze_agency,
@@ -69,12 +70,12 @@ class AnalyticalPattern:
 class AnalyticsEngine:
     """Analytical Pattern Engine"""
 
-    def __init__(self, enhancer=None, matcher=None):
+    def __init__(self, enhancer: Any = None, matcher: Any = None) -> None:
         self.enhancer = enhancer
         self.matcher = matcher
         self.patterns = self._register_patterns()
 
-    def _register_patterns(self):
+    def _register_patterns(self) -> list[Any]:
         return [
             # === A1: capacity_elasticity ===
             AnalyticalPattern(
@@ -204,7 +205,15 @@ class AnalyticsEngine:
             ),
         ]
 
-    def run(self, facts, entities, inferences, relations=None, patterns=None, max_depth: int = 5):
+    def run(
+        self,
+        facts: Any,
+        entities: Any,
+        inferences: Any,
+        relations: Any = None,
+        patterns: Any = None,
+        max_depth: int = 5,
+    ) -> Any:
         """运行所有(或指定)分析模式, 返回洞察列表
 
         max_depth: 最大推理深度 (0=仅纯规则, 3=含分类器, 5=含LLM)

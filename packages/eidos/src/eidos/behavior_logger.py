@@ -111,7 +111,7 @@ class BehaviorLogger:
     """
 
     def __init__(self) -> None:
-        self._fact_graph = None
+        self._fact_graph: Any = None
         self._fg_available = True
         # 实例级内存回退存储（避免多实例共享状态）
         self._memory_store: list[BehaviorEvent] = []

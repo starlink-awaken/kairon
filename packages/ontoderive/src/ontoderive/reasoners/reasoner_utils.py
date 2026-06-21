@@ -1,9 +1,10 @@
 """Reasoner utility functions — self-free helpers extracted from RuleReasoner"""
 
 import re
+from typing import Any
 
 
-def default_rules():
+def default_rules() -> list[Any]:
     """内置推导规则库 — 可扩展"""
     from ontoderive.reasoners.reasoner import DerivationRule  # type: ignore[import-not-found]
 
@@ -46,7 +47,7 @@ def default_rules():
     ]
 
 
-def find_chain(node, inferences, visited):
+def find_chain(node: Any, inferences: Any, visited: Any) -> Any:
     """递归追踪推导链 — 从当前节点到最深的依赖节点"""
     if node in visited or node not in inferences:
         return [node]
@@ -60,7 +61,7 @@ def find_chain(node, inferences, visited):
     return longest
 
 
-def calc_depth(node, inferences, depths, visited):
+def calc_depth(node: Any, inferences: Any, depths: Any, visited: Any) -> Any:
     """递归计算推导深度 — 支持循环检测"""
     if node in visited or node not in inferences:
         depths[node] = 0
@@ -74,7 +75,7 @@ def calc_depth(node, inferences, depths, visited):
     return depths[node]
 
 
-def project_profile(project):
+def project_profile(project: Any) -> list[Any]:
     """提取项目特征向量: [事实数/20, 推偶数/10, 平均引用数/5, 数值事实比, 政策事实比]"""
     facts = project.get("facts", {})
     infs = project.get("inferences", {})
@@ -87,7 +88,7 @@ def project_profile(project):
     return [n_f / 20, n_i / 10, avg_df / 5, num_ratio, pol_ratio]
 
 
-def cosine_similarity(a, b):
+def cosine_similarity(a: Any, b: Any) -> Any:
     """两个向量的余弦相似度"""
     dot = sum(x * y for x, y in zip(a, b))
     norm_a = (sum(x * x for x in a) or 1) ** 0.5

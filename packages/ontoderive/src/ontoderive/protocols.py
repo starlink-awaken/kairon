@@ -1,4 +1,5 @@
 """OntoDerive Engine protocols — formal interfaces for toolforge and engine components."""
+
 from __future__ import annotations
 
 from typing import Any, Protocol, runtime_checkable

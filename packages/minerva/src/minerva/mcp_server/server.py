@@ -17,6 +17,7 @@ import os
 import re
 import sys
 import uuid
+from typing import Any, cast
 
 from fastmcp import FastMCP
 
@@ -44,23 +45,23 @@ class DegradedExecutor:
     knowledge_search and knowledge_ingest; research tools return clear errors.
     """
 
-    def __init__(self, kb):
+    def __init__(self, kb: Any) -> None:
         self.kb = kb
 
-    async def get_status(self, task_id: str):
+    async def get_status(self, task_id: str) -> None:
         return None
 
-    async def execute_now(self, task):
+    async def execute_now(self, task: Any) -> None:
         raise RuntimeError("Research not available in degraded mode. Only knowledge_search and knowledge_ingest work.")
 
-    async def schedule(self, task):
+    async def schedule(self, task: Any) -> None:
         raise RuntimeError("Schedule not available in degraded mode.")
 
-    async def watch(self, task):
+    async def watch(self, task: Any) -> None:
         raise RuntimeError("Watch not available in degraded mode.")
 
 
-def _ensure_executor():
+def _ensure_executor() -> Any:
     """Return executor or raise with clear guidance."""
     if executor is not None:
         return executor
@@ -539,7 +540,7 @@ async def knowledge_closed_loop(
 # ============================================================
 
 
-def init_server(executor_instance: ResearchExecutor):
+def init_server(executor_instance: ResearchExecutor) -> None:
     """Initialize the MCP server with an executor."""
     global executor
     executor = executor_instance
@@ -611,7 +612,7 @@ def _check_llm_health() -> tuple[bool, str]:
     return overall, "\n".join(messages)
 
 
-def main():
+def main() -> None:
     """Entry point: minerva-mcp — auto-initializes executor with graceful degradation."""
     sys.stderr.write("Minerva MCP Server starting...\n")
 
@@ -630,7 +631,7 @@ def main():
             from minerva.knowledge.store import SQLiteKnowledgeStore  # type: ignore[import-not-found]
 
             kb = SQLiteKnowledgeStore()
-            init_server(DegradedExecutor(kb))
+            init_server(cast("ResearchExecutor", DegradedExecutor(kb)))
             sys.stderr.write("  Degraded mode ready: knowledge_search + knowledge_ingest available.\n")
         except Exception as e2:
             sys.stderr.write(f"  [ERROR] Degraded init also failed: {e2}\n")

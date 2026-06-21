@@ -15,6 +15,7 @@ import subprocess
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
+from typing import cast
 
 """
 ---
@@ -166,7 +167,7 @@ class GitVC:
 
         # 获取提交hash
         result = self._run_git(["rev-parse", "HEAD"])
-        return result.stdout.strip()
+        return cast("str", result.stdout.strip())
 
     def history(self, limit: int = 10, file: str | None = None) -> list[VersionCommit]:
         """查询变更历史
@@ -342,7 +343,7 @@ class GitVC:
         """
         try:
             result = self._run_git(["rev-parse", "HEAD"])
-            return result.stdout.strip()
+            return cast("str | None", result.stdout.strip())
         except RuntimeError:
             return None
 
@@ -354,7 +355,7 @@ class GitVC:
         """
         try:
             result = self._run_git(["rev-parse", "--abbrev-ref", "HEAD"])
-            return result.stdout.strip()
+            return cast("str", result.stdout.strip())
         except RuntimeError:
             return "main"
 

@@ -8,6 +8,7 @@ OntoDerive LLM增强层 — 零依赖降级 + 本地模型增强
 from __future__ import annotations
 
 import os
+from typing import Any
 
 from .providers import BACKENDS, BaseProvider, detect_backend
 
@@ -22,7 +23,7 @@ class LLMEnhancer:
     4. ANTHROPIC_API_KEY → anthropic 后端
     """
 
-    def __init__(self, backend="auto", model=None, base_url=None):
+    def __init__(self, backend: Any = "auto", model: Any = None, base_url: Any = None) -> None:
         if backend == "auto":
             backend = os.environ.get("ONTODERIVE_LLM_BACKEND", "auto")
         if backend == "auto":
@@ -44,7 +45,7 @@ class LLMEnhancer:
             return BACKENDS["none"]()
         return cls(model=self.model, base_url=self.base_url)
 
-    def _call(self, prompt, system="", temperature=0.3):
+    def _call(self, prompt: Any, system: Any = "", temperature: Any = 0.3) -> Any:
         if not self.available:
             return None
         try:
@@ -57,7 +58,7 @@ class LLMEnhancer:
 
     # ── 三个增强入口 ──
 
-    def enhance_derivation_hints(self, facts_summary, inferences_text, existing_hints):
+    def enhance_derivation_hints(self, facts_summary: Any, inferences_text: Any, existing_hints: Any) -> Any:
         """增强推导提示：LLM读取推论全文，生成洞察"""
         if not self.available or self.backend == "none":
             return existing_hints
@@ -74,7 +75,7 @@ class LLMEnhancer:
             return existing_hints + lines[:2]
         return existing_hints
 
-    def detect_contradictions(self, inference_a, inference_b, shared_facts):
+    def detect_contradictions(self, inference_a: Any, inference_b: Any, shared_facts: Any) -> Any:
         """语义矛盾检测：LLM判断两个推论是否真正矛盾"""
         if not self.available or self.backend == "none":
             return None
@@ -88,7 +89,7 @@ class LLMEnhancer:
         result = self._call(prompt, "仅回答YES或NO。", 0.1)
         return result and "YES" in result.upper()
 
-    def smart_match_tools(self, goal, context, tools_descriptions):
+    def smart_match_tools(self, goal: Any, context: Any, tools_descriptions: Any) -> Any:
         """智能工具匹配：LLM替代TF-IDF做语义匹配"""
         if not self.available or self.backend == "none":
             return None
@@ -115,7 +116,7 @@ class LLMEnhancer:
 _enhancer: LLMEnhancer | None = None
 
 
-def get_enhancer(force=False):
+def get_enhancer(force: Any = False) -> Any:
     global _enhancer
     if _enhancer is None or force:
         _enhancer = LLMEnhancer()

@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 
 @dataclass
@@ -48,7 +49,7 @@ class ContradictionDetector:
     - Methodological disagreements
     """
 
-    def __init__(self, llm_client=None, report_dir: str = "~/knowledge/reports"):
+    def __init__(self, llm_client: Any = None, report_dir: str = "~/knowledge/reports") -> None:
         self.llm = llm_client
         self.report_dir = Path(report_dir).expanduser()
 

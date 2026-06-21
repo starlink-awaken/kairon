@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+from typing import Any
 
 import structlog
 
@@ -46,12 +47,12 @@ class BFTSearch:
 
     def __init__(
         self,
-        search_engine,
-        llm_client=None,
+        search_engine: Any,
+        llm_client: Any = None,
         max_depth: int = 3,
         max_branches: int = 5,
         prune_threshold: float = 0.3,
-    ):
+    ) -> None:
         self.search_engine = search_engine
         self.llm_client = llm_client
         self.max_depth = max_depth

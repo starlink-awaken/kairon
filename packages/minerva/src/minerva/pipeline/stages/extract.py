@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+from typing import Any
 
 from minerva.knowledge.store import Entity  # type: ignore[import-not-found]
 from minerva.pipeline.engine import IPipelineStage, ResearchContext  # type: ignore[import-not-found]
@@ -34,7 +35,7 @@ class DecomposeStageImpl(IPipelineStage):
 
     name = "decompose"
 
-    def __init__(self, llm, prompt: str | None = None, *, max_sub_questions: int = 5):
+    def __init__(self, llm: Any, prompt: str | None = None, *, max_sub_questions: int = 5) -> None:
         self._llm = llm
         self._prompt = prompt or DECOMPOSE_PROMPT
         self._max_sub_questions = max_sub_questions
@@ -51,7 +52,7 @@ class EntityExtractionStageImpl(IPipelineStage):
 
     name = "extract"
 
-    def __init__(self, nlp, llm_client=None, knowledge_store=None, *, nlp_zh=None):
+    def __init__(self, nlp: Any, llm_client: Any = None, knowledge_store: Any = None, *, nlp_zh: Any = None) -> None:
         self._nlp = nlp
         self._nlp_zh = nlp_zh
         self._llm_client = llm_client
@@ -81,7 +82,15 @@ class DeepReadStageImpl(IPipelineStage):
 
     name = "deep_read"
 
-    def __init__(self, llm=None, prompt: str | None = None, *, top_n: int = 15, search_engine=None, long_context=None):
+    def __init__(
+        self,
+        llm: Any = None,
+        prompt: str | None = None,
+        *,
+        top_n: int = 15,
+        search_engine: Any = None,
+        long_context: Any = None,
+    ) -> None:
         self._llm = llm or long_context
         self._prompt = prompt or DEEP_READ_PROMPT
         self._top_n = top_n

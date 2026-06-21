@@ -280,9 +280,7 @@ class IndexHealthChecker:
 
 
 # 便捷函数
-async def check_index_health(
-    knowledge_store: Any | None = None, index_manager: Any | None = None
-) -> HealthReport:
+async def check_index_health(knowledge_store: Any | None = None, index_manager: Any | None = None) -> HealthReport:
     """
     检查索引健康
 

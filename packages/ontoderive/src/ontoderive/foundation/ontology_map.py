@@ -123,7 +123,7 @@ class OntologyMapper:
         """OntoDerive类型→PROV-O类型"""
         return TYPE_MAPPINGS.get(onto_type, {}).get("prov_o", "prov:Entity")
 
-    def to_jsonld(self, knowledge, base_uri: str = "") -> dict:
+    def to_jsonld(self, knowledge: Any, base_uri: str = "") -> dict:
         """将FormalKnowledge导出为JSON-LD (schema.org context)"""
         uri = base_uri or self.DEFAULT_BASE_URI
 
@@ -169,7 +169,7 @@ class OntologyMapper:
 
         return result
 
-    def to_turtle(self, knowledge, base_uri: str = "") -> str:
+    def to_turtle(self, knowledge: Any, base_uri: str = "") -> str:
         """导出Turtle格式 (最小实现)"""
         uri = base_uri or self.DEFAULT_BASE_URI
         lines = [
@@ -200,7 +200,7 @@ class OntologyMapper:
 
         return "\n".join(lines)
 
-    def export(self, knowledge, fmt="jsonld", base_uri="") -> str:
+    def export(self, knowledge: Any, fmt: Any = "jsonld", base_uri: Any = "") -> str:
         """统一导出入口"""
         if fmt == "turtle":
             return self.to_turtle(knowledge, base_uri)

@@ -46,9 +46,11 @@ Authority: organs/D-Memory/AGENTS.md
 
 _log = logging.getLogger(__name__)
 
+
 # Define a Protocol for cross-organ TaskContext
 class _TaskContextProtocol(Protocol):
     """Protocol matching the cross-organ TaskContext interface."""
+
     def to_dict(self) -> dict[str, object]: ...
 
     @classmethod

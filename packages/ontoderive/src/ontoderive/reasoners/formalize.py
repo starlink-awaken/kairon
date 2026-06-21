@@ -7,6 +7,7 @@ LLM从自然语言提取结构化知识 → 本体对齐 → OntoLang符号化
 import json
 import re
 from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass
@@ -164,10 +165,10 @@ class Formalizer:
 - entities: 组织/角色/项目 (id= ORG-/ROL-/PRJ-, type=组织|角色|项目)
 - inferences: 结论/判断 (id= INF-1.., from=引用的事实id列表, conc≤80字)"""
 
-    def __init__(self, enhancer=None):
+    def __init__(self, enhancer: Any = None) -> None:
         self.enhancer = enhancer
 
-    def _smart_chunk(self, text: str, max_chars=3000, max_total=12000):
+    def _smart_chunk(self, text: str, max_chars: Any = 3000, max_total: Any = 12000) -> Any:
         """智能分块: 按段落边界切割, 避免截断句子"""
         text = text[:max_total]
         if len(text) <= max_chars:
@@ -220,7 +221,7 @@ class Formalizer:
             conclusion=inf.get("conc", inf.get("conclusion", "")),
         )
 
-    def extract_from_text(self, text: str, mode="llm_first") -> FormalKnowledge:
+    def extract_from_text(self, text: str, mode: Any = "llm_first") -> FormalKnowledge:
         """Phase 1: LLM主提取 → 降级规则引擎
 
         mode: llm_first (默认, LLM优先+规则降级)
@@ -268,7 +269,7 @@ class Formalizer:
         self._build_abox_tbox(knowledge)
         return knowledge
 
-    def _validate(self, knowledge: FormalKnowledge):
+    def _validate(self, knowledge: FormalKnowledge) -> None:
         """规则校验: TypeValidator检查ID格式 + 属性约束校验"""
         try:
             from ontoderive.foundation.typesystem import TypeValidator
@@ -283,7 +284,7 @@ class Formalizer:
                 e.id = f"ORG-{e.name[:10]}"
         self._validate_properties(knowledge)
 
-    def _validate_properties(self, knowledge: FormalKnowledge):
+    def _validate_properties(self, knowledge: FormalKnowledge) -> None:
         """属性约束校验: 基于TBox PROPERTY/META_TYPES检查字段完整性和类型"""
         issues = []
         # 事实属性校验
@@ -317,7 +318,7 @@ class Formalizer:
         if issues:
             knowledge.abox["_validation_issues"] = issues
 
-    def _build_abox_tbox(self, knowledge: FormalKnowledge):
+    def _build_abox_tbox(self, knowledge: FormalKnowledge) -> None:
         """Phase 2: 构建ABox(断言)和TBox(术语)"""
         knowledge.abox = {
             "facts": {f.id: {"description": f.description, "value": f.value} for f in knowledge.facts},

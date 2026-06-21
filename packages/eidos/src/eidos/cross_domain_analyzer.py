@@ -92,9 +92,7 @@ class CrossDomainAnalyzer:
             db_path: 数据库路径
         """
         self.status = "active"
-        self.db_path = db_path or os.environ.get(
-            "BOS_MICROKERNEL_DB", "data/microkernel.db"
-        )
+        self.db_path = db_path or os.environ.get("BOS_MICROKERNEL_DB", "data/microkernel.db")
         self._relations: dict[str, DomainRelation] = {}
         self._flows: list[InformationFlow] = []
         self._domain_graph: dict[str, set[str]] = {}  # domain -> connected domains
@@ -322,7 +320,9 @@ class CrossDomainAnalyzer:
             ),
         )
 
-    def query_across_domains(self, query: str, domains: list[str] | None = None, limit: int = 10) -> list[dict[str, Any]]:
+    def query_across_domains(
+        self, query: str, domains: list[str] | None = None, limit: int = 10
+    ) -> list[dict[str, Any]]:
         """
         跨域查询
 

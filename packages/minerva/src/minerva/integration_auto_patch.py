@@ -58,7 +58,7 @@ import weakref
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar, cast
 
 if TYPE_CHECKING:
     from minerva.cognitive_provider import CognitiveLoopKnowledgeProvider  # type: ignore[import-not-found]
@@ -306,7 +306,7 @@ class AutoPatcher:
                 mod = importlib.import_module(path)
                 cognitive_loop_class = getattr(mod, "CognitiveLoop", None)
                 if cognitive_loop_class is not None:
-                    return cognitive_loop_class
+                    return cast("type | None", cognitive_loop_class)
             except ImportError:
                 continue
 

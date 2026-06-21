@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from minerva.paradigm.types import ParadigmResult, ResearchParadigm  # type: ignore[import-not-found]
 
 CLASSIFY_PROMPT = """Classify this research question into exactly ONE of these paradigms:
@@ -24,7 +26,7 @@ Respond with a JSON object:
 "alternative": "<second_best>"}}"""
 
 
-async def classify_paradigm(llm_client, query: str) -> ParadigmResult:
+async def classify_paradigm(llm_client: Any, query: str) -> ParadigmResult:
     """Use LLM to classify a research question into the best paradigm."""
     if llm_client is None:
         return _rule_based_classify(query)

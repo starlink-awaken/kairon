@@ -5,6 +5,7 @@
 - 即将（soon）: 30 天内处理
 - 一般（info）: 60-90 天参考
 """
+
 from __future__ import annotations
 
 from collections.abc import Callable, Iterator
@@ -35,9 +36,7 @@ class HealthAlert:
 # ---------- 1. 疫苗临近 ----------
 
 
-def check_vaccination(
-    profile: HealthProfile, today: date, window_days: int = 60
-) -> Iterator[HealthAlert]:
+def check_vaccination(profile: HealthProfile, today: date, window_days: int = 60) -> Iterator[HealthAlert]:
     """未来 window_days 天内 next_due 的疫苗。"""
     for v in profile.vaccinations:
         if v.next_due is None:
@@ -65,9 +64,7 @@ def check_vaccination(
 # ---------- 2. 体检超期 ----------
 
 
-def check_checkup_due(
-    profile: HealthProfile, today: date, window_days: int = 60
-) -> Iterator[HealthAlert]:
+def check_checkup_due(profile: HealthProfile, today: date, window_days: int = 60) -> Iterator[HealthAlert]:
     """学龄前儿童：上次体检 >6 个月提醒，>12 个月紧急。"""
     last = profile.last_check()
     if last is None:
@@ -108,9 +105,7 @@ def check_checkup_due(
 # ---------- 3. 视力变化 ----------
 
 
-def check_vision_change(
-    profile: HealthProfile, today: date, window_days: int = 60
-) -> Iterator[HealthAlert]:
+def check_vision_change(profile: HealthProfile, today: date, window_days: int = 60) -> Iterator[HealthAlert]:
     """最近 2 次体检视力下降 >0.1 → 一般提醒。"""
     if len(profile.checks) < 2:
         return
@@ -140,9 +135,7 @@ def check_vision_change(
 # ---------- 4. 季节过敏 ----------
 
 
-def check_allergy_season(
-    profile: HealthProfile, today: date, window_days: int = 60
-) -> Iterator[HealthAlert]:
+def check_allergy_season(profile: HealthProfile, today: date, window_days: int = 60) -> Iterator[HealthAlert]:
     """春/秋季（3-5 月、9-11 月）+ 成员 allergies 列表非空 → 一般提醒。"""
     if not profile.allergies:
         return
@@ -167,9 +160,7 @@ def check_allergy_season(
 # ---------- 5. 生长曲线偏差 ----------
 
 
-def check_growth_curve(
-    profile: HealthProfile, today: date, window_days: int = 60
-) -> Iterator[HealthAlert]:
+def check_growth_curve(profile: HealthProfile, today: date, window_days: int = 60) -> Iterator[HealthAlert]:
     """最近一次体检身高/体重与 WHO 中位数偏差 >30% → 一般提醒。"""
     last = profile.last_check()
     if last is None:

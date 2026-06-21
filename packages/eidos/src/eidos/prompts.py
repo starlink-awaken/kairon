@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 """
 ---
 Type: Service
@@ -20,8 +22,6 @@ Extracted from: SharedBrain D_Memory/organs/services/prompts.py → eidos/prompt
 # 功能 ⊢ {Init_Prompts, Execute_Prompts, Validate_Prompts}
 # =============================================================================
 
-
-from typing import Any
 
 # Memory Sifter Prompts
 

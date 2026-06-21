@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 """
 ---
@@ -238,7 +238,7 @@ class LanceDBBackend(VectorStoreBackend):
     def count(self) -> int:
         """Get the total number of entries."""
         table = self._get_table()
-        return table.count_rows()
+        return cast("int", table.count_rows())
 
     def health_check(self) -> dict[str, Any]:
         """Check backend health."""
@@ -247,4 +247,4 @@ class LanceDBBackend(VectorStoreBackend):
             base_status["backend_type"] = "lancedb"
             base_status["embedding_type"] = "semantic_sentence_transformers"
             base_status["role"] = self.role
-        return base_status
+        return cast("dict[str, Any]", base_status)

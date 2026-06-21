@@ -46,8 +46,8 @@ try:
         TreeSitterExtractor,
     )
 except ImportError:
-    TreeSitterExtractor = None
-    TreeSitterExtractionResult = None
+    TreeSitterExtractor = None  # type: ignore[assignment, misc]
+    TreeSitterExtractionResult = None  # type: ignore[assignment, misc]
 
 
 @dataclass
@@ -347,7 +347,7 @@ class IncrementalIndexer:
                 content = path.read_text(encoding="utf-8", errors="replace")
 
                 # Extract entities and relations
-                extraction_result = extractor.extract_from_file(content=content, source_file=file_path)
+                extraction_result = extractor.extract(source_code=content, file_path=file_path)
 
                 # Clear old candidates for this file before adding new ones
                 self.store.clear_candidates(source_file=file_path)

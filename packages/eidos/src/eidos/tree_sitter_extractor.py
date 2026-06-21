@@ -12,6 +12,7 @@ from typing import Any
 @dataclass
 class TreeSitterExtractionResult:
     """Result of a tree-sitter extraction."""
+
     entities: list[dict[str, Any]] = field(default_factory=list)
     relations: list[dict[str, Any]] = field(default_factory=list)
     imports: list[str] = field(default_factory=list)

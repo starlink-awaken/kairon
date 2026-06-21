@@ -7,6 +7,7 @@ FormalReasoner — 形式推理引擎 (Phase 3, 零LLM)
 
 import re
 from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass
@@ -31,7 +32,7 @@ class FormalReasoner:
     def __init__(self) -> None:
         self.conclusions: list[FormalConclusion] = []
 
-    def reason(self, knowledge) -> list[FormalConclusion]:
+    def reason(self, knowledge: Any) -> list[FormalConclusion]:
         """主推理入口"""
         self.conclusions = []
         facts = knowledge.abox.get("facts", {})
@@ -52,7 +53,7 @@ class FormalReasoner:
 
         return self.conclusions
 
-    def _subsumption_reason(self, entities, tbox):
+    def _subsumption_reason(self, entities: Any, tbox: Any) -> Any:
         """包含推理: ORG-X ⊑ DOMAIN, ORG-X是DOMAIN的实例"""
         results = []
         domain_subtypes = tbox.get("DOMAIN", {}).get("subtypes", [])
@@ -80,7 +81,7 @@ class FormalReasoner:
             )
         return results
 
-    def _transitivity_reason(self, knowledge):
+    def _transitivity_reason(self, knowledge: Any) -> Any:
         """传递推理: D-F1→INF-L1→INF-L2 则 D-F1间接影响INF-L2"""
         results = []
         inferences = knowledge.inferences
@@ -105,7 +106,7 @@ class FormalReasoner:
                 )
         return results
 
-    def _constraint_propagation(self, facts):
+    def _constraint_propagation(self, facts: Any) -> Any:
         """约束传播: 内置阈值检查"""
         results = []
         thresholds = {"率": 60.0, "占比": 50.0, "覆盖": 60.0, "增长": 0}
@@ -128,7 +129,7 @@ class FormalReasoner:
                             )
         return results
 
-    def _classification(self, facts, entities, tbox):
+    def _classification(self, facts: Any, entities: Any, tbox: Any) -> Any:
         """实例归类: 基于属性推断实例所属类别"""
         results = []
         fact_subtypes = tbox.get("FACT", {}).get("subtypes", [])

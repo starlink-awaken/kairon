@@ -6,17 +6,18 @@ LLM在图上游走, 在合并节点综合多路推理。
 """
 
 import re
+from typing import Any
 
 
 class GraphOfThoughts:
     """图思维引擎 — 在蕴含图上做LLM推理"""
 
-    def __init__(self, entailment_graph, enhancer):
+    def __init__(self, entailment_graph: Any, enhancer: Any) -> None:
         self.graph = entailment_graph  # logic.EntailmentGraph
         self.llm = enhancer
-        self.thoughts = {}  # node_id → 推理结果
+        self.thoughts: dict[Any, Any] = {}  # node_id → 推理结果
 
-    def traverse_and_reason(self, merge_at_depth=2):
+    def traverse_and_reason(self, merge_at_depth: Any = 2) -> Any:
         """
         图游走推理:
         1. 拓扑排序确定推理顺序
@@ -50,7 +51,7 @@ class GraphOfThoughts:
 
         return results
 
-    def _reason_on_node(self, node, parent_thoughts):
+    def _reason_on_node(self, node: Any, parent_thoughts: Any) -> Any:
         """单节点推理"""
         parents_str = "\n".join(f"  {p}: {t.get('summary', '')[:100]}" for p, t in parent_thoughts.items())
         node_label = self.graph.nodes.get(node, {}).get("label", node)[:200]
@@ -82,7 +83,7 @@ class GraphOfThoughts:
                     pass
         return {"summary": node_label[:100]}
 
-    def _merge_paths(self, node, input_nodes):
+    def _merge_paths(self, node: Any, input_nodes: Any) -> Any:
         """合并多条推理路径"""
         thoughts = {n: self.thoughts.get(n, {}) for n in input_nodes}
         summaries = "\n".join(
@@ -105,7 +106,7 @@ class GraphOfThoughts:
         except Exception:
             return {"merged": f"{len(input_nodes)}条路径综合"}
 
-    def _find_merge_nodes(self):
+    def _find_merge_nodes(self) -> Any:
         """找出有多个输入的合并节点"""
         merges = {}
         for node in self.graph.nodes:
@@ -114,9 +115,9 @@ class GraphOfThoughts:
                 merges[node] = inputs
         return merges
 
-    def _topological_order(self):
+    def _topological_order(self) -> Any:
         """拓扑排序 (Kahn)"""
-        in_degree = {}
+        in_degree: dict[Any, Any] = {}
         for u in self.graph.nodes:
             for v in self.graph.edges.get(u, []):
                 in_degree[v] = in_degree.get(v, 0) + 1

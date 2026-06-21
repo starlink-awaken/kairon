@@ -17,6 +17,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 from dataclasses import dataclass
+from typing import Any, cast
 
 import structlog
 
@@ -37,7 +38,7 @@ class SearchResult:
 class SearchEngine:
     """Unified multi-backend search with RRF fusion."""
 
-    def __init__(self, config: dict | None = None):
+    def __init__(self, config: dict | None = None) -> None:
         self.config = config or {}
         self._result_cache: dict[str, list[SearchResult]] = {}
 
@@ -129,7 +130,7 @@ class SearchEngine:
         """
         return self.config.get("backends") or ["ddg", "scholar", "arxiv", "exa"]
 
-    def _get_searcher(self, backend: str):
+    def _get_searcher(self, backend: str) -> Any:
         """Get the search function for a backend."""
         searchers = {
             "searxng": self._search_searxng,
@@ -143,10 +144,10 @@ class SearchEngine:
         }
         return searchers.get(backend)
 
-    async def _search_backend(self, name: str, searcher, query: str) -> list[SearchResult]:
+    async def _search_backend(self, name: str, searcher: Any, query: str) -> list[SearchResult]:
         """Execute search on a single backend with error handling."""
         try:
-            return await searcher(query)
+            return cast("list[SearchResult]", await searcher(query))
         except Exception as exc:
             logger.error("search_backend_error", backend=name, error=str(exc))
             return []

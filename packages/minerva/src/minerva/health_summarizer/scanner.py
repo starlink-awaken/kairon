@@ -3,6 +3,7 @@
 约定路径：~/Library/Mobile Documents/iCloud~md~obsidian/Documents/FamilyShared/02.健康/档案/*.json
 目录不存在时返回空列表（由 runner 给出用户友好提示，不在此层抛错）。
 """
+
 from __future__ import annotations
 
 import sys

@@ -11,6 +11,7 @@
 __all__ = []
 
 import re
+from typing import Any
 
 from .ast import AST, EntityDef, FactDef, InferenceDef, ParseError, ProtocolDef, RelationDef, SemanticError, SourcePos
 from .codegen import to_json, to_legacy_ast, to_markdown
@@ -39,18 +40,18 @@ __all__ = [
 
 
 class OntoLangParserV2:
-    def __init__(self, filename=""):
+    def __init__(self, filename: Any = "") -> None:
         self.filename = filename
         self.parser = Parser(filename)
         self.semantic = SemanticAnalyzer()
 
-    def parse(self, source):
+    def parse(self, source: Any) -> Any:
         return self.parser.parse(source)
 
-    def validate(self, ast):
+    def validate(self, ast: Any) -> Any:
         return self.semantic.analyze(ast)
 
-    def test_suite(self):
+    def test_suite(self) -> tuple[Any, ...]:
         test_source = """-- 实体定义
 entity ORG-国转中心 : Organization { governance: "双轨制" }
 entity ROL-技术经理人 : Role { count: 133 }
@@ -72,23 +73,23 @@ protocol P-CROSS-001 : Constraint { constraint: "mapping_coverage >= 90%" }
 
 # v1兼容接口 — 与旧 ontolang.OntoLangParser 保持相同api
 class OntoLangParser:
-    def __init__(self):
+    def __init__(self) -> None:
         self.v2 = OntoLangParserV2()
-        self.errors = []
-        self.warnings = []
+        self.errors: list[Any] = []
+        self.warnings: list[Any] = []
 
-    def parse(self, source):
+    def parse(self, source: Any) -> Any:
         ast = self.v2.parse(source)
         legacy = to_legacy_ast(ast)
         legacy["errors"] = [{"line": e.pos.line, "msg": e.msg} for e in self.v2.parser.errors]
         return legacy
 
-    def validate(self, ast):
+    def validate(self, ast: Any) -> Any:
         if isinstance(ast, dict):
             return self._validate_dict(ast)
         return self.v2.validate(ast)
 
-    def _validate_dict(self, ast):
+    def _validate_dict(self, ast: Any) -> Any:
         errors = []
         for e in ast.get("entities", []):
             prefix = e["id"].split("-")[0] if "-" in e["id"] else ""
@@ -104,7 +105,7 @@ class OntoLangParser:
                 errors.append(f"E{f.get('line', 0)}: '{f['id']}' 事实ID格式无效")
         return errors
 
-    def test_suite(self):
+    def test_suite(self) -> Any:
         legacy_ast, errors, parse_errors = self.v2.test_suite()
         self.errors = ["parse_error"] * parse_errors
         return legacy_ast

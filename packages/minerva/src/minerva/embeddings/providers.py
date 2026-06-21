@@ -38,7 +38,7 @@ import logging
 import os
 import random
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Protocol
+from typing import TYPE_CHECKING, Any, Protocol, cast
 
 if TYPE_CHECKING:
     pass
@@ -374,7 +374,7 @@ class LocalEmbeddingProvider(BaseEmbeddingProvider):
                 )
 
             _log.debug(f"[LocalEmbedding] Generated {len(embeddings)} embeddings")
-            return embeddings
+            return cast("list[list[float]]", embeddings)
 
         except Exception as e:
             _log.error(f"[LocalEmbedding] Encoding failed: {e}")

@@ -9,12 +9,13 @@ import datetime
 import math
 import re
 from pathlib import Path
+from typing import Any
 
-from ontoderive.foundation.utils import all_md, load_json, rf, save_json, wf  # type: ignore[import-not-found]
+from ontoderive.foundation.utils import all_md, load_json, rf, save_json, wf  # type: ignore[import-not-found,no-redef]
 
 
 class MetricsLayer:
-    def __init__(self, project_root):
+    def __init__(self, project_root: Any) -> None:
         self.root = Path(project_root)
         self.facts_dir = self.root / "facts"
         self.entities_dir = self.root / "entities"
@@ -24,19 +25,19 @@ class MetricsLayer:
         self.log_dir.mkdir(parents=True, exist_ok=True)
         self._history_path = self.log_dir / "kqi_history.json"
 
-    def entropy(self, probabilities):
+    def entropy(self, probabilities: Any) -> Any:
         h = 0
         for p in probabilities:
             if 0 < p < 1:
                 h += -p * math.log2(p) - (1 - p) * math.log2(1 - p)
         return round(h, 4)
 
-    def get_real_confidences(self):
+    def get_real_confidences(self) -> tuple[Any, ...]:
         """尝试从贝叶斯网络获取真实置信度分布"""
         try:
             from .bayesian import BayesianLayer
         except ImportError:
-            from bayesian import BayesianLayer  # type: ignore[import-not-found]
+            from bayesian import BayesianLayer  # type: ignore[import-not-found,no-redef]
 
         bl = BayesianLayer(self.root)
         facts, inferences = bl.propagate_all()
@@ -46,7 +47,7 @@ class MetricsLayer:
             inf_confs = [i["base_confidence"] for i in inferences.values()]
         return fact_confs, inf_confs, len(facts), len(inferences)
 
-    def compute_kqi(self, use_bayesian=True, precomputed_confs=None):
+    def compute_kqi(self, use_bayesian: Any = True, precomputed_confs: Any = None) -> Any:
         """
         KQI知识质量指数。公式: 0.25*熵 + 0.25*覆盖 + 0.20*密度 + 0.15*实体 + 0.15*方案。
         ⚠️ 权重未经经验校准，仅供参考。基准值: 空项目KQI≈0.5, z-park KQI≈0.44。
@@ -123,17 +124,17 @@ class MetricsLayer:
         self._save_history(result)
         return result
 
-    def _estimate_chain_depth(self, n_facts, n_inferences):
+    def _estimate_chain_depth(self, n_facts: Any, n_inferences: Any) -> Any:
         if n_facts == 0 or n_inferences == 0:
             return 0
         try:
             from .logic import build_from_project
         except ImportError:
-            from logic import build_from_project  # type: ignore[import-not-found]
+            from logic import build_from_project  # type: ignore[import-not-found,no-redef]
         g = build_from_project(self.root)
         return g.chain_depths()["max"]
 
-    def _save_history(self, kqi_data):
+    def _save_history(self, kqi_data: Any) -> None:
         history = load_json(self._history_path) or {"entries": []}
         entry = {"timestamp": datetime.datetime.now().isoformat(), **kqi_data}
         history["entries"].append(entry)
@@ -142,7 +143,7 @@ class MetricsLayer:
             history["entries"] = history["entries"][-100:]
         save_json(self._history_path, history)
 
-    def get_kqi_trend(self, window=5):
+    def get_kqi_trend(self, window: Any = 5) -> dict[str, Any]:
         """分析最近N条KQI记录的趋势"""
         history = load_json(self._history_path) or {"entries": []}
         entries = history["entries"]
@@ -177,10 +178,10 @@ class MetricsLayer:
             "window": n,
         }
 
-    def information_gain(self, before_kqi, after_kqi):
+    def information_gain(self, before_kqi: Any, after_kqi: Any) -> Any:
         return round(before_kqi["entropy"] - after_kqi["entropy"], 4)
 
-    def suggest_next_fact(self):
+    def suggest_next_fact(self) -> Any:
         """基于信息增益，建议下一个最有价值的事实方向"""
         kqi = self.compute_kqi()
         suggestions = []
@@ -199,7 +200,7 @@ class MetricsLayer:
 
         return suggestions
 
-    def full_report(self):
+    def full_report(self) -> Any:
         kqi = self.compute_kqi()
         trend = self.get_kqi_trend()
 

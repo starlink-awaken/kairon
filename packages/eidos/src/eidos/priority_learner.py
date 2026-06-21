@@ -52,7 +52,7 @@ import threading
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from enum import StrEnum
-from typing import Any
+from typing import Any, cast
 
 # ---------------------------------------------------------------------------
 # Priority Level Enum
@@ -681,7 +681,7 @@ class PriorityLearner:
             total = self._classification_stats["total"]
             if total == 0:
                 return 0.0
-            return self._classification_stats["correct"] / total
+            return cast("float", self._classification_stats["correct"] / total)
 
     def get_stats(self) -> dict[str, Any]:
         """获取学习系统统计信息。"""

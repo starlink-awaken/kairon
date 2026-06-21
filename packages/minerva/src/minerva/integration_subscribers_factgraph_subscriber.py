@@ -60,7 +60,7 @@ class FactGraphLike:
         self,
         facts: list[tuple[str, str, str, dict[str, object]]],
         _remote_sync: bool = False,
-    ) -> Any: ...
+    ) -> None: ...
 
     def add_fact(
         self,
@@ -68,7 +68,7 @@ class FactGraphLike:
         predicate: str,
         obj: str,
         metadata: dict[str, object] | None = None,
-    ) -> Any: ...
+    ) -> None: ...
 
 
 # =============================================================================

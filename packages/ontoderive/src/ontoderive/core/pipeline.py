@@ -6,6 +6,7 @@ OntoDerive Pipeline — 推导管道
 """
 
 from pathlib import Path
+from typing import Any
 
 try:
     from .config import Config  # type: ignore[import-not-found]
@@ -18,7 +19,7 @@ except ImportError:
 class ToolForgeStage(PipelineStage):
     name = "toolforge"
 
-    def run(self, ctx):
+    def run(self, ctx: Any) -> dict[str, Any]:
         try:
             from .toolforge import ToolForge  # type: ignore[import-not-found]
         except ImportError:
@@ -39,7 +40,7 @@ class ToolForgeStage(PipelineStage):
 class LoadStage(PipelineStage):
     name = "load"
 
-    def run(self, ctx):
+    def run(self, ctx: Any) -> dict[str, Any]:
         try:
             from .derive import OntoDerive as _OD  # noqa: N814
         except ImportError:
@@ -52,7 +53,7 @@ class LoadStage(PipelineStage):
 class DeriveStage(PipelineStage):
     name = "derive"
 
-    def run(self, ctx):
+    def run(self, ctx: Any) -> Any:
         # 复用LoadStage结果，避免重复扫描+Bayesian
         cached = ctx.get("_derive_result")
         if cached:
@@ -70,7 +71,7 @@ class DeriveStage(PipelineStage):
 class CheckStage(PipelineStage):
     name = "check"
 
-    def run(self, ctx):
+    def run(self, ctx: Any) -> Any:
         try:
             from .derive import OntoDerive as _OD  # noqa: N814
         except ImportError:
@@ -82,7 +83,7 @@ class CheckStage(PipelineStage):
 class ResolveStage(PipelineStage):
     name = "resolve"
 
-    def run(self, ctx):
+    def run(self, ctx: Any) -> dict[str, Any]:
         try:
             from .derive import OntoDerive as _OD  # noqa: N814
         except ImportError:
@@ -94,7 +95,7 @@ class ResolveStage(PipelineStage):
 class ReportStage(PipelineStage):
     name = "report"
 
-    def run(self, ctx):
+    def run(self, ctx: Any) -> dict[str, Any]:
         try:
             from .derive import OntoDerive as _OD  # noqa: N814
         except ImportError:
@@ -116,19 +117,19 @@ PIPELINE_STAGES = [
 class DerivePipeline:
     """六阶段推导管道，可序列化结果"""
 
-    def __init__(self, project_root, config=None, observers=None):
+    def __init__(self, project_root: Any, config: Any = None, observers: Any = None) -> None:
         self.project_root = Path(project_root)
         self.config = config or Config(project_root).to_dict()
         self.observers = observers or []
-        self.stages = [s() for s in PIPELINE_STAGES]
+        self.stages: list[PipelineStage] = [s() for s in PIPELINE_STAGES]
         self.ctx = {"project_root": str(project_root), "config": self.config}
-        self.results = {}
+        self.results: dict[Any, Any] = {}
 
-    def set_goal(self, goal, context=""):
+    def set_goal(self, goal: Any, context: Any = "") -> None:
         self.ctx["goal"] = goal
         self.ctx["context"] = context
 
-    def run(self, stages=None):
+    def run(self, stages: Any = None) -> None:
         """执行指定阶段或全部阶段"""
         names = stages or [s.name for s in self.stages]
         for stage in self.stages:
@@ -146,7 +147,7 @@ class DerivePipeline:
                 self._notify("stage_error", stage.name, error=e)
                 raise
 
-    def _notify(self, event, stage_name, result=None, error=None):
+    def _notify(self, event: Any, stage_name: Any, result: Any = None, error: Any = None) -> None:
         for obs in self.observers:
             try:
                 if event == "stage_start":
@@ -164,7 +165,7 @@ class DerivePipeline:
         toolforge_r = self.results.get("toolforge", {}).get("matches", [])
         return AnalysisResult(summary=derive_r, checks=check_r, toolforge_matches=toolforge_r)
 
-    def to_dict(self):
+    def to_dict(self) -> dict[str, Any]:
         return {
             "project_root": str(self.project_root),
             "config": self.config,

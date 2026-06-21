@@ -53,8 +53,7 @@ def _classify(ctx: ResearchContext) -> str:
         return DEFAULT_RULES[hint]
     # Heuristic: scan search results for domain keywords
     texts = " ".join(
-        (s.get("content", "") or s.get("snippet", "") or "")[:200]
-        for s in (ctx.search_results or [])
+        (s.get("content", "") or s.get("snippet", "") or "")[:200] for s in (ctx.search_results or [])
     ).lower()
     ai_keywords = {"llm", "transformer", "gpt", "deepseek", "agent", "mcp", "rag", "ai"}
     industry_keywords = {"政策", "医疗", "政务", "报告", "白皮书", "标准", "规范"}
@@ -73,19 +72,16 @@ def _generate_frontmatter(note_id: str, ctx: ResearchContext) -> dict[str, Any]:
         "type": "research-note",
         "status": "draft",
         "created": datetime.now().strftime("%Y-%m-%d"),
-        "source": [
-            s.get("url", "") for s in (ctx.search_results or []) if s.get("url")
-        ][:5],
+        "source": [s.get("url", "") for s in (ctx.search_results or []) if s.get("url")][:5],
         "minerva": {
             "level": ctx.level.value if hasattr(ctx.level, "value") else str(ctx.level),
             "cost": round(ctx.cost, 4),
             "sources": len(ctx.search_results),
             "entities": len(ctx.entities),
         },
-        "tags": [
-            e.get("name", e.get("type", "")) if isinstance(e, dict) else str(e)
-            for e in (ctx.entities or [])
-        ][:10],
+        "tags": [e.get("name", e.get("type", "")) if isinstance(e, dict) else str(e) for e in (ctx.entities or [])][
+            :10
+        ],
     }
 
 
@@ -163,6 +159,7 @@ class VaultSinkStage(IPipelineStage):
         # Emit signal via l4-kernel if available
         try:
             from l4_kernel.signals import SignalBus
+
             bus = SignalBus()
             bus.emit("vault", "✅", f"研究归档: {ctx.query[:60]}", source="minerva.vault_sink")
         except ImportError:
@@ -195,13 +192,15 @@ class VaultSinkStage(IPipelineStage):
 if __name__ == "__main__":
     import asyncio
 
-    async def _test():
+    async def _test() -> None:
         from minerva.triage.router import ResearchLevel, TriageResult
 
         ctx = ResearchContext(
             query="MCP 协议在 Agent 工具调用中的应用",
             level=ResearchLevel.L1,
-            triage=TriageResult(level=ResearchLevel.L1, cost_estimate=0.0, reasoning="test"),
+            triage=TriageResult(
+                level=ResearchLevel.L1, scores={}, model_plan={}, search_plan=[], cost_estimate=0.0, reasoning="test"
+            ),
         )
         ctx.report = "MCP (Model Context Protocol) 是 Anthropic 推出的开放标准协议..."
         ctx.search_results = [{"url": "https://modelcontextprotocol.io", "title": "MCP 官网"}]

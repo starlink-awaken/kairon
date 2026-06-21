@@ -1,5 +1,5 @@
 {
-  "derived_at": "2026-06-19T22:29:31.703186",
+  "derived_at": "2026-06-21T13:15:24.838290",
   "facts": 8,
   "entities": 0,
   "inferences": 0,
@@ -41,13 +41,13 @@
       "method": "modus_ponens_valid",
       "derives_from": [
         "D-F2",
-        "D-F3",
         "D-F4",
-        "D-F1"
+        "D-F1",
+        "D-F3"
       ],
       "confidence": 0.9,
       "source": "rule_engine",
-      "derivation_trail": "R7: D-F2→D-F3→D-F4→D-F1",
+      "derivation_trail": "R7: D-F2→D-F4→D-F1→D-F3",
       "type": "modus_ponens_valid"
     },
     {
@@ -165,13 +165,13 @@
       "method": "structural_hole",
       "derives_from": [
         "D-F2",
-        "D-F3",
         "D-F4",
-        "D-F1"
+        "D-F1",
+        "D-F3"
       ],
       "confidence": 0.65,
       "source": "rule_engine",
-      "derivation_trail": "R17: D-F2→D-F3→D-F4→D-F1",
+      "derivation_trail": "R17: D-F2→D-F4→D-F1→D-F3",
       "type": "structural_hole"
     },
     {

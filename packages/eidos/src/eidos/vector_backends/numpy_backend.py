@@ -24,7 +24,7 @@ import hashlib
 import json
 import logging
 import threading
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 
@@ -82,7 +82,7 @@ class NumPyBackend(VectorStoreBackend):
         norm = np.linalg.norm(vec)
         if norm > 0:
             vec = vec / norm
-        return vec.tolist()
+        return cast("list[float]", vec.tolist())
 
     # ------------------------------------------------------------------
     # CRUD operations
@@ -248,4 +248,4 @@ class NumPyBackend(VectorStoreBackend):
         if base_status["status"] == "healthy":
             base_status["backend_type"] = "numpy"
             base_status["embedding_type"] = "deterministic_hash"
-        return base_status
+        return cast("dict[str, Any]", base_status)

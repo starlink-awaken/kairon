@@ -12,7 +12,7 @@ Gracefully skips if immune bridge is unavailable (audit only).
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, cast
 
 import httpx
 import structlog
@@ -109,6 +109,6 @@ class ImmuneAuditStage(IPipelineStage):
         try:
             async with httpx.AsyncClient(timeout=self._timeout) as client:
                 resp = await client.post(f"{self._endpoint}/call", json=item)
-                return resp.json()
+                return cast("dict[str, Any]", resp.json())
         except Exception as e:
             return {"risk": "UNKNOWN", "error": str(e)}

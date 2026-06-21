@@ -6,7 +6,7 @@ import json
 import sqlite3
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 
 class CheckpointManager:
@@ -18,7 +18,7 @@ class CheckpointManager:
         state = mgr.resume("run-001")  # -> dict or None
     """
 
-    def __init__(self, db_path: str | None = None):
+    def __init__(self, db_path: str | None = None) -> None:
         if db_path is None:
             db_path = str(Path.home() / ".pontus" / "checkpoints.sqlite")
         if db_path != ":memory:":
@@ -67,12 +67,10 @@ class CheckpointManager:
     def resume(self, run_id: str) -> dict[str, Any] | None:
         """Return the saved state dict, or None if not found."""
         with self._get_conn() as conn:
-            row = conn.execute(
-                "SELECT state_json FROM checkpoints WHERE run_id = ?", (run_id,)
-            ).fetchone()
+            row = conn.execute("SELECT state_json FROM checkpoints WHERE run_id = ?", (run_id,)).fetchone()
         if row is None:
             return None
-        return json.loads(row["state_json"])
+        return cast("dict[str, Any] | None", json.loads(row["state_json"]))
 
     def delete(self, run_id: str) -> bool:
         """Delete a checkpoint. Returns True if a row was deleted."""

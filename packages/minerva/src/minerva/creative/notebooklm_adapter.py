@@ -1,6 +1,6 @@
-from typing import Any
-
 """NotebookLM adapter — bridge to notebooklm-py for audio/video/notes generation."""
+
+from typing import Any
 
 
 def is_available() -> bool:

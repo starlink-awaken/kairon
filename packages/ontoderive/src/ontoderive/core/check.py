@@ -9,19 +9,22 @@ C1-C8 为独立 _check_cNN 辅助函数，C9-C13 通过 check_theory 注册表�
 import datetime
 import re
 from pathlib import Path
+from typing import Any
 
 try:
-    from .constants import V2_ID_PATTERNS  # type: ignore[import-not-found]
-    from .utils import CachedReader, save_json  # type: ignore[import-not-found]
+    from .constants import V2_ID_PATTERNS  # type: ignore[import-not-found,no-redef]
+    from .utils import CachedReader, save_json  # type: ignore[import-not-found,no-redef]
 except ImportError:
     from ontoderive.foundation.utils import CachedReader, save_json  # type: ignore[import-not-found]  # noqa
-    from ontoderive.foundation.constants import V2_ID_PATTERNS  # type: ignore[import-not-found]
+    from ontoderive.foundation.constants import V2_ID_PATTERNS  # type: ignore[import-not-found,no-redef]
 
 
 # ── C1-C8 独立检查函数 ──────────────────────────────────────────────
 
 
-def _check_c01(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_dir, rf, cr):
+def _check_c01(
+    root: Any, facts_dir: Any, entities_dir: Any, inferences_dir: Any, scheme_dir: Any, log_dir: Any, rf: Any, cr: Any
+) -> dict[str, Any]:
     """C-01: 事实基座完整性"""
     all_md = cr.all_md
     facts_exist = len(all_md(facts_dir)) > 0
@@ -37,7 +40,9 @@ def _check_c01(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_di
     }
 
 
-def _check_c02(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_dir, rf, cr):
+def _check_c02(
+    root: Any, facts_dir: Any, entities_dir: Any, inferences_dir: Any, scheme_dir: Any, log_dir: Any, rf: Any, cr: Any
+) -> dict[str, Any]:
     """C-02: 推论体系完整性"""
     all_md = cr.all_md
     infs_exist = len(all_md(inferences_dir)) > 0
@@ -53,7 +58,9 @@ def _check_c02(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_di
     }
 
 
-def _check_c03(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_dir, rf, cr):
+def _check_c03(
+    root: Any, facts_dir: Any, entities_dir: Any, inferences_dir: Any, scheme_dir: Any, log_dir: Any, rf: Any, cr: Any
+) -> dict[str, Any]:
     """C-03: 方案文件完整性"""
     all_md = cr.all_md
     schemes = all_md(scheme_dir)
@@ -69,7 +76,9 @@ def _check_c03(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_di
     }
 
 
-def _check_c04(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_dir, rf, cr):
+def _check_c04(
+    root: Any, facts_dir: Any, entities_dir: Any, inferences_dir: Any, scheme_dir: Any, log_dir: Any, rf: Any, cr: Any
+) -> dict[str, Any]:
     """C-04: 事实可追溯性（含file:line + 蕴含图统计）"""
     all_md = cr.all_md
     fact_ids = set()
@@ -91,7 +100,7 @@ def _check_c04(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_di
     detail = f"事实{len(fact_ids)}个: 推论引用{traced_in_inf}, 方案引用{traced_in_scheme}"
     # v2.3: 蕴含图运行时统计
     try:
-        from ontoderive.theories.logic import build_from_project  # type: ignore[import-not-found]
+        from ontoderive.theories.logic import build_from_project  # type: ignore[import-not-found,no-redef]
 
         g = build_from_project(root)
         gs = g.stats()
@@ -112,7 +121,9 @@ def _check_c04(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_di
     }
 
 
-def _check_c05(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_dir, rf, cr):
+def _check_c05(
+    root: Any, facts_dir: Any, entities_dir: Any, inferences_dir: Any, scheme_dir: Any, log_dir: Any, rf: Any, cr: Any
+) -> dict[str, Any]:
     """C-05: 断言可追溯性（含file:line）"""
     all_md = cr.all_md
     total_assertions = 0
@@ -149,7 +160,9 @@ def _check_c05(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_di
     }
 
 
-def _check_c06(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_dir, rf, cr):
+def _check_c06(
+    root: Any, facts_dir: Any, entities_dir: Any, inferences_dir: Any, scheme_dir: Any, log_dir: Any, rf: Any, cr: Any
+) -> dict[str, Any]:
     """C-06: 关键判断可证伪性（含file:line）"""
     all_md = cr.all_md
     falsifiable_total = 0
@@ -187,7 +200,9 @@ def _check_c06(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_di
     }
 
 
-def _check_c07(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_dir, rf, cr):
+def _check_c07(
+    root: Any, facts_dir: Any, entities_dir: Any, inferences_dir: Any, scheme_dir: Any, log_dir: Any, rf: Any, cr: Any
+) -> dict[str, Any]:
     """C-07: 实体ID合规性（v2.2 TypeValidator）"""
     all_md = cr.all_md
     all_text = ""
@@ -199,7 +214,7 @@ def _check_c07(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_di
     ids_found = set()
     skip_prefixes = ("C-", "P-", "ISC-", "F", "v", "v2", "v3", "E", "e")
     try:
-        from ontoderive.foundation.typesystem import TypeValidator  # type: ignore[import-not-found]
+        from ontoderive.foundation.typesystem import TypeValidator  # type: ignore[import-not-found,no-redef]
 
         tv = TypeValidator()
         for m in re.finditer(r"\b([A-Z][A-Za-z0-9_-]*(?:-[A-Za-z0-9_-]+)*)\b", all_text):
@@ -234,7 +249,9 @@ def _check_c07(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_di
     }
 
 
-def _check_c08(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_dir, rf, cr):
+def _check_c08(
+    root: Any, facts_dir: Any, entities_dir: Any, inferences_dir: Any, scheme_dir: Any, log_dir: Any, rf: Any, cr: Any
+) -> dict[str, Any]:
     """C-08: 引擎自检"""
     script_path = Path(__file__).resolve()
     return {
@@ -252,14 +269,16 @@ def _check_c08(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_di
 # ── 主入口 ──────────────────────────────────────────────────────────
 
 
-def run_check(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_dir):
+def run_check(root: Any, facts_dir: Any, entities_dir: Any, inferences_dir: Any, scheme_dir: Any, log_dir: Any) -> Any:
     """执行全部13条规约检查，使用CachedReader消除重复I/O"""
     cr = CachedReader()
     rf = cr.rf
     results = []
     severity_counts = {"PASS": 0, "WARN": 0, "ERROR": 0, "BLOCKER": 0}
 
-    def result(pid, name, passed, severity, detail, fixes=None, file="", line=0):
+    def result(
+        pid: Any, name: Any, passed: Any, severity: Any, detail: Any, fixes: Any = None, file: Any = "", line: Any = 0
+    ) -> Any:
         r = {
             "protocol_id": pid,
             "name": name,
@@ -295,7 +314,7 @@ def run_check(root, facts_dir, entities_dir, inferences_dir, scheme_dir, log_dir
     try:
         from .check_theory import THEORY_CHECKS, check_bayesian
     except ImportError:
-        from check_theory import THEORY_CHECKS, check_bayesian  # type: ignore[import-not-found]
+        from check_theory import THEORY_CHECKS, check_bayesian  # type: ignore[import-not-found,no-redef]
 
     # C9: 贝叶斯 → 结果缓存供C-10复用
     try:

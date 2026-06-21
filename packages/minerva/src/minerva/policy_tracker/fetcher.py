@@ -14,6 +14,7 @@ from __future__ import annotations
 import asyncio
 import re
 from datetime import UTC, datetime, timedelta
+from typing import Any
 
 from minerva.policy_tracker.seeds import SEED_POLICIES
 from minerva.policy_tracker.types import PolicyItem
@@ -66,15 +67,17 @@ def _parse_nhc_html(html: str) -> list[PolicyItem]:
             continue
         if not url.startswith("http"):
             url = "http://www.nhc.gov.cn" + url if url.startswith("/") else url
-        items.append(PolicyItem(
-            title=title[:200],
-            issuing_agency="国家卫健委",
-            doc_number="",
-            published_at=date,
-            summary=title[:200],
-            url=url,
-            tags=["#health-policy", "#source:nhc"],
-        ))
+        items.append(
+            PolicyItem(
+                title=title[:200],
+                issuing_agency="国家卫健委",
+                doc_number="",
+                published_at=date,
+                summary=title[:200],
+                url=url,
+                tags=["#health-policy", "#source:nhc"],
+            )
+        )
     return items[:20]
 
 
@@ -97,22 +100,24 @@ def _parse_nhsa_html(html: str) -> list[PolicyItem]:
             url = "https://www.nhsa.gov.cn" + url
         elif not url.startswith("http"):
             continue
-        items.append(PolicyItem(
-            title=title[:200],
-            issuing_agency="国家医保局",
-            doc_number="",
-            published_at=date,
-            summary=title[:200],
-            url=url,
-            tags=["#health-policy", "#source:nhsa"],
-        ))
+        items.append(
+            PolicyItem(
+                title=title[:200],
+                issuing_agency="国家医保局",
+                doc_number="",
+                published_at=date,
+                summary=title[:200],
+                url=url,
+                tags=["#health-policy", "#source:nhsa"],
+            )
+        )
     return items[:20]
 
 
 # ── 单源抓取 ──────────────────────────────────────────────────────────────
 
 
-async def fetch_nhc(client, days: int = 7) -> list[PolicyItem]:
+async def fetch_nhc(client: Any, days: int = 7) -> list[PolicyItem]:
     """抓取国家卫健委新闻发布（最近 N 天）。"""
     try:
         resp = await client.get(NHC_NEWS_URL, timeout=15)
@@ -127,7 +132,7 @@ async def fetch_nhc(client, days: int = 7) -> list[PolicyItem]:
     return [i for i in items if i.published_at >= cutoff]
 
 
-async def fetch_nhsa(client, days: int = 7) -> list[PolicyItem]:
+async def fetch_nhsa(client: Any, days: int = 7) -> list[PolicyItem]:
     """抓取国家医保局政策法规（最近 N 天）。"""
     try:
         resp = await client.get(NHSA_POLICY_URL, timeout=15)

@@ -12,12 +12,15 @@ import datetime
 import json
 from collections import deque
 from pathlib import Path
+from typing import Any
 
 from ontoderive.foundation.utils import wf  # type: ignore[import-not-found]
 
 
 class PIDController:
-    def __init__(self, project_root, kp=1.0, ki=0.5, kd=0.5, window=5, epsilon=0.1):
+    def __init__(
+        self, project_root: Any, kp: Any = 1.0, ki: Any = 0.5, kd: Any = 0.5, window: Any = 5, epsilon: Any = 0.1
+    ) -> None:
         self.root = Path(project_root)
         self.log_dir = self.root / "_derivation_logs"
         self.log_dir.mkdir(parents=True, exist_ok=True)
@@ -33,9 +36,9 @@ class PIDController:
         self.epsilon = epsilon
 
         # 微分历史
-        self._d_history = deque(maxlen=window)
+        self._d_history: deque[Any] = deque(maxlen=window)
 
-    def _load_history(self):
+    def _load_history(self) -> Any:
         history = []
         for f in sorted(self.log_dir.glob("check-result*.json")):
             try:
@@ -44,7 +47,7 @@ class PIDController:
                 pass
         return history
 
-    def analyze(self):
+    def analyze(self) -> dict[str, Any]:
         current = self._get_current_violations()
         p_value = current.get("total_violations", 0)
         i_value = self._integral_term()
@@ -68,19 +71,19 @@ class PIDController:
             "history_count": len(self.history),
         }
 
-    def _get_current_violations(self):
+    def _get_current_violations(self) -> dict[str, Any]:
         latest = self.history[-1] if self.history else {}
         sevs = latest.get("severities", {})
         total = sevs.get("WARN", 0) + sevs.get("ERROR", 0) + sevs.get("BLOCKER", 0)
         return {"total_violations": total, "severities": sevs}
 
-    def _integral_term(self):
+    def _integral_term(self) -> Any:
         """指数衰减加权：越近的检查权重越高"""
         if not self.history:
             return 0.0
         n = len(self.history)
-        weighted_sum = 0
-        weight_total = 0
+        weighted_sum = 0.0
+        weight_total = 0.0
         decay = 0.85  # 衰减因子
         for i, h in enumerate(self.history):
             sevs = h.get("severities", {})
@@ -90,12 +93,12 @@ class PIDController:
             weight_total += w
         return round(weighted_sum / weight_total, 2) if weight_total > 0 else 0.0
 
-    def _derivative_term(self):
+    def _derivative_term(self) -> Any:
         """滑动窗口平均变化率"""
         if len(self.history) < 2:
             return 0.0
 
-        def get_total(h):
+        def get_total(h: Any) -> Any:
             sevs = h.get("severities", {})
             return sevs.get("WARN", 0) + sevs.get("ERROR", 0) + sevs.get("BLOCKER", 0)
 
@@ -105,7 +108,7 @@ class PIDController:
             diffs.append(get_total(self.history[i]) - get_total(self.history[i - 1]))
         return round(sum(diffs) / len(diffs), 2) if diffs else 0.0
 
-    def _check_convergence(self):
+    def _check_convergence(self) -> Any:
         """收敛判定: |D| < epsilon 且最近D值稳定"""
         if len(self._d_history) < self.window:
             return False
@@ -113,7 +116,7 @@ class PIDController:
         avg_d = sum(abs(d) for d in recent_d) / len(recent_d)
         return avg_d < self.epsilon
 
-    def _adaptive_thresholds(self):
+    def _adaptive_thresholds(self) -> dict[str, Any]:
         """基于历史数据动态校准阈值"""
         n = len(self.history)
         if n < 3:
@@ -123,7 +126,7 @@ class PIDController:
         else:
             return {"assertion_traceability": ">=70%", "falsifiability": ">=35%"}
 
-    def _generate_actions(self, p_value, i_value, d_value, converged):
+    def _generate_actions(self, p_value: Any, i_value: Any, d_value: Any, converged: Any) -> Any:
         actions = []
         if converged:
             actions.append("✅ 推导已收敛，检查全部通过")
@@ -139,7 +142,7 @@ class PIDController:
             actions.append("系统状态正常，无需干预")
         return actions
 
-    def report(self):
+    def report(self) -> Any:
         pid = self.analyze()
         report = f"""---
 title: 控制论PID分析报告 v2

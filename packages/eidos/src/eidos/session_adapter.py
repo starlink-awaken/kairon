@@ -12,7 +12,7 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-AX01-10_holographic_metadata_axio
 
 import logging
 from enum import Enum
-from typing import Protocol
+from typing import Protocol, cast
 
 # =============================================================================
 # 0. 形式化摘要 ≝
@@ -221,14 +221,14 @@ class SQLiteSessionStorageAdapter:
             return False
         try:
             rws = EnhancedSessionAdapter.to_role_worker_session(session)
-            return self._storage.update(rws)
+            return cast("bool", self._storage.update(rws))
         except (TypeError, ValueError, AttributeError, RuntimeError):
             return False
 
     def delete(self, session_id: str) -> bool:
         """删除会话"""
         try:
-            return self._storage.delete(session_id)
+            return cast("bool", self._storage.delete(session_id))
         except (TypeError, ValueError, AttributeError, RuntimeError):
             return False
 

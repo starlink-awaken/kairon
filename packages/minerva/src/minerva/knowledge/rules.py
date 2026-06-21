@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from enum import Enum
-from typing import Any
+from typing import Any, cast
 
 
 class RuleSeverity(Enum):
@@ -69,7 +69,7 @@ class RuleEngine:
         self.rules: list[Rule] = []
         self._register_default_rules()
 
-    def _register_default_rules(self):
+    def _register_default_rules(self) -> None:
         """Pre-register standard knowledge maintenance rules."""
         self.add_rule(
             Rule(
@@ -105,7 +105,7 @@ class RuleEngine:
             )
         )
 
-    def add_rule(self, rule: Rule):
+    def add_rule(self, rule: Rule) -> None:
         self.rules.append(rule)
 
     def evaluate(self, entities: list[dict]) -> list[RuleResult]:
@@ -158,13 +158,13 @@ class RuleEngine:
             try:
                 dt = datetime.fromisoformat(val.replace("Z", "+00:00"))
                 days = (datetime.now(UTC) - dt).days
-                return days > cond.value  # True = older than threshold = problem
+                return cast("bool", days > cond.value)  # True = older than threshold problem)
             except (ValueError, TypeError):
                 return False  # Can't parse date → don't flag
         if op == "gt" and isinstance(val, (int, float)):
-            return val > cond.value
+            return cast("bool", val > cond.value)
         if op == "lt" and isinstance(val, (int, float)):
-            return val < cond.value
+            return cast("bool", val < cond.value)
 
         return False  # Unknown operator or missing value → no problem detected
 

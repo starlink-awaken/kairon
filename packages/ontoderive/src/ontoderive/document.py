@@ -50,7 +50,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum, StrEnum
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, Protocol, cast
 from uuid import uuid4
 
 import yaml
@@ -169,7 +169,7 @@ class DocumentMetadata:
             if key not in data:
                 data[key] = value
 
-        return yaml.dump(data, default_flow_style=False, allow_unicode=True, sort_keys=False)
+        return cast("str", yaml.dump(data, default_flow_style=False, allow_unicode=True, sort_keys=False))
 
     def is_valid(self) -> bool:
         """检查元数据是否有效"""

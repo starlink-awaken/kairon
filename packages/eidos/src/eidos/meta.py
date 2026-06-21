@@ -14,6 +14,7 @@ from typing import Any
 
 class MetaRelationType(Enum):
     """SSOT 4-type meta-relation classification."""
+
     STRUCT = "struct"
     DERIVE = "derive"
     BEHAVIOR = "behavior"
@@ -30,6 +31,7 @@ class MetaRelationType(Enum):
 
 class MetaType(Enum):
     """Eidos 8-type meta-model."""
+
     CONCEPT = "concept"
     RELATION = "relation"
     RULE = "rule"

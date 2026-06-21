@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 
 @dataclass
@@ -33,7 +34,9 @@ class KnowledgeIngester:
     Pipeline: Source → Extract text → spaCy NER → Entity + Relation → KnowledgeStore
     """
 
-    def __init__(self, knowledge_store=None, nlp_pipeline=None, report_dir: str = "~/knowledge/ingested"):
+    def __init__(
+        self, knowledge_store: Any = None, nlp_pipeline: Any = None, report_dir: str = "~/knowledge/ingested"
+    ) -> None:
         self.kb = knowledge_store
         self.nlp = nlp_pipeline
         self.report_dir = Path(report_dir).expanduser()
@@ -183,13 +186,13 @@ class KnowledgeIngester:
 
         return convert(label)
 
-    def _save_content(self, source: str, text: str, source_type: str):
+    def _save_content(self, source: str, text: str, source_type: str) -> None:
         """Save raw extracted text."""
         slug = source.replace("/", "-").replace(":", "-")[:60]
         path = self.report_dir / f"{slug}.txt"
         path.write_text(text[:50000])
 
-    def _save_markdown(self, source: str, text: str):
+    def _save_markdown(self, source: str, text: str) -> None:
         """Save as markdown for knowledge base."""
         slug = source.replace("/", "-").replace(":", "-")[:60]
         path = self.report_dir / f"{slug}.md"

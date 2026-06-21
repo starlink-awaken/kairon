@@ -8,18 +8,20 @@ from __future__ import annotations
 import logging
 import sqlite3
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 _log = logging.getLogger(__name__)
 
 
 class SQLiteError(Exception):
     """Base exception for SQLite storage operations."""
+
     pass
 
 
 class SQLiteOperationalError(SQLiteError):
     """Operational error during SQLite storage operations."""
+
     pass
 
 
@@ -102,7 +104,7 @@ class SQLiteRelationalProvider:
     def fetch_all(self, sql: str, params: tuple = ()) -> list[Any]:
         """Fetch all rows."""
         cur = self.execute(sql, params)
-        return cur.fetchall()
+        return cast("list[Any]", cur.fetchall())
 
     def close(self) -> None:
         """Close the database connection."""
@@ -114,6 +116,17 @@ class SQLiteRelationalProvider:
         return self
 
     def __exit__(self, *args: Any) -> None:
+        self.close()
+
+    def connect(self) -> None:
+        """Connect (stub, no-op — __init__ already connects)."""
+
+    def execute_write(self, sql: str, params: tuple = ()) -> Any:
+        """Execute a write statement (stub, delegates to execute)."""
+        return self.execute(sql, params)
+
+    def disconnect(self) -> None:
+        """Disconnect (stub, delegates to close)."""
         self.close()
 
 

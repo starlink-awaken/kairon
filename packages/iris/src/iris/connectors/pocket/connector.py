@@ -186,7 +186,16 @@ class PocketConnector(BaseConnector):
 
     # ── List items ──────────────────────────────────────────────
 
-    def list_items(self, limit: int = 20, cursor: str | None = None, **kwargs: Any) -> list[Bookmark]:
+    def list_items(
+        self,
+        limit: int = 20,
+        cursor: str | None = None,
+        tag: str | None = None,
+        folder: str | None = None,
+        subdir: str | None = None,
+        chat_id: str | None = None,
+        **kwargs: Any,
+    ) -> list[Bookmark]:
         """List unread bookmarks from Pocket, newest first.
 
         Args:

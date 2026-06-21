@@ -34,7 +34,7 @@ import pickle
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 
@@ -311,7 +311,7 @@ class VectorEmbeddingPipeline:
         """加载向量索引"""
         try:
             with open(self._index_file, "rb") as f:
-                return pickle.load(f)  # noqa: S301
+                return cast("dict[Any, Any]", pickle.load(f))  # noqa: S301
         except FileNotFoundError:
             return {}
         except (OSError, pickle.PickleError, ValueError) as e:

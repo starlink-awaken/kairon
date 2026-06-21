@@ -77,7 +77,9 @@ async def run(
         # 3. KOS 入库
         print("[policy-tracker] 写入 KOS…")
         kos_stats = save_to_kos(scored_items)
-        print(f"[policy-tracker] KOS 写入: saved={kos_stats['saved']} failed={kos_stats['failed']} skipped={kos_stats['skipped']}")
+        print(
+            f"[policy-tracker] KOS 写入: saved={kos_stats['saved']} failed={kos_stats['failed']} skipped={kos_stats['skipped']}"
+        )
 
         # 4. 生成报告
         out = output_path or str(_default_output_path(run_date))
@@ -121,11 +123,15 @@ def main(
 ) -> None:
     """CLI 入口（被 minerva cli.py 调用）。"""
     src_list = [s.strip() for s in sources.split(",")] if sources else None
-    result = asyncio.run(run(
-        output_path=output,
-        sources=src_list,
-        days=days,
-        relevance_threshold=threshold,
-        dry_run=dry_run,
-    ))
-    print(f"\n[policy-tracker] 完成 — 高相关度: {result['high_relevance_count']} 条，报告: {result['report_path'] or '(dry-run)'}")
+    result = asyncio.run(
+        run(
+            output_path=output,
+            sources=src_list,
+            days=days,
+            relevance_threshold=threshold,
+            dry_run=dry_run,
+        )
+    )
+    print(
+        f"\n[policy-tracker] 完成 — 高相关度: {result['high_relevance_count']} 条，报告: {result['report_path'] or '(dry-run)'}"
+    )

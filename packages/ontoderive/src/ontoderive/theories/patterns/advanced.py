@@ -1,5 +1,7 @@
 """Advanced analysis patterns (A6-A9 + extras)."""
 
+from typing import Any
+
 from ..analytics_constants import (
     _DISRUPTION_KW,
     _HISTORY_KW,
@@ -12,7 +14,7 @@ from ..analytics_constants import (
 from .common import _extract_num, _iter_facts, detect_remediation_needed
 
 
-def detect_market_structure(engine, facts, entities, relations):
+def detect_market_structure(engine: Any, facts: Any, entities: Any, relations: Any) -> bool:
     """检测: ≥3实体 或 存在市场份额关键词"""
     n_entities = len(entities) if isinstance(entities, dict) else len(entities)
     if n_entities >= 3:
@@ -23,9 +25,9 @@ def detect_market_structure(engine, facts, entities, relations):
     return False
 
 
-def analyze_market_structure(engine, facts, entities, relations, enhancer):
+def analyze_market_structure(engine: Any, facts: Any, entities: Any, relations: Any, enhancer: Any) -> Any:
     """HHI集中度 + 市场类型判定"""
-    results = []
+    results: list[Any] = []
     n = len(entities) if isinstance(entities, dict) else len(entities)
     shares = []
     for fid, info in _iter_facts(facts):
@@ -53,14 +55,14 @@ def analyze_market_structure(engine, facts, entities, relations, enhancer):
 # ═══ A7: 博弈均衡检测 ═══
 
 
-def detect_game_equilibrium(engine, facts, entities, relations):
+def detect_game_equilibrium(engine: Any, facts: Any, entities: Any, relations: Any) -> Any:
     """检测: 多方竞争/合作关系"""
     comp_count = sum(1 for r in (relations or []) if r.get("relation_type") == "competes_with")
     coop_count = sum(1 for r in (relations or []) if r.get("relation_type") == "cooperates_with")
     return comp_count >= 1 or coop_count >= 2
 
 
-def analyze_game_equilibrium(engine, facts, entities, relations, enhancer):
+def analyze_game_equilibrium(engine: Any, facts: Any, entities: Any, relations: Any, enhancer: Any) -> Any:
     """识别博弈结构: 囚徒困境/协调博弈/零和博弈"""
     results = []
     comps = [r for r in (relations or []) if r.get("relation_type") == "competes_with"]
@@ -91,7 +93,7 @@ def analyze_game_equilibrium(engine, facts, entities, relations, enhancer):
 # ═══ A8: 策略选项生成 ═══
 
 
-def detect_strategic_options(engine, facts, entities, relations):
+def detect_strategic_options(engine: Any, facts: Any, entities: Any, relations: Any) -> Any:
     """检测: 存在问题+约束+资源"""
     has_problem = detect_remediation_needed(engine, facts, entities, relations)
     has_constraint = any(
@@ -100,9 +102,9 @@ def detect_strategic_options(engine, facts, entities, relations):
     return has_problem or has_constraint
 
 
-def analyze_strategic_options(engine, facts, entities, relations, enhancer):
+def analyze_strategic_options(engine: Any, facts: Any, entities: Any, relations: Any, enhancer: Any) -> Any:
     """生成策略选项 — 基于目标/约束/资源组合"""
-    results = []
+    results: list[Any] = []
     # 收集目标、约束、资源
     goals = [
         info.get("desc", "")
@@ -144,7 +146,7 @@ def analyze_strategic_options(engine, facts, entities, relations, enhancer):
 # ═══ A9: 信息生态健康度 (v3.5) ═══
 
 
-def detect_info_ecology(engine, facts, entities, relations):
+def detect_info_ecology(engine: Any, facts: Any, entities: Any, relations: Any) -> bool:
     """检测: 虚假信息/可信度/信任度/共识度相关数据"""
     kw = ("虚假信息", "可信度", "信任度", "共识度", "信息", "公众信任")
     for _, info in _iter_facts(facts):
@@ -153,9 +155,9 @@ def detect_info_ecology(engine, facts, entities, relations):
     return False
 
 
-def analyze_info_ecology(engine, facts, entities, relations, enhancer):
+def analyze_info_ecology(engine: Any, facts: Any, entities: Any, relations: Any, enhancer: Any) -> Any:
     """信息生态健康度评分"""
-    results = []
+    results: list[Any] = []
     disinfo = trust = consensus = 0.0
     for _, info in _iter_facts(facts):
         desc = info.get("desc", "")
@@ -187,13 +189,13 @@ def analyze_info_ecology(engine, facts, entities, relations, enhancer):
 # ═══ A10: 因果链分析 (v3.6) ═══
 
 
-def detect_causal_chain(engine, facts, entities, relations):
+def detect_causal_chain(engine: Any, facts: Any, entities: Any, relations: Any) -> Any:
     return len(relations or []) >= 1
 
 
-def analyze_causal_chain(engine, facts, entities, relations, enhancer):
-    results = []
-    deps = {}
+def analyze_causal_chain(engine: Any, facts: Any, entities: Any, relations: Any, enhancer: Any) -> Any:
+    results: list[Any] = []
+    deps: dict[Any, Any] = {}
     for r in relations or []:
         if r.get("relation_type") in ("depends_on", "causes", "influences"):
             deps.setdefault(r["subject"], []).append(r["object"])
@@ -226,7 +228,7 @@ def analyze_causal_chain(engine, facts, entities, relations, enhancer):
 # ═══ A11: 情景规划 (v3.6) ═══
 
 
-def detect_scenario_planning(engine, facts, entities, relations):
+def detect_scenario_planning(engine: Any, facts: Any, entities: Any, relations: Any) -> bool:
     kw = ("不确定性", "概率", "情景", "乐观", "悲观", "基线", "可能")
     for _, info in _iter_facts(facts):
         if any(k in info.get("desc", "") for k in kw):
@@ -234,8 +236,8 @@ def detect_scenario_planning(engine, facts, entities, relations):
     return False
 
 
-def analyze_scenario_planning(engine, facts, entities, relations, enhancer):
-    results = []
+def analyze_scenario_planning(engine: Any, facts: Any, entities: Any, relations: Any, enhancer: Any) -> Any:
+    results: list[Any] = []
     uncertainties = []
     for _, info in _iter_facts(facts):
         desc = info.get("desc", "")
@@ -267,14 +269,14 @@ def analyze_scenario_planning(engine, facts, entities, relations, enhancer):
 # ═══ A12: 权力地图 (v3.6) ═══
 
 
-def detect_power_map(engine, facts, entities, relations):
+def detect_power_map(engine: Any, facts: Any, entities: Any, relations: Any) -> Any:
     return len(relations or []) >= 4
 
 
-def analyze_power_map(engine, facts, entities, relations, enhancer):
-    results = []
+def analyze_power_map(engine: Any, facts: Any, entities: Any, relations: Any, enhancer: Any) -> Any:
+    results: list[Any] = []
     # Degree centrality (度中心性): 每个节点参与的关系数
-    centrality = {}
+    centrality: dict[Any, Any] = {}
     for r in relations or []:
         s, o = r.get("subject", ""), r.get("object", "")
         centrality[s] = centrality.get(s, 0) + 1
@@ -298,7 +300,7 @@ def analyze_power_map(engine, facts, entities, relations, enhancer):
 # ═══ A13: 组织惯性分析 (v3.6) ═══
 
 
-def detect_organizational_inertia(engine, facts, entities, relations):
+def detect_organizational_inertia(engine: Any, facts: Any, entities: Any, relations: Any) -> bool:
     """检测: 规模大/历史悠久/投入多 + 转型慢/变化难/惯性/路径依赖"""
     if len(entities or {}) >= 3 or len(relations or []) >= 4:
         return True
@@ -308,8 +310,8 @@ def detect_organizational_inertia(engine, facts, entities, relations):
     return False
 
 
-def analyze_organizational_inertia(engine, facts, entities, relations, enhancer):
-    results = []
+def analyze_organizational_inertia(engine: Any, facts: Any, entities: Any, relations: Any, enhancer: Any) -> Any:
+    results: list[Any] = []
     if not entities:
         return results
 
@@ -352,7 +354,7 @@ def analyze_organizational_inertia(engine, facts, entities, relations, enhancer)
 # ═══ A14: 技术颠覆风险 (v3.6) ═══
 
 
-def detect_tech_disruption(engine, facts, entities, relations):
+def detect_tech_disruption(engine: Any, facts: Any, entities: Any, relations: Any) -> Any:
     """检测: 新技术信号 + 传统技术描述"""
     has_new = False
     has_old = False
@@ -367,7 +369,7 @@ def detect_tech_disruption(engine, facts, entities, relations):
     return has_new or has_old
 
 
-def analyze_tech_disruption(engine, facts, entities, relations, enhancer):
+def analyze_tech_disruption(engine: Any, facts: Any, entities: Any, relations: Any, enhancer: Any) -> Any:
     results = []
 
     new_signals = 0

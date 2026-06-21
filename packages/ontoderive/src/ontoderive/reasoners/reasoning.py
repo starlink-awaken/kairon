@@ -13,6 +13,7 @@ OntoDerive 推理编排 — 选择器 + 范式化
 
 import re
 from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
@@ -34,8 +35,8 @@ class DataProfile:
 class ContentCanonicalizer:
     """内容范式化器 — 将原始事实/推论转为标准化表示"""
 
-    def __init__(self):
-        self._numeric_cache = {}
+    def __init__(self) -> None:
+        self._numeric_cache: dict[Any, Any] = {}
 
     def canonicalize_facts(self, raw_facts: dict[str, dict]) -> dict[str, dict]:
         """
@@ -177,11 +178,11 @@ class ReasoningSelector:
 
         return profile
 
-    def _calc_max_depth(self, inferences):
+    def _calc_max_depth(self, inferences: Any) -> Any:
         depths = {}
         visited = set()
 
-        def dfs(node):
+        def dfs(node: Any) -> Any:
             if node not in inferences:
                 return 0
             visited.add(node)

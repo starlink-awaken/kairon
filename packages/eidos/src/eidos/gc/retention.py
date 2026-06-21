@@ -60,9 +60,7 @@ class RetentionPolicy:
 
         # --- Importance check ---
         min_importance = policy_rules.get("min_importance")
-        if min_importance is not None and not self._check_importance(
-            entry, float(min_importance)
-        ):
+        if min_importance is not None and not self._check_importance(entry, float(min_importance)):
             return False
 
         return True

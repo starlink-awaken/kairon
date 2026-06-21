@@ -17,7 +17,7 @@ class HarvestFact:
     harvested_at: str = ""
     metadata: dict[str, Any] = field(default_factory=dict)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if not self.harvested_at:
             self.harvested_at = datetime.now(UTC).isoformat()
 

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from minerva.pipeline.engine import IPipelineStage, QualityGateError, ResearchContext  # type: ignore[import-not-found]
 
 CROSS_ANALYZE_PROMPT = """Given this analysis of multiple sources about: {query}
@@ -48,7 +50,7 @@ class CrossAnalyzeStageImpl(IPipelineStage):
 
     name = "cross_analyze"
 
-    def __init__(self, llm_client):
+    def __init__(self, llm_client: Any) -> None:
         self.llm = llm_client
 
     async def execute(self, ctx: ResearchContext) -> ResearchContext:
@@ -145,7 +147,7 @@ class CounterArgumentStageImpl(IPipelineStage):
 
     name = "counter_argument"
 
-    def __init__(self, llm_client):
+    def __init__(self, llm_client: Any) -> None:
         self.llm = llm_client
 
     async def execute(self, ctx: ResearchContext) -> ResearchContext:
@@ -177,7 +179,7 @@ class MultiModelVotingStageImpl(IPipelineStage):
 
     name = "multi_model_voting"
 
-    def __init__(self, llm_client):
+    def __init__(self, llm_client: Any) -> None:
         self.llm = llm_client
 
     async def execute(self, ctx: ResearchContext) -> ResearchContext:

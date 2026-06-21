@@ -14,7 +14,7 @@ import collections
 import logging
 import re
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import yaml
 
@@ -55,6 +55,7 @@ _log = logging.getLogger(__name__)
 
 class _ProjectPathsStub:
     """Stub replacement for nucleus ProjectPaths until migration is complete."""
+
     ROOT = Path(__file__).resolve().parent.parent.parent.parent.parent
 
 
@@ -129,7 +130,7 @@ class ArchetypeLoader:
         cache_key = f"yaml:{subdir}"
         cached = self._get_from_cache(cache_key)
         if cached is not None:
-            return cached
+            return cast("dict[str, Any]", cached)
 
         result: dict[str, Any] = {}
         target_dir = self._root / subdir
@@ -161,7 +162,7 @@ class ArchetypeLoader:
         cache_key = f"md:{subdir}"
         cached = self._get_from_cache(cache_key)
         if cached is not None:
-            return cached
+            return cast("dict[str, Any]", cached)
 
         result: dict[str, Any] = {}
         target_dir = self._root / subdir

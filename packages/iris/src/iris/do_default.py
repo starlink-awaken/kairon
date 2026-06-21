@@ -1,4 +1,5 @@
 """P58-W0 iris do_default — 真业务 (调 iris 真模块: list connectors / build_parser)."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -23,8 +24,10 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             except Exception:
                 connectors = []
             return {
-                "_method": "do_default", "_action": "list_connectors",
-                "version": __version__, "count": len(connectors),
+                "_method": "do_default",
+                "_action": "list_connectors",
+                "version": __version__,
+                "count": len(connectors),
                 "connectors": connectors,
             }
         if action == "commands":
@@ -32,8 +35,10 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             _last = parser._actions[-1] if parser._actions else None
             sub_actions = sorted(_last.choices) if _last and _last.choices else []
             return {
-                "_method": "do_default", "_action": "commands",
-                "commands": sub_actions, "count": len(sub_actions),
+                "_method": "do_default",
+                "_action": "commands",
+                "commands": sub_actions,
+                "count": len(sub_actions),
             }
         if action == "config":
             cfg = IrisConfig()

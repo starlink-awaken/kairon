@@ -18,11 +18,11 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum
 from threading import Lock
-from typing import Protocol
+from typing import Any, Protocol
 
 
 @contextmanager
-def managed_connection(conn):
+def managed_connection(conn: Any) -> Any:
     """Simple context manager for sqlite3 connections — replacement for nucleus."""
     try:
         yield conn

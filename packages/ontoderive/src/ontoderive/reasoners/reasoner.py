@@ -25,6 +25,7 @@ R21时态序列
 
 import re
 from dataclasses import dataclass
+from typing import Any
 
 from ontoderive.foundation.rule_loader import RuleLoader  # type: ignore[import-not-found]
 
@@ -90,7 +91,7 @@ class RuleReasoner:
         "shallow_chain": "R6",
     }
 
-    def __init__(self, loaded_rules: list | None = None):
+    def __init__(self, loaded_rules: list | None = None) -> None:
         self.rules: list[DerivationRule] = self._default_rules()
         self._rule_loader = RuleLoader()
         if loaded_rules is not None:
@@ -100,7 +101,7 @@ class RuleReasoner:
             self._loaded_rules = self._rule_loader.load_all()
         self.state = "idle"
 
-    def _default_rules(self):
+    def _default_rules(self) -> list[Any]:
         """内置推导规则库 — 可扩展"""
         return [
             # ── 数值比较规则 ──
@@ -145,7 +146,9 @@ class RuleReasoner:
             ),
         ]
 
-    def derive(self, facts: dict[str, dict], inferences: dict[str, dict], relations: list[dict] | None = None) -> list[dict]:
+    def derive(
+        self, facts: dict[str, dict], inferences: dict[str, dict], relations: list[dict] | None = None
+    ) -> list[dict]:
         """
         基于规则库做确定性推导。
         facts: {id: {desc, value, ...}}   inferences: {title: {text, derives_from, ...}}
@@ -228,13 +231,13 @@ class RuleReasoner:
         self.state = "done"
         return results
 
-    def case_based_reasoning(self, current_project, reference_cases):
+    def case_based_reasoning(self, current_project: Any, reference_cases: Any) -> Any:
         """
         TF-IDF驱动的案例匹配 — 无LLM的CBR引擎。
         current_project: {facts: {id: info}, inferences: {title: info}}
         reference_cases: [{name: str, facts: dict, inferences: dict, outcome: str}, ...]
         """
-        results = []
+        results: list[Any] = []
         if not reference_cases:
             return results
 
@@ -259,7 +262,7 @@ class RuleReasoner:
                 )
         return results
 
-    def _project_profile(self, project):
+    def _project_profile(self, project: Any) -> list[Any]:
         """提取项目特征向量: [事实数, 推偶数, 平均引用数, 数值事实比, 政策事实比]"""
         facts = project.get("facts", {})
         infs = project.get("inferences", {})
@@ -272,18 +275,18 @@ class RuleReasoner:
         pol_ratio = sum(1 for f in facts.values() if "政策" in str(f.get("desc", ""))) / max(n_f, 1)
         return [n_f / 20, n_i / 10, avg_df / 5, num_ratio, pol_ratio]
 
-    def _cosine_similarity(self, a, b):
+    def _cosine_similarity(self, a: Any, b: Any) -> Any:
         dot = sum(x * y for x, y in zip(a, b))
         norm_a = (sum(x * x for x in a) or 1) ** 0.5
         norm_b = (sum(x * x for x in b) or 1) ** 0.5
         return dot / (norm_a * norm_b)
 
-    def incremental_recalc(self, old_facts, new_facts, inferences):
+    def incremental_recalc(self, old_facts: Any, new_facts: Any, inferences: Any) -> Any:
         """
         检测事实变更, 标记受影响的推论为stale。
         比全量重算更高效: 只重算变更相关的推论。
         """
-        results = []
+        results: list[Any] = []
         changed = set()
         for fid in set(old_facts.keys()) | set(new_facts.keys()):
             old_v = str(old_facts.get(fid, {}).get("value", ""))
@@ -314,12 +317,12 @@ class RuleReasoner:
         )
         return results
 
-    def temporal_reasoning(self, facts):
+    def temporal_reasoning(self, facts: Any) -> Any:
         """
         简化版Allen区间时态推理。
         检测事实的时间顺序关系: before/after/simultaneous。
         """
-        results = []
+        results: list[Any] = []
         dated = []
         for fid, info in facts.items():
             text = f"{info.get('desc', '')} {info.get('value', '')}"

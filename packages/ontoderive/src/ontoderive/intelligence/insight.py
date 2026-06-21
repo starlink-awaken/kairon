@@ -26,10 +26,10 @@ class Insight:
     timestamp: str = ""
     metadata: dict[str, Any] = field(default_factory=dict)
 
-    def to_dict(self):
+    def to_dict(self) -> Any:
         return asdict(self)
 
-    def to_markdown(self):
+    def to_markdown(self) -> Any:
         cites_str = ", ".join(self.cites) if self.cites else "无"
         return f"**[{self.type}]** {self.content} (置信度:{self.confidence:.0%}, 引用:{cites_str})"
 
@@ -37,12 +37,12 @@ class Insight:
 class InsightCache:
     """洞察缓存 — 项目内容不变时不重复调用LLM"""
 
-    def __init__(self, cache_dir=None):
+    def __init__(self, cache_dir: Any = None) -> None:
         self.cache_dir = Path(cache_dir) if cache_dir else Path("_derivation_logs")
         self.cache_dir.mkdir(parents=True, exist_ok=True)
-        self._cache = {}
+        self._cache: dict[Any, Any] = {}
 
-    def _key(self, project_root, category):
+    def _key(self, project_root: Any, category: Any) -> Any:
         import hashlib
 
         root = Path(project_root)
@@ -54,7 +54,7 @@ class InsightCache:
                     hashes.append(hashlib.md5(f.read_bytes()).hexdigest()[:8])  # noqa: S324
         return f"{category}-{hashlib.md5(''.join(hashes).encode()).hexdigest()[:12]}"  # noqa: S324
 
-    def get(self, project_root, category):
+    def get(self, project_root: Any, category: Any) -> Any:
         key = self._key(project_root, category)
         cache_file = self.cache_dir / f"insight-{key}.json"
         if cache_file.exists():
@@ -65,7 +65,7 @@ class InsightCache:
                 pass
         return None
 
-    def set(self, project_root, category, insights):
+    def set(self, project_root: Any, category: Any, insights: Any) -> None:
         key = self._key(project_root, category)
         cache_file = self.cache_dir / f"insight-{key}.json"
         cache_file.write_text(
@@ -83,7 +83,7 @@ class InsightCache:
 class InsightEngine:
     """统一洞察引擎 — 所有需要LLM的模块通过此引擎调用"""
 
-    def __init__(self, enhancer=None, cache_dir=None):
+    def __init__(self, enhancer: Any = None, cache_dir: Any = None) -> None:
         self.enhancer = enhancer
         if enhancer is None:
             try:
@@ -96,17 +96,17 @@ class InsightEngine:
         self._history: list[Insight] = []  # 本次会话的所有洞察
 
     @property
-    def available(self):
+    def available(self) -> Any:
         return self.enhancer and self.enhancer.available
 
-    def _call(self, prompt, system="", temperature=0.3):
+    def _call(self, prompt: Any, system: Any = "", temperature: Any = 0.3) -> Any:
         if not self.available:
             return None
         return self.enhancer._call(prompt, system, temperature)
 
     # ── 四种标准洞察类型 ──
 
-    def derive_insights(self, project_root, facts_summary, inferences_text):
+    def derive_insights(self, project_root: Any, facts_summary: Any, inferences_text: Any) -> Any:
         """类型1: 推导洞察 — 基于事实/推论发现新连接"""
         cached = self.cache.get(project_root, "derive")
         if cached:
@@ -149,7 +149,7 @@ class InsightEngine:
         self.cache.set(project_root, "derive", insights)
         return insights
 
-    def judge_quality(self, project_root, context):
+    def judge_quality(self, project_root: Any, context: Any) -> Any:
         """类型2: 质量评估洞察 — LLM对项目整体质量评分"""
         if not self.available:
             return {"verdict": "llm_unavailable", "score": None}
@@ -185,7 +185,9 @@ class InsightEngine:
                     pass
         return {"verdict": "eval_failed", "raw": result[:500]}
 
-    def check_contradiction(self, inf_a_title, inf_a_text, inf_b_title, inf_b_text, shared_facts):
+    def check_contradiction(
+        self, inf_a_title: Any, inf_a_text: Any, inf_b_title: Any, inf_b_text: Any, shared_facts: Any
+    ) -> Any:
         """类型3: 矛盾检测洞察 — 语义级别判断两个推论是否矛盾"""
         if not self.available:
             return None
@@ -213,7 +215,7 @@ class InsightEngine:
         self._history.append(insight)
         return insight
 
-    def recommend_tools(self, goal, context, tools):
+    def recommend_tools(self, goal: Any, context: Any, tools: Any) -> Any:
         """类型4: 推荐洞察 — LLM语义匹配最合适的思维工具"""
         if not self.available:
             return None
@@ -243,7 +245,7 @@ class InsightEngine:
 
     # ── 导出接口 ──
 
-    def export_insights(self, format="json"):
+    def export_insights(self, format: Any = "json") -> Any:
         """导出本次会话的所有洞察"""
         data = [i.to_dict() for i in self._history]
         if format == "json":
@@ -252,7 +254,7 @@ class InsightEngine:
             return "\n\n".join(i.to_markdown() for i in self._history)
         return data
 
-    def save_insights(self, output_dir):
+    def save_insights(self, output_dir: Any) -> None:
         """保存洞察到文件，供外部工具消费"""
         out = Path(output_dir)
         out.mkdir(parents=True, exist_ok=True)
@@ -260,14 +262,14 @@ class InsightEngine:
         (out / "insights.md").write_text(self.export_insights("markdown"))
         print(f"[insight] ✅ {len(self._history)}条洞察 → {out}/insights.{{json,md}}")
 
-    def clear_cache(self):
+    def clear_cache(self) -> None:
         """清除LLM结果缓存（项目内容变更后调用）"""
         for f in self.cache.cache_dir.glob("insight-*.json"):
             f.unlink()
 
     # ═══ LLM推理增强: Self-Consistency ═══
 
-    def judge_with_consensus(self, project_root, context, n_samples=3):
+    def judge_with_consensus(self, project_root: Any, context: Any, n_samples: Any = 3) -> dict[str, Any]:
         """多次采样取中位数, 减少单次随机性"""
         scores, verdicts = [], []
         for i in range(n_samples):
@@ -287,7 +289,7 @@ class InsightEngine:
 
     # ═══ LLM推理增强: Reflexion ═══
 
-    def reflect_and_refine(self, project_root, context, max_refinements=2):
+    def reflect_and_refine(self, project_root: Any, context: Any, max_refinements: Any = 2) -> Any:
         """自我反思修正: 生成→评估→发现问题→修正"""
         import re
 

@@ -1,21 +1,23 @@
 """健康摘要 CLI — 扫 FamilyShared → 应用规则 → 写 Markdown。"""
+
 from __future__ import annotations
 
 import argparse
 import sys
 from datetime import date
 from pathlib import Path
+from typing import Any
 
 from minerva.health_summarizer.renderer import DEFAULT_OUTPUT, render, write_output
 from minerva.health_summarizer.rules import ALL_RULES, HealthAlert
 from minerva.health_summarizer.scanner import DEFAULT_PROFILE_DIR, scan_profiles
 
 
-def _collect_alerts(profiles, today: date, window_days: int) -> list[HealthAlert]:
+def _collect_alerts(profiles: Any, today: date, window_days: int) -> list[HealthAlert]:
     alerts: list[HealthAlert] = []
     for p in profiles:
         for rule in ALL_RULES:
-            alerts.extend(rule(p, today, window_days=window_days))
+            alerts.extend(rule(p, today, window_days))
     return alerts
 
 

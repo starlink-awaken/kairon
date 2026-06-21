@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+from typing import Any
 
 from minerva.pipeline.engine import IPipelineStage, ResearchContext  # type: ignore[import-not-found]
 
@@ -12,7 +13,7 @@ class MultiSourceSearchStageImpl(IPipelineStage):
 
     name = "search"
 
-    def __init__(self, search_engine, backends: list[str], max_results: int = 25):
+    def __init__(self, search_engine: Any, backends: list[str], max_results: int = 25) -> None:
         self.search_engine = search_engine
         self.backends = backends
         self.max_results = max_results

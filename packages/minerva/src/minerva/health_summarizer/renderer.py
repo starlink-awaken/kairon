@@ -1,4 +1,5 @@
 """Markdown 渲染器 — 按严重度分桶，输出家庭可读待办。"""
+
 from __future__ import annotations
 
 from datetime import date
@@ -46,9 +47,7 @@ def render(alerts: list[HealthAlert], today: date | None = None) -> str:
             by_member.setdefault(a.member_name, []).append(a)
         lines.append(f"## {icon} {label}")
         for name in sorted(by_member.keys()):
-            member_alerts = sorted(
-                by_member[name], key=lambda x: (x.action_by or today, x.category)
-            )
+            member_alerts = sorted(by_member[name], key=lambda x: (x.action_by or today, x.category))
             for a in member_alerts:
                 lines.append(_format_alert_line(a))
         lines.append("")
@@ -59,8 +58,7 @@ def render(alerts: list[HealthAlert], today: date | None = None) -> str:
     else:
         lines.append("---")
         lines.append(
-            f"_本摘要由 minerva.health_summarizer 自动生成 · {len(alerts)} 条提醒 ·"
-            f" 数据源: FamilyShared/02.健康/档案_"
+            f"_本摘要由 minerva.health_summarizer 自动生成 · {len(alerts)} 条提醒 · 数据源: FamilyShared/02.健康/档案_"
         )
     return "\n".join(lines)
 

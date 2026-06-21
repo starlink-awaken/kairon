@@ -1,6 +1,7 @@
 """OntoLang 词法+语法解析器 — 手写递归下降"""
 
 import re
+from typing import Any
 
 from .ast import (
     AST,
@@ -15,7 +16,7 @@ from .ast import (
 
 
 class Token:
-    def __init__(self, kind, value, line, col):
+    def __init__(self, kind: Any, value: Any, line: Any, col: Any) -> None:
         self.kind = kind
         self.value = value
         self.line = line
@@ -43,14 +44,14 @@ class Lexer:
         ("WS", r"[ \t\r]+"),
     ]
 
-    def __init__(self, source, filename=""):
+    def __init__(self, source: Any, filename: Any = "") -> None:
         self.source = source
         self.pos = 0
         self.line = 1
         self.col = 1
         self.filename = filename
 
-    def tokenize(self):
+    def tokenize(self) -> Any:
         tokens = []
         while self.pos < len(self.source):
             matched = False
@@ -90,16 +91,16 @@ class Parser:
     VALID_ENTITY_PREFIXES = {"ORG", "ROL", "PRJ", "POL", "DAT"}
     VALID_FACT_PREFIXES = {"D-F", "P-F"}
 
-    def __init__(self, filename="") -> None:
+    def __init__(self, filename: Any = "") -> None:
         self.tokens: list[Token] = []
         self.idx = 0
         self.filename = filename
         self.errors: list[ParseError] = []
 
-    def peek(self):
+    def peek(self) -> Any:
         return self.tokens[self.idx] if self.idx < len(self.tokens) else Token("EOF", "", 0, 0)
 
-    def consume(self, kind=None):
+    def consume(self, kind: Any = None) -> Any:
         t = self.peek()
         if kind and t.kind != kind:
             self.errors.append(
@@ -112,11 +113,11 @@ class Parser:
         self.idx += 1
         return t
 
-    def skip_newlines(self):
+    def skip_newlines(self) -> None:
         while self.peek().kind == "NEWLINE":
             self.idx += 1
 
-    def parse(self, source):
+    def parse(self, source: Any) -> Any:
         self.tokens = Lexer(source, self.filename).tokenize()
         self.idx = 0
         self.errors = []
@@ -166,7 +167,7 @@ class Parser:
 
         return ast
 
-    def _parse_properties(self):
+    def _parse_properties(self) -> Any:
         props = {}
         self.consume("LBRACE")
         while self.peek().kind not in ("RBRACE", "EOF"):
@@ -194,7 +195,7 @@ class Parser:
         self.consume("RBRACE")
         return props
 
-    def _parse_list(self):
+    def _parse_list(self) -> Any:
         items = []
         self.consume("LBRACKET")
         while self.peek().kind not in ("RBRACKET", "EOF"):
@@ -211,7 +212,7 @@ class Parser:
         self.consume("RBRACKET")
         return items
 
-    def _parse_common(self, keyword, default_type):
+    def _parse_common(self, keyword: Any, default_type: Any) -> Any:
         """通用声明解析：返回 (decl_id, decl_type, props, pos)"""
         pos = SourcePos(self.peek().line, self.peek().col, self.filename)
         self.consume(keyword.upper())
@@ -228,21 +229,21 @@ class Parser:
         props = self._parse_properties() if self.peek().kind == "LBRACE" else {}
         return (decl_id, decl_type, props, pos)
 
-    def _parse_entity(self):
+    def _parse_entity(self) -> Any:
         r = self._parse_common("ENTITY", "Entity")
         if not r:
             return None
         decl_id, decl_type, props, pos = r
         return EntityDef(id=decl_id, entity_type=decl_type, properties=props, pos=pos)
 
-    def _parse_fact(self):
+    def _parse_fact(self) -> Any:
         r = self._parse_common("FACT", "DataPoint")
         if not r:
             return None
         decl_id, decl_type, props, pos = r
         return FactDef(id=decl_id, fact_type=decl_type, properties=props, pos=pos)
 
-    def _parse_inference(self):
+    def _parse_inference(self) -> Any:
         r = self._parse_common("INFERENCE", "Inference")
         if not r:
             return None
@@ -255,7 +256,7 @@ class Parser:
             id=decl_id, inference_type=decl_type, derives_from=df, conclusion=conclusion, properties=props, pos=pos
         )
 
-    def _parse_protocol(self):
+    def _parse_protocol(self) -> Any:
         r = self._parse_common("PROTOCOL", "Constraint")
         if not r:
             return None
@@ -281,7 +282,7 @@ class Parser:
         "maps_to": ("DOMAIN", "DOMAIN"),
     }
 
-    def _parse_relation(self):
+    def _parse_relation(self) -> Any:
         pos = SourcePos(self.peek().line, self.peek().col, self.filename)
         self.consume("RELATION")
         # 支持的语法: relation ORG-A cooperates_with ORG-B
@@ -296,7 +297,7 @@ class Parser:
             pass
         return RelationDef(subject=subj, relation_type=rel, object=obj, pos=pos)
 
-    def _read_until_comma_or_id_end(self):
+    def _read_until_comma_or_id_end(self) -> Any:
         """读取一个完整的ID值, 遇到已知关系名则停止"""
         parts = []
         while self.peek().kind not in ("EOF", "NEWLINE", "COMMA", "LBRACE", "RBRACE"):

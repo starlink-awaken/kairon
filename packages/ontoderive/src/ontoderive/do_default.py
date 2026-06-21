@@ -1,4 +1,5 @@
 """P58-W0 ontoderive do_default — 真业务 (调 ontoderive engine 真模块)."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -19,7 +20,8 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     try:
         if action == "list_components":
             return {
-                "_method": "do_default", "_action": "list_components",
+                "_method": "do_default",
+                "_action": "list_components",
                 "FrontmatterDetector": FrontmatterDetector.__name__,
                 "FrontmatterMerger": FrontmatterMerger.__name__,
                 "MetaValidateEngine": MetaValidateEngine.__name__,
@@ -30,14 +32,16 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
         if action == "detector":
             d = FrontmatterDetector()
             return {
-                "_method": "do_default", "_action": "detector",
+                "_method": "do_default",
+                "_action": "detector",
                 "detector_type": type(d).__name__,
                 "methods": [m for m in dir(d) if not m.startswith("_")][:10],
             }
         if action == "validator":
             v = MetaValidateEngine()
             return {
-                "_method": "do_default", "_action": "validator",
+                "_method": "do_default",
+                "_action": "validator",
                 "validator_type": type(v).__name__,
                 "methods": [m for m in dir(v) if not m.startswith("_")][:10],
             }

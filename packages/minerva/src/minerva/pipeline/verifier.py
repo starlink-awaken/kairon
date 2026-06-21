@@ -7,6 +7,8 @@ Inspired by MiroThinker-H1's Local+Global Verifier architecture:
 
 from __future__ import annotations
 
+from typing import Any
+
 STEP_VERIFY_PROMPT = """You are a research quality auditor. Review the intermediate research state for consistency issues.
 
 Current stage: {stage_name}
@@ -44,7 +46,7 @@ Output a JSON array of issues found:
 If all claims are supported, return an empty array []."""
 
 
-async def verify_step(llm_client, ctx, stage_name: str) -> dict:
+async def verify_step(llm_client: Any, ctx: Any, stage_name: str) -> dict:
     """Run a lightweight consistency check after a pipeline stage.
 
     Uses local LLM (qwen3.6:35b, $0) to check intermediate research state.
@@ -76,7 +78,7 @@ async def verify_step(llm_client, ctx, stage_name: str) -> dict:
         return {"status": "ok"}  # Verification never blocks
 
 
-async def verify_report(llm_client, report: str, search_results: list[dict]) -> dict:
+async def verify_report(llm_client: Any, report: str, search_results: list[dict]) -> dict:
     """Verify that report claims are supported by search result sources.
 
     Returns {"verified": True, "issues": [...]} or {"verified": False, "issues": [...]}

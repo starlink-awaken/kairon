@@ -47,6 +47,7 @@ except ImportError:
     HAS_SENTENCE_TRANSFORMERS = False
 _log = logging.getLogger(__name__)
 
+
 class QueryResultCache:
     """TTL-based cache for query results with hot query tracking."""
 
@@ -144,6 +145,7 @@ class QueryResultCache:
             "tracked_queries": len(self._query_counts),
         }
 
+
 @dataclass
 class SearchResult:
     """A single semantic search result with hybrid scoring."""
@@ -164,6 +166,7 @@ class SearchResult:
             "final_score": self.final_score,
             "explanation": self.explanation,
         }
+
 
 class EmbeddingCache:
     """SQLite-backed embedding cache with LRU eviction and size limits."""
@@ -324,6 +327,7 @@ class EmbeddingCache:
         except SQLiteError:
             return False
 
+
 class EmbeddingManager:
     """Manages text embeddings using sentence-transformers."""
 
@@ -382,7 +386,9 @@ class EmbeddingManager:
 
     def embed_query(self, query: str) -> np.ndarray:
         model = self._get_model()
-        return cast("ndarray[tuple[Any, ...], dtype[Any]]", model.encode(query, normalize_embeddings=True).astype(np.float32))
+        return cast(
+            "ndarray[tuple[Any, ...], dtype[Any]]", model.encode(query, normalize_embeddings=True).astype(np.float32)
+        )
 
     @staticmethod
     def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
@@ -394,6 +400,7 @@ class EmbeddingManager:
 
     def get_stats(self) -> dict[str, object]:
         return {"mock": False, "cached_embeddings": self.cache.get_stats()["memory_entries"]}
+
 
 class SemanticSearchEngine:
     """Semantic search engine with graph context integration."""
@@ -740,6 +747,7 @@ class SemanticSearchEngine:
             "results": [r.to_dict() for r in results],
         }
 
+
 def create_semantic_search_engine(
     db_path: str | None = None, cache_path: str | None = None, **kwargs: Any
 ) -> SemanticSearchEngine:
@@ -747,6 +755,7 @@ def create_semantic_search_engine(
     cache = EmbeddingCache(cache_path=cache_path)
     manager = EmbeddingManager(cache=cache)
     return SemanticSearchEngine(graph_store=store, embedding_manager=manager)
+
 
 def quick_search(query: str, documents: list[str], top_k: int = 5, **kwargs: Any) -> list[SearchResult]:
     """One-off semantic search over a list of strings."""

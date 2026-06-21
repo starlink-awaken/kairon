@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import atexit
 import contextlib
+from typing import Any, cast
 
 import httpx
 
@@ -23,7 +24,7 @@ _MAX_DOMAIN_CACHE_SIZE = 50  # Prevent unbounded growth of _domain_last_call
 
 
 @atexit.register
-def _cleanup_clients():
+def _cleanup_clients() -> None:
     """Close all pooled HTTP clients on process exit."""
     import asyncio
 
@@ -83,7 +84,7 @@ async def _api_get(url: str, params: dict | None = None, headers: dict | None = 
                 return None
             resp.raise_for_status()
             _domain_last_call[domain] = time.monotonic()
-            return resp.json()
+            return cast("dict[Any, Any] | None", resp.json())
         except (httpx.HTTPError, ConnectionError, TimeoutError) as e:
             _log.debug("api_get_failed", url=url[:80], error=str(e)[:100])
             _domain_last_call[domain] = time.monotonic()
@@ -101,7 +102,7 @@ async def _api_post(url: str, json_data: dict, headers: dict | None = None, time
         client = _get_client(domain, timeout)
         resp = await client.post(url, json=json_data, headers=headers)
         resp.raise_for_status()
-        return resp.json()
+        return cast("dict[Any, Any] | None", resp.json())
     except (httpx.HTTPError, ConnectionError, TimeoutError) as e:
         _log.debug("api_post_failed", url=url[:80], error=str(e)[:100])
         return None

@@ -6,9 +6,10 @@ import asyncio
 import contextlib
 import signal
 import time
+from typing import Any
 
 
-def main():
+def main() -> Any:
     """Start Minerva daemon with scheduled + watch execution loops."""
     print("Minerva daemon starting...")
     return asyncio.run(_run_daemon())
@@ -27,7 +28,7 @@ async def _run_daemon() -> int:
     # Handle shutdown
     shutdown_event = asyncio.Event()
 
-    def _signal_handler():
+    def _signal_handler() -> None:
         print("\nShutting down daemon...")
         shutdown_event.set()
 
@@ -37,7 +38,7 @@ async def _run_daemon() -> int:
             loop.add_signal_handler(sig, _signal_handler)
 
     # Status heartbeat
-    async def _heartbeat():
+    async def _heartbeat() -> None:
         while not shutdown_event.is_set():
             status = executor.health_check()
             print(

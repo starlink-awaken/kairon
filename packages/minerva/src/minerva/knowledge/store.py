@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from typing import Any
 
 import structlog
 
@@ -83,7 +84,7 @@ class Entity:
     recorded_at: str | None = None
     last_verified: str | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.type:
             self.type = _normalize_entity_type(self.type)
 
@@ -101,7 +102,7 @@ class Relation:
     source_ids: list[str] = field(default_factory=list)
     recorded_at: str | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if hasattr(self, "predicate") and self.predicate:
             self.predicate = _normalize_relation_type(self.predicate)
         if hasattr(self, "meta_relation") and self.meta_relation:
@@ -183,7 +184,7 @@ class SQLiteKnowledgeStore(IKnowledgeStore):
     # Regex patterns for basic entity extraction — compiled once at class level
     _ENTITY_PATTERNS: dict = {}  # populated on first ingest() call
 
-    def __init__(self, db_path: str = "~/minerva/knowledge.db"):
+    def __init__(self, db_path: str = "~/minerva/knowledge.db") -> None:
         import sqlite3
         from pathlib import Path as _Path
 
@@ -194,7 +195,7 @@ class SQLiteKnowledgeStore(IKnowledgeStore):
         self._check_integrity()
         self._init_schema()
 
-    def _check_integrity(self):
+    def _check_integrity(self) -> None:
         """Run integrity check on startup. Attempt repair if corrupted."""
         import structlog
 
@@ -209,7 +210,7 @@ class SQLiteKnowledgeStore(IKnowledgeStore):
             logger.error("db_integrity_error", error=str(e))
             self._repair_db()
 
-    def _repair_db(self):
+    def _repair_db(self) -> None:
         """Attempt WAL checkpoint recovery. If still broken, backup and recreate."""
         import shutil
 
@@ -240,7 +241,7 @@ class SQLiteKnowledgeStore(IKnowledgeStore):
         except Exception as e:
             logger.error("db_repair_failed", error=str(e))
 
-    def _init_schema(self):
+    def _init_schema(self) -> None:
         """Create tables if they don't exist."""
         self.conn.executescript("""
             CREATE TABLE IF NOT EXISTS entities (
@@ -627,7 +628,7 @@ class LanceDBVectorStore:
     Falls back gracefully when dependencies are unavailable.
     """
 
-    def __init__(self, db_path: str = "~/minerva/vectors", embedding_dim: int = 384):
+    def __init__(self, db_path: str = "~/minerva/vectors", embedding_dim: int = 384) -> None:
         from pathlib import Path
 
         self.db_path = str(Path(db_path).expanduser())
@@ -635,7 +636,7 @@ class LanceDBVectorStore:
         self._model = None
         self._table = None
 
-    def _get_model(self):
+    def _get_model(self) -> Any:
         """Lazy-load sentence-transformers model. Returns None if unavailable."""
         if self._model is not None:
             return self._model
@@ -647,7 +648,7 @@ class LanceDBVectorStore:
         except Exception:
             return None
 
-    def _get_table(self):
+    def _get_table(self) -> Any:
         """Lazy-init LanceDB table. Returns None if unavailable."""
         if self._table is not None:
             return self._table
@@ -698,7 +699,7 @@ class LanceDBVectorStore:
         except Exception:
             return []
 
-    async def index_entities(self, entities: list[Entity], mode: str = "overwrite"):
+    async def index_entities(self, entities: list[Entity], mode: str = "overwrite") -> None:
         """Index entities for semantic search. No-op if unavailable."""
         if not entities:
             return

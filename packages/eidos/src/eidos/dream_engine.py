@@ -22,7 +22,7 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-AX01-10_holographic_metadata_axio
 
 import logging
 import math
-from typing import Any
+from typing import Any, cast
 
 from nucleus.Z_Microkernel.gateways.cognitive_gateway import Gateway  # type: ignore[import-not-found]
 
@@ -102,6 +102,6 @@ class DreamEngine:
 
         response = Gateway.call(prompt, iq_req=9.0, spec="philosopher")
         if response.get("status") == "success":
-            return response["content"].strip()
+            return cast("str", response["content"].strip())
 
         return "Failed to synthesize model."

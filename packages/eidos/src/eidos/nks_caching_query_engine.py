@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Callable
-from typing import Any
+from typing import Any, cast
 
 from eidos.graph_store import Entity, Relation  # type: ignore[import-not-found]
 from eidos.query_cache import QueryCache  # type: ignore[import-not-found]
@@ -110,7 +110,7 @@ class CachingQueryEngine:
 
     def _get_cache_key(self, query_type: str, **kwargs: Any) -> str:
         """Generate cache key for query."""
-        return self.cache.generate_cache_key(query_type, **kwargs)
+        return cast("str", self.cache.generate_cache_key(query_type, **kwargs))
 
     def _execute_with_cache(
         self,
@@ -175,15 +175,18 @@ class CachingQueryEngine:
         Returns:
             List of PathResult objects
         """
-        return self._execute_with_cache(
-            "find_paths",
-            lambda **kw: self.engine.find_paths(**kw),
-            bypass_cache=bypass_cache,
-            source_id=source_id,
-            target_id=target_id,
-            max_depth=max_depth,
-            relation_types=relation_types,
-            max_paths=max_paths,
+        return cast(
+            "list[PathResult]",
+            self._execute_with_cache(
+                "find_paths",
+                lambda **kw: self.engine.find_paths(**kw),
+                bypass_cache=bypass_cache,
+                source_id=source_id,
+                target_id=target_id,
+                max_depth=max_depth,
+                relation_types=relation_types,
+                max_paths=max_paths,
+            ),
         )
 
     def find_shortest_path(
@@ -207,14 +210,17 @@ class CachingQueryEngine:
         Returns:
             PathResult or None
         """
-        return self._execute_with_cache(
-            "find_shortest_path",
-            lambda **kw: self.engine.find_shortest_path(**kw),
-            bypass_cache=bypass_cache,
-            source_id=source_id,
-            target_id=target_id,
-            max_depth=max_depth,
-            relation_types=relation_types,
+        return cast(
+            "PathResult | None",
+            self._execute_with_cache(
+                "find_shortest_path",
+                lambda **kw: self.engine.find_shortest_path(**kw),
+                bypass_cache=bypass_cache,
+                source_id=source_id,
+                target_id=target_id,
+                max_depth=max_depth,
+                relation_types=relation_types,
+            ),
         )
 
     # === Call Graph Methods ===
@@ -240,14 +246,17 @@ class CachingQueryEngine:
         Returns:
             Dictionary of entity_id -> CallGraphNode
         """
-        return self._execute_with_cache(
-            "get_call_graph",
-            lambda **kw: self.engine.get_call_graph(**kw),
-            bypass_cache=bypass_cache,
-            function_id=function_id,
-            depth=depth,
-            direction=direction,
-            relation_types=relation_types,
+        return cast(
+            "dict[str, CallGraphNode]",
+            self._execute_with_cache(
+                "get_call_graph",
+                lambda **kw: self.engine.get_call_graph(**kw),
+                bypass_cache=bypass_cache,
+                function_id=function_id,
+                depth=depth,
+                direction=direction,
+                relation_types=relation_types,
+            ),
         )
 
     def get_call_chain(
@@ -269,13 +278,16 @@ class CachingQueryEngine:
         Returns:
             List of entity IDs or None
         """
-        return self._execute_with_cache(
-            "get_call_chain",
-            lambda **kw: self.engine.get_call_chain(**kw),
-            bypass_cache=bypass_cache,
-            caller_id=caller_id,
-            callee_id=callee_id,
-            max_depth=max_depth,
+        return cast(
+            "list[str] | None",
+            self._execute_with_cache(
+                "get_call_chain",
+                lambda **kw: self.engine.get_call_chain(**kw),
+                bypass_cache=bypass_cache,
+                caller_id=caller_id,
+                callee_id=callee_id,
+                max_depth=max_depth,
+            ),
         )
 
     # === Analysis Methods ===
@@ -297,12 +309,15 @@ class CachingQueryEngine:
         Returns:
             List of orphaned entities
         """
-        return self._execute_with_cache(
-            "find_orphans",
-            lambda **kw: self.engine.find_orphans(**kw),
-            bypass_cache=bypass_cache,
-            entity_types=entity_types,
-            exclude_patterns=exclude_patterns,
+        return cast(
+            "list[Entity]",
+            self._execute_with_cache(
+                "find_orphans",
+                lambda **kw: self.engine.find_orphans(**kw),
+                bypass_cache=bypass_cache,
+                entity_types=entity_types,
+                exclude_patterns=exclude_patterns,
+            ),
         )
 
     def find_leaf_functions(
@@ -318,10 +333,13 @@ class CachingQueryEngine:
         Returns:
             List of leaf function entities
         """
-        return self._execute_with_cache(
-            "find_leaf_functions",
-            lambda **kw: self.engine.find_leaf_functions(),
-            bypass_cache=bypass_cache,
+        return cast(
+            "list[Entity]",
+            self._execute_with_cache(
+                "find_leaf_functions",
+                lambda **kw: self.engine.find_leaf_functions(),
+                bypass_cache=bypass_cache,
+            ),
         )
 
     def find_entry_points(
@@ -337,10 +355,13 @@ class CachingQueryEngine:
         Returns:
             List of entry point entities
         """
-        return self._execute_with_cache(
-            "find_entry_points",
-            lambda **kw: self.engine.find_entry_points(),
-            bypass_cache=bypass_cache,
+        return cast(
+            "list[Entity]",
+            self._execute_with_cache(
+                "find_entry_points",
+                lambda **kw: self.engine.find_entry_points(),
+                bypass_cache=bypass_cache,
+            ),
         )
 
     def get_centrality_scores(
@@ -360,12 +381,15 @@ class CachingQueryEngine:
         Returns:
             List of CentralityScore objects
         """
-        return self._execute_with_cache(
-            "get_centrality_scores",
-            lambda **kw: self.engine.get_centrality_scores(**kw),
-            bypass_cache=bypass_cache,
-            top_n=top_n,
-            entity_types=entity_types,
+        return cast(
+            "list[CentralityScore]",
+            self._execute_with_cache(
+                "get_centrality_scores",
+                lambda **kw: self.engine.get_centrality_scores(**kw),
+                bypass_cache=bypass_cache,
+                top_n=top_n,
+                entity_types=entity_types,
+            ),
         )
 
     def get_most_connected(
@@ -383,11 +407,14 @@ class CachingQueryEngine:
         Returns:
             List of CentralityScore objects
         """
-        return self._execute_with_cache(
-            "get_most_connected",
-            lambda **kw: self.engine.get_most_connected(**kw),
-            bypass_cache=bypass_cache,
-            top_n=top_n,
+        return cast(
+            "list[CentralityScore]",
+            self._execute_with_cache(
+                "get_most_connected",
+                lambda **kw: self.engine.get_most_connected(**kw),
+                bypass_cache=bypass_cache,
+                top_n=top_n,
+            ),
         )
 
     def find_cycles(
@@ -409,13 +436,16 @@ class CachingQueryEngine:
         Returns:
             List of cyclic PathResult objects
         """
-        return self._execute_with_cache(
-            "find_cycles",
-            lambda **kw: self.engine.find_cycles(**kw),
-            bypass_cache=bypass_cache,
-            start_id=start_id,
-            max_depth=max_depth,
-            relation_types=relation_types,
+        return cast(
+            "list[PathResult]",
+            self._execute_with_cache(
+                "find_cycles",
+                lambda **kw: self.engine.find_cycles(**kw),
+                bypass_cache=bypass_cache,
+                start_id=start_id,
+                max_depth=max_depth,
+                relation_types=relation_types,
+            ),
         )
 
     def get_neighbors(
@@ -437,13 +467,16 @@ class CachingQueryEngine:
         Returns:
             List of (entity, relation) tuples
         """
-        return self._execute_with_cache(
-            "get_neighbors",
-            lambda **kw: self.engine.get_neighbors(**kw),
-            bypass_cache=bypass_cache,
-            entity_id=entity_id,
-            direction=direction,
-            relation_types=relation_types,
+        return cast(
+            "list[tuple[Entity, Relation]]",
+            self._execute_with_cache(
+                "get_neighbors",
+                lambda **kw: self.engine.get_neighbors(**kw),
+                bypass_cache=bypass_cache,
+                entity_id=entity_id,
+                direction=direction,
+                relation_types=relation_types,
+            ),
         )
 
     def get_common_neighbors(
@@ -463,12 +496,15 @@ class CachingQueryEngine:
         Returns:
             List of common neighbor entities
         """
-        return self._execute_with_cache(
-            "get_common_neighbors",
-            lambda **kw: self.engine.get_common_neighbors(**kw),
-            bypass_cache=bypass_cache,
-            entity_id1=entity_id1,
-            entity_id2=entity_id2,
+        return cast(
+            "list[Entity]",
+            self._execute_with_cache(
+                "get_common_neighbors",
+                lambda **kw: self.engine.get_common_neighbors(**kw),
+                bypass_cache=bypass_cache,
+                entity_id1=entity_id1,
+                entity_id2=entity_id2,
+            ),
         )
 
     def export_subgraph(
@@ -490,13 +526,16 @@ class CachingQueryEngine:
         Returns:
             Dictionary with 'nodes' and 'edges'
         """
-        return self._execute_with_cache(
-            "export_subgraph",
-            lambda **kw: self.engine.export_subgraph(**kw),
-            bypass_cache=bypass_cache,
-            center_id=center_id,
-            depth=depth,
-            direction=direction,
+        return cast(
+            "dict[str, Any]",
+            self._execute_with_cache(
+                "export_subgraph",
+                lambda **kw: self.engine.export_subgraph(**kw),
+                bypass_cache=bypass_cache,
+                center_id=center_id,
+                depth=depth,
+                direction=direction,
+            ),
         )
 
     def invalidate_entity(self, entity_id: str) -> int:
@@ -537,8 +576,8 @@ class CachingQueryEngine:
 
     def get_cache_stats(self) -> dict[str, Any]:
         """Get cache statistics."""
-        return self.cache.get_stats()
+        return cast("dict[str, Any]", self.cache.get_stats())
 
     def ping(self) -> bool:
         """Health check."""
-        return self.engine.ping() and self.cache.ping()
+        return cast("bool", self.engine.ping() and self.cache.ping())

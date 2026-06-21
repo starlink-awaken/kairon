@@ -13,6 +13,7 @@ OntoDerive 提示词系统 v1 — 一等公民的提示词工程
 
 import json
 from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass
@@ -33,7 +34,7 @@ class PromptTemplate:
     fallback: str  # LLM不可用时的回退策略
     examples: list[dict] = field(default_factory=list)  # few-shot示例
 
-    def render(self, **kwargs) -> str:
+    def render(self, **kwargs: Any) -> str:
         """填充模板变量"""
         prompt = self.user_prompt_template
         for var in self.variables:
@@ -209,7 +210,7 @@ DOMAIN_PRESETS = {
 }
 
 
-def auto_detect_domain(facts_summary, inferences_summary):
+def auto_detect_domain(facts_summary: Any, inferences_summary: Any) -> Any:
     """基于事实/推论内容自动检测领域"""
     text = f"{facts_summary} {inferences_summary}".lower()
     scores = {}
@@ -217,10 +218,10 @@ def auto_detect_domain(facts_summary, inferences_summary):
         scores[domain] = sum(1 for kw in info["keywords"] if kw in text)
     if max(scores.values()) == 0:
         return "general"
-    return max(scores, key=scores.get)
+    return max(scores, key=lambda k: scores[k])
 
 
-def get_template(name, domain="general"):
+def get_template(name: Any, domain: Any = "general") -> Any:
     """获取提示词模板，支持领域定制"""
     templates = {
         "derive_insights": DERIVE_INSIGHTS,
@@ -237,7 +238,7 @@ def get_template(name, domain="general"):
     return tmpl
 
 
-def export_all_templates():
+def export_all_templates() -> Any:
     """导出所有提示词模板为JSON（供外部工具消费）"""
     templates = {
         "derive_insights": {

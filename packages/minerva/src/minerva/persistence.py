@@ -13,7 +13,7 @@ import shutil
 import time
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 _RESULTS_DIR = Path.home() / ".minerva" / "research"
 
@@ -149,7 +149,7 @@ def get_result(result_id: str) -> dict[str, Any] | None:
         with contextlib.suppress(Exception):
             meta["search_results"] = json.loads(results_file.read_text(encoding="utf-8"))
 
-    return meta
+    return cast("dict[str, Any] | None", meta)
 
 
 def delete_result(result_id: str) -> bool:

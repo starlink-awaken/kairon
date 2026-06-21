@@ -5,7 +5,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import StrEnum
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from kairon_utils import atomic_write_json
 
@@ -233,11 +233,11 @@ class SchemaRegistry:
             fields=fields,
         )
 
-    def _ensure_storage(self):
+    def _ensure_storage(self) -> None:
         """Ensure the storage directory exists."""
         DEFAULT_REGISTRY_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-    def validate(self, schema_name: str, data: dict[str, Any], strict: bool = True):
+    def validate(self, schema_name: str, data: dict[str, Any], strict: bool = True) -> Any:
         from eidos.core.validator import Validator  # type: ignore[import-not-found]
 
         return Validator(self).validate_object(schema_name, data, strict=strict)
@@ -260,7 +260,7 @@ class SchemaMigration:
         to_version: str,
         description: str = "",
         transform: Callable | None = None,
-    ):
+    ) -> None:
         self.from_version = from_version
         self.to_version = to_version
         self.description = description
@@ -268,7 +268,7 @@ class SchemaMigration:
 
     def apply(self, data: dict) -> dict:
         if self.transform is not None:
-            return self.transform(data)
+            return cast("dict[Any, Any]", self.transform(data))
         return data
 
 

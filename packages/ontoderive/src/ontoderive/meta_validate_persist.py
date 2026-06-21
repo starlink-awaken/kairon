@@ -116,7 +116,7 @@ class _MetaPersistenceMixin:
             验证结果字典
         """
         if gt_id:
-            gts = {gt_id: self.ground_truths.get(gt_id)}
+            gts: dict[str, Any] = {gt_id: self.ground_truths.get(gt_id)}
         else:
             gts = self.ground_truths
 

@@ -34,6 +34,12 @@ class CognitiveLoopKnowledgeProvider:
         """Retrieve relevant context as a formatted string for the LLM."""
         return ""
 
+    async def query_for_thinking(
+        self, context: Any = None, max_results: int = 5, quality_threshold: float = 0.0
+    ) -> None:
+        """Query knowledge for thinking stage (stub)."""
+        return None
+
     def is_available(self) -> bool:
         """Check if the provider is available and initialized."""
         return self._initialized

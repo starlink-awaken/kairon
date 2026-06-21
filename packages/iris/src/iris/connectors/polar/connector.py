@@ -160,7 +160,16 @@ class PolarConnector(BaseConnector):
 
     # ── List items ──────────────────────────────────────────────
 
-    def list_items(self, limit: int = 20, cursor: str | None = None, **kwargs: Any) -> list[Article]:
+    def list_items(
+        self,
+        limit: int = 20,
+        cursor: str | None = None,
+        tag: str | None = None,
+        folder: str | None = None,
+        subdir: str | None = None,
+        chat_id: str | None = None,
+        **kwargs: Any,
+    ) -> list[Article]:
         """List articles from Polar.sh, with optional pagination.
 
         Args:

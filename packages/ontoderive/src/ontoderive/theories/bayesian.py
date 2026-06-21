@@ -13,6 +13,7 @@ import math
 import re
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
 from ontoderive.foundation.utils import all_md, detect_cycles, rf, wf  # type: ignore[import-not-found]
 
@@ -36,19 +37,19 @@ CONVERGENCE_EPSILON = 0.001
 class BayesianNetwork:
     """有向无环图：节点=事实+推论，边=derives_from"""
 
-    def __init__(self):
-        self.nodes = {}  # id -> {confidence, type(fact|inference), label}
-        self.edges = {}  # from_id -> [to_id]
-        self.reverse = defaultdict(list)  # to_id -> [from_id]
-        self.fact_ids = set()
-        self.inf_ids = set()
+    def __init__(self) -> None:
+        self.nodes: dict[Any, Any] = {}  # id -> {confidence, type(fact|inference), label}
+        self.edges: dict[Any, Any] = {}  # from_id -> [to_id]
+        self.reverse: defaultdict[str, list[Any]] = defaultdict(list)  # to_id -> [from_id]
+        self.fact_ids: set[Any] = set()
+        self.inf_ids: set[Any] = set()
 
-    def add_fact(self, fid, confidence=0.95, label=""):
+    def add_fact(self, fid: Any, confidence: Any = 0.95, label: Any = "") -> None:
         self.nodes[fid] = {"confidence": confidence, "type": "fact", "label": label}
         self.fact_ids.add(fid)
         self.edges.setdefault(fid, [])
 
-    def add_inference(self, iid, derives_from, base_conf=0.85, label=""):
+    def add_inference(self, iid: Any, derives_from: Any, base_conf: Any = 0.85, label: Any = "") -> None:
         self.nodes[iid] = {"confidence": base_conf, "type": "inference", "label": label, "base_confidence": base_conf}
         self.inf_ids.add(iid)
         self.edges.setdefault(iid, [])
@@ -57,7 +58,7 @@ class BayesianNetwork:
             if src in self.nodes:
                 self.edges.setdefault(src, []).append(iid)
 
-    def finalize(self):
+    def finalize(self) -> None:
         """解析所有前向引用，确保边完整"""
         for iid in list(self.inf_ids):
             for src in list(self.reverse.get(iid, [])):
@@ -67,20 +68,20 @@ class BayesianNetwork:
                 if src not in self.nodes and not self._is_fact_id(src):
                     pass  # 忽略无效引用
 
-    def _is_fact_id(self, fid):
+    def _is_fact_id(self, fid: Any) -> Any:
         return bool(re.match(r"^(D-F|P-F)\d+", fid))
 
-    def detect_cycles(self):
+    def detect_cycles(self) -> Any:
         return detect_cycles(self.nodes, self.edges)
 
-    def propagate(self):
+    def propagate(self) -> dict[str, Any]:
         """Sum-product信念传播 — 多轮迭代直至收敛"""
         cycles = self.detect_cycles()
         if cycles:
             return {"error": f"检测到{len(cycles)}个循环引用", "cycles": cycles, "nodes": self.nodes}
 
         # 拓扑排序（Kahn算法）
-        in_degree = defaultdict(int)
+        in_degree: defaultdict[str, int] = defaultdict(int)
         for u in self.nodes:
             for v in self.edges.get(u, []):
                 in_degree[v] += 1
@@ -129,7 +130,7 @@ class BayesianNetwork:
 
         return {"nodes": self.nodes, "iterations": iteration, "converged": not changed}
 
-    def to_dot(self):
+    def to_dot(self) -> Any:
         """生成Graphviz DOT格式"""
         lines = ["digraph BayesianNetwork {", "  rankdir=LR;", "  node [shape=box];"]
         for nid, info in self.nodes.items():
@@ -145,14 +146,14 @@ class BayesianNetwork:
 
 
 class BayesianLayer:
-    def __init__(self, project_root):
+    def __init__(self, project_root: Any) -> None:
         self.root = Path(project_root)
         self.facts_dir = self.root / "facts"
         self.inferences_dir = self.root / "inferences"
         self.log_dir = self.root / "_derivation_logs"
         self.log_dir.mkdir(parents=True, exist_ok=True)
 
-    def scan_facts(self):
+    def scan_facts(self) -> Any:
         facts = {}
         for f in all_md(self.facts_dir):
             text = rf(f)
@@ -171,7 +172,7 @@ class BayesianLayer:
                 facts[fid] = {"desc": m.group(2).strip(), "value": source, "confidence": conf, "type": "fact"}
         return facts
 
-    def scan_inferences(self):
+    def scan_inferences(self) -> Any:
         inferences = {}
         for f in all_md(self.inferences_dir):
             text = rf(f)
@@ -194,7 +195,7 @@ class BayesianLayer:
                 }
         return inferences
 
-    def build_network(self, facts, inferences):
+    def build_network(self, facts: Any, inferences: Any) -> Any:
         """构建贝叶斯网络DAG"""
         bn = BayesianNetwork()
         for fid, info in facts.items():
@@ -204,7 +205,7 @@ class BayesianLayer:
         bn.finalize()  # 解析前向引用
         return bn
 
-    def propagate_all(self):
+    def propagate_all(self) -> tuple[Any, ...]:
         facts = self.scan_facts()
         inferences = self.scan_inferences()
         bn = self.build_network(facts, inferences)
@@ -236,7 +237,7 @@ class BayesianLayer:
 
         return facts, inferences
 
-    def get_distribution(self):
+    def get_distribution(self) -> dict[str, Any]:
         """公开方法：返回置信度分布供Pipeline/Metrics消费"""
         facts, inferences = self.propagate_all()
         fact_confs = [f["confidence"] for f in facts.values()]
@@ -252,7 +253,7 @@ class BayesianLayer:
             "n_inferences": len(inf_confs),
         }
 
-    def _fallback_propagate(self, facts, inferences):
+    def _fallback_propagate(self, facts: Any, inferences: Any) -> Any:
         """原加权平均传播（兼容循环引用场景）"""
         for name, inf in inferences.items():
             premises = [f for f in inf["derives_from"] if f in facts]
@@ -265,7 +266,7 @@ class BayesianLayer:
             inf["propagated_confidence"] = max(0.01, min(0.99, inf["propagated_confidence"]))
         return inferences
 
-    def recompute_if_changed(self, fact_id: str, new_value: float):
+    def recompute_if_changed(self, fact_id: str, new_value: float) -> dict[str, Any]:
         """v3.6: What-if分析 — 修改一个事实值后重算下游置信度变化"""
         if not hasattr(self, "_cached_facts"):
             self._cached_facts, self._cached_inferences = self.propagate_all()
@@ -290,7 +291,7 @@ class BayesianLayer:
             "deltas": deltas,
         }
 
-    def confidence_report(self):
+    def confidence_report(self) -> Any:
         facts, inferences = self.propagate_all()
         report = f"""---
 title: 贝叶斯信念传播报告 v2

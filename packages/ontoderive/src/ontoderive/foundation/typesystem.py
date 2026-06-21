@@ -8,6 +8,7 @@ OntoDerive 类型系统 — MOF十元类型校验
 """
 
 from dataclasses import dataclass, field
+from typing import Any
 
 # ── 十元类型定义 ──
 META_TYPES = {
@@ -73,7 +74,7 @@ class TypeCheckResult:
     line: int = 0
 
     @property
-    def is_valid(self):
+    def is_valid(self) -> Any:
         return len(self.errors) == 0
 
 
@@ -110,7 +111,7 @@ class TypeValidator:
                 return meta_name
         return None
 
-    def _check_subtype_prefix(self, node_id: str, meta_type: str, result: TypeCheckResult):
+    def _check_subtype_prefix(self, node_id: str, meta_type: str, result: TypeCheckResult) -> None:
         meta = META_TYPES.get(meta_type, {})
         subtypes = meta.get("subtypes", set())
         if not subtypes:

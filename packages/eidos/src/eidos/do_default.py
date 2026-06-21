@@ -4,6 +4,7 @@ P56-W3 评估后 P57-W0 实施: 3 sample 包先做真业务, 其他 14 包留 P5
 
 POC 业务范围: list_available_organs / get_organ_path / read_organ_data / find_sharedbrain_root.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -26,7 +27,8 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
         if action == "list":
             organs = list_available_organs()
             return {
-                "_method": "do_default", "_action": "list",
+                "_method": "do_default",
+                "_action": "list",
                 "organs_count": len(organs),
                 "organs": organs[:10],
             }
@@ -38,7 +40,9 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             organ = args.get("organ", args.get("name", ""))
             data = read_organ_data(organ)
             return {
-                "_method": "do_default", "_action": "read", "organ": organ,
+                "_method": "do_default",
+                "_action": "read",
+                "organ": organ,
                 "data_keys": list(data.keys()) if isinstance(data, dict) else None,
             }
         if action == "find_root":

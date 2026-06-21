@@ -128,7 +128,16 @@ class ZhihuConnector(BaseConnector):
         except Exception:
             return False
 
-    def list_items(self, limit: int = 20, cursor: str | None = None, **kwargs: Any) -> list[Article]:
+    def list_items(
+        self,
+        limit: int = 20,
+        cursor: str | None = None,
+        tag: str | None = None,
+        folder: str | None = None,
+        subdir: str | None = None,
+        chat_id: str | None = None,
+        **kwargs: Any,
+    ) -> list[Article]:
         """Not available without auth — Zhihu doesn't have a public feed API."""
         return []
 

@@ -1,13 +1,14 @@
 """Domain-specific reasoning checks."""
 
 import re
+from typing import Any
 
 from .common import (
     calc_depth,
 )
 
 
-def shared_premise_check(engine, inferences):
+def shared_premise_check(engine: Any, inferences: Any) -> Any:
     """R2: 共享前提检测 — 两个推论引用相同事实可能互补或矛盾"""
     results = []
     inf_list = list(inferences.items())
@@ -29,7 +30,7 @@ def shared_premise_check(engine, inferences):
     return results
 
 
-def missing_ref_check(engine, inferences, all_ids):
+def missing_ref_check(engine: Any, inferences: Any, all_ids: Any) -> Any:
     """R3: 缺失引用 — 三段论的前提断裂"""
     results = []
     for title, info in inferences.items():
@@ -47,7 +48,7 @@ def missing_ref_check(engine, inferences, all_ids):
     return results
 
 
-def evidence_gap_check(engine, inferences):
+def evidence_gap_check(engine: Any, inferences: Any) -> Any:
     """R4: 证据缺口 — 前提不足以支持推论"""
     results = []
     for title, info in inferences.items():
@@ -65,7 +66,7 @@ def evidence_gap_check(engine, inferences):
     return results
 
 
-def threshold_check(engine, facts, thresholds=None):
+def threshold_check(engine: Any, facts: Any, thresholds: Any = None) -> Any:
     """R5: 阈值触发 — 预设基准检查"""
     if thresholds is None:
         thresholds = {
@@ -96,7 +97,7 @@ def threshold_check(engine, facts, thresholds=None):
     return results
 
 
-def chain_integrity_check(engine, inferences):
+def chain_integrity_check(engine: Any, inferences: Any) -> Any:
     """R6: 推导链完整性 — INF→INF链是否完整"""
     results = []
     inf_ids = set(inferences.keys())
@@ -113,7 +114,7 @@ def chain_integrity_check(engine, inferences):
                     }
                 )
     # 检测推导深度
-    depths = {}
+    depths: dict[Any, Any] = {}
     for title in inferences:
         calc_depth(engine, title, inferences, depths, set())
     max_depth = max(depths.values()) if depths else 0

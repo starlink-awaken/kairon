@@ -22,6 +22,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from enum import Enum
 from pathlib import Path
+from typing import Any, cast
 
 import structlog
 
@@ -94,7 +95,7 @@ class CostGuard:
         monthly_budget: float = 50.0,
         warn_pct: float = 0.80,
         ledger_path: str = "~/minerva/state/cost_ledger.jsonl",
-    ):
+    ) -> None:
         self.monthly_budget = monthly_budget
         self.warn_threshold = monthly_budget * warn_pct
         self.current_spend = 0.0
@@ -103,7 +104,7 @@ class CostGuard:
         self.ledger_path.parent.mkdir(parents=True, exist_ok=True)
         self._load_ledger()
 
-    def _load_ledger(self):
+    def _load_ledger(self) -> None:
         """Load current month's spend from persistent ledger."""
         if not self.ledger_path.exists():
             return
@@ -129,7 +130,7 @@ class CostGuard:
             return False
         return True
 
-    def record(self, actual_cost: float):
+    def record(self, actual_cost: float) -> None:
         """Record actual API spend with persistent ledger."""
         self.current_spend += actual_cost
         entry = {
@@ -299,12 +300,12 @@ class ResearchExecutor:
 
     def __init__(
         self,
-        triage_router,
+        triage_router: Any,
         pipeline: Pipeline,
-        knowledge_store,
+        knowledge_store: Any,
         cost_guard: CostGuard,
         state_dir: str = "~/minerva/state",
-    ):
+    ) -> None:
         self.router = triage_router
         self.pipeline = pipeline
         self.kb = knowledge_store
@@ -392,7 +393,7 @@ class ResearchExecutor:
 
         self._ensure_scheduler()
 
-        async def _execute_scheduled():
+        async def _execute_scheduled() -> None:
             try:
                 await self.execute_now(task)
                 logger.info("scheduled_task_complete", task_id=task_id, cron=task.cron_expr)
@@ -427,10 +428,10 @@ class ResearchExecutor:
         interval_secs = {"hourly": 3600, "daily": 86400, "weekly": 604800}.get(task.check_interval or "daily", 86400)
         self._ensure_scheduler()
 
-        async def _watch_check():
+        async def _watch_check() -> None:
             for source in task.sources or []:
                 try:
-                    new_items = await self.source_checker.check(source, task.topic, None)
+                    new_items = await self.source_checker.check(source, cast("str", task.topic), None)
                     for item in new_items:
                         watch_task = ResearchTask(
                             id=str(uuid.uuid4())[:8],
@@ -462,7 +463,7 @@ class ResearchExecutor:
         logger.info("watch_created", task_id=task_id, topic=task.topic, sources=task.sources)
         return task_id
 
-    def _ensure_scheduler(self):
+    def _ensure_scheduler(self) -> None:
         """Lazy-init APScheduler with SQLite persistence."""
         if hasattr(self, "_apscheduler"):
             return
@@ -576,7 +577,7 @@ class ResearchExecutor:
             pass
         return result
 
-    def persist_state(self):
+    def persist_state(self) -> None:
         """Persist all execution state to disk."""
         self._persist_scheduled_tasks()
         self._persist_watch_configs()
@@ -595,7 +596,7 @@ class ResearchExecutor:
     # Private: State Persistence
     # ============================================================
 
-    def _persist_task_dict(self, tasks: dict, filename: str, keys: dict[str, tuple[str, object]]):
+    def _persist_task_dict(self, tasks: dict, filename: str, keys: dict[str, tuple[str, object]]) -> None:
         """Persist task metadata to JSON file using key mapping.
 
         Always includes the task ID as 'id'. Additional keys are extracted from
@@ -611,7 +612,7 @@ class ResearchExecutor:
         with open(self.state_dir / filename, "w") as f:
             json.dump(configs, f, indent=2)
 
-    def _persist_scheduled_tasks(self):
+    def _persist_scheduled_tasks(self) -> None:
         self._persist_task_dict(
             self.scheduled_tasks,
             "scheduled_tasks.json",
@@ -623,7 +624,7 @@ class ResearchExecutor:
             },
         )
 
-    def _persist_watch_configs(self):
+    def _persist_watch_configs(self) -> None:
         self._persist_task_dict(
             self.watch_tasks,
             "watch_configs.json",
@@ -635,7 +636,7 @@ class ResearchExecutor:
             },
         )
 
-    def _log_execution(self, task: ResearchTask, result: ResearchResult, started: str, completed: str):
+    def _log_execution(self, task: ResearchTask, result: ResearchResult, started: str, completed: str) -> None:
         """Append execution record to JSONL log using atomic append."""
         entry = {
             "task_id": task.id,
@@ -653,8 +654,10 @@ class ResearchExecutor:
         with open(log_path, "a") as f:
             f.write(json.dumps(entry) + "\n")
 
-    def _notify(self, task: ResearchTask, result: ResearchResult):
+    def _notify(self, task: ResearchTask, result: ResearchResult | None) -> None:
         """Queue notification for agent consumption via MCP."""
+        if result is None:
+            return None
         notification = {
             "task_id": task.id,
             "mode": task.mode.value,

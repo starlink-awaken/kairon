@@ -178,7 +178,16 @@ class WPSNoteConnector(BaseConnector):
             logger.exception("WPS Note MCP server unavailable")
         return self._available
 
-    def list_items(self, limit: int = 20, cursor: str | None = None, **kwargs: Any) -> list[Note]:
+    def list_items(
+        self,
+        limit: int = 20,
+        cursor: str | None = None,
+        tag: str | None = None,
+        folder: str | None = None,
+        subdir: str | None = None,
+        chat_id: str | None = None,
+        **kwargs: Any,
+    ) -> list[Note]:
         """List notes from WPS Note Cloud."""
         params: dict[str, Any] = {"limit": min(limit, 100)}
         if cursor:
@@ -309,10 +318,10 @@ class WPSNoteConnector(BaseConnector):
 
         return result
 
-    def delete_item(self, id: str) -> bool:
+    def delete_item(self, item_id: str, **kwargs: Any) -> bool:
         """Move a note to the trash."""
         try:
-            self._get_client().call_tool("trash_note", {"note_id": id})
+            self._get_client().call_tool("trash_note", {"note_id": item_id})
             return True
         except McpError:
             return False

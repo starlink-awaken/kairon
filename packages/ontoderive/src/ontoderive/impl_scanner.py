@@ -110,7 +110,9 @@ class ImplementationScanner:
         self.entities: list[CodeEntity] = []
         self.manifest: ImplementationManifest | None = None
 
-    def scan(self, include_patterns: list[str] | None = None, exclude_patterns: list[str] | None = None) -> ImplementationManifest:
+    def scan(
+        self, include_patterns: list[str] | None = None, exclude_patterns: list[str] | None = None
+    ) -> ImplementationManifest:
         """扫描代码库"""
         _log.info("🔍 扫描代码库：{self.root}")
 

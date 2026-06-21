@@ -7,7 +7,7 @@ python3 engine/mcp_server.py --port 8321          # SSE"""
 import argparse
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 _PROJECT_ROOT = str(Path(__file__).parent.parent)
 if _PROJECT_ROOT not in sys.path:
@@ -102,13 +102,13 @@ def derive(project: str = ".", goal: str = "", auto: bool = False, with_tools: b
 @mcp.tool()
 def trace(entity_id: str, depth: int = 2) -> dict:
     """溯源推理路径 — 从实体ID出发,追踪其涉及的推理链"""
-    prefix_match = None
+    prefix_match: str | None = None
     for prefix in sorted(PREFIX_TO_META, key=len, reverse=True):
         if entity_id.startswith(prefix):
             prefix_match = prefix
             break
 
-    meta_type = PREFIX_TO_META.get(prefix_match, "UNKNOWN")
+    meta_type = PREFIX_TO_META.get(prefix_match or "UNKNOWN", "UNKNOWN")
     meta_info = META_TYPES.get(meta_type, {})
     return {
         "entity_id": entity_id,
@@ -222,7 +222,7 @@ def _call_tool(name: str, arguments: dict | None = None) -> dict | list[dict]:
     if name not in _TOOL_HANDLERS:
         raise KeyError(f"Unknown tool: {name}")
     handler = _TOOL_HANDLERS[name]
-    return handler(**(arguments or {}))
+    return cast("dict[Any, Any] | list[dict[Any, Any]]", handler(**(arguments or {})))
 
 
 def handle_mcp_request(request: dict) -> dict:
@@ -260,7 +260,7 @@ def handle_mcp_request(request: dict) -> dict:
 handle_request = handle_mcp_request
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="OntoDerive MCP Server (fastmcp)",
         epilog="Example: python3 engine/mcp_server.py --port 8321",

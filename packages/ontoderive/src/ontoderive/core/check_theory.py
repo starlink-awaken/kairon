@@ -6,9 +6,10 @@
 
 import sys
 from pathlib import Path
+from typing import Any
 
 
-def check_bayesian(root):
+def check_bayesian(root: Any) -> dict[str, Any]:
     """C-09: 贝叶斯信念传播"""
     try:
         sys.path.insert(0, str(Path(__file__).parent))
@@ -34,7 +35,7 @@ def check_bayesian(root):
         return {"passed": False, "severity": "WARN", "detail": f"异常: {str(e)[:50]}"}
 
 
-def check_metrics(root, precomputed_confs=None):
+def check_metrics(root: Any, precomputed_confs: Any = None) -> dict[str, Any]:
     """C-10: KQI知识质量指数"""
     try:
         sys.path.insert(0, str(Path(__file__).parent))
@@ -55,7 +56,7 @@ def check_metrics(root, precomputed_confs=None):
         return {"passed": False, "severity": "WARN", "detail": f"异常: {str(e)[:50]}"}
 
 
-def check_pid(root):
+def check_pid(root: Any) -> dict[str, Any]:
     """C-11: PID反馈控制"""
     try:
         sys.path.insert(0, str(Path(__file__).parent))
@@ -72,7 +73,7 @@ def check_pid(root):
         return {"passed": True, "severity": "PASS", "detail": "首次运行, 信号=0 (需历史数据)"}
 
 
-def check_turing(root):
+def check_turing(root: Any) -> dict[str, Any]:
     """C-12: 知识状态机"""
     try:
         sys.path.insert(0, str(Path(__file__).parent))
@@ -88,7 +89,7 @@ def check_turing(root):
         return {"passed": False, "severity": "WARN", "detail": f"异常: {str(e)[:50]}"}
 
 
-def check_ontolang(root=None):
+def check_ontolang(root: Any = None) -> dict[str, Any]:
     """C-13: OntoLang形式语言 [DEPRECATED - 保留供外部兼容]"""
     try:
         import sys

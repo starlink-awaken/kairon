@@ -16,7 +16,7 @@ import logging
 import os
 import sqlite3
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 _log = logging.getLogger(__name__)
 
@@ -183,7 +183,7 @@ def read_json_file(file_path: str) -> dict | list | None:
         return None
     try:
         with open(file_path, encoding="utf-8") as f:
-            return json.load(f)
+            return cast("dict[Any, Any] | list[Any] | None", json.load(f))
     except (json.JSONDecodeError, OSError, RuntimeError) as exc:
         _log.warning("Failed to read JSON %s: %s", file_path, exc)
         return None

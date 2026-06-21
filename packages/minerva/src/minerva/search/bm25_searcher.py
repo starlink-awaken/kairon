@@ -41,7 +41,7 @@ import re
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 
@@ -370,7 +370,7 @@ class BM25Index:
 
         # 标准 BM25 IDF
         idf = np.log((n - df + 0.5) / (df + 0.5) + self.EPSILON)
-        return max(0.0, idf)
+        return cast("float", max(0.0, idf))
 
     def search(self, query_tokens: list[str], top_k: int = 10) -> list[tuple[int, float, list[str]]]:
         """

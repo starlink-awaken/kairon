@@ -35,7 +35,9 @@ def save_to_kos(items: list[TechItem]) -> dict[str, int]:
             continue
 
         entity_id = _make_entity_id(item)
-        combined_tags = list(set(item.tags + ["#tech-radar"] + (["#upgrade-candidate"] if item.upgrade_candidate else [])))
+        combined_tags = list(
+            set(item.tags + ["#tech-radar"] + (["#upgrade-candidate"] if item.upgrade_candidate else []))
+        )
 
         try:
             entity = Entity(

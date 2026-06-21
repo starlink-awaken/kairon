@@ -10,25 +10,52 @@ from minerva.policy_tracker.types import PolicyItem
 # 场景 A 关键词权重
 _KEYWORDS: dict[str, float] = {
     # 基层医疗（高权重）
-    "基层": 1.0, "基层医疗": 1.2, "基层卫生": 1.2, "primary care": 1.0,
-    "社区卫生": 0.9, "乡镇卫生院": 0.9, "村卫生室": 0.8,
+    "基层": 1.0,
+    "基层医疗": 1.2,
+    "基层卫生": 1.2,
+    "primary care": 1.0,
+    "社区卫生": 0.9,
+    "乡镇卫生院": 0.9,
+    "村卫生室": 0.8,
     # 药品集采（高权重）
-    "药品集中采购": 1.2, "药品集采": 1.2, "带量采购": 1.1, "集采中选": 1.0,
-    "drug procurement": 1.0, "volume-based procurement": 1.0, "vbp": 0.8,
+    "药品集中采购": 1.2,
+    "药品集采": 1.2,
+    "带量采购": 1.1,
+    "集采中选": 1.0,
+    "drug procurement": 1.0,
+    "volume-based procurement": 1.0,
+    "vbp": 0.8,
     # 医保支付
-    "医保支付": 1.0, "医保基金": 0.9, "医保报销": 0.8, "drg": 0.9, "dip": 0.9,
-    "medical insurance": 0.9, "基本医保": 0.9, "门诊共济": 1.0, "门诊保障": 0.8,
+    "医保支付": 1.0,
+    "医保基金": 0.9,
+    "医保报销": 0.8,
+    "drg": 0.9,
+    "dip": 0.9,
+    "medical insurance": 0.9,
+    "基本医保": 0.9,
+    "门诊共济": 1.0,
+    "门诊保障": 0.8,
     # 分级诊疗
-    "分级诊疗": 1.0, "双向转诊": 0.9, "hierarchical diagnosis": 0.9,
-    "分级医疗": 0.8, "上下联动": 0.7,
+    "分级诊疗": 1.0,
+    "双向转诊": 0.9,
+    "hierarchical diagnosis": 0.9,
+    "分级医疗": 0.8,
+    "上下联动": 0.7,
     # 基本药物
-    "基本药物": 1.0, "基本药物制度": 1.0, "essential medicine": 1.0,
-    "零差率": 0.7, "国家基本药物目录": 1.0,
+    "基本药物": 1.0,
+    "基本药物制度": 1.0,
+    "essential medicine": 1.0,
+    "零差率": 0.7,
+    "国家基本药物目录": 1.0,
     # 医改
-    "医改": 0.7, "医药卫生体制改革": 0.8, "公立医院改革": 0.8,
+    "医改": 0.7,
+    "医药卫生体制改革": 0.8,
+    "公立医院改革": 0.8,
     "三医联动": 0.9,
     # 公共卫生
-    "公共卫生": 0.6, "家庭医生": 0.7, "签约服务": 0.6,
+    "公共卫生": 0.6,
+    "家庭医生": 0.7,
+    "签约服务": 0.6,
 }
 
 # 噪音词（命中降分）
@@ -55,9 +82,7 @@ def score_item(item: PolicyItem) -> float:
     return min(round(score / 6.0, 3), 1.0)
 
 
-def analyze_items(
-    items: list[PolicyItem], threshold: float = 0.15
-) -> list[PolicyItem]:
+def analyze_items(items: list[PolicyItem], threshold: float = 0.15) -> list[PolicyItem]:
     """批量评分，过滤低相关度条目。
 
     Returns: 按 relevance_score 降序排列的过滤后条目。

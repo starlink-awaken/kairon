@@ -24,7 +24,7 @@ def parse_command(text: str) -> list[list[str]]:
     return cmds
 
 
-def main():
+def main() -> None:
     text = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else input("> ")
     cmds = parse_command(text)
     print(f"Interpreted: {text}")

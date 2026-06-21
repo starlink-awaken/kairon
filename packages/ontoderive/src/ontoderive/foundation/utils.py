@@ -8,23 +8,24 @@ v2.3: 添加 CachedReader 消除单次 run_check 中的重复文件 I/O。
 import json
 import re
 from pathlib import Path
+from typing import Any
 
 
 class CachedReader:
     """单次检查生命周期内的文件读缓存 — 每个文件只从磁盘读一次"""
 
-    def __init__(self):
-        self._files = {}  # path_str → text
-        self._listings = {}  # dir_str → [Path]
+    def __init__(self) -> None:
+        self._files: dict[Any, Any] = {}  # path_str → text
+        self._listings: dict[Any, Any] = {}  # dir_str → [Path]
 
-    def rf(self, path):
+    def rf(self, path: Any) -> Any:
         key = str(path)
         if key not in self._files:
             p = Path(path)
             self._files[key] = p.read_text("utf-8", errors="ignore") if p.exists() else ""
         return self._files[key]
 
-    def all_md(self, directory):
+    def all_md(self, directory: Any) -> Any:
         key = str(directory)
         if key not in self._listings:
             dp = Path(directory)
@@ -33,26 +34,26 @@ class CachedReader:
 
 
 # 全局无状态工具（向后兼容）
-def rf(path):
+def rf(path: Any) -> Any:
     """读文件，文件不存在返回空串"""
     p = Path(path) if isinstance(path, str) else path
     return p.read_text("utf-8", errors="ignore") if p.exists() else ""
 
 
-def wf(path, text):
+def wf(path: Any, text: Any) -> None:
     """写文件，自动创建父目录"""
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(text, encoding="utf-8")
 
 
-def all_md(directory):
+def all_md(directory: Any) -> Any:
     """列出目录下所有 .md 文件，按路径排序"""
     dp = Path(directory)
     return sorted(dp.rglob("*.md")) if dp.exists() else []
 
 
-def load_json(path):
+def load_json(path: Any) -> Any:
     """加载JSON文件，失败返回None"""
     p = Path(path)
     if p.exists():
@@ -63,7 +64,7 @@ def load_json(path):
     return None
 
 
-def save_json(path, data):
+def save_json(path: Any, data: Any) -> None:
     """保存JSON文件，自动创建父目录"""
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -91,7 +92,7 @@ def scan_inferences_from_md(text: str) -> dict:
     return inferences
 
 
-def detect_cycles(nodes, edges):
+def detect_cycles(nodes: Any, edges: Any) -> Any:
     """
     共享的三色DFS环检测算法。
     nodes: dict {id: info} 或 set of ids
@@ -103,7 +104,7 @@ def detect_cycles(nodes, edges):
     color = {n: white for n in node_ids}
     cycles = []
 
-    def dfs(u, path):
+    def dfs(u: Any, path: Any) -> None:
         color[u] = gray
         path.append(u)
         for v in edges.get(u, []):

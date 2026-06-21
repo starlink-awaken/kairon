@@ -1,0 +1,102 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1781997300248,
+  "projectRoot": "/Users/xiamingxing/Workspace/projects/kairon/packages/eidos",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Python",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "pyproject.toml"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "pytest",
+        "version": null,
+        "category": "testing"
+      }
+    ],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": "pytest",
+    "lintCommand": "ruff check",
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "src",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "schemas": {
+      "path": "schemas",
+      "purpose": "Schema definitions",
+      "fileCount": 25,
+      "lastAccessed": 1781997300237,
+      "keyFiles": [
+        "agent-run.schema.json",
+        "approval-policy.schema.json",
+        "approval-receipt.schema.json",
+        "approval-request.schema.json",
+        "audit-event.schema.json"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1781997300238,
+      "keyFiles": []
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 26,
+      "lastAccessed": 1781997300238,
+      "keyFiles": [
+        "__init__.py",
+        "_fixtures.py",
+        "test_archetype_loader.py",
+        "test_cli.py",
+        "test_context_compressor.py"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src/eidos/organs/nks/graph_store.py",
+      "accessCount": 1,
+      "lastAccessed": 1781998881827,
+      "type": "file"
+    },
+    {
+      "path": "src/eidos/graph_store.py",
+      "accessCount": 1,
+      "lastAccessed": 1781998899724,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

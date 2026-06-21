@@ -19,8 +19,10 @@ from typing import Any, Protocol
 
 class EnergyLedger(Protocol):
     """Protocol for cross-organ energy ledger."""
+
     def get_balance(self) -> float: ...
     def deduct_usage(self, agent_id: str, operation: str, ref_id: str, usage: dict | None = None) -> float: ...
+
 
 # =============================================================================
 # 0. 形式化摘要 ≝

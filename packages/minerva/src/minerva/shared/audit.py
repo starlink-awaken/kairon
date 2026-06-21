@@ -13,6 +13,7 @@ import json
 import os
 import time
 from pathlib import Path
+from typing import Any
 
 import structlog
 
@@ -23,7 +24,7 @@ _AUDIT_DIR = Path(os.environ.get("MINERVA_AUDIT_DIR", Path.home() / ".minerva" /
 _audit_dir_ready = False
 
 
-def _ensure_audit_dir():
+def _ensure_audit_dir() -> None:
     global _audit_dir_ready
     if not _audit_dir_ready:
         try:
@@ -33,7 +34,7 @@ def _ensure_audit_dir():
             pass
 
 
-def _write_event(level: str, event: str, **kwargs) -> None:
+def _write_event(level: str, event: str, **kwargs: Any) -> None:
     """Write a structured audit event to the JSONL log."""
     record = {
         "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -53,21 +54,21 @@ def _write_event(level: str, event: str, **kwargs) -> None:
 class AuditLogger:
     """Structured audit logger for security-relevant events."""
 
-    def info(self, event: str, **kwargs) -> None:
+    def info(self, event: str, **kwargs: Any) -> None:
         logger.info(event, **kwargs)
         _write_event("INFO", event, **kwargs)
 
-    def warning(self, event: str, **kwargs) -> None:
+    def warning(self, event: str, **kwargs: Any) -> None:
         logger.warning(event, **kwargs)
         _write_event("WARNING", event, **kwargs)
 
-    def error(self, event: str, **kwargs) -> None:
+    def error(self, event: str, **kwargs: Any) -> None:
         logger.error(event, **kwargs)
         _write_event("ERROR", event, **kwargs)
 
     # Convenience methods for specific events
 
-    def mcp_tool_called(self, tool: str, **params) -> None:
+    def mcp_tool_called(self, tool: str, **params: Any) -> None:
         self.info("mcp_tool_called", tool=tool, **{k: str(v)[:200] for k, v in params.items()})
 
     def web_api_request(self, method: str, path: str, ip: str, status: int, duration_ms: float = 0) -> None:

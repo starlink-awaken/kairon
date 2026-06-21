@@ -5,8 +5,10 @@ from __future__ import annotations
 import json
 import os
 import uuid
+from collections.abc import AsyncGenerator, AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path as _Path
+from typing import Any
 
 from fastapi import FastAPI, Form
 from fastapi.middleware.cors import CORSMiddleware
@@ -40,7 +42,7 @@ def _safe_report_path(path: str) -> _Path | None:
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """Startup: init executor. Shutdown: cleanup."""
     try:
         from minerva.init import create_default_executor  # type: ignore[import-not-found]
@@ -74,7 +76,7 @@ app.add_middleware(
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     """Add security headers to all responses."""
 
-    async def dispatch(self, request, call_next):
+    async def dispatch(self, request: Any, call_next: Any) -> Any:
         response = await call_next(request)
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
@@ -115,7 +117,7 @@ def _build_paradigm_info(query: str) -> dict | None:
 
 
 @app.get("/healthz")
-async def healthz():
+async def healthz() -> dict[str, Any]:
     """Unified health check (HP-01)."""
     checks = {
         "sqlite": _check_sqlite(),
@@ -135,13 +137,13 @@ async def healthz():
 
 
 @app.get("/health")
-async def health():
+async def health() -> dict[str, Any]:
     """System health check — minimal info, no internal detail leak."""
     return {"status": "ok"}
 
 
 @app.get("/health/detailed")
-async def health_detailed():
+async def health_detailed() -> dict[str, Any]:
     """Detailed health check — protected by API key if configured."""
     checks = {
         "sqlite": _check_sqlite(),
@@ -187,7 +189,7 @@ def _check_llm_local() -> bool:
 
 
 @app.get("/api/paradigm")
-async def paradigm_analyze(query: str):
+async def paradigm_analyze(query: str) -> Any:
     """Analyze a research question and return the paradigm + suggested operations."""
     if not query.strip():
         return JSONResponse({"error": "Query is required"}, status_code=400)
@@ -221,13 +223,13 @@ async def paradigm_analyze(query: str):
 
 
 @app.get("/api/stream")
-async def progress_stream():
+async def progress_stream() -> Any:
     """Server-Sent Events stream for real-time system status."""
     import asyncio
 
     from starlette.responses import StreamingResponse
 
-    async def event_stream():
+    async def event_stream() -> AsyncGenerator[str]:
         while True:
             checks = {
                 "sqlite": _check_sqlite(),
@@ -244,7 +246,7 @@ async def progress_stream():
 
 
 @app.post("/api/research")
-async def research_start(query: str = Form(...), level: str = Form("auto"), max_cost: float = Form(1.0)):
+async def research_start(query: str = Form(...), level: str = Form("auto"), max_cost: float = Form(1.0)) -> Any:
     """Start a research task. Returns task_id for polling."""
     executor = _executor_ref.get("executor")
     if executor is None:
@@ -280,7 +282,7 @@ async def research_start(query: str = Form(...), level: str = Form("auto"), max_
 
 
 @app.get("/api/research/{task_id}")
-async def research_status(task_id: str):
+async def research_status(task_id: str) -> Any:
     executor = _executor_ref.get("executor")
     if executor is None:
         return JSONResponse({"error": "Service unavailable"}, status_code=503)
@@ -289,7 +291,7 @@ async def research_status(task_id: str):
 
 
 @app.get("/api/progress")
-async def system_progress():
+async def system_progress() -> dict[str, Any]:
     """Return current system state for dashboard polling."""
     executor = _executor_ref.get("executor")
     checks = {
@@ -310,7 +312,7 @@ async def system_progress():
 
 
 @app.get("/api/graph")
-async def knowledge_graph(limit: int = 50):
+async def knowledge_graph(limit: int = 50) -> Any:
     """Return Neo4j graph data (nodes + edges) for visualization."""
     try:
         from minerva.knowledge.graph_api import graph_accessor  # type: ignore[import-not-found]
@@ -325,7 +327,7 @@ async def knowledge_graph(limit: int = 50):
 
 
 @app.get("/api/report/pdf")
-async def export_pdf(path: str = ""):
+async def export_pdf(path: str = "") -> Any:
     """Export a research report as print-ready HTML."""
     fp = _safe_report_path(path)
     if fp is None:
@@ -343,7 +345,7 @@ async def export_pdf(path: str = ""):
 
 
 @app.get("/api/report")
-async def view_report(path: str = ""):
+async def view_report(path: str = "") -> Any:
     """Render a research report as styled HTML from markdown."""
     fp = _safe_report_path(path)
     if fp is None:
@@ -477,5 +479,5 @@ def _load_dashboard() -> str:
 
 
 @app.get("/", response_class=HTMLResponse)
-async def dashboard():
+async def dashboard() -> Any:
     return HTMLResponse(_load_dashboard())

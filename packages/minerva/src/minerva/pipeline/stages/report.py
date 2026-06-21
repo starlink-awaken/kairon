@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import time
+from typing import Any
 
 from minerva.pipeline.engine import IPipelineStage, ResearchContext  # type: ignore[import-not-found]
 
@@ -30,14 +31,14 @@ REPORT_TEMPLATE = """# Research Report: {query}
 class OutputStageImpl(IPipelineStage):
     """Generate final research report from accumulated context."""
 
-    def __init__(self, llm=None, report_dir: str | None = None, *, llm_client=None, knowledge_store=None):
+    def __init__(
+        self, llm: Any = None, report_dir: str | None = None, *, llm_client: Any = None, knowledge_store: Any = None
+    ) -> None:
         self._llm = llm_client or llm
         self._report_dir = report_dir
         self._knowledge_store = knowledge_store
 
-    @property
-    def name(self) -> str:
-        return "output"
+    name = "output"
 
     async def execute(self, ctx: ResearchContext) -> ResearchContext:
         search_results = ctx.search_results or []
@@ -101,13 +102,13 @@ class OutputStageImpl(IPipelineStage):
 class ExtendedOutputStageImpl(OutputStageImpl):
     """Extended report generation with deeper analysis."""
 
-    def __init__(self, llm=None, report_dir: str | None = None, *, llm_client=None, knowledge_store=None):
+    def __init__(
+        self, llm: Any = None, report_dir: str | None = None, *, llm_client: Any = None, knowledge_store: Any = None
+    ) -> None:
         super().__init__(llm, report_dir, llm_client=llm_client, knowledge_store=knowledge_store)
         self._extended = True
 
-    @property
-    def name(self) -> str:
-        return "extended_output"
+    name = "extended_output"
 
     async def execute(self, ctx: ResearchContext) -> ResearchContext:
         # First generate base report via parent

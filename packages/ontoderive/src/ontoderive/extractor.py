@@ -10,14 +10,15 @@ OntoDerive 上下文提取器 — 从本地文件/网页提取事实
 
 import re
 from pathlib import Path
+from typing import Any
 
 
 class ContextExtractor:
-    def __init__(self):
-        self.facts = []
+    def __init__(self) -> None:
+        self.facts: list[Any] = []
         self.fact_counter = 1
 
-    def extract_from_text(self, text, source="auto"):
+    def extract_from_text(self, text: Any, source: Any = "auto") -> Any:
         """从文本中提取数值事实"""
         # 提取形如 "470项成果" "220亿基金" "133名" 的数字陈述
         patterns = [
@@ -46,19 +47,19 @@ class ContextExtractor:
                     self.fact_counter += 1
         return found
 
-    def extract_from_file(self, filepath):
+    def extract_from_file(self, filepath: Any) -> Any:
         """从文件提取事实"""
         text = Path(filepath).read_text("utf-8", errors="ignore")
         return self.extract_from_text(text, source=filepath)
 
-    def extract_from_dir(self, directory, extensions=(".md", ".txt", ".html")):
+    def extract_from_dir(self, directory: Any, extensions: Any = (".md", ".txt", ".html")) -> None:
         """从目录递归提取"""
         dp = Path(directory)
         for f in sorted(dp.rglob("*")):
             if f.suffix in extensions and f.is_file():
                 self.extract_from_file(str(f))
 
-    def to_markdown(self):
+    def to_markdown(self) -> Any:
         """输出为OntoDerive facts/data.md格式"""
         lines = ["| 编号 | 数据 | 数值 | 来源 |"]
         lines.append("|------|------|------|------|")
@@ -66,7 +67,7 @@ class ContextExtractor:
             lines.append(f"| {f['id']} | {f['context'][:30]} | {f['value']} | {f['source']} |")
         return "\n".join(lines)
 
-    def save(self, output_path):
+    def save(self, output_path: Any) -> Any:
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
         Path(output_path).write_text(self.to_markdown(), encoding="utf-8")
         print(f"[extract] ✅ {len(self.facts)} facts → {output_path}")

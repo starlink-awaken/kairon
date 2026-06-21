@@ -50,10 +50,7 @@ Authority: organs/D-Memory/AGENTS.md
 _log = logging.getLogger(__name__)
 _log = logging.getLogger(__name__)
 
-try:
-    from eidos.enhanced_session import EnhancedSession  # type: ignore[import-not-found]
-except ImportError:
-    from eidos.organs.enhanced_session import EnhancedSession  # type: ignore[no-redef, import-not-found]
+from eidos.enhanced_session import EnhancedSession  # type: ignore[import-not-found]
 
 
 class CheckpointPolicy(Protocol):

@@ -6,11 +6,12 @@ v7: 加 do_default(action, args) 通用 fallback — 反射式调包内任何 'd
 
 POC 业务: 各包 __init__.py 加 do_default (或具体 do_<action>), v7 框架自动 dispatch.
 """
+
 from __future__ import annotations
 
 import importlib
 import inspect
-from typing import Any
+from typing import Any, cast
 
 
 def _package_info() -> dict[str, Any]:
@@ -156,13 +157,21 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
 
 
 _ACTION_MAP = {
-'eidos': {'search': 'read', 'ingest': 'read', 'validate': 'read', 'register': 'find_root', 'list': 'list', 'run': 'read', 'get': 'get_organ_path', 'sync': 'read'},
+    "eidos": {
+        "search": "read",
+        "ingest": "read",
+        "validate": "read",
+        "register": "find_root",
+        "list": "list",
+        "run": "read",
+        "get": "get_organ_path",
+        "sync": "read",
+    },
 }
 
 _DISPATCH = {
     # P61-W0: per-package 8 do_<action> → do_default 真 action 映射
     # 找不到 mapping 时 fallback 到 do_default 通用 (同 action name)
-
     "search": lambda args: do_default({"action": "read", **args}),
     "ingest": lambda args: do_default({"action": "read", **args}),
     "validate": lambda args: do_default({"action": "read", **args}),
@@ -170,7 +179,7 @@ _DISPATCH = {
     "list": lambda args: do_default({"action": "list", **args}),
     "run": lambda args: do_default({"action": "read", **args}),
     "get": lambda args: do_default({"action": "get_organ_path", **args}),
-    "sync": lambda args: do_default({"action": "read", **args})
+    "sync": lambda args: do_default({"action": "read", **args}),
 }
 
 
@@ -195,7 +204,11 @@ def _call_action(action: str, args: dict[str, Any]) -> dict[str, Any]:
             result = fallback_fn(args)
             return {"package": __name__.split(".")[0], "action_dispatched": action, "args_echo": args, **result}
         except Exception as exc:
-            return {"package": __name__.split(".")[0], "action_dispatched": action, "_error": f"{type(exc).__name__}: {exc}"}
+            return {
+                "package": __name__.split(".")[0],
+                "action_dispatched": action,
+                "_error": f"{type(exc).__name__}: {exc}",
+            }
     # 都没: do_default generic
     result = do_default(args)
     info = _package_info()
@@ -212,6 +225,7 @@ def _call_action(action: str, args: dict[str, Any]) -> dict[str, Any]:
 # P57-W0: 自动 import 包内 do_default 真业务
 try:
     from .do_default import do_default as _pkg_fn  # type: ignore[import-not-found]
+
     globals()["do_default"] = _pkg_fn
 except ImportError:
     pass
@@ -224,12 +238,12 @@ def serve() -> int:
     """
     from kairon_utils.stdio_rpc import run_stdio_dispatch  # type: ignore[import-not-found]
 
-    return run_stdio_dispatch(_call_action, daemon_mode=True, restart_delay_sec=60)
+    return cast("int", run_stdio_dispatch(_call_action, daemon_mode=True, restart_delay_sec=60))
 
 
 __all__ = ["serve", "_call_action", "_package_info", "_DISPATCH", "do_default"]
 
 if __name__ == "__main__":
     import sys
-    sys.exit(serve())
 
+    sys.exit(serve())

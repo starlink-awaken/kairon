@@ -106,7 +106,9 @@ class LocalFilesConnector(BaseConnector):
         limit: int = 20,
         cursor: str | None = None,
         tag: str | None = None,
+        folder: str | None = None,
         subdir: str | None = None,
+        chat_id: str | None = None,
         **kwargs: Any,
     ) -> list[Note]:
         """List notes with optional tag and subdirectory filtering."""

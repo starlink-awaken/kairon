@@ -1,4 +1,5 @@
 """P58-W0 minerva do_default — 真业务 (调 minerva search / pipeline / triage 真类)."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -18,7 +19,8 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     try:
         if action == "list_components":
             return {
-                "_method": "do_default", "_action": "list_components",
+                "_method": "do_default",
+                "_action": "list_components",
                 "TriageRouter": TriageRouter.__name__,
                 "SearchEngine": SearchEngine.__name__,
                 "ResearchExecutor": ResearchExecutor.__name__,
@@ -27,16 +29,19 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             }
         if action == "pipeline":
             from minerva.pipeline.engine import create_default_pipeline  # type: ignore[import-not-found]
+
             pipe = create_default_pipeline()
             return {
-                "_method": "do_default", "_action": "pipeline",
+                "_method": "do_default",
+                "_action": "pipeline",
                 "pipeline_type": type(pipe).__name__,
                 "methods": [m for m in dir(pipe) if not m.startswith("_")][:10],
             }
         if action == "search_engine":
             se = SearchEngine()
             return {
-                "_method": "do_default", "_action": "search_engine",
+                "_method": "do_default",
+                "_action": "search_engine",
                 "engine_type": type(se).__name__,
                 "methods": [m for m in dir(se) if not m.startswith("_")][:10],
             }

@@ -298,7 +298,16 @@ class AppleNotesConnector(BaseConnector):
             )
         return notes
 
-    def list_items(self, limit: int = 20, cursor: str | None = None, **kwargs: Any) -> list[Note]:
+    def list_items(
+        self,
+        limit: int = 20,
+        cursor: str | None = None,
+        tag: str | None = None,
+        folder: str | None = None,
+        subdir: str | None = None,
+        chat_id: str | None = None,
+        **kwargs: Any,
+    ) -> list[Note]:
         """List recent notes, ordered by creation date descending.
 
         Because AppleScript does not expose a "list all notes globally"

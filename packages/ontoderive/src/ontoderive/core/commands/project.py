@@ -1,13 +1,14 @@
 """命令: init — 初始化新项目"""
 
 from pathlib import Path
+from typing import Any
 
 from ontoderive.foundation.templates import TEMPLATES  # type: ignore[import-not-found]
 
 
 def cmd_init(project_name: str, template: str = "default") -> None:
     """初始化 OntoDerive 项目目录结构"""
-    tmpl = TEMPLATES.get(template, TEMPLATES["default"])
+    tmpl: Any = TEMPLATES.get(template, TEMPLATES["default"])
 
     root = Path(project_name)
 

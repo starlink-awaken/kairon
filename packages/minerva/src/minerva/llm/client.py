@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 import httpx
 
 
@@ -18,7 +20,7 @@ class OpenAICompatibleClient:
         api_key: str = "ollama",
         model: str = "qwen3.6:35b-a3b-coding-nvfp4",
         timeout: int = 120,
-    ):
+    ) -> None:
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key
         self.model = model
@@ -32,7 +34,7 @@ class OpenAICompatibleClient:
             self._client = httpx.AsyncClient(timeout=self.timeout)
         return self._client
 
-    async def close(self):
+    async def close(self) -> None:
         """Close the underlying HTTP client."""
         if self._client is not None:
             await self._client.aclose()
@@ -81,4 +83,4 @@ class OpenAICompatibleClient:
         )
         resp.raise_for_status()
         data = resp.json()
-        return data["choices"][0]["message"]["content"]
+        return cast("str", data["choices"][0]["message"]["content"])

@@ -49,6 +49,7 @@ Authority: organs/D-Logos/AGENTS.md
 
 _log = logging.getLogger(__name__)
 
+
 class DiffType(Enum):
     """差异类型"""
 
@@ -56,6 +57,7 @@ class DiffType(Enum):
     TYPE_B = "type_b"  # 实现缺失，文档有定义
     TYPE_C = "type_c"  # 文档错误，需重新描述
     TYPE_D = "type_d"  # 实现偏差，需重构代码
+
 
 class MatchConfidence(Enum):
     """匹配置信度"""
@@ -65,6 +67,7 @@ class MatchConfidence(Enum):
     MEDIUM = "medium"  # 中等置信度
     LOW = "low"  # 低置信度
     NO_MATCH = "no_match"  # 无匹配
+
 
 @dataclass
 class MatchResult:
@@ -93,6 +96,7 @@ class MatchResult:
     missing_methods: list[str] = field(default_factory=list)
     extra_methods: list[str] = field(default_factory=list)
 
+
 @dataclass
 class DiffReport:
     """差异报告"""
@@ -114,6 +118,7 @@ class DiffReport:
 
     # 修复建议
     recommendations: list[dict]
+
 
 class DiffAnalyzer:
     """差异分析器"""

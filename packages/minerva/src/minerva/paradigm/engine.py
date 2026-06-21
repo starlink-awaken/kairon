@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Any
 
 import structlog
 
@@ -35,9 +36,9 @@ class ParadigmContext:
 
 
 async def execute_with_paradigm(
-    pipeline,
-    llm_client,
-    ctx,  # ResearchContext
+    pipeline: Any,
+    llm_client: Any,
+    ctx: Any,  # ResearchContext
     paradigm_result: ParadigmResult,
     max_iterations: int = 3,
 ) -> ParadigmContext:
@@ -96,7 +97,7 @@ async def execute_with_paradigm(
     return pctx
 
 
-def _check_completion(ctx, paradigm_def, paradigm: ResearchParadigm) -> tuple[bool, list[str]]:
+def _check_completion(ctx: Any, paradigm_def: Any, paradigm: ResearchParadigm) -> tuple[bool, list[str]]:
     """Check if the paradigm's completion criteria are satisfied."""
     failures = []
     criteria = paradigm_def.completion_criteria
@@ -108,7 +109,7 @@ def _check_completion(ctx, paradigm_def, paradigm: ResearchParadigm) -> tuple[bo
     return len(failures) == 0, failures
 
 
-def _check_criterion(ctx, criterion: str, paradigm: ResearchParadigm) -> bool:
+def _check_criterion(ctx: Any, criterion: str, paradigm: ResearchParadigm) -> bool:
     """Check a single completion criterion against the research context."""
     c = criterion.lower()
 

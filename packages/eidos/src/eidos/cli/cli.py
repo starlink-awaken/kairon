@@ -7,6 +7,7 @@ import os
 from dataclasses import fields as dataclass_fields
 from dataclasses import is_dataclass
 from pathlib import Path
+from typing import Any, cast
 
 from eidos.core.schema import FieldType, Schema, SchemaField, SchemaRegistry  # type: ignore[import-not-found]
 from eidos.core.validator import ValidationError, ValidationResult, Validator  # type: ignore[import-not-found]
@@ -55,11 +56,11 @@ def _build_registry() -> SchemaRegistry:
     return registry
 
 
-def _print_validation_result(result) -> None:
+def _print_validation_result(result: Any) -> None:
     print(json.dumps(result.to_dict(), ensure_ascii=False, indent=2))
 
 
-def _out(args, data: dict):
+def _out(args: Any, data: dict) -> Any:
     """Output in JSON or human format based on --json flag."""
     if getattr(args, "json", False) or os.environ.get("PIPELINE_MODE"):
         output = {**OUTPUT_JSON, "command": args.command if hasattr(args, "command") else "", "data": data}
@@ -68,7 +69,7 @@ def _out(args, data: dict):
         return data  # caller handles human output
 
 
-def meta_command(args):
+def meta_command(args: Any) -> None:
     """Show SSOT meta-model: 8 MetaType × 4 MetaRelationType"""
     import json
 
@@ -104,7 +105,7 @@ def meta_command(args):
         print(f"  {t['meta_type']:12s} → {t['type_name']}")
 
 
-def pipeline_command(args):
+def pipeline_command(args: Any) -> None:
     from eidos.pipeline import Pipeline, run_pipeline  # type: ignore[import-not-found]
     from eidos.pipeline.webui import generate_html  # type: ignore[import-not-found]
 
@@ -139,7 +140,7 @@ def pipeline_command(args):
         print(f"❌ FAILED: {pipeline.name}")
 
 
-def viz_schema_command(args):
+def viz_schema_command(args: Any) -> None:
     from eidos.viz import render  # type: ignore[import-not-found]
 
     sr = _build_registry()
@@ -176,7 +177,7 @@ def viz_schema_command(args):
     print(output["mermaid"])
 
 
-def viz_graph_command(args):
+def viz_graph_command(args: Any) -> None:
     from eidos.viz import render
 
     # Try to load real data from KOS
@@ -206,7 +207,7 @@ def viz_graph_command(args):
 
         types = list_types()
         nodes = [{"id": t["type_name"], "label": t["type_name"], "type": t["meta_type"]} for t in types]
-        edges = []
+        edges: list[dict[str, str]] = []
         mermaid = render("graph", nodes=nodes, edges=edges, title=args.meta_type)
         if args.json or os.environ.get("PIPELINE_MODE"):
             _out(args, {"nodes": nodes, "edges": edges, "mermaid": mermaid})
@@ -216,7 +217,7 @@ def viz_graph_command(args):
         print("Eidos meta not available")
 
 
-def viz_explore_command(args):
+def viz_explore_command(args: Any) -> None:
     """Interactive ontology exploration."""
     try:
         from eidos.viz_interactive import explore  # type: ignore[import-not-found]
@@ -239,11 +240,11 @@ def viz_explore_command(args):
     explore(args.meta_type)
 
 
-def viz_state_command(args):
+def viz_state_command(args: Any) -> None:
     from eidos.viz import render
 
     states = [mt.value for mt in __import__("eidos.meta", fromlist=["MetaType"]).MetaType]
-    transitions = []
+    transitions: list[dict[str, str]] = []
     mermaid = render("state", states=states, transitions=transitions, initial=states[0])
     if args.json or os.environ.get("PIPELINE_MODE"):
         _out(args, {"states": states, "transitions": transitions, "initial": states[0], "mermaid": mermaid})
@@ -251,7 +252,7 @@ def viz_state_command(args):
     print(mermaid)
 
 
-def viz_pipeline_command(args):
+def viz_pipeline_command(args: Any) -> None:
     from eidos.viz import render
 
     steps = [
@@ -268,7 +269,7 @@ def viz_pipeline_command(args):
     print(mermaid)
 
 
-def viz_web_command(args):
+def viz_web_command(args: Any) -> None:
     """Generate interactive knowledge graph explorer."""
     from pathlib import Path
 
@@ -400,7 +401,7 @@ function exportGraph() {{
     print(f"Interactive knowledge graph → {args.output} ({len(html)} chars)")
 
 
-def define_command(args):
+def define_command(args: Any) -> None:
     """Define a schema — from file, from args, or interactive."""
     import json
     from pathlib import Path
@@ -479,7 +480,7 @@ def define_command(args):
     print(f"\nSchema '{name}' defined successfully ({len(schema_fields)} fields)")
 
 
-def store_command(args):
+def store_command(args: Any) -> None:
     from eidos.storage import JSONFileBackend  # type: ignore[import-not-found]
 
     store = JSONFileBackend()
@@ -685,7 +686,7 @@ def main(argv: list[str] | None = None) -> int:
         elif args.schema_type:
             type_cls = TYPE_MAP.get(args.schema_type)
             if type_cls is not None:
-                instance = type_cls.from_dict(data)
+                instance = cast("Any", type_cls).from_dict(data)
                 errors = instance.validate()
                 result = (
                     ValidationResult(False, [ValidationError(field="__object__", message=error) for error in errors])
@@ -699,7 +700,7 @@ def main(argv: list[str] | None = None) -> int:
                 (schema_name, validator.validate_object(schema_name, data)) for schema_name in registry.list_types()
             ]
             for type_name, type_cls in TYPE_MAP.items():
-                instance = type_cls.from_dict(data)
+                instance = cast("Any", type_cls).from_dict(data)
                 errors = instance.validate()
                 candidate_results.append(
                     (

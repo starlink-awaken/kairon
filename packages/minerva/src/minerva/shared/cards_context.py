@@ -5,6 +5,7 @@ import yaml
 
 logger = logging.getLogger(__name__)
 
+
 def get_cards_context() -> str:
     """Reads L4 CARDS active goals/context to inject into agent prompts."""
     cards_dir = Path.home() / "Documents" / "驾驶舱" / "CARDS"

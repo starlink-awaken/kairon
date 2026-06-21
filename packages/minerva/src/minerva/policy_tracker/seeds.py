@@ -48,8 +48,7 @@ SEED_POLICIES: list[PolicyItem] = [
         doc_number="国家药监局公告2024年第18号",
         published_at=_recent(14),
         summary=(
-            "明确药品网络销售企业的主体责任，规范处方药网络销售行为，"
-            "要求第三方平台履行审核管理义务，保障公众用药安全。"
+            "明确药品网络销售企业的主体责任，规范处方药网络销售行为，要求第三方平台履行审核管理义务，保障公众用药安全。"
         ),
         url="https://www.nmpa.gov.cn/xxgk/fgwj/gzwj/gzwjyp/20240326163401117.html",
         tags=["#health-policy", "#source:nmpa", "#drug-regulation"],
@@ -60,8 +59,7 @@ SEED_POLICIES: list[PolicyItem] = [
         doc_number="国卫医发〔2024〕9号",
         published_at=_recent(5),
         summary=(
-            "推动基层首诊、双向转诊、急慢分治、上下联动的分级诊疗格局，"
-            "明确基层医疗机构的诊疗病种范围和转诊标准。"
+            "推动基层首诊、双向转诊、急慢分治、上下联动的分级诊疗格局，明确基层医疗机构的诊疗病种范围和转诊标准。"
         ),
         url="https://www.nhc.gov.cn/yzygj/s7659/202404/分级诊疗2024.html",
         tags=["#health-policy", "#source:nhc", "#primary-care", "#hierarchical-diagnosis"],
@@ -71,10 +69,7 @@ SEED_POLICIES: list[PolicyItem] = [
         issuing_agency="国家医保局",
         doc_number="国办发〔2024〕5号",
         published_at=_recent(10),
-        summary=(
-            "建立健全职工医保门诊共济保障机制，提高门诊报销比例，"
-            "扩大个人账户使用范围，增强门诊保障能力。"
-        ),
+        summary=("建立健全职工医保门诊共济保障机制，提高门诊报销比例，扩大个人账户使用范围，增强门诊保障能力。"),
         url="https://www.nhsa.gov.cn/art/2024/3/28/art_104_12360.html",
         tags=["#health-policy", "#source:nhsa", "#medical-insurance", "#outpatient"],
     ),

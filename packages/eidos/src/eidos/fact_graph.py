@@ -18,6 +18,12 @@ class FactGraph:
         """Query facts from the graph."""
         return self._facts
 
+    def _get_connection(self) -> Any:
+        """Get a DB connection stub (context manager)."""
+        from contextlib import nullcontext
+
+        return nullcontext()
+
     def add_fact(self, fact: dict[str, Any]) -> None:
         """Add a fact to the graph."""
         self._facts.append(fact)

@@ -6,6 +6,7 @@ import argparse
 import asyncio
 import os
 import sys
+from typing import Any
 
 import httpx
 
@@ -95,7 +96,7 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-async def _run_research(args):
+async def _run_research(args: Any) -> int:
     """Execute a research query."""
     from minerva.config import MinervaConfig  # type: ignore[import-not-found]
     from minerva.llm.client import OpenAICompatibleClient  # type: ignore[import-not-found]
@@ -509,7 +510,7 @@ def _run_check() -> int:
     return 0 if failed == 0 else 1
 
 
-def main():
+def main() -> Any:
     parser = build_parser()
     args = parser.parse_args()
 
@@ -549,7 +550,7 @@ def main():
     return 0
 
 
-def _run_results(args) -> int:
+def _run_results(args: Any) -> int:
     """List/show/delete saved research results."""
     from minerva.persistence import (  # type: ignore[import-not-found]
         delete_result,
@@ -624,7 +625,7 @@ def _run_results(args) -> int:
     return 0
 
 
-def _run_audit(args) -> int:
+def _run_audit(args: Any) -> int:
     """View audit log."""
     from minerva.audit_store import get_logger  # type: ignore[import-not-found]
 
@@ -650,7 +651,7 @@ def _run_audit(args) -> int:
     return 0
 
 
-def _run_maintenance(args) -> int:
+def _run_maintenance(args: Any) -> int:
     """Run knowledge base maintenance."""
 
     from minerva.knowledge.mineru_adapter import cleanup_stale_mineru_outputs  # type: ignore[import-not-found]

@@ -2,15 +2,16 @@
 
 from importlib.util import find_spec
 from types import SimpleNamespace
+from typing import Any
 
 EIDOS_AVAILABLE = find_spec("eidos.types") is not None
 
 
-def is_eidos_available():
+def is_eidos_available() -> Any:
     return EIDOS_AVAILABLE
 
 
-def to_eidos_fact(onto_fact):
+def to_eidos_fact(onto_fact: Any) -> Any:
     if not EIDOS_AVAILABLE:
         return None
     d = getattr(onto_fact, "data", {}) or {}
@@ -25,7 +26,7 @@ def to_eidos_fact(onto_fact):
     )
 
 
-def from_eidos_fact(ef):
+def from_eidos_fact(ef: Any) -> Any:
     return SimpleNamespace(
         id=getattr(ef, "id", ""),
         weight=getattr(ef, "confidence", 1.0),
@@ -37,7 +38,7 @@ def from_eidos_fact(ef):
     )
 
 
-def from_eidos_entity(node):
+def from_eidos_entity(node: Any) -> Any:
     props = getattr(node, "properties", {}) or {}
     return SimpleNamespace(
         id=getattr(node, "id", ""),
@@ -47,7 +48,7 @@ def from_eidos_entity(node):
     )
 
 
-def to_eidos_entity(onto_entity):
+def to_eidos_entity(onto_entity: Any) -> Any:
     if not EIDOS_AVAILABLE:
         return None
     d = getattr(onto_entity, "data", {}) or {}

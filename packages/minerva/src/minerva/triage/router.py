@@ -11,6 +11,7 @@ import json
 import re
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 import structlog
 
@@ -35,6 +36,7 @@ class TriageResult:
     warnings: list[str] = field(default_factory=list)
 
     total_score: float = 0.0
+    reasoning: str = ""
 
 
 # --- Scoring dimensions and weights ---
@@ -182,7 +184,7 @@ class TriageRouter:
         ResearchLevel.L4: ["searxng", "exa", "scholar", "arxiv", "scopus"],
     }
 
-    def __init__(self, llm_client):
+    def __init__(self, llm_client: Any) -> None:
         self.llm = llm_client  # OllamaClient or any OpenAI-compatible
 
     # ============================================================
@@ -251,6 +253,7 @@ class TriageRouter:
 
         # Load L4 CARDS context for alignment
         from minerva.shared.cards_context import get_cards_context  # type: ignore[import-not-found]
+
         l4_context = get_cards_context()
         system_prompt = TRIAGE_SYSTEM_PROMPT + l4_context
 
