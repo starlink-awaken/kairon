@@ -10,7 +10,7 @@ from typing import Any
 
 import numpy as np
 
-from eidos.organs.storage_dal import SQLiteRelationalProvider  # type: ignore[import-not-found]
+from eidos.organs.storage_dal import SQLiteRelationalProvider
 
 """
 ---

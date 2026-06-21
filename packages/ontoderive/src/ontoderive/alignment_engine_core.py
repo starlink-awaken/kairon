@@ -102,7 +102,7 @@ class AlignmentEngine:
             return True
         except (ImportError, KeyError, AttributeError):
             try:
-                from ontoderive.organs.fault_tolerance_policy import (  # type: ignore[import-not-found]
+                from ontoderive.organs.fault_tolerance_policy import (
                     FaultContext,
                     FaultTolerancePolicy,
                 )
@@ -395,7 +395,7 @@ class AlignmentEngine:
     def _get_doc_extractor(self) -> DocStatementExtractor:
         """获取文档提取器（延迟加载）"""
         if self._doc_extractor is None:
-            from ..doc_extractor import DocStatementExtractor  # type: ignore[import-not-found]
+            from ..doc_extractor import DocStatementExtractor
 
             self._doc_extractor = DocStatementExtractor()
         return self._doc_extractor  # type: ignore[return-value]
@@ -403,7 +403,7 @@ class AlignmentEngine:
     def _get_impl_scanner(self) -> ImplementationScanner:
         """获取实现扫描器（延迟加载）"""
         if self._impl_scanner is None:
-            from ..impl_scanner import ImplementationScanner  # type: ignore[import-not-found]
+            from ..impl_scanner import ImplementationScanner
 
             self._impl_scanner = ImplementationScanner(self.root)
         return self._impl_scanner  # type: ignore[return-value]
@@ -411,7 +411,7 @@ class AlignmentEngine:
     def _get_diff_analyzer(self) -> DiffAnalyzer:
         """获取差异分析器（延迟加载）"""
         if self._diff_analyzer is None:
-            from ..diff_analyzer import DiffAnalyzer  # type: ignore[import-not-found]
+            from ..diff_analyzer import DiffAnalyzer
 
             self._diff_analyzer = DiffAnalyzer()
         return self._diff_analyzer  # type: ignore[return-value]

@@ -134,7 +134,7 @@ Action: FINISH
 
             if name == "get_confidence":
                 try:
-                    from ontoderive.theories.bayesian import BayesianLayer  # type: ignore[import-not-found]
+                    from ontoderive.theories.bayesian import BayesianLayer
 
                     bl = BayesianLayer(self.root)
                     _, infs = bl.propagate_all()
@@ -161,7 +161,7 @@ Action: FINISH
 
             if name == "find_contradictions":
                 try:
-                    from ontoderive.theories.logic import build_from_project  # type: ignore[import-not-found]
+                    from ontoderive.theories.logic import build_from_project
 
                     g = build_from_project(self.root)
                     return {"contradictions": g.find_contradictions()}
@@ -170,7 +170,7 @@ Action: FINISH
 
             if name == "compute_kqi":
                 try:
-                    from ontoderive.theories.metrics import MetricsLayer  # type: ignore[import-not-found]
+                    from ontoderive.theories.metrics import MetricsLayer
 
                     ml = MetricsLayer(self.root)
                     kqi = ml.compute_kqi()

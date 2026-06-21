@@ -9,6 +9,7 @@ from __future__ import annotations
 import sqlite3
 from abc import ABC, abstractmethod
 from pathlib import Path
+from typing import Any
 
 
 class IStorageProvider(ABC):
@@ -20,7 +21,7 @@ class IStorageProvider(ABC):
 
 class IRelationalProvider(ABC):
     @abstractmethod
-    def execute(self, sql: str, params: tuple = ()) -> None: ...
+    def execute(self, sql: str, params: tuple = ()) -> Any: ...
     @abstractmethod
     def fetch_all(self, sql: str, params: tuple = ()) -> list[dict]: ...
     @abstractmethod

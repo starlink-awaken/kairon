@@ -47,7 +47,7 @@ from typing import Any
 try:
     import yaml
 except ImportError:
-    yaml = None  # type: ignore
+    yaml = None
 
 _log = logging.getLogger(__name__)
 

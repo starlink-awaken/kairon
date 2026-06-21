@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, cast
 
-from eidos.organs.storage_dal import SQLiteError, SQLiteRelationalProvider  # type: ignore[import-not-found]
+from eidos.organs.storage_dal import SQLiteError, SQLiteRelationalProvider
 
 """
 ---

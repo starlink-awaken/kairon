@@ -35,7 +35,7 @@ from dataclasses import dataclass
 from typing import Any
 
 import httpx
-from minerva.sources.connectors import ISourceConnector, RawContent  # type: ignore[import-not-found]
+from minerva.sources.connectors import ISourceConnector, RawContent
 
 
 # 共享的HTTP客户端池 - 这个SB连接池避免重复创建TCP连接
@@ -228,7 +228,7 @@ class ApiSourceConnector(ISourceConnector):
             auth = (self.config.username, self.config.password)
 
         if method.upper() == "GET":
-            response = await client.get(url, params=params, auth=auth)  # type: ignore[arg-type]
+            response = await client.get(url, params=params, auth=auth)
         elif method.upper() == "POST":
             response = await client.post(url, params=params, json=json_body, auth=auth)  # type: ignore[arg-type]
         elif method.upper() == "PUT":

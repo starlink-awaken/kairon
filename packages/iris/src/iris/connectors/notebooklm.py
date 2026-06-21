@@ -19,8 +19,8 @@ import logging
 from pathlib import Path
 from typing import Any, cast
 
-from iris.base import BaseConnector, SyncResult  # type: ignore[import-not-found]
-from iris.models import KnowledgeArtifact, Note  # type: ignore[import-not-found]
+from iris.base import BaseConnector, SyncResult
+from iris.models import KnowledgeArtifact, Note
 
 logger = logging.getLogger(__name__)
 

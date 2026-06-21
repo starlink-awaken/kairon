@@ -9,9 +9,9 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     """P58-W0 minerva do_default: 真调 TriageRouter / SearchEngine / create_default_pipeline."""
     try:
         from minerva import __version__
-        from minerva.executor.executor import CostGuard, ResearchExecutor  # type: ignore[import-not-found]
-        from minerva.search.engine import SearchEngine  # type: ignore[import-not-found]
-        from minerva.triage.router import TriageRouter  # type: ignore[import-not-found]
+        from minerva.executor.executor import CostGuard, ResearchExecutor
+        from minerva.search.engine import SearchEngine
+        from minerva.triage.router import TriageRouter
     except Exception as exc:
         return {"_method": "do_default", "_error": f"import: {type(exc).__name__}: {exc}"}
 
@@ -28,7 +28,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
                 "version": __version__,
             }
         if action == "pipeline":
-            from minerva.pipeline.engine import create_default_pipeline  # type: ignore[import-not-found]
+            from minerva.pipeline.engine import create_default_pipeline
 
             pipe = create_default_pipeline()
             return {

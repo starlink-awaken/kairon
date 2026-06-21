@@ -3,8 +3,8 @@
 import threading
 import time
 
-from ontoderive.mcp_server import main as mcp_main  # type: ignore[import-not-found]
-from ontoderive.watcher import FileWatcher  # type: ignore[import-not-found]
+from ontoderive.mcp_server import main as mcp_main
+from ontoderive.watcher import FileWatcher
 
 
 def cmd_mcp(port: int = 0) -> None:
@@ -32,7 +32,7 @@ def cmd_serve(
     enable_mcp = not no_mcp
 
     if http:
-        from ontoderive.web_server import serve  # type: ignore[import-not-found]
+        from ontoderive.web_server import serve
 
         serve(project=project, host=host, port=port, watch=watch_enabled)
         return

@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any, Protocol, cast
 
-from eidos.organs.storage_dal import SQLiteError, SQLiteRelationalProvider  # type: ignore[import-not-found]
+from eidos.organs.storage_dal import SQLiteError, SQLiteRelationalProvider
 
 # =============================================================================
 # 0. 形式化摘要 ≝
@@ -50,7 +50,7 @@ Authority: organs/D-Memory/AGENTS.md
 _log = logging.getLogger(__name__)
 _log = logging.getLogger(__name__)
 
-from eidos.enhanced_session import EnhancedSession  # type: ignore[import-not-found]
+from eidos.enhanced_session import EnhancedSession
 
 
 class CheckpointPolicy(Protocol):

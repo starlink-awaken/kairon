@@ -13,7 +13,7 @@ def check_bayesian(root: Any) -> dict[str, Any]:
     """C-09: 贝叶斯信念传播"""
     try:
         sys.path.insert(0, str(Path(__file__).parent))
-        from ontoderive.theories.bayesian import BayesianLayer  # type: ignore[import-not-found]
+        from ontoderive.theories.bayesian import BayesianLayer
 
         bl = BayesianLayer(root)
         dist = bl.get_distribution()
@@ -39,7 +39,7 @@ def check_metrics(root: Any, precomputed_confs: Any = None) -> dict[str, Any]:
     """C-10: KQI知识质量指数"""
     try:
         sys.path.insert(0, str(Path(__file__).parent))
-        from ontoderive.theories.metrics import MetricsLayer  # type: ignore[import-not-found]
+        from ontoderive.theories.metrics import MetricsLayer
 
         ml = MetricsLayer(root)
         kqi = ml.compute_kqi(precomputed_confs=precomputed_confs)
@@ -60,7 +60,7 @@ def check_pid(root: Any) -> dict[str, Any]:
     """C-11: PID反馈控制"""
     try:
         sys.path.insert(0, str(Path(__file__).parent))
-        from ontoderive.theories.controller import PIDController  # type: ignore[import-not-found]
+        from ontoderive.theories.controller import PIDController
 
         pid = PIDController(root).analyze()
         return {
@@ -77,7 +77,7 @@ def check_turing(root: Any) -> dict[str, Any]:
     """C-12: 知识状态机"""
     try:
         sys.path.insert(0, str(Path(__file__).parent))
-        from ontoderive.theories.turing_k import KnowledgeTM  # type: ignore[import-not-found]
+        from ontoderive.theories.turing_k import KnowledgeTM
 
         state = KnowledgeTM(root).snapshot()
         return {
@@ -95,7 +95,7 @@ def check_ontolang(root: Any = None) -> dict[str, Any]:
         import sys
 
         sys.path.insert(0, str(Path(__file__).parent))
-        from ontolang import OntoLangParser  # type: ignore[import-not-found]
+        from ontolang import OntoLangParser
 
         parser = OntoLangParser()
         parser.test_suite()

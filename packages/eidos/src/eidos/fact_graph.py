@@ -5,6 +5,7 @@ TODO: implement full fact graph with querying and persistence.
 
 from __future__ import annotations
 
+from contextlib import nullcontext
 from typing import Any
 
 
@@ -20,8 +21,6 @@ class FactGraph:
 
     def _get_connection(self) -> Any:
         """Get a DB connection stub (context manager)."""
-        from contextlib import nullcontext
-
         return nullcontext()
 
     def add_fact(self, fact: dict[str, Any]) -> None:

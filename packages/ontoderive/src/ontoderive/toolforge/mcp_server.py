@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any, cast
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from mcp_server import handle_mcp_request  # type: ignore[import-not-found]
+from mcp_server import handle_mcp_request
 
 
 def handle_request(request: dict) -> dict:

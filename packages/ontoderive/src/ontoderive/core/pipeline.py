@@ -9,11 +9,11 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from .config import Config  # type: ignore[import-not-found]
-    from .protocols import AnalysisResult, PipelineStage  # type: ignore[import-not-found]
+    from .config import Config
+    from .protocols import AnalysisResult, PipelineStage
 except ImportError:
-    from ontoderive.foundation.config import Config  # type: ignore[import-not-found]  # noqa
-    from ontoderive.foundation.protocols import PipelineStage, AnalysisResult  # type: ignore[import-not-found]
+    from ontoderive.foundation.config import Config  # noqa
+    from ontoderive.foundation.protocols import PipelineStage, AnalysisResult
 
 
 class ToolForgeStage(PipelineStage):
@@ -21,9 +21,9 @@ class ToolForgeStage(PipelineStage):
 
     def run(self, ctx: Any) -> dict[str, Any]:
         try:
-            from .toolforge import ToolForge  # type: ignore[import-not-found]
+            from .toolforge import ToolForge
         except ImportError:
-            from ontoderive.toolforge import ToolForge  # type: ignore[import-not-found]
+            from ontoderive.toolforge import ToolForge
         tf = ToolForge()
         cfg = ctx.get("config", {})
         goal = ctx.get("goal", "")
@@ -44,7 +44,7 @@ class LoadStage(PipelineStage):
         try:
             from .derive import OntoDerive as _OD  # noqa: N814
         except ImportError:
-            from ontoderive.core.derive import OntoDerive as _OD  # type: ignore[import-not-found]  # noqa: N814
+            from ontoderive.core.derive import OntoDerive as _OD  # noqa: N814
         od = _OD(ctx["project_root"])
         summary = od.derive()
         return {"derive_summary": summary}

@@ -34,7 +34,7 @@ import json
 import re as _re
 from pathlib import Path
 
-from ontoderive.alignment_models import (  # type: ignore[import-not-found]
+from ontoderive.alignment_models import (
     AlignmentCategory,
     AlignmentIssue,
     AlignmentSeverity,

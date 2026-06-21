@@ -28,7 +28,7 @@ import logging
 import uuid
 from typing import Any
 
-from eidos.models import Lesson  # type: ignore[import-not-found]
+from eidos.models import Lesson
 
 _log = logging.getLogger(__name__)
 
@@ -61,7 +61,7 @@ class LessonCache:
         """获取BOS-URI解析器(延迟初始化)"""
         if self._uri_resolver is None:
             # 动态导入避免违反LAYER_AUTHORITY
-            from nucleus.Z_Microkernel.organs.uri_router import get_router  # type: ignore[import-not-found]
+            from nucleus.Z_Microkernel.organs.uri_router import get_router
 
             self._uri_resolver = get_router()
         return self._uri_resolver

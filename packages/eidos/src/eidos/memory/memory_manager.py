@@ -23,7 +23,7 @@ from typing import Any, Protocol, cast
 from kairon_utils import atomic_write_json
 
 from .archetype_loader import ArchetypeLoader, get_archetype_loader
-from .storage_dal import SQLiteError, SQLiteRelationalProvider  # type: ignore[import-not-found]
+from .storage_dal import SQLiteError, SQLiteRelationalProvider
 
 # =============================================================================
 # 0. 形式化摘要 ≝
@@ -123,7 +123,7 @@ class SecurityManagerProtocol(Protocol):
 
 
 class SQLiteConnectionProtocol(Protocol):
-    def execute(self, statement: str, parameters: tuple[object, ...] = ()) -> None: ...
+    def execute(self, statement: str, parameters: tuple[object, ...] = ()) -> Any: ...
 
     def commit(self) -> None: ...
 

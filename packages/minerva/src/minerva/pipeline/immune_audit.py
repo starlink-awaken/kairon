@@ -17,7 +17,7 @@ from typing import Any, cast
 import httpx
 import structlog
 
-from minerva.pipeline.engine import IPipelineStage, ResearchContext  # type: ignore[import-not-found]
+from minerva.pipeline.engine import IPipelineStage, ResearchContext
 
 logger = structlog.get_logger(__name__)
 _log = logging.getLogger(__name__)

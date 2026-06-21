@@ -197,7 +197,7 @@ class HabitLearner:
     def _get_fact_graph(self) -> Any | None:
         """Lazily load FactGraph to avoid circular import at startup."""
         try:
-            from eidos.fact_graph import FactGraph  # type: ignore[import-not-found]
+            from eidos.fact_graph import FactGraph
 
             return FactGraph()
         except ImportError:
@@ -504,7 +504,7 @@ class HabitLearner:
 
     def _count_sequence_occurrences(
         self,
-        _user_id: str,  # type: ignore[reportUnusedParameter]
+        _user_id: str,
         behavior_sequence: list[str],
     ) -> int:
         """Count how many distinct days a sequence appears in logs."""

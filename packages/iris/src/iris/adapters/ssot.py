@@ -12,7 +12,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-from iris.config import IrisConfig  # type: ignore[import-not-found]
+from iris.config import IrisConfig
 
 
 class SSOTDomainAdapter:
@@ -62,7 +62,7 @@ facts:
 
     def _check_ssot(self) -> bool:
         try:
-            import ssot_kernel  # type: ignore[import-not-found]  # noqa: F401
+            import ssot_kernel  # noqa: F401
 
             return True
         except ImportError:
@@ -111,7 +111,7 @@ facts:
             }
 
         try:
-            from ssot_kernel.config_loader import load_domain  # type: ignore[import-not-found]
+            from ssot_kernel.config_loader import load_domain
 
             config = load_domain(str(domain_dir))
             return {

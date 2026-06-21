@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from ontoderive.reasoners.formalize import Formalizer  # type: ignore[import-not-found]
+from ontoderive.reasoners.formalize import Formalizer
 
 
 def cmd_extract(source: str, to_path: str = "facts/data.md", project: str = ".") -> None:

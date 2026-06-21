@@ -56,7 +56,7 @@ from typing import Any
 try:
     import networkx as nx
 except ImportError:
-    nx = None  # type: ignore
+    nx = None
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 _log = logging.getLogger(__name__)

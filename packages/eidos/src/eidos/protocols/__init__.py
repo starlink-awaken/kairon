@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
-from eidos.protocols.contracts import CONTRACT_REGISTRY, validate_contract_payload  # type: ignore[import-not-found]
+from eidos.protocols.contracts import CONTRACT_REGISTRY, validate_contract_payload
 
 
 @runtime_checkable

@@ -24,7 +24,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from ontoderive.meta_validate_types import (  # type: ignore[import-not-found]
+from ontoderive.meta_validate_types import (
     GroundTruth,
 )
 

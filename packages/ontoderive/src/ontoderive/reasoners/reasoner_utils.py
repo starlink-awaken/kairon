@@ -6,7 +6,7 @@ from typing import Any
 
 def default_rules() -> list[Any]:
     """内置推导规则库 — 可扩展"""
-    from ontoderive.reasoners.reasoner import DerivationRule  # type: ignore[import-not-found]
+    from ontoderive.reasoners.reasoner import DerivationRule
 
     return [
         DerivationRule(

@@ -15,8 +15,8 @@ if _PROJECT_ROOT not in sys.path:
 
 from fastmcp import FastMCP
 
-from ontoderive import __version__  # type: ignore[import-not-found]
-from ontoderive.foundation.typesystem import META_TYPES, PREFIX_TO_META, TypeValidator  # type: ignore[import-not-found]
+from ontoderive import __version__
+from ontoderive.foundation.typesystem import META_TYPES, PREFIX_TO_META, TypeValidator
 
 mcp = FastMCP(
     "ontoderive",
@@ -82,7 +82,7 @@ TOOL_DEFS = [
 @mcp.tool()
 def derive(project: str = ".", goal: str = "", auto: bool = False, with_tools: bool = False) -> dict:
     """正向知识推导 — 事实扫描 → 多引擎推理 → 推导结论"""
-    from ontoderive.core.derive import OntoDerive  # type: ignore[import-not-found]
+    from ontoderive.core.derive import OntoDerive
 
     od = OntoDerive(project)
     result = od.derive()
@@ -194,7 +194,7 @@ def pipeline_status() -> dict:
             checks[mod_name] = f"unavailable: {e}"
 
     try:
-        from ontoderive.intelligence.llm import get_enhancer  # type: ignore[import-not-found]
+        from ontoderive.intelligence.llm import get_enhancer
 
         enhancer = get_enhancer()
         checks["LLM"] = enhancer.backend if enhancer.available else "not configured"

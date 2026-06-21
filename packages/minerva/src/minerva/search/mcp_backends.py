@@ -80,7 +80,7 @@ async def search_web_search_prime(
         # MCP returns results in various formats; handle list of dicts
         items = data if isinstance(data, list) else data.get("results", data.get("data", []))
         if isinstance(items, list):
-            from minerva.search.engine import SearchResult  # type: ignore[import-not-found]
+            from minerva.search.engine import SearchResult
 
             for item in items:
                 if isinstance(item, dict):

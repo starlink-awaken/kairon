@@ -42,7 +42,7 @@ from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from minerva.orchestrator import HarvestOrchestrator, HarvestResult  # type: ignore[import-not-found]
+    from minerva.orchestrator import HarvestOrchestrator, HarvestResult
 
 _log = logging.getLogger(__name__)
 _HARVEST_BRIDGE_ERRORS = (

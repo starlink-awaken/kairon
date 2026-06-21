@@ -58,7 +58,7 @@ class _TaskContextProtocol(Protocol):
 
 
 try:
-    TaskContext: type[_TaskContextProtocol] = __import__(  # type: ignore[no-redef]
+    TaskContext: type[_TaskContextProtocol] = __import__(
         "organs.D_Execution.organs.task_context", fromlist=["TaskContext"]
     ).TaskContext
 except ImportError:

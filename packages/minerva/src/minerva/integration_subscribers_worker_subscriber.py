@@ -36,8 +36,8 @@ import logging
 import time
 from typing import Any
 
-from minerva.base_subscriber import BaseSubscriber  # type: ignore[import-not-found]
-from minerva.events import KnowledgeEvent  # type: ignore[import-not-found]
+from minerva.base_subscriber import BaseSubscriber
+from minerva.events import KnowledgeEvent
 
 _log = logging.getLogger(__name__)
 

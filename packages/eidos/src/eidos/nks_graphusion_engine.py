@@ -6,7 +6,7 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
-from eidos.graph_store import (  # type: ignore[import-not-found]
+from eidos.graph_store import (
     CandidateEntity,
     CandidateRelation,
     Entity,

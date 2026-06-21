@@ -35,7 +35,7 @@ FactGraphSubscriber 监控指标集成
 
 import logging
 
-from minerva.observability.metrics_collector import get_global_collector  # type: ignore[import-not-found]
+from minerva.observability.metrics_collector import get_global_collector
 
 _logger = logging.getLogger(__name__)
 

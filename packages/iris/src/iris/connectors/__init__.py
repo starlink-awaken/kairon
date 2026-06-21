@@ -10,8 +10,8 @@ import logging
 from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
-    from iris.base import BaseConnector  # type: ignore[import-not-found]
-    from iris.registry import ConnectorRegistry  # type: ignore[import-not-found]
+    from iris.base import BaseConnector
+    from iris.registry import ConnectorRegistry
 
 logger = logging.getLogger(__name__)
 
@@ -49,22 +49,22 @@ def _discover_entry_points(registry: ConnectorRegistry) -> int:
 
 def _register_fallback(registry: ConnectorRegistry) -> None:
     """Hardcoded fallback registration when entry_points are unavailable."""
-    from iris.connectors.applenotes import AppleNotesConnector  # type: ignore[import-not-found]
-    from iris.connectors.dingtalk.connector import DingTalkConnector  # type: ignore[import-not-found]
-    from iris.connectors.feishu.connector import FeishuConnector  # type: ignore[import-not-found]
-    from iris.connectors.github.connector import GitHubConnector  # type: ignore[import-not-found]
-    from iris.connectors.local_files import LocalFilesConnector  # type: ignore[import-not-found]
-    from iris.connectors.notebooklm import NotebookLMConnector  # type: ignore[import-not-found]
-    from iris.connectors.obsidian import ObsidianConnector  # type: ignore[import-not-found]
-    from iris.connectors.openhuman import OpenHumanConnector  # type: ignore[import-not-found]
-    from iris.connectors.pocket import PocketConnector  # type: ignore[import-not-found]
-    from iris.connectors.polar import PolarConnector  # type: ignore[import-not-found]
-    from iris.connectors.rss.connector import RssConnector  # type: ignore[import-not-found]
-    from iris.connectors.telegram import TelegramConnector  # type: ignore[import-not-found]
-    from iris.connectors.wechat.connector import WeChatConnector  # type: ignore[import-not-found]
-    from iris.connectors.wpsnote import WPSNoteConnector  # type: ignore[import-not-found]
-    from iris.connectors.wxread import WXReadConnector  # type: ignore[import-not-found]
-    from iris.connectors.zhihu import ZhihuConnector  # type: ignore[import-not-found]
+    from iris.connectors.applenotes import AppleNotesConnector
+    from iris.connectors.dingtalk.connector import DingTalkConnector
+    from iris.connectors.feishu.connector import FeishuConnector
+    from iris.connectors.github.connector import GitHubConnector
+    from iris.connectors.local_files import LocalFilesConnector
+    from iris.connectors.notebooklm import NotebookLMConnector
+    from iris.connectors.obsidian import ObsidianConnector
+    from iris.connectors.openhuman import OpenHumanConnector
+    from iris.connectors.pocket import PocketConnector
+    from iris.connectors.polar import PolarConnector
+    from iris.connectors.rss.connector import RssConnector
+    from iris.connectors.telegram import TelegramConnector
+    from iris.connectors.wechat.connector import WeChatConnector
+    from iris.connectors.wpsnote import WPSNoteConnector
+    from iris.connectors.wxread import WXReadConnector
+    from iris.connectors.zhihu import ZhihuConnector
 
     registry.register(LocalFilesConnector())
     registry.register(ObsidianConnector())

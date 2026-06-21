@@ -30,9 +30,9 @@ from typing import Any, cast
 
 import httpx
 
-from iris.base import BaseConnector, SyncResult  # type: ignore[import-not-found]
-from iris.config import IrisConfig  # type: ignore[import-not-found]
-from iris.models import Note  # type: ignore[import-not-found]
+from iris.base import BaseConnector, SyncResult
+from iris.config import IrisConfig
+from iris.models import Note
 
 logger = logging.getLogger(__name__)
 

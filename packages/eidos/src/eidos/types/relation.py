@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from eidos.meta import MetaRelationType  # type: ignore[import-not-found]
+from eidos.meta import MetaRelationType
 
 
 @dataclass

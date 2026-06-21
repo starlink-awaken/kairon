@@ -32,8 +32,8 @@ Re-exports the public API from the extracted alignment engine modules.
 AlignmentEngine core class is not yet extracted (future wave).
 """
 
-from ontoderive.alignment_governance import DocFreshnessScanner, IndexAuditor  # type: ignore[import-not-found]
-from ontoderive.alignment_models import (  # type: ignore[import-not-found]
+from ontoderive.alignment_governance import DocFreshnessScanner, IndexAuditor
+from ontoderive.alignment_models import (
     AlignmentCategory,
     AlignmentIssue,
     AlignmentSeverity,

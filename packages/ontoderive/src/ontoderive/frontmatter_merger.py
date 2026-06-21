@@ -50,11 +50,11 @@ from pathlib import Path
 try:
     import yaml
 except ImportError:
-    yaml = None  # type: ignore
+    yaml = None
 
 from typing import Any
 
-from ontoderive.frontmatter_detector import FrontmatterDetector  # type: ignore[import-not-found]
+from ontoderive.frontmatter_detector import FrontmatterDetector
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 _log = logging.getLogger(__name__)

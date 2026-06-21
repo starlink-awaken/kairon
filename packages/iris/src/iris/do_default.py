@@ -9,9 +9,9 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     """P58-W0 iris do_default: 真调 iris registry / build_parser / config."""
     try:
         from iris import __version__
-        from iris.cli import build_parser  # type: ignore[import-not-found]
-        from iris.config import IrisConfig  # type: ignore[import-not-found]
-        from iris.registry import ConnectorRegistry  # type: ignore[import-not-found]
+        from iris.cli import build_parser
+        from iris.config import IrisConfig
+        from iris.registry import ConnectorRegistry
     except Exception as exc:
         return {"_method": "do_default", "_error": f"import: {type(exc).__name__}: {exc}"}
 

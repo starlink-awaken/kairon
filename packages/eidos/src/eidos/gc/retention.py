@@ -50,7 +50,7 @@ class RetentionPolicy:
         """
         # Pinned entries are always kept
         pinned = policy_rules.get("pinned_ids", [])
-        if entry.get("id") in pinned:  # type: ignore[operator]
+        if entry.get("id") in pinned:
             return True
 
         # --- TTL check ---

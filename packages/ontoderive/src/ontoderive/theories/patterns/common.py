@@ -4,7 +4,7 @@ import re
 from collections.abc import Iterator
 from typing import Any
 
-from ontoderive.foundation.semantic import SemanticMatcher  # type: ignore[import-not-found]
+from ontoderive.foundation.semantic import SemanticMatcher
 
 # Helpers
 #############################################

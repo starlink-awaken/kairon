@@ -5,9 +5,9 @@ from __future__ import annotations
 import asyncio
 from typing import Any
 
-from minerva.knowledge.store import Entity  # type: ignore[import-not-found]
-from minerva.pipeline.engine import IPipelineStage, ResearchContext  # type: ignore[import-not-found]
-from minerva.shared import spacy_to_entity_type  # type: ignore[import-not-found]
+from minerva.knowledge.store import Entity
+from minerva.pipeline.engine import IPipelineStage, ResearchContext
+from minerva.shared import spacy_to_entity_type
 
 DECOMPOSE_PROMPT = """Decompose this research question into 3-5 specific sub-questions.
 Each sub-question should cover a distinct aspect. Output one question per line.

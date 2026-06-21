@@ -13,9 +13,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent))  # 项目根
 sys.path.insert(0, str(Path(__file__).parent))  # engine/
 from typing import Any
 
-from toolforge.matcher import ToolForge  # type: ignore[import-not-found]
+from toolforge.matcher import ToolForge
 
-from ontoderive.core.derive import OntoDerive  # type: ignore[import-not-found]
+from ontoderive.core.derive import OntoDerive
 
 tf = ToolForge()
 
@@ -293,7 +293,7 @@ def _handle_analyze(args: Any, req_id: Any) -> Any:
 
 def _handle_config(args: Any, req_id: Any) -> Any:
     project = args.get("project", ".")
-    from ontoderive.foundation.config import Config  # type: ignore[import-not-found]
+    from ontoderive.foundation.config import Config
 
     cfg = Config(project).to_dict()
     return respond(req_id, cfg)
@@ -301,7 +301,7 @@ def _handle_config(args: Any, req_id: Any) -> Any:
 
 def _handle_delta(args: Any, req_id: Any) -> Any:
     project = args.get("project", ".")
-    from ontoderive.theories.turing_k import KnowledgeTM  # type: ignore[import-not-found]
+    from ontoderive.theories.turing_k import KnowledgeTM
 
     ktm = KnowledgeTM(project)
     d = ktm.delta()
@@ -330,12 +330,12 @@ def _handle_export(args: Any, req_id: Any) -> Any:
     od = OntoDerive(project)
     r = od.derive()
     if fmt in ("html", "json"):
-        from ontoderive.core.export import to_html, to_json  # type: ignore[import-not-found]
+        from ontoderive.core.export import to_html, to_json
 
         output = to_html(r, project) if fmt == "html" else to_json(r)
     else:
-        from ontoderive.foundation.ontology_map import OntologyMapper  # type: ignore[import-not-found]
-        from ontoderive.reasoners.formalize import Formalizer  # type: ignore[import-not-found]
+        from ontoderive.foundation.ontology_map import OntologyMapper
+        from ontoderive.reasoners.formalize import Formalizer
 
         fz = Formalizer()
         kb = fz.extract_from_text("\n".join(str(r.get(k, "")) for k in r), mode="rule_only")

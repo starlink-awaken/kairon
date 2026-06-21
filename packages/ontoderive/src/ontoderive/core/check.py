@@ -15,7 +15,7 @@ try:
     from .constants import V2_ID_PATTERNS  # type: ignore[import-not-found,no-redef]
     from .utils import CachedReader, save_json  # type: ignore[import-not-found,no-redef]
 except ImportError:
-    from ontoderive.foundation.utils import CachedReader, save_json  # type: ignore[import-not-found]  # noqa
+    from ontoderive.foundation.utils import CachedReader, save_json  # noqa
     from ontoderive.foundation.constants import V2_ID_PATTERNS  # type: ignore[import-not-found,no-redef]
 
 

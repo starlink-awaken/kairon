@@ -1,6 +1,6 @@
 version: '1.0'
 status: active
-updated_at: '2026-06-20T05:03:50Z'
+updated_at: '2026-06-20T12:33:10Z'
 owner: governance
 invocation: MYPYPATH=src mypy src --namespace-packages --explicit-package-bases --exclude tests/ (per-package)
 policy: regression-only
@@ -18,16 +18,16 @@ note: 'kairon mypy strict 存量 baseline. 真实调法 (MYPATH=src) 暴露 1245
 
   '
 totals:
-  total_errors: 873
-  packages_with_errors: 4
-  packages_clean: 12
+  total_errors: 0
+  packages_with_errors: 0
+  packages_clean: 16
 entries:
   codeanalyze: 0
   core-models: 0
-  eidos: 217
+  eidos: 0
   forge: 0
   health-profile: 0
-  iris: 11
+  iris: 0
   kairon-lib-events: 0
   kairon-observability: 0
   kairon-pipeline: 0
@@ -35,6 +35,6 @@ entries:
   kairon-utils: 0
   kos: 0
   kronos: 0
-  minerva: 175
-  ontoderive: 470
+  minerva: 0
+  ontoderive: 0
   sophia: 0

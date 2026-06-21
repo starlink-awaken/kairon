@@ -1,6 +1,6 @@
 """命令: watch — 文件监听自动重推导"""
 
-from ontoderive.watcher import FileWatcher  # type: ignore[import-not-found]
+from ontoderive.watcher import FileWatcher
 
 
 def cmd_watch(project: str = ".", interval: int = 5) -> None:

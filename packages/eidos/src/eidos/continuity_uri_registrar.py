@@ -25,8 +25,8 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from typing import Any, Protocol
 
-from eidos.session_store import SessionState, SessionStore  # type: ignore[import-not-found]
-from eidos.session_sync import SessionSync  # type: ignore[import-not-found]
+from eidos.session_store import SessionState, SessionStore
+from eidos.session_sync import SessionSync
 
 _INGRESS_SURFACE = "organs/D_Continuity/organs/uri_registrar.py"
 

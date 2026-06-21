@@ -5,7 +5,7 @@ from __future__ import annotations
 
 Extracted from SharedBrain D_Harvest → minerva.
 """
-from minerva.extractors.base import StructuredKnowledge  # type: ignore[import-not-found]
+from minerva.extractors.base import StructuredKnowledge
 
 
 class LengthRule:

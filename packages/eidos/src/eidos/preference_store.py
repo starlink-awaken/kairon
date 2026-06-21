@@ -33,7 +33,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
-from storage_dal import SQLiteError, SQLiteRelationalProvider  # type: ignore[import-not-found]
+from storage_dal import SQLiteError, SQLiteRelationalProvider
 
 _log = logging.getLogger(__name__)
 

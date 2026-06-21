@@ -13,7 +13,7 @@ import httpx
 import structlog as _structlog
 from bs4 import BeautifulSoup
 
-from minerva.search.engine import SearchResult  # type: ignore[import-not-found]
+from minerva.search.engine import SearchResult
 
 _log = _structlog.get_logger(__name__)
 
@@ -450,7 +450,7 @@ async def extract_bs4(url: str) -> str:
         return ""
 
     try:
-        from readability import Document  # type: ignore[import-untyped]
+        from readability import Document
 
         doc = Document(html)
         content_html = doc.summary()

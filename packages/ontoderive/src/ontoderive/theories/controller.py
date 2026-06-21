@@ -14,7 +14,7 @@ from collections import deque
 from pathlib import Path
 from typing import Any
 
-from ontoderive.foundation.utils import wf  # type: ignore[import-not-found]
+from ontoderive.foundation.utils import wf
 
 
 class PIDController:

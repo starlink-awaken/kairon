@@ -21,8 +21,8 @@ def save_to_kos(items: list[TechItem]) -> dict[str, int]:
     Returns: {"saved": N, "failed": M, "skipped": K}
     """
     try:
-        from kos.ontology._types import Entity, EntityType  # type: ignore[import-not-found]
-        from kos.ontology.store import put_entity  # type: ignore[import-not-found]
+        from kos.ontology._types import Entity, EntityType
+        from kos.ontology.store import put_entity
     except ImportError:
         logger.warning("kos not available — skipping KOS write")
         return {"saved": 0, "failed": 0, "skipped": len(items)}

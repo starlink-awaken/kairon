@@ -2,7 +2,7 @@
 
 import json
 
-from ontoderive.toolforge import ToolForge  # type: ignore[import-not-found]
+from ontoderive.toolforge import ToolForge
 
 
 def cmd_toolforge(

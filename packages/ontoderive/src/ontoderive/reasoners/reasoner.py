@@ -27,7 +27,7 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
-from ontoderive.foundation.rule_loader import RuleLoader  # type: ignore[import-not-found]
+from ontoderive.foundation.rule_loader import RuleLoader
 
 from .reasoning_rules import (
     chain_integrity_check,

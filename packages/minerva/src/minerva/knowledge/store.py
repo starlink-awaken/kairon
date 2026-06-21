@@ -655,7 +655,7 @@ class LanceDBVectorStore:
         try:
             import os
 
-            import lancedb  # type: ignore[import-untyped]
+            import lancedb
 
             os.makedirs(self.db_path, exist_ok=True)
             db = lancedb.connect(self.db_path)

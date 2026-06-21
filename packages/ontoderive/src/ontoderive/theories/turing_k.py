@@ -12,11 +12,11 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from .models import DeriveSnapshot  # type: ignore[import-not-found]
-    from .utils import all_md, rf, wf  # type: ignore[import-not-found]
+    from .models import DeriveSnapshot
+    from .utils import all_md, rf, wf
 except ImportError:
-    from ontoderive.foundation.utils import all_md, rf, wf  # type: ignore[import-not-found]  # noqa
-    from ontoderive.foundation.models import DeriveSnapshot  # type: ignore[import-not-found]
+    from ontoderive.foundation.utils import all_md, rf, wf  # noqa
+    from ontoderive.foundation.models import DeriveSnapshot
 
 
 class KnowledgeTM:

@@ -18,9 +18,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from iris.base import BaseConnector, SyncResult, parse_frontmatter, strip_frontmatter  # type: ignore[import-not-found]
-from iris.config import IrisConfig  # type: ignore[import-not-found]
-from iris.models import Note  # type: ignore[import-not-found]
+from iris.base import BaseConnector, SyncResult, parse_frontmatter, strip_frontmatter
+from iris.config import IrisConfig
+from iris.models import Note
 
 
 def _slugify(text: str) -> str:

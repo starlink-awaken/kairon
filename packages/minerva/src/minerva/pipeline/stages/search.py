@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 from typing import Any
 
-from minerva.pipeline.engine import IPipelineStage, ResearchContext  # type: ignore[import-not-found]
+from minerva.pipeline.engine import IPipelineStage, ResearchContext
 
 
 class MultiSourceSearchStageImpl(IPipelineStage):

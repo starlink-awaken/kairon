@@ -224,7 +224,7 @@ def _call_action(action: str, args: dict[str, Any]) -> dict[str, Any]:
 
 # P57-W0: 自动 import 包内 do_default 真业务
 try:
-    from .do_default import do_default as _pkg_fn  # type: ignore[import-not-found]
+    from .do_default import do_default as _pkg_fn
 
     globals()["do_default"] = _pkg_fn
 except ImportError:
@@ -233,7 +233,7 @@ except ImportError:
 
 def serve() -> int:
     """P55-W0 serve 入口 (复用 kairon_utils.stdio_rpc)."""
-    from kairon_utils.stdio_rpc import run_stdio_dispatch  # type: ignore[import-not-found]
+    from kairon_utils.stdio_rpc import run_stdio_dispatch
 
     return cast("int", run_stdio_dispatch(_call_action))
 

@@ -8,8 +8,8 @@ from typing import Any
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 
-from ontoderive.core.derive import OntoDerive  # type: ignore[import-not-found]
-from ontoderive.mcp_server import TOOL_DEFS, handle_mcp_request  # type: ignore[import-not-found]
+from ontoderive.core.derive import OntoDerive
+from ontoderive.mcp_server import TOOL_DEFS, handle_mcp_request
 
 app = FastAPI(title="OntoDerive", version="3.6.4")
 
@@ -64,7 +64,7 @@ async def api_check(project: str = "") -> Any:
 async def api_export(project: str = "", fmt: str = "json") -> Any:
     od = _get_od(project or None)
     r = od.derive()
-    from ontoderive.core.export import to_html, to_json  # type: ignore[import-not-found]
+    from ontoderive.core.export import to_html, to_json
 
     if fmt == "html":
         return HTMLResponse(to_html(r, project or _project_path))
@@ -204,7 +204,7 @@ def serve(project: str = ".", host: str = "127.0.0.1", port: int = 8080, watch: 
     _project_path = project
 
     if watch:
-        from ontoderive.watcher import FileWatcher  # type: ignore[import-not-found]
+        from ontoderive.watcher import FileWatcher
 
         t = threading.Thread(target=FileWatcher(project).watch, daemon=True)
         t.start()

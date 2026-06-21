@@ -11,7 +11,7 @@ from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from minerva.sources.connectors import RawContent  # type: ignore[import-not-found]
+    from minerva.sources.connectors import RawContent
 
 utc = datetime.now(UTC)
 

@@ -9,10 +9,10 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     """P58-W0 ontoderive do_default: 真调 FrontmatterDetector / MetaValidateEngine / generate_doc."""
     try:
         from ontoderive import __version__
-        from ontoderive.doc_generator import DocGenerator, generate_doc  # type: ignore[import-not-found]
-        from ontoderive.frontmatter_detector import FrontmatterDetector  # type: ignore[import-not-found]
-        from ontoderive.frontmatter_merger import FrontmatterMerger  # type: ignore[import-not-found]
-        from ontoderive.meta_validate import MetaValidateEngine  # type: ignore[import-not-found]
+        from ontoderive.doc_generator import DocGenerator, generate_doc
+        from ontoderive.frontmatter_detector import FrontmatterDetector
+        from ontoderive.frontmatter_merger import FrontmatterMerger
+        from ontoderive.meta_validate import MetaValidateEngine
     except Exception as exc:
         return {"_method": "do_default", "_error": f"import: {type(exc).__name__}: {exc}"}
 

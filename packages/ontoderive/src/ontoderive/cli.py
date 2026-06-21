@@ -136,18 +136,18 @@ def main() -> None:
         return
 
     # 路由到对应功能（委托至 engine/core/commands/）
-    from ontoderive.core.commands.derive_commands import (  # type: ignore[import-not-found]
+    from ontoderive.core.commands.derive_commands import (
         cmd_analyze,
         cmd_check,
         cmd_derive,
         cmd_rounds,
     )
-    from ontoderive.core.commands.extract import cmd_extract  # type: ignore[import-not-found]
-    from ontoderive.core.commands.mcp_serve import cmd_mcp  # type: ignore[import-not-found]
-    from ontoderive.core.commands.toolforge import cmd_toolforge  # type: ignore[import-not-found]
+    from ontoderive.core.commands.extract import cmd_extract
+    from ontoderive.core.commands.mcp_serve import cmd_mcp
+    from ontoderive.core.commands.toolforge import cmd_toolforge
 
     if args.command == "init":
-        from ontoderive.foundation.templates import TEMPLATES  # type: ignore[import-not-found]
+        from ontoderive.foundation.templates import TEMPLATES
 
         root = Path(args.name)
         tmpl_name = getattr(args, "template", "default")
@@ -192,13 +192,13 @@ def main() -> None:
         print(f"项目 {args.name} 已初始化 (模板: {tmpl_name})")
 
     elif args.command in ("derive", "check", "rounds", "generate", "analyze"):
-        from ontoderive.core.derive import OntoDerive  # type: ignore[import-not-found]
+        from ontoderive.core.derive import OntoDerive
 
         od = OntoDerive(getattr(args, "project", "."))
 
         # ToolForge 前置
         if getattr(args, "with_tools", False):
-            from ontoderive.toolforge import ToolForge  # type: ignore[import-not-found]
+            from ontoderive.toolforge import ToolForge
 
             tf = ToolForge()
             goal = getattr(args, "goal", "") or ""
@@ -238,13 +238,13 @@ def main() -> None:
                 r = od.derive()
                 try:
                     if fmt in ("html", "json"):
-                        from ontoderive.core.export import to_html, to_json  # type: ignore[import-not-found]
+                        from ontoderive.core.export import to_html, to_json
 
                         output = to_html(r, args.project) if fmt == "html" else to_json(r)
                         ext = fmt
                     else:
-                        from ontoderive.foundation.ontology_map import OntologyMapper  # type: ignore[import-not-found]
-                        from ontoderive.reasoners.formalize import Formalizer  # type: ignore[import-not-found]
+                        from ontoderive.foundation.ontology_map import OntologyMapper
+                        from ontoderive.reasoners.formalize import Formalizer
 
                         fz = Formalizer()
                         all_text = ""
@@ -280,7 +280,7 @@ def main() -> None:
         print(result.get("report", "推理完成")[:3000])
 
     elif args.command == "watch":
-        from ontoderive.watcher import FileWatcher  # type: ignore[import-not-found]
+        from ontoderive.watcher import FileWatcher
 
         w = FileWatcher(args.project)
         print(f"[watch] 监听中... 间隔{args.interval}秒, Ctrl+C停止")

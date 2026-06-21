@@ -55,7 +55,7 @@ def _compute_idf(docs: Any, vocab: Any) -> Any:
 
 
 try:
-    from ..protocols import ToolForgeInterface  # type: ignore[import-not-found]
+    from ..protocols import ToolForgeInterface
 except ImportError:
     from ontoderive.foundation.protocols import ToolForgeInterface  # type: ignore[import-not-found,assignment,no-redef]
 

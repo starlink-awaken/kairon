@@ -13,9 +13,9 @@ from datetime import UTC, datetime
 from enum import Enum
 from typing import cast
 
-from iris.base import BaseConnector  # type: ignore[import-not-found]
-from iris.models import Note  # type: ignore[import-not-found]
-from iris.sync.id_map import IdMapping  # type: ignore[import-not-found]
+from iris.base import BaseConnector
+from iris.models import Note
+from iris.sync.id_map import IdMapping
 
 
 class ChangeType(Enum):

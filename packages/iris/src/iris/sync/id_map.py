@@ -8,7 +8,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import cast
 
-from iris.store import JSONFileStore  # type: ignore[import-not-found]
+from iris.store import JSONFileStore
 
 
 class IdMapping:

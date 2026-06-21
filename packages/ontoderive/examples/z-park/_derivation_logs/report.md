@@ -1,7 +1,7 @@
 ---
 title: OntoDerive 推导报告
 version: 3.6.4
-generated: 2026-06-21T13:15:23.708965
+generated: 2026-06-21T18:30:06.847005
 ---
 
 ## 执行摘要

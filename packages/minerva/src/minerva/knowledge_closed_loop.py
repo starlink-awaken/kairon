@@ -28,8 +28,8 @@ from typing import Any
 
 import structlog
 
-from minerva.audit_store import AuditLogger  # type: ignore[import-not-found]
-from minerva.executor.executor import ExecutionMode, ResearchExecutor, ResearchTask  # type: ignore[import-not-found]
+from minerva.audit_store import AuditLogger
+from minerva.executor.executor import ExecutionMode, ResearchExecutor, ResearchTask
 
 FORMAT_VERSION = "minerva-v1"
 logger = structlog.get_logger(__name__)

@@ -103,7 +103,7 @@ class KnowledgeIngester:
     async def _fetch_url(self, url: str) -> str:
         """Fetch and extract content from a URL."""
         try:
-            from minerva.search.backends import extract_bs4, extract_jina  # type: ignore[import-not-found]
+            from minerva.search.backends import extract_bs4, extract_jina
 
             # Try Jina Reader first (better quality)
             content = await extract_jina(url)
@@ -122,7 +122,7 @@ class KnowledgeIngester:
         # MinerU only when explicitly enabled (opt-in, 2.3GB models)
         if use_mineru:
             try:
-                from minerva.knowledge.mineru_adapter import (  # type: ignore[import-not-found]
+                from minerva.knowledge.mineru_adapter import (
                     is_available,
                     parse_to_text,
                 )
@@ -150,7 +150,7 @@ class KnowledgeIngester:
     def _extract_office(self, filepath: str) -> str:
         """Extract text from Office documents via MinerU."""
         try:
-            from minerva.knowledge.mineru_adapter import is_available, parse_to_text  # type: ignore[import-not-found]
+            from minerva.knowledge.mineru_adapter import is_available, parse_to_text
 
             if is_available():
                 return parse_to_text(str(Path(filepath).expanduser()))
@@ -160,8 +160,8 @@ class KnowledgeIngester:
 
     def _extract_entities(self, text: str) -> list:
         """Extract entities from text using spaCy."""
-        from minerva.knowledge.store import Entity  # type: ignore[import-not-found]
-        from minerva.shared import spacy_to_entity_type  # type: ignore[import-not-found]
+        from minerva.knowledge.store import Entity
+        from minerva.shared import spacy_to_entity_type
 
         entities: list[Entity] = []
         doc = self.nlp(text[:10000])  # Limit to avoid memory issues

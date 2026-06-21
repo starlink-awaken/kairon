@@ -22,7 +22,7 @@ import logging
 
 _log = logging.getLogger(__name__)
 
-from ontoderive.meta_validate_types import (  # type: ignore[import-not-found]
+from ontoderive.meta_validate_types import (
     ConfidenceScore,
     FalseNegative,
     FalseNegativeType,

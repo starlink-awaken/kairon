@@ -38,7 +38,7 @@ import time
 import uuid
 from typing import TypedDict
 
-from eidos.organs.storage_dal import SQLiteOperationalError, SQLiteRelationalProvider  # type: ignore[import-not-found]
+from eidos.organs.storage_dal import SQLiteOperationalError, SQLiteRelationalProvider
 
 _log = logging.getLogger(__name__)
 

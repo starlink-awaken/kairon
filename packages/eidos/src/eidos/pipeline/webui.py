@@ -10,7 +10,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from eidos.pipeline.presets import PRESETS  # type: ignore[import-not-found]
+from eidos.pipeline.presets import PRESETS
 
 
 def generate_html(pipeline_name: str | None = None) -> str:

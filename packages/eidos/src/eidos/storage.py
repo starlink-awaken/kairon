@@ -15,7 +15,7 @@ import sqlite3
 from pathlib import Path
 from typing import Any, Protocol, cast
 
-from eidos.errors import EidosError, ErrorCode  # type: ignore[import-not-found]
+from eidos.errors import EidosError, ErrorCode
 
 
 class StorageBackend(Protocol):
@@ -182,7 +182,7 @@ class KOSLibraryBackend:
         self._kos_available = False
         try:
             from kos import search as _kos_search  # type: ignore[import-untyped, import-not-found]
-            from kos import stats as _kos_stats  # type: ignore[import-untyped]
+            from kos import stats as _kos_stats
 
             self._search = _kos_search
             self._stats = _kos_stats

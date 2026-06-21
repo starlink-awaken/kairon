@@ -43,7 +43,7 @@ Authority: organs/D-Memory/AGENTS.md
 _log = logging.getLogger(__name__)
 try:
     from .enhanced_session import EnhancedSession, SessionStatus
-    from .session_storage import RoleWorkerSession, SessionStorage  # type: ignore[import-not-found]
+    from .session_storage import RoleWorkerSession, SessionStorage
 except ImportError:
     from organs.D_Memory.organs.enhanced_session import (  # type: ignore[no-redef, import-not-found]
         EnhancedSession,

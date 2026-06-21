@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from eidos.core.schema import FieldType, Schema, SchemaField, SchemaRegistry  # type: ignore[import-unused]
+from eidos.core.schema import FieldType, Schema, SchemaField, SchemaRegistry
 
 
 def create_registry() -> SchemaRegistry:

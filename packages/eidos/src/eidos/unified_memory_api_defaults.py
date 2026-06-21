@@ -10,7 +10,7 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from eidos.organs.unified_memory_api import UnifiedMemoryAPI  # type: ignore[import-not-found]
+    from eidos.organs.unified_memory_api import UnifiedMemoryAPI
 
 _log = logging.getLogger(__name__)
 
@@ -18,20 +18,20 @@ _default_unified_memory_api_singleton: UnifiedMemoryAPI | None = None
 
 
 def _build_default_holo_memory() -> Any:
-    from eidos.organs.holo_memory import HoloMemory  # type: ignore[import-not-found]
+    from eidos.organs.holo_memory import HoloMemory
 
     return HoloMemory()
 
 
 def _build_default_fact_graph() -> Any:
-    from eidos.organs.fact_graph import get_fact_graph  # type: ignore[import-not-found]
+    from eidos.organs.fact_graph import get_fact_graph
 
     return get_fact_graph()
 
 
 def _build_default_nks_query_engine() -> Any:
-    from eidos.graph_store import GraphStore  # type: ignore[import-not-found]
-    from eidos.query_engine import GraphQueryEngine  # type: ignore[import-not-found]
+    from eidos.graph_store import GraphStore
+    from eidos.query_engine import GraphQueryEngine
 
     store = GraphStore("eidos/nks_graph.db")
     return GraphQueryEngine(store)

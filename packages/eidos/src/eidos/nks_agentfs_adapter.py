@@ -26,7 +26,7 @@ Authority: organs/D-Memory/AGENTS.md
 from pathlib import Path
 from typing import cast
 
-from eidos.organs.nks.agent_file_system import (  # type: ignore[import-not-found]
+from eidos.organs.nks.agent_file_system import (
     AgentFileSystem,
     FileNode,
     OperationLog,

@@ -24,7 +24,7 @@ class FormalPipeline:
         try:
             from ontoderive.reasoners.formalize import Formalizer
         except ImportError:
-            from ontoderive.reasoners.formalize import Formalizer  # type: ignore[import-not-found]
+            from ontoderive.reasoners.formalize import Formalizer
         fz = Formalizer(enhancer=self.enhancer)
         knowledge = fz.extract_from_text(text)
         self.results["phase1"] = {
@@ -33,7 +33,7 @@ class FormalPipeline:
             "inferences": len(knowledge.inferences),
         }
 
-        from ontoderive.reasoners.reasoner_formal import FormalReasoner  # type: ignore[import-not-found]
+        from ontoderive.reasoners.reasoner_formal import FormalReasoner
 
         fr = FormalReasoner()
         conclusions = fr.reason(knowledge)

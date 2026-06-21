@@ -2,6 +2,6 @@
 
 from __future__ import annotations
 
-from iris.connectors.pocket.connector import PocketConnector  # type: ignore[import-not-found]
+from iris.connectors.pocket.connector import PocketConnector
 
 __all__ = ["PocketConnector"]

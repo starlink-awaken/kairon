@@ -7,7 +7,7 @@ from typing import Any
 
 import structlog
 
-from minerva.search.bfs_search_types import (  # type: ignore[import-not-found]
+from minerva.search.bfs_search_types import (
     BFTSNode,
     collect_completed,
     count_nodes,

@@ -21,7 +21,7 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-AX01-10_holographic_metadata_axio
 import re
 from pathlib import Path
 
-from ontoderive.meta_validate_types import (  # type: ignore[import-not-found]
+from ontoderive.meta_validate_types import (
     DocType,
     ValidationIssue,
     ValidationIssueSeverity,

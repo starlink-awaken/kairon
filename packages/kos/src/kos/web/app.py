@@ -316,8 +316,8 @@ def _get_entity_label(entity_id: str) -> str:
     return ""
 
 
-@app.get("/", response_class=HTMLResponse)
-async def search_page(q: str = "", zone: str = "", limit: int = 20, request: Request | None = None) -> Any:
+@app.get("/", response_class=HTMLResponse, response_model=None)
+async def search_page(q: str = "", zone: str = "", limit: int = 20) -> Any:
     """Search page (web UI)."""
     results: list[dict[str, Any]] = []
     count: int = 0

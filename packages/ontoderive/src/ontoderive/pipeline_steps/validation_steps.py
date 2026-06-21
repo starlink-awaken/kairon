@@ -28,15 +28,15 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from ..meta_evolve import MetaEvolveEngine
-from ..meta_validate import MetaValidateEngine  # type: ignore[import-not-found]
-from ..pipeline_models import (  # type: ignore[import-not-found]
+from ..meta_validate import MetaValidateEngine
+from ..pipeline_models import (
     BatchItem,
     BatchResult,
     ProgressInfo,
     StepResult,
     StepStatus,
 )
-from .base import PipelineStep  # type: ignore[import-not-found]
+from .base import PipelineStep
 
 
 class ValidateStep(PipelineStep):
@@ -62,7 +62,7 @@ class ValidateStep(PipelineStep):
 
             # 使用 MetaValidateEngine 验证
             validator = MetaValidateEngine()
-            verification = validator.verify_alignment_result(alignment_report)  # type: ignore[attr-defined]
+            verification = validator.verify_alignment_result(alignment_report)
 
             # 更新上下文
             context["validation_result"] = verification
@@ -190,9 +190,9 @@ class BatchValidateStep(PipelineStep):
         """验证单个项目"""
         item.status = StepStatus.RUNNING
 
-        if item.result and hasattr(item.result, "alignment_rate"):  # type: ignore[attr-defined]
+        if item.result and hasattr(item.result, "alignment_rate"):
             validator = MetaValidateEngine()
-            verification = validator.verify_alignment_result(item.result)  # type: ignore[attr-defined]
+            verification = validator.verify_alignment_result(item.result)
             item.result = verification
         else:
             item.status = StepStatus.SKIPPED

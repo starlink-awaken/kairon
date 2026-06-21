@@ -25,8 +25,8 @@ if TYPE_CHECKING:
     from iris.base import BaseConnector
     from iris.registry import ConnectorRegistry
 
-from iris import __version__  # type: ignore[import-not-found]
-from iris.config import IrisConfig  # type: ignore[import-not-found]
+from iris import __version__
+from iris.config import IrisConfig
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -106,7 +106,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def _get_registry() -> ConnectorRegistry:
     """Lazy import to avoid circular deps at module level."""
-    from iris.registry import ConnectorRegistry  # type: ignore[import-not-found]
+    from iris.registry import ConnectorRegistry
 
     registry = ConnectorRegistry()
     _register_all_connectors(registry)
@@ -115,7 +115,7 @@ def _get_registry() -> ConnectorRegistry:
 
 def _register_all_connectors(registry: ConnectorRegistry) -> None:
     """Register all available connectors."""
-    from iris.connectors import register_all  # type: ignore[import-not-found]
+    from iris.connectors import register_all
 
     register_all(registry)
 
@@ -193,7 +193,7 @@ def cmd_get(args: argparse.Namespace, config: IrisConfig) -> None:
     item = connector.get_item(args.id)
     if item:
         card = item.to_knowledge_card()
-        from iris.adapters.eidos import EidosAdapter  # type: ignore[import-not-found]
+        from iris.adapters.eidos import EidosAdapter
 
         eidos = EidosAdapter()
         if eidos.is_eidos_available():
@@ -234,9 +234,9 @@ def cmd_sync(args: argparse.Namespace, config: IrisConfig) -> None:
 
 def _run_bidirectional_sync(args: argparse.Namespace, config: IrisConfig) -> None:
     """Execute bidirectional sync between Obsidian and WPS Note."""
-    from iris.connectors.obsidian import ObsidianConnector  # type: ignore[import-not-found]
-    from iris.connectors.wpsnote import WPSNoteConnector  # type: ignore[import-not-found]
-    from iris.sync.engine import SyncEngine  # type: ignore[import-not-found]
+    from iris.connectors.obsidian import ObsidianConnector
+    from iris.connectors.wpsnote import WPSNoteConnector
+    from iris.sync.engine import SyncEngine
 
     obsidian = ObsidianConnector(config)
     wpsnote = WPSNoteConnector(config)
@@ -304,7 +304,7 @@ def cmd_config(args: argparse.Namespace, config: IrisConfig) -> None:
 
 def cmd_init(args: argparse.Namespace, config: IrisConfig) -> None:
     """Handle `iris init`."""
-    from iris.adapters.ssot import SSOTDomainAdapter  # type: ignore[import-not-found]
+    from iris.adapters.ssot import SSOTDomainAdapter
 
     ssot = SSOTDomainAdapter(config)
 

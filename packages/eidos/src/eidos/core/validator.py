@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-from eidos.core.schema import FieldType, SchemaField, SchemaRegistry  # type: ignore[import-not-found]
+from eidos.core.schema import FieldType, SchemaField, SchemaRegistry
 
 
 @dataclass

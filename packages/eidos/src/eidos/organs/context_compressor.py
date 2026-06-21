@@ -41,7 +41,7 @@ class ContextCompressor:
         """Get a memory entry by ID."""
         return self._entries.get(entry_id)
 
-    def summarize_batch(self, entries: list[Any]) -> None:
+    def summarize_batch(self, entries: list[Any]) -> Any:
         """Summarize a batch of entries (stub)."""
         return None
 

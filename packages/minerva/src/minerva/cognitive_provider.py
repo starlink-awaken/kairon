@@ -36,7 +36,7 @@ class CognitiveLoopKnowledgeProvider:
 
     async def query_for_thinking(
         self, context: Any = None, max_results: int = 5, quality_threshold: float = 0.0
-    ) -> None:
+    ) -> Any:
         """Query knowledge for thinking stage (stub)."""
         return None
 

@@ -25,7 +25,7 @@ import math
 import time
 from typing import Any
 
-from eidos.fact_graph import get_graph  # type: ignore[import-not-found]
+from eidos.fact_graph import get_graph
 
 _log = logging.getLogger(__name__)
 

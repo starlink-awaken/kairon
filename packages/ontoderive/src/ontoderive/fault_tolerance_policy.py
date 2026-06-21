@@ -40,7 +40,7 @@ class EventType(StrEnum):
     DOC_AFTER_UPDATE = "doc.after_update"
 
 
-def get_event_bus() -> object:  # type: ignore[no-redef]
+def get_event_bus() -> object:
     """Return the global EventBus, or a dummy bus if unavailable."""
     if get_global_event_bus is None:
         return _DummyBus()
@@ -53,12 +53,10 @@ def get_event_bus() -> object:  # type: ignore[no-redef]
 class _DummyBus:
     """Silent no-op bus returned when the real EventBus is unavailable."""
 
-    def subscribe(self, event_type: object, handler: object) -> None:  # type: ignore[unused-var]
+    def subscribe(self, event_type: object, handler: object) -> None:
         return None
 
-    def subscribe_async(  # type: ignore[unused-var]
-        self, event_type: object, handler: object
-    ) -> None:
+    def subscribe_async(self, event_type: object, handler: object) -> None:
         return None
 
 
@@ -304,7 +302,7 @@ class FaultTolerancePolicy:
 
     # -- CoreService BOS-URI handler ----------------------------------------
 
-    def call(self, action: str, params: dict[str, Any] | None = None) -> dict[str, Any]:  # type: ignore[override]
+    def call(self, action: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
         """BOS-URI handler – delegates to ``_handle_{action}``."""
         params = params or {}
         handler_name = f"_handle_{action}"

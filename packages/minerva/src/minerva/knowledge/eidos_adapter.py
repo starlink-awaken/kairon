@@ -54,7 +54,7 @@ def entity_to_node(entity: Any) -> Any | None:
         properties=props,
         aliases=list(entity.aliases) if entity.aliases else [],
         description="",
-    )  # type: ignore[call-arg]
+    )
 
 
 def research_result_to_card(result: dict[str, Any]) -> Any | None:
@@ -78,7 +78,7 @@ def research_result_to_card(result: dict[str, Any]) -> Any | None:
         schema_type="KnowledgeCard",
         tags=tags,
         created_at=result.get("created_at", datetime.datetime.now().isoformat()),
-    )  # type: ignore[call-arg]
+    )
 
 
 def export_cards_to_json(cards: list[Any], path: str | Path) -> int:

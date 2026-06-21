@@ -34,7 +34,7 @@ from collections.abc import Callable, Coroutine, Mapping
 from dataclasses import dataclass, field
 from typing import Any, NotRequired, Protocol, TypedDict, cast, runtime_checkable
 
-from nucleus.Z_Microkernel.organs.async_utils import run_sync  # type: ignore[import-not-found]
+from nucleus.Z_Microkernel.organs.async_utils import run_sync
 
 _TRACE_CONTEXT: contextvars.ContextVar[dict[str, str] | None] = contextvars.ContextVar("_TRACE_CONTEXT", default=None)
 
@@ -62,7 +62,7 @@ type MemoryMetadata = Mapping[str, JSONValue]
 
 
 def build_default_unified_memory_api() -> UnifiedMemoryAPI:
-    from eidos import (  # type: ignore[import-not-found]
+    from eidos import (
         unified_memory_api_defaults as defaults_module,
     )
 
@@ -169,7 +169,7 @@ class _SubsystemProtocol(Protocol):
 
     def keyword_search(self, q: str, limit: int) -> list[dict]: ...  # noqa: E704
     def query(self, q: str, limit: int) -> list[dict]: ...  # noqa: E704
-    def find_paths(self, q: str) -> None: ...  # noqa: E704
+    def find_paths(self, q: str) -> Any: ...  # noqa: E704
     def read(self, key: str) -> str | None: ...  # noqa: E704
     def write(
         self,
@@ -241,7 +241,7 @@ class UnifiedMemoryAPI:
         self._nks: _SubsystemProtocol | None = nks_query_engine
         # Lazy-init MemorySifter (P-10-01: Think-and-Rank before inference).
         try:
-            from eidos.organs.services.memory_sifter import MemorySifter  # type: ignore[import-not-found]
+            from eidos.organs.services.memory_sifter import MemorySifter
 
             self._sifter: MemorySifter | None = MemorySifter()
         except ImportError:
@@ -332,7 +332,7 @@ class UnifiedMemoryAPI:
         # Apply MemorySifter (Think-and-Rank) to compress context before returning.
         if self._sifter is not None and len(merged) > limit:
             try:
-                from eidos.organs.holo_memory import MNode  # type: ignore[import-not-found]
+                from eidos.organs.holo_memory import MNode
 
                 nodes = [
                     MNode(key=item.dedup_key(), value=item.content or "", importance=item.score or 0.0)

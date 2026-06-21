@@ -17,7 +17,7 @@ def main() -> Any:
 
 async def _run_daemon() -> int:
     """Main daemon event loop with graceful shutdown."""
-    from minerva.init import create_default_executor  # type: ignore[import-not-found]
+    from minerva.init import create_default_executor
 
     executor = create_default_executor()
 

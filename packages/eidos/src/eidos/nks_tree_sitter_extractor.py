@@ -32,7 +32,7 @@ _log = logging.getLogger(__name__)
 # if graph_store is not importable in all environments.
 # ---------------------------------------------------------------------------
 try:
-    from eidos.organs.nks.graph_store import (  # type: ignore
+    from eidos.organs.nks.graph_store import (
         CandidateEntity,
         CandidateRelation,
     )
@@ -293,7 +293,7 @@ class TreeSitterExtractor:
                 try:
                     import importlib
 
-                    import tree_sitter  # type: ignore[import-not-found]
+                    import tree_sitter
 
                     mod = importlib.import_module(mod_name)
 

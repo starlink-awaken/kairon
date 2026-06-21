@@ -9,9 +9,9 @@ from dataclasses import is_dataclass
 from pathlib import Path
 from typing import Any, cast
 
-from eidos.core.schema import FieldType, Schema, SchemaField, SchemaRegistry  # type: ignore[import-not-found]
-from eidos.core.validator import ValidationError, ValidationResult, Validator  # type: ignore[import-not-found]
-from eidos.types import Fact, KnowledgeCard, OntologyNode  # type: ignore[import-not-found]
+from eidos.core.schema import FieldType, Schema, SchemaField, SchemaRegistry
+from eidos.core.validator import ValidationError, ValidationResult, Validator
+from eidos.types import Fact, KnowledgeCard, OntologyNode
 
 TYPE_MAP = {"KnowledgeCard": KnowledgeCard, "Fact": Fact, "OntologyNode": OntologyNode}
 OUTPUT_JSON = {"tool": "eidos", "version": "0.1.0"}
@@ -73,7 +73,7 @@ def meta_command(args: Any) -> None:
     """Show SSOT meta-model: 8 MetaType × 4 MetaRelationType"""
     import json
 
-    from eidos.meta import MetaRelationType, MetaType, list_types  # type: ignore[import-not-found]
+    from eidos.meta import MetaRelationType, MetaType, list_types
 
     types = list_types()
     output = {
@@ -106,8 +106,8 @@ def meta_command(args: Any) -> None:
 
 
 def pipeline_command(args: Any) -> None:
-    from eidos.pipeline import Pipeline, run_pipeline  # type: ignore[import-not-found]
-    from eidos.pipeline.webui import generate_html  # type: ignore[import-not-found]
+    from eidos.pipeline import Pipeline, run_pipeline
+    from eidos.pipeline.webui import generate_html
 
     if getattr(args, "web", None) == "web":
         html = generate_html(args.name)
@@ -122,7 +122,7 @@ def pipeline_command(args: Any) -> None:
         pipeline = Pipeline.load(args.file)
     elif args.name:
         try:
-            from eidos.pipeline.presets import PRESETS  # type: ignore[import-not-found]
+            from eidos.pipeline.presets import PRESETS
 
             pipeline = PRESETS[args.name]
         except (ImportError, KeyError):
@@ -141,7 +141,7 @@ def pipeline_command(args: Any) -> None:
 
 
 def viz_schema_command(args: Any) -> None:
-    from eidos.viz import render  # type: ignore[import-not-found]
+    from eidos.viz import render
 
     sr = _build_registry()
     schema = sr.get(args.name) if hasattr(sr, "get") else None
@@ -220,7 +220,7 @@ def viz_graph_command(args: Any) -> None:
 def viz_explore_command(args: Any) -> None:
     """Interactive ontology exploration."""
     try:
-        from eidos.viz_interactive import explore  # type: ignore[import-not-found]
+        from eidos.viz_interactive import explore
     except ImportError:
         from eidos.meta import list_types
         from eidos.viz import render
@@ -406,7 +406,7 @@ def define_command(args: Any) -> None:
     import json
     from pathlib import Path
 
-    from eidos.registry import SchemaRegistry  # type: ignore[import-not-found]
+    from eidos.registry import SchemaRegistry
 
     name = args.name
     meta_type = args.meta_type
@@ -481,7 +481,7 @@ def define_command(args: Any) -> None:
 
 
 def store_command(args: Any) -> None:
-    from eidos.storage import JSONFileBackend  # type: ignore[import-not-found]
+    from eidos.storage import JSONFileBackend
 
     store = JSONFileBackend()
     if args.store_command == "save":
@@ -598,7 +598,7 @@ def main(argv: list[str] | None = None) -> int:
 
     args = parser.parse_args(argv)
     if getattr(args, "verbose", False) or os.environ.get("EIDOS_LOG"):
-        from eidos.logging import _get_logger  # type: ignore[import-not-found]
+        from eidos.logging import _get_logger
 
         _get_logger().setLevel(logging.DEBUG)
     registry = _build_registry()

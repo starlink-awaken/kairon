@@ -26,13 +26,13 @@ import logging
 import os
 import time
 
-from eidos.base import VectorSearchResult, VectorStoreBackend  # type: ignore[import-not-found]
+from eidos.base import VectorSearchResult, VectorStoreBackend
 
 _log = logging.getLogger(__name__)
 
 # Optional dependencies - will be None if not installed
 try:
-    import lancedb  # type: ignore[import-untyped]
+    import lancedb
     from sentence_transformers import SentenceTransformer
 
     LANCEDB_AVAILABLE = True
@@ -100,7 +100,7 @@ class LanceDBBackend(VectorStoreBackend):
             return self._table
 
         db_path = os.path.join(self.base_dir, self.role)
-        db = lancedb.connect(db_path)  # type: ignore[arg-type]
+        db = lancedb.connect(db_path)
 
         # Check if table exists
         if "memories" not in db.list_tables():

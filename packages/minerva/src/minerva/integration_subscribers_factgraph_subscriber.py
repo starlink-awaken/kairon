@@ -43,8 +43,8 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
-from minerva.base_subscriber import BaseSubscriber  # type: ignore[import-not-found]
-from minerva.events import KnowledgeEvent  # type: ignore[import-not-found]
+from minerva.base_subscriber import BaseSubscriber
+from minerva.events import KnowledgeEvent
 
 _log = logging.getLogger(__name__)
 
@@ -142,7 +142,7 @@ class FactGraphSubscriber(BaseSubscriber):
         # 监控指标集成（延迟导入避免循环依赖）
         self._metrics = None
         try:
-            from minerva.integration_subscribers_subscriber_metrics import (  # type: ignore[import-not-found]
+            from minerva.integration_subscribers_subscriber_metrics import (
                 get_subscriber_metrics,
             )
 

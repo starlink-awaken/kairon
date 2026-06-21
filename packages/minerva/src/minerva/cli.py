@@ -98,12 +98,12 @@ def build_parser() -> argparse.ArgumentParser:
 
 async def _run_research(args: Any) -> int:
     """Execute a research query."""
-    from minerva.config import MinervaConfig  # type: ignore[import-not-found]
-    from minerva.llm.client import OpenAICompatibleClient  # type: ignore[import-not-found]
-    from minerva.pipeline.engine import create_default_pipeline  # type: ignore[import-not-found]
-    from minerva.search.engine import SearchEngine  # type: ignore[import-not-found]
-    from minerva.triage.router import ResearchLevel, TriageRouter  # type: ignore[import-not-found]
-    from minerva.utils.terminal import (  # type: ignore[import-not-found]
+    from minerva.config import MinervaConfig
+    from minerva.llm.client import OpenAICompatibleClient
+    from minerva.pipeline.engine import create_default_pipeline
+    from minerva.search.engine import SearchEngine
+    from minerva.triage.router import ResearchLevel, TriageRouter
+    from minerva.utils.terminal import (
         print_banner,
         print_pipeline_header,
         print_summary_table,
@@ -207,8 +207,8 @@ async def _run_research(args: Any) -> int:
     print_pipeline_header(args.query, level.value)
 
     # Research Paradigm — classify problem type → apply framework
-    from minerva.paradigm.router import classify_paradigm  # type: ignore[import-not-found]
-    from minerva.paradigm.types import PARADIGMS  # type: ignore[import-not-found]
+    from minerva.paradigm.router import classify_paradigm
+    from minerva.paradigm.types import PARADIGMS
 
     paradigm_result = await classify_paradigm(llm, args.query)
     paradigm_def = PARADIGMS[paradigm_result.paradigm]
@@ -231,7 +231,7 @@ async def _run_research(args: Any) -> int:
     results = getattr(ctx, "search_results", []) or []
 
     if hasattr(args, "to_kos") and args.to_kos:
-        from minerva.knowledge.eidos_adapter import (  # type: ignore[import-not-found]
+        from minerva.knowledge.eidos_adapter import (
             export_to_kos,
             research_result_to_card,
         )
@@ -247,7 +247,7 @@ async def _run_research(args: Any) -> int:
 
     if hasattr(args, "eidos_output") and args.eidos_output:
         try:
-            from minerva.knowledge.eidos_adapter import (  # type: ignore[import-not-found]
+            from minerva.knowledge.eidos_adapter import (
                 export_cards_to_json,
                 research_result_to_card,
             )
@@ -296,7 +296,7 @@ async def _run_research(args: Any) -> int:
     # -- Default persist: save research result to ~/.minerva/research/ --
     _result_id: str | None = None
     if hasattr(ctx, "report") and ctx.report:
-        from minerva.persistence import save_research  # type: ignore[import-not-found]
+        from minerva.persistence import save_research
 
         quality_val = quality_score if quality_score != "N/A" else 0
         _result_id = save_research(
@@ -316,7 +316,7 @@ async def _run_research(args: Any) -> int:
         print(f"\n  [green]✓ Result saved:[/green] ~/.minerva/research/{_result_id}/")
 
     # -- Audit log --
-    from minerva.audit_store import log_operation  # type: ignore[import-not-found]
+    from minerva.audit_store import log_operation
 
     log_operation(
         actor="cli",
@@ -405,7 +405,7 @@ def _run_init() -> int:
         print("  ⚠️  spaCy model not found. Run: python -m spacy download en_core_web_lg")
 
     # Audit
-    from minerva.audit_store import log_operation  # type: ignore[import-not-found]
+    from minerva.audit_store import log_operation
 
     log_operation("cli", "init", "minerva", "success", f"{sum(1 for _, ok in checks if ok)}/{len(checks)} checks")
 
@@ -500,7 +500,7 @@ def _run_check() -> int:
         print(f"  {failed} issue(s) found. Run 'minerva init' for setup help.")
 
     # Audit
-    from minerva.audit_store import log_operation  # type: ignore[import-not-found]
+    from minerva.audit_store import log_operation
 
     log_operation(
         "cli", "check", "minerva:health", "success" if failed == 0 else "degraded", f"{passed}/{total} checks passed", 0
@@ -523,7 +523,7 @@ def main() -> Any:
     elif args.command == "research":
         return asyncio.run(_run_research(args))
     elif args.command == "mcp":
-        from minerva.mcp_server.server import main as mcp_main  # type: ignore[import-not-found]
+        from minerva.mcp_server.server import main as mcp_main
 
         return mcp_main()
     elif args.command == "check":
@@ -531,13 +531,13 @@ def main() -> Any:
     elif args.command == "web":
         import uvicorn
 
-        from minerva.web.app import app  # type: ignore[import-not-found]
+        from minerva.web.app import app
 
         print("Minerva Web → http://localhost:8765")
         uvicorn.run(app, host="127.0.0.1", port=8765, log_level=os.environ.get("MINERVA_LOG_LEVEL", "info"))
         return 0
     elif args.command == "daemon":
-        from minerva.executor.daemon import main as daemon_main  # type: ignore[import-not-found]
+        from minerva.executor.daemon import main as daemon_main
 
         return daemon_main()
     elif args.command == "maintenance":
@@ -552,7 +552,7 @@ def main() -> Any:
 
 def _run_results(args: Any) -> int:
     """List/show/delete saved research results."""
-    from minerva.persistence import (  # type: ignore[import-not-found]
+    from minerva.persistence import (
         delete_result,
         get_result,
         get_storage_stats,
@@ -627,7 +627,7 @@ def _run_results(args: Any) -> int:
 
 def _run_audit(args: Any) -> int:
     """View audit log."""
-    from minerva.audit_store import get_logger  # type: ignore[import-not-found]
+    from minerva.audit_store import get_logger
 
     logger = get_logger()
 
@@ -654,10 +654,10 @@ def _run_audit(args: Any) -> int:
 def _run_maintenance(args: Any) -> int:
     """Run knowledge base maintenance."""
 
-    from minerva.knowledge.mineru_adapter import cleanup_stale_mineru_outputs  # type: ignore[import-not-found]
-    from minerva.maintenance.contradiction import detect_contradictions_rule_based  # type: ignore[import-not-found]
-    from minerva.maintenance.gap_analyzer import get_improvement_suggestions  # type: ignore[import-not-found]
-    from minerva.maintenance.staleness import StalenessChecker  # type: ignore[import-not-found]
+    from minerva.knowledge.mineru_adapter import cleanup_stale_mineru_outputs
+    from minerva.maintenance.contradiction import detect_contradictions_rule_based
+    from minerva.maintenance.gap_analyzer import get_improvement_suggestions
+    from minerva.maintenance.staleness import StalenessChecker
 
     action = args.action
     report_dir = "~/knowledge/reports"

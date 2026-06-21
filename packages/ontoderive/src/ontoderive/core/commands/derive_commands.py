@@ -4,11 +4,11 @@ import json
 from pathlib import Path
 from typing import Any
 
-from ontoderive.core.derive import OntoDerive  # type: ignore[import-not-found]
+from ontoderive.core.derive import OntoDerive
 
 
 def _run_toolforge(project: str, goal: str, tool_context: str) -> None:
-    from ontoderive.toolforge import ToolForge  # type: ignore[import-not-found]
+    from ontoderive.toolforge import ToolForge
 
     tf = ToolForge()
     print(f"\n{'━' * 50}")
@@ -75,7 +75,7 @@ def cmd_derive(
 def cmd_analyze(project: Any, force: Any) -> None:
     """全量分析: 推导+LLM洞察(自动检测)"""
     print("[analyze] 全量分析: 结构推导 + LLM洞察(自动检测LLM)...")
-    from ontoderive.intelligence.llm import get_enhancer  # type: ignore[import-not-found]
+    from ontoderive.intelligence.llm import get_enhancer
 
     od = OntoDerive(project)
     enhancer = get_enhancer(force)
@@ -107,7 +107,7 @@ def cmd_generate(project: Any, export: Any) -> None:
         r = od.derive()
         try:
             if export == "html":
-                from ontoderive.core.export import to_html  # type: ignore[import-not-found]
+                from ontoderive.core.export import to_html
 
                 output = to_html(r, project)
                 Path(project + "/export.html").write_text(output)

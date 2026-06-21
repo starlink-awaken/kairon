@@ -7,9 +7,9 @@ def build_code_graph(repo_path: str = ".") -> dict:
     Uses graphify v0.7.10+ Python API. Falls back gracefully if graphify is not installed.
     """
     try:
-        import graphify  # type: ignore[import-not-found]  # noqa: F401
-        from graphify.analyze import analyze_repo  # type: ignore[import-not-found]
-        from graphify.extract import extract_symbols  # type: ignore[import-not-found]  # noqa: F401
+        import graphify  # noqa: F401
+        from graphify.analyze import analyze_repo
+        from graphify.extract import extract_symbols  # noqa: F401
     except ImportError:
         return {"entities": [], "relations": [], "error": "graphify not installed"}
 

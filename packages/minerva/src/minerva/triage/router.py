@@ -252,7 +252,7 @@ class TriageRouter:
         """Classify via local LLM (Qwen3.6-35B)."""
 
         # Load L4 CARDS context for alignment
-        from minerva.shared.cards_context import get_cards_context  # type: ignore[import-not-found]
+        from minerva.shared.cards_context import get_cards_context
 
         l4_context = get_cards_context()
         system_prompt = TRIAGE_SYSTEM_PROMPT + l4_context

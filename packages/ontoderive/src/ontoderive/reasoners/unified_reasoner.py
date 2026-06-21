@@ -135,7 +135,7 @@ class UnifiedReasoner:
 
         # 5. 分析模式 (v3.4: AnalyticsEngine纳入统一输出)
         try:
-            from ontoderive.theories.analytics import AnalyticsEngine  # type: ignore[import-not-found]
+            from ontoderive.theories.analytics import AnalyticsEngine
 
             ae = AnalyticsEngine(enhancer=enhancer)
             ae_results = ae.run(facts, {}, inferences, relations)

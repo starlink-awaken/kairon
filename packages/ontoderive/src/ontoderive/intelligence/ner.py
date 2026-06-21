@@ -115,7 +115,7 @@ def extract_entities(text: str, use_jieba: Any = True) -> list:
     # 优先: jieba词性标注 (如果可用)
     if use_jieba:
         try:
-            import jieba.posseg as pseg  # type: ignore[import-untyped]
+            import jieba.posseg as pseg
 
             words = pseg.cut(text)
             buf = ""

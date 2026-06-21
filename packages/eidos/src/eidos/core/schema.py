@@ -214,7 +214,7 @@ class SchemaRegistry:
     @staticmethod
     def _legacy_dict_to_schema(name: str, sdata: dict) -> Schema:
         """Convert a legacy v0 serialized schema dict to a Schema object."""
-        from eidos.core.schema import FieldType, Schema, SchemaField  # type: ignore[import-not-found]
+        from eidos.core.schema import FieldType, Schema, SchemaField
 
         valid_field_types = [e.value for e in FieldType]
         fields: dict[str, SchemaField] = {}
@@ -238,7 +238,7 @@ class SchemaRegistry:
         DEFAULT_REGISTRY_PATH.parent.mkdir(parents=True, exist_ok=True)
 
     def validate(self, schema_name: str, data: dict[str, Any], strict: bool = True) -> Any:
-        from eidos.core.validator import Validator  # type: ignore[import-not-found]
+        from eidos.core.validator import Validator
 
         return Validator(self).validate_object(schema_name, data, strict=strict)
 
@@ -309,7 +309,7 @@ def migrate_schema_instance(
     Raises:
         EidosError: SCHEMA_MIGRATION_FAILED if a transform fails
     """
-    from eidos.errors import EidosError, ErrorCode  # type: ignore[import-not-found]
+    from eidos.errors import EidosError, ErrorCode
 
     migrations = get_migrations(schema_name)
     current = data

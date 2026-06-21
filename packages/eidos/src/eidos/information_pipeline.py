@@ -16,7 +16,7 @@ import os
 import time
 from typing import Any
 
-from eidos.organs.storage_dal import SQLiteOperationalError, SQLiteRelationalProvider  # type: ignore[import-not-found]
+from eidos.organs.storage_dal import SQLiteOperationalError, SQLiteRelationalProvider
 
 # =============================================================================
 # 0. 形式化摘要 ≝

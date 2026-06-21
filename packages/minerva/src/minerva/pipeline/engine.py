@@ -13,7 +13,7 @@ from typing import Any
 
 import structlog
 
-from minerva.triage.router import ResearchLevel, TriageResult  # type: ignore[import-not-found]
+from minerva.triage.router import ResearchLevel, TriageResult
 
 logger = structlog.get_logger(__name__)
 
@@ -163,7 +163,7 @@ def create_default_pipeline(
         immune_audit_enabled: Insert ImmuneAuditStage before quality gate.
     """
 
-    from minerva.pipeline.stages import (  # type: ignore[import-not-found]
+    from minerva.pipeline.stages import (
         CounterArgumentStageImpl,
         CrossAnalyzeStageImpl,
         DecomposeStageImpl,
@@ -177,7 +177,7 @@ def create_default_pipeline(
         OutputStageImpl,
         QualityGateStageImpl,
     )
-    from minerva.sinks.vault_sink import VaultSinkStage  # type: ignore[import-not-found]
+    from minerva.sinks.vault_sink import VaultSinkStage
 
     # L3/L4 use cloud client for enterprise reasoning (DeepSeek V4 Pro).
     # Falls back to local qwen3.6:27b if cloud is unavailable.

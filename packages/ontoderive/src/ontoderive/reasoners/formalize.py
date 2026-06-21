@@ -135,7 +135,7 @@ class Formalizer:
 
         # L1 NER: 命名实体识别增强 — 补正则到LLM之间的能力断层
         try:
-            from ontoderive.intelligence.ner import extract_entities  # type: ignore[import-not-found]
+            from ontoderive.intelligence.ner import extract_entities
 
             for name, etype in extract_entities(text, use_jieba=True):
                 if name not in seen_names and len(name) >= 3:
@@ -274,7 +274,7 @@ class Formalizer:
         try:
             from ontoderive.foundation.typesystem import TypeValidator
         except ImportError:
-            from ontoderive.foundation.typesystem import TypeValidator  # type: ignore[import-not-found]
+            from ontoderive.foundation.typesystem import TypeValidator
         tv = TypeValidator()
         for f in knowledge.facts:
             if not tv.check_id(f.id).is_valid:

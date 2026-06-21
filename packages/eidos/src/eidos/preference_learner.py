@@ -211,7 +211,7 @@ class PreferenceLearner:
         if self._fact_graph is not None:
             return self._fact_graph
         try:
-            from eidos.organs.fact_graph import FactGraph  # type: ignore[import-not-found]
+            from eidos.organs.fact_graph import FactGraph
 
             self._fact_graph = FactGraph()
             return self._fact_graph

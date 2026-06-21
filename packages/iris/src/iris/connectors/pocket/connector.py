@@ -19,9 +19,9 @@ import urllib.request
 from datetime import datetime
 from typing import Any, cast
 
-from iris.base import BaseConnector, SyncResult  # type: ignore[import-not-found]
-from iris.config import IrisConfig  # type: ignore[import-not-found]
-from iris.models import Bookmark  # type: ignore[import-not-found]
+from iris.base import BaseConnector, SyncResult
+from iris.config import IrisConfig
+from iris.models import Bookmark
 
 logger = logging.getLogger(__name__)
 

@@ -15,7 +15,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
-from ontoderive.foundation.utils import all_md, detect_cycles, rf, wf  # type: ignore[import-not-found]
+from ontoderive.foundation.utils import all_md, detect_cycles, rf, wf
 
 CONFIDENCE_MAP = {
     "fact": 0.95,

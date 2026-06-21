@@ -44,7 +44,7 @@ from pathlib import Path
 try:
     import yaml
 except ImportError:
-    yaml = None  # type: ignore
+    yaml = None
 
 # Import QualityIssue from quality_probe
 from typing import Any

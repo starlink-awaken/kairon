@@ -11,7 +11,7 @@ OntoDerive 逻辑层 — 蕴含图分析
 from collections import defaultdict
 from typing import Any
 
-from ontoderive.foundation.utils import detect_cycles  # type: ignore[import-not-found]
+from ontoderive.foundation.utils import detect_cycles
 
 
 class EntailmentGraph:

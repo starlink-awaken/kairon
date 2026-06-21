@@ -12,13 +12,13 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, cast
 
-from iris.base import BaseConnector  # type: ignore[import-not-found]
-from iris.config import IrisConfig  # type: ignore[import-not-found]
-from iris.models import KnowledgeArtifact, Note  # type: ignore[import-not-found]
-from iris.sync.changes import Change, ChangeTracker, ChangeType  # type: ignore[import-not-found]
-from iris.sync.conflict import ConflictResolver  # type: ignore[import-not-found]
-from iris.sync.format import FormatConverter  # type: ignore[import-not-found]
-from iris.sync.id_map import IdMapping  # type: ignore[import-not-found]
+from iris.base import BaseConnector
+from iris.config import IrisConfig
+from iris.models import KnowledgeArtifact, Note
+from iris.sync.changes import Change, ChangeTracker, ChangeType
+from iris.sync.conflict import ConflictResolver
+from iris.sync.format import FormatConverter
+from iris.sync.id_map import IdMapping
 
 logger = logging.getLogger(__name__)
 
@@ -241,7 +241,7 @@ class SyncEngine:
             md_body = self.format_converter.xml_to_markdown(xml_content)
 
             # Generate a valid Obsidian path
-            from iris.connectors.obsidian import _slugify  # type: ignore[import-not-found]
+            from iris.connectors.obsidian import _slugify
 
             slug = _slugify(item.title)
             obs_path = f"sync/{slug}.md"

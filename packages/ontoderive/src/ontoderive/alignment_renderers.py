@@ -31,7 +31,7 @@ Layer: L3
 
 import json
 
-from ontoderive.alignment_models import EnhancedDiffReport  # type: ignore[import-not-found]
+from ontoderive.alignment_models import EnhancedDiffReport
 
 
 def generate_markdown_report(report: EnhancedDiffReport) -> str:

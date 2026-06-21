@@ -11,7 +11,7 @@ from typing import Any
 
 import structlog
 
-from minerva.paradigm.types import (  # type: ignore[import-not-found]
+from minerva.paradigm.types import (
     PARADIGMS,
     ParadigmResult,
     ResearchParadigm,

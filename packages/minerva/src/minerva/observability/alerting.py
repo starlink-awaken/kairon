@@ -660,7 +660,7 @@ class HarvestAlertManager:
         """
         if metrics_getter is None:
             # 使用全局收集器作为默认
-            from minerva.observability.metrics_collector import get_global_collector  # type: ignore[import-not-found]
+            from minerva.observability.metrics_collector import get_global_collector
 
             collector = get_global_collector()
 

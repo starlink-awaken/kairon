@@ -427,7 +427,7 @@ def create_scan_pipeline(
     pipeline.add_step(
         ScanStep(
             docs_dir=Path(docs_dir) if docs_dir else None,  # type: ignore[call-arg]
-            code_dir=Path(code_dir) if code_dir else None,  # type: ignore[call-arg]
+            code_dir=Path(code_dir) if code_dir else None,
             parallel=parallel,
             max_workers=max_workers,
         )
@@ -464,7 +464,7 @@ def create_full_pipeline(
     pipeline.add_step(
         ScanStep(
             docs_dir=Path(docs_dir) if docs_dir else None,  # type: ignore[call-arg]
-            code_dir=Path(code_dir) if code_dir else None,  # type: ignore[call-arg]
+            code_dir=Path(code_dir) if code_dir else None,
             parallel=parallel,
             max_workers=max_workers,
         )

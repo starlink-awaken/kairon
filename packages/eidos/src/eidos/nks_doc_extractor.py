@@ -5,7 +5,7 @@ import logging
 import re
 from dataclasses import dataclass, field
 
-from eidos.graph_store import CandidateEntity, CandidateRelation  # type: ignore[import-not-found]
+from eidos.graph_store import CandidateEntity, CandidateRelation
 
 """
 ---

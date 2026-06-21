@@ -13,12 +13,12 @@ __all__ = []
 __version__ = "3.6.4"
 
 # 顶层 re-export — 保持向后兼容
-from ontoderive.core.derive import VERSION as _VERSION  # type: ignore[import-not-found]
+from ontoderive.core.derive import VERSION as _VERSION
 from ontoderive.core.derive import OntoDerive as _OntoDerive
-from ontoderive.reasoners.formalize import Formalizer as _Formalizer  # type: ignore[import-not-found]
+from ontoderive.reasoners.formalize import Formalizer as _Formalizer
 from ontoderive.reasoners.formalize import FormalKnowledge as _FormalKnowledge
-from ontoderive.reasoners.pipeline_v4 import FormalPipeline as _FormalPipeline  # type: ignore[import-not-found]
-from ontoderive.toolforge import ToolForge as _ToolForge  # type: ignore[import-not-found]
+from ontoderive.reasoners.pipeline_v4 import FormalPipeline as _FormalPipeline
+from ontoderive.toolforge import ToolForge as _ToolForge
 
 from . import core as core
 from . import foundation as foundation

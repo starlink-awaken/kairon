@@ -85,7 +85,7 @@ class GraphBridge:
         if not self.config.enabled:
             return False
         try:
-            from neo4j import AsyncGraphDatabase  # type: ignore[import-not-found]
+            from neo4j import AsyncGraphDatabase
 
             self._driver = AsyncGraphDatabase.driver(
                 self.config.neo4j_uri,
@@ -254,7 +254,7 @@ class GraphBridge:
         Falls back gracefully if graphify is not installed.
         """
         try:
-            from minerva.graph.graphify_adapter import build_code_graph  # type: ignore[import-not-found]
+            from minerva.graph.graphify_adapter import build_code_graph
 
             graph = build_code_graph(repo_path)
         except Exception:

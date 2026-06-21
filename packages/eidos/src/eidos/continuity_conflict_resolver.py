@@ -67,7 +67,7 @@ _ESCALATION_THRESHOLD_CRITICAL = 0.20  # 20 % for nucleus / rules files
 
 
 class _LLMProvider(Protocol):
-    def generate(self, prompt: str) -> None: ...
+    def generate(self, prompt: str) -> Any: ...
 
 
 class DeterministicConflictResolver:

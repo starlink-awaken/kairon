@@ -207,7 +207,7 @@ def create_knowledge_event(event_type: str, **kwargs: Any) -> KnowledgeEvent:
     if event_class is None:
         raise ValueError(f"Unknown event type: {event_type}")
 
-    return event_class(**kwargs)  # type: ignore[call-arg]
+    return event_class(**kwargs)
 
 
 __all__ = [

@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Any
 
-from ontoderive.foundation.templates import TEMPLATES  # type: ignore[import-not-found]
+from ontoderive.foundation.templates import TEMPLATES
 
 
 def cmd_init(project_name: str, template: str = "default") -> None:

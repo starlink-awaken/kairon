@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from minerva.paradigm.types import ParadigmResult, ResearchParadigm  # type: ignore[import-not-found]
+from minerva.paradigm.types import ParadigmResult, ResearchParadigm
 
 CLASSIFY_PROMPT = """Classify this research question into exactly ONE of these paradigms:
 
@@ -34,7 +34,7 @@ async def classify_paradigm(llm_client: Any, query: str) -> ParadigmResult:
     try:
         import json
 
-        from minerva.shared.cards_context import get_cards_context  # type: ignore[import-not-found]
+        from minerva.shared.cards_context import get_cards_context
 
         l4_context = get_cards_context()
         system_prompt = "You classify research questions into paradigms. Output valid JSON only." + l4_context

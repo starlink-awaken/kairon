@@ -8,7 +8,7 @@ from importlib import import_module
 from multiprocessing import cpu_count
 from typing import Any, TypeVar, cast
 
-from eidos.graph_store import CandidateEntity, CandidateRelation  # type: ignore[import-not-found]
+from eidos.graph_store import CandidateEntity, CandidateRelation
 
 """
 ---
@@ -63,7 +63,7 @@ except ImportError:
         def close(self) -> None:
             pass
 
-        def __enter__(self) -> tqdm:  # type: ignore[valid-type]
+        def __enter__(self) -> tqdm:
             return self
 
         def __exit__(self, *args: Any) -> None:

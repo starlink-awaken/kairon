@@ -18,8 +18,8 @@ from typing import Any
 import structlog
 import yaml
 
-from minerva.audit_store import AuditLogger  # type: ignore[import-not-found]
-from minerva.pipeline.engine import IPipelineStage, ResearchContext  # type: ignore[import-not-found]
+from minerva.audit_store import AuditLogger
+from minerva.pipeline.engine import IPipelineStage, ResearchContext
 
 logger = structlog.get_logger(__name__)
 

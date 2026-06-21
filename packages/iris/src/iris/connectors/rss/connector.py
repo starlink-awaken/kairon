@@ -9,8 +9,8 @@ import subprocess
 import time
 from typing import Any
 
-from iris.base import BaseConnector, SyncResult  # type: ignore[import-not-found]
-from iris.models import Article, KnowledgeArtifact  # type: ignore[import-not-found]
+from iris.base import BaseConnector, SyncResult
+from iris.models import Article, KnowledgeArtifact
 
 logger = logging.getLogger(__name__)
 

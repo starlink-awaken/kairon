@@ -190,7 +190,7 @@ class OpenAIEmbeddingProvider(BaseEmbeddingProvider):
         """延迟初始化 OpenAI 客户端"""
         if self._client is None:
             try:
-                import openai  # type: ignore[import-not-found]
+                import openai
             except ImportError as e:
                 raise ImportError("openai package is required. Install with: pip install openai") from e
 
