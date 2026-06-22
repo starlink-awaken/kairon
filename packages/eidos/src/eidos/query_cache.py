@@ -5,6 +5,8 @@ TODO: implement full caching with TTL, invalidation, and persistence.
 
 from __future__ import annotations
 
+import hashlib
+import json
 import time
 from typing import Any
 
@@ -15,14 +17,18 @@ class QueryCache:
     def __init__(self, ttl: float = 300.0) -> None:
         self._ttl = ttl
         self._cache: dict[str, tuple[float, Any]] = {}
+        self._hits = 0
+        self._misses = 0
 
     def get(self, key: str) -> Any | None:
         """Get a cached value by key. Returns None if missing or expired."""
         if key in self._cache:
             ts, value = self._cache[key]
             if time.monotonic() - ts < self._ttl:
+                self._hits += 1
                 return value
             del self._cache[key]
+        self._misses += 1
         return None
 
     def set(self, key: str, value: Any, ttl: float | None = None) -> None:
@@ -47,12 +53,18 @@ class QueryCache:
         return True
 
     def get_stats(self) -> dict[str, Any]:
-        """Get cache statistics (stub)."""
-        return {}
+        """Get cache statistics: size, ttl, hit/miss counters."""
+        return {
+            "size": len(self._cache),
+            "ttl": self._ttl,
+            "hits": self._hits,
+            "misses": self._misses,
+        }
 
     def generate_cache_key(self, *args: Any, **kwargs: Any) -> str:
-        """Generate cache key (stub)."""
-        return ""
+        """Generate stable cache key from positional + keyword args (md5)."""
+        payload = json.dumps({"args": list(args), "kwargs": dict(sorted(kwargs.items()))}, default=str, sort_keys=True)
+        return hashlib.sha256(payload.encode()).hexdigest()
 
 
 __all__ = [
