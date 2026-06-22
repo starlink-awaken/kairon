@@ -302,7 +302,7 @@ class GraphusionEngine:
                 existing.confidence = max(existing.confidence, candidate.confidence)
 
                 updated = Relation(
-                    relation_id=existing.relation_id,
+                    id=existing.relation_id,
                     source_id=existing.source_id,
                     target_id=existing.target_id,
                     relation_type=existing.relation_type,
@@ -320,7 +320,7 @@ class GraphusionEngine:
         relation_id = self._generate_relation_id(source_canonical_id, target_canonical_id, candidate.relation_type)
 
         return Relation(
-            relation_id=relation_id,
+            id=relation_id,
             source_id=source_canonical_id,
             target_id=target_canonical_id,
             relation_type=candidate.relation_type,
