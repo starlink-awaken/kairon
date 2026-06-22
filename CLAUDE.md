@@ -67,7 +67,7 @@ make test
 make test-fast
 make lint
 make format
-make typecheck          # mypy strict 真相检查 (会红, 存量 1245 errors, 见 mypy-baseline.yaml)
+make typecheck          # mypy strict 真相检查 (16/16 包全绿, baseline 0, 见 mypy-baseline.yaml)
 make typecheck-gate     # regression gate (卡增量不卡存量, CI 友好, 绿)
 make typecheck-report   # per-package mypy 错误数报表
 ```

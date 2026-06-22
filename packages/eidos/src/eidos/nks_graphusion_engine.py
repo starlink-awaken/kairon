@@ -223,7 +223,7 @@ class GraphusionEngine:
 
         # Create merged entity
         merged = Entity(
-            entity_id=canonical.entity_id,
+            id=canonical.entity_id,
             name=canonical.name,
             properties=merged_properties,
             source_files=canonical.source_files,
@@ -250,7 +250,7 @@ class GraphusionEngine:
         entity_id = self._generate_entity_id(candidate.name)
 
         return Entity(
-            entity_id=entity_id,
+            id=entity_id,
             name=candidate.name,
             properties=candidate.properties.copy(),
             source_files=[candidate.source_file] if candidate.source_file else [],

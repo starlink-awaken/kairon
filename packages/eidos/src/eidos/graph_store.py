@@ -37,7 +37,7 @@ class CandidateRelation:
 class Entity:
     """A knowledge graph entity."""
 
-    id: str = ""
+    id: str
     name: str = ""
     entity_type: str = ""
     properties: dict[str, Any] = field(default_factory=dict)

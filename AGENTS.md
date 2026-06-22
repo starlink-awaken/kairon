@@ -68,7 +68,8 @@ L0 ┌ protocols · 协议 YAML
 - `make test-fast` — 仅单元测试
 - `make test-diff` — 仅测试修改的包
 - `make lint` — Ruff 检查
-- `make typecheck` / `uv run mypy` — mypy strict 试点 (当前 kairon-lib-events / health-profile / kairon-pipeline / plugin-sdk / sophia 等包已启用)
+- `make typecheck` / `uv run mypy` — mypy strict (16/16 包全绿, baseline 0; 2026-06-22 mypy 存量清零 + altitude 治本 AgentFileSystem 统一 + 删 536 unused ignore + 162 返回类型具体化)
+- **mypy 类型工作陷阱**: (1) adapter 接真实现后 stub 时代的 cast 是多余 bandaid, 需清 (见 nks_agentfs_adapter); (2) Protocol/接口方法 `-> None` 若被调用方用返回值是声明债, 改 `-> Any` 消错但可能被钩子还原, 改后验证留存; (3) 删 unused type:ignore 用 `mypy --warn-unused-ignores` 定位.
 - 覆盖率门禁: 70%
 
 ## 已归档 (P28-W2 ~ P31-W0)
