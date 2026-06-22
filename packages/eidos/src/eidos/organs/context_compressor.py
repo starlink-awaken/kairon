@@ -42,8 +42,27 @@ class ContextCompressor:
         return self._entries.get(entry_id)
 
     def summarize_batch(self, entries: list[Any]) -> Any:
-        """Summarize a batch of entries (stub)."""
-        return None
+        """Summarize a batch of entries into one MemoryEntry (合并策略 MVP).
+
+        合并 entries 的 content (拼接 + token 累加), 生成 summary MemoryEntry.
+        非 LLM 摘要 — 简单合并策略 (TODO: LLM 摘要后续).
+        """
+        if not entries:
+            return None
+        contents: list[str] = []
+        total_tokens = 0
+        for e in entries:
+            content = getattr(e, "content", str(e))
+            contents.append(content)
+            total_tokens += getattr(e, "token_count", 0) or 0
+        ts = datetime.utcnow().isoformat()
+        return MemoryEntry(
+            id=f"summary-{ts}",
+            content="\n---\n".join(contents),
+            tier="warm",
+            token_count=total_tokens,
+            metadata={"summarized_count": len(entries), "strategy": "merge"},
+        )
 
     def _maybe_compact(self) -> None:
         """Evict oldest cold entries if over capacity."""
