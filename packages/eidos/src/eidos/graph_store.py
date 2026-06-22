@@ -50,6 +50,11 @@ class Entity:
     is_canonical: bool = True
 
     def __post_init__(self) -> None:
+        """P43 R5 修真: 统一处理 entity_id / relation_id 字段 (防同名字段覆盖丢失)"""
+        if self.relation_id and not self.id:
+            self.id = self.relation_id
+        elif self.id and not self.relation_id:
+            self.relation_id = self.id
         if self.entity_id and not self.id:
             self.id = self.entity_id
         elif self.id and not self.entity_id:
@@ -60,7 +65,7 @@ class Entity:
 class Relation:
     """A knowledge graph relation."""
 
-    id: str = ""
+    id: str
     source_id: str = ""
     target_id: str = ""
     relation_type: str = ""
