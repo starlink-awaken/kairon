@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import sqlite3
+
 """
 ---
 Type: Module
@@ -123,7 +125,7 @@ class SecurityManagerProtocol(Protocol):
 
 
 class SQLiteConnectionProtocol(Protocol):
-    def execute(self, statement: str, parameters: tuple[object, ...] = ()) -> Any: ...
+    def execute(self, statement: str, parameters: tuple[object, ...] = ()) -> sqlite3.Cursor: ...
 
     def commit(self) -> None: ...
 
