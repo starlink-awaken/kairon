@@ -1,7 +1,12 @@
 #!/bin/bash
-# Pre-commit CI gate: run ruff check + debt prevention on staged Python files.
+# Pre-commit CI gate: run ruff check + ruff format check + debt prevention on staged Python files.
 # Supports: kairon (submodule), agora, cockpit, ecos, omo, metaos, runtime
 set -euo pipefail
+
+if [ "${SKIP_GATE:-}" = "true" ]; then
+    echo "🔓 SKIP_GATE=true — 跳过 pre-commit 检查"
+    exit 0
+fi
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
 REPO_NAME=$(basename "$REPO_ROOT")
@@ -77,6 +82,7 @@ check_project() {
         echo "   [$project_name] Checking: $(echo "$STAGED_FILES" | tr '\n' ' ')"
         if command -v ruff &>/dev/null; then
             ruff check $STAGED_FILES 2>&1 || { echo "❌ ruff check failed for $project_name"; exit 1; }
+            ruff format --check $STAGED_FILES 2>&1 || { echo "❌ ruff format check failed for $project_name"; exit 1; }
         fi
     fi
     cd "$REPO_ROOT"
