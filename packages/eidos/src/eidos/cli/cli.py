@@ -4,6 +4,7 @@ import argparse
 import json
 import logging
 import os
+import sys
 from dataclasses import fields as dataclass_fields
 from dataclasses import is_dataclass
 from pathlib import Path
@@ -504,6 +505,7 @@ def store_command(args: Any) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    print("⚠️ Eidos 独立 CLI 已弃用，请使用 cockpit 替代", file=sys.stderr)
     parser = argparse.ArgumentParser(
         prog="eidos",
         epilog="""使用示例:

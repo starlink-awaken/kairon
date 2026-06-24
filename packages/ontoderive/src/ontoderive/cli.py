@@ -42,6 +42,7 @@ def _json_output(status: str, data: dict | None = None, error: str | None = None
 
 def main() -> None:
     """统一 CLI 入口"""
+    print("⚠️ OntoDerive 独立 CLI 已弃用，请使用 cockpit 替代", file=sys.stderr)
     import argparse
 
     parser = argparse.ArgumentParser(

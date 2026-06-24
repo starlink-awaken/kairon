@@ -1,10 +1,10 @@
 version: '1.0'
 status: active
-updated_at: '2026-06-20T12:33:10Z'
+updated_at: '2026-06-23T07:30:00Z'
 owner: governance
 invocation: MYPYPATH=src mypy src --namespace-packages --explicit-package-bases --exclude tests/ (per-package)
 policy: regression-only
-note: 'kairon mypy strict 存量 baseline. 真实调法 (MYPATH=src) 暴露 1245 errors / 9 包有错 / 7 包干净.
+note: '[2026-06-23 已付清 ✅] total_errors=0, 16/16 包全绿 (make typecheck-report 真相验证 MYPYPATH=src). 历史 (已解决): 真实调法曾暴露 1245 errors / 9 包有错 / 7 包干净.
 
   旧 `mypy src` 无 MYPYPATH 对多数包给假绿 (mypy 解析不出跨包 import 当 Any 静默通过),
 

@@ -3,6 +3,8 @@
 命令实现已拆分到 commands/ 目录。
 """
 
+import sys
+
 import click
 from rich.console import Console
 
@@ -27,4 +29,5 @@ from codeanalyze.commands import register_commands  # type: ignore[import-not-fo
 register_commands(cli)
 
 if __name__ == "__main__":
+    print("⚠️ CodeAnalyze 独立 CLI 已弃用，请使用 cockpit 替代", file=sys.stderr)
     cli()

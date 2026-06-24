@@ -308,6 +308,7 @@ MCP 层 (对话环境):
 
 
 def main() -> None:
+    print("⚠️ Kronos 独立 CLI 已弃用，请使用 cockpit 替代", file=sys.stderr)
     cli()
 
 

@@ -176,12 +176,20 @@ class TestExtract:
         result = extract("   \n  \t  ")
         assert result["_fallback"] == "default"
 
-    def test_nonempty_text_returns_result(self):
-        """Non-empty text returns a result regardless of LLM availability."""
+    def test_nonempty_text_returns_result(self, monkeypatch):
+        """Non-empty text returns a result (rules path, LLM mocked off).
+
+        单元测试不该依赖 Ollama 外部服务 (曾 flaky: Ollama 在跑时走 llm 路径,
+        LLM 生成 title 不确定, 硬断言 == '规则提取测试' 随机 fail). Mock 掉
+        extract_with_ollama 强制走 rules 路径, 确定性 + 稳定.
+        """
         text = "# 规则提取测试\n\n- 要点1\n\n本研究介绍了一个新方法。"
+        monkeypatch.setattr(
+            "kronos.extractor.extract_with_ollama",
+            lambda *_args, **_kwargs: {"error": "mocked off (unit test)"},
+        )
         result = extract(text)
-        # May be "llm" (Ollama running), "rules" (Ollama not running), or "default"
-        assert result["_fallback"] in ("llm", "rules", "default")
+        assert result["_fallback"] == "rules"
         assert result["title"]
         assert result["title"] == "规则提取测试"
 

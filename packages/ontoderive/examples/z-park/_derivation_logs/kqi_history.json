@@ -1,7 +1,7 @@
 {
   "entries": [
     {
-      "timestamp": "2026-06-21T13:34:26.678450",
+      "timestamp": "2026-06-23T16:15:34.956509",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -14,7 +14,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:34:26.836454",
+      "timestamp": "2026-06-23T16:15:35.048854",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -27,7 +27,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:34:26.947238",
+      "timestamp": "2026-06-23T16:15:35.164242",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -40,7 +40,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:34:27.128935",
+      "timestamp": "2026-06-23T16:15:35.360784",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -53,7 +53,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:34:27.325031",
+      "timestamp": "2026-06-23T16:18:01.087319",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -66,7 +66,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:34:27.533271",
+      "timestamp": "2026-06-23T16:18:01.334299",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -79,7 +79,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:34:28.600457",
+      "timestamp": "2026-06-23T16:18:01.409704",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -92,7 +92,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:34:28.738585",
+      "timestamp": "2026-06-23T16:18:01.552184",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -105,7 +105,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:34:28.929190",
+      "timestamp": "2026-06-23T16:18:02.671605",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -118,7 +118,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:34:29.283020",
+      "timestamp": "2026-06-23T16:18:04.048336",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -131,7 +131,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:19.717345",
+      "timestamp": "2026-06-23T16:18:04.132121",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -144,7 +144,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:19.829391",
+      "timestamp": "2026-06-23T16:18:04.218685",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -157,7 +157,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:20.008859",
+      "timestamp": "2026-06-23T16:18:04.304835",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -170,7 +170,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:20.119198",
+      "timestamp": "2026-06-23T16:18:04.412042",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -183,7 +183,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:20.297416",
+      "timestamp": "2026-06-23T16:18:04.591085",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -196,7 +196,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:20.406103",
+      "timestamp": "2026-06-23T16:18:04.728363",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -209,7 +209,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:21.428315",
+      "timestamp": "2026-06-23T16:18:05.300158",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -222,7 +222,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:23.040156",
+      "timestamp": "2026-06-23T16:18:05.390151",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -235,7 +235,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:23.133903",
+      "timestamp": "2026-06-23T16:18:05.510464",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -248,7 +248,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:23.230050",
+      "timestamp": "2026-06-23T16:18:05.717334",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -261,7 +261,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:23.314883",
+      "timestamp": "2026-06-23T16:22:04.617812",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -274,7 +274,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:23.465480",
+      "timestamp": "2026-06-23T16:22:04.842928",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -287,7 +287,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:23.593065",
+      "timestamp": "2026-06-23T16:22:04.912030",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -300,7 +300,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:23.735817",
+      "timestamp": "2026-06-23T16:22:05.033614",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -313,7 +313,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:24.352544",
+      "timestamp": "2026-06-23T16:22:05.912159",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -326,7 +326,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:24.440238",
+      "timestamp": "2026-06-23T16:22:07.128363",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -339,7 +339,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:24.569808",
+      "timestamp": "2026-06-23T16:22:07.211632",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -352,7 +352,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T13:42:24.847307",
+      "timestamp": "2026-06-23T16:22:07.290485",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -365,7 +365,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:00.479051",
+      "timestamp": "2026-06-23T16:22:07.358822",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -378,7 +378,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:00.711171",
+      "timestamp": "2026-06-23T16:22:07.442199",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -391,7 +391,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:00.813391",
+      "timestamp": "2026-06-23T16:22:07.600856",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -404,7 +404,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:00.875098",
+      "timestamp": "2026-06-23T16:22:07.722868",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -417,7 +417,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:00.967789",
+      "timestamp": "2026-06-23T16:22:08.231049",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -430,7 +430,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:01.031419",
+      "timestamp": "2026-06-23T16:22:08.315114",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -443,7 +443,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:02.060778",
+      "timestamp": "2026-06-23T16:22:08.423195",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -456,7 +456,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:03.238634",
+      "timestamp": "2026-06-23T16:22:08.614298",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -469,7 +469,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:03.330356",
+      "timestamp": "2026-06-23T16:26:37.569045",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -482,7 +482,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:03.410355",
+      "timestamp": "2026-06-23T16:26:37.833654",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -495,7 +495,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:03.475029",
+      "timestamp": "2026-06-23T16:26:37.904962",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -508,7 +508,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:03.590069",
+      "timestamp": "2026-06-23T16:26:38.023813",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -521,7 +521,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:03.692889",
+      "timestamp": "2026-06-23T16:26:38.914222",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -534,7 +534,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:03.807371",
+      "timestamp": "2026-06-23T16:26:40.142775",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -547,7 +547,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:04.263381",
+      "timestamp": "2026-06-23T16:26:40.219803",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -560,7 +560,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:04.339728",
+      "timestamp": "2026-06-23T16:26:40.300881",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -573,7 +573,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:04.437838",
+      "timestamp": "2026-06-23T16:26:40.373505",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -586,7 +586,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:40:04.618902",
+      "timestamp": "2026-06-23T16:26:40.461141",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -599,7 +599,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:45.947939",
+      "timestamp": "2026-06-23T16:26:40.623779",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -612,7 +612,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:46.023906",
+      "timestamp": "2026-06-23T16:26:40.747684",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -625,7 +625,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:46.127368",
+      "timestamp": "2026-06-23T16:26:41.276232",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -638,7 +638,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:46.190043",
+      "timestamp": "2026-06-23T16:26:41.361059",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -651,7 +651,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:46.283577",
+      "timestamp": "2026-06-23T16:26:41.470108",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -664,7 +664,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:46.348053",
+      "timestamp": "2026-06-23T16:26:41.664908",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -677,7 +677,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:47.254820",
+      "timestamp": "2026-06-23T16:31:06.344380",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -690,7 +690,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:48.435163",
+      "timestamp": "2026-06-23T16:31:06.564257",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -703,7 +703,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:48.531777",
+      "timestamp": "2026-06-23T16:31:06.644810",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -716,7 +716,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:48.610511",
+      "timestamp": "2026-06-23T16:31:06.762414",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -729,7 +729,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:48.675331",
+      "timestamp": "2026-06-23T16:31:08.032059",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -742,7 +742,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:48.792214",
+      "timestamp": "2026-06-23T16:31:09.473548",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -755,7 +755,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:48.898055",
+      "timestamp": "2026-06-23T16:31:09.554719",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -768,7 +768,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:49.011052",
+      "timestamp": "2026-06-23T16:31:09.643552",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -781,7 +781,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:49.459328",
+      "timestamp": "2026-06-23T16:31:09.721485",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -794,7 +794,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:49.533862",
+      "timestamp": "2026-06-23T16:31:09.815231",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -807,7 +807,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:49.631424",
+      "timestamp": "2026-06-23T16:31:09.978722",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -820,7 +820,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T16:42:49.803326",
+      "timestamp": "2026-06-23T16:31:10.106319",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -833,7 +833,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:24.462037",
+      "timestamp": "2026-06-23T16:31:10.718422",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -846,7 +846,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:24.696269",
+      "timestamp": "2026-06-23T16:31:10.806037",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -859,7 +859,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:24.797844",
+      "timestamp": "2026-06-23T16:31:10.917895",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -872,7 +872,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:24.859385",
+      "timestamp": "2026-06-23T16:31:11.115749",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -885,7 +885,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:24.952231",
+      "timestamp": "2026-06-23T16:35:45.033073",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -898,7 +898,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:25.015474",
+      "timestamp": "2026-06-23T16:35:45.265380",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -911,7 +911,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:26.058415",
+      "timestamp": "2026-06-23T16:35:45.349837",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -924,7 +924,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:27.231985",
+      "timestamp": "2026-06-23T16:35:45.478708",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -937,7 +937,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:27.326414",
+      "timestamp": "2026-06-23T16:35:46.467535",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -950,7 +950,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:27.404804",
+      "timestamp": "2026-06-23T16:35:47.739451",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -963,7 +963,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:27.467648",
+      "timestamp": "2026-06-23T16:35:47.830126",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -976,7 +976,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:27.582096",
+      "timestamp": "2026-06-23T16:35:47.916630",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -989,7 +989,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:27.685399",
+      "timestamp": "2026-06-23T16:35:47.998663",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1002,7 +1002,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:27.798501",
+      "timestamp": "2026-06-23T16:35:48.095595",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1015,7 +1015,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:28.249347",
+      "timestamp": "2026-06-23T16:35:48.268901",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1028,7 +1028,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:28.324988",
+      "timestamp": "2026-06-23T16:35:48.399171",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1041,7 +1041,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:28.422396",
+      "timestamp": "2026-06-23T16:35:48.981326",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1054,7 +1054,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:27:28.593392",
+      "timestamp": "2026-06-23T16:35:49.071019",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1067,7 +1067,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:03.619486",
+      "timestamp": "2026-06-23T16:35:49.191096",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1080,7 +1080,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:03.697794",
+      "timestamp": "2026-06-23T16:35:49.386266",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1093,7 +1093,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:03.801506",
+      "timestamp": "2026-06-23T16:40:36.837706",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1106,7 +1106,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:03.898696",
+      "timestamp": "2026-06-23T16:40:37.102997",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1119,7 +1119,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:03.960400",
+      "timestamp": "2026-06-23T16:40:37.178801",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1132,7 +1132,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:04.027108",
+      "timestamp": "2026-06-23T16:40:37.304216",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1145,7 +1145,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:05.066959",
+      "timestamp": "2026-06-23T16:40:38.266838",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1158,7 +1158,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:06.317374",
+      "timestamp": "2026-06-23T16:40:39.550527",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1171,7 +1171,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:06.413607",
+      "timestamp": "2026-06-23T16:40:39.630255",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1184,7 +1184,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:06.488853",
+      "timestamp": "2026-06-23T16:40:39.713341",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1197,7 +1197,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:06.595050",
+      "timestamp": "2026-06-23T16:40:39.785486",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1210,7 +1210,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:06.673491",
+      "timestamp": "2026-06-23T16:40:39.876893",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1223,7 +1223,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:06.778842",
+      "timestamp": "2026-06-23T16:40:40.037041",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1236,7 +1236,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:06.894516",
+      "timestamp": "2026-06-23T16:40:40.174656",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1249,7 +1249,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:07.346117",
+      "timestamp": "2026-06-23T16:40:40.728833",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1262,7 +1262,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:07.421707",
+      "timestamp": "2026-06-23T16:40:40.815010",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1275,7 +1275,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:07.519489",
+      "timestamp": "2026-06-23T16:40:40.932087",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,
@@ -1288,7 +1288,7 @@
       "max_chain_depth": 1
     },
     {
-      "timestamp": "2026-06-21T18:30:07.690743",
+      "timestamp": "2026-06-23T16:40:41.138388",
       "kqi": 0.4391,
       "entropy": 5.9249,
       "mean_confidence": 0.9079,

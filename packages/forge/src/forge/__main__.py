@@ -228,5 +228,6 @@ __all__ = ["serve", "_call_action", "_package_info", "_DISPATCH", "do_default"]
 
 if __name__ == "__main__":
     import sys
+    print("⚠️ Forge 独立 CLI 已弃用，请使用 cockpit 替代", file=sys.stderr)
     sys.exit(serve())
 

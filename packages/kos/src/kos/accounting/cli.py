@@ -94,6 +94,7 @@ def cmd_services(_args: argparse.Namespace) -> int:
 
 
 def main() -> int:
+    print("⚠️ KOS Accounting 独立 CLI 已弃用，请使用 cockpit 替代", file=sys.stderr)
     parser = argparse.ArgumentParser(description="KOS 资源消耗追踪")
     sub = parser.add_subparsers(dest="command")
 

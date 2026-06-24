@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"echo \\\"=== get_relations_for_entity + search_entities 签名 ===\\\"; for m in get_relations_for_entity search_entities; do ln=$(grep -n \\\"def $m\\\" \\\"/Users/xiamingxing/Workspace/projects/kairon...",
-  "error": "Exit code 1\n=== get_relations_for_entity + search_entities 签名 ===\n--- get_relations_for_entity (line ) ---\n--- search_entities (line ) ---\n=== Relation dataclass ===\nsed: 1: \",15p\n\": invalid command code ,",
-  "timestamp": "2026-06-20T23:40:38.957Z",
-  "retry_count": 2
-}

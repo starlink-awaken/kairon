@@ -511,6 +511,7 @@ def _run_check() -> int:
 
 
 def main() -> Any:
+    print("⚠️ Minerva 独立 CLI 已弃用，请使用 cockpit 替代", file=sys.stderr)
     parser = build_parser()
     args = parser.parse_args()
 

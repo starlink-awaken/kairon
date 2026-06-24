@@ -25,7 +25,7 @@
   },
   "build": {
     "buildCommand": null,
-    "testCommand": "pytest",
+    "testCommand": "cd \"/Users/xiamingxing/Workspace/projects/kairon/packages/eidos\" && uv run pytest tests/test_query_cache.py -q 2>&1 | tail -2",
     "lintCommand": "ruff check",
     "devCommand": null,
     "scripts": {}
@@ -95,6 +95,18 @@
       "path": "src/eidos/graph_store.py",
       "accessCount": 1,
       "lastAccessed": 1781998899724,
+      "type": "file"
+    },
+    {
+      "path": "tests/test_graph_store.py",
+      "accessCount": 1,
+      "lastAccessed": 1782114047024,
+      "type": "file"
+    },
+    {
+      "path": "tests/test_query_cache.py",
+      "accessCount": 1,
+      "lastAccessed": 1782114448258,
       "type": "file"
     }
   ],
