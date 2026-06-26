@@ -57,5 +57,5 @@ coverage.xml
 .claude/
 
 # ── Local OMC runtime state ──
-.omc/sessions/
-.omc/state/checkpoints/
+.omc/
+
