@@ -100,7 +100,7 @@ class InsightEngine:
         return self.enhancer and self.enhancer.available
 
     def _call(self, prompt: Any, system: Any = "", temperature: Any = 0.3) -> Any:
-        if not self.available:
+        if not self.available or self.enhancer is None:
             return None
         return self.enhancer._call(prompt, system, temperature)
 

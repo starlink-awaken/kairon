@@ -10,10 +10,12 @@ from typing import Any
 
 try:
     from .config import Config
+    from .derive import OntoDerive as _OD  # noqa: N814
     from .protocols import AnalysisResult, PipelineStage
 except ImportError:
     from ontoderive.foundation.config import Config  # noqa
     from ontoderive.foundation.protocols import PipelineStage, AnalysisResult
+    from ontoderive.core.derive import OntoDerive as _OD  # noqa: N814  # type: ignore[no-redef]
 
 
 class ToolForgeStage(PipelineStage):
@@ -41,10 +43,6 @@ class LoadStage(PipelineStage):
     name = "load"
 
     def run(self, ctx: Any) -> dict[str, Any]:
-        try:
-            from .derive import OntoDerive as _OD  # noqa: N814
-        except ImportError:
-            from ontoderive.core.derive import OntoDerive as _OD  # noqa: N814
         od = _OD(ctx["project_root"])
         summary = od.derive()
         return {"derive_summary": summary}
@@ -58,10 +56,6 @@ class DeriveStage(PipelineStage):
         cached = ctx.get("_derive_result")
         if cached:
             return cached
-        try:
-            from .derive import OntoDerive as _OD  # noqa: N814
-        except ImportError:
-            from ontoderive.core.derive import OntoDerive as _OD  # noqa: N814
         od = _OD(ctx["project_root"])
         result = od.derive()
         ctx["_derive_result"] = result
@@ -72,10 +66,6 @@ class CheckStage(PipelineStage):
     name = "check"
 
     def run(self, ctx: Any) -> Any:
-        try:
-            from .derive import OntoDerive as _OD  # noqa: N814
-        except ImportError:
-            from ontoderive.core.derive import OntoDerive as _OD  # noqa: N814
         od = _OD(ctx["project_root"])
         return od.check()
 
@@ -84,10 +74,6 @@ class ResolveStage(PipelineStage):
     name = "resolve"
 
     def run(self, ctx: Any) -> dict[str, Any]:
-        try:
-            from .derive import OntoDerive as _OD  # noqa: N814
-        except ImportError:
-            from ontoderive.core.derive import OntoDerive as _OD  # noqa: N814
         od = _OD(ctx["project_root"])
         return {"fixed": od.resolve()}
 
@@ -96,10 +82,6 @@ class ReportStage(PipelineStage):
     name = "report"
 
     def run(self, ctx: Any) -> dict[str, Any]:
-        try:
-            from .derive import OntoDerive as _OD  # noqa: N814
-        except ImportError:
-            from ontoderive.core.derive import OntoDerive as _OD  # noqa: N814
         od = _OD(ctx["project_root"])
         return {"report": od.generate_report()}
 

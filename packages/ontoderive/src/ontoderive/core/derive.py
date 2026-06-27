@@ -289,7 +289,7 @@ class OntoDerive(DeriveInterface):
         try:
             from .check import run_check
         except ImportError:
-            from ontoderive.core.check import run_check
+            from ontoderive.core.check import run_check  # type: ignore[no-redef]
         return run_check(
             self.root, self.facts_dir, self.entities_dir, self.inferences_dir, self.scheme_dir, self.log_dir
         )[0]
