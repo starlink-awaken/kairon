@@ -14,7 +14,7 @@ try:
     from .protocols import AnalysisResult, PipelineStage
 except ImportError:  # type: ignore[no-redef]
     from ontoderive.foundation.config import Config  # noqa
-    from ontoderive.foundation.protocols import PipelineStage, AnalysisResult  # noqa
+    from ontoderive.foundation.protocols import PipelineStage, AnalysisResult
     from ontoderive.core.derive import OntoDerive as _OD  # noqa: N814
 
 
