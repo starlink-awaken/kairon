@@ -4,6 +4,7 @@
 # status: active
 # ---
 """解析器单元测试。"""
+
 from __future__ import annotations
 
 import importlib
@@ -14,6 +15,7 @@ from pathlib import Path
 import pytest
 
 # ── 微信解析测试 ──
+
 
 class TestWechatParser:
     def test_parse_valid_line(self, wechat_parser):
@@ -52,8 +54,13 @@ class TestWechatParser:
     def test_to_jsonld_structure(self, wechat_parser):
         """测试JSON-LD输出结构。"""
         messages = [
-            {"timestamp": "2026-04-20T14:30:22", "sender": "老王",
-             "content": "学习Rust", "urls": [], "topics": ["Rust"]}
+            {
+                "timestamp": "2026-04-20T14:30:22",
+                "sender": "老王",
+                "content": "学习Rust",
+                "urls": [],
+                "topics": ["Rust"],
+            }
         ]
         jsonld = wechat_parser.to_jsonld(messages)
         assert jsonld["source"] == "wechat_export"
@@ -78,6 +85,7 @@ class TestWechatParser:
 
 
 # ── 笔记解析测试 ──
+
 
 class TestNotesParser:
     def test_parse_topics(self, notes_parser):
@@ -111,11 +119,11 @@ class TestNotesParser:
 
 # ── 书签解析测试 ──
 
+
 class TestBookmarksParser:
     def test_parse_bookmarks(self, bookmarks_parser):
         bookmarks = [
-            {"title": "Test", "url": "https://test.com",
-             "tags": ["test"], "folder": "Test", "date_added": "2026-01-01"}
+            {"title": "Test", "url": "https://test.com", "tags": ["test"], "folder": "Test", "date_added": "2026-01-01"}
         ]
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as f:
             json.dump(bookmarks, f)
@@ -143,6 +151,7 @@ class TestBookmarksParser:
 
 
 # ── Fixtures ──
+
 
 @pytest.fixture
 def wechat_parser():

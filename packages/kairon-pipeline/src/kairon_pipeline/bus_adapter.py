@@ -11,6 +11,7 @@ Adapters here are intentionally thin: the kairon-pipeline event hook
 contract is "call this function with a dict payload"; we wrap each call
 in a BusEnvelope and publish via agora.bus.
 """
+
 from __future__ import annotations
 
 import logging
@@ -66,9 +67,7 @@ def emit_source_ingested(source_name: str, record_count: int, **extra: Any) -> s
     )
 
 
-def emit_extraction_completed(
-    pipeline_id: str, extractor: str, duration_ms: int, **extra: Any
-) -> str | None:
+def emit_extraction_completed(pipeline_id: str, extractor: str, duration_ms: int, **extra: Any) -> str | None:
     return emit_event(
         event_type="kairon:extraction:completed",
         payload={"pipeline_id": pipeline_id, "extractor": extractor, "duration_ms": duration_ms, **extra},

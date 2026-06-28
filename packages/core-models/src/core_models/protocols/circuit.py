@@ -36,6 +36,7 @@ class FailureAction(StrEnum):
 @dataclass
 class CircuitStep:
     """回路步骤"""
+
     id: str
     neuron: str = ""
     action: str = ""
@@ -51,6 +52,7 @@ class CircuitStep:
 @dataclass
 class CircuitDefinition:
     """回路定义"""
+
     name: str
     version: str = "1.0"
     description: str = ""
@@ -63,6 +65,7 @@ class CircuitDefinition:
 @dataclass
 class CircuitRun:
     """回路执行实例"""
+
     run_id: str
     circuit_name: str
     status: str = "pending"  # pending|running|completed|failed

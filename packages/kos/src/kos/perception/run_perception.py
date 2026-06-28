@@ -7,6 +7,7 @@
 
 Migrated from SharedBrain-code/workflows/perception/run_perception.py to KOS kairon.
 """
+
 from __future__ import annotations
 
 import json
@@ -41,12 +42,14 @@ def run_perceive(goal: str, auto: bool = True) -> bool:
     print("  >> [fact injection]")
     facts = []
     for s in scraped:
-        facts.append({
-            "sub": s.get("title", goal)[:100],
-            "pred": "external_reference",
-            "obj": s.get("url", ""),
-            "metadata": json.dumps({"source": "web_scrape", "snippet": s.get("text_content", "")[:200]}),
-        })
+        facts.append(
+            {
+                "sub": s.get("title", goal)[:100],
+                "pred": "external_reference",
+                "obj": s.get("url", ""),
+                "metadata": json.dumps({"source": "web_scrape", "snippet": s.get("text_content", "")[:200]}),
+            }
+        )
     count = inject_facts(facts)
     print(f"    {count} facts injected into FactGraph")
     return count > 0

@@ -41,6 +41,7 @@ def test_sort_keys(tmp_path):
 def _concurrent_worker(idx_and_path):
     idx, path_str = idx_and_path
     from kairon_utils import AppendOnlyLog, fcntl_lock
+
     p = Path(path_str)
     for i in range(50):
         log = AppendOnlyLog(p, lock=fcntl_lock(p.with_suffix(".lock")))
@@ -50,10 +51,7 @@ def _concurrent_worker(idx_and_path):
 def test_fcntl_lock_concurrent(tmp_path):
     """P0: 跨进程并发写 0 丢行. 2 个进程并发 50 次 append."""
     p = tmp_path / "concurrent.jsonl"
-    procs = [
-        multiprocessing.Process(target=_concurrent_worker, args=((i, str(p)),))
-        for i in range(2)
-    ]
+    procs = [multiprocessing.Process(target=_concurrent_worker, args=((i, str(p)),)) for i in range(2)]
     for pr in procs:
         pr.start()
     for pr in procs:
@@ -89,11 +87,9 @@ async def test_async_versioning_migration(tmp_path):
     # E3 P0 验证: 50 次并发 record_version 不阻塞 event loop
     # event loop 在 await 期间应能处理其他 task (快速返回)
     import time
+
     t0 = time.monotonic()
-    await asyncio.gather(*[
-        tracker.record_version(f"src{i}", f"content-{i}", {"i": i})
-        for i in range(50)
-    ])
+    await asyncio.gather(*[tracker.record_version(f"src{i}", f"content-{i}", {"i": i}) for i in range(50)])
     elapsed = time.monotonic() - t0
 
     # 50 个 record 串行做 fcntl 大约需要 50ms 量级; 串行会阻塞但 total 短

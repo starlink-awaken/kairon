@@ -2,9 +2,6 @@
 测试 foundation/protocols.py - 接口协议抽象类
 """
 
-
-
-
 import pytest
 from ontoderive.foundation.protocols import (  # type: ignore[import-not-found]
     AnalysisResult,

@@ -5,6 +5,7 @@
   - 验证 compute_grade / build_watchlist / build_recommendations / to_markdown
   - 用 tmp_path 模拟工作区布局, 避免污染真实仓库
 """
+
 from __future__ import annotations
 
 import sys
@@ -51,19 +52,15 @@ def fake_workspace(tmp_path: Path) -> Path:
     debt = ws / ".omo" / "debt" / "items"
     debt.mkdir(parents=True)
     (debt / "GOOD.yaml").write_text(
-        "id: GOOD\n"
-        "lifecycle_state: resolved\n"
-        "resolution_evidence: '>= 20 chars of valid evidence here, no problem.'\n",
+        "id: GOOD\nlifecycle_state: resolved\nresolution_evidence: '>= 20 chars of valid evidence here, no problem.'\n",
         encoding="utf-8",
     )
     (debt / "BAD.yaml").write_text(
-        "id: BAD\n"
-        "lifecycle_state: resolved\n",
+        "id: BAD\nlifecycle_state: resolved\n",
         encoding="utf-8",
     )
     (debt / "OPEN.yaml").write_text(
-        "id: OPEN\n"
-        "lifecycle_state: open\n",
+        "id: OPEN\nlifecycle_state: open\n",
         encoding="utf-8",
     )
 
@@ -71,9 +68,7 @@ def fake_workspace(tmp_path: Path) -> Path:
     dec = ws / ".omo" / "_knowledge" / "decisions"
     dec.mkdir(parents=True)
     (dec / "INDEX.md").write_text(
-        "# ADR Index\n\n"
-        "- 0001-test-adr.md\n"
-        "- 0099-ghost-adr.md\n",  # 0099 不存在 → 死链
+        "# ADR Index\n\n- 0001-test-adr.md\n- 0099-ghost-adr.md\n",  # 0099 不存在 → 死链
         encoding="utf-8",
     )
     (dec / "0001-test-adr.md").write_text("# 0001\n", encoding="utf-8")
@@ -90,17 +85,11 @@ def fake_workspace(tmp_path: Path) -> Path:
         encoding="utf-8",
     )
     (tasks / "COMPLETE_BAD.yaml").write_text(
-        "id: COMPLETE_BAD\n"
-        "status: completed\n"
-        "deliverables:\n"
-        "  - .omo/_delivery/this-file-does-not-exist.md\n",
+        "id: COMPLETE_BAD\nstatus: completed\ndeliverables:\n  - .omo/_delivery/this-file-does-not-exist.md\n",
         encoding="utf-8",
     )
     (tasks / "IN_PROGRESS.yaml").write_text(
-        "id: IN_PROGRESS\n"
-        "status: in_progress\n"
-        "deliverables:\n"
-        "  - nonexistent-but-ok-because-not-completed.md\n",
+        "id: IN_PROGRESS\nstatus: in_progress\ndeliverables:\n  - nonexistent-but-ok-because-not-completed.md\n",
         encoding="utf-8",
     )
     return ws
@@ -179,9 +168,7 @@ class TestCheckAdrLinkIntegrity:
 class TestCheckTaskYamlConsistency:
     """任务 YAML 一致性."""
 
-    def test_check_task_yaml_consistency_missing_deliverable(
-        self, fake_workspace: Path
-    ) -> None:
+    def test_check_task_yaml_consistency_missing_deliverable(self, fake_workspace: Path) -> None:
         """status=completed 但 deliverable 缺失 → warn."""
         ga.OMO_ROOT = fake_workspace / ".omo"
         ga.WORKSPACE_ROOT = fake_workspace
@@ -189,9 +176,7 @@ class TestCheckTaskYamlConsistency:
         assert result.severity == "warn"
         assert any("COMPLETE_BAD" in d for d in result.details)
 
-    def test_check_task_yaml_consistency_ignores_in_progress(
-        self, fake_workspace: Path
-    ) -> None:
+    def test_check_task_yaml_consistency_ignores_in_progress(self, fake_workspace: Path) -> None:
         """status=in_progress 的任务即使 deliverable 缺失也不报错."""
         ga.OMO_ROOT = fake_workspace / ".omo"
         ga.WORKSPACE_ROOT = fake_workspace
@@ -243,9 +228,7 @@ class TestBuildRecommendations:
             ga.CheckResult("lint", "lint", "ok", 100, "ok"),
             ga.CheckResult("tests", "tests", "warn", 80, "1 missing", ["pkg_b"]),
             ga.CheckResult("debt", "debt", "warn", 95, "1 missing", ["BAD"]),
-            ga.CheckResult(
-                "knowledge", "knowledge", "fail", 50, "broken", ["X"]
-            ),
+            ga.CheckResult("knowledge", "knowledge", "fail", 50, "broken", ["X"]),
             ga.CheckResult("tasks", "tasks", "warn", 90, "1 missing", ["Y"]),
         ]
         recs = ga.build_recommendations(checks)
@@ -329,9 +312,7 @@ class TestRunAudit:
         # 用 monkeypatch 子进程调用, 避免真实跑 ruff
         import unittest.mock as mock
 
-        with mock.patch.object(
-            ga, "check_lint", return_value=ga.CheckResult("lint", "lint", "ok", 100, "ok")
-        ):
+        with mock.patch.object(ga, "check_lint", return_value=ga.CheckResult("lint", "lint", "ok", 100, "ok")):
             report = ga.run_audit()
         assert isinstance(report.total_score, float)
         assert 0 <= report.total_score <= 100

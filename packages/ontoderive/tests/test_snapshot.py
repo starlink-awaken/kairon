@@ -3,7 +3,6 @@ from pathlib import Path
 """E2E快照测试 — 确保重构不改变输出质量"""
 
 
-
 ZPARK = str(Path(__file__).parent.parent / "examples" / "z-park")
 DEMO = str(Path(__file__).parent.parent / "examples" / "demo-product")
 

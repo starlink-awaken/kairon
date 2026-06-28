@@ -1,4 +1,5 @@
 """Eidos test fixtures."""
+
 import pytest
 
 

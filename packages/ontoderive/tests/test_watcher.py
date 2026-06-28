@@ -1,7 +1,5 @@
 """文件监听器测试"""
 
-
-
 from ontoderive.watcher import FileWatcher
 
 

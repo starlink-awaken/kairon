@@ -1,4 +1,5 @@
 """conftest — kairon root 测试的路径配置。"""
+
 import sys
 from pathlib import Path
 

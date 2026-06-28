@@ -1,4 +1,5 @@
 """P57-W0 forge do_default — 真业务 (调 forge.cmd_* CLI command)."""
+
 from __future__ import annotations
 
 from typing import Any

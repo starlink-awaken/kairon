@@ -5,7 +5,6 @@
 __all__ = []
 
 
-
 from ontoderive.theories.ontolang import OntoLangParser
 
 

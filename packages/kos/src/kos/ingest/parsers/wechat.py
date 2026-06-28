@@ -4,6 +4,7 @@
 # status: active
 # ---
 """微信聊天导出解析器 — 将微信导出txt解析为JSON-LD格式。"""
+
 from __future__ import annotations
 
 import re
@@ -13,9 +14,20 @@ from pathlib import Path
 from typing import Any
 
 TECH_KEYWORDS = [
-    "Rust", "Go", "Python", "TypeScript", "JavaScript",
-    "Tokio", "async", "pandas", "numpy", "PyTorch",
-    "分布式", "Raft", "Paxos", "WebAssembly",
+    "Rust",
+    "Go",
+    "Python",
+    "TypeScript",
+    "JavaScript",
+    "Tokio",
+    "async",
+    "pandas",
+    "numpy",
+    "PyTorch",
+    "分布式",
+    "Raft",
+    "Paxos",
+    "WebAssembly",
 ]
 
 URL_PATTERN = re.compile(r"https?://[^\s]+")
@@ -27,9 +39,7 @@ def parse_line(line: str) -> dict[str, Any] | None:
     格式: YYYY-MM-DD HH:MM:SS 发送者: 内容
     返回结构化字典或 None（如果行格式不匹配）。
     """
-    pattern = re.compile(
-        r"^(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})\s+([^:]+?):\s*(.+)$"
-    )
+    pattern = re.compile(r"^(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})\s+([^:]+?):\s*(.+)$")
     match = pattern.match(line.strip())
     if not match:
         return None
@@ -75,20 +85,22 @@ def to_jsonld(messages: list[dict[str, Any]]) -> dict[str, Any]:
     facts: list[dict[str, Any]] = []
     for msg in messages:
         fact_id = str(uuid.uuid4())
-        facts.append({
-            "id": fact_id,
-            "@type": "ChatMessage",
-            "topic": msg.get("sender", "unknown"),
-            "pred": "said_about",
-            "content": msg["content"],
-            "metadata": {
-                "source": "wechat",
-                "timestamp": msg["timestamp"],
-                "sender": msg["sender"],
-                "urls": msg["urls"],
-                "topics": msg["topics"],
-            },
-        })
+        facts.append(
+            {
+                "id": fact_id,
+                "@type": "ChatMessage",
+                "topic": msg.get("sender", "unknown"),
+                "pred": "said_about",
+                "content": msg["content"],
+                "metadata": {
+                    "source": "wechat",
+                    "timestamp": msg["timestamp"],
+                    "sender": msg["sender"],
+                    "urls": msg["urls"],
+                    "topics": msg["topics"],
+                },
+            }
+        )
 
     return {
         "@context": "https://sharedbrain.local/kg/personal/v1",

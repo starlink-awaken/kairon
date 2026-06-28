@@ -7,6 +7,7 @@
 
 Migrated from SharedBrain-code/workflows/perception/fact_injector.py to KOS kairon.
 """
+
 from __future__ import annotations
 
 import json

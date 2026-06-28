@@ -36,13 +36,24 @@ class MemThetaAdapter:
     def _emit_omo_event(self, domain: str, payload: dict[str, Any]) -> None:
         """X1/X4 Governance: Emit raw track via OMO Event Bus."""
         import subprocess
+
         try:
-            subprocess.run([
-                "omo", "event", "emit",
-                "--type", f"memory.{domain}",
-                "--source", "memtheta",
-                "--payload", json.dumps(payload, ensure_ascii=False)
-            ], check=True, capture_output=True, text=True)
+            subprocess.run(
+                [
+                    "omo",
+                    "event",
+                    "emit",
+                    "--type",
+                    f"memory.{domain}",
+                    "--source",
+                    "memtheta",
+                    "--payload",
+                    json.dumps(payload, ensure_ascii=False),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
         except Exception as e:
             logger.error(f"[MemTheta] X1 Governance failure - could not emit OMO event: {e}")
 

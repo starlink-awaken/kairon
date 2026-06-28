@@ -2,9 +2,6 @@
 测试 foundation/semantic.py - SemanticMatcher (TF-IDF 语义匹配)
 """
 
-
-
-
 import pytest
 from ontoderive.foundation.semantic import SemanticMatcher  # type: ignore[import-not-found]
 

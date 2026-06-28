@@ -41,10 +41,7 @@ def test_parse_draft_structure_complete() -> None:
 
 
 def test_parse_draft_structure_missing_references() -> None:
-    md = (
-        "## 问题摘要\nx\n"
-        "## 政策依据\n依据 [1].\n"
-    )
+    md = "## 问题摘要\nx\n## 政策依据\n依据 [1].\n"
     s = ev.parse_draft_structure(md)
     assert s.has_problem_section is True
     assert s.has_basis_section is True
@@ -56,22 +53,14 @@ def test_parse_draft_structure_missing_references() -> None:
 
 
 def test_parse_draft_structure_counts_citations() -> None:
-    md = (
-        "## 问题背景\n引用 [1] [2] [3].\n"
-        "## 政策依据\n[1] 与 [3].\n"
-        "## 参考文献\n(略)\n"
-    )
+    md = "## 问题背景\n引用 [1] [2] [3].\n## 政策依据\n[1] 与 [3].\n## 参考文献\n(略)\n"
     s = ev.parse_draft_structure(md)
     # [1][2][3] 出现, 3 个独立编号
     assert s.citation_count == 3
 
 
 def test_parse_draft_structure_handles_chinese_brackets() -> None:
-    md = (
-        "## 问题摘要\nx\n"
-        "## 政策依据\n依据〔1〕与〔2〕.\n"
-        "## 参考文献\n略\n"
-    )
+    md = "## 问题摘要\nx\n## 政策依据\n依据〔1〕与〔2〕.\n## 参考文献\n略\n"
     s = ev.parse_draft_structure(md)
     assert s.citation_count == 2
 
@@ -177,11 +166,7 @@ def test_draft_structure_warn_lines() -> None:
 
 
 def test_draft_structure_warn_lines_all_ok() -> None:
-    md = (
-        "## 问题摘要\n[1] 描述\n"
-        "## 政策依据\n[1] [2] [3]\n"
-        "## 参考引用\n略\n"
-    )
+    md = "## 问题摘要\n[1] 描述\n## 政策依据\n[1] [2] [3]\n## 参考引用\n略\n"
     s = ev.parse_draft_structure(md)
     assert s.warn_lines() == []
 
@@ -197,9 +182,7 @@ def test_render_eval_report_contains_grade() -> None:
         citation_count=5,
         missing_sections=[],
     )
-    m = ev.RecallMetrics(
-        expected_count=3, hit_count=3, miss_count=0, recall=1.0, missing=[]
-    )
+    m = ev.RecallMetrics(expected_count=3, hit_count=3, miss_count=0, recall=1.0, missing=[])
     out = ev.render_eval_report(
         question="测试",
         expected_ids=["CON-a", "CON-b", "CON-c"],

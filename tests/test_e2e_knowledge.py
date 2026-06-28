@@ -1,4 +1,5 @@
 """Knowledge E2E tests — test kos and ontoderive integration."""
+
 import pytest
 
 
@@ -8,6 +9,7 @@ class TestKosSearch:
     def test_kos_search_function(self):
         """Verify kos.search function is importable and callable."""
         from kos import search
+
         result = search("test")
         assert isinstance(result, list)
 

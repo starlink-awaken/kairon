@@ -57,12 +57,8 @@ class TestChainAgoraToAgentRuntime:
         from agora.core.service_base import Service
 
         registry = ServiceRegistry(storage_path=str(tmp_path / "agora2.json"))
-        registry.register(
-            Service(name="agent-runtime", protocol="mcp", port=8765, tags=["agent-runtime"])
-        )
-        registry.register(
-            Service(name="llm-gateway", protocol="mcp", port=8766, tags=["llm"])
-        )
+        registry.register(Service(name="agent-runtime", protocol="mcp", port=8765, tags=["agent-runtime"]))
+        registry.register(Service(name="llm-gateway", protocol="mcp", port=8766, tags=["llm"]))
 
         services = registry.list_all()
         names = {s.name for s in services}
@@ -97,6 +93,7 @@ class TestChainAgentRuntimeToEngineCore:
         # Import worker_abstraction without triggering engine_core.__init__
         # (must import the module directly to avoid kairon_lib dep chain)
         import importlib
+
         wa = importlib.import_module("engine_core.worker_abstraction")
 
         # Verify the types exist and are structured correctly
@@ -135,6 +132,7 @@ class TestChainAgentRuntimeToEngineCore:
     def test_retry_policy_delay(self):
         """Engine-core RetryPolicy provides backoff compatible with retry loops."""
         import importlib
+
         rp = importlib.import_module("engine_core.retry_policy")
 
         policy = rp.RetryPolicy(max_attempts=3, backoff_base=2.0, max_delay=10.0)
@@ -154,12 +152,8 @@ class TestChainAgentRuntimeToEngineCore:
         from engine_core.capability import Capability, CapabilityCatalog
 
         catalog = CapabilityCatalog()
-        catalog.register(
-            Capability(id="llm:chat", name="Chat via LLM", source="local")
-        )
-        catalog.register(
-            Capability(id="task:execute", name="Execute task", source="local")
-        )
+        catalog.register(Capability(id="llm:chat", name="Chat via LLM", source="local"))
+        catalog.register(Capability(id="task:execute", name="Execute task", source="local"))
 
         cap = catalog.get("llm:chat")
         assert cap is not None
@@ -171,6 +165,7 @@ class TestChainAgentRuntimeToEngineCore:
     def test_worker_metrics_tracking(self):
         """Engine-core WorkerMetrics tracks execution stats."""
         import importlib
+
         wa = importlib.import_module("engine_core.worker_abstraction")
 
         metrics = wa.WorkerMetrics(
@@ -181,6 +176,7 @@ class TestChainAgentRuntimeToEngineCore:
         )
         assert metrics.success_rate == 0.9
         assert metrics.load_factor == 0.0
+
 
 # ═══════════════════════════════════════════════════════════════════
 # Chain 3: Engine-Core → LLM-Gateway
@@ -207,6 +203,7 @@ class TestChainEngineCoreToLlmGateway:
         import importlib
 
         from llm_gateway.provider import LLMRequest, MockLLMProvider
+
         rp = importlib.import_module("engine_core.retry_policy")
 
         provider = MockLLMProvider()
@@ -224,6 +221,7 @@ class TestChainEngineCoreToLlmGateway:
         import importlib
 
         from llm_gateway.provider import LLMRequest, MockLLMProvider
+
         tc = importlib.import_module("engine_core.task_context")
 
         provider = MockLLMProvider()
@@ -239,9 +237,7 @@ class TestChainEngineCoreToLlmGateway:
         from engine_core.capability import Capability, CapabilityCatalog
 
         catalog = CapabilityCatalog()
-        catalog.register(
-            Capability(id="code_gen", name="Code generation", source="local")
-        )
+        catalog.register(Capability(id="code_gen", name="Code generation", source="local"))
 
         card = catalog.to_agent_card()
         assert len(card["capabilities"]) == 1

@@ -5,6 +5,7 @@
 请改用:
     kairon-governance adr-scan [--output PATH] [--days N]
 """
+
 from __future__ import annotations
 
 import sys

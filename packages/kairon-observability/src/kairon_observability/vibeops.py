@@ -8,6 +8,7 @@ class AgoraGatewayLLM(DeepEvalBaseLLM):
     A custom DeepEval LLM that routes all evaluation generation requests
     through the internal Agora LLM Gateway via bos://capability/llm-gateway.
     """
+
     def __init__(self, model_name: str = "gpt-4o-mini") -> None:
         self.model_name = model_name
         self.gateway_url = os.environ.get("AGORA_HTTP_PORT", "http://localhost:8080")

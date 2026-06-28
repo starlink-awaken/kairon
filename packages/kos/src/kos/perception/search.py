@@ -4,6 +4,7 @@
 # status: active
 # ---
 """Web search — multi-provider with graceful degradation (DDG + Wikipedia fallback)."""
+
 from __future__ import annotations
 
 import importlib.util
@@ -21,15 +22,14 @@ def _search_stdlib(query: str, max_results: int = 5) -> list[dict]:
     import urllib.parse
     import urllib.request
 
-    api_url = (
-        "https://en.wikipedia.org/w/api.php?"
-        + urllib.parse.urlencode({
+    api_url = "https://en.wikipedia.org/w/api.php?" + urllib.parse.urlencode(
+        {
             "action": "query",
             "list": "search",
             "srsearch": query,
             "format": "json",
             "srlimit": str(max_results),
-        })
+        }
     )
     try:
         ctx = ssl.create_default_context()
@@ -41,12 +41,14 @@ def _search_stdlib(query: str, max_results: int = 5) -> list[dict]:
         results = []
         for sr in data.get("query", {}).get("search", []):
             title = sr.get("title", "")
-            results.append({
-                "title": title,
-                "url": f"https://en.wikipedia.org/wiki/{urllib.parse.quote(title.replace(' ', '_'))}",
-                "snippet": sr.get("snippet", "")[:300],
-                "source": "wikipedia",
-            })
+            results.append(
+                {
+                    "title": title,
+                    "url": f"https://en.wikipedia.org/wiki/{urllib.parse.quote(title.replace(' ', '_'))}",
+                    "snippet": sr.get("snippet", "")[:300],
+                    "source": "wikipedia",
+                }
+            )
             if len(results) >= max_results:
                 break
         return results
@@ -85,12 +87,14 @@ async def _async_search_ddg(query: str, max_results: int = 5) -> list[dict]:
                     title = re.sub(r"<[^>]+>", "", m.group(2)).strip()
                     snippet = re.sub(r"<[^>]+>", "", m.group(3)).strip()
                     if url_match and title:
-                        results.append({
-                            "title": title,
-                            "url": url_match,
-                            "snippet": snippet[:300],
-                            "source": "web",
-                        })
+                        results.append(
+                            {
+                                "title": title,
+                                "url": url_match,
+                                "snippet": snippet[:300],
+                                "source": "web",
+                            }
+                        )
                     if len(results) >= max_results:
                         break
                 if results:
@@ -109,15 +113,14 @@ async def _async_search_wikipedia(query: str, max_results: int = 5) -> list[dict
 
     import aiohttp
 
-    api_url = (
-        "https://en.wikipedia.org/w/api.php?"
-        + urllib.parse.urlencode({
+    api_url = "https://en.wikipedia.org/w/api.php?" + urllib.parse.urlencode(
+        {
             "action": "query",
             "list": "search",
             "srsearch": query,
             "format": "json",
             "srlimit": str(max_results),
-        })
+        }
     )
     try:
         async with aiohttp.ClientSession() as session:
@@ -131,12 +134,14 @@ async def _async_search_wikipedia(query: str, max_results: int = 5) -> list[dict
                 data = await resp.json()
                 results = []
                 for sr in data.get("query", {}).get("search", []):
-                    results.append({
-                        "title": sr.get("title", ""),
-                        "url": f"https://en.wikipedia.org/wiki/{urllib.parse.quote(sr.get('title', '').replace(' ', '_'))}",
-                        "snippet": sr.get("snippet", "")[:300],
-                        "source": "wikipedia",
-                    })
+                    results.append(
+                        {
+                            "title": sr.get("title", ""),
+                            "url": f"https://en.wikipedia.org/wiki/{urllib.parse.quote(sr.get('title', '').replace(' ', '_'))}",
+                            "snippet": sr.get("snippet", "")[:300],
+                            "source": "wikipedia",
+                        }
+                    )
                 return results
     except (aiohttp.ClientError, OSError, ValueError, RuntimeError, TimeoutError, _json.JSONDecodeError) as exc:
         _log.debug("Wikipedia aiohttp search failed: %s", exc)

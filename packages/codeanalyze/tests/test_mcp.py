@@ -1,5 +1,7 @@
 """Basic tests for MCP server module."""
 
+from pathlib import Path
+
 from codeanalyze.mcp import FORMAT_VERSION, _error, _ok, _resolve
 
 
@@ -24,7 +26,7 @@ class TestHelpers:
 
     def test_resolve_relative(self):
         resolved = _resolve(".")
-        assert resolved.endswith("codeanalyze")
+        assert resolved == str(Path(".").resolve())
 
     def test_resolve_absolute(self):
         resolved = _resolve("/tmp")

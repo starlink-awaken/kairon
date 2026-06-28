@@ -1,4 +1,5 @@
 """Tests for core-models provenance."""
+
 from core_models.provenance import Provenance
 
 

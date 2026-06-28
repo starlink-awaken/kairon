@@ -13,6 +13,7 @@ from typing import Literal, Protocol, runtime_checkable
 @dataclass
 class HealthStatus:
     """健康状态"""
+
     service: str
     status: Literal["healthy", "degraded", "unhealthy"]
     version: str

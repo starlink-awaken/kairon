@@ -33,12 +33,7 @@ def main() -> None:
 @click.option("--email", help="Author email")
 @click.option("--template", default="basic", type=click.Choice(["basic", "advanced", "api"]))
 def init(
-    plugin_id: str,
-    name: str | None,
-    description: str | None,
-    author: str | None,
-    email: str | None,
-    template: str
+    plugin_id: str, name: str | None, description: str | None, author: str | None, email: str | None, template: str
 ) -> None:
     """
     Initialize a new plugin project.
@@ -78,7 +73,7 @@ def init(
     click.echo(f"📝 Template: {template}")
     click.echo("\nNext steps:")
     click.echo(f"  cd {plugin_id}")
-    click.echo("  pip install -e \".[dev]\"")
+    click.echo('  pip install -e ".[dev]"')
     click.echo("  kairon-plugin test")
     click.echo("  kairon-plugin validate")
 
@@ -121,14 +116,7 @@ def _write_manifest(plugin_dir: Path, plugin_id: str, name: str, description: st
         yaml.dump(manifest, f, default_flow_style=False, sort_keys=False)
 
 
-def _write_pyproject(
-    plugin_dir: Path,
-    plugin_id: str,
-    name: str,
-    description: str,
-    author: str,
-    email: str
-) -> None:
+def _write_pyproject(plugin_dir: Path, plugin_id: str, name: str, description: str, author: str, email: str) -> None:
     """Write pyproject.toml."""
     module_name = _to_module_name(plugin_id)
     author_str = f'"{author}"' if not email else f'{{name = "{author}", email = "{email}"}}'
@@ -183,13 +171,7 @@ warn_unused_configs = true
 
 
 def _write_plugin_code(
-    src_dir: Path,
-    plugin_id: str,
-    class_name: str,
-    name: str,
-    description: str,
-    author: str,
-    template: str
+    src_dir: Path, plugin_id: str, class_name: str, name: str, description: str, author: str, template: str
 ) -> None:
     """Write plugin implementation."""
     if template == "basic":
@@ -504,14 +486,7 @@ import pytest
         f.write(conftest_content)
 
 
-def _write_readme(
-    plugin_dir: Path,
-    plugin_id: str,
-    name: str,
-    description: str,
-    author: str,
-    template: str
-) -> None:
+def _write_readme(plugin_dir: Path, plugin_id: str, name: str, description: str, author: str, template: str) -> None:
     """Write README.md."""
     template_specific = ""
     capabilities: list[str] = []
@@ -567,7 +542,7 @@ result = plugin.execute("configure", timeout=60)
 
     capabilities_section = "\n".join(f"- {capability}" for capability in capabilities) or "- (none)"
 
-    content = f'''# {name}
+    content = f"""# {name}
 
 {description}
 
@@ -611,7 +586,7 @@ mypy {plugin_id.replace("-", "_")}/
 ## License
 
 MIT License
-'''
+"""
 
     with open(plugin_dir / "README.md", "w") as f:
         f.write(content)
@@ -663,6 +638,7 @@ def validate() -> None:
         raise click.Abort()
 
     import py_compile
+
     for src_dir in [d.parent for d in src_dirs]:
         for py_file in src_dir.glob("*.py"):
             try:
@@ -706,6 +682,7 @@ def info() -> None:
     pyproject_path = plugin_dir / "pyproject.toml"
     if pyproject_path.exists():
         import tomllib
+
         with open(pyproject_path, "rb") as f:
             data = tomllib.load(f)
 

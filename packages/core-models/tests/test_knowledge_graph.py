@@ -1,4 +1,5 @@
 """Tests for core-models knowledge graph."""
+
 from core_models.knowledge_graph import KnowledgeGraph
 
 

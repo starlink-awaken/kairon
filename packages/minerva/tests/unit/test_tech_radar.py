@@ -13,6 +13,7 @@ from minerva.tech_radar.runner import _default_output_path, _resolve_workspace_r
 
 # ── fixtures ──────────────────────────────────────────────────────────────
 
+
 @pytest.fixture
 def sample_items() -> list[TechItem]:
     return [
@@ -41,6 +42,7 @@ def sample_items() -> list[TechItem]:
 
 
 # ── analyzer tests ────────────────────────────────────────────────────────
+
 
 def test_score_item_high_relevance():
     item = TechItem(
@@ -118,6 +120,7 @@ def test_analyze_items_upgrade_candidate_flag(sample_items):
 
 # ── reporter tests ────────────────────────────────────────────────────────
 
+
 def test_generate_report_structure(sample_items):
     scored = analyze_items(sample_items, threshold=0.0)
     report = generate_report(scored, run_date="2026-06-05")
@@ -135,13 +138,14 @@ def test_generate_report_empty_items():
 
 # ── fetcher unit tests (no network) ──────────────────────────────────────
 
+
 def test_parse_github_trending_empty_html():
     items = _parse_github_trending("<html></html>", "python")
     assert items == []
 
 
 def test_parse_github_trending_mock_html():
-    html = '''
+    html = """
     <article class="Box-row">
       <h2><a href="/owner/awesome-agent">awesome-agent</a></h2>
       <p class="col-9 color-fg-muted my-1 pr-4">Multi-agent framework for Python</p>
@@ -150,7 +154,7 @@ def test_parse_github_trending_mock_html():
       <h2><a href="/test/mcp-server">mcp-server</a></h2>
       <p class="col-9 color-fg-muted my-1 pr-4">MCP protocol implementation</p>
     </article>
-    '''
+    """
     items = _parse_github_trending(html, "python")
     assert len(items) >= 1
     assert any("owner/awesome-agent" in i.title or "test/mcp-server" in i.title for i in items)
@@ -160,6 +164,7 @@ def test_parse_github_trending_mock_html():
 
 
 # ── KOS writer tests ──────────────────────────────────────────────────────
+
 
 def test_make_entity_id_uses_kos_prefix():
     """KOS 实体 ID 必须以合法前缀（CON-）开头，否则 store.put_entity 会拒绝。"""
@@ -195,6 +200,7 @@ def test_make_entity_id_matches_hashlib():
 
 # ── Path resolution tests ─────────────────────────────────────────────────
 
+
 def test_resolve_workspace_root_finds_omostation():
     """从子目录向上搜应能找到 Workspace 根（含 .omo/_delivery）。"""
     root = _resolve_workspace_root()
@@ -226,4 +232,5 @@ def test_resolve_workspace_root_env_override(monkeypatch):
         assert root == fake_root
     finally:
         import shutil
+
         shutil.rmtree(fake_root)

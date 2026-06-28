@@ -1,4 +1,5 @@
 """P57-W0 kos do_default — 真业务 (调 kos.search 真函数)."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -19,16 +20,20 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             limit = int(args.get("limit", 10))
             results = search(query, meta_type=meta_type, limit=limit)
             return {
-                "_method": "do_default", "_action": "search",
-                "query": query, "count": len(results),
+                "_method": "do_default",
+                "_action": "search",
+                "query": query,
+                "count": len(results),
                 "results": results[:5],
             }
         if action == "list_documents":
             limit = int(args.get("limit", 10))
             docs = list_documents(limit=limit)
             return {
-                "_method": "do_default", "_action": "list_documents",
-                "count": len(docs), "docs": docs[:5],
+                "_method": "do_default",
+                "_action": "list_documents",
+                "count": len(docs),
+                "docs": docs[:5],
             }
         if action == "stats":
             s = stats()

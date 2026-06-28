@@ -4,6 +4,7 @@
     cd projects/kairon
     uv run python scripts/health_profile_demo.py
 """
+
 from __future__ import annotations
 
 import sys
@@ -34,36 +35,54 @@ def build_xia() -> HealthProfile:
     )
 
     # 3 次体检（半年一次）
-    xia.add_check(HealthCheckRecord(
-        check_date=date(2023, 9, 1),
-        height_cm=92.0, weight_kg=13.0,
-        vision_left=0.7, vision_right=0.7,
-        notes="2 岁体检",
-    ))
-    xia.add_check(HealthCheckRecord(
-        check_date=date(2024, 3, 1),
-        height_cm=95.0, weight_kg=14.5,
-        vision_left=0.8, vision_right=0.8,
-        notes="半年度体检",
-    ))
-    xia.add_check(HealthCheckRecord(
-        check_date=date(2024, 9, 1),
-        height_cm=98.0, weight_kg=15.2,
-        vision_left=0.85, vision_right=0.85,
-        notes="3 岁体检",
-    ))
+    xia.add_check(
+        HealthCheckRecord(
+            check_date=date(2023, 9, 1),
+            height_cm=92.0,
+            weight_kg=13.0,
+            vision_left=0.7,
+            vision_right=0.7,
+            notes="2 岁体检",
+        )
+    )
+    xia.add_check(
+        HealthCheckRecord(
+            check_date=date(2024, 3, 1),
+            height_cm=95.0,
+            weight_kg=14.5,
+            vision_left=0.8,
+            vision_right=0.8,
+            notes="半年度体检",
+        )
+    )
+    xia.add_check(
+        HealthCheckRecord(
+            check_date=date(2024, 9, 1),
+            height_cm=98.0,
+            weight_kg=15.2,
+            vision_left=0.85,
+            vision_right=0.85,
+            notes="3 岁体检",
+        )
+    )
 
     # 2 个疫苗（其中一个 next_due 在 30 天内）
-    xia.add_vaccination(VaccinationRecord(
-        vaccine="DTaP", dose=4,
-        administered_at=date(2024, 2, 15),
-        next_due=TODAY + timedelta(days=20),  # 25 天后到期
-    ))
-    xia.add_vaccination(VaccinationRecord(
-        vaccine="MMR", dose=1,
-        administered_at=date(2024, 8, 20),
-        next_due=TODAY + timedelta(days=180),  # 半年后到期
-    ))
+    xia.add_vaccination(
+        VaccinationRecord(
+            vaccine="DTaP",
+            dose=4,
+            administered_at=date(2024, 2, 15),
+            next_due=TODAY + timedelta(days=20),  # 25 天后到期
+        )
+    )
+    xia.add_vaccination(
+        VaccinationRecord(
+            vaccine="MMR",
+            dose=1,
+            administered_at=date(2024, 8, 20),
+            next_due=TODAY + timedelta(days=180),  # 半年后到期
+        )
+    )
 
     return xia
 

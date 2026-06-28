@@ -1,7 +1,5 @@
 """Pipeline端到端测试"""
 
-
-
 from ontoderive.core.pipeline import DerivePipeline
 
 

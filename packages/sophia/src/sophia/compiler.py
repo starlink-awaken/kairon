@@ -24,9 +24,8 @@ logger = logging.getLogger(__name__)
 class _LLMClientProtocol(Protocol):
     """LLM client 结构契约 — compiler 只依赖 generate 方法, 不耦合具体实现 (如 _LLMClient)."""
 
-    async def generate(
-        self, system: str, prompt: str, temperature: float, max_tokens: int
-    ) -> str: ...
+    async def generate(self, system: str, prompt: str, temperature: float, max_tokens: int) -> str: ...
+
 
 # Pre-built operation sets for common research patterns
 _OPS_DEFAULT = [

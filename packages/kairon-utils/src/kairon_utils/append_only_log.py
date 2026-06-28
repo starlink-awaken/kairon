@@ -39,6 +39,7 @@ class fcntl_lock:
 
     def __enter__(self) -> "fcntl_lock":
         import fcntl  # POSIX-only; 延迟 import
+
         self.lock_path.parent.mkdir(parents=True, exist_ok=True)
         self._fd = os.open(str(self.lock_path), os.O_CREAT | os.O_RDWR, 0o644)
         fcntl.flock(self._fd, fcntl.LOCK_EX)
@@ -47,6 +48,7 @@ class fcntl_lock:
     def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> None:
         if self._fd is not None:
             import fcntl
+
             try:
                 fcntl.flock(self._fd, fcntl.LOCK_UN)
             finally:
@@ -165,6 +167,7 @@ class AppendOnlyLog:
     def group_by(self, field: str) -> dict[str, int]:
         """按 field 分组统计 record 数."""
         from collections import defaultdict
+
         counter: dict[str, int] = defaultdict(int)
         for r in self.read_all():
             v = r.get(field, "<missing>")

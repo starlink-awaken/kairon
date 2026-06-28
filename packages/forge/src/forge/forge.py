@@ -372,6 +372,7 @@ def cmd_sniff(*_: object) -> None:
 def cmd_market(args: list[str]) -> None:
     """GitHub 工具市场 — install/list/remove"""
     from forge.market import cli as _market_cli
+
     sys.exit(_market_cli(args))
 
 

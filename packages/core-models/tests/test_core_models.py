@@ -1,4 +1,5 @@
 """Core tests for core-models package."""
+
 from __future__ import annotations
 
 from core_models.entity import Entity

@@ -1,4 +1,5 @@
 """P58-W0 health_profile do_default — 真业务 (调 health_profile models 真类)."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -22,7 +23,8 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     try:
         if action == "schema":
             return {
-                "_method": "do_default", "_action": "schema",
+                "_method": "do_default",
+                "_action": "schema",
                 "BloodType_values": BLOOD_TYPES,
                 "HealthCheckRecord_fields": list(HealthCheckRecord.__dataclass_fields__.keys()),
                 "HealthProfile_fields": list(HealthProfile.__dataclass_fields__.keys()),
@@ -30,7 +32,8 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             }
         if action == "blood_types":
             return {
-                "_method": "do_default", "_action": "blood_types",
+                "_method": "do_default",
+                "_action": "blood_types",
                 "types": BLOOD_TYPES,
             }
         return {"_method": "do_default", "_error": f"unknown action: {action}"}

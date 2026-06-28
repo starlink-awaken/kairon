@@ -2,8 +2,6 @@
 测试信息论层
 """
 
-
-
 from ontoderive.theories.metrics import MetricsLayer
 
 

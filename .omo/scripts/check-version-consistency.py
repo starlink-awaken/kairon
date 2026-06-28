@@ -96,10 +96,7 @@ def main() -> int:
     total = 0
     skipped = 0
 
-    pkg_dirs = sorted(
-        d for d in PACKAGES_DIR.iterdir()
-        if d.is_dir() and not d.name.startswith(".")
-    )
+    pkg_dirs = sorted(d for d in PACKAGES_DIR.iterdir() if d.is_dir() and not d.name.startswith("."))
 
     print("=" * 72)
     print(f"Kairon 版本一致性检查 — {PACKAGES_DIR.resolve()}")

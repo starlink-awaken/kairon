@@ -19,6 +19,7 @@ Usage:
     python scripts/mypy_report.py --baseline mypy-baseline.yaml   # regression gate
     python scripts/mypy_report.py --baseline mypy-baseline.yaml --update   # 刷新 baseline
 """
+
 from __future__ import annotations
 
 import argparse

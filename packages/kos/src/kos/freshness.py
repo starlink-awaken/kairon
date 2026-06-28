@@ -22,9 +22,11 @@ _log = logging.getLogger(__name__)
 
 # ── 本地数据模型 ──────────────────────────────────────────────
 
+
 @dataclass
 class KnowledgeTriple:
     """知识三元组"""
+
     subject: str
     predicate: str
     obj: str
@@ -56,9 +58,7 @@ class FreshnessManager:
         "default": 168,
     }
 
-    def __init__(
-        self, memory_graph: MemoryGraph, custom_ttl_rules: dict[str, int | None] | None = None
-    ) -> None:
+    def __init__(self, memory_graph: MemoryGraph, custom_ttl_rules: dict[str, int | None] | None = None) -> None:
         self._fg = memory_graph
         self._ttl_rules = self.DEFAULT_TTL_HOURS.copy()
         if custom_ttl_rules:
@@ -117,9 +117,7 @@ class FreshnessManager:
             _log.error(f"Freshness check failed for {subject}: {e}")
             return True
 
-    def filter_by_time_window(
-        self, triples: list[KnowledgeTriple], hours: int
-    ) -> list[KnowledgeTriple]:
+    def filter_by_time_window(self, triples: list[KnowledgeTriple], hours: int) -> list[KnowledgeTriple]:
         if not triples:
             return []
 
@@ -150,9 +148,7 @@ class FreshnessManager:
             "stale": self._stats["stale"],
             "errors": self._stats["errors"],
             "freshness_rate": self._stats["fresh"] / max(total, 1),
-            "ttl_rules": {
-                k: v if v is not None else "infinite" for k, v in self._ttl_rules.items()
-            },
+            "ttl_rules": {k: v if v is not None else "infinite" for k, v in self._ttl_rules.items()},
         }
 
     def get_stale_knowledge(self, category: str | None = None, limit: int = 100) -> list[str]:

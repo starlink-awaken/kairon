@@ -12,6 +12,7 @@ except ImportError:
     try:
         from .._helpers import _has_module
     except ImportError:
+
         def _has_module(name: str) -> bool:
             return True
 

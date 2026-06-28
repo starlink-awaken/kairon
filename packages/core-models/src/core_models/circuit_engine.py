@@ -288,7 +288,7 @@ class CircuitEngine:
         if end < 0:
             return bool(ctx.get(cond, False))
         ref = cond[2:end]
-        remainder = cond[end + 1:].strip()
+        remainder = cond[end + 1 :].strip()
         if not remainder:
             return bool(ctx.get(ref, False))
         # 二元比较

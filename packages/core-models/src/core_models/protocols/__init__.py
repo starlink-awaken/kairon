@@ -18,9 +18,14 @@ from core_models.protocols.identity import IdentityProtocol, IdentityResult
 from core_models.protocols.metrics import MetricsProtocol
 
 __all__ = [
-    "IdentityProtocol", "IdentityResult",
-    "HealthProtocol", "HealthStatus",
-    "CircuitProtocol", "CircuitDefinition", "CircuitRun",
+    "IdentityProtocol",
+    "IdentityResult",
+    "HealthProtocol",
+    "HealthStatus",
+    "CircuitProtocol",
+    "CircuitDefinition",
+    "CircuitRun",
     "MetricsProtocol",
-    "GovernanceProtocol", "GovernancePolicy",
+    "GovernanceProtocol",
+    "GovernancePolicy",
 ]

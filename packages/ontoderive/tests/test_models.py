@@ -2,8 +2,6 @@
 测试数据模型模块
 """
 
-
-
 from ontoderive.foundation.models import (
     CheckResult,
     DeriveSnapshot,

@@ -1,4 +1,5 @@
 """P58-W0 kairon_events do_default — 真业务 (调 kairon_events EventBus 真模块)."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -24,7 +25,8 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
                 payload=args.get("payload", {"k": "v"}),
             )
             return {
-                "_method": "do_default", "_action": "make",
+                "_method": "do_default",
+                "_action": "make",
                 "event_id": event.event_id,
                 "event_type": event.event_type,
                 "source": event.source,
@@ -33,13 +35,15 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
         if action == "bus_status":
             bus = get_event_bus()
             return {
-                "_method": "do_default", "_action": "bus_status",
+                "_method": "do_default",
+                "_action": "bus_status",
                 "bus_type": type(bus).__name__,
                 "is_null": bus.__class__.__name__ == "_NullEventBus",
             }
         if action == "event_types":
             return {
-                "_method": "do_default", "_action": "event_types",
+                "_method": "do_default",
+                "_action": "event_types",
                 "types": [et.value for et in EventType],
             }
         return {"_method": "do_default", "_error": f"unknown action: {action}"}

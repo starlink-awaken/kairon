@@ -1,4 +1,5 @@
 """健康档案 IO（JSON 持久化，FamilyShared iCloud 同步友好）。"""
+
 from __future__ import annotations
 
 import json

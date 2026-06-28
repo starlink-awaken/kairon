@@ -1,4 +1,5 @@
 """P58-W0 core_models do_default — 真业务 (调 core_models models 真函数)."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -15,7 +16,8 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     try:
         if action == "schema":
             return {
-                "_method": "do_default", "_action": "schema",
+                "_method": "do_default",
+                "_action": "schema",
                 "entity_types": list(ENTITY_TYPES),
                 "relation_types": list(RELATION_TYPES),
                 "entity_count": len(ENTITY_TYPES),
@@ -23,7 +25,8 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             }
         if action == "types":
             return {
-                "_method": "do_default", "_action": "types",
+                "_method": "do_default",
+                "_action": "types",
                 "Entity": Entity.__name__,
                 "Relation": Relation.__name__,
                 "KnowledgeGraph": KnowledgeGraph.__name__,

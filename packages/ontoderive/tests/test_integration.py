@@ -1,8 +1,6 @@
 """集成测试 — 生态无关的核心流程"""
 
 
-
-
 def test_multi_hop_derivation():
     """多层推导链：D-F→INF-L1→INF-L2"""
     from ontoderive.theories.bayesian import BayesianNetwork

@@ -25,8 +25,8 @@ class TestMetricsCollector:
         mc.counter("http_requests_total")
         mc.counter("http_requests_total")
         output = mc.to_prometheus()
-        assert 'TYPE http_requests_total counter' in output
-        assert 'http_requests_total 2' in output
+        assert "TYPE http_requests_total counter" in output
+        assert "http_requests_total 2" in output
 
     def test_counter_with_labels(self):
         mc = MetricsCollector()
@@ -41,7 +41,7 @@ class TestMetricsCollector:
         mc = MetricsCollector()
         mc.counter("errors", help_text="Total error count")
         output = mc.to_prometheus()
-        assert '# HELP errors Total error count' in output
+        assert "# HELP errors Total error count" in output
 
     def test_counter_multiple_label_sets(self):
         mc = MetricsCollector()
@@ -57,15 +57,15 @@ class TestMetricsCollector:
         mc = MetricsCollector()
         mc.gauge("memory_bytes", 1024)
         output = mc.to_prometheus()
-        assert 'TYPE memory_bytes gauge' in output
-        assert 'memory_bytes 1024' in output
+        assert "TYPE memory_bytes gauge" in output
+        assert "memory_bytes 1024" in output
 
     def test_gauge_overwrites_previous(self):
         mc = MetricsCollector()
         mc.gauge("memory_bytes", 1024)
         mc.gauge("memory_bytes", 2048)
         output = mc.to_prometheus()
-        assert 'memory_bytes 2048' in output
+        assert "memory_bytes 2048" in output
         # gauge 应只有一条值线 (不包含 HELP/TYPE 前缀行)
         value_lines = [ln for ln in output.splitlines() if ln.startswith("memory_bytes")]
         assert len(value_lines) == 1
@@ -82,18 +82,18 @@ class TestMetricsCollector:
         mc = MetricsCollector()
         mc.histogram("request_latency_ms", 12.5)
         output = mc.to_prometheus()
-        assert 'TYPE request_latency_ms histogram' in output
-        assert 'request_latency_ms_sum 12.5' in output
-        assert 'request_latency_ms_count 1' in output
-        assert 'le=' in output  # bucket lines
+        assert "TYPE request_latency_ms histogram" in output
+        assert "request_latency_ms_sum 12.5" in output
+        assert "request_latency_ms_count 1" in output
+        assert "le=" in output  # bucket lines
 
     def test_histogram_multiple_observations(self):
         mc = MetricsCollector()
         for val in [5, 15, 55, 150, 550, 1500]:
             mc.histogram("latency", val)
         output = mc.to_prometheus()
-        assert 'latency_sum 2275' in output  # 5+15+55+150+550+1500
-        assert 'latency_count 6' in output
+        assert "latency_sum 2275" in output  # 5+15+55+150+550+1500
+        assert "latency_count 6" in output
 
     def test_to_prometheus_empty(self):
         mc = MetricsCollector()

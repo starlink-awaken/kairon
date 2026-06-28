@@ -1,7 +1,5 @@
 """配置系统测试"""
 
-
-
 from ontoderive.foundation.config import Config
 
 

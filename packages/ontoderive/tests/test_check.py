@@ -1,7 +1,5 @@
 """规约检查模块测试"""
 
-
-
 from ontoderive.core.check import run_check
 
 

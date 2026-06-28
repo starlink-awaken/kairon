@@ -8,17 +8,20 @@ pytest.importorskip("pontus", reason="requires pontus package (not yet in kairon
 class TestCoreImports:
     """Verify all core packages can be imported without errors."""
 
+
 class TestPontusPipeline:
     """Test pontus pipeline: DSL → quality → checkpoint."""
 
     def test_quality_validator(self):
         from pontus.quality import QualityValidator
+
         v = QualityValidator()
         assert v.validate_format({"id": 1, "name": "test"}, {"id": "int", "name": "str"})
         assert not v.validate_format({"id": "not_int"}, {"id": "int"})
 
     def test_deduplicator(self):
         from pontus.quality import Deduplicator
+
         d = Deduplicator()
         entries = [{"id": 1}, {"id": 2}, {"id": 1}]
         result = d.deduplicate(entries, key_fn=lambda e: e["id"])
@@ -29,6 +32,7 @@ class TestPontusPipeline:
         import tempfile
 
         from pontus.checkpoint import CheckpointManager
+
         with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
             db_path = f.name
         try:
@@ -47,10 +51,12 @@ class TestAgentRuntime:
 
     def test_task_status(self):
         from agent_runtime.types import TaskStatus  # type: ignore[import-not-found]
+
         assert TaskStatus.PENDING is not None
         assert TaskStatus.RUNNING is not None
 
     def test_task_def(self):
         from agent_runtime.types import TaskDef  # type: ignore[import-not-found]
+
         t = TaskDef(id="test-1", action="test", agent_id="worker-1")
         assert t.id == "test-1"

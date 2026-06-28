@@ -1,4 +1,5 @@
 """Basic smoke tests for core-models package."""
+
 from __future__ import annotations
 
 from core_models import ENTITY_TYPES, RELATION_TYPES, Entity, KnowledgeGraph, Provenance, Relation

@@ -5,6 +5,7 @@
 请改用:
     kairon-governance sync [--apply] [--output PATH]
 """
+
 from __future__ import annotations
 
 import sys

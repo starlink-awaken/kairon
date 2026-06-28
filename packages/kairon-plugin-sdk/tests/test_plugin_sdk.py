@@ -17,10 +17,7 @@ class TestPluginContext:
         assert ctx.metadata == {}
 
     def test_custom_context(self):
-        ctx = PluginContext(
-            workspace="/tmp/test",
-            metadata={"key": "value"}
-        )
+        ctx = PluginContext(workspace="/tmp/test", metadata={"key": "value"})
         assert ctx.workspace == "/tmp/test"
         assert ctx.metadata == {"key": "value"}
 
@@ -117,13 +114,7 @@ class TestPluginWithComplexConfig:
                 return {"config": self.config}
 
         plugin = ConfiguredPlugin()
-        plugin.configure({
-            "database": {
-                "host": "localhost",
-                "port": 5432
-            },
-            "api_keys": ["key1", "key2"]
-        })
+        plugin.configure({"database": {"host": "localhost", "port": 5432}, "api_keys": ["key1", "key2"]})
 
         result = plugin.execute()
         assert result["config"]["database"]["host"] == "localhost"

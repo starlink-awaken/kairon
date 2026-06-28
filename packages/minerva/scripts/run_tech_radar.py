@@ -22,6 +22,7 @@ def verify_imports() -> bool:
     print("验证 import…")
     try:
         import importlib
+
         for mod in [
             "minerva.tech_radar.analyzer",
             "minerva.tech_radar.fetcher",
@@ -32,6 +33,7 @@ def verify_imports() -> bool:
             importlib.import_module(mod)
         from minerva.tech_radar.analyzer import analyze_items
         from minerva.tech_radar.fetcher import TechItem
+
         print("✅ 所有模块 import 成功")
 
         # 快速评分测试
@@ -60,6 +62,7 @@ def verify_imports() -> bool:
     except Exception as exc:
         print(f"❌ 失败: {exc}")
         import traceback
+
         traceback.print_exc()
         return False
 
@@ -84,22 +87,24 @@ def main():
     src_list = [s.strip() for s in args.sources.split(",")]
     print(f"\n启动 tech-radar (sources={src_list}, dry_run={args.dry_run})…\n")
 
-    result = asyncio.run(run(
-        output_path=args.output,
-        sources=src_list,
-        dry_run=args.dry_run,
-    ))
+    result = asyncio.run(
+        run(
+            output_path=args.output,
+            sources=src_list,
+            dry_run=args.dry_run,
+        )
+    )
 
     print("\n===== 运行摘要 =====")
     print(f"原始条目:  {result['raw_count']}")
     print(f"相关条目:  {result['relevant_count']}")
     print(f"升级候选:  {result['candidate_count']}")
     print(f"KOS 写入:  {result['kos']}")
-    if result['report_path']:
+    if result["report_path"]:
         print(f"报告路径:  {result['report_path']}")
-    if result['top_candidates']:
+    if result["top_candidates"]:
         print("\nTop 候选:")
-        for c in result['top_candidates']:
+        for c in result["top_candidates"]:
             print(f"  [{c['score']:.2f}] {c['source']:12s} {c['title'][:60]}")
 
 

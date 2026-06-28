@@ -41,7 +41,9 @@ def test_paradigm_program_validate_ok():
         operations=[AtomicOp.SEARCH, AtomicOp.SYNTHESIZE],
         transitions=[
             TransitionRule(ResearchState.QUESTION, AtomicOp.SEARCH, ResearchState.SEARCHING, gate_always, fail_state),
-            TransitionRule(ResearchState.SEARCHING, AtomicOp.SYNTHESIZE, ResearchState.CONCLUSION, gate_always, fail_state),
+            TransitionRule(
+                ResearchState.SEARCHING, AtomicOp.SYNTHESIZE, ResearchState.CONCLUSION, gate_always, fail_state
+            ),
         ],
     )
     issues = prog.validate()
@@ -53,8 +55,16 @@ def test_paradigm_program_state_count():
         name="test",
         operations=[AtomicOp.SEARCH, AtomicOp.SYNTHESIZE],
         transitions=[
-            TransitionRule(ResearchState.QUESTION, AtomicOp.SEARCH, ResearchState.SEARCHING, gate_always, ResearchState.QUESTION),
-            TransitionRule(ResearchState.SEARCHING, AtomicOp.SYNTHESIZE, ResearchState.CONCLUSION, gate_always, ResearchState.QUESTION),
+            TransitionRule(
+                ResearchState.QUESTION, AtomicOp.SEARCH, ResearchState.SEARCHING, gate_always, ResearchState.QUESTION
+            ),
+            TransitionRule(
+                ResearchState.SEARCHING,
+                AtomicOp.SYNTHESIZE,
+                ResearchState.CONCLUSION,
+                gate_always,
+                ResearchState.QUESTION,
+            ),
         ],
     )
     assert prog.state_count == 3  # QUESTION, SEARCHING, CONCLUSION
@@ -65,7 +75,9 @@ def test_paradigm_program_to_dict():
         name="test",
         operations=[AtomicOp.SEARCH],
         transitions=[
-            TransitionRule(ResearchState.QUESTION, AtomicOp.SEARCH, ResearchState.CONCLUSION, gate_always, ResearchState.QUESTION),
+            TransitionRule(
+                ResearchState.QUESTION, AtomicOp.SEARCH, ResearchState.CONCLUSION, gate_always, ResearchState.QUESTION
+            ),
         ],
     )
     d = prog.to_dict(include_query="test query")
@@ -78,7 +90,9 @@ def test_paradigm_program_mermaid():
         name="test",
         operations=[AtomicOp.SEARCH],
         transitions=[
-            TransitionRule(ResearchState.QUESTION, AtomicOp.SEARCH, ResearchState.CONCLUSION, gate_always, ResearchState.QUESTION),
+            TransitionRule(
+                ResearchState.QUESTION, AtomicOp.SEARCH, ResearchState.CONCLUSION, gate_always, ResearchState.QUESTION
+            ),
         ],
     )
     m = prog.to_mermaid()

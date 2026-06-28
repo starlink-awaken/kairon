@@ -2,6 +2,7 @@
 
 测试会跳过未安装的包（非关键失败），只验证已安装包的基本可导入性。
 """
+
 from __future__ import annotations
 
 import importlib
@@ -19,6 +20,7 @@ def _import(module: str):
 
 def test_core_models():
     from core_models.entity import Entity
+
     assert Entity is not None
 
 

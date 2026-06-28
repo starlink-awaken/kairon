@@ -748,6 +748,7 @@ def workflow_impact_analysis(symbol_name: str, language: str, path: str = ".") -
     except Exception as e:
         return _error(str(e))
 
+
 @mcp.tool()
 def codegraph_get_symbol_graph(symbol_name: str, path: str = ".") -> dict:
     """[Relational Engine] Get a tree of callers and callees for a specific symbol using codegraph.
@@ -766,14 +767,10 @@ def codegraph_get_symbol_graph(symbol_name: str, path: str = ".") -> dict:
         if callees and "error" in callees[0]:
             return _error(callees[0]["error"])
 
-        return _ok({
-            "format_version": FORMAT_VERSION,
-            "symbol": symbol_name,
-            "callers": callers,
-            "callees": callees
-        })
+        return _ok({"format_version": FORMAT_VERSION, "symbol": symbol_name, "callers": callers, "callees": callees})
     except Exception as e:
         return _error(str(e))
+
 
 @mcp.tool()
 def codegraph_get_impact_radius(file_path: str, path: str = ".") -> dict:
@@ -789,15 +786,14 @@ def codegraph_get_impact_radius(file_path: str, path: str = ".") -> dict:
             return _error(ctx["error"])
 
         # Extract unique source files from callers
-        impacted_files = list({caller.get('source_file') for caller in ctx.get('callers', []) if caller.get('source_file')})
+        impacted_files = list(
+            {caller.get("source_file") for caller in ctx.get("callers", []) if caller.get("source_file")}
+        )
 
-        return _ok({
-            "format_version": FORMAT_VERSION,
-            "target_file": file_path,
-            "impacted_files": impacted_files
-        })
+        return _ok({"format_version": FORMAT_VERSION, "target_file": file_path, "impacted_files": impacted_files})
     except Exception as e:
         return _error(str(e))
+
 
 @mcp.tool()
 def architecture_generate_diagram(module_path: str, path: str = ".") -> dict:
@@ -809,11 +805,13 @@ def architecture_generate_diagram(module_path: str, path: str = ".") -> dict:
     """
     try:
         from codeanalyze.analyzers.understand import UnderstandAdapter
+
         adapter = UnderstandAdapter(workspace_root=_resolve(path))
         diagram = adapter.generate_architecture_diagram(module_path)
         return _ok({"format_version": FORMAT_VERSION, "mermaid": diagram})
     except Exception as e:
         return _error(str(e))
+
 
 @mcp.tool()
 def architecture_get_code_metrics(file_path: str, path: str = ".") -> dict:
@@ -825,44 +823,48 @@ def architecture_get_code_metrics(file_path: str, path: str = ".") -> dict:
     """
     try:
         from codeanalyze.analyzers.understand import UnderstandAdapter
+
         adapter = UnderstandAdapter(workspace_root=_resolve(path))
         result = adapter.get_code_metrics(file_path)
         return _ok({"format_version": FORMAT_VERSION, "result": result})
     except Exception as e:
         return _error(str(e))
 
+
 @mcp.tool()
 def codegraph_init(path: str = ".") -> dict:
     """[Relational Engine] Initialize CodeGraph in the workspace and build initial index."""
     try:
         from codeanalyze.integrations.codegraph import init_codegraph
+
         result = init_codegraph(_resolve(path))
         return _ok({"format_version": FORMAT_VERSION, "result": result})
     except Exception as e:
         return _error(str(e))
+
 
 @mcp.tool()
 def codegraph_sync(path: str = ".") -> dict:
     """[Relational Engine] Sync CodeGraph index with recent file changes."""
     try:
         from codeanalyze.integrations.codegraph import sync_codegraph
+
         result = sync_codegraph(_resolve(path))
         return _ok({"format_version": FORMAT_VERSION, "result": result})
     except Exception as e:
         return _error(str(e))
+
 
 @mcp.tool()
 def codegraph_get_affected_tests(files: list[str], path: str = ".") -> dict:
     """[Relational Engine] Find test files affected by changed source files using CodeGraph."""
     try:
         from codeanalyze.integrations.codegraph import get_affected_tests
+
         result = get_affected_tests(files, _resolve(path))
         return _ok({"format_version": FORMAT_VERSION, "result": result})
     except Exception as e:
         return _error(str(e))
-
-
-
 
 
 @mcp.resource("bos://analysis/graph/{project}")
@@ -870,12 +872,14 @@ def read_analysis_graph(project: str) -> str:
     """Dynamically generate a Mermaid diagram for a project."""
     try:
         import urllib.parse
+
         project = urllib.parse.unquote(project)
         # Assuming project refers to a module path, e.g. "projects/omo"
         # Default workspace is the environment variable or common path
         import os
 
         from codeanalyze.analyzers.understand import UnderstandAdapter
+
         workspace_root = os.environ.get("WORKSPACE_ROOT", str(Path.home() / "Workspace"))
         adapter = UnderstandAdapter(workspace_root=_resolve(workspace_root))
         diagram = adapter.generate_architecture_diagram(project)
@@ -883,16 +887,20 @@ def read_analysis_graph(project: str) -> str:
     except Exception as e:
         return f"Error generating graph: {str(e)}"
 
+
 @mcp.resource("bos://analysis/metrics/{file}")
 def read_analysis_metrics(file: str) -> str:
     """Calculate and return code metrics (e.g. Radon/Understand)."""
     try:
         import json
         import urllib.parse
+
         file = urllib.parse.unquote(file)
         import os
+
         workspace_root = os.environ.get("WORKSPACE_ROOT", str(Path.home() / "Workspace"))
         from codeanalyze.analyzers.understand import UnderstandAdapter
+
         adapter = UnderstandAdapter(workspace_root=_resolve(workspace_root))
         result = adapter.get_code_metrics(file)
         return json.dumps(result, indent=2, ensure_ascii=False)

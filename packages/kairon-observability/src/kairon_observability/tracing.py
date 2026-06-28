@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 
 _TRACING_INITIALIZED = False
 
+
 def setup_tracing(service_name: str) -> None:
     """Initialize OpenTelemetry tracing for a service."""
     global _TRACING_INITIALIZED
@@ -27,10 +28,12 @@ def setup_tracing(service_name: str) -> None:
     # Langfuse typically uses http://localhost:3000/api/public/otlp/v1/traces
     otlp_endpoint = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:3000/api/public/otlp/v1/traces")
 
-    resource = Resource(attributes={
-        "service.name": service_name,
-        "environment": os.environ.get("ECOS_ENV", "development"),
-    })
+    resource = Resource(
+        attributes={
+            "service.name": service_name,
+            "environment": os.environ.get("ECOS_ENV", "development"),
+        }
+    )
 
     provider = TracerProvider(resource=resource)
 
@@ -45,6 +48,7 @@ def setup_tracing(service_name: str) -> None:
         logger.info(f"[OTLP] Tracing initialized for '{service_name}', exporting to {otlp_endpoint}")
     except Exception as e:
         logger.error(f"[OTLP] Failed to initialize tracing: {e}")
+
 
 def get_tracer(name: str) -> trace.Tracer:
     """Get a tracer instance for the current module."""

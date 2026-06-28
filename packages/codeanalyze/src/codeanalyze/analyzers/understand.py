@@ -6,6 +6,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 class UnderstandAdapter:
     """Adapter for Mindpilot/SciTools Understand functionality."""
 
@@ -22,7 +23,7 @@ class UnderstandAdapter:
             return f"Error: Module path {module_path} is invalid."
 
         try:
-            with open(target, encoding='utf-8') as f:
+            with open(target, encoding="utf-8") as f:
                 content = f.read()
             tree = ast.parse(content)
 
@@ -63,15 +64,9 @@ class UnderstandAdapter:
 
         try:
             # Run radon cyclomatic complexity
-            cc_res = subprocess.run(
-                ["radon", "cc", "-s", "-j", str(target)],
-                capture_output=True, text=True
-            )
+            cc_res = subprocess.run(["radon", "cc", "-s", "-j", str(target)], capture_output=True, text=True)
             # Run radon raw metrics (LOC, LLOC, SLOC, etc.)
-            raw_res = subprocess.run(
-                ["radon", "raw", "-j", str(target)],
-                capture_output=True, text=True
-            )
+            raw_res = subprocess.run(["radon", "raw", "-j", str(target)], capture_output=True, text=True)
 
             cc_data = json.loads(cc_res.stdout) if cc_res.stdout else {}
             raw_data = json.loads(raw_res.stdout) if raw_res.stdout else {}
@@ -82,15 +77,12 @@ class UnderstandAdapter:
             file_raw = raw_data.get(file_key, {})
 
             # Calculate average complexity
-            avg_complexity = sum(item.get('complexity', 0) for item in file_cc) / max(1, len(file_cc))
+            avg_complexity = sum(item.get("complexity", 0) for item in file_cc) / max(1, len(file_cc))
 
             return {
                 "file": file_path,
-                "cyclomatic_complexity": {
-                    "average": round(avg_complexity, 2),
-                    "details": file_cc
-                },
-                "raw_metrics": file_raw
+                "cyclomatic_complexity": {"average": round(avg_complexity, 2), "details": file_cc},
+                "raw_metrics": file_raw,
             }
         except Exception as e:
             return {"error": f"Radon analysis failed: {e}"}

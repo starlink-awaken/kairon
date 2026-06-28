@@ -3,6 +3,7 @@ import subprocess
 
 CODEGRAPH_CMD = ["npx", "-y", "@colbymchenry/codegraph"]
 
+
 def _run_codegraph(args: list[str], cwd: str) -> str:
     """Run a codegraph command and return its stdout as a string."""
     try:
@@ -14,13 +15,16 @@ def _run_codegraph(args: list[str], cwd: str) -> str:
     except FileNotFoundError:
         return "Error: npx not found. Ensure Node.js is installed."
 
+
 def init_codegraph(cwd: str) -> str:
     """Initialize CodeGraph and build the initial index."""
     return _run_codegraph(["init"], cwd)
 
+
 def sync_codegraph(cwd: str) -> str:
     """Sync changes since last index."""
     return _run_codegraph(["sync"], cwd)
+
 
 def get_symbol_graph(symbol: str, cwd: str) -> dict:
     """Get callers and callees for a specific symbol."""
@@ -41,9 +45,11 @@ def get_symbol_graph(symbol: str, cwd: str) -> dict:
 
     return res
 
+
 def get_impact_radius(symbol: str, cwd: str) -> str:
     """Analyze what code is affected by changing a symbol (Blast Radius)."""
     return _run_codegraph(["impact", symbol], cwd)
+
 
 def get_affected_tests(files: list[str], cwd: str) -> str:
     """Find test files affected by changed source files."""

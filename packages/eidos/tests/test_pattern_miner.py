@@ -60,6 +60,7 @@ class TestPatternMiner:
         class FakeEvent:
             def __init__(self):
                 self.type = "test_type"
+
         assert self.miner._event_key(FakeEvent()) == "test_type"
 
     def test_event_key_from_dict(self):

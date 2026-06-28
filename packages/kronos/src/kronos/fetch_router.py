@@ -72,6 +72,7 @@ def is_image_url(url: str) -> bool:
     result: bool = _impl(url)
     return result
 
+
 MCP_TOOLS: list[MCPTool] = [
     MCPTool(
         "mcp__metaso__metaso_web_reader",

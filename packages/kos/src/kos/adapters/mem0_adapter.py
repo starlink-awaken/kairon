@@ -4,6 +4,7 @@ Mem0 Adapter for KOS
 Provides a dual-track memory pipeline interface wrapping Mem0.
 Implemented for Phase 1 decoupling and memory engine evaluation.
 """
+
 import logging
 from typing import Any, cast
 
@@ -33,7 +34,7 @@ class Mem0Adapter:
                             "config": {
                                 "host": "localhost",
                                 "port": 6333,
-                            }
+                            },
                         }
                     }
                 self.memory = Memory.from_config(self.config)

@@ -11,9 +11,11 @@ class TestAgora:
     def test_hermes_mcp(self):
         """Hermes MCP tools module should compile and be importable."""
         from agora.hermes_mcp import HermesToolRegistry
+
         assert HermesToolRegistry is not None
 
     def test_known_services(self):
         """Test known service registry is loadable."""
         from agora.mcp.mcp_bootstrap import KNOWN_SERVICES
+
         assert len(KNOWN_SERVICES) >= 1

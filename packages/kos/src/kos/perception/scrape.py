@@ -4,6 +4,7 @@
 # status: active
 # ---
 """Web page scraping via aiohttp with sync wrapper."""
+
 from __future__ import annotations
 
 import importlib.util
@@ -20,11 +21,13 @@ async def _async_scrape(url: str, timeout: int = 15) -> dict | None:
     if not _HAS_AIOHTTP:
         return None
     import aiohttp
+
     try:
         headers = {"User-Agent": _USER_AGENT}
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                url, headers=headers,
+                url,
+                headers=headers,
                 timeout=aiohttp.ClientTimeout(total=timeout),
             ) as resp:
                 if resp.status == 200:
@@ -42,6 +45,7 @@ async def _async_scrape(url: str, timeout: int = 15) -> dict | None:
 
 def scrape_url(url: str, timeout: int = 15) -> dict | None:
     import asyncio
+
     try:
         return asyncio.run(_async_scrape(url, timeout))
     except (OSError, RuntimeError, ValueError, TimeoutError) as exc:

@@ -5,6 +5,7 @@
 请改用:
     kairon-governance agora-routes [--dry-run] [--only PKG,...] [--report PATH]
 """
+
 from __future__ import annotations
 
 import warnings

@@ -18,6 +18,7 @@ from typing import Any
 # Error class hierarchy
 # ---------------------------------------------------------------------------
 
+
 class AgentToolkitError(Exception):
     """Base error for the agent toolkit."""
 
@@ -156,7 +157,9 @@ def get_error_message(error: Any) -> str:
     return "发生未知错误"
 
 
-def wrap_error(error: Any, code: str = "UNKNOWN_ERROR", message: str = "An unexpected error occurred") -> AgentToolkitError:
+def wrap_error(
+    error: Any, code: str = "UNKNOWN_ERROR", message: str = "An unexpected error occurred"
+) -> AgentToolkitError:
     """Wrap an arbitrary error into an AgentToolkitError."""
     if isinstance(error, AgentToolkitError):
         return error

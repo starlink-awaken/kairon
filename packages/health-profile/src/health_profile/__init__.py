@@ -1,4 +1,5 @@
 """health_profile —— Phase 28 北极星场景 C 数据底座。"""
+
 from .models import (
     BloodType,
     HealthCheckRecord,

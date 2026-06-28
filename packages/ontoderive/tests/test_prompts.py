@@ -2,9 +2,6 @@
 测试 intelligence/prompts.py - 提示词模板系统
 """
 
-
-
-
 import json
 
 from ontoderive.intelligence.prompts import (  # type: ignore[import-not-found]

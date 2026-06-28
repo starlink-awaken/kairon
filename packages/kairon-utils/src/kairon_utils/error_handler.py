@@ -129,7 +129,7 @@ class ErrorHandler:
             f"Operation failed for {source_id}: {error}",
             context={
                 "source_id": source_id,
-                'error_type': result['category'].value,  # type: ignore[attr-defined]
+                "error_type": result["category"].value,  # type: ignore[attr-defined]
                 "event": "operation_failed",
             },
         )

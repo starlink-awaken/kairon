@@ -1,6 +1,5 @@
 """AnalyticsEngine 测试 --- A1~A12 全分析模式 + 辅助函数"""
 
-
 from ontoderive.theories.analytics import (
     AnalyticalPattern,
     AnalyticsEngine,

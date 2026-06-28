@@ -5,6 +5,7 @@ adoption (Phase B migration), but it had no tests at the time.
 22 months later (R80), we're adding the missing coverage so that
 future changes to the adapter are guarded by regression tests.
 """
+
 from unittest.mock import patch
 
 
@@ -12,6 +13,7 @@ class TestBusAdapter:
     def test_imports_succeed(self):
         """Adapter imports without side-effects at module load."""
         from kairon_pipeline import bus_adapter
+
         # The real public functions (verified by reading bus_adapter.py)
         assert hasattr(bus_adapter, "emit_source_ingested")
         assert hasattr(bus_adapter, "emit_extraction_completed")

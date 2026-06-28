@@ -11,6 +11,7 @@ from typing import Protocol, runtime_checkable
 @dataclass
 class IdentityResult:
     """身份验证结果"""
+
     identity_id: str
     principal: str
     authenticated: bool

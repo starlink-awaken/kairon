@@ -264,10 +264,7 @@ async def generate_draft_with_llm(
         context_lines.append("")
     context = "\n".join(context_lines)
 
-    system = (
-        "你是中国国家卫健委政策研究员. 请根据提供的政策素材, "
-        "为工作人员整理一份带来源的简明初稿, 用中文输出."
-    )
+    system = "你是中国国家卫健委政策研究员. 请根据提供的政策素材, 为工作人员整理一份带来源的简明初稿, 用中文输出."
     prompt = (
         f"工作问题: {question}\n\n"
         f"已有政策素材:\n{context}\n\n"
@@ -335,8 +332,7 @@ def generate_draft_template(question: str, entities: list[Entity]) -> tuple[str,
     """不依赖 LLM 的模板式初稿, 至少包含 3 节, 引用全部种子政策."""
     if entities:
         summary = (
-            f"针对「{question}」, 根据 KOS 中检索到的 {len(entities)} 条相关政策"
-            f"整理形成本初稿, 供后续正式起草参考."
+            f"针对「{question}」, 根据 KOS 中检索到的 {len(entities)} 条相关政策整理形成本初稿, 供后续正式起草参考."
         )
     else:
         summary = f"针对「{question}」, 模板式初稿(无 LLM 增强且 KOS 命中为空)."

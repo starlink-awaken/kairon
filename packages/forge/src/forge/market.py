@@ -195,7 +195,9 @@ def install(url: str, alias: str | None = None) -> dict[str, Any]:
     try:
         result = subprocess.run(
             ["git", "clone", "--depth", "1", url, str(target)],
-            capture_output=True, text=True, timeout=120,
+            capture_output=True,
+            text=True,
+            timeout=120,
         )
         if result.returncode != 0:
             return {"status": "error", "name": name, "error": result.stderr.strip()}
@@ -239,14 +241,16 @@ def list_installed() -> list[dict[str, Any]]:
         entry = next((t for t in reg.get("tools", []) if t.get("id") == p.name), None)
 
         git_dir = p / ".git"
-        packages.append({
-            "name": p.name,
-            "path": str(p),
-            "registered": entry is not None,
-            "status": entry.get("status", "unknown") if entry else "unknown",
-            "has_git": git_dir.exists(),
-            "description": (entry or {}).get("description", "")[:100],
-        })
+        packages.append(
+            {
+                "name": p.name,
+                "path": str(p),
+                "registered": entry is not None,
+                "status": entry.get("status", "unknown") if entry else "unknown",
+                "has_git": git_dir.exists(),
+                "description": (entry or {}).get("description", "")[:100],
+            }
+        )
     return packages
 
 
@@ -281,6 +285,7 @@ def remove(name: str) -> dict[str, Any]:
 
 
 # ── CLI 入口 (被 forge.py cmd_market 调用) ──
+
 
 def cli(args: list[str]) -> int:
     """Market CLI handler. Called from forge.py cmd_market."""
@@ -357,6 +362,7 @@ def cli(args: list[str]) -> int:
 # ── Local tool management (CAPS_ROOT / market.json) ─────────────────
 # These complement the git-based install() with a local-path install workflow.
 # CAPS_ROOT and MARKET_REGISTRY are module-level and patchable by tests.
+
 
 def _load_market() -> list[dict]:
     """Load market.json, returning list of tool entries."""
@@ -455,6 +461,7 @@ def list_tools() -> list[dict]:
 # validate_bos_uri / validate_tool_name / MARKET_REGISTRY migrated to
 # agora.ssrf_guard + agora.core.service_base + agora.mcp.bos_resolver.
 
+
 def validate_bos_uri(uri: str) -> tuple[bool, str]:
     """Validate BOS URI format. Returns (valid, error_message)."""
     if not uri.startswith("bos://"):
@@ -474,10 +481,9 @@ def validate_tool_name(name: str) -> tuple[bool, str]:
     Returns (valid, error_message).
     """
     import re
+
     if not name:
         return False, "invalid_tool_name: empty name"
-    if not re.match(r'^[a-z0-9]+(-[a-z0-9]+)*$', name):
+    if not re.match(r"^[a-z0-9]+(-[a-z0-9]+)*$", name):
         return False, f"invalid_tool_name: '{name}' must be kebab-case (lowercase, hyphens only, no underscores)"
     return True, ""
-
-

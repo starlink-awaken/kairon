@@ -1,4 +1,5 @@
 """健康档案数据模型（P28-W1 底座，W4 再做摘要/提醒）。"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

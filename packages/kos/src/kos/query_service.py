@@ -35,6 +35,7 @@ QueryStats = dict[str, object]
 @dataclass
 class KnowledgeTriple:
     """知识三元组"""
+
     subject: str
     predicate: str
     obj: str
@@ -49,6 +50,7 @@ class KnowledgeTriple:
 
 class QueryError(Exception):
     """知识查询错误"""
+
     def __init__(self, message: str, query: str | None = None) -> None:
         self.query = query
         super().__init__(message)
@@ -184,8 +186,7 @@ class KnowledgeQueryService:
                 provider_type = None  # auto-detect
                 adapter = VectorSearchAdapter(provider_type=provider_type)
                 _log.info(
-                    "KnowledgeQueryService: Using VectorSearchAdapter "
-                    f"(provider_type=auto, dim={adapter.dimension})"
+                    f"KnowledgeQueryService: Using VectorSearchAdapter (provider_type=auto, dim={adapter.dimension})"
                 )
                 self._vector_adapter = adapter
                 self._use_vector_adapter = True
@@ -207,13 +208,9 @@ class KnowledgeQueryService:
 
         try:
             if getattr(self, "_use_vector_adapter", False) and self._vector_adapter is not None:
-                return await self._vector_search_with_adapter(
-                    query_text, limit, time_window_hours
-                )
+                return await self._vector_search_with_adapter(query_text, limit, time_window_hours)
 
-            return await self._vector_search_with_legacy(
-                query_text, limit, time_window_hours
-            )
+            return await self._vector_search_with_legacy(query_text, limit, time_window_hours)
 
         except (OSError, ValueError, KeyError, RuntimeError) as e:
             _log.warning(f"Embedding semantic search failed; falling back to keyword search: {e}")
@@ -269,9 +266,7 @@ class KnowledgeQueryService:
         legacy_engine = cast(LegacyEmbeddingEngine, self._embedding_engine)
         query_vector = legacy_engine.get_embedding(query_text)
         if query_vector is None:
-            _log.warning(
-                "EmbeddingEngine returned no query embedding; falling back to keyword search"
-            )
+            _log.warning("EmbeddingEngine returned no query embedding; falling back to keyword search")
             return []
 
         candidates = self._fg.query()
@@ -341,9 +336,7 @@ class KnowledgeQueryService:
             params: list[str] = []
             for kw in keywords:
                 pattern = f"%{kw}%"
-                like_clauses.append(
-                    "(LOWER(sub) LIKE ? OR LOWER(pred) LIKE ? OR LOWER(obj) LIKE ?)"
-                )
+                like_clauses.append("(LOWER(sub) LIKE ? OR LOWER(pred) LIKE ? OR LOWER(obj) LIKE ?)")
                 params.extend([pattern, pattern, pattern])
 
             where = " OR ".join(like_clauses)
@@ -521,9 +514,7 @@ class KnowledgeQueryService:
         except (ValueError, TypeError, RuntimeError):
             return 0.0
 
-    def _filter_by_time_window(
-        self, triples: list[KnowledgeTriple], hours: int
-    ) -> list[KnowledgeTriple]:
+    def _filter_by_time_window(self, triples: list[KnowledgeTriple], hours: int) -> list[KnowledgeTriple]:
         now = datetime.now(UTC)
         filtered: list[KnowledgeTriple] = []
 
@@ -552,7 +543,6 @@ class KnowledgeQueryService:
             },
             "errors": self._stats["errors"],
             "success_rate": (
-                (self._stats["total_queries"] - self._stats["errors"])
-                / max(self._stats["total_queries"], 1)
+                (self._stats["total_queries"] - self._stats["errors"]) / max(self._stats["total_queries"], 1)
             ),
         }

@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class EvolutionPattern:
     """进化模式数据结构"""
+
     pattern_id: str
     pattern_type: str
     facts: list[tuple[str, str, str]]
@@ -49,9 +50,7 @@ class PatternExtractor:
     - 因果关系推断
     """
 
-    def __init__(
-        self, fact_graph: MemoryGraph, min_confidence: float = 0.7, min_frequency: int = 3
-    ) -> None:
+    def __init__(self, fact_graph: MemoryGraph, min_confidence: float = 0.7, min_frequency: int = 3) -> None:
         self.fact_graph = fact_graph
         self.min_confidence = min_confidence
         self.min_frequency = min_frequency
@@ -118,9 +117,7 @@ class PatternExtractor:
 
         return patterns
 
-    def validate_pattern(
-        self, pattern: EvolutionPattern, test_data: list[tuple[str, str, str]]
-    ) -> bool:
+    def validate_pattern(self, pattern: EvolutionPattern, test_data: list[tuple[str, str, str]]) -> bool:
         if not test_data:
             return False
 
@@ -135,9 +132,7 @@ class PatternExtractor:
         validation_confidence = match_count / len(pattern.facts)
         is_valid = validation_confidence >= self.min_confidence
 
-        logger.info(
-            f"Pattern {pattern.pattern_id} validation: {validation_confidence:.2f} (valid={is_valid})"
-        )
+        logger.info(f"Pattern {pattern.pattern_id} validation: {validation_confidence:.2f} (valid={is_valid})")
         return is_valid
 
     async def _fetch_triples(self, filters: dict[str, Any]) -> list[tuple[str, str, str]]:
@@ -196,9 +191,7 @@ class PatternExtractor:
                 confidence = min(support * 2, 1.0)
 
                 if confidence >= self.min_confidence:
-                    patterns.append(
-                        {"triples": group[:10], "confidence": confidence, "support": len(group)}
-                    )
+                    patterns.append({"triples": group[:10], "confidence": confidence, "support": len(group)})
 
         return patterns
 

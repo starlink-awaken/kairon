@@ -1147,11 +1147,41 @@ def cmd_import(args: list[str]) -> None:
                 "bind": "0.0.0.0",  # noqa: S104
                 "tags": ["bos", "mcp"],
             },
-            {"id": "bos-web", "name": "B-OS Web", "type": "webapp", "port": int(os.environ.get("BOS_WEB_PORT", 8082)), "bind": "0.0.0.0"},  # noqa: S104
-            {"id": "bos-metrics", "name": "B-OS Metrics", "type": "service", "port": int(os.environ.get("BOS_METRICS_PORT", 9090)), "bind": "0.0.0.0"},  # noqa: S104
-            {"id": "agent-runtime", "name": "Agent Runtime", "type": "daemon", "port": int(os.environ.get("AGENT_RUNTIME_PORT", 9876)), "bind": "127.0.0.1"},
-            {"id": "hermes-mcp", "name": "Hermes MCP", "type": "service", "port": int(os.environ.get("HERMES_MCP_PORT", 7423)), "bind": "127.0.0.1"},
-            {"id": "ollama", "name": "Ollama", "type": "service", "port": int(os.environ.get("OLLAMA_PORT", 11434)), "bind": "127.0.0.1"},
+            {
+                "id": "bos-web",
+                "name": "B-OS Web",
+                "type": "webapp",
+                "port": int(os.environ.get("BOS_WEB_PORT", 8082)),
+                "bind": "0.0.0.0",  # noqa: S104  # BOS service bind config (data, not socket.bind)
+            },
+            {
+                "id": "bos-metrics",
+                "name": "B-OS Metrics",
+                "type": "service",
+                "port": int(os.environ.get("BOS_METRICS_PORT", 9090)),
+                "bind": "0.0.0.0",  # noqa: S104  # BOS service bind config (data, not socket.bind)
+            },
+            {
+                "id": "agent-runtime",
+                "name": "Agent Runtime",
+                "type": "daemon",
+                "port": int(os.environ.get("AGENT_RUNTIME_PORT", 9876)),
+                "bind": "127.0.0.1",
+            },
+            {
+                "id": "hermes-mcp",
+                "name": "Hermes MCP",
+                "type": "service",
+                "port": int(os.environ.get("HERMES_MCP_PORT", 7423)),
+                "bind": "127.0.0.1",
+            },
+            {
+                "id": "ollama",
+                "name": "Ollama",
+                "type": "service",
+                "port": int(os.environ.get("OLLAMA_PORT", 11434)),
+                "bind": "127.0.0.1",
+            },
             {"id": "clash", "name": "Clash", "type": "service", "port": 7890, "bind": "0.0.0.0"},  # noqa: S104
         ]
         for s in services:

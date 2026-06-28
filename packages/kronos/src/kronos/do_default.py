@@ -1,4 +1,5 @@
 """P58-W0 kronos do_default — 真业务 (调 kronos fetch_router / dispatcher 真函数)."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -21,15 +22,18 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
         if action == "list_methods":
             methods = list_all_methods()
             return {
-                "_method": "do_default", "_action": "list_methods",
-                "version": __version__, "count": len(methods),
+                "_method": "do_default",
+                "_action": "list_methods",
+                "version": __version__,
+                "count": len(methods),
                 "methods": methods[:20],
             }
         if action == "plan":
             url = args.get("url", "https://example.com")
             plan = plan_for_url(url)
             return {
-                "_method": "do_default", "_action": "plan",
+                "_method": "do_default",
+                "_action": "plan",
                 "url": url,
                 "content_type": content_type_label(plan.content_type),
             }

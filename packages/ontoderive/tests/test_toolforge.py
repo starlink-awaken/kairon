@@ -2,8 +2,6 @@
 测试 ToolForge v2 匹配引擎
 """
 
-
-
 import pytest
 from ontoderive.toolforge.matcher import ToolForge, _tokenize
 

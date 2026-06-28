@@ -1,4 +1,5 @@
 """P58-W0 codeanalyze do_default — 真业务 (调 codeanalyze commands 真模块)."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -17,8 +18,11 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
         if action == "list_commands":
             commands = sorted(cli.commands.keys())
             return {
-                "_method": "do_default", "_action": "list_commands",
-                "version": __version__, "count": len(commands), "commands": commands,
+                "_method": "do_default",
+                "_action": "list_commands",
+                "version": __version__,
+                "count": len(commands),
+                "commands": commands,
             }
         if action == "version":
             return {"_method": "do_default", "_action": "version", "version": __version__}

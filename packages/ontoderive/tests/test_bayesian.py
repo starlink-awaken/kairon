@@ -2,8 +2,6 @@
 测试贝叶斯层
 """
 
-
-
 from ontoderive.theories.bayesian import BayesianLayer
 
 

@@ -51,11 +51,11 @@ class Signal:
 class NeuralCenter:
     """神经中枢 — 内存级服务注册/拓扑/信号路由/健康检查协调器。
 
-        nc = NeuralCenter()
-        await nc.register("gate", "http://localhost:8001", service=gate_instance)
-        await nc.add_edge("gate", "kb", relation="calls")
-        await nc.emit_signal("search", {"query": "hello"})
-        await nc.start_health_checker(interval=30.0)
+    nc = NeuralCenter()
+    await nc.register("gate", "http://localhost:8001", service=gate_instance)
+    await nc.add_edge("gate", "kb", relation="calls")
+    await nc.emit_signal("search", {"query": "hello"})
+    await nc.start_health_checker(interval=30.0)
     """
 
     def __init__(self) -> None:
@@ -97,8 +97,11 @@ class NeuralCenter:
             neuron_id = f"neuron-{name}"
 
         record = ServiceRecord(
-            name=name, endpoint=endpoint, capabilities=caps,
-            metadata=metadata or {}, neuron_id=neuron_id,
+            name=name,
+            endpoint=endpoint,
+            capabilities=caps,
+            metadata=metadata or {},
+            neuron_id=neuron_id,
         )
         if service is not None:
             record._instance = service
@@ -109,9 +112,12 @@ class NeuralCenter:
         self._failure_counts[name] = 0
 
         return ValidationResult(
-            service_name=name, passed=True,
+            service_name=name,
+            passed=True,
             required_passed=["HealthProtocol", "IdentityProtocol"],
-            required_failed=[], optional_implemented=[], neuron_id=neuron_id,
+            required_failed=[],
+            optional_implemented=[],
+            neuron_id=neuron_id,
         )
 
     async def deregister(self, name: str) -> bool:
@@ -139,8 +145,11 @@ class NeuralCenter:
     # ── Topology Graph ────────────────────────────────────────────
 
     async def add_edge(
-        self, source: str, target: str,
-        relation: str = "depends_on", **meta: Any,
+        self,
+        source: str,
+        target: str,
+        relation: str = "depends_on",
+        **meta: Any,
     ) -> bool:
         """添加拓扑边，source/target 不存在则返回 False。"""
         if source not in self._services or target not in self._services:
@@ -155,14 +164,10 @@ class NeuralCenter:
         if source not in self._edges:
             return False
         before = len(self._edges[source])
-        self._edges[source] = [
-            e for e in self._edges[source]
-            if not (e.source == source and e.target == target)
-        ]
+        self._edges[source] = [e for e in self._edges[source] if not (e.source == source and e.target == target)]
         if target in self._reverse_edges:
             self._reverse_edges[target] = [
-                e for e in self._reverse_edges[target]
-                if not (e.source == source and e.target == target)
+                e for e in self._reverse_edges[target] if not (e.source == source and e.target == target)
             ]
         return len(self._edges[source]) < before
 
@@ -179,7 +184,9 @@ class NeuralCenter:
         return {name: [e.target for e in edges] for name, edges in self._edges.items()}
 
     async def walk_upstream(
-        self, name: str, visited: set[str] | None = None,
+        self,
+        name: str,
+        visited: set[str] | None = None,
     ) -> list[str]:
         """递归遍历上游依赖链，返回所有可达依赖。"""
         if visited is None:
@@ -208,8 +215,11 @@ class NeuralCenter:
         return matched
 
     async def emit_signal(
-        self, capability: str, payload: dict[str, Any],
-        origin: str = "", ttl: int = 10,
+        self,
+        capability: str,
+        payload: dict[str, Any],
+        origin: str = "",
+        ttl: int = 10,
     ) -> Signal:
         """创建信号并立即路由。"""
         signal = Signal(capability=capability, payload=payload, origin=origin, ttl=ttl)
@@ -236,7 +246,8 @@ class NeuralCenter:
             except Exception:
                 pass
         status = HealthStatus(
-            service=name, status="healthy",
+            service=name,
+            status="healthy",
             version=record.metadata.get("version", "unknown"),
             message=f"neuron_id={record.neuron_id} endpoint={record.endpoint}",
         )
@@ -274,8 +285,7 @@ class NeuralCenter:
 
     async def get_health_summary(self) -> dict[str, Any]:
         """返回 {total, healthy, unhealthy, failure_counts, last_probe}。"""
-        h = sum(1 for s in self._services.values()
-                if s.last_health and s.last_health.status == "healthy")
+        h = sum(1 for s in self._services.values() if s.last_health and s.last_health.status == "healthy")
         return {
             "total": len(self._services),
             "healthy": h,

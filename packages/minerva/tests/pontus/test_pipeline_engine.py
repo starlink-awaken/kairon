@@ -22,6 +22,7 @@ from minerva.pipeline.pontus import (
 # DSL tests
 # ---------------------------------------------------------------------------
 
+
 class TestDSL:
     def test_load_pipeline_from_yaml(self):
         yaml_content = """\
@@ -121,6 +122,7 @@ steps:
 # Scheduler tests
 # ---------------------------------------------------------------------------
 
+
 class TestScheduler:
     def test_linear_pipeline(self):
         p = PipelineDef(
@@ -213,6 +215,7 @@ class TestScheduler:
 # Checkpoint tests
 # ---------------------------------------------------------------------------
 
+
 class TestCheckpoint:
     def test_save_and_resume(self):
         mgr = CheckpointManager(db_path=":memory:")
@@ -249,6 +252,7 @@ class TestCheckpoint:
 # ---------------------------------------------------------------------------
 # Quality tests
 # ---------------------------------------------------------------------------
+
 
 class TestQualityValidator:
     def test_valid_data(self):

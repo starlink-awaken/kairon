@@ -141,10 +141,8 @@ class MetricsCollector:
                             break
 
                 for upper, bc in zip(buckets, bucket_counts):
-                    lines.append(
-                        f'{name}_bucket{{le="{_fmt_bucket(upper)}"}} {_fmt_val(bc)}'
-                    )
-                lines.append(f"{name}_bucket{{le=\"+Inf\"}} {_fmt_val(entry.count)}")
+                    lines.append(f'{name}_bucket{{le="{_fmt_bucket(upper)}"}} {_fmt_val(bc)}')
+                lines.append(f'{name}_bucket{{le="+Inf"}} {_fmt_val(entry.count)}')
                 lines.append(f"{name}_sum {_fmt_val(entry.sum_val)}")
                 lines.append(f"{name}_count {_fmt_val(entry.count)}")
             else:

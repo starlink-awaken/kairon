@@ -37,6 +37,7 @@ OPTIONAL_INTERFACES: list[type[Protocol]] = [  # type: ignore[valid-type]
 @dataclass
 class ValidationResult:
     """干细胞验证结果"""
+
     service_name: str
     passed: bool
     required_passed: list[str] = field(default_factory=list)

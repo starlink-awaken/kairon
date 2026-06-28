@@ -1,7 +1,5 @@
 """类型系统测试"""
 
-
-
 from ontoderive.foundation.typesystem import META_TYPES, PREFIX_TO_META, TypeValidator
 
 

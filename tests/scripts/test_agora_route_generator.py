@@ -25,6 +25,7 @@ import agora_route_generator as arg
 
 # ── 1. AST 提取 ─────────────────────────────────────────
 
+
 def test_extract_tools_from_mock_file(tmp_path: Path) -> None:
     """mock 一个含 @mcp.tool() / @fastmcp.tool() 的 Python 文件，验证提取。"""
     mock_file = tmp_path / "server.py"
@@ -103,6 +104,7 @@ def test_extract_tools_syntax_error_returns_empty(tmp_path: Path) -> None:
 
 # ── 2. 黑名单 ──────────────────────────────────────────
 
+
 def test_is_blacklisted_private() -> None:
     """以下划线开头的工具名应被黑名单。"""
     assert arg.is_blacklisted("_health_check") is True
@@ -126,12 +128,13 @@ def test_is_blacklisted_sample_and_internal() -> None:
 
 # ── 3. 扫描包 ──────────────────────────────────────────
 
+
 def test_scan_package_finds_decorated_functions(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """扫描一个 mock 包，验证能找出装饰过的函数。"""
     fake_pkg_root = tmp_path / "packages" / "fakepkg" / "src" / "fakepkg"
     fake_pkg_root.mkdir(parents=True)
     (fake_pkg_root / "server.py").write_text(
-        '''
+        """
 from fastmcp import FastMCP
 mcp = FastMCP("fake")
 
@@ -142,15 +145,15 @@ def public_tool() -> dict:
 @mcp.tool()
 def _private_tool() -> dict:
     return {}
-''',
+""",
         encoding="utf-8",
     )
     (fake_pkg_root / "_hidden.py").write_text(
-        '''
+        """
 @mcp.tool()
 def sample_ignored() -> dict:
     return {}
-''',
+""",
         encoding="utf-8",
     )
     (fake_pkg_root / "tools_template.py").write_text(
@@ -180,6 +183,7 @@ def sample_send_message() -> dict:
 
 # ── 4. 保留现有 ─────────────────────────────────────────
 
+
 def test_generate_routes_preserves_existing(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """现有 routes（含手工注册条目）应被完整保留。"""
     fake_agora = tmp_path / "agora"
@@ -198,6 +202,7 @@ def test_generate_routes_preserves_existing(monkeypatch: pytest.MonkeyPatch, tmp
 
 # ── 5. 去重 ────────────────────────────────────────────
 
+
 def test_generate_routes_deduplicates(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """同一 tool_name 在不同包出现，第二次应被忽略（保留旧 service）。"""
     fake_agora = tmp_path / "agora"
@@ -211,7 +216,7 @@ def test_generate_routes_deduplicates(monkeypatch: pytest.MonkeyPatch, tmp_path:
     pkg = tmp_path / "packages" / "p1" / "src" / "p1"
     pkg.mkdir(parents=True)
     (pkg / "s.py").write_text(
-        '''
+        """
 from fastmcp import FastMCP
 mcp = FastMCP("p1")
 @mcp.tool()
@@ -220,7 +225,7 @@ def shared_tool() -> dict:
 @mcp.tool()
 def new_tool() -> dict:
     return {}
-''',
+""",
         encoding="utf-8",
     )
 
@@ -235,6 +240,7 @@ def new_tool() -> dict:
 
 
 # ── 6. 备份 ─────────────────────────────────────────────
+
 
 def test_backup_creates_timestamped_file(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """备份文件应带 UTC 时间戳后缀，文件名格式 .json.bak-YYYYMMDDTHHMMSSZ。"""

@@ -6,6 +6,7 @@ sleep 30s 重试 (避免 KeepAlive 重启风暴), 正常模式立即 return 0.
 P68-W1: 加 restart_delay_sec 参数 — 4 kairon 包配 launchd 周期重启 (sleep Ns + return 0),
 避免 daemon_mode 永远 sleep 30s 永远 disconnected.
 """
+
 from __future__ import annotations
 
 import json
@@ -43,20 +44,14 @@ def run_stdio_dispatch(
             try:
                 req = json.loads(line)
             except json.JSONDecodeError as exc:
-                sys.stdout.write(
-                    json.dumps({"status": "error", "error": f"json_decode: {exc}"}) + "\n"
-                )
+                sys.stdout.write(json.dumps({"status": "error", "error": f"json_decode: {exc}"}) + "\n")
                 sys.stdout.flush()
                 continue
             action = req.get("action", "")
             args = req.get("args", {}) or {}
             try:
                 result = dispatch_fn(action, args)
-                resp = (
-                    result
-                    if isinstance(result, dict) and "status" in result
-                    else {"status": "ok", "result": result}
-                )
+                resp = result if isinstance(result, dict) and "status" in result else {"status": "ok", "result": result}
             except Exception as exc:
                 resp = {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
             sys.stdout.write(json.dumps(resp, ensure_ascii=False, default=str) + "\n")

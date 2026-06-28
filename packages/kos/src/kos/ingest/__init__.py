@@ -90,21 +90,19 @@ def ingest_text(text: str, title: Optional[str] = None) -> dict[str, Any]:
     filepath = INBOX / f"{safe_name}.md"
     content = f"# {title}\n\n> KOS ingest · {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n{text}\n"
     filepath.write_text(content, encoding="utf-8")
-    
+
     # Dual-track write: Mem0Adapter
     try:
         from kos.adapters.mem0_adapter import Mem0Adapter
+
         adapter = Mem0Adapter()
         if adapter.enabled:
-            adapter.add_memory(
-                text=text,
-                user_id="kos-user",
-                metadata={"source": str(filepath), "title": title}
-            )
+            adapter.add_memory(text=text, user_id="kos-user", metadata={"source": str(filepath), "title": title})
     except Exception as e:
         import logging
+
         logging.getLogger(__name__).warning(f"Dual-write to Mem0 failed: {e}")
-        
+
     # Check duplication
     dedup_check = _is_duplicate(text)
     result = {"ingested": str(filepath), "type": "text", "title": title, "chars": len(text)}
@@ -195,7 +193,12 @@ def analyze_ingest(item: dict[str, Any]) -> dict[str, Any]:
     if not text or len(text) < 20:
         return {"depth": "minimal", "reason": "content too short"}
 
-    analysis: dict[str, Any] = {"depth": "full", "suggested_tags": [], "related_docs": [], "suggested_domain": "obsidian"}
+    analysis: dict[str, Any] = {
+        "depth": "full",
+        "suggested_tags": [],
+        "related_docs": [],
+        "suggested_domain": "obsidian",
+    }
 
     # 1. Domain classification via manifest strategies
     get_workspace_manifest()

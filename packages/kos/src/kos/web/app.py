@@ -31,10 +31,12 @@ except ImportError:
 try:
     from fastapi import FastAPI, Query, Request
     from fastapi.responses import HTMLResponse, JSONResponse
+
     HAS_FASTAPI = True
 except ImportError:
     FastAPI = None  # type: ignore[assignment,misc]
     from fastapi.responses import HTMLResponse, JSONResponse  # type: ignore[import-not-found]
+
     HAS_FASTAPI = False
 
 app = FastAPI(title="KOS Dashboard", version="2.0")

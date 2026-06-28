@@ -53,9 +53,7 @@ class DraftStructure:
         if not self.has_references_section:
             warnings.append("缺失「参考引用」节(期望 ## 参考引用 / ## 参考文献 / 引用清单节)")
         if self.citation_count < 3:
-            warnings.append(
-                f"引用数 {self.citation_count} < 3 阈值(任务验收要求 ≥ 3 个可溯源引用)"
-            )
+            warnings.append(f"引用数 {self.citation_count} < 3 阈值(任务验收要求 ≥ 3 个可溯源引用)")
         return warnings
 
 
@@ -86,15 +84,9 @@ class RecallMetrics:
 
 
 # 节标题识别(包含 demo 报告里的实际写法, 支持 `## 4. xxx` 这种带序号的标题)
-_PROBLEM_PATTERNS = (
-    r"^#{1,3}\s*(?:\d+\.\s*)?(?:问题摘要|问题背景|问题)\s*$",
-)
-_BASIS_PATTERNS = (
-    r"^#{1,3}\s*(?:\d+\.\s*)?(?:政策依据|主要内容|政策内容)\s*$",
-)
-_REFERENCES_PATTERNS = (
-    r"^#{1,3}\s*(?:\d+\.\s*)?(?:参考引用|参考文献|引用清单|可溯源引用清单)\s*$",
-)
+_PROBLEM_PATTERNS = (r"^#{1,3}\s*(?:\d+\.\s*)?(?:问题摘要|问题背景|问题)\s*$",)
+_BASIS_PATTERNS = (r"^#{1,3}\s*(?:\d+\.\s*)?(?:政策依据|主要内容|政策内容)\s*$",)
+_REFERENCES_PATTERNS = (r"^#{1,3}\s*(?:\d+\.\s*)?(?:参考引用|参考文献|引用清单|可溯源引用清单)\s*$",)
 
 # 引用编号正则(支持中英文方括号)
 _CITATION_RE = re.compile(r"[\[〔]\s*(\d+)\s*[\]〕]")
@@ -162,9 +154,7 @@ def compute_recall(searched_ids: list[str], expected_ids: list[str]) -> RecallMe
     expected:  期望命中的种子政策 ID 列表(如 SEED_POLICIES 里的 entity_id)
     """
     if not expected_ids:
-        return RecallMetrics(
-            expected_count=0, hit_count=0, miss_count=0, recall=0.0, missing=[]
-        )
+        return RecallMetrics(expected_count=0, hit_count=0, miss_count=0, recall=0.0, missing=[])
 
     searched_set = set(searched_ids)
     expected_set = set(expected_ids)
@@ -185,14 +175,10 @@ def compute_recall(searched_ids: list[str], expected_ids: list[str]) -> RecallMe
 
 
 def _grade_emoji(grade: str) -> str:
-    return {"A": "优秀", "B": "良好", "C": "合格", "D": "待改进", "F": "不合格"}.get(
-        grade, grade
-    )
+    return {"A": "优秀", "B": "良好", "C": "合格", "D": "待改进", "F": "不合格"}.get(grade, grade)
 
 
-def _improvement_rows(
-    recall: RecallMetrics, structure: DraftStructure
-) -> list[tuple[str, str, str]]:
+def _improvement_rows(recall: RecallMetrics, structure: DraftStructure) -> list[tuple[str, str, str]]:
     """生成"当前 → 建议"改进表格行."""
     rows: list[tuple[str, str, str]] = []
 
@@ -227,15 +213,14 @@ def _improvement_rows(
             )
         )
 
-    present = sum(
-        [structure.has_problem_section, structure.has_basis_section, structure.has_references_section]
-    )
+    present = sum([structure.has_problem_section, structure.has_basis_section, structure.has_references_section])
     rows.append(
         (
             "结构完整性",
             f"{present}/3",
-            "在 system prompt 中强制要求 '## 政策依据' 与 '## 参考引用' 节, "
-            "否则 warn 提醒起草人补节" if present < 3 else "3/3 全部命中, 维持模板",
+            "在 system prompt 中强制要求 '## 政策依据' 与 '## 参考引用' 节, 否则 warn 提醒起草人补节"
+            if present < 3
+            else "3/3 全部命中, 维持模板",
         )
     )
     return rows
@@ -310,7 +295,7 @@ def render_eval_report(
             "```bash",
             "# 1. 跑 demo 生成初稿",
             "uv run python scripts/e2e_health_demo.py \\",
-            "    --question \"<工作问题>\" \\",
+            '    --question "<工作问题>" \\',
             "    --output /tmp/draft.md",
             "",
             "# 2. 跑 eval 评估初稿",
@@ -428,12 +413,13 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     print("[E2E-EVAL] 评估完成")
-    print(f"  结构: problem={structure.has_problem_section} "
-          f"basis={structure.has_basis_section} "
-          f"refs={structure.has_references_section} "
-          f"citations={structure.citation_count}")
-    print(f"  召回率: {recall.recall:.2f} ({recall.quality_grade()}) "
-          f"hit={recall.hit_count}/{recall.expected_count}")
+    print(
+        f"  结构: problem={structure.has_problem_section} "
+        f"basis={structure.has_basis_section} "
+        f"refs={structure.has_references_section} "
+        f"citations={structure.citation_count}"
+    )
+    print(f"  召回率: {recall.recall:.2f} ({recall.quality_grade()}) hit={recall.hit_count}/{recall.expected_count}")
     if structure.warn_lines():
         print("  警告:")
         for w in structure.warn_lines():

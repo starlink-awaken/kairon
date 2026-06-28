@@ -2,8 +2,6 @@
 测试图灵机层 v2
 """
 
-
-
 from ontoderive.theories.turing_k import KnowledgeTM
 
 

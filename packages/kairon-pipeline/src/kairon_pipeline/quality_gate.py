@@ -70,24 +70,18 @@ class QualityGate:
 
             # Rule 1: Title length
             if len(item.title) < self._min_title_length:
-                reasons.append(
-                    f"Title too short ({len(item.title)} < {self._min_title_length})"
-                )
+                reasons.append(f"Title too short ({len(item.title)} < {self._min_title_length})")
                 score -= 0.3
 
             # Rule 2: Body length
             if len(item.body) < self._min_body_length:
-                reasons.append(
-                    f"Body too short ({len(item.body)} < {self._min_body_length})"
-                )
+                reasons.append(f"Body too short ({len(item.body)} < {self._min_body_length})")
                 score -= 0.3
 
             # Rule 3: Word count
             word_count = len(item.body.split())
             if word_count < self._min_word_count:
-                reasons.append(
-                    f"Too few words ({word_count} < {self._min_word_count})"
-                )
+                reasons.append(f"Too few words ({word_count} < {self._min_word_count})")
                 score -= 0.3
 
             passed = score > 0.4  # at least one rule must pass comfortably

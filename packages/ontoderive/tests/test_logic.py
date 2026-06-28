@@ -3,7 +3,6 @@ from pathlib import Path
 """逻辑蕴含图测试"""
 
 
-
 from ontoderive.theories.logic import EntailmentGraph, build_from_project
 
 

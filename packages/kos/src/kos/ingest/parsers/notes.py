@@ -4,6 +4,7 @@
 # status: active
 # ---
 """Markdown 笔记解析器 — 将 Markdown 笔记解析为 JSON-LD 事实。"""
+
 from __future__ import annotations
 
 import re
@@ -32,14 +33,16 @@ def parse_markdown(md: str) -> list[dict[str, Any]]:
                 # End code block
                 if code_lines:
                     fact_id = str(uuid.uuid4())
-                    facts.append({
-                        "id": fact_id,
-                        "@type": "CodeSnippet",
-                        "topic": current_topic or "untitled",
-                        "pred": "contains_code",
-                        "content": "\n".join(code_lines),
-                        "metadata": {"language": code_lang},
-                    })
+                    facts.append(
+                        {
+                            "id": fact_id,
+                            "@type": "CodeSnippet",
+                            "topic": current_topic or "untitled",
+                            "pred": "contains_code",
+                            "content": "\n".join(code_lines),
+                            "metadata": {"language": code_lang},
+                        }
+                    )
                     code_lines = []
                 in_code_block = False
                 code_lang = ""
@@ -57,13 +60,15 @@ def parse_markdown(md: str) -> list[dict[str, Any]]:
         if topic_match:
             current_topic = topic_match.group(1).strip()
             fact_id = str(uuid.uuid4())
-            facts.append({
-                "id": fact_id,
-                "@type": "Topic",
-                "topic": current_topic,
-                "pred": "is_topic",
-                "content": current_topic,
-            })
+            facts.append(
+                {
+                    "id": fact_id,
+                    "@type": "Topic",
+                    "topic": current_topic,
+                    "pred": "is_topic",
+                    "content": current_topic,
+                }
+            )
             continue
 
         # SubTopic (H2)
@@ -71,39 +76,45 @@ def parse_markdown(md: str) -> list[dict[str, Any]]:
         if subtopic_match:
             current_subtopic = subtopic_match.group(1).strip()
             fact_id = str(uuid.uuid4())
-            facts.append({
-                "id": fact_id,
-                "@type": "SubTopic",
-                "topic": current_topic or current_subtopic,
-                "pred": "is_subtopic",
-                "content": current_subtopic,
-            })
+            facts.append(
+                {
+                    "id": fact_id,
+                    "@type": "SubTopic",
+                    "topic": current_topic or current_subtopic,
+                    "pred": "is_subtopic",
+                    "content": current_subtopic,
+                }
+            )
             continue
 
         # Knowledge points (list items under a subtopic)
         kp_match = re.match(r"^-\s+(.+)$", line)
         if kp_match and current_subtopic:
             fact_id = str(uuid.uuid4())
-            facts.append({
-                "id": fact_id,
-                "@type": "KnowledgePoint",
-                "topic": current_topic or current_subtopic,
-                "pred": "describes",
-                "content": kp_match.group(1).strip(),
-                "metadata": {"subtopic": current_subtopic},
-            })
+            facts.append(
+                {
+                    "id": fact_id,
+                    "@type": "KnowledgePoint",
+                    "topic": current_topic or current_subtopic,
+                    "pred": "describes",
+                    "content": kp_match.group(1).strip(),
+                    "metadata": {"subtopic": current_subtopic},
+                }
+            )
 
     # Handle code block at end of file
     if in_code_block and code_lines:
         fact_id = str(uuid.uuid4())
-        facts.append({
-            "id": fact_id,
-            "@type": "CodeSnippet",
-            "topic": current_topic or "untitled",
-            "pred": "contains_code",
-            "content": "\n".join(code_lines),
-            "metadata": {"language": code_lang},
-        })
+        facts.append(
+            {
+                "id": fact_id,
+                "@type": "CodeSnippet",
+                "topic": current_topic or "untitled",
+                "pred": "contains_code",
+                "content": "\n".join(code_lines),
+                "metadata": {"language": code_lang},
+            }
+        )
 
     return facts
 

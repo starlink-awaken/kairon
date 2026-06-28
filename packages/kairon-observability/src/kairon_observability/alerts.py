@@ -60,9 +60,7 @@ def _eval_condition(condition: str, metrics: dict[str, float]) -> bool:
     """Safely evaluate a simple ``metric op threshold`` condition against *metrics*."""
     m = _COND_RE.match(condition)
     if not m:
-        raise ValueError(
-            f"Invalid condition syntax: '{condition}'. Expected e.g. 'p99_ms > 500'"
-        )
+        raise ValueError(f"Invalid condition syntax: '{condition}'. Expected e.g. 'p99_ms > 500'")
     metric_name = m.group("metric")
     op_func = _OPS[m.group("op")]
     threshold = float(m.group("threshold"))

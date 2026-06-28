@@ -2,9 +2,6 @@
 测试 intelligence/judge.py - OntoDeriveJudge 评估器
 """
 
-
-
-
 from ontoderive.intelligence.judge import JudgeResult, OntoDeriveJudge  # type: ignore[import-not-found]
 
 

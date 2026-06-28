@@ -1,4 +1,5 @@
 """health_profile 单元测试（P28-W1）。"""
+
 from __future__ import annotations
 
 import json
@@ -10,6 +11,7 @@ from health_profile import HealthCheckRecord, HealthProfile, VaccinationRecord
 from health_profile.io import from_json, profile_from_dict, profile_to_dict, to_json
 
 # ---------- age_years ----------
+
 
 def test_age_years_basic() -> None:
     """生日已过：年龄 = year_diff。"""
@@ -31,6 +33,7 @@ def test_age_years_exact_birthday() -> None:
 
 # ---------- add_check 时间戳 ----------
 
+
 def test_add_check_updates_timestamp() -> None:
     """add_check 必须刷新 updated_at。"""
     p = HealthProfile(
@@ -47,6 +50,7 @@ def test_add_check_updates_timestamp() -> None:
 
 
 # ---------- last_check ----------
+
 
 def test_last_check_returns_newest() -> None:
     """last_check 必须按 check_date 返回最大者，不依赖插入顺序。"""
@@ -66,6 +70,7 @@ def test_last_check_empty() -> None:
 
 
 # ---------- upcoming_vaccinations ----------
+
 
 def test_upcoming_vaccinations_30_days() -> None:
     """next_due 在 30 天内：应被返回。"""
@@ -98,6 +103,7 @@ def test_upcoming_vaccinations_window_validation() -> None:
 
 
 # ---------- JSON roundtrip ----------
+
 
 def test_json_roundtrip() -> None:
     """to_json → from_json 字段完全一致。"""
@@ -170,6 +176,7 @@ def test_json_unicode_preserved() -> None:
 
 
 # ---------- BloodType Literal ----------
+
 
 def test_blood_type_literal_validation() -> None:
     """血型必须是字面量集合内的值（dataclass Literal 会在构造时拒绝非法值）。"""

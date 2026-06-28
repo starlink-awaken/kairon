@@ -196,9 +196,7 @@ class TestArchetypeLoaderWithFiles:
 
         workers_dir = tmp_path / "workers"
         workers_dir.mkdir()
-        (workers_dir / "test_agent.yaml").write_text(
-            "id: agent-1\nname: Test Agent\n"
-        )
+        (workers_dir / "test_agent.yaml").write_text("id: agent-1\nname: Test Agent\n")
 
         loader = ArchetypeLoader(archetypes_root=tmp_path)
         agents = loader.get_agent_archetypes()
@@ -211,9 +209,7 @@ class TestArchetypeLoaderWithFiles:
 
         synapses_dir = tmp_path / "synapses"
         synapses_dir.mkdir()
-        (synapses_dir / "search.yaml").write_text(
-            "tool_id: tool-search\nname: Search Tool\n"
-        )
+        (synapses_dir / "search.yaml").write_text("tool_id: tool-search\nname: Search Tool\n")
 
         loader = ArchetypeLoader(archetypes_root=tmp_path)
         tools = loader.get_tool_archetypes()
@@ -225,9 +221,7 @@ class TestArchetypeLoaderWithFiles:
 
         cells_dir = tmp_path / "cells"
         cells_dir.mkdir()
-        (cells_dir / "law_of_gravity.md").write_text(
-            "---\nname: Law of Gravity\npriority: 1\n---\n\nContent here\n"
-        )
+        (cells_dir / "law_of_gravity.md").write_text("---\nname: Law of Gravity\npriority: 1\n---\n\nContent here\n")
 
         loader = ArchetypeLoader(archetypes_root=tmp_path)
         laws = loader.get_law_archetypes()
@@ -251,9 +245,7 @@ class TestArchetypeLoaderWithFiles:
 
         workers_dir = tmp_path / "workers"
         workers_dir.mkdir()
-        (workers_dir / "agents.yaml").write_text(
-            "id: agent-alpha\nname: Alpha\n"
-        )
+        (workers_dir / "agents.yaml").write_text("id: agent-alpha\nname: Alpha\n")
 
         loader = ArchetypeLoader(archetypes_root=tmp_path)
         agent = loader.get_agent("agent-alpha")
@@ -265,9 +257,7 @@ class TestArchetypeLoaderWithFiles:
 
         synapses_dir = tmp_path / "synapses"
         synapses_dir.mkdir()
-        (synapses_dir / "tools.yaml").write_text(
-            "tool_id: tool-search\nname: Search\n"
-        )
+        (synapses_dir / "tools.yaml").write_text("tool_id: tool-search\nname: Search\n")
 
         loader = ArchetypeLoader(archetypes_root=tmp_path)
         tool = loader.get_tool("tool-search")

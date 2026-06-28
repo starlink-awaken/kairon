@@ -1,4 +1,5 @@
 """minerva.health_summarizer 单元测试（P28-W4）。"""
+
 from __future__ import annotations
 
 from datetime import date, timedelta
@@ -106,12 +107,14 @@ def test_check_vaccination_outside_window() -> None:
     p = _make_profile(
         vaccinations=[
             VaccinationRecord(
-                vaccine="X", dose=1,
+                vaccine="X",
+                dose=1,
                 administered_at=TODAY - timedelta(days=400),
                 next_due=TODAY - timedelta(days=10),  # 已过期
             ),
             VaccinationRecord(
-                vaccine="Y", dose=1,
+                vaccine="Y",
+                dose=1,
                 administered_at=TODAY - timedelta(days=200),
                 next_due=TODAY + timedelta(days=200),  # 超出 60 天
             ),
@@ -126,7 +129,11 @@ def test_check_vaccination_outside_window() -> None:
 def test_check_checkup_due_severity_urgent() -> None:
     """上次体检 >12 个月 → urgent。"""
     p = _make_profile(
-        checks=[HealthCheckRecord(check_date=TODAY - timedelta(days=400), height_cm=95, weight_kg=14, vision_left=1.0, vision_right=1.0)]
+        checks=[
+            HealthCheckRecord(
+                check_date=TODAY - timedelta(days=400), height_cm=95, weight_kg=14, vision_left=1.0, vision_right=1.0
+            )
+        ]
     )
     alerts = list(check_checkup_due(p, TODAY))
     assert len(alerts) == 1
@@ -137,7 +144,11 @@ def test_check_checkup_due_severity_urgent() -> None:
 def test_check_checkup_due_severity_soon() -> None:
     """上次体检 6-12 个月 → soon。"""
     p = _make_profile(
-        checks=[HealthCheckRecord(check_date=TODAY - timedelta(days=240), height_cm=95, weight_kg=14, vision_left=1.0, vision_right=1.0)]
+        checks=[
+            HealthCheckRecord(
+                check_date=TODAY - timedelta(days=240), height_cm=95, weight_kg=14, vision_left=1.0, vision_right=1.0
+            )
+        ]
     )
     alerts = list(check_checkup_due(p, TODAY))
     assert len(alerts) == 1
@@ -147,7 +158,11 @@ def test_check_checkup_due_severity_soon() -> None:
 def test_check_checkup_due_within_window_no_alert() -> None:
     """上次体检 <6 个月 → 不提醒。"""
     p = _make_profile(
-        checks=[HealthCheckRecord(check_date=TODAY - timedelta(days=90), height_cm=95, weight_kg=14, vision_left=1.0, vision_right=1.0)]
+        checks=[
+            HealthCheckRecord(
+                check_date=TODAY - timedelta(days=90), height_cm=95, weight_kg=14, vision_left=1.0, vision_right=1.0
+            )
+        ]
     )
     assert list(check_checkup_due(p, TODAY)) == []
 
@@ -159,8 +174,12 @@ def test_check_vision_change_detects_drop() -> None:
     """最近 2 次视力下降 >0.1 → info。"""
     p = _make_profile(
         checks=[
-            HealthCheckRecord(check_date=TODAY - timedelta(days=180), height_cm=95, weight_kg=14, vision_left=0.9, vision_right=0.9),
-            HealthCheckRecord(check_date=TODAY - timedelta(days=10), height_cm=98, weight_kg=15, vision_left=0.7, vision_right=0.95),
+            HealthCheckRecord(
+                check_date=TODAY - timedelta(days=180), height_cm=95, weight_kg=14, vision_left=0.9, vision_right=0.9
+            ),
+            HealthCheckRecord(
+                check_date=TODAY - timedelta(days=10), height_cm=98, weight_kg=15, vision_left=0.7, vision_right=0.95
+            ),
         ]
     )
     alerts = list(check_vision_change(p, TODAY))
@@ -173,8 +192,12 @@ def test_check_vision_change_no_drop() -> None:
     """视力稳定或上升 → 不提醒。"""
     p = _make_profile(
         checks=[
-            HealthCheckRecord(check_date=TODAY - timedelta(days=180), height_cm=95, weight_kg=14, vision_left=0.7, vision_right=0.7),
-            HealthCheckRecord(check_date=TODAY - timedelta(days=10), height_cm=98, weight_kg=15, vision_left=0.8, vision_right=0.85),
+            HealthCheckRecord(
+                check_date=TODAY - timedelta(days=180), height_cm=95, weight_kg=14, vision_left=0.7, vision_right=0.7
+            ),
+            HealthCheckRecord(
+                check_date=TODAY - timedelta(days=10), height_cm=98, weight_kg=15, vision_left=0.8, vision_right=0.85
+            ),
         ]
     )
     assert list(check_vision_change(p, TODAY)) == []
@@ -230,19 +253,28 @@ def test_render_separates_urgent_soon_info() -> None:
     """三种 severity 都被渲染到对应分桶。"""
     alerts = [
         HealthAlert(
-            severity="urgent", category="vaccination",
-            member_id="m1", member_name="夏维桢",
-            title="A", detail="a",
+            severity="urgent",
+            category="vaccination",
+            member_id="m1",
+            member_name="夏维桢",
+            title="A",
+            detail="a",
         ),
         HealthAlert(
-            severity="soon", category="checkup",
-            member_id="m1", member_name="夏维桢",
-            title="B", detail="b",
+            severity="soon",
+            category="checkup",
+            member_id="m1",
+            member_name="夏维桢",
+            title="B",
+            detail="b",
         ),
         HealthAlert(
-            severity="info", category="vision",
-            member_id="m2", member_name="爸爸",
-            title="C", detail="c",
+            severity="info",
+            category="vision",
+            member_id="m2",
+            member_name="爸爸",
+            title="C",
+            detail="c",
         ),
     ]
     md = render(alerts, today=TODAY)

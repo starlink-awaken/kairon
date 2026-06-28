@@ -14,6 +14,7 @@ import pytest
 
 try:
     from ontoderive.core.derive import OntoDerive
+
     _ENGINE_AVAILABLE = True
 except ImportError:
     OntoDerive = None

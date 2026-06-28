@@ -32,9 +32,11 @@ _DEGRADED_MODE_CHECK_INTERVAL = 30.0
 
 # ── 本地数据模型 (共享自 kos.query_service) ─────────────────
 
+
 @dataclass
 class KnowledgeTriple:
     """知识三元组"""
+
     subject: str
     predicate: str
     obj: str
@@ -58,9 +60,7 @@ class _NoOpKnowledgeQueryService:
     ) -> list:
         return []
 
-    async def semantic_search(
-        self, query_text: str, limit: int = 100, time_window_hours: int | None = None
-    ) -> list:
+    async def semantic_search(self, query_text: str, limit: int = 100, time_window_hours: int | None = None) -> list:
         return []
 
     def get_query_stats(self) -> dict:
@@ -139,9 +139,7 @@ class HarvestContextInjector:
             is_healthy = await self._check_factgraph_health_async()
 
             if not is_healthy:
-                _log.warning(
-                    "HarvestContextInjector: MemoryGraph unhealthy, using degraded mode"
-                )
+                _log.warning("HarvestContextInjector: MemoryGraph unhealthy, using degraded mode")
                 self._enter_degraded_mode()
 
             query = knowledge_query or self._derive_query(persona, task_msg)
@@ -262,9 +260,7 @@ class HarvestContextInjector:
             if not self._degraded_mode:
                 self._degraded_mode = True
                 self._degraded_since = time.time()
-                _log.warning(
-                    "HarvestContextInjector: ENTERING DEGRADED MODE - no knowledge enhancement"
-                )
+                _log.warning("HarvestContextInjector: ENTERING DEGRADED MODE - no knowledge enhancement")
 
     def _exit_degraded_mode(self) -> None:
         with self._lock:
@@ -367,15 +363,11 @@ class HarvestContextInjector:
                     break
             sections.append("\n".join(knowledge_lines))
         elif self._degraded_mode:
-            sections.append(
-                "## Knowledge Status\n(Knowledge enhancement temporarily unavailable - using base prompt)"
-            )
+            sections.append("## Knowledge Status\n(Knowledge enhancement temporarily unavailable - using base prompt)")
 
         meta = {k: v for k, v in task_msg.items() if k != "content" and v}
         if meta:
-            sections.append(
-                f"## Context\n```json\n{json.dumps(meta, ensure_ascii=False, indent=2)}\n```"
-            )
+            sections.append(f"## Context\n```json\n{json.dumps(meta, ensure_ascii=False, indent=2)}\n```")
 
         return "\n\n".join(sections)
 

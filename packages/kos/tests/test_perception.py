@@ -4,6 +4,7 @@
 # status: active
 # ---
 """Tests for kos.perception — all network calls mocked."""
+
 from __future__ import annotations
 
 import importlib
@@ -104,10 +105,16 @@ class TestFactInjector:
         assert rows[0] == 2
 
     def test_inject_to_real_db_smoke(self):
-        count = self.mod.inject_facts([
-            {"sub": "SmokeTest", "pred": "perception_test", "obj": "ok",
-             "metadata": json.dumps({"source": "test", "confidence": 0.9})}
-        ])
+        count = self.mod.inject_facts(
+            [
+                {
+                    "sub": "SmokeTest",
+                    "pred": "perception_test",
+                    "obj": "ok",
+                    "metadata": json.dumps({"source": "test", "confidence": 0.9}),
+                }
+            ]
+        )
         assert count >= 0
 
     def test_ignored_insert_is_not_counted(self):
@@ -122,13 +129,9 @@ class TestFactInjector:
         assert rows[0] == 1
 
     def test_metadata_dict_is_serialized_as_json(self):
-        count = self.mod.inject_facts([
-            {"sub": "Meta", "pred": "has", "obj": "dict", "metadata": {"source": "unit"}}
-        ])
+        count = self.mod.inject_facts([{"sub": "Meta", "pred": "has", "obj": "dict", "metadata": {"source": "unit"}}])
         assert count == 1
-        row = self.conn.execute(
-            "SELECT metadata FROM fact_triples WHERE sub = 'Meta'"
-        ).fetchone()
+        row = self.conn.execute("SELECT metadata FROM fact_triples WHERE sub = 'Meta'").fetchone()
         assert json.loads(row[0]) == {"source": "unit"}
 
 
@@ -159,9 +162,11 @@ class TestRunPerception:
             assert result is False
 
     def test_returns_true_with_results(self):
-        with patch("kos.perception.search.web_search") as mock_search, \
-             patch("kos.perception.scrape.scrape_url") as mock_scrape, \
-             patch("kos.perception.fact_injector.inject_facts") as mock_inject:
+        with (
+            patch("kos.perception.search.web_search") as mock_search,
+            patch("kos.perception.scrape.scrape_url") as mock_scrape,
+            patch("kos.perception.fact_injector.inject_facts") as mock_inject,
+        ):
             mock_search.return_value = [{"url": "http://example.com", "title": "Test", "snippet": "test"}]
             mock_scrape.return_value = {"url": "http://example.com", "title": "Test", "text_content": "content"}
             mock_inject.return_value = 1

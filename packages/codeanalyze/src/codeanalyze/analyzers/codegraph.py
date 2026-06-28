@@ -6,6 +6,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
+
 class CodeGraphAdapter:
     """Adapter for 'codegraph' - a tree-sitter based relational codebase indexer."""
 
@@ -24,7 +25,9 @@ class CodeGraphAdapter:
             subprocess.run(["codegraph", "index", "--dir", str(self.workspace_root)], check=True, capture_output=True)
             return True
         except FileNotFoundError:
-            logger.warning("codegraph CLI not found. Please install it globally (e.g. `npm i -g codegraph` or via cargo).")
+            logger.warning(
+                "codegraph CLI not found. Please install it globally (e.g. `npm i -g codegraph` or via cargo)."
+            )
             return False
         except subprocess.CalledProcessError as e:
             logger.error(f"Failed to build index: {e.stderr.decode()}")
@@ -52,13 +55,12 @@ class CodeGraphAdapter:
         try:
             # Placeholder query to demonstrate FTS5 / graph traversal
             rows = self._query_db(
-                "SELECT * FROM edges WHERE source_symbol = ? OR target_symbol = ? LIMIT 100",
-                (symbol_name, symbol_name)
+                "SELECT * FROM edges WHERE source_symbol = ? OR target_symbol = ? LIMIT 100", (symbol_name, symbol_name)
             )
             return {
                 "symbol": symbol_name,
                 "edges": rows,
-                "note": "This is a placeholder schema. Actual query depends on codegraph SQLite layout."
+                "note": "This is a placeholder schema. Actual query depends on codegraph SQLite layout.",
             }
         except sqlite3.OperationalError:
             return {"error": "Schema mismatch or DB not initialized.", "symbol": symbol_name}
@@ -66,10 +68,7 @@ class CodeGraphAdapter:
     def get_impact_radius(self, file_path: str) -> list[str]:
         """Returns all files that depend on the target file."""
         try:
-            rows = self._query_db(
-                "SELECT DISTINCT source_file FROM imports WHERE target_file = ?",
-                (file_path,)
-            )
+            rows = self._query_db("SELECT DISTINCT source_file FROM imports WHERE target_file = ?", (file_path,))
             return [row["source_file"] for row in rows]
         except sqlite3.OperationalError:
             return []

@@ -1,4 +1,5 @@
 """P58-W0 sophia do_default — 真业务 (调 sophia compiler / learner 真函数)."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -20,7 +21,8 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     try:
         if action == "list_components":
             return {
-                "_method": "do_default", "_action": "list_components",
+                "_method": "do_default",
+                "_action": "list_components",
                 "compile_fn": compile_paradigm_sync.__name__,
                 "recompile_fn": recompile_from_dict.__name__,
                 "ParadigmLearner": ParadigmLearner.__name__,
@@ -31,12 +33,15 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             query = args.get("query", "Hello world research")
             program = compile_paradigm_sync(query)
             return {
-                "_method": "do_default", "_action": "compile",
-                "query": query, "program_type": type(program).__name__,
+                "_method": "do_default",
+                "_action": "compile",
+                "query": query,
+                "program_type": type(program).__name__,
             }
         if action == "transitions":
             return {
-                "_method": "do_default", "_action": "transitions",
+                "_method": "do_default",
+                "_action": "transitions",
                 "count": len(BASE_TRANSITIONS),
                 "states": sorted({t.get("from", "?") for t in BASE_TRANSITIONS if isinstance(t, dict)}),
             }

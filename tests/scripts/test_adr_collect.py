@@ -4,6 +4,7 @@
   - 验证关键词解析、源扫描、置信度评分、markdown 渲染
   - 用 tmp_path 模拟工作区布局, 避免污染真实仓库
 """
+
 from __future__ import annotations
 
 import sys
@@ -123,14 +124,7 @@ class TestFormatCandidate:
 class TestMarkdownExtraction:
     def test_extract_decision_from_markdown_section(self) -> None:
         """extract_section_text 能从 markdown 中找到匹配标题的正文."""
-        text = (
-            "# Top\n\n"
-            "## P0 Section\n\n"
-            "正文内容 A\n"
-            "正文内容 B\n\n"
-            "## P1 Section\n\n"
-            "其他内容\n"
-        )
+        text = "# Top\n\n## P0 Section\n\n正文内容 A\n正文内容 B\n\n## P1 Section\n\n其他内容\n"
         result = ac.extract_section_text(text, "P0 Section")
         assert result is not None
         assert "正文内容 A" in result
@@ -139,12 +133,7 @@ class TestMarkdownExtraction:
 
     def test_extract_decision_lines_finds_keyword(self) -> None:
         """extract_decision_lines 能找出命中决策关键词的行."""
-        text = (
-            "普通行 1\n"
-            "## 决策: 采用 agora 路由\n"
-            "普通行 2\n"
-            "We decide to migrate to llm-gateway\n"
-        )
+        text = "普通行 1\n## 决策: 采用 agora 路由\n普通行 2\nWe decide to migrate to llm-gateway\n"
         hits = ac.extract_decision_lines(text)
         assert len(hits) >= 2
         # 至少包含中文与英文关键词命中
@@ -237,9 +226,12 @@ class TestSourceScanners:
 class TestReportBuilding:
     def test_build_report_includes_all_sections(self, fake_workspace: Path) -> None:
         """build_report 生成的报告包含所有 section."""
-        candidates = ac.scan_governance_plan(fake_workspace) + ac.scan_architecture_audit(
-            fake_workspace
-        ) + ac.scan_tool_heatmap(fake_workspace) + ac.scan_pkg_slim_plan(fake_workspace)
+        candidates = (
+            ac.scan_governance_plan(fake_workspace)
+            + ac.scan_architecture_audit(fake_workspace)
+            + ac.scan_tool_heatmap(fake_workspace)
+            + ac.scan_pkg_slim_plan(fake_workspace)
+        )
         sources = [
             "projects/kairon/docs/governance_plan.md",
             "projects/kairon/docs/architecture_audit.md",

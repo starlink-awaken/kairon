@@ -18,9 +18,11 @@ logger = logging.getLogger(__name__)
 
 # ── Dataclasses ──────────────────────────────────────────────────────────────
 
+
 @dataclass
 class ServiceRef:
     """后端服务引用。"""
+
     name: str
     endpoint: str
     priority: int = 1
@@ -33,6 +35,7 @@ class ServiceRef:
 @dataclass
 class SignalResult:
     """信号触发结果。status_code=0 表示网络层失败。"""
+
     status_code: int = 0
     body: str = ""
     error: str = ""
@@ -43,6 +46,7 @@ class SignalResult:
 
 
 # ── BaseNeuron ───────────────────────────────────────────────────────────────
+
 
 class BaseNeuron:
     """连接代理。
@@ -142,7 +146,11 @@ class BaseNeuron:
             url = f"{backend.endpoint.rstrip('/')}{path}"
             try:
                 async with session.request(
-                    method.upper(), url, json=json_body, params=params, headers=headers,
+                    method.upper(),
+                    url,
+                    json=json_body,
+                    params=params,
+                    headers=headers,
                     timeout=aiohttp.ClientTimeout(total=timeout),
                 ) as resp:
                     body = await resp.text()
@@ -161,6 +169,7 @@ class BaseNeuron:
 
 
 # ── NeuronPool ───────────────────────────────────────────────────────────────
+
 
 @dataclass
 class NeuronPool:
@@ -210,8 +219,10 @@ class NeuronPool:
 
     def list_backends(self) -> dict[str, list[dict[str, Any]]]:
         return {
-            name: [{"name": b.name, "endpoint": b.endpoint, "priority": b.priority, "healthy": b.healthy_status}
-                   for b in n._backends]
+            name: [
+                {"name": b.name, "endpoint": b.endpoint, "priority": b.priority, "healthy": b.healthy_status}
+                for b in n._backends
+            ]
             for name, n in self._neurons.items()
         }
 
@@ -237,8 +248,10 @@ class NeuronPool:
 
 # ── Pre-built neuron factories ──────────────────────────────────────────────
 
-def _make_neuron(name: str, service: str, endpoint: str, priority: int = 1,
-                 extra: list[ServiceRef] | None = None) -> BaseNeuron:
+
+def _make_neuron(
+    name: str, service: str, endpoint: str, priority: int = 1, extra: list[ServiceRef] | None = None
+) -> BaseNeuron:
     """内部工厂辅助：创建带单个默认后端的神经元。"""
     backends = [ServiceRef(service, endpoint, priority)]
     if extra:
@@ -246,26 +259,27 @@ def _make_neuron(name: str, service: str, endpoint: str, priority: int = 1,
     return BaseNeuron(name, backends)
 
 
-def create_identity_neuron(endpoint: str = "http://localhost:8400",
-                           extra: list[ServiceRef] | None = None) -> BaseNeuron:
+def create_identity_neuron(
+    endpoint: str = "http://localhost:8400", extra: list[ServiceRef] | None = None
+) -> BaseNeuron:
     return _make_neuron("identity", "metaos-identity", endpoint, extra=extra)
 
 
-def create_knowledge_neuron(endpoint: str = "http://localhost:8401",
-                            extra: list[ServiceRef] | None = None) -> BaseNeuron:
+def create_knowledge_neuron(
+    endpoint: str = "http://localhost:8401", extra: list[ServiceRef] | None = None
+) -> BaseNeuron:
     return _make_neuron("knowledge", "metaos-knowledge", endpoint, extra=extra)
 
 
-def create_monitoring_neuron(endpoint: str = "http://localhost:8402",
-                             extra: list[ServiceRef] | None = None) -> BaseNeuron:
+def create_monitoring_neuron(
+    endpoint: str = "http://localhost:8402", extra: list[ServiceRef] | None = None
+) -> BaseNeuron:
     return _make_neuron("monitoring", "metaos-monitor", endpoint, extra=extra)
 
 
-def create_economy_neuron(endpoint: str = "http://localhost:8403",
-                          extra: list[ServiceRef] | None = None) -> BaseNeuron:
+def create_economy_neuron(endpoint: str = "http://localhost:8403", extra: list[ServiceRef] | None = None) -> BaseNeuron:
     return _make_neuron("economy", "metaos-economy", endpoint, extra=extra)
 
 
-def create_genesis_neuron(endpoint: str = "http://localhost:8404",
-                          extra: list[ServiceRef] | None = None) -> BaseNeuron:
+def create_genesis_neuron(endpoint: str = "http://localhost:8404", extra: list[ServiceRef] | None = None) -> BaseNeuron:
     return _make_neuron("genesis", "metaos-genesis", endpoint, extra=extra)

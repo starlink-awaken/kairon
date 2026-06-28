@@ -2,9 +2,6 @@
 测试 foundation/rule_loader.py - 规则加载器
 """
 
-
-
-
 import json
 
 import pytest

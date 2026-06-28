@@ -2,9 +2,6 @@
 测试 foundation/ontology_map.py - 本体映射与格式导出
 """
 
-
-
-
 import json
 
 from ontoderive.foundation.ontology_map import (  # type: ignore[import-not-found]

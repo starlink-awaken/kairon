@@ -115,7 +115,8 @@ def test_analyzer_scores_relevance(sample_policies):
     by_title = {i.title: i.relevance_score for i in scored}
 
     primary_care_score = next(
-        (s for t, s in by_title.items() if "基层" in t and "采购" in t), None,
+        (s for t, s in by_title.items() if "基层" in t and "采购" in t),
+        None,
     )
     cosmetics_score = next((s for t, s in by_title.items() if "化妆品" in t), None)
     drg_score = next((s for t, s in by_title.items() if "医保支付" in t), None)
@@ -171,8 +172,12 @@ def test_make_entity_id_uses_kos_prefix():
 def test_make_entity_id_deterministic():
     """同一 PolicyItem 必须产生相同 ID。"""
     item = PolicyItem(
-        title="t", issuing_agency="国家卫健委", doc_number="X号",
-        published_at="2026-06-01", summary="d", url="https://x.com/1",
+        title="t",
+        issuing_agency="国家卫健委",
+        doc_number="X号",
+        published_at="2026-06-01",
+        summary="d",
+        url="https://x.com/1",
     )
     assert _make_entity_id(item) == _make_entity_id(item)
 
@@ -180,12 +185,20 @@ def test_make_entity_id_deterministic():
 def test_make_entity_id_collision_free():
     """不同 doc_number 的相同 agency/url 不应碰撞。"""
     a = PolicyItem(
-        title="t", issuing_agency="国家卫健委", doc_number="国卫基层〔2024〕1号",
-        published_at="2026-06-01", summary="d", url="https://x.com/1",
+        title="t",
+        issuing_agency="国家卫健委",
+        doc_number="国卫基层〔2024〕1号",
+        published_at="2026-06-01",
+        summary="d",
+        url="https://x.com/1",
     )
     b = PolicyItem(
-        title="t", issuing_agency="国家卫健委", doc_number="国卫基层〔2024〕2号",
-        published_at="2026-06-01", summary="d", url="https://x.com/1",
+        title="t",
+        issuing_agency="国家卫健委",
+        doc_number="国卫基层〔2024〕2号",
+        published_at="2026-06-01",
+        summary="d",
+        url="https://x.com/1",
     )
     assert _make_entity_id(a) != _make_entity_id(b)
 
@@ -205,8 +218,12 @@ def test_kos_writer_skips_when_kos_unavailable(monkeypatch):
 
     items = [
         PolicyItem(
-            title="t", issuing_agency="国家卫健委", doc_number="X号",
-            published_at="2026-06-01", summary="d", url="https://x.com/1",
+            title="t",
+            issuing_agency="国家卫健委",
+            doc_number="X号",
+            published_at="2026-06-01",
+            summary="d",
+            url="https://x.com/1",
         )
     ]
     stats = save_to_kos(items)
@@ -250,13 +267,19 @@ def test_runner_dry_run_no_kos_write(monkeypatch):
     monkeypatch.setattr(runner_mod, "save_report", fake_save_report)
 
     async def fake_fetch_recent(*args, **kwargs):
-        return ([
-            PolicyItem(
-                title="基层药品集采", issuing_agency="国家卫健委",
-                doc_number="X号", published_at="2026-06-01",
-                summary="s", url="https://x.com/1",
-            ),
-        ], {"nhc": "seed", "nhsa": "seed"})
+        return (
+            [
+                PolicyItem(
+                    title="基层药品集采",
+                    issuing_agency="国家卫健委",
+                    doc_number="X号",
+                    published_at="2026-06-01",
+                    summary="s",
+                    url="https://x.com/1",
+                ),
+            ],
+            {"nhc": "seed", "nhsa": "seed"},
+        )
 
     monkeypatch.setattr(runner_mod, "fetch_recent", fake_fetch_recent)
 
@@ -306,6 +329,7 @@ def test_fetch_recent_falls_back_to_seeds(monkeypatch):
 
         async def get(self, *args, **kwargs):
             import httpx as _httpx
+
             raise _httpx.ConnectError("simulated network failure")
 
     monkeypatch.setattr(httpx, "AsyncClient", FakeAsyncClient)

@@ -14,6 +14,7 @@ from core_models.models import (
 
 # ── ENTITY_TYPES ────────────────────────────────────────────
 
+
 class TestEntityTypes:
     def test_known_types(self):
         assert "Function" in ENTITY_TYPES
@@ -27,6 +28,7 @@ class TestEntityTypes:
 
 
 # ── RELATION_TYPES ──────────────────────────────────────────
+
 
 class TestRelationTypes:
     def test_known_relations(self):
@@ -49,6 +51,7 @@ class TestRelationTypes:
 
 
 # ── Provenance tests ────────────────────────────────────────
+
 
 class TestProvenance:
     def test_defaults(self):
@@ -93,6 +96,7 @@ class TestProvenance:
 
 
 # ── Entity tests ────────────────────────────────────────────
+
 
 class TestEntity:
     def test_basic(self):
@@ -175,6 +179,7 @@ class TestEntity:
 
 # ── Relation tests ──────────────────────────────────────────
 
+
 class TestRelation:
     def test_minimal(self):
         r = Relation(source_id="e1", target_id="e2", type="CALLS")
@@ -242,6 +247,7 @@ class TestRelation:
 
 
 # ── KnowledgeGraph tests ────────────────────────────────────
+
 
 class TestKnowledgeGraph:
     def test_empty_counts(self):

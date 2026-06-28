@@ -10,6 +10,7 @@ from typing import Literal, Protocol, runtime_checkable
 @dataclass
 class GovernancePolicy:
     """治理策略"""
+
     service: str
     policies: list[str] = field(default_factory=list)
     compliance_level: Literal["full", "partial", "none"] = "none"

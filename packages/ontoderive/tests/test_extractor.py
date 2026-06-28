@@ -1,7 +1,5 @@
 """事实提取器测试"""
 
-
-
 from ontoderive.extractor import ContextExtractor
 
 

@@ -1,11 +1,12 @@
 """sync_system_state.py 测试 — 覆盖:
-  1. 真实状态收集 (collect_actual_state)
-  2. 差异检测 (diff_with_system_yaml)
-  3. 白名单机制 (非白名单字段被拒绝)
-  4. system.yaml 读写 (去重 / 替换 / 添加)
-  5. 备份机制 (apply 模式生成 .bak 文件)
-  6. 报告渲染
+1. 真实状态收集 (collect_actual_state)
+2. 差异检测 (diff_with_system_yaml)
+3. 白名单机制 (非白名单字段被拒绝)
+4. system.yaml 读写 (去重 / 替换 / 添加)
+5. 备份机制 (apply 模式生成 .bak 文件)
+6. 报告渲染
 """
+
 from __future__ import annotations
 
 import importlib.util
@@ -168,9 +169,7 @@ class TestWhitelistEnforcement:
         """非白名单字段写入必须 raise PermissionError。"""
         fake_yaml = tmp_path / "system.yaml"
         fake_yaml.write_text("foo: 1\n", encoding="utf-8")
-        bad_diff = sync_mod.FieldDiff(
-            field="foo", old_value=1, new_value=2, reason="test"
-        )
+        bad_diff = sync_mod.FieldDiff(field="foo", old_value=1, new_value=2, reason="test")
         with pytest.raises(PermissionError, match="refused"):
             apply_diff([bad_diff], fake_yaml, apply=False)
 
@@ -178,9 +177,7 @@ class TestWhitelistEnforcement:
         """goals 字段必须被拒绝（人类专属）。"""
         fake_yaml = tmp_path / "system.yaml"
         fake_yaml.write_text("goals: keep\n", encoding="utf-8")
-        bad_diff = sync_mod.FieldDiff(
-            field="goals", old_value="keep", new_value="change", reason="test"
-        )
+        bad_diff = sync_mod.FieldDiff(field="goals", old_value="keep", new_value="change", reason="test")
         with pytest.raises(PermissionError):
             apply_diff([bad_diff], fake_yaml, apply=False)
 
@@ -201,9 +198,7 @@ class TestWhitelistEnforcement:
         """next_active_tasks 字段必须被拒绝。"""
         fake_yaml = tmp_path / "system.yaml"
         fake_yaml.write_text("next_active_tasks: []\n", encoding="utf-8")
-        bad_diff = sync_mod.FieldDiff(
-            field="next_active_tasks", old_value="[]", new_value="x", reason="test"
-        )
+        bad_diff = sync_mod.FieldDiff(field="next_active_tasks", old_value="[]", new_value="x", reason="test")
         with pytest.raises(PermissionError):
             apply_diff([bad_diff], fake_yaml, apply=False)
 
@@ -265,9 +260,7 @@ class TestBackupMechanism:
         """apply=True 时必须生成 .bak 文件。"""
         fake_yaml = tmp_path / "system.yaml"
         fake_yaml.write_text("current_phase: 28\n", encoding="utf-8")
-        diff = sync_mod.FieldDiff(
-            field="current_phase", old_value=28, new_value=29, reason="test"
-        )
+        diff = sync_mod.FieldDiff(field="current_phase", old_value=28, new_value=29, reason="test")
         apply_diff([diff], fake_yaml, apply=True)
         backups = list(tmp_path.glob("system.yaml.bak-*"))
         assert len(backups) == 1
@@ -280,9 +273,7 @@ class TestBackupMechanism:
         fake_yaml = tmp_path / "system.yaml"
         original = "current_phase: 28\n"
         fake_yaml.write_text(original, encoding="utf-8")
-        diff = sync_mod.FieldDiff(
-            field="current_phase", old_value=28, new_value=29, reason="test"
-        )
+        diff = sync_mod.FieldDiff(field="current_phase", old_value=28, new_value=29, reason="test")
         apply_diff([diff], fake_yaml, apply=False)
         backups = list(tmp_path.glob("system.yaml.bak-*"))
         assert len(backups) == 0

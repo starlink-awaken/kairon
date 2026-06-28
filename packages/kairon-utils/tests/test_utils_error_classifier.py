@@ -1,6 +1,5 @@
 """Tests for kairon_lib.utils.error_classifier — ErrorCategory, ErrorClassifier, ErrorStatistics."""
 
-
 from kairon_utils.error_classifier import ErrorCategory, ErrorClassifier, ErrorStatistics
 
 
