@@ -200,7 +200,7 @@ class HarvestScheduler:
                 total_facts += 1
                 quality_scores.append(self._score_fact(fact_text))
 
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             errors.append(str(exc))
             logger.exception("Error executing job %s", job.job_id)
 

@@ -97,7 +97,7 @@ class RetryExecutor:
 
                     await asyncio.sleep(delay)
                 continue
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 # Non-retryable error, fail immediately
                 last_error = e
                 break

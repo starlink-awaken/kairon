@@ -117,7 +117,7 @@ def cmd_generate(project: Any, export: Any) -> None:
                 Path(project + "/export.json").write_text(json.dumps(r, ensure_ascii=False))
             else:
                 print(f"[export] 格式 {export} 暂不支持")
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             print(f"[export] ❌ {e}")
     else:
         od.generate_report()

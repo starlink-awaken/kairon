@@ -162,7 +162,7 @@ def retry_on_error(
                 logger.info(f"重试第 {attempt} 次...")
                 _stats.error_recoveries += 1
             return func(*args, **kwargs)
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             last_error = str(e)
             logger.warning(f"调用失败 (attempt {attempt + 1}): {e}")
             if attempt < max_retries:

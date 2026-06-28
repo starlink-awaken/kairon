@@ -41,7 +41,7 @@ def get_version() -> str | None:
             timeout=5,
         )
         return r.stdout.strip() or r.stderr.strip() or None
-    except Exception:  # noqa: BLE001
+    except Exception:
         return None
 
 
@@ -70,7 +70,7 @@ def init_graph(path: str = ".") -> CgcResult:
         result.data = r.stdout.strip()
     except subprocess.TimeoutExpired:
         result.error = "CGC 索引超时（300s）"
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         result.error = str(e)
 
     return result
@@ -105,7 +105,7 @@ def query(query_str: str, path: str = ".") -> CgcResult:
 
     except subprocess.TimeoutExpired:
         result.error = "CGC 查询超时（60s）"
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         result.error = str(e)
 
     return result

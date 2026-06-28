@@ -151,7 +151,7 @@ class UnifiedReasoner:
                         derivation_trail=f"A{ar.get('pattern', '?')}: {ar.get('category', '?')}",
                     )
                 )
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             import sys
 
             print(f"[unified] analytics skip: {e}", file=sys.stderr)

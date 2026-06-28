@@ -19,7 +19,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             list_available_organs,
             read_organ_data,
         )
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "do_default", "_error": f"import: {type(exc).__name__}: {exc}"}
 
     action = args.get("action", "list")
@@ -49,7 +49,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             root = find_sharedbrain_root()
             return {"_method": "do_default", "_action": "find_root", "root": root}
         return {"_method": "do_default", "_error": f"unknown action: {action}"}
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "do_default", "_action": action, "_error": f"{type(exc).__name__}: {exc}"}
 
 

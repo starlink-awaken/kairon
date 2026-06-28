@@ -129,7 +129,7 @@ async def search_searxng(
             )
             resp.raise_for_status()
             data = resp.json()
-    except Exception:  # noqa: BLE001
+    except Exception:
         _log.warning("search_backend_empty", source="search_searxng", exc_info=False)
         return []
 
@@ -237,7 +237,7 @@ async def search_arxiv(query: str, max_results: int = 10) -> list[SearchResult]:
             resp = await client.get(url)
             resp.raise_for_status()
             raw = resp.text
-    except Exception:  # noqa: BLE001
+    except Exception:
         _log.warning("search_backend_empty", source="search_searxng", exc_info=False)
         return []
 
@@ -275,7 +275,7 @@ async def search_arxiv(query: str, max_results: int = 10) -> list[SearchResult]:
                         published_date=published,
                     )
                 )
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
     return results
 
@@ -383,7 +383,7 @@ async def search_duckduckgo(query: str, max_results: int = 10) -> list[SearchRes
 
         loop = __import__("asyncio").get_event_loop()
         results_raw = await loop.run_in_executor(None, lambda: list(DDGS().text(query, max_results=max_results)))
-    except Exception:  # noqa: BLE001
+    except Exception:
         _log.warning("search_backend_empty", source="ddg", exc_info=False)
         return []
 
@@ -425,7 +425,7 @@ async def extract_jina(url: str, api_key: str | None = None) -> str:
             content = resp.text
             if len(content) > 200:
                 return content
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
 
     return ""
@@ -446,7 +446,7 @@ async def extract_bs4(url: str) -> str:
             resp = await client.get(url, headers={"User-Agent": "Minerva/0.1 Research Bot"})
             resp.raise_for_status()
             html = resp.text
-    except Exception:  # noqa: BLE001
+    except Exception:
         return ""
 
     try:

@@ -31,7 +31,7 @@ def check_bayesian(root: Any) -> dict[str, Any]:
         }
     except ImportError:
         return {"passed": False, "severity": "WARN", "detail": "bayesian.py未安装"}
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"passed": False, "severity": "WARN", "detail": f"异常: {str(e)[:50]}"}
 
 
@@ -52,7 +52,7 @@ def check_metrics(root: Any, precomputed_confs: Any = None) -> dict[str, Any]:
         }
     except ImportError:
         return {"passed": False, "severity": "WARN", "detail": "metrics.py未安装"}
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"passed": False, "severity": "WARN", "detail": f"异常: {str(e)[:50]}"}
 
 
@@ -69,7 +69,7 @@ def check_pid(root: Any) -> dict[str, Any]:
             "detail": f"P={pid['p_value']} I={pid['i_value']} D={pid['d_value']} "
             f"信号={pid['control_signal']} 状态={pid['stability']}",
         }
-    except Exception:  # noqa: BLE001
+    except Exception:
         return {"passed": True, "severity": "PASS", "detail": "首次运行, 信号=0 (需历史数据)"}
 
 
@@ -85,7 +85,7 @@ def check_turing(root: Any) -> dict[str, Any]:
             "severity": "PASS",
             "detail": f"快照: {state.facts}F/{state.inferences}I/{state.entities}E",
         }
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"passed": False, "severity": "WARN", "detail": f"异常: {str(e)[:50]}"}
 
 
@@ -104,7 +104,7 @@ def check_ontolang(root: Any = None) -> dict[str, Any]:
             "severity": "PASS",
             "detail": "[DEPRECATED] OntoLang保留供外部引用",
         }
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"passed": True, "severity": "PASS", "detail": f"[DEPRECATED] ontolang不可用: {str(e)[:30]}"}
 
 

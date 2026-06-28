@@ -98,7 +98,7 @@ class OpenAIProvider(BaseProvider):
                 max_tokens=500,
             )
             return resp.choices[0].message.content
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             print(f"[llm] OpenAI调用失败: {e}", file=sys.stderr)
             return None
 
@@ -123,7 +123,7 @@ class AnthropicProvider(BaseProvider):
                 temperature=temperature,
             )
             return resp.content[0].text if resp.content else None
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             print(f"[llm] Anthropic调用失败: {e}", file=sys.stderr)
             return None
 

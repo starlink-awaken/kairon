@@ -76,7 +76,7 @@ class StalenessChecker:
                 entry = self._check_file(f, now)
                 if entry:
                     report.stale_entries.append(entry)
-            except Exception:  # noqa: BLE001
+            except Exception:
                 pass
 
         report.total_stale = len(report.stale_entries)
@@ -93,7 +93,7 @@ class StalenessChecker:
         # Read the file to extract metadata
         try:
             content = filepath.read_text()
-        except Exception:  # noqa: BLE001
+        except Exception:
             return None
 
         # Extract title from first H1
@@ -112,7 +112,7 @@ class StalenessChecker:
                 dt = f"{y}-{m}-{d}"
                 if dt > newest_date:
                     newest_date = dt
-            except Exception:  # noqa: BLE001
+            except Exception:
                 pass
 
         # Determine reason

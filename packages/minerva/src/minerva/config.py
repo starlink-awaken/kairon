@@ -37,7 +37,7 @@ def _load_forge_env() -> None:
                         key, val = parts[0], parts[1]
                         if key not in os.environ:
                             os.environ[key] = val
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
 
 

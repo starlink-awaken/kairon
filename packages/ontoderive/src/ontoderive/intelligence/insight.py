@@ -61,7 +61,7 @@ class InsightCache:
             try:
                 data = json.loads(cache_file.read_text())
                 return [Insight(**i) for i in data.get("insights", [])]
-            except Exception:  # noqa: BLE001
+            except Exception:
                 pass
         return None
 
@@ -90,7 +90,7 @@ class InsightEngine:
                 from .llm import get_enhancer
 
                 self.enhancer = get_enhancer()
-            except Exception:  # noqa: BLE001
+            except Exception:
                 self.enhancer = None
         self.cache = InsightCache(cache_dir)
         self._history: list[Insight] = []  # 本次会话的所有洞察
@@ -181,7 +181,7 @@ class InsightEngine:
                     )
                     self._history.append(insight)
                     return parsed
-                except Exception:  # noqa: BLE001
+                except Exception:
                     pass
         return {"verdict": "eval_failed", "raw": result[:500]}
 

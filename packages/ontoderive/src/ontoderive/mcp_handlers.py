@@ -486,7 +486,7 @@ def handle_request(req: Any) -> Any:
             if handler:
                 return handler(args, req_id)
             return err(req_id, -32601, f"未知工具: {tool}")
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             return err(req_id, -32000, f"{tool}失败: {str(e)[:200]}")
 
     return err(req_id, -32601, f"未知方法: {method}")

@@ -29,7 +29,7 @@ def _extract_pdf(fp: Path, n: int = 2000) -> str:
                 return (r.stdout or "")[:n]
     except FileNotFoundError:
         pass
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
 
     # Method 2: magic-pdf CLI (OCR fallback)
@@ -49,7 +49,7 @@ def _extract_pdf(fp: Path, n: int = 2000) -> str:
                 t = Path(md_files[0]).read_text("utf-8", errors="ignore")[:n]
                 if t.strip():
                     return t
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
 
     return ""
@@ -61,5 +61,5 @@ def _extract_docx(fp: Path, n: int = 2000) -> str:
             xml = z.read("word/document.xml")
             t = re.sub(r"<[^>]+>", "", xml.decode("utf-8", errors="ignore"))
             return re.sub(r"\s+", " ", t).strip()[:n]
-    except Exception:  # noqa: BLE001
+    except Exception:
         return ""

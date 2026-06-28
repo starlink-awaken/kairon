@@ -426,7 +426,7 @@ class SemanticSearchEngine:
             try:
                 self.meta_protocol_service = MetaProtocolService.get_instance()
                 _log.info("MetaProtocolService integrated into SemanticSearchEngine")
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 _log.warning(f"Failed to initialize MetaProtocolService: {e}")
 
         self._stats = {
@@ -571,7 +571,7 @@ class SemanticSearchEngine:
 
             return knowledge_priority
 
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             _log.warning(f"Failed to enhance with op7 knowledge: {e}")
             return {}
 
@@ -723,7 +723,7 @@ class SemanticSearchEngine:
                 try:
                     self.embedding_manager.embed_query(query_text)
                     precomputed += 1
-                except Exception as e:  # noqa: BLE001
+                except Exception as e:
                     _log.warning(f"Failed to precompute query '{query_text}': {e}")
 
         return {"total_hot_queries": len(hot_queries), "precomputed": precomputed}

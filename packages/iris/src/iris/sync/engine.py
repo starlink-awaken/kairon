@@ -111,7 +111,7 @@ class SyncEngine:
             for change in obsidian_changes:
                 try:
                     self._process_obsidian_change(change, result)
-                except Exception as e:  # noqa: BLE001
+                except Exception as e:
                     msg = f"Failed to process Obsidian change '{change.item_title}': {e}"
                     logger.exception(msg)
                     result.errors.append(msg)
@@ -121,7 +121,7 @@ class SyncEngine:
             for change in wpsnote_changes:
                 try:
                     self._process_wpsnote_change(change, result)
-                except Exception as e:  # noqa: BLE001
+                except Exception as e:
                     msg = f"Failed to process WPS Note change '{change.item_title}': {e}"
                     logger.exception(msg)
                     result.errors.append(msg)
@@ -135,7 +135,7 @@ class SyncEngine:
                 len(result.errors),
             )
 
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             msg = f"Sync engine error: {e}"
             logger.exception(msg)
             result.errors.append(msg)
@@ -218,7 +218,7 @@ class SyncEngine:
             if wps_id:
                 try:
                     self._wpsnote.delete_item(wps_id)
-                except Exception as e:  # noqa: BLE001
+                except Exception as e:
                     logger.warning("Failed to delete WPS note %s: %s", wps_id, e)
                 self.id_map.remove(obs_path)
                 result.deleted += 1
@@ -326,7 +326,7 @@ class SyncEngine:
             padded = item.id + "=" * (-len(item.id) % 4)
             rel_path = base64.urlsafe_b64decode(padded.encode()).decode()
             return rel_path
-        except Exception:  # noqa: BLE001
+        except Exception:
             return getattr(item, "source_path", None) or item.id
 
     def _get_markdown_body(self, full_content: str) -> str:
@@ -345,7 +345,7 @@ class SyncEngine:
             item = self._obsidian.get_item(encoded)
             if item is not None:
                 return encoded
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
         return None
 
@@ -356,5 +356,5 @@ class SyncEngine:
         try:
             encoded = base64.urlsafe_b64encode(rel_path.encode()).decode().rstrip("=")
             return self._obsidian.delete_item(encoded, soft=True)
-        except Exception:  # noqa: BLE001
+        except Exception:
             return False

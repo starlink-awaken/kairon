@@ -125,7 +125,7 @@ def export_to_kos(cards: list[Any], kos_script: str | None = None) -> dict[str, 
             timeout=30,
         )
         return {"status": "done", "count": len(cards), "kos_output": result.stdout[:200]}
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"status": "error", "error": str(e)}
     finally:
         tmp.unlink(missing_ok=True)

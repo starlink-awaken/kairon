@@ -192,7 +192,7 @@ class AgentFileSystem:
         try:
             yield conn
             conn.commit()
-        except Exception:  # noqa: BLE001
+        except Exception:
             conn.rollback()
             raise
         finally:

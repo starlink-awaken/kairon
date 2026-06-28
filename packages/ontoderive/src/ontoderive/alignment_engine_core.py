@@ -122,7 +122,7 @@ class AlignmentEngine:
                     decision.reason,
                 )
                 return cast("bool", decision.allow)
-            except Exception:  # noqa: BLE001
+            except Exception:
                 _log.warning(
                     "FaultTolerancePolicy unavailable during document access check; defaulting to deny",
                     exc_info=True,

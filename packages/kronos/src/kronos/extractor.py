@@ -63,7 +63,7 @@ def check_ollama(timeout: float = 3.0) -> bool:
         if _OLLAMA_AVAILABLE:
             logger.info("Ollama detected at http://localhost:11434")
         return _OLLAMA_AVAILABLE
-    except Exception:  # noqa: BLE001
+    except Exception:
         _OLLAMA_AVAILABLE = False
         return False
 
@@ -361,7 +361,7 @@ def _detect_ollama_model() -> str:
                 first_model: str = models[0]["name"]
                 _DEFAULT_OLLAMA_MODEL = first_model
                 return first_model
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
     return "qwen2.5:7b"
 
@@ -384,7 +384,7 @@ def call_ollama(prompt: str, model: str | None = None, system_prompt: str | None
         return response_text
     except ImportError:
         return "[Ollama 需要 httpx: pip install httpx]"
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return f"[Ollama error: {e}]"
 
 
@@ -415,5 +415,5 @@ def extract_with_ollama(text: str, model: str | None = None) -> ExtractedResult 
             result: ExtractedResult | ErrorResult = json.loads(json_match.group())
             return result
         return {"error": "模型返回非 JSON 格式", "raw": response[:300]}
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"error": str(e), "raw": response[:200]}

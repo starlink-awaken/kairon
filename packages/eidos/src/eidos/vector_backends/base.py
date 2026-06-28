@@ -155,7 +155,7 @@ class VectorStoreBackend(ABC):
                 "dimension": self.dimension,
                 "persistent": self.db_path is not None,
             }
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             return {
                 "status": "unhealthy",
                 "backend": self.__class__.__name__,

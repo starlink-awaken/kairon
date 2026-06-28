@@ -121,7 +121,7 @@ class EidosToBosAdapter:
             req = Request(f"{self.mcp_endpoint}/health", method="GET")  # noqa: S310
             resp = urlopen(req, timeout=2)  # noqa: S310
             return cast("bool", resp.status == 200)
-        except Exception:  # noqa: BLE001
+        except Exception:
             _log.warning("Agora MCP not reachable — using file fallback")
             return False
 
@@ -133,7 +133,7 @@ class EidosToBosAdapter:
         try:
             resp = urlopen(req, timeout=10)  # noqa: S310
             return {"status": resp.status, "body": resp.read().decode()[:500]}
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             _log.error(f"MCP call failed: {e}")
             return {"status": 0, "error": str(e)}
 

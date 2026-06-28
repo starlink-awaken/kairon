@@ -64,7 +64,7 @@ def _send_notification(message: str, notify_type: str) -> None:
                     capture_output=True,
                     timeout=10,
                 )
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 logging.warning("ntfy 通知失败: %s", e)
         else:
             logging.warning("NTFY_TOPIC 未设置，跳过 ntfy 通知")
@@ -79,7 +79,7 @@ def _send_notification(message: str, notify_type: str) -> None:
                     capture_output=True,
                     timeout=10,
                 )
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 logging.warning("Discord 通知失败: %s", e)
         else:
             logging.warning("DISCORD_WEBHOOK 未设置，跳过 Discord 通知")
@@ -99,7 +99,7 @@ def _run_health_check() -> tuple[bool, str]:
         return False, f"health_check.py 不存在: {HEALTH_CHECK}"
     except subprocess.TimeoutExpired:
         return False, "health_check.py 执行超时（60 秒）"
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return False, f"health_check.py 错误: {e}"
 
 
@@ -147,7 +147,7 @@ def _remove_pid() -> None:
     try:
         if PID_FILE.exists():
             PID_FILE.unlink()
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
 
 
@@ -241,7 +241,7 @@ def main() -> int:
     except KeyboardInterrupt:
         logging.info("收到 SIGINT，正在关闭")
         _remove_pid()
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logging.error("意外错误: %s", e)
         _remove_pid()
         return 1

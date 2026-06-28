@@ -137,7 +137,7 @@ def _try_native_http(url: str, timeout: int = 15) -> str | None:
         resp = httpx.get(url, headers=HTTP_HEADERS, timeout=timeout, follow_redirects=True)
         if resp.status_code == 200 and len(resp.text) > 200:
             return resp.text
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.warning("native_http failed for %s: %s", url, e)
     return None
 
@@ -160,7 +160,7 @@ def _try_scrapling_fetch(url: str, timeout: int = 15) -> str | None:
             return text_val
     except ImportError:
         pass  # scrapling 或 curl_cffi 未安装
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.warning("scrapling_fetch failed for %s: %s", url, e)
     return None
 
@@ -174,7 +174,7 @@ def _try_jina_reader(url: str, timeout: int = 30) -> str | None:
         resp = httpx.get(proxy_url, timeout=timeout, follow_redirects=True)
         if resp.status_code == 200 and len(resp.text) > 200:
             return resp.text
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.warning("jina_reader failed for %s: %s", url, e)
     return None
 
@@ -237,7 +237,7 @@ def _try_web_search(query: str, timeout: int = 10) -> list[dict]:
                     if href.startswith("//"):
                         href = "https:" + href
                     results.append({"title": title_el.extract_first() or "", "url": href})
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             logger.warning("web_search Selector parsing failed: %s", e)
             pass
         # BeautifulSoup 没结果时用正则兜底
@@ -254,7 +254,7 @@ def _try_web_search(query: str, timeout: int = 10) -> list[dict]:
         return results[:10]
     except ImportError:
         return []
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.warning("web_search failed: %s", e)
         return []
 
@@ -302,7 +302,7 @@ def _try_cloakbrowser(url: str, timeout: int = 60) -> str | None:
         return result
     except ImportError:
         pass
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.warning("cloakbrowser failed for %s: %s", url, e)
     return None
 
@@ -331,7 +331,7 @@ def _try_playwright(url: str, timeout: int = 60) -> str | None:
         return result
     except ImportError:
         pass  # Playwright 未安装
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.warning("playwright failed for %s: %s", url, e)
     return None
 

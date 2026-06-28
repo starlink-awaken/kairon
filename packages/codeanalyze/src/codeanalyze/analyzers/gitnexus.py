@@ -11,7 +11,7 @@ def gitnexus_available() -> bool:
         import shutil
 
         return shutil.which("gitnexus") is not None
-    except Exception:  # noqa: BLE001
+    except Exception:
         return False
 
 
@@ -39,7 +39,7 @@ def analyze(repo_path: str = ".", tool: ToolInfo | None = None) -> dict:
         return {"error": "gitnexus analyze timed out (300s)", "status": "timeout"}
     except FileNotFoundError:
         return {"error": "gitnexus CLI not found", "status": "unavailable"}
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"error": str(e), "status": "error"}
 
 
@@ -59,7 +59,7 @@ def status(repo_path: str = ".") -> dict:
             "status": "indexed" if result.returncode == 0 else "not_indexed",
             "message": (result.stdout or result.stderr).strip()[:500],
         }
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"status": "error", "message": str(e)}
 
 
@@ -82,5 +82,5 @@ def serve_mcp() -> dict:
             "status": "ok" if result.returncode == 0 else "failed",
             "message": (result.stdout or result.stderr).strip()[:1000],
         }
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"error": str(e)}

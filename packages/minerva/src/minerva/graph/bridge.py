@@ -95,7 +95,7 @@ class GraphBridge:
             await self._driver.verify_connectivity()
             self._connected = True
             return True
-        except Exception:  # noqa: BLE001
+        except Exception:
             self._connected = False
             return False
 
@@ -127,7 +127,7 @@ class GraphBridge:
                     properties=entity.properties,
                 )
             return True
-        except Exception:  # noqa: BLE001
+        except Exception:
             return False
 
     async def upsert_relation(self, rel: GraphRelation) -> bool:
@@ -152,7 +152,7 @@ class GraphBridge:
                     properties=rel.properties,
                 )
             return True
-        except Exception:  # noqa: BLE001
+        except Exception:
             return False
 
     async def search_entities(self, query: str, limit: int = 10) -> list[dict]:
@@ -181,7 +181,7 @@ class GraphBridge:
                     }
                     for r in records
                 ]
-        except Exception:  # noqa: BLE001
+        except Exception:
             return []
 
     async def find_relations(self, entity_id: str, depth: int = 1) -> list[dict]:
@@ -209,7 +209,7 @@ class GraphBridge:
                     }
                     for r in records
                 ]
-        except Exception:  # noqa: BLE001
+        except Exception:
             return []
 
     async def sync_from_research(self, entities: list[dict], relations: list[dict]) -> dict:
@@ -257,7 +257,7 @@ class GraphBridge:
             from minerva.graph.graphify_adapter import build_code_graph
 
             graph = build_code_graph(repo_path)
-        except Exception:  # noqa: BLE001
+        except Exception:
             return {"entities_synced": 0, "relations_synced": 0, "error": "graphify unavailable"}
 
         entities = graph.get("entities", [])

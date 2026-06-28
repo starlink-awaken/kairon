@@ -30,7 +30,7 @@ def _ensure_audit_dir() -> None:
         try:
             _AUDIT_DIR.mkdir(parents=True, exist_ok=True)
             _audit_dir_ready = True
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
 
 
@@ -47,7 +47,7 @@ def _write_event(level: str, event: str, **kwargs: Any) -> None:
         log_file = _AUDIT_DIR / f"audit-{time.strftime('%Y%m%d')}.jsonl"
         with open(log_file, "a") as f:
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass  # Audit failure must never break the application
 
 

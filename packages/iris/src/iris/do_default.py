@@ -12,7 +12,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
         from iris.cli import build_parser
         from iris.config import IrisConfig
         from iris.registry import ConnectorRegistry
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "do_default", "_error": f"import: {type(exc).__name__}: {exc}"}
 
     action = args.get("action", "list_connectors")
@@ -21,7 +21,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             reg = ConnectorRegistry()
             try:
                 connectors = [c.name for c in reg.list_all()]
-            except Exception:  # noqa: BLE001
+            except Exception:
                 connectors = []
             return {
                 "_method": "do_default",
@@ -44,7 +44,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             cfg = IrisConfig()
             return {"_method": "do_default", "_action": "config", "config_repr": repr(cfg)[:500]}
         return {"_method": "do_default", "_error": f"unknown action: {action}"}
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "do_default", "_action": action, "_error": f"{type(exc).__name__}: {exc}"}
 
 

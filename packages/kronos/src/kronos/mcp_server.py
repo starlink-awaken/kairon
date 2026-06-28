@@ -175,7 +175,7 @@ def kronos_browser_fetch(url: str) -> dict:
                 }
             )
         return _error("CloakBrowser 抓取失败")
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return _error(str(e))
 
 

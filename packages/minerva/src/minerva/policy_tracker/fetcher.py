@@ -123,7 +123,7 @@ async def fetch_nhc(client: Any, days: int = 7) -> list[PolicyItem]:
         resp = await client.get(NHC_NEWS_URL, timeout=15)
         resp.raise_for_status()
         html = resp.text
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         print(f"[policy-tracker] NHC fetch failed: {exc}")
         return []
 
@@ -138,7 +138,7 @@ async def fetch_nhsa(client: Any, days: int = 7) -> list[PolicyItem]:
         resp = await client.get(NHSA_POLICY_URL, timeout=15)
         resp.raise_for_status()
         html = resp.text
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         print(f"[policy-tracker] NHSA fetch failed: {exc}")
         return []
 
@@ -184,7 +184,7 @@ async def fetch_recent(days: int = 7, sources: list[str] | None = None) -> tuple
                     status[src] = "ok"
                 else:
                     status[src] = "failed"
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 print(f"[policy-tracker] {src} error: {exc}")
                 status[src] = "failed"
 

@@ -50,7 +50,7 @@ class QualityValidator:
                     if not expected(value):
                         return False
                     continue
-                except Exception:  # noqa: BLE001
+                except Exception:
                     return False
 
             # Type name lookup
@@ -127,7 +127,7 @@ class DetailedFormatValidator:
                 if not expected(value):
                     return False, "callable predicate returned False"
                 return True, ""
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 return False, f"callable predicate raised: {e}"
 
         if isinstance(expected, str):

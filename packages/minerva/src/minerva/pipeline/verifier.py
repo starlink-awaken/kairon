@@ -74,7 +74,7 @@ async def verify_step(llm_client: Any, ctx: Any, stage_name: str) -> dict:
         if response.upper().startswith("OK"):
             return {"status": "ok"}
         return {"status": "warning", "issue": response[:200]}
-    except Exception:  # noqa: BLE001
+    except Exception:
         return {"status": "ok"}  # Verification never blocks
 
 
@@ -110,7 +110,7 @@ async def verify_report(llm_client: Any, report: str, search_results: list[dict]
         if start >= 0 and end > start:
             issues = json.loads(response[start : end + 1])
             return {"verified": len(issues) == 0, "issues": issues}
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
 
     return {"verified": True, "issues": []}

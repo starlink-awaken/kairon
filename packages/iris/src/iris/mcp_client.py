@@ -89,7 +89,7 @@ class McpClient:
         try:
             self._request("ping", {})
             return True
-        except Exception:  # noqa: BLE001
+        except Exception:
             return False
 
     def list_tools(self) -> list[dict[str, Any]]:
@@ -167,7 +167,7 @@ class McpClient:
                     # Try parsing as plain JSON
                     try:
                         sse_data = resp.json()
-                    except Exception:  # noqa: BLE001
+                    except Exception:
                         raise McpError(
                             -32700,
                             f"Failed to parse response: {resp.text[:500]}",

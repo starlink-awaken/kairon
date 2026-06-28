@@ -72,7 +72,7 @@ def connector_status(name: str) -> dict[str, Any]:
         available = conn.is_available()
         s = conn.status()
         return {"name": name, "display_name": conn.display_name, "available": available, **s}
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"name": name, "available": False, "error": str(e)}
 
 

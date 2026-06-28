@@ -43,7 +43,7 @@ class PIDController:
         for f in sorted(self.log_dir.glob("check-result*.json")):
             try:
                 history.append(json.loads(f.read_text()))
-            except Exception:  # noqa: BLE001
+            except Exception:
                 pass
         return history
 

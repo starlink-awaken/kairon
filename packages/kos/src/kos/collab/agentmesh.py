@@ -54,6 +54,6 @@ def dispatch_to_agentmesh(task_data: dict) -> str | None:
                 return cast("str | None", body.get("task_id"))
         except urllib.error.URLError:
             return None
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logging.warning("agentmesh dispatch failed: %s", e)
         return None

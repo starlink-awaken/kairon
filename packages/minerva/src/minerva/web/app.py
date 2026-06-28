@@ -49,7 +49,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
         executor = create_default_executor()
         _executor_ref["executor"] = executor
-    except Exception:  # noqa: BLE001
+    except Exception:
         _executor_ref["executor"] = None
     yield
     _executor_ref.clear()
@@ -167,7 +167,7 @@ def _check_sqlite() -> bool:
         conn.execute("SELECT 1")
         conn.close()
         _health_sqlite_ok = True
-    except Exception:  # noqa: BLE001
+    except Exception:
         _health_sqlite_ok = False
     return _health_sqlite_ok
 
@@ -181,7 +181,7 @@ def _check_llm_local() -> bool:
         config = MinervaConfig.load()
         resp = httpx.get(f"{config.llm.base_url}/models", timeout=5)
         return resp.status_code == 200
-    except Exception:  # noqa: BLE001
+    except Exception:
         return False
 
 
@@ -215,7 +215,7 @@ async def paradigm_analyze(query: str) -> Any:
             if suggestion.get("sample_count", 0) > 0
             else None,
         }
-    except Exception:  # noqa: BLE001
+    except Exception:
         return JSONResponse({"error": "Analysis failed"}, status_code=500)
 
 
@@ -274,7 +274,7 @@ async def research_start(query: str = Form(...), level: str = Form("auto"), max_
             "stages": {name: round(elapsed, 2) for name, elapsed in stage_timings.items()},
             "total_time": round(sum(stage_timings.values()), 2) if stage_timings else 0,
         }
-    except Exception:  # noqa: BLE001
+    except Exception:
         return JSONResponse(
             {"task_id": task_id, "status": "failed", "error": "Research execution failed"},
             status_code=500,
@@ -319,7 +319,7 @@ async def knowledge_graph(limit: int = 50) -> Any:
 
         data = await graph_accessor.get_graph_data(limit=limit)
         return data
-    except Exception:  # noqa: BLE001
+    except Exception:
         return {"nodes": [], "edges": [], "error": "Graph query failed"}
 
 
@@ -337,7 +337,7 @@ async def export_pdf(path: str = "") -> Any:
 
         html = markdown_to_html(str(fp))
         return HTMLResponse(html)
-    except Exception:  # noqa: BLE001
+    except Exception:
         return JSONResponse({"error": "Export failed"}, status_code=500)
 
 
@@ -354,7 +354,7 @@ async def view_report(path: str = "") -> Any:
         md = fp.read_text()
         html = _md_to_html(md)
         return HTMLResponse(REPORT_WRAPPER.format(title=fp.name, content=html))
-    except Exception:  # noqa: BLE001
+    except Exception:
         return JSONResponse({"error": "Render failed"}, status_code=500)
 
 
@@ -474,7 +474,7 @@ _DASHBOARD_PATH = _Path(__file__).parent / "dashboard.html"
 def _load_dashboard() -> str:
     try:
         return _DASHBOARD_PATH.read_text()
-    except Exception:  # noqa: BLE001
+    except Exception:
         return "<html><body><h1>Dashboard unavailable</h1></body></html>"
 
 

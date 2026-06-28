@@ -46,7 +46,7 @@ def setup_tracing(service_name: str) -> None:
         trace.set_tracer_provider(provider)
         _TRACING_INITIALIZED = True
         logger.info(f"[OTLP] Tracing initialized for '{service_name}', exporting to {otlp_endpoint}")
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.error(f"[OTLP] Failed to initialize tracing: {e}")
 
 

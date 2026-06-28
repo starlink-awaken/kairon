@@ -42,7 +42,7 @@ def apply_rule(rule: dict) -> None:
             capture_output=True,
             timeout=5,
         )
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
 
 
@@ -51,7 +51,7 @@ def push_notification(title: str, message: str) -> None:
     try:
         data = json.dumps({"title": title, "message": message})
         subprocess.run(["python3", str(PUSH_SCRIPT)], input=data.encode(), timeout=5, capture_output=True)
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
 
 

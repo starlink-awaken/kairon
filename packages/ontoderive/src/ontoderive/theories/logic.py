@@ -245,7 +245,7 @@ class EntailmentGraph:
                                     }
                                 )
                                 seen.add((id1, id2))
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 import sys
 
                 print(f"[logic] find_contradictions error: {e}", file=sys.stderr)

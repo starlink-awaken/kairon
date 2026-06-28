@@ -54,7 +54,7 @@ def _api_call(api_name: str, **params: Any) -> dict | None:
             logger.warning("WeRead API error [%s]: %s", api_name, data.get("errmsg", ""))
             return data
         return data
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.warning("WeRead API call failed [%s]: %s", api_name, e)
         return None
 

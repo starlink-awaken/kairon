@@ -226,9 +226,9 @@ class ChangeTracker:
                     padded = item.id + "=" * (-len(item.id) % 4)
                     rel_path = base64.urlsafe_b64decode(padded.encode()).decode()
                     return rel_path
-                except Exception:  # noqa: BLE001
+                except Exception:
                     pass
-            except Exception:  # noqa: BLE001
+            except Exception:
                 pass
         return item.source_path or item.id
 

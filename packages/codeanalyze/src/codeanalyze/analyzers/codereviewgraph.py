@@ -53,7 +53,7 @@ def is_available() -> bool:
             timeout=5,
         )
         return r.returncode == 0
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.warning("CRG not available: %s", e)
         return False
 
@@ -68,7 +68,7 @@ def get_version() -> str | None:
             timeout=5,
         )
         return (r.stdout.strip() or r.stderr.strip()) or None
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.warning("CRG version check failed: %s", e)
         return None
 
@@ -105,7 +105,7 @@ def build(path: str = ".", force: bool = False) -> CrgStats:
         _parse_status(stats, r.stdout)
     except subprocess.TimeoutExpired:
         stats.error = "构建超时（5min）"
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         stats.error = str(e)[:200]
 
     return stats
@@ -133,7 +133,7 @@ def update(path: str = ".") -> CrgStats:
         _parse_status(stats, r.stdout)
     except subprocess.TimeoutExpired:
         stats.error = "更新超时（2min）"
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         stats.error = str(e)[:200]
 
     return stats
@@ -159,7 +159,7 @@ def status(path: str = ".") -> CrgStats:
             return stats
 
         _parse_status(stats, r.stdout)
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         stats.error = str(e)[:200]
 
     return stats
@@ -219,6 +219,6 @@ def visualise(path: str = ".", output: str | None = None) -> str | None:
         if r.returncode == 0 and Path(target).exists():
             return target
         return None
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.warning("CRG visualize failed: %s", e)
         return None

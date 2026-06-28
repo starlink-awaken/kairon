@@ -230,7 +230,7 @@ class FactGraphImporter:
                 triples = self._knowledge_to_triples(item["id"], item)
                 all_triples.extend(triples)
                 item_ids.append(item["id"])
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 _log.error(f"Failed to convert item {item['id']}: {e}")
                 self._skipped_count += 1
                 continue
@@ -268,7 +268,7 @@ class FactGraphImporter:
                 "message": f"Successfully imported {self._imported_count} items",
             }
 
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             _log.error(f"Failed to import to FactGraph: {e}")
             return {
                 "success": False,
@@ -317,7 +317,7 @@ class FactGraphImporter:
                 "message": "Successfully imported",
             }
 
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             _log.error(f"Failed to import item {item_id}: {e}")
             return {"success": False, "imported": 0, "error": str(e)}
 

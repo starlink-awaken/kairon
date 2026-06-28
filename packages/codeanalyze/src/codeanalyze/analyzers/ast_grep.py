@@ -63,7 +63,7 @@ def get_version() -> str | None:
         )
         first_line = (r.stdout or r.stderr).strip().split("\n")[0]
         return first_line or None
-    except Exception:  # noqa: BLE001
+    except Exception:
         return None
 
 
@@ -201,7 +201,7 @@ def dump_ast(
                 except json.JSONDecodeError:
                     pass
         return {"language": language, "nodes": matches[:20]}
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"error": str(e)}
     finally:
         Path(tmp).unlink(missing_ok=True)

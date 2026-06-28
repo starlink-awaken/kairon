@@ -45,6 +45,6 @@ def test_hybrid_research_analysis():
     # 由于是 Mock 的 LLM，这里仅作架构连通性演示
     try:
         assert_test(test_case, [relevancy_metric, factual_metric])
-    except Exception:  # noqa: BLE001
+    except Exception:
         # Expected to fail since Mock LLM returns random string
         pass

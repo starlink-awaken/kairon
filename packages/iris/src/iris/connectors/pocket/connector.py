@@ -62,7 +62,7 @@ def _pocket_post(endpoint: str, payload: dict[str, Any]) -> dict[str, Any] | Non
                 logger.warning("Pocket API error: %s", data["error"])
                 return None
             return data
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.warning("Pocket API request failed [%s]: %s", endpoint, e)
         return None
 
@@ -234,7 +234,7 @@ class PocketConnector(BaseConnector):
             try:
                 bm = _pocket_item_to_bookmark(item_id, item_data, self.name)
                 bookmarks.append(bm)
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 logger.debug("Failed to parse Pocket item %s: %s", item_id, e)
                 continue
         # Sort by created_at descending (newest first)
@@ -363,7 +363,7 @@ class PocketConnector(BaseConnector):
                 message=f"Synced {count} unread Pocket bookmarks.",
             )
 
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             logger.exception("Pocket sync failed")
             return SyncResult(
                 connector_name=self.name,
@@ -434,7 +434,7 @@ class PocketConnector(BaseConnector):
                 "note": "Counts are based on latest API response; Pocket does not expose exact totals.",
             }
 
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             logger.warning("Failed to get Pocket status: %s", e)
             return {
                 "configured": True,

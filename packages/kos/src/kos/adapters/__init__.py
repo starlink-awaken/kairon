@@ -132,7 +132,7 @@ class MinervaAdapter:
                     v = MinervaVersion.parse(r.stdout + r.stderr)
                     if v:
                         return v
-            except Exception:  # noqa: BLE001, S112  # defensive fallback
+            except Exception:  # noqa: S112  # defensive fallback
                 continue
         return None
 
@@ -145,7 +145,7 @@ class MinervaAdapter:
                 v = MinervaVersion.parse(r.stdout + r.stderr)
                 if v:
                     return v
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
 
         # fallback: pip show
@@ -157,7 +157,7 @@ class MinervaAdapter:
                         v = MinervaVersion.parse(line)
                         if v:
                             return v
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
         return None
 
@@ -214,7 +214,7 @@ class MinervaAdapter:
             }
         except sp.TimeoutExpired:
             return {"error": f"Minerva research timed out (>{timeout}s)", "query": query}
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             return {"error": str(e), "query": query}
 
     def quick_llm(self, prompt: str, timeout: int = 60) -> str | None:
@@ -224,7 +224,7 @@ class MinervaAdapter:
             r = sp.run(args, capture_output=True, text=True, timeout=timeout)
             if r.returncode == 0:
                 return r.stdout.strip()
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
         return None
 
@@ -321,7 +321,7 @@ class SemanticScholarAdapter:
                     data = json.loads(resp.read())
             else:
                 return {"error": f"HTTP {e.code}", "detail": str(e)}
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             return {"error": str(e)}
 
         # Schema validation / defensive parsing

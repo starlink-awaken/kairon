@@ -54,7 +54,7 @@ class ConnectorRegistry:
                         **s,
                     }
                 )
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 results.append(
                     {
                         "name": name,

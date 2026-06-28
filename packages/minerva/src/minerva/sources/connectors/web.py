@@ -165,7 +165,7 @@ class WebSourceConnector(ISourceConnector):
                     await asyncio.sleep(self.config.retry_delay * (2**attempt))
                 continue
 
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 last_error = e
                 if attempt < self.config.max_retries - 1:
                     await asyncio.sleep(self.config.retry_delay * (2**attempt))
@@ -183,7 +183,7 @@ class WebSourceConnector(ISourceConnector):
             client = await HTTPClientPool.get_client(self.config)
             response = await client.head(self.config.url)
             return response.status_code < 500
-        except Exception:  # noqa: BLE001
+        except Exception:
             return False
 
     async def close(self) -> None:

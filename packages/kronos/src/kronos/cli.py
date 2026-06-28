@@ -59,7 +59,7 @@ def status() -> None:
         from kronos.fetch_router import check_ollama
 
         ok, info = check_ollama()
-    except Exception:  # noqa: BLE001
+    except Exception:
         ok, info = False, "模块导入失败"
     click.echo("")
     click.echo(f"🧠  Ollama: {'✅ ' + info if ok else '❌ ' + info}")
@@ -129,7 +129,7 @@ def fetch(url: str, dry_run: bool = False) -> None:
             ok, info = check_ollama()
             if ok:
                 ollama_ok = True
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             ollama_err = str(e)
         if ollama_ok:
             click.echo("  ✅ Ollama 已连接 — 提取中...")
@@ -153,7 +153,7 @@ def fetch(url: str, dry_run: bool = False) -> None:
                         click.echo(f"  🏷️  标签: {', '.join(ec.tags[:5])}")
                 else:
                     click.echo(f"  ⚠️  Ollama 返回无有效提取: {str(extracted)[:200]}")
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 click.echo(f"  ❌ 提取异常: {e}")
         else:
             click.echo(f"  ❌ Ollama 未连接{' (' + ollama_err + ')' if ollama_err else ''}")
@@ -204,7 +204,7 @@ def search(query: tuple[str, ...]) -> None:
             click.echo(f"  {i}. {r['title']}")
             click.echo(f"     {r['url']}")
             click.echo("")
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         click.echo(f"❌ 搜索失败: {e}")
 
 

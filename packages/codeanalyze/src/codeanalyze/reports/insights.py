@@ -72,7 +72,7 @@ def _load_layer_rules(root: Path) -> list[tuple[str, str, str]]:
     cfg = configparser.ConfigParser()
     try:
         cfg.read_string(cfg_path.read_text(encoding="utf-8"))
-    except Exception:  # noqa: BLE001
+    except Exception:
         return []
 
     rules = []
@@ -89,7 +89,7 @@ def _load_layer_rules(root: Path) -> list[tuple[str, str, str]]:
             desc = rule.get("description", "")
             if low and high:
                 rules.append((low, high, desc))
-    except (ImportError, tomllib.TOMLDecodeError, Exception):  # noqa: BLE001
+    except (ImportError, tomllib.TOMLDecodeError, Exception):
         pass
 
     return rules

@@ -216,10 +216,10 @@ def claim_subtask(
         row = conn.execute("SELECT * FROM kos_collab_tasks WHERE task_id=?", (task_id,)).fetchone()
         conn.close()
         return {"status": "claimed", "subtask": st, "task": _row_to_dict(row)}
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         try:
             conn.rollback()
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
         conn.close()
         return {"error": str(e), "code": "INTERNAL_ERROR"}
@@ -291,10 +291,10 @@ def complete_subtask(task_id: str, subtask_index: int, assignee: str) -> dict[st
             "task_status": new_status or row["status"],
             "task": _row_to_dict(row),
         }
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         try:
             conn.rollback()
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
         conn.close()
         return {"error": str(e), "code": "INTERNAL_ERROR"}

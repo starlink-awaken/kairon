@@ -155,5 +155,5 @@ def trigger_api_wiki_generation(repo_url: str, output_dir: str) -> dict:
             return {"status": "error", "error": f"API returned {resp.status_code}: {resp.text[:200]}"}
     except ImportError:
         return {"error": "requests not installed", "status": "error"}
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"error": str(e), "status": "error"}

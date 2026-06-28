@@ -105,7 +105,7 @@ def _check_c04(
         g = build_from_project(root)
         gs = g.stats()
         detail += f" | 蕴含图: {gs['nodes']}节点/{gs['edges']}边, 深度{gs['max_depth']}"
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
     if untraced:
         detail += f", 未追溯{len(untraced)}个: {','.join(untraced[:3])}"
@@ -323,7 +323,7 @@ def run_check(root: Any, facts_dir: Any, entities_dir: Any, inferences_dir: Any,
             "C-09", r9["name"] if "name" in r9 else "贝叶斯信念传播(智能层)", r9["passed"], r9["severity"], r9["detail"]
         )
         _bayes_distribution = r9.get("distribution")
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         result("C-09", "贝叶斯信念传播(智能层)", False, "WARN", str(e)[:50])
         _bayes_distribution = None
 
@@ -337,7 +337,7 @@ def run_check(root: Any, facts_dir: Any, entities_dir: Any, inferences_dir: Any,
                 kwargs["precomputed_confs"] = _bayes_distribution
             r = check_fn(root, **kwargs) if pid == "C-10" else check_fn(root)
             result(pid, name, r["passed"], r["severity"], r["detail"])
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             result(pid, name, False, "WARN", f"异常: {str(e)[:50]}")
 
     # 保存结果

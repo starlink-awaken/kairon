@@ -157,7 +157,7 @@ class _ConnectionPool(_OrganBase):
             try:
                 yield conn
                 conn.commit()
-            except Exception:  # noqa: BLE001
+            except Exception:
                 conn.rollback()
                 raise
 

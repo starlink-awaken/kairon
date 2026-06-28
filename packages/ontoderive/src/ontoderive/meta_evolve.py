@@ -755,7 +755,7 @@ class MetaEvolveEngine:
                     result.applied.append(sugg)
                 else:
                     result.rejected.append(sugg)
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 _log.warning("auto_update: suggestion %s left pending: %s", sugg.id, exc)
                 result.pending.append(sugg)
 

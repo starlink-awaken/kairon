@@ -50,7 +50,7 @@ class UnderstandAdapter:
             mermaid.append("```")
             return "\\n".join(mermaid)
 
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             logger.error(f"Failed to generate diagram: {e}")
             return f"Error generating architecture diagram: {e}"
 
@@ -84,5 +84,5 @@ class UnderstandAdapter:
                 "cyclomatic_complexity": {"average": round(avg_complexity, 2), "details": file_cc},
                 "raw_metrics": file_raw,
             }
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             return {"error": f"Radon analysis failed: {e}"}

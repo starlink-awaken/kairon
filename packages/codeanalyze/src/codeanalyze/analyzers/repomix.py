@@ -42,7 +42,7 @@ def get_version() -> str | None:
         try:
             r = subprocess.run(["repomix", "--version"], capture_output=True, text=True, timeout=10)
             return r.stdout.strip() or None
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
     # npx 方式
     if shutil.which("npx"):
@@ -54,7 +54,7 @@ def get_version() -> str | None:
                 timeout=30,
             )
             return r.stdout.strip() or None
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
     return None
 

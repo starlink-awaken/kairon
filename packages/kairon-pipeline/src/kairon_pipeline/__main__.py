@@ -18,7 +18,7 @@ def _package_info() -> dict[str, Any]:
     pkg_name = __name__.split(".")[0]
     try:
         mod = importlib.import_module(__name__)
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"package": pkg_name, "_import_error": f"{type(exc).__name__}: {exc}"}
     return {
         "package": pkg_name,
@@ -36,7 +36,7 @@ def do_search(args: dict[str, Any]) -> dict[str, Any]:
                 instance = obj()
                 result = instance.search(args.get("query", ""))
                 return {"_method": "search", "_class": name, "result": str(result)[:500]}
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "search", "_error": f"{type(exc).__name__}: {exc}"}
     return {"_method": "search", "_error": "no class with search method"}
 
@@ -50,7 +50,7 @@ def do_ingest(args: dict[str, Any]) -> dict[str, Any]:
                 instance = obj()
                 result = instance.ingest(args.get("entity", args.get("data", {})))
                 return {"_method": "ingest", "_class": name, "result": str(result)[:500]}
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "ingest", "_error": f"{type(exc).__name__}: {exc}"}
     return {"_method": "ingest", "_error": "no class with ingest method"}
 
@@ -64,7 +64,7 @@ def do_validate(args: dict[str, Any]) -> dict[str, Any]:
                 instance = obj()
                 result = instance.validate(args.get("data", args.get("entity", {})))
                 return {"_method": "validate", "_class": name, "result": str(result)[:500]}
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "validate", "_error": f"{type(exc).__name__}: {exc}"}
     return {"_method": "validate", "_error": "no class with validate method"}
 
@@ -78,7 +78,7 @@ def do_register(args: dict[str, Any]) -> dict[str, Any]:
                 instance = obj()
                 result = instance.register(args.get("name", "default"), args.get("capabilities", []))
                 return {"_method": "register", "_class": name, "result": str(result)[:500]}
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "register", "_error": f"{type(exc).__name__}: {exc}"}
     return {"_method": "register", "_error": "no class with register method"}
 
@@ -92,7 +92,7 @@ def do_list(args: dict[str, Any]) -> dict[str, Any]:
                 instance = obj()
                 result = instance.list(args)
                 return {"_method": "list", "_class": name, "result": str(result)[:500]}
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "list", "_error": f"{type(exc).__name__}: {exc}"}
     return {"_method": "list", "_error": "no class with list method"}
 
@@ -106,7 +106,7 @@ def do_run(args: dict[str, Any]) -> dict[str, Any]:
                 instance = obj()
                 result = instance.run(args.get("query", args.get("task", "")))
                 return {"_method": "run", "_class": name, "result": str(result)[:500]}
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "run", "_error": f"{type(exc).__name__}: {exc}"}
     return {"_method": "run", "_error": "no class with run method"}
 
@@ -120,7 +120,7 @@ def do_get(args: dict[str, Any]) -> dict[str, Any]:
                 instance = obj()
                 result = instance.get(args.get("id", args.get("key", "")))
                 return {"_method": "get", "_class": name, "result": str(result)[:500]}
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "get", "_error": f"{type(exc).__name__}: {exc}"}
     return {"_method": "get", "_error": "no class with get method"}
 
@@ -134,7 +134,7 @@ def do_sync(args: dict[str, Any]) -> dict[str, Any]:
                 instance = obj()
                 result = instance.sync(args)
                 return {"_method": "sync", "_class": name, "result": str(result)[:500]}
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "sync", "_error": f"{type(exc).__name__}: {exc}"}
     return {"_method": "sync", "_error": "no class with sync method"}
 
@@ -143,7 +143,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     """P55-W0: 通用 fallback — 反射式调包内任何 do_<action> function."""
     try:
         mod = importlib.import_module(__name__)
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "do_default", "_error": f"import: {type(exc).__name__}: {exc}"}
     # 找包内 do_default function
     fn = getattr(mod, "do_default", None)
@@ -151,7 +151,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
         try:
             result = fn(args)
             return {"_method": "do_default", "result": str(result)[:500]}
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return {"_method": "do_default", "_error": f"{type(exc).__name__}: {exc}"}
     return {"_method": "do_default", "_error": "no do_default function"}
 
@@ -203,7 +203,7 @@ def _call_action(action: str, args: dict[str, Any]) -> dict[str, Any]:
         try:
             result = fallback_fn(args)
             return {"package": __name__.split(".")[0], "action_dispatched": action, "args_echo": args, **result}
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return {
                 "package": __name__.split(".")[0],
                 "action_dispatched": action,

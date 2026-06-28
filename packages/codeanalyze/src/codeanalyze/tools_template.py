@@ -65,7 +65,7 @@ def sample_sync_tool(name: str = "default") -> dict:
                 **result,
             }
         )
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return _error(str(e))
 
 
@@ -89,7 +89,7 @@ async def sample_async_tool(query: str, limit: int = 10) -> dict:
                 "items": items,
             }
         )
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return _error(str(e))
 
 
@@ -110,7 +110,7 @@ def sample_item_detail(item_id: str) -> dict:
         # result["format_version"] = FORMAT_VERSION
 
         return result
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return _error(str(e))
 
 
@@ -127,7 +127,7 @@ def sample_list_result() -> dict:
                 "total": len(items),
             }
         )
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return _error(str(e))
 
 

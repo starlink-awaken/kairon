@@ -15,7 +15,7 @@ def build_code_graph(repo_path: str = ".") -> dict:
 
     try:
         results = analyze_repo(repo_path)
-    except Exception:  # noqa: BLE001
+    except Exception:
         return {"entities": [], "relations": [], "error": "graphify analysis failed"}
 
     entities = []

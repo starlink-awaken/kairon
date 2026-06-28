@@ -61,7 +61,7 @@ def get_version() -> str | None:
         if first_line:
             return first_line.split(" ", 1)[-1] if " " in first_line else first_line
         return None
-    except Exception:  # noqa: BLE001
+    except Exception:
         return None
 
 

@@ -168,7 +168,7 @@ class BFTSearch:
             if not sub_questions:
                 return [query]
             return sub_questions[: self.max_branches]
-        except Exception:  # noqa: BLE001
+        except Exception:
             logger.warning("decompose_failed", query=query)
             return [query]
 
@@ -215,7 +215,7 @@ class BFTSearch:
                 for r in search_results
             ]
             return results
-        except Exception:  # noqa: BLE001
+        except Exception:
             logger.warning("explore_failed", query=node.query)
             return []
 

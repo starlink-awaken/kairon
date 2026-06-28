@@ -32,6 +32,6 @@ if __name__ == "__main__":
             sys.stdout.flush()
         except json.JSONDecodeError:
             continue
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             sys.stderr.write(f"[toolforge-mcp] Error: {e}\n")
             sys.stderr.flush()

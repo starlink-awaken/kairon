@@ -75,7 +75,7 @@ def launch_dashboard(project_path: str = ".", port: int = 3456) -> dict:
             result["url"] = f"http://localhost:{port}"
             result["pid"] = r.pid
             return result
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             result["error"] = str(e)[:200]
 
     # 降级：检查已有图谱文件
@@ -107,7 +107,7 @@ def generate_standalone_html(path: str = ".") -> str | None:
 
     try:
         data = _json.loads(graph_file.read_text(encoding="utf-8"))
-    except Exception:  # noqa: BLE001
+    except Exception:
         return None
 
     nodes = data.get("nodes", [])

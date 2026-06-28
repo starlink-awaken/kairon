@@ -50,7 +50,7 @@ class LLMEnhancer:
             return None
         try:
             return self._provider.call(prompt, system, temperature)
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             import sys
 
             print(f"[llm] 调用失败: {e}", file=sys.stderr)

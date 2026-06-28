@@ -162,7 +162,7 @@ def cmd_list(args: argparse.Namespace, config: IrisConfig) -> None:
                         **s,
                     }
                 )
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 results.append(
                     {
                         "name": conn.name,

@@ -46,7 +46,7 @@ class RAGContextBuilder:
             if self.vs:
                 try:
                     return await self.vs.search(query, top_k=self.top_k)
-                except Exception:  # noqa: BLE001
+                except Exception:
                     return []
             return []
 
@@ -54,7 +54,7 @@ class RAGContextBuilder:
             if self.kb:
                 try:
                     return await self.kb.search(query, mode="fulltext", top_k=self.top_k)
-                except Exception:  # noqa: BLE001
+                except Exception:
                     return []
             return []
 

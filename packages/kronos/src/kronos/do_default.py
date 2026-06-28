@@ -14,7 +14,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             list_all_methods,
             plan_for_url,
         )
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "do_default", "_error": f"import: {type(exc).__name__}: {exc}"}
 
     action = args.get("action", "list_methods")
@@ -40,7 +40,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
         if action == "version":
             return {"_method": "do_default", "_action": "version", "version": __version__}
         return {"_method": "do_default", "_error": f"unknown action: {action}"}
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "do_default", "_action": action, "_error": f"{type(exc).__name__}: {exc}"}
 
 

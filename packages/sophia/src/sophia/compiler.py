@@ -99,7 +99,7 @@ async def compile_paradigm(llm_client: _LLMClientProtocol | None, query: str) ->
             else:
                 logger.info("LLM compilation succeeded for query: %.60s", query)
                 return program
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             logger.warning("LLM compilation failed, falling back to rule path: %s", exc)
     return compile_paradigm_sync(query)
 

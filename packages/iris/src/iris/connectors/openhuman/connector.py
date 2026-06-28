@@ -91,7 +91,7 @@ class OpenHumanConnector(BaseConnector):
             return {"error": f"Connection failed: {e.reason}"}
         except OSError as e:
             return {"error": f"Network error: {e}"}
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             return {"error": str(e)}
 
     # ------------------------------------------------------------------

@@ -259,7 +259,7 @@ def main() -> None:
                     out_path = Path(args.project) / f"export.{ext}"
                     out_path.write_text(output)
                     print(f"[export] ✅ {out_path} ({len(output)}字符)")
-                except Exception as e:  # noqa: BLE001
+                except Exception as e:
                     print(f"[export] ❌ {e}")
             else:
                 od.generate_report()

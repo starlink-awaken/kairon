@@ -37,7 +37,7 @@ def get_password(key: str) -> str | None:
         return None
     try:
         return cast("str | None", kr.get_password(_KEYRING_SERVICE, key))
-    except Exception:  # noqa: BLE001
+    except Exception:
         return None
 
 
@@ -52,7 +52,7 @@ def set_password(key: str, password: str) -> bool:
     try:
         kr.set_password(_KEYRING_SERVICE, key, password)
         return True
-    except Exception:  # noqa: BLE001
+    except Exception:
         return False
 
 
@@ -64,5 +64,5 @@ def delete_password(key: str) -> bool:
     try:
         kr.delete_password(_KEYRING_SERVICE, key)
         return True
-    except Exception:  # noqa: BLE001
+    except Exception:
         return False

@@ -53,7 +53,7 @@ class ZhihuConnector(BaseConnector):
                 return cast("str | None", result["content"])
         except ImportError:
             pass
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             logger.debug("kronos fetch failed: %s", e)
 
         # Fallback: direct HTTP with optional cookie
@@ -69,7 +69,7 @@ class ZhihuConnector(BaseConnector):
             req = urllib.request.Request(url, headers=headers)  # noqa: S310
             resp = urllib.request.urlopen(req, timeout=15)  # noqa: S310
             return cast("str", resp.read().decode("utf-8", errors="replace"))
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             logger.debug("Direct HTTP fetch failed: %s", e)
             return None
 
@@ -125,7 +125,7 @@ class ZhihuConnector(BaseConnector):
 
             resp = urllib.request.urlopen(f"{ZHIHU_HOST}/robots.txt", timeout=5)  # noqa: S310
             return cast("bool", resp.status == 200)
-        except Exception:  # noqa: BLE001
+        except Exception:
             return False
 
     def list_items(

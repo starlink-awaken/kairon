@@ -115,7 +115,7 @@ class CostGuard:
                     entry = json.loads(line)
                     if entry.get("month") == current_month:
                         self.current_spend += entry.get("cost", 0.0)
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
 
     def check(self, estimated_cost: float) -> bool:
@@ -173,7 +173,7 @@ class SourceChecker:
                 resp = await client.get(url)
                 resp.raise_for_status()
                 raw = resp.text
-        except Exception:  # noqa: BLE001
+        except Exception:
             return []
 
         items = []
@@ -202,7 +202,7 @@ class SourceChecker:
                         "source": "arxiv",
                     }
                 )
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
         return items
 
@@ -218,7 +218,7 @@ class SourceChecker:
                 )
                 resp.raise_for_status()
                 repos = resp.json()
-        except Exception:  # noqa: BLE001
+        except Exception:
             return []
         items = []
         topic_lower = topic.lower()
@@ -244,7 +244,7 @@ class SourceChecker:
             import feedparser
 
             feed = feedparser.parse(feed_url)
-        except Exception:  # noqa: BLE001
+        except Exception:
             return []
 
         items = []
@@ -397,7 +397,7 @@ class ResearchExecutor:
             try:
                 await self.execute_now(task)
                 logger.info("scheduled_task_complete", task_id=task_id, cron=task.cron_expr)
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 logger.error("scheduled_task_failed", task_id=task_id, error=str(exc))
 
         from apscheduler.triggers.cron import CronTrigger
@@ -442,7 +442,7 @@ class ResearchExecutor:
                         )
                         await self.execute_now(watch_task)
                         self._notify(task, None)
-                except Exception as exc:  # noqa: BLE001
+                except Exception as exc:
                     logger.error("watch_check_failed", source=source, error=str(exc))
 
         job = self._apscheduler.add_job(
@@ -557,7 +557,7 @@ class ResearchExecutor:
                             "level": cfg.get("level", "auto"),
                         }
                 result["scheduled"] = len(configs)
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
         try:
             wpath = self.state_dir / "watch_configs.json"
@@ -573,7 +573,7 @@ class ResearchExecutor:
                             "check_interval": cfg.get("check_interval", "daily"),
                         }
                 result["watch"] = len(configs)
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
         return result
 

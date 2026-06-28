@@ -56,7 +56,7 @@ class OntoDerive(DeriveInterface):
                 for yf in rules_dir.glob("*.yaml"):
                     rl.load_yaml(str(yf))
             return rl.rules
-        except Exception:  # noqa: BLE001
+        except Exception:
             return []
 
     def derive(self) -> Any:
@@ -120,7 +120,7 @@ class OntoDerive(DeriveInterface):
                     "max": round(max(confs), 4),
                     "count": len(confs),
                 }
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             import sys
 
             print(f"[derive] Bayesian skip: {e}", file=sys.stderr)
@@ -137,7 +137,7 @@ class OntoDerive(DeriveInterface):
                 "max_depth": g["max_depth"],
                 "cycles": g["cycles"],
             }
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             import sys
 
             print(f"[derive] Logic skip: {e}", file=sys.stderr)
@@ -173,7 +173,7 @@ class OntoDerive(DeriveInterface):
                 derivation_hints.append(f"推导链深度仅{st['max_depth']}，推论间缺少递进关系")
             if st["has_cycles"]:
                 derivation_hints.append(f"检测到{st['cycles']}个循环引用，请检查 derives_from 链")
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
 
         # v3.1: 规则引擎提示（始终可用，标注为结构分析）
@@ -221,7 +221,7 @@ class OntoDerive(DeriveInterface):
                 enhancer=self._try_llm(),
             )
             summary["derived_conclusions"] = [uc.to_dict() for uc in uc_list[:25]]
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
 
         save_json(self.log_dir / "derive-summary.json", summary)
@@ -270,7 +270,7 @@ class OntoDerive(DeriveInterface):
                 print(f"[analyze] ✅ +{len(insights)}条LLM洞察")
                 summary["analysis_mode"] = "llm_enhanced"
             engine.save_insights(self.log_dir)
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             summary["llm_status"] = f"error: {e}"
             print(f"[analyze] ⚠️ LLM调用失败: {e}")
         return summary
@@ -281,7 +281,7 @@ class OntoDerive(DeriveInterface):
 
             e = get_enhancer()
             return e if e.available else None
-        except Exception:  # noqa: BLE001
+        except Exception:
             return None
 
     def check(self) -> Any:

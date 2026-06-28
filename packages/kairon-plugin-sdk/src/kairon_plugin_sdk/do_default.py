@@ -9,7 +9,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     """P58-W0 kairon_plugin_sdk do_default: 真调 BosPlugin / PluginContext 反射."""
     try:
         from kairon_plugin_sdk import BosPlugin, PluginContext
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "do_default", "_error": f"import: {type(exc).__name__}: {exc}"}
 
     action = args.get("action", "schema")
@@ -43,7 +43,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
                 "count": len(fields),
             }
         return {"_method": "do_default", "_error": f"unknown action: {action}"}
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "do_default", "_action": action, "_error": f"{type(exc).__name__}: {exc}"}
 
 

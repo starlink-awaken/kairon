@@ -121,7 +121,7 @@ def create_consensus(
             headers={"Content-Type": "application/json"},
         )
         urllib.request.urlopen(req, timeout=2)  # noqa: S310
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
     return _row_to_dict(row)
 

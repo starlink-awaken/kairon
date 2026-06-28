@@ -57,7 +57,7 @@ class KnowledgeIngester:
         # Step 1: Extract text content
         try:
             text = await self._extract_text(source, source_type)
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             result.errors.append(f"Extraction failed: {e}")
             return result
 
@@ -69,7 +69,7 @@ class KnowledgeIngester:
         try:
             self._save_content(source, text, source_type)
             result.content_saved = True
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             result.errors.append(f"Save failed: {e}")
 
         # Step 3: Extract entities with spaCy
@@ -80,7 +80,7 @@ class KnowledgeIngester:
                     try:
                         await self.kb.upsert_entity(ent)
                         result.entities_extracted += 1
-                    except Exception:  # noqa: BLE001
+                    except Exception:
                         pass
 
         # Step 4: Save raw markdown for future reference
@@ -111,7 +111,7 @@ class KnowledgeIngester:
                 return content
             # Fallback to BS4
             return await extract_bs4(url)
-        except Exception:  # noqa: BLE001
+        except Exception:
             return ""
 
     def _extract_pdf(self, filepath: str, use_mineru: bool = False) -> str:
@@ -131,7 +131,7 @@ class KnowledgeIngester:
                     text = parse_to_text(str(path))
                     if text and len(text) > 50:
                         return text
-            except Exception:  # noqa: BLE001
+            except Exception:
                 pass
         # Default: pdftotext (lightweight, always available)
         try:
@@ -144,7 +144,7 @@ class KnowledgeIngester:
                 timeout=30,
             )
             return result.stdout if result.returncode == 0 else ""
-        except Exception:  # noqa: BLE001
+        except Exception:
             return ""
 
     def _extract_office(self, filepath: str) -> str:
@@ -154,7 +154,7 @@ class KnowledgeIngester:
 
             if is_available():
                 return parse_to_text(str(Path(filepath).expanduser()))
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
         return ""
 

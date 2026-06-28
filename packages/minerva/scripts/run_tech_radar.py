@@ -59,7 +59,7 @@ def verify_imports() -> bool:
         print(f"✅ 评分测试通过: [{high.relevance_score:.2f}] {high.title[:40]}")
         print(f"   低分示例: [{low.relevance_score:.2f}] {low.title[:40]}")
         return True
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         print(f"❌ 失败: {exc}")
         import traceback
 

@@ -31,7 +31,7 @@ def sophia_compile(query: str, timeout: int = 30) -> dict[str, Any] | None:
         )
         if result.returncode == 0:
             return cast("dict[str, Any] | None", json.loads(result.stdout))
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
     return None
 
@@ -47,7 +47,7 @@ def sophia_suggest(query: str, timeout: int = 15) -> dict[str, Any]:
         )
         if result.returncode == 0:
             return cast("dict[str, Any]", json.loads(result.stdout))
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
     return {"sample_count": 0, "confidence": 0, "recommended_ops": [], "top_traces": []}
 
@@ -63,6 +63,6 @@ def sophia_evolve(query: str, timeout: int = 30) -> dict[str, Any] | None:
         )
         if result.returncode == 0:
             return cast("dict[str, Any] | None", json.loads(result.stdout))
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
     return None

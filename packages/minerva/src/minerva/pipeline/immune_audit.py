@@ -83,7 +83,7 @@ class ImmuneAuditStage(IPipelineStage):
                         "Immune audit flagged HIGH risk: %s",
                         item.get("title", "")[:80],
                     )
-            except Exception:  # noqa: BLE001
+            except Exception:
                 _log.error("Immune audit request failed for item", exc_info=True)
 
         if high_risk_count > 0:
@@ -110,5 +110,5 @@ class ImmuneAuditStage(IPipelineStage):
             async with httpx.AsyncClient(timeout=self._timeout) as client:
                 resp = await client.post(f"{self._endpoint}/call", json=item)
                 return cast("dict[str, Any]", resp.json())
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             return {"risk": "UNKNOWN", "error": str(e)}

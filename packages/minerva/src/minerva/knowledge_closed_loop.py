@@ -94,7 +94,7 @@ class KnowledgeClosedLoop:
 
         try:
             results = store["search_entities"](query, zone="minerva_research", limit=3)
-        except Exception:  # noqa: BLE001
+        except Exception:
             return None
 
         # Find exact or best match
@@ -197,7 +197,7 @@ class KnowledgeClosedLoop:
 
         try:
             result = await self.executor.execute_now(task)
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             duration_ms = (time.time() - t0) * 1000
             self.audit.log(
                 actor="mcp",

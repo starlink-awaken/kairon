@@ -32,7 +32,7 @@ def _discover_entry_points(registry: ConnectorRegistry) -> int:
             from importlib.metadata import entry_points
 
             _entry_points_cache = list(entry_points(group="iris.connectors"))
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             logger.info("Entry point discovery unavailable: %s", e)
             _entry_points_cache = []
 
@@ -42,7 +42,7 @@ def _discover_entry_points(registry: ConnectorRegistry) -> int:
             cls = ep.load()
             registry.register(cls())
             count += 1
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             logger.warning("Failed to load connector '%s': %s", ep.name, e)
     return count
 

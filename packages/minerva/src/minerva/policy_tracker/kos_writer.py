@@ -67,7 +67,7 @@ def save_to_kos(items: list[PolicyItem]) -> dict[str, int]:
                 stats["failed"] += 1
             else:
                 stats["saved"] += 1
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             logger.warning("kos_write_exception entity=%s exc=%s", entity_id, exc)
             stats["failed"] += 1
 

@@ -14,7 +14,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             recompile_from_dict,
         )
         from sophia.symbols import BASE_TRANSITIONS, AtomicOp  # type: ignore[import-not-found]
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "do_default", "_error": f"import: {type(exc).__name__}: {exc}"}
 
     action = args.get("action", "list_components")
@@ -46,7 +46,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
                 "states": sorted({t.get("from", "?") for t in BASE_TRANSITIONS if isinstance(t, dict)}),
             }
         return {"_method": "do_default", "_error": f"unknown action: {action}"}
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"_method": "do_default", "_action": action, "_error": f"{type(exc).__name__}: {exc}"}
 
 

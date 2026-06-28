@@ -38,7 +38,7 @@ class IrisConfig:
         if self._config_path.exists():
             try:
                 self._file_config = json.loads(self._config_path.read_text())
-            except Exception:  # noqa: BLE001
+            except Exception:
                 self._file_config = {}
 
     def save(self) -> None:

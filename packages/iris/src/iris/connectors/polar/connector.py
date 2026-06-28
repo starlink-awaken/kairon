@@ -56,7 +56,7 @@ def _polar_get(endpoint: str, api_key: str, params: dict[str, Any] | None = None
     except httpx.HTTPStatusError as e:
         logger.warning("Polar.sh API HTTP error [%s]: %s %s", endpoint, e.response.status_code, e.response.text)
         return None
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.warning("Polar.sh API request failed [%s]: %s", endpoint, e)
         return None
 
@@ -97,14 +97,14 @@ def _polar_item_to_article(item: dict[str, Any], platform: str) -> Article:
     if published_at:
         try:
             created = published_at[:10]
-        except Exception:  # noqa: BLE001
+        except Exception:
             created = published_at
 
     updated = ""
     if updated_at:
         try:
             updated = updated_at[:10]
-        except Exception:  # noqa: BLE001
+        except Exception:
             updated = updated_at
 
     return Article(
@@ -201,7 +201,7 @@ class PolarConnector(BaseConnector):
             try:
                 article = _polar_item_to_article(item, self.name)
                 articles.append(article)
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 logger.debug("Failed to parse Polar.sh article %s: %s", item.get("id", "?"), e)
                 continue
         return articles
@@ -229,7 +229,7 @@ class PolarConnector(BaseConnector):
 
         try:
             return _polar_item_to_article(result, self.name)
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             logger.warning("Failed to parse Polar.sh article %s: %s", raw_id, e)
             return None
 
@@ -312,7 +312,7 @@ class PolarConnector(BaseConnector):
                 message=f"Synced {count} Polar.sh articles.",
             )
 
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             logger.exception("Polar.sh sync failed")
             return SyncResult(
                 connector_name=self.name,
@@ -362,7 +362,7 @@ class PolarConnector(BaseConnector):
                 "note": "Article count from Polar.sh API pagination metadata.",
             }
 
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             logger.warning("Failed to get Polar.sh status: %s", e)
             return {
                 "configured": True,

@@ -55,7 +55,7 @@ def _call_mcp_tool(tool_name: str, arguments: dict[str, Any] | None = None, time
         result = json.loads(proc.stdout)
         parsed: dict[str, Any] = result.get("result", {})
         return parsed
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"error": str(e)}
 
 
@@ -81,6 +81,6 @@ def check_ollama() -> bool:
         )
         if result.returncode == 0 and "models" in result.stdout:
             return True
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
     return False

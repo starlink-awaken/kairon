@@ -199,7 +199,7 @@ def dispatch(
             "note_title": title,
             "xml_preview": wps_xml[:100],
         }
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         result["wps"] = {"status": "failed", "error": str(e)}
 
     # → KOS（通过 Python API）

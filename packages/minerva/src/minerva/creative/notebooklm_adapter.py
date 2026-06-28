@@ -23,7 +23,7 @@ def create_client(auth_tokens: dict | None = None) -> Any | None:
         if auth_tokens:
             return NotebookLMClient(**auth_tokens)
         return NotebookLMClient()  # Will try saved auth
-    except Exception:  # noqa: BLE001
+    except Exception:
         return None
 
 
@@ -56,5 +56,5 @@ def generate_audio_overview(report_path: str, auth_tokens: dict | None = None) -
             "notebook_id": getattr(notebook, "id", ""),
             "note": "Audio overview generation initiated",
         }
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"status": "error", "reason": str(e)}

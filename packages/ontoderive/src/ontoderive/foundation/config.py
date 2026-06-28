@@ -33,9 +33,9 @@ def _load_yaml(path: Any) -> Any:
 
         try:
             return json.loads(open(path).read())
-        except Exception:  # noqa: BLE001
+        except Exception:
             return {}
-    except Exception:  # noqa: BLE001
+    except Exception:
         return {}
 
 

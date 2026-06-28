@@ -36,7 +36,7 @@ class SharedBrainHealingTrigger:
         if RULES_FILE.exists():
             try:
                 return cast("dict", yaml.safe_load(RULES_FILE.read_text()).get("rules", {}))
-            except Exception:  # noqa: BLE001
+            except Exception:
                 pass
         return {
             "organ_timeout": "sharedbrain/genesis/heal --organ {organ} --reason timeout",
@@ -68,6 +68,6 @@ class SharedBrainHealingTrigger:
             data = json.loads(resp.read().decode())
             _log.info("Healing triggered: %s → %s → %s", anomaly_type, organ, command)
             return {"ok": True, "data": data}
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             _log.error("Healing trigger failed: %s", e)
             return {"ok": False, "error": str(e)}

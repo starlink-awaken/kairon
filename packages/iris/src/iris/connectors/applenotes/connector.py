@@ -102,7 +102,7 @@ def _decode_note_id(note_id: str) -> tuple[str, str] | None:
             return None
         folder, title = decoded.split("::", 1)
         return folder, title
-    except Exception:  # noqa: BLE001
+    except Exception:
         return None
 
 
@@ -172,7 +172,7 @@ class AppleNotesConnector(BaseConnector):
                 out = _run_osascript(script)
                 if out:
                     notes_count += len([n for n in out.split(",") if n.strip()])
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return {
                 "available": True,
                 "folders": 0,

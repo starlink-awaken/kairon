@@ -25,7 +25,7 @@ def search(query: str, meta_type: str | None = None, limit: int = 10) -> list[di
             p.append(meta_type)
         sql += f" LIMIT {int(limit)}"
         return [dict(r) for r in c.execute(sql, p).fetchall()]
-    except Exception:  # noqa: BLE001
+    except Exception:
         return []
     finally:
         c.close()
@@ -35,7 +35,7 @@ def stats() -> dict[str, Any]:
     c = _db()
     try:
         return {"total": c.execute("SELECT COUNT(*) as c FROM documents").fetchone()["c"]}
-    except Exception:  # noqa: BLE001
+    except Exception:
         return {"total": 0}
     finally:
         c.close()
@@ -47,7 +47,7 @@ def list_documents(limit: int = 10) -> list[dict[str, Any]]:
     try:
         sql = "SELECT * FROM documents LIMIT ?"
         return [dict(r) for r in c.execute(sql, (int(limit),)).fetchall()]
-    except Exception:  # noqa: BLE001
+    except Exception:
         return []
     finally:
         c.close()

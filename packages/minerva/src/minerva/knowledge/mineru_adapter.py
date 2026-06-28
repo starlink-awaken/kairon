@@ -83,7 +83,7 @@ def parse_document(
         }
     except subprocess.TimeoutExpired:
         return {"status": "error", "message": "MinerU parsing timed out (120s)"}
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return {"status": "error", "message": str(e)}
 
 

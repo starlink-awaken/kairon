@@ -32,7 +32,7 @@ class GraphDataAccessor:
                 self._driver = GraphDatabase.driver(self.uri, auth=(self.user, self.password))
             except ImportError:
                 return None
-            except Exception:  # noqa: BLE001
+            except Exception:
                 return None
         return self._driver
 
@@ -48,7 +48,7 @@ class GraphDataAccessor:
         try:
             nodes, edges = await asyncio.to_thread(self._query_neo4j, driver, limit)
             return {"nodes": nodes, "edges": edges}
-        except Exception:  # noqa: BLE001
+        except Exception:
             return {"nodes": [], "edges": [], "error": "Query failed"}
 
     def _query_neo4j(self, driver: Any, limit: int) -> tuple[list, list]:

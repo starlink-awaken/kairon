@@ -326,7 +326,7 @@ def migrate_schema_instance(
             current = m.apply(current)
             # Stamp the version onto the migrated data for traceability
             current["_migrated_version"] = m.to_version
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             raise EidosError(
                 ErrorCode.SCHEMA_MIGRATION_FAILED,
                 f"Migration {m.from_version}→{m.to_version} failed for schema '{schema_name}': {exc}",

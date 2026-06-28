@@ -85,7 +85,7 @@ class Validator:
                     },
                     timeout=0.5,  # 快进快出
                 )
-            except Exception:  # noqa: BLE001
+            except Exception:
                 pass  # Ignore anchoring errors to not crash the validator
 
         return result

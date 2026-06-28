@@ -84,7 +84,7 @@ class MetricsLayer:
             try:
                 fact_confs, inf_confs, _, _ = self.get_real_confidences()
                 all_confs = fact_confs + inf_confs
-            except Exception:  # noqa: BLE001
+            except Exception:
                 all_confs = [0.95] * n_facts + [0.85] * n_inferences
         else:
             all_confs = [0.95] * n_facts + [0.85] * n_inferences
