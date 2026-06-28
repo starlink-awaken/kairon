@@ -89,7 +89,7 @@ def save_research(
                 (result_dir / "search_results.json").write_text(
                     json.dumps(serializable, ensure_ascii=False, indent=2, default=str),
                 )
-        except Exception:
+        except Exception:  # noqa: BLE001
             pass
 
     # Copy original report if it exists and is different file
@@ -116,7 +116,7 @@ def list_results(limit: int = 20) -> list[dict[str, Any]]:
             report_file = d / "report.md"
             meta["has_report"] = report_file.exists()
             entries.append(meta)
-        except Exception:  # noqa: S112
+        except Exception:  # noqa: BLE001, S112  # defensive fallback
             continue
         if len(entries) >= limit:
             break
@@ -135,7 +135,7 @@ def get_result(result_id: str) -> dict[str, Any] | None:
 
     try:
         meta = json.loads(meta_file.read_text(encoding="utf-8"))
-    except Exception:
+    except Exception:  # noqa: BLE001
         return None
 
     # Load report

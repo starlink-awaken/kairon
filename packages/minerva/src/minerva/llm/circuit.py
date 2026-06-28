@@ -37,7 +37,7 @@ class CircuitBreaker:
         try:
             result = await llm.generate(...)
             breaker.success()
-        except Exception:
+        except Exception:  # noqa: BLE001
             breaker.failure()
     """
 

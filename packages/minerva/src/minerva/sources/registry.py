@@ -120,5 +120,5 @@ class SourceRegistry:
             async with httpx.AsyncClient(timeout=5) as client:
                 resp = await client.get(source.health_check_url)
                 return resp.status_code == 200
-        except Exception:
+        except Exception:  # noqa: BLE001
             return False

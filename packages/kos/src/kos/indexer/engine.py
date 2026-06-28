@@ -83,13 +83,13 @@ class MarkdownHandler(FormatHandler):
     def extract_text(self, p: Path) -> str:
         try:
             return p.read_text(encoding="utf-8")[:8000]
-        except Exception:
+        except Exception:  # noqa: BLE001
             return f"[{p.suffix}: {p.name}]"
 
     def extract_metadata(self, p: Path) -> dict:
         try:
             content = p.read_text(encoding="utf-8")
-        except Exception:
+        except Exception:  # noqa: BLE001
             return {"title": p.stem}
         title = p.stem
         m = re.search(r"^#\s+(.+)$", content, re.MULTILINE)
@@ -116,7 +116,7 @@ class DocxHandler(FormatHandler):
 
             doc = Document(str(p))
             return "\n".join(para.text for para in doc.paragraphs if para.text.strip())[:8000]
-        except Exception:
+        except Exception:  # noqa: BLE001
             return f"[docx: {p.name}]"
 
     def extract_metadata(self, p: Path) -> dict:
@@ -125,7 +125,7 @@ class DocxHandler(FormatHandler):
 
             doc = Document(str(p))
             return {"title": doc.core_properties.title or p.stem}
-        except Exception:
+        except Exception:  # noqa: BLE001
             return {"title": p.stem}
 
 
@@ -412,7 +412,7 @@ class GongwenDocxHandler(FormatHandler):
                 text = self._extract_generic(paragraphs, doc)
 
             return text
-        except Exception:
+        except Exception:  # noqa: BLE001
             return f"[docx: {p.name}]"
 
     def extract_metadata(self, p: Path) -> dict:
@@ -447,7 +447,7 @@ class GongwenDocxHandler(FormatHandler):
                     meta["发文字号"] = fwh.group(1)
 
             return meta
-        except Exception:
+        except Exception:  # noqa: BLE001
             return {"title": p.stem}
 
 
@@ -464,7 +464,7 @@ class PdfHandler(FormatHandler):
             md = result.get("markdown", "") or result.get("content", "")
             if md and len(md) > 50:
                 return cast("str", md[:8000])
-        except Exception:
+        except Exception:  # noqa: BLE001
             pass
 
         # Tier 2: PyMuPDF (fallback)
@@ -475,7 +475,7 @@ class PdfHandler(FormatHandler):
             text = "\n".join(page.get_text() for page in doc)
             doc.close()
             return text[:8000]
-        except Exception:
+        except Exception:  # noqa: BLE001
             return f"[pdf: {p.name}]"
 
     def extract_metadata(self, p: Path) -> dict:
@@ -486,7 +486,7 @@ class PdfHandler(FormatHandler):
             meta = doc.metadata
             doc.close()
             return {"title": meta.get("title") or p.stem}
-        except Exception:
+        except Exception:  # noqa: BLE001
             return {"title": p.stem}
 
 
@@ -510,7 +510,7 @@ class XlsxHandler(FormatHandler):
                 parts.append(f"Sheet: {sn}\n" + "\n".join(rows))
             wb.close()
             return "\n\n".join(parts)[:8000]
-        except Exception:
+        except Exception:  # noqa: BLE001
             return f"[xlsx: {p.name}]"
 
     def extract_metadata(self, p: Path) -> dict:
@@ -521,7 +521,7 @@ class XlsxHandler(FormatHandler):
             sheets = list(wb.sheetnames)
             wb.close()
             return {"title": p.stem, "sheets": sheets}
-        except Exception:
+        except Exception:  # noqa: BLE001
             return {"title": p.stem}
 
 
@@ -627,7 +627,7 @@ def _verify_db_integrity(conn: Any) -> None:
                 print("   ✅ VACUUM repair successful", file=sys.stderr, flush=True)
             else:
                 print(f"   ❌ VACUUM failed: {result}", file=sys.stderr, flush=True)
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             print(f"   ❌ Could not repair: {exc}", file=sys.stderr, flush=True)
 
 
@@ -775,7 +775,7 @@ class KosIndexer:
                 },
                 "fingerprint": (rel_path, zone_id, fhash, fsize, fmtime, self.now, fmt),
             }
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             return {"action": "error", "rel": rel_path, "error": str(e)}
 
     def _compute_hash(self, file_path: Path) -> str:
@@ -784,7 +784,7 @@ class KosIndexer:
         try:
             with open(file_path, "rb") as f:
                 h.update(f.read(65536))
-        except Exception:
+        except Exception:  # noqa: BLE001
             return "ERROR"
         h.update(str(file_path.stat().st_size).encode())
         return h.hexdigest()

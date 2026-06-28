@@ -199,7 +199,7 @@ def viz_graph_command(args: Any) -> None:
                 return
             print(result.stdout)
             return
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
 
     # Fallback to meta-model
@@ -279,7 +279,7 @@ def viz_web_command(args: Any) -> None:
     types = list_types()
     try:
         constraints = list_constraints()
-    except Exception:
+    except Exception:  # noqa: BLE001
         constraints = []
 
     nodes = []
@@ -669,7 +669,7 @@ def main(argv: list[str] | None = None) -> int:
                     else:
                         print(f"  ✓ {f.name}")
                     passed += 1
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     if args.json or os.environ.get("PIPELINE_MODE"):
                         results.append({"file": f.name, "valid": False, "error": str(e)})
                     else:

@@ -39,7 +39,7 @@ async def fetch_arxiv(client: Any) -> list[TechItem]:
     try:
         resp = await client.get(_ARXIV_URL, timeout=20)
         resp.raise_for_status()
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return [TechItem(title="ArXiv fetch failed", description=str(exc), url="", source="arxiv")]
 
     root = ET.fromstring(resp.text)
@@ -120,7 +120,7 @@ async def fetch_github_trending(client: Any) -> list[TechItem]:
             resp = await client.get(url, timeout=20, follow_redirects=True)
             resp.raise_for_status()
             items.extend(_parse_github_trending(resp.text, lang))
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             items.append(
                 TechItem(
                     title=f"GitHub Trending {lang} fetch failed",
@@ -143,7 +143,7 @@ async def fetch_huggingface(client: Any) -> list[TechItem]:
         resp = await client.get(_HF_API_URL, timeout=20)
         resp.raise_for_status()
         data = resp.json()
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return [TechItem(title="HuggingFace fetch failed", description=str(exc), url="", source="huggingface")]
 
     items: list[TechItem] = []

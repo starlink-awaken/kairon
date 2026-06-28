@@ -190,7 +190,7 @@ class ApiSourceConnector(ISourceConnector):
                     await asyncio.sleep(self.config.retry_delay * (2**attempt))
                 continue
 
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 last_error = e
                 if attempt < self.config.max_retries - 1:
                     await asyncio.sleep(self.config.retry_delay * (2**attempt))
@@ -383,7 +383,7 @@ class ApiSourceConnector(ISourceConnector):
             try:
                 response = await client.head(self.config.url, headers=headers)
                 return response.status_code < 500
-            except Exception:
+            except Exception:  # noqa: BLE001
                 # Fall back to GET with minimal data
                 params = dict(self.config.params or {})
                 # Limit to 1 item for health check
@@ -392,7 +392,7 @@ class ApiSourceConnector(ISourceConnector):
 
                 response = await client.get(self.config.url, params=params, headers=headers)
                 return response.status_code < 500
-        except Exception:
+        except Exception:  # noqa: BLE001
             return False
 
     async def close(self) -> None:

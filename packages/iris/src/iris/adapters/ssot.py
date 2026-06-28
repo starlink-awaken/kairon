@@ -119,7 +119,7 @@ facts:
                 "entities": [{"id": e.id, "name": e.name, "meta_type": e.meta_type.value} for e in config.entities],
                 "facts": [{"id": f.id, "title": f.title, "value": f.value} for f in config.facts],
             }
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             return {"domain_dir": str(domain_dir), "error": str(e)}
 
     def domain_exists(self, name: str) -> bool:

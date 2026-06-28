@@ -149,7 +149,7 @@ def execute_fetch(url: str, timeout: int = 15) -> FetchResult:
                     "method": method_name,
                     "title": _extract_title(content),
                 }
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.warning("fetch method %s failed for %s: %s", method_name, url, e)
             continue
 

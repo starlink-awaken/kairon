@@ -95,7 +95,7 @@ class FormalPipeline:
                     for line in llm_interpret.split("\n"):
                         if line.strip() and len(line.strip()) > 10:
                             lines.append(f"- {line.strip()}")
-            except Exception:
+            except Exception:  # noqa: BLE001
                 lines.append("\n## LLM解读\n(LLM不可用, 以上为规则引擎结论)")
 
         return "\n".join(lines)

@@ -133,7 +133,7 @@ class LanceDBBackend(VectorStoreBackend):
                     replace=True,
                 )
                 _log.info("✅ [LanceDB] IVF-PQ index created/updated.")
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 _log.warning(f"Failed to create LanceDB index: {e}")
 
     # ------------------------------------------------------------------
@@ -231,7 +231,7 @@ class LanceDBBackend(VectorStoreBackend):
             table = self._get_table()
             table.delete(f"id = '{entry_id}'")
             return True
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             _log.error(f"Failed to delete entry {entry_id}: {e}")
             return False
 

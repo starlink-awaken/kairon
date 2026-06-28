@@ -105,7 +105,7 @@ class SearchEngine:
             content = await self._extract_jina(url)
             if content and len(content) > 200:
                 return content
-        except Exception:
+        except Exception:  # noqa: BLE001
             pass
 
         # Fallback: BeautifulSoup + readability-lxml
@@ -113,7 +113,7 @@ class SearchEngine:
             content = await self._extract_bs4(url)
             if content and len(content) > 200:
                 return content
-        except Exception:
+        except Exception:  # noqa: BLE001
             pass
 
         return f"[Could not extract content from {url}]"
@@ -148,7 +148,7 @@ class SearchEngine:
         """Execute search on a single backend with error handling."""
         try:
             return cast("list[SearchResult]", await searcher(query))
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             logger.error("search_backend_error", backend=name, error=str(exc))
             return []
 

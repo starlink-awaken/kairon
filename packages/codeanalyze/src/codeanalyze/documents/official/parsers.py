@@ -72,7 +72,7 @@ def _try_pdf_extract(fp: Path) -> str | None:
         logger.info("pdftotext not installed, skipping PDF extraction")
     except subprocess.TimeoutExpired:
         logger.warning("pdftotext timeout for %s", fp.name)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         logger.warning("pdftotext failed for %s: %s", fp.name, e)
     return None
 
@@ -103,7 +103,7 @@ def _try_docx_extract(fp: Path) -> str | None:
                     if t.strip():
                         texts.append(t.strip())
                 return _strip_control_chars(" | ".join(texts)[:MAX_PREVIEW_CHARS])
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
     return None
 
@@ -151,7 +151,7 @@ def _try_xlsx_extract(fp: Path) -> str | None:
                     if t.strip():
                         texts.append(t.strip())
             return _strip_control_chars(" | ".join(texts)[:MAX_PREVIEW_CHARS])
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
     return None
 
@@ -190,7 +190,7 @@ def extract_file_content(fp: Path) -> str | None:
         text = fp.read_text(encoding="utf-8", errors="ignore")[:MAX_PREVIEW_CHARS]
         if text.strip():
             return _strip_control_chars(text)
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
 
     # 最后用 LLM 降级

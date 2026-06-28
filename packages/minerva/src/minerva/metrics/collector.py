@@ -93,7 +93,7 @@ class BusinessMetricsCollector:
                         return PipelineMetrics(**data)
                     else:
                         return default_class
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 logger.warning("metrics_load_failed: path=%s, error=%s", str(filepath), str(e))
                 return default_class
         return default_class
@@ -109,7 +109,7 @@ class BusinessMetricsCollector:
                 json.dump(data, f, indent=2, default=str)
 
             logger.debug("metrics_saved: path=%s", str(filepath))
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error("metrics_save_failed: path=%s, error=%s", str(filepath), str(e))
 
     def record_research_attempt(

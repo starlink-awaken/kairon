@@ -250,7 +250,7 @@ class GraphStore:
         try:
             self._db.fetch_one("SELECT 1")
             return True
-        except Exception:
+        except Exception:  # noqa: BLE001
             return False
 
     def clear_candidates(self, source_file: str = "") -> None:

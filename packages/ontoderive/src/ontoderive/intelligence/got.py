@@ -74,12 +74,12 @@ class GraphOfThoughts:
             return {"summary": node_label[:100]}
         try:
             return __import__("json").loads(result)
-        except Exception:
+        except Exception:  # noqa: BLE001
             m = re.search(r"\{[^}]+\}", result)
             if m:
                 try:
                     return __import__("json").loads(m.group())
-                except Exception:
+                except Exception:  # noqa: BLE001
                     pass
         return {"summary": node_label[:100]}
 
@@ -103,7 +103,7 @@ class GraphOfThoughts:
         result = self.llm._call(prompt, "输出JSON。", 0.2)
         try:
             return __import__("json").loads(result)
-        except Exception:
+        except Exception:  # noqa: BLE001
             return {"merged": f"{len(input_nodes)}条路径综合"}
 
     def _find_merge_nodes(self) -> Any:

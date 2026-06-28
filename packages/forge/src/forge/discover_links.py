@@ -41,7 +41,7 @@ def _save_registry(reg: dict) -> None:
         tmp.write(json.dumps(reg, indent=2, ensure_ascii=False) + "\n")
         tmp.close()
         Path(tmp.name).replace(REGISTRY)
-    except Exception:
+    except Exception:  # noqa: BLE001
         Path(tmp.name).unlink(missing_ok=True)
         raise
 

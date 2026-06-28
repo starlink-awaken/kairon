@@ -52,7 +52,7 @@ def _gh_json(args: list[str], timeout: int = 30) -> Any:
     except subprocess.TimeoutExpired:
         logger.warning("gh command timed out: %s", " ".join(args))
         return None
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         logger.warning("gh command error: %s", e)
         return None
 
@@ -81,7 +81,7 @@ def _gh_text(args: list[str], timeout: int = 30) -> str | None:
         return None
     except subprocess.TimeoutExpired:
         return None
-    except Exception:
+    except Exception:  # noqa: BLE001
         return None
 
 
@@ -181,7 +181,7 @@ class GitHubConnector(BaseConnector):
             self._available = result.returncode == 0
         except FileNotFoundError:
             self._available = False
-        except Exception:
+        except Exception:  # noqa: BLE001
             self._available = False
         return self._available
 
@@ -455,7 +455,7 @@ class GitHubConnector(BaseConnector):
                 )
                 if isinstance(issues, list):
                     total_found += len(issues)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 errors.append(f"{owner_repo} issues: {e}")
 
             # Fetch open PRs
@@ -476,7 +476,7 @@ class GitHubConnector(BaseConnector):
                 )
                 if isinstance(prs, list):
                     total_found += len(prs)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 errors.append(f"{owner_repo} prs: {e}")
 
         status = "dry_run" if dry_run else "success"

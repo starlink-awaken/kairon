@@ -37,7 +37,7 @@ def convert_to_markdown(file_path: str) -> str | None:
         converter = DocumentConverter()
         result = converter.convert(file_path)
         return cast("str", result.document.export_to_markdown())
-    except Exception:
+    except Exception:  # noqa: BLE001
         return None
 
 
@@ -67,5 +67,5 @@ def extract_knowledge_graph(file_path: str, template_path: str | None = None) ->
         }
     except ImportError:
         return {"error": "docling-graph not installed"}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e)}

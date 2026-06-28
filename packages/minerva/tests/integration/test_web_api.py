@@ -13,7 +13,7 @@ def _has_network():
     try:
         urllib.request.urlopen("https://httpbin.org/ip", timeout=3)
         return True
-    except Exception:
+    except Exception:  # noqa: BLE001
         return False
 
 
@@ -24,7 +24,7 @@ def _server_is_running():
     try:
         resp = urllib.request.urlopen("http://127.0.0.1:8765/health", timeout=2)
         return resp.status == 200
-    except Exception:
+    except Exception:  # noqa: BLE001
         return False
 
 

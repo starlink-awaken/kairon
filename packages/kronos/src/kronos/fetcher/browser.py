@@ -49,7 +49,7 @@ def _try_cloakbrowser(url: str, timeout: int = 60) -> str | None:
         return result
     except ImportError:
         pass
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         logger.warning("cloakbrowser failed for %s: %s", url, e)
     return None
 
@@ -78,7 +78,7 @@ def _try_playwright(url: str, timeout: int = 60) -> str | None:
         return result
     except ImportError:
         pass  # Playwright 未安装
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         logger.warning("playwright failed for %s: %s", url, e)
     return None
 

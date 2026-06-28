@@ -38,7 +38,7 @@ def _run_bash(script: str, args: list[str] | None = None, timeout: int = 15) -> 
             cwd=FORGE_ROOT,
         )
         return r.returncode == 0
-    except Exception:
+    except Exception:  # noqa: BLE001
         return False
 
 
@@ -143,7 +143,7 @@ def phase1() -> int:
             result = json.loads(r.stdout).get("methodology", "?") if r.stdout.strip() else "?"
             if result != expected:
                 c_pass = False
-        except Exception:
+        except Exception:  # noqa: BLE001
             c_pass = False
     _check("classify.sh A/B/C 测试", c_pass)
 
@@ -240,7 +240,7 @@ def phase3() -> int:
         )
         json.loads(r.stdout)
         ok = True
-    except Exception:
+    except Exception:  # noqa: BLE001
         ok = False
     _check("query-graph.sh --json 有效", ok)
 

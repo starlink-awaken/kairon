@@ -16,7 +16,7 @@ class TestConcurrency:
         async def _one():
             try:
                 return await search_duckduckgo("test query concurrency", max_results=2)
-            except Exception:
+            except Exception:  # noqa: BLE001
                 return []
 
         tasks = [_one() for _ in range(10)]

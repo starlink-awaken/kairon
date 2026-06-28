@@ -109,7 +109,7 @@ class CircuitEngine:
         except asyncio.CancelledError:
             run.status = "failed"
             run.error = "Circuit cancelled"
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             run.status = "failed"
             run.error = f"Circuit error: {exc}"
         finally:
@@ -258,7 +258,7 @@ class CircuitEngine:
                 st.status = "completed"
                 st.completed_at = time.monotonic()
                 return True
-            except Exception as exc:
+            except Exception as exc:  # noqa: BLE001
                 st.error = str(exc)
                 if attempt < max_attempts:
                     backoff = step.retry_backoff_ms / 1000.0

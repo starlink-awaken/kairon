@@ -9,7 +9,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     """P57-W0 kos do_default: 真调 kos.search 真业务."""
     try:
         from kos import list_documents, search, stats
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return {"_method": "do_default", "_error": f"import: {type(exc).__name__}: {exc}"}
 
     action = args.get("action", "search")
@@ -39,7 +39,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             s = stats()
             return {"_method": "do_default", "_action": "stats", "stats": s}
         return {"_method": "do_default", "_error": f"unknown action: {action}"}
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return {"_method": "do_default", "_action": action, "_error": f"{type(exc).__name__}: {exc}"}
 
 

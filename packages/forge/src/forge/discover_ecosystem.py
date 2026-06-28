@@ -174,7 +174,7 @@ def _has_cmd(cmd: str) -> bool:
     try:
         subprocess.run(["which", cmd], capture_output=True, timeout=5)
         return True
-    except Exception:
+    except Exception:  # noqa: BLE001
         return False
 
 
@@ -238,7 +238,7 @@ def probe_npm() -> list[dict]:
             timeout=30,
         )
         data = json.loads(r.stdout)
-    except Exception:
+    except Exception:  # noqa: BLE001
         return []
     deps = data.get("dependencies", {})
     candidates = []
@@ -273,7 +273,7 @@ def probe_brew() -> list[dict]:
             timeout=30,
         )
         formulae = [f for f in r.stdout.strip().split("\n") if f]
-    except Exception:
+    except Exception:  # noqa: BLE001
         return []
     candidates = []
     for name in formulae:
@@ -290,7 +290,7 @@ def probe_brew() -> list[dict]:
             formulae_data = info.get("formulae", [{}])[0]
             ver = formulae_data.get("versions", {}).get("stable", "")
             desc = formulae_data.get("desc", "") or ""
-        except Exception:
+        except Exception:  # noqa: BLE001
             ver, desc = "", ""
         notes = f"{desc} (brew)" if desc else "brew formula"
         if ver:
@@ -316,7 +316,7 @@ def probe_docker() -> list[dict]:
         return []
     try:
         subprocess.run(["docker", "info"], capture_output=True, timeout=10)
-    except Exception:
+    except Exception:  # noqa: BLE001
         return []
     try:
         r = subprocess.run(
@@ -326,7 +326,7 @@ def probe_docker() -> list[dict]:
             timeout=30,
         )
         lines = [l for l in r.stdout.strip().split("\n") if l]  # noqa: E741
-    except Exception:
+    except Exception:  # noqa: BLE001
         return []
     candidates = []
     seen = set()
@@ -354,7 +354,7 @@ def probe_docker() -> list[dict]:
                     confidence=0.4,
                 )
             )
-        except Exception:  # noqa: S112
+        except Exception:  # noqa: BLE001, S112  # defensive fallback
             continue
     return candidates
 
@@ -370,7 +370,7 @@ def probe_uv() -> list[dict]:
             timeout=30,
         )
         tools = json.loads(r.stdout)
-    except Exception:
+    except Exception:  # noqa: BLE001
         return []
     candidates = []
     for t in tools:
@@ -411,7 +411,7 @@ def probe_pipx() -> list[dict]:
             timeout=30,
         )
         data = json.loads(r.stdout)
-    except Exception:
+    except Exception:  # noqa: BLE001
         return []
     venvs = data.get("venvs", {})
     candidates = []
@@ -445,7 +445,7 @@ def probe_cargo() -> list[dict]:
             text=True,
             timeout=30,
         )
-    except Exception:
+    except Exception:  # noqa: BLE001
         return []
     candidates = []
     for line in r.stdout.splitlines():
@@ -544,7 +544,7 @@ def run(args: list[str]) -> int:
             continue
         try:
             result = prob_fn()
-        except Exception:
+        except Exception:  # noqa: BLE001
             result = []
         total_probed += len(result)
         new = [c for c in result if c["id"] not in registered_ids]

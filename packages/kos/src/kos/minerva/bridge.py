@@ -99,7 +99,7 @@ def cmd_ingest() -> dict:  # type: ignore[type-arg]
             ingest_path = SCRIPT_DIR / "kos-ingest.py"
             r2 = sp.run([sys.executable, str(ingest_path), str(r)], capture_output=True, text=True, timeout=30)
             ingested.append({"file": r.name, "success": r2.returncode == 0})
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             ingested.append({"file": r.name, "success": False, "error": str(e)})
 
     # After ingest, re-index minerva domain
@@ -137,7 +137,7 @@ def cmd_status() -> dict:  # type: ignore[type-arg]
             ).fetchall()
             index_status = {"documents": count, "recent": [dict(d) for d in docs]}
             conn.close()
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         index_status = {"error": str(e)}
 
     return {
@@ -166,7 +166,7 @@ def cmd_report() -> dict:  # type: ignore[type-arg]
             "SELECT title, zone, updated_at FROM documents ORDER BY updated_at DESC LIMIT 10"
         ).fetchall()
         conn.close()
-    except Exception:
+    except Exception:  # noqa: BLE001
         zones = []
         minerva_count = 0
         recent = []

@@ -112,7 +112,7 @@ async def compile_paradigm(query: str, use_llm: bool = False) -> dict:
                 result = program.to_dict()
                 result["format_version"] = FORMAT_VERSION
                 return _ok(result)
-            except Exception:
+            except Exception:  # noqa: BLE001
                 pass  # fall through to sync fallback
 
     program = compile_paradigm_sync(query[:1000])

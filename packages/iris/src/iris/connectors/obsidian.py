@@ -196,7 +196,7 @@ class ObsidianConnector(BaseConnector):
         try:
             padded = id + "=" * (-len(id) % 4)
             rel_path = base64.urlsafe_b64decode(padded.encode()).decode()
-        except Exception:
+        except Exception:  # noqa: BLE001
             return None
         full = (vault / rel_path).resolve()
         vault_resolved = vault.resolve()
@@ -295,7 +295,7 @@ class ObsidianConnector(BaseConnector):
         try:
             padded = id + "=" * (-len(id) % 4)
             rel_path = base64.urlsafe_b64decode(padded.encode()).decode()
-        except Exception:
+        except Exception:  # noqa: BLE001
             return None
         full = (vault / rel_path).resolve()
         if not str(full).startswith(str(vault)):

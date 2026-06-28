@@ -130,7 +130,7 @@ class LocalFilesConnector(BaseConnector):
         try:
             padded = id + "=" * (-len(id) % 4)
             rel_path = base64.urlsafe_b64decode(padded.encode()).decode()
-        except Exception:
+        except Exception:  # noqa: BLE001
             return None
         full = (root / rel_path).resolve()
         root_resolved = root.resolve()

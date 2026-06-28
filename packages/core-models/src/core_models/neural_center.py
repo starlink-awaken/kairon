@@ -243,7 +243,7 @@ class NeuralCenter:
                 record.last_health = status
                 self._failure_counts[name] = 0
                 return status
-            except Exception:
+            except Exception:  # noqa: BLE001
                 pass
         status = HealthStatus(
             service=name,

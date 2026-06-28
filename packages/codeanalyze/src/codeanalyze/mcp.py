@@ -147,7 +147,7 @@ def analyze_project(path: str = ".") -> dict:
                 },
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -204,7 +204,7 @@ async def export_graph(path: str = ".", output_format: str = "json", code: bool 
             result["eidos"] = eidos_result
 
         return _ok(result)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -236,7 +236,7 @@ def audit_project(path: str = ".") -> dict:
                 "details": report.to_markdown(),
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -265,7 +265,7 @@ def extract_policy_docs(path: str = ".") -> dict:
                 "report": format_policy_graph_report(graph),
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -324,7 +324,7 @@ def scan_directory(path: str = ".") -> dict:
                 "wiki_available": wiki_info.get("available", False),
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -361,7 +361,7 @@ def crg_status(path: str = ".") -> dict:
                 "total_edges": stats.total_edges,
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -391,7 +391,7 @@ def crg_build(path: str = ".", force: bool = False) -> dict:
                 "total_edges": stats.total_edges,
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -420,7 +420,7 @@ def codegraph_search(pattern: str, kind: str | None = None, path: str = ".", lim
                 "count": len(results),
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -448,7 +448,7 @@ def codegraph_callers(qualified_name: str, path: str = ".", limit: int = 20) -> 
                 "count": len(results),
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -476,7 +476,7 @@ def codegraph_callees(qualified_name: str, path: str = ".", limit: int = 20) -> 
                 "count": len(results),
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -504,7 +504,7 @@ def codegraph_context(file_path: str, path: str = ".") -> dict:
                 "callees": results.get("callees", []),
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -563,7 +563,7 @@ def rg_search(
                 ],
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -618,7 +618,7 @@ def ast_search(
                 ],
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -666,7 +666,7 @@ def pack_repo(
                 "content": content,
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -692,7 +692,7 @@ def cgc_query(query_str: str, path: str = ".") -> dict:
                 "data": result.data,
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -718,7 +718,7 @@ def workflow_onboarding(path: str = ".", include: str | None = None) -> dict:
                 "result": result,
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -745,7 +745,7 @@ def workflow_impact_analysis(symbol_name: str, language: str, path: str = ".") -
                 "result": result,
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -768,7 +768,7 @@ def codegraph_get_symbol_graph(symbol_name: str, path: str = ".") -> dict:
             return _error(callees[0]["error"])
 
         return _ok({"format_version": FORMAT_VERSION, "symbol": symbol_name, "callers": callers, "callees": callees})
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -791,7 +791,7 @@ def codegraph_get_impact_radius(file_path: str, path: str = ".") -> dict:
         )
 
         return _ok({"format_version": FORMAT_VERSION, "target_file": file_path, "impacted_files": impacted_files})
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -809,7 +809,7 @@ def architecture_generate_diagram(module_path: str, path: str = ".") -> dict:
         adapter = UnderstandAdapter(workspace_root=_resolve(path))
         diagram = adapter.generate_architecture_diagram(module_path)
         return _ok({"format_version": FORMAT_VERSION, "mermaid": diagram})
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -827,7 +827,7 @@ def architecture_get_code_metrics(file_path: str, path: str = ".") -> dict:
         adapter = UnderstandAdapter(workspace_root=_resolve(path))
         result = adapter.get_code_metrics(file_path)
         return _ok({"format_version": FORMAT_VERSION, "result": result})
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -839,7 +839,7 @@ def codegraph_init(path: str = ".") -> dict:
 
         result = init_codegraph(_resolve(path))
         return _ok({"format_version": FORMAT_VERSION, "result": result})
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -851,7 +851,7 @@ def codegraph_sync(path: str = ".") -> dict:
 
         result = sync_codegraph(_resolve(path))
         return _ok({"format_version": FORMAT_VERSION, "result": result})
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -863,7 +863,7 @@ def codegraph_get_affected_tests(files: list[str], path: str = ".") -> dict:
 
         result = get_affected_tests(files, _resolve(path))
         return _ok({"format_version": FORMAT_VERSION, "result": result})
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -884,7 +884,7 @@ def read_analysis_graph(project: str) -> str:
         adapter = UnderstandAdapter(workspace_root=_resolve(workspace_root))
         diagram = adapter.generate_architecture_diagram(project)
         return diagram
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return f"Error generating graph: {str(e)}"
 
 
@@ -904,7 +904,7 @@ def read_analysis_metrics(file: str) -> str:
         adapter = UnderstandAdapter(workspace_root=_resolve(workspace_root))
         result = adapter.get_code_metrics(file)
         return json.dumps(result, indent=2, ensure_ascii=False)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return f"Error getting metrics: {str(e)}"
 
 

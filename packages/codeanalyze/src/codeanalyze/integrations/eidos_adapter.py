@@ -214,7 +214,7 @@ def try_eidos_validate(data: dict) -> dict:
 
     except ImportError:
         return {"available": False, "note": _eidos_install_hint()}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"available": False, "error": str(e)}
 
 

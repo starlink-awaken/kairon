@@ -36,7 +36,7 @@ async def api_status(project: str = "") -> Any:
     try:
         r = od.derive()
         check = od.check()
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return JSONResponse({"error": str(e)}, status_code=500)
     return {
         "project": project or _project_path,

@@ -64,7 +64,7 @@ async def classify_paradigm(llm_client: Any, query: str) -> ParadigmResult:
                         reasoning=data.get("reasoning", ""),
                         alternative=alt,
                     )
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
 
     return _rule_based_classify(query)

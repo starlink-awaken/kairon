@@ -35,7 +35,7 @@ zone_map = {z["zone"]: z["cnt"] for z in zones}
 try:
     ecount = conn.execute("SELECT COUNT(*) as cnt FROM kos_entities").fetchone()["cnt"]
     rcount = conn.execute("SELECT COUNT(*) as cnt FROM kos_relations").fetchone()["cnt"]
-except Exception:
+except Exception:  # noqa: BLE001
     logger.error("Unexpected exception caught", exc_info=True)  # type: ignore[name-defined]
     ecount = rcount = 0
 

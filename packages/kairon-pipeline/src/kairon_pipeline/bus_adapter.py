@@ -53,7 +53,7 @@ def emit_event(
             trace_id=trace_id,
         )
         return event_type
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         logger.warning("kairon_pipeline_bus_emit_failed type=%s err=%s", event_type, e)
         return None
 

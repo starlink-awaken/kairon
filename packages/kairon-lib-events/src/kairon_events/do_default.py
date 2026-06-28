@@ -13,7 +13,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             get_event_bus,
             make_event,
         )
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return {"_method": "do_default", "_error": f"import: {type(exc).__name__}: {exc}"}
 
     action = args.get("action", "make")
@@ -47,7 +47,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
                 "types": [et.value for et in EventType],
             }
         return {"_method": "do_default", "_error": f"unknown action: {action}"}
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return {"_method": "do_default", "_action": action, "_error": f"{type(exc).__name__}: {exc}"}
 
 

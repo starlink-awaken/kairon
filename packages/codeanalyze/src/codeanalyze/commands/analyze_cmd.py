@@ -125,7 +125,7 @@ def analyze(path: str, docs: bool, output: str | None) -> None:
         for ins in project_insights[:3]:
             icon = SEVERITY_ICONS.get(ins["severity"], "💡")
             console.print(f"  {icon} {ins['title']}")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         console.print(f"  [yellow]⚠️ 洞察分析异常: {e}[/]")
         project_insights = []
 

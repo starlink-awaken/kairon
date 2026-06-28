@@ -189,7 +189,7 @@ class KOSLibraryBackend:
             self._kos_available = True
         except ImportError:
             pass
-        except Exception:
+        except Exception:  # noqa: BLE001
             pass  # KOS import may fail in odd edge cases — stay resilient
 
     def save(self, key: str, data: dict) -> bool:

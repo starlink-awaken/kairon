@@ -38,7 +38,7 @@ class Mem0Adapter:
                         }
                     }
                 self.memory = Memory.from_config(self.config)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 logger.error(f"Failed to initialize Mem0: {e}")
                 self.enabled = False
                 self.memory = None
@@ -50,7 +50,7 @@ class Mem0Adapter:
             return
         try:
             self.memory.add(text, user_id=user_id, metadata=metadata)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Mem0 add_memory failed: {e}")
 
     def search_memory(self, query: str, user_id: str, limit: int = 5) -> list[dict[str, Any]]:
@@ -58,7 +58,7 @@ class Mem0Adapter:
             return []
         try:
             return cast("list[dict[str, Any]]", self.memory.search(query, user_id=user_id, limit=limit))
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Mem0 search_memory failed: {e}")
             return []
 
@@ -67,7 +67,7 @@ class Mem0Adapter:
             return []
         try:
             return cast("list[dict[str, Any]]", self.memory.get_all(user_id=user_id))
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Mem0 get_all failed: {e}")
             return []
 
@@ -76,7 +76,7 @@ class Mem0Adapter:
             return []
         try:
             return cast("list[dict[str, Any]]", self.memory.history(memory_id))
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Mem0 history failed: {e}")
             return []
 

@@ -199,7 +199,7 @@ async def research_now(
 
     try:
         result = await _ensure_executor().execute_now(task)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return _error(str(exc))
 
     # 构建 Eidos KnowledgeCard 兼容数据
@@ -207,7 +207,7 @@ async def research_now(
         from minerva.knowledge.adapters import research_result_to_card
 
         eidos_card = research_result_to_card(result)
-    except Exception:
+    except Exception:  # noqa: BLE001
         eidos_card = None
 
     return _ok(
@@ -259,7 +259,7 @@ async def research_schedule(
 
     try:
         task_id = await _ensure_executor().schedule(task)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return _error(str(exc))
 
     return _ok(
@@ -308,7 +308,7 @@ async def research_watch(
 
     try:
         task_id = await _ensure_executor().watch(task)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return _error(str(exc))
 
     return _ok(
@@ -357,7 +357,7 @@ async def knowledge_search(
                 "total": len(results),
             }
         )
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return _error(str(exc))
 
 
@@ -385,7 +385,7 @@ async def cross_domain_research(
                 "missing_domains": report["missing_domains"],
             }
         )
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return _error(str(exc))
 
 
@@ -426,7 +426,7 @@ async def minerva_bfs_search(
                     "exa_api_key": config.search.exa_api_key,
                 }
             )
-        except Exception:
+        except Exception:  # noqa: BLE001
             engine = SearchEngine()
 
         bfs = BFTSearch(
@@ -446,7 +446,7 @@ async def minerva_bfs_search(
                 "synthesis": result["synthesis"],
             }
         )
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return _error(str(exc))
 
 
@@ -479,7 +479,7 @@ async def knowledge_ingest(
                 source=source,
                 source_type=result.get("source_type", source_type),
             )
-        except Exception:
+        except Exception:  # noqa: BLE001
             eidos_card = None
 
         return _ok(
@@ -493,7 +493,7 @@ async def knowledge_ingest(
                 "eidos_card": eidos_card,
             }
         )
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return _error(str(exc))
 
 
@@ -531,7 +531,7 @@ async def knowledge_closed_loop(
             confirmed=confirmed,
             fresh=fresh,
         )
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return _error(str(exc))
 
 
@@ -583,7 +583,7 @@ def _check_llm_health() -> tuple[bool, str]:
                 messages.append("  [WARN] LLM endpoint responded but no models listed")
         else:
             messages.append(f"  [WARN] LLM health check returned HTTP {resp.status_code}")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         err_msg = str(e)
         if "ConnectError" in type(e).__name__ or "Connection refused" in err_msg:
             messages.append(f"  [WARN] LLM {config.llm.base_url} unreachable — check Ollama is running")
@@ -623,7 +623,7 @@ def main() -> None:
         executor = create_default_executor(kos_save_enabled=True)
         init_server(executor)
         sys.stderr.write("  Full executor initialized: research + search + ingest all available.\n")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         sys.stderr.write(f"  [WARNING] Full executor init failed: {e}\n")
         sys.stderr.write("  Trying degraded mode: knowledge_search + knowledge_ingest only...\n")
         # Degraded mode: create a minimal executor with just the knowledge store
@@ -633,7 +633,7 @@ def main() -> None:
             kb = SQLiteKnowledgeStore()
             init_server(cast("ResearchExecutor", DegradedExecutor(kb)))
             sys.stderr.write("  Degraded mode ready: knowledge_search + knowledge_ingest available.\n")
-        except Exception as e2:
+        except Exception as e2:  # noqa: BLE001
             sys.stderr.write(f"  [ERROR] Degraded init also failed: {e2}\n")
             sys.stderr.write("  No tools available.\n")
             mcp.run()

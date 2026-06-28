@@ -228,7 +228,7 @@ def _port_check(port: int) -> tuple[bool, str]:
             s.close()
             if r == 0:
                 return True, host
-        except Exception:  # noqa: S112
+        except Exception:  # noqa: BLE001, S112  # defensive fallback
             continue
     return False, ""
 
@@ -241,7 +241,7 @@ def _resolve_process(port: int) -> str:
             return ""
         r2 = subprocess.run(["ps", "-p", pid, "-o", "comm="], capture_output=True, text=True, timeout=2)
         return f"{r2.stdout.strip() or 'unknown'} (PID {pid})"
-    except Exception:
+    except Exception:  # noqa: BLE001
         return ""
 
 
@@ -681,7 +681,7 @@ def cmd_scan(args: list[str]) -> None:
             for p in sorted(new_ports)[:5]:
                 proc = _resolve_process(p)
                 print(f"     {p} ({proc})")
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
 
     # 2. Scripts

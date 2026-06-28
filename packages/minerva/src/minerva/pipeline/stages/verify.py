@@ -81,7 +81,7 @@ class CrossAnalyzeStageImpl(IPipelineStage):
                 temperature=0.5,
                 max_tokens=1500,
             )
-        except Exception:
+        except Exception:  # noqa: BLE001
             reasoning = "Cross-analysis unavailable."
 
         ctx.relations = ctx.relations or []
@@ -166,7 +166,7 @@ class CounterArgumentStageImpl(IPipelineStage):
                 temperature=0.5,
                 max_tokens=1500,
             )
-        except Exception:
+        except Exception:  # noqa: BLE001
             response = "Counter-argument analysis unavailable."
 
         ctx.relations = ctx.relations or []
@@ -200,7 +200,7 @@ class MultiModelVotingStageImpl(IPipelineStage):
                 temperature=0.4,
                 max_tokens=1500,
             )
-        except Exception:
+        except Exception:  # noqa: BLE001
             response = "Multi-model voting unavailable."
 
         ctx.relations = ctx.relations or []

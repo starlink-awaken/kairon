@@ -40,7 +40,7 @@ def _build_default_nks_query_engine() -> Any:
 def _build_optional_subsystem(name: str, builder: Callable[[], object]) -> Any | None:
     try:
         return builder()
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         _log.warning("[UnifiedMemoryAPI] default %s wiring unavailable: %s", name, exc)
         return None
 

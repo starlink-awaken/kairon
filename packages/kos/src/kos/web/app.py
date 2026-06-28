@@ -381,6 +381,6 @@ async def collab_callback(request: Request):  # type: ignore[no-untyped-def]
             "agentmesh_task_id": agentmesh_task_id,
             "updated": updated is not None,
         }
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         logger.warning("collab callback failed: %s", e)
         return JSONResponse({"status": "error", "detail": str(e)}, status_code=500)

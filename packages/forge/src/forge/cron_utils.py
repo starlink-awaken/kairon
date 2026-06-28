@@ -211,7 +211,7 @@ def launchctl_is_loaded(name: str) -> bool:
             timeout=5,
         )
         return r.returncode == 0
-    except Exception:
+    except Exception:  # noqa: BLE001
         return False
 
 
@@ -231,7 +231,7 @@ def launchctl_bootstrap(name: str) -> tuple[bool, str]:
         if r.returncode == 2 and "No such file" in r.stderr:
             return False, f"plist 不存在: {plist}"
         return False, r.stderr.strip() or f"exit code {r.returncode}"
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return False, str(e)
 
 
@@ -249,7 +249,7 @@ def launchctl_bootout(name: str) -> tuple[bool, str]:
         if r.returncode == 36:
             return True, "未加载（无需卸载）"
         return False, r.stderr.strip() or f"exit code {r.returncode}"
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return False, str(e)
 
 

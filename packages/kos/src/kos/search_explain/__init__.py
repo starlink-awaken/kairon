@@ -62,7 +62,7 @@ def _ollama_available() -> bool:
                     _ollama_model = candidate
                     _ollama_ok = True
                     return True
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
     _ollama_ok = False
     return False
@@ -86,7 +86,7 @@ def _call_ollama(model: str, prompt: str) -> str | None:
                     if text.startswith(prefix):
                         text = text[len(prefix) :].strip()
                 return text
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
     return None
 
@@ -165,7 +165,7 @@ def explain_search(
                         if r["doc_id"] not in sem_ids:
                             sem_rows.append(r)
                     rows = sem_rows
-        except Exception:
+        except Exception:  # noqa: BLE001
             pass
 
     # Fetch body content for all results BEFORE sorting

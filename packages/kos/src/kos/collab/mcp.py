@@ -125,7 +125,7 @@ def _handle_create_task(args: dict[str, Any]) -> dict[str, Any]:
             subtasks=args.get("subtasks"),
         )
         return {"status": "created", "task": t}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "code": "INTERNAL_ERROR"}
 
 
@@ -135,7 +135,7 @@ def _handle_get_task(args: dict[str, Any]) -> dict[str, Any]:
         if t is None:
             return {"error": f"Task not found: {args['task_id']}", "code": "NOT_FOUND"}
         return {"status": "ok", "task": t}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "code": "INTERNAL_ERROR"}
 
 
@@ -147,7 +147,7 @@ def _handle_list_tasks(args: dict[str, Any]) -> dict[str, Any]:
             limit=args.get("limit", 20),
         )
         return {"status": "ok", "tasks": tasks, "count": len(tasks)}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "code": "INTERNAL_ERROR"}
 
 
@@ -157,7 +157,7 @@ def _handle_update_task(args: dict[str, Any]) -> dict[str, Any]:
         if t is None:
             return {"error": f"Task not found: {args['task_id']}", "code": "NOT_FOUND"}
         return {"status": "updated", "task": t}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "code": "INTERNAL_ERROR"}
 
 
@@ -168,7 +168,7 @@ def _handle_claim_subtask(args: dict[str, Any]) -> dict[str, Any]:
             subtask_index=int(args["subtask_index"]),
             assignee=args["assignee"],
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "code": "INTERNAL_ERROR"}
 
 
@@ -179,7 +179,7 @@ def _handle_complete_subtask(args: dict[str, Any]) -> dict[str, Any]:
             subtask_index=int(args.get("subtask_index", 0)),
             assignee=args.get("assignee", ""),
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "code": "INTERNAL_ERROR"}
 
 
@@ -189,7 +189,7 @@ def _handle_add_artifact(args: dict[str, Any]) -> dict[str, Any]:
         if t is None:
             return {"error": f"Task not found: {args['task_id']}", "code": "NOT_FOUND"}
         return {"status": "artifact_added", "task": t}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "code": "INTERNAL_ERROR"}
 
 
@@ -201,7 +201,7 @@ def _handle_update_visibility(args: dict[str, Any]) -> dict[str, Any]:
         if t is None:
             return {"error": f"Task not found: {args['task_id']}", "code": "NOT_FOUND"}
         return {"status": "visibility_updated", "task": t}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "code": "INTERNAL_ERROR"}
 
 

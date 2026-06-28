@@ -67,7 +67,7 @@ def _validate_eidos(file_path, schema_type=None) -> tuple[bool, list]:  # type: 
         return True, []
     except ImportError:
         return True, []
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return False, [str(e)]
 
 
@@ -136,7 +136,7 @@ def _build_record(file_path: Path, root: Path) -> dict[str, Any]:
             if EIDOS_AVAILABLE and validate_object is not None:
                 try:
                     metadata["eidos_validated"] = bool(validate_object(parsed))
-                except Exception as exc:  # graceful fallback
+                except Exception as exc:  # graceful fallback  # noqa: BLE001
                     metadata["eidos_error"] = str(exc)
                     metadata["eidos_validated"] = False
                 if metadata.get("eidos_validated"):
@@ -254,7 +254,7 @@ def ingest_command(args) -> dict[str, Any]:  # type: ignore[no-untyped-def]
         ext = file_path.suffix.lower()
         try:
             record = _build_record(file_path, root)
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             skipped += 1
             if verbose:
                 print(f"skip {rel_path}: {exc}", file=sys.stderr)
@@ -282,7 +282,7 @@ def ingest_command(args) -> dict[str, Any]:  # type: ignore[no-untyped-def]
 
         try:
             _store_document(record)
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             skipped += 1
             if verbose:
                 print(f"skip {rel_path}: {exc}", file=sys.stderr)

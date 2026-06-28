@@ -44,7 +44,7 @@ class RuleLoader:
         for f in sorted(self.rules_dir.glob("*.yaml")):
             try:
                 self.load_yaml(str(f))
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 print(f"[RuleLoader] 加载 {f.name} 失败: {e}")
         return self.rules
 
@@ -214,7 +214,7 @@ class RuleLoader:
                 c = self.evaluate(rule, facts, inferences, **kwargs)
                 if c:
                     results.append(c)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 import sys
 
                 print(f"[RuleLoader] evaluate {rule.get('id', '?')} 失败: {e}", file=sys.stderr)

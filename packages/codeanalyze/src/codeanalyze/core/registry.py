@@ -53,7 +53,7 @@ def _check_python_module(mod: str, name: str, desc: str) -> ToolInfo:
         if ver is not None and not isinstance(ver, str):
             ver = getattr(ver, "__version__", None) or str(ver)
         info.version = ver
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         info.error = str(e)[:120]
     return info
 
@@ -69,7 +69,7 @@ def _check_cli(cmd: str, name: str, desc: str, version_flag: str = "--version") 
     try:
         result = subprocess.run([cli_path, version_flag], capture_output=True, text=True, timeout=10)
         info.version = result.stdout.strip() or result.stderr.strip() or None
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
     return info
 
@@ -242,7 +242,7 @@ def _check_version(info: ToolInfo, min_v: str | None = None, max_v: str | None =
                     return False
                 elif parts[i] < mp:
                     break
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
     return True
 

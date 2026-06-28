@@ -42,6 +42,6 @@ def is_safe_url(url: str) -> bool:
         ip = ipaddress.ip_address(resolved)
         if any(ip in net for net in BLOCKED_NETWORKS):
             return False
-    except Exception:
+    except Exception:  # noqa: BLE001
         return False
     return True

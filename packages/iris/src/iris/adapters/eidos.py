@@ -56,7 +56,7 @@ class EidosAdapter:
                 "is_valid": result.is_valid,
                 "errors": [e.message for e in result.errors],
             }
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             return {"is_valid": False, "errors": [f"Validation error: {e}"]}
 
     def validate_knowledge_card(self, data: dict[str, Any], strict: bool = False) -> dict[str, Any]:

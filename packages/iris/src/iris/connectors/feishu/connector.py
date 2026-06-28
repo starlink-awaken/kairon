@@ -21,7 +21,7 @@ class FeishuConnector:
             req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})  # noqa: S310
             with urllib.request.urlopen(req, timeout=10):  # noqa: S310
                 return {"sent": True}
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             return {"error": str(e)}
 
     def sync(self) -> dict:

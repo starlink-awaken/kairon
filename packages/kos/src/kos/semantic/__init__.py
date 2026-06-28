@@ -136,7 +136,7 @@ def build_index(domain: str | None = None) -> dict:  # type: ignore[unknown]
     # Drop and recreate table
     try:
         db.drop_table(VECTOR_TABLE)
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
 
     tbl = db.create_table(VECTOR_TABLE, table_data)

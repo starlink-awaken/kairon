@@ -31,7 +31,7 @@ class OntoDeriveJudge:
                 from .llm import get_enhancer
 
                 self.enhancer = get_enhancer()
-            except Exception:
+            except Exception:  # noqa: BLE001
                 self.enhancer = None
 
     def _rf(self, path: Any) -> Any:
@@ -134,7 +134,7 @@ class OntoDeriveJudge:
             if m:
                 try:
                     return json.loads(m.group())
-                except Exception:
+                except Exception:  # noqa: BLE001
                     pass
         return None
 
@@ -194,6 +194,6 @@ class OntoDeriveJudge:
             if m:
                 try:
                     return json.loads(m.group())
-                except Exception:
+                except Exception:  # noqa: BLE001
                     pass
         return {"verdict": "eval_failed", "raw": result[:500]}

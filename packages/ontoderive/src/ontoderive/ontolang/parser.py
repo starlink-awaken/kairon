@@ -161,7 +161,7 @@ class Parser:
                         )
                     )
                     self.idx += 1
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 self.errors.append(ParseError(f"解析错误: {e}", SourcePos(t.line, t.col, self.filename)))
                 self.idx += 1
 

@@ -75,7 +75,7 @@ async def compare_models_llm(
             )
             result.latency_s = time.time() - start
             result.output_length = len(output)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             result.latency_s = time.time() - start
             result.error = str(e)
         results.append(result)
@@ -99,7 +99,7 @@ def compare_models_triage(query: str) -> ComparisonReport:
             triage = router.classify_rule_based(query)
             result.latency_s = time.time() - start
             result.output_length = len(str(triage.scores))
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             result.latency_s = time.time() - start
             result.error = str(e)
         results.append(result)

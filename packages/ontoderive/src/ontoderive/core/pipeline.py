@@ -124,7 +124,7 @@ class DerivePipeline:
                 stage.after(self.ctx, result)
                 self.results[stage.name] = result
                 self._notify("stage_end", stage.name, result)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 stage.on_error(self.ctx, e)
                 self._notify("stage_error", stage.name, error=e)
                 raise
@@ -138,7 +138,7 @@ class DerivePipeline:
                     obs.on_stage_end(stage_name, result or {})
                 elif event == "stage_error":
                     obs.on_error(stage_name, error or Exception("unknown"))
-            except Exception:
+            except Exception:  # noqa: BLE001
                 pass
 
     def to_analysis_result(self) -> AnalysisResult:

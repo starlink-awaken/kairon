@@ -22,7 +22,7 @@ class KronosConfig:
             try:
                 data: dict[str, Any] = json.loads(config_path.read_text())
                 return data
-            except Exception:
+            except Exception:  # noqa: BLE001
                 pass
         return {}
 

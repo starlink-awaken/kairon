@@ -220,7 +220,7 @@ def analyze_agency(engine: Any, facts: Any, entities: Any, relations: Any, enhan
                         )
                         if enhanced:
                             base += f"。LLM分析: {enhanced.strip()[:200]}"
-                    except Exception:
+                    except Exception:  # noqa: BLE001
                         pass
                 results.append(
                     {
@@ -374,7 +374,7 @@ def analyze_remediation(engine: Any, facts: Any, entities: Any, relations: Any, 
                         "confidence": 0.65,
                     }
                 )
-        except Exception:
+        except Exception:  # noqa: BLE001
             pass
     return results
 

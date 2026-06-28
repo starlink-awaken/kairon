@@ -95,7 +95,7 @@ def _handle_create(args: dict[str, Any]) -> dict[str, Any]:
             provenance_chain=args.get("provenance_chain"),
         )
         return {"status": "created", "consensus": c}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "code": "INTERNAL_ERROR"}
 
 
@@ -112,7 +112,7 @@ def _handle_get(args: dict[str, Any]) -> dict[str, Any]:
             cons = get_entity_consensus(eid)
             return {"status": "ok", "consensus_list": cons, "count": len(cons)}
         return {"error": "Provide consensus_id or entity_id", "code": "INVALID_PARAM"}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "code": "INTERNAL_ERROR"}
 
 
@@ -121,7 +121,7 @@ def _handle_list_expired(_args: dict[str, Any]) -> dict[str, Any]:
         mark_expired()
         expired = list_expired_consensus()
         return {"status": "ok", "expired": expired, "count": len(expired)}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "code": "INTERNAL_ERROR"}
 
 
@@ -131,14 +131,14 @@ def _handle_renew(args: dict[str, Any]) -> dict[str, Any]:
             consensus_id=args["consensus_id"],
             agreed_by=args.get("agreed_by"),
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "code": "INTERNAL_ERROR"}
 
 
 def _handle_trace(args: dict[str, Any]) -> dict[str, Any]:
     try:
         return trace_consensus(entity_id=args["entity_id"])
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "code": "INTERNAL_ERROR"}
 
 

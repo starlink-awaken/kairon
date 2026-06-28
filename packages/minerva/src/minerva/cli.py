@@ -168,13 +168,13 @@ async def _run_research(args: Any) -> int:
         import spacy
 
         nlp = spacy.load(config.nlp.spacy_model)
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
     try:
         import spacy
 
         nlp_zh = spacy.load(config.nlp.spacy_model_zh)
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
 
     # Template support: load template and interpolate {{variables}}
@@ -261,7 +261,7 @@ async def _run_research(args: Any) -> int:
             print(f"Exported {count} Eidos KnowledgeCards to {args.eidos_output}")
         except ImportError:
             print("Eidos not available. Install eidos or check PYTHONPATH")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             print(f"Eidos export failed: {e}")
 
     if hasattr(args, "json") and args.json:
@@ -363,7 +363,7 @@ def _run_init() -> int:
             checks.append(("Ollama", True))
         else:
             raise Exception("not ok")
-    except Exception:
+    except Exception:  # noqa: BLE001
         print("  ⚠️  Ollama not detected. Install: brew install ollama && ollama serve")
         checks.append(("Ollama", False))
 
@@ -401,7 +401,7 @@ def _run_init() -> int:
 
         spacy.load("en_core_web_lg")
         print("  ✅ spaCy en_core_web_lg available")
-    except Exception:
+    except Exception:  # noqa: BLE001
         print("  ⚠️  spaCy model not found. Run: python -m spacy download en_core_web_lg")
 
     # Audit
@@ -430,7 +430,7 @@ def _run_check() -> int:
             passed += 1
         else:
             raise Exception("not ok")
-    except Exception:
+    except Exception:  # noqa: BLE001
         print("  ❌ Ollama not reachable (brew install ollama && ollama serve)")
         failed += 1
 
@@ -442,7 +442,7 @@ def _run_check() -> int:
             passed += 1
         else:
             raise Exception("not ok")
-    except Exception:
+    except Exception:  # noqa: BLE001
         print("  ⚠️  SearXNG not running (docker compose up -d searxng)")
         failed += 1
 
@@ -455,7 +455,7 @@ def _run_check() -> int:
             passed += 1
         else:
             raise Exception("not ok")
-    except Exception:
+    except Exception:  # noqa: BLE001
         print("  ⚠️  Neo4j not running (docker compose --profile full up -d neo4j)")
         failed += 1
 

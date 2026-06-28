@@ -96,7 +96,7 @@ class BaseNeuron:
                 if resp.status != 200:
                     logger.warning("Neuron %s: %s returned %s", self.name, backend.name, resp.status)
                 return resp.status == 200
-        except Exception:
+        except Exception:  # noqa: BLE001
             return False
 
     async def probe_all(self) -> dict[str, bool]:
@@ -161,7 +161,7 @@ class BaseNeuron:
             except (aiohttp.ClientError, TimeoutError):
                 logger.debug("Neuron %s: %s request failed", self.name, backend.name)
                 backend.healthy_status = False
-            except Exception:
+            except Exception:  # noqa: BLE001
                 logger.exception("Neuron %s: unexpected error on %s", self.name, backend.name)
                 backend.healthy_status = False
 

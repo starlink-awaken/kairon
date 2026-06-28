@@ -41,7 +41,7 @@ class KnowledgeTM:
                     metrics=data.get("metrics"),
                 )
                 self._states.append(ds)
-            except Exception:
+            except Exception:  # noqa: BLE001
                 pass
 
     def snapshot(self) -> Any:
@@ -196,7 +196,7 @@ class KnowledgeTM:
         for i, s in enumerate(snapshots):
             try:
                 data = json.loads(s.read_text())
-            except Exception:  # noqa: S112
+            except Exception:  # noqa: BLE001, S112  # defensive fallback
                 continue
             # 兼容新旧格式
             if "state" in data:

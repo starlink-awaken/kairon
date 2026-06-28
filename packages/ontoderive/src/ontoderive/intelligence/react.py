@@ -141,7 +141,7 @@ Action: FINISH
                     for k, v in infs.items():
                         if arg in k:
                             return {"inference": arg, "confidence": v.get("propagated_confidence", "N/A")}
-                except Exception:
+                except Exception:  # noqa: BLE001
                     pass
                 return {"error": f"无法计算{arg}的置信度"}
 
@@ -155,7 +155,7 @@ Action: FINISH
                             if arg in b:
                                 df = re.findall(r"(D-F\d+|P-F\d+)", b)
                                 chain.extend(df)
-                except Exception:
+                except Exception:  # noqa: BLE001
                     pass
                 return {"chain": chain, "depth": len(chain) - 1}
 
@@ -165,7 +165,7 @@ Action: FINISH
 
                     g = build_from_project(self.root)
                     return {"contradictions": g.find_contradictions()}
-                except Exception:
+                except Exception:  # noqa: BLE001
                     return {"error": "矛盾检测失败"}
 
             if name == "compute_kqi":
@@ -175,10 +175,10 @@ Action: FINISH
                     ml = MetricsLayer(self.root)
                     kqi = ml.compute_kqi()
                     return {"kqi": kqi["kqi"], "coverage": f"{kqi['coverage'] * 100:.0f}%"}
-                except Exception:
+                except Exception:  # noqa: BLE001
                     return {"error": "KQI计算失败"}
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             return {"error": str(e)}
         return {"error": f"未知Action: {name}"}
 

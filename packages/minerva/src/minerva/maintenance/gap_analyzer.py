@@ -69,7 +69,7 @@ class GapAnalyzer:
         for f in report_files:
             try:
                 content = f.read_text()
-            except Exception:  # noqa: S112
+            except Exception:  # noqa: BLE001, S112  # defensive fallback
                 continue
 
             # Extract sources
@@ -177,7 +177,7 @@ class GapAnalyzer:
         for f in report_files:
             try:
                 content = f.read_text()
-            except Exception:  # noqa: S112
+            except Exception:  # noqa: BLE001, S112  # defensive fallback
                 continue
             title_match = re.search(r"^#\s+(.+)$", content, re.MULTILINE)
             if title_match:

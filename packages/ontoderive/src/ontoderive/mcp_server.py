@@ -190,7 +190,7 @@ def pipeline_status() -> dict:
         try:
             __import__(import_path)
             checks[mod_name] = "ready"
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             checks[mod_name] = f"unavailable: {e}"
 
     try:
@@ -198,7 +198,7 @@ def pipeline_status() -> dict:
 
         enhancer = get_enhancer()
         checks["LLM"] = enhancer.backend if enhancer.available else "not configured"
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         checks["LLM"] = f"unavailable: {e}"
 
     return {
@@ -253,7 +253,7 @@ def handle_mcp_request(request: dict) -> dict:
         return {"jsonrpc": "2.0", "id": req_id, "error": {"code": -32601, "message": f"Unknown method: {method}"}}
     except KeyError as exc:
         return {"jsonrpc": "2.0", "id": req_id, "error": {"code": -32601, "message": str(exc)}}
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return {"jsonrpc": "2.0", "id": req_id, "error": {"code": -1, "message": str(exc)}}
 
 

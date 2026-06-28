@@ -338,7 +338,7 @@ def cmd_sniff(*_: object) -> None:
         r = subprocess.run(["crontab", "-l"], capture_output=True, text=True, timeout=5)
         has_cron = r.returncode == 0
         items.append(("定时任务", "已配置" if has_cron else "未配置", has_cron))
-    except Exception:
+    except Exception:  # noqa: BLE001
         items.append(("定时任务", "不可用", False))
 
     # 7. Git
@@ -418,14 +418,14 @@ def cmd_install(args: list[str]) -> None:
         try:
             cfg = json.loads(claude_config.read_text())
             mcp_installed = "forge" in cfg.get("mcpServers", {})
-        except Exception:
+        except Exception:  # noqa: BLE001
             pass
     available.append((not mcp_installed, "2", "MCP 配置", "注册到 Claude Desktop", _install_mcp_config))
 
     try:
         r = subprocess.run(["crontab", "-l"], capture_output=True, text=True, timeout=5)
         has_cron = "health" in r.stdout
-    except Exception:
+    except Exception:  # noqa: BLE001
         has_cron = False
     available.append((not has_cron, "3", "每日巡更", "配置 cron 定时健康检查", _install_cron))
 
@@ -529,7 +529,7 @@ def _install_cron() -> None:
                 print(f"   {cron_line}")
         else:
             print("✅ 定时任务已存在，无需重复添加")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"⚠️  无法配置定时任务: {e}")
         print(f"   手动添加: (crontab -l; echo '{cron_line}') | crontab -")
 

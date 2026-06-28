@@ -34,7 +34,7 @@ def _load_dedup() -> dict:  # type: ignore[type-arg]
     if DEDUP_FILE.exists():
         try:
             return cast("dict[Any, Any]", json.loads(DEDUP_FILE.read_text()))
-        except Exception:
+        except Exception:  # noqa: BLE001
             return {}
     return {}
 
@@ -98,7 +98,7 @@ def ingest_text(text: str, title: Optional[str] = None) -> dict[str, Any]:
         adapter = Mem0Adapter()
         if adapter.enabled:
             adapter.add_memory(text=text, user_id="kos-user", metadata={"source": str(filepath), "title": title})
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         import logging
 
         logging.getLogger(__name__).warning(f"Dual-write to Mem0 failed: {e}")
@@ -137,7 +137,7 @@ def ingest_url(url: str) -> dict:  # type: ignore[type-arg]
         text = text.strip()[:10000]
 
         return ingest_text(text, title)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e)}
 
 
@@ -173,7 +173,7 @@ def ingest_file(filepath: str) -> dict:  # type: ignore[type-arg]
             doc = fitz.open(str(src))
             text = "\n".join(page.get_text() for page in doc)[:8000]
             doc.close()
-    except Exception:
+    except Exception:  # noqa: BLE001
         text = f"[{suffix} file: {src.name}]"
 
     return {
@@ -247,7 +247,7 @@ def analyze_ingest(item: dict[str, Any]) -> dict[str, Any]:
                 if len(analysis["related_docs"]) >= 3:
                     break
             conn.close()
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
 
     return analysis

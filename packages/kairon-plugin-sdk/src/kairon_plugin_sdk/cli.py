@@ -321,7 +321,7 @@ class {class_name}(BosPlugin):
             try:
                 self._api_get("health")
                 health["api"] = "healthy"
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 health["status"] = "degraded"
                 health["api"] = f"error: {{e}}"
 

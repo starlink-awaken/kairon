@@ -12,7 +12,7 @@ def managed_connection(conn: sqlite3.Connection) -> Generator[sqlite3.Connection
     """Context manager that yields a sqlite3 connection and closes it on exit."""
     try:
         yield conn
-    except Exception:
+    except Exception:  # noqa: BLE001
         conn.rollback()
         raise
     finally:

@@ -74,7 +74,7 @@ def create_vector_backend(
             try:
                 _log.info("🚀 Using LanceDB backend (semantic search)")
                 return LanceDBBackend(dimension=dimension, db_path=db_path, role=role)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 if backend_preference == "lancedb":
                     # User explicitly requested LanceDB
                     msg = f"LanceDB backend requested but failed to initialize: {e}"

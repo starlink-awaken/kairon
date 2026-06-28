@@ -223,7 +223,7 @@ def cmd_enable(args: list[str]) -> int:
             plist_data = _generate_plist_from_item(name, item)
             ppath.write_bytes(plist_data)
             print(f"  📄 生成 plist: {ppath}")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             print(f"❌ 生成 plist 失败: {e}")
             return 1
 
@@ -414,7 +414,7 @@ def cmd_reminder_add(args: list[str]) -> int:
         else:
             print(f"❌ 创建提醒失败: {r.stderr.strip()}")
             return 1
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"❌ 创建提醒失败: {e}")
         return 1
 
@@ -454,7 +454,7 @@ return "done"
         else:
             print(f"❌ 删除提醒失败: {r.stderr.strip()}")
             return 1
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"❌ 删除提醒失败: {e}")
         return 1
 

@@ -42,7 +42,7 @@ async def _call_mcp_tool(
                         texts.append(block.text)
                 return "\n".join(texts)
             return None
-    except Exception:
+    except Exception:  # noqa: BLE001
         return None
 
 

@@ -56,13 +56,13 @@ def create_default_executor(
         import spacy
 
         nlp = spacy.load(config.nlp.spacy_model)
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
     try:
         import spacy
 
         nlp_zh = spacy.load(config.nlp.spacy_model_zh)
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
 
     pipeline = create_default_pipeline(

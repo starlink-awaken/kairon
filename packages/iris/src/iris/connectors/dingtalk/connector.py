@@ -22,7 +22,7 @@ class DingTalkConnector:
             req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})  # noqa: S310
             with urllib.request.urlopen(req, timeout=10) as r:  # noqa: S310
                 return cast("dict[Any, Any]", json.loads(r.read()))
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             return {"error": str(e)}
 
     def sync(self) -> dict:

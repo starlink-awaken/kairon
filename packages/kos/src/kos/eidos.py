@@ -50,7 +50,7 @@ def _mcp_call(tool: str, **kwargs: Any) -> dict[str, Any]:
         )
         raw = json.loads(proc.stdout.strip())
         return cast("dict[str, Any]", raw.get("result", {}))
-    except Exception:
+    except Exception:  # noqa: BLE001
         logger.debug("eidos MCP call failed for %s", tool)
         return {}
 
@@ -91,7 +91,7 @@ def validate_object_full(
         direct_validate = getattr(direct_validator, "validate_object", None)
         if callable(direct_validate):
             return bool(direct_validate(data)), []
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
 
     try:
@@ -103,5 +103,5 @@ def validate_object_full(
         text = _mcp_result_text(resp)
         result = json.loads(text) if isinstance(text, str) else text
         return bool(result.get("is_valid", False)), result.get("errors", [])
-    except Exception:
+    except Exception:  # noqa: BLE001
         return False, ["eidos MCP unavailable"]

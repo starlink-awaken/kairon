@@ -165,7 +165,7 @@ class TelegramConnector(BaseConnector):
             raise RuntimeError("Telegram API request timed out")
         except httpx.HTTPStatusError as e:
             raise RuntimeError(f"Telegram API HTTP error: {e.response.status_code}")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             raise RuntimeError(f"Telegram API request failed: {e}")
 
         if not data.get("ok"):
@@ -192,7 +192,7 @@ class TelegramConnector(BaseConnector):
         try:
             result = self._call_api("getMe")
             self._available = bool(result and result.get("ok", result.get("id")))
-        except Exception:
+        except Exception:  # noqa: BLE001
             logger.exception("Telegram API unavailable")
             self._available = False
         return self._available
@@ -370,7 +370,7 @@ class TelegramConnector(BaseConnector):
                 me = self._call_api("getMe")
                 info["bot_name"] = me.get("first_name", "") or me.get("username", "")
                 info["bot_id"] = me.get("id", "")
-            except Exception:
+            except Exception:  # noqa: BLE001
                 pass
 
         return info

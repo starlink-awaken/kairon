@@ -206,7 +206,7 @@ class SQLiteKnowledgeStore(IKnowledgeStore):
                 return
             logger.warning("db_integrity_failed", detail=result[0] if result else "unknown")
             self._repair_db()
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error("db_integrity_error", error=str(e))
             self._repair_db()
 
@@ -223,7 +223,7 @@ class SQLiteKnowledgeStore(IKnowledgeStore):
             if result and result[0] == "ok":
                 logger.info("db_repaired_via_checkpoint")
                 return
-        except Exception:
+        except Exception:  # noqa: BLE001
             pass
         # Backup corrupted DB and recreate
         import time
@@ -238,7 +238,7 @@ class SQLiteKnowledgeStore(IKnowledgeStore):
             self.conn = sqlite3.connect(self.db_path)
             self.conn.row_factory = sqlite3.Row
             self.conn.execute("PRAGMA journal_mode=WAL")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error("db_repair_failed", error=str(e))
 
     def _init_schema(self) -> None:
@@ -393,7 +393,7 @@ class SQLiteKnowledgeStore(IKnowledgeStore):
                         ]
                         await vector_store.index_entities(entity_objs, mode="overwrite")
                         semantic_results = await vector_store.search(query, top_k=top_k)
-                    except Exception:
+                    except Exception:  # noqa: BLE001
                         pass
         else:
             semantic_results = []
@@ -488,7 +488,7 @@ class SQLiteKnowledgeStore(IKnowledgeStore):
                     resp = await client.get(source)
                     resp.raise_for_status()
                     content = resp.text[:50000]
-            except Exception:
+            except Exception:  # noqa: BLE001
                 return {
                     "entity_count": 0,
                     "relation_count": 0,
@@ -645,7 +645,7 @@ class LanceDBVectorStore:
 
             self._model = SentenceTransformer("all-MiniLM-L6-v2")
             return self._model
-        except Exception:
+        except Exception:  # noqa: BLE001
             return None
 
     def _get_table(self) -> Any:
@@ -661,7 +661,7 @@ class LanceDBVectorStore:
             db = lancedb.connect(self.db_path)
             self._table = db.open_table("entities") if "entities" in db.list_tables() else None
             return self._table
-        except Exception:
+        except Exception:  # noqa: BLE001
             return None
 
     async def embed(self, texts: list[str]) -> list[list[float]]:
@@ -696,7 +696,7 @@ class LanceDBVectorStore:
                 }
                 for r in result
             ]
-        except Exception:
+        except Exception:  # noqa: BLE001
             return []
 
     async def index_entities(self, entities: list[Entity], mode: str = "overwrite") -> None:
@@ -728,7 +728,7 @@ class LanceDBVectorStore:
             else:
                 self._table = db.open_table("entities")
                 self._table.add(rows)  # type: ignore[attr-defined]
-        except Exception:
+        except Exception:  # noqa: BLE001
             pass
 
 

@@ -107,7 +107,7 @@ def handle_validate(params: dict | None = None) -> dict:
                 "type": "OntologyNode",
             }
         return {"format_version": FORMAT_VERSION, "is_valid": True, "errors": [], "type": schema_type}
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return {"format_version": FORMAT_VERSION, "is_valid": False, "errors": [str(exc)], "type": schema_type}
 
 
@@ -160,7 +160,7 @@ def handle_migrate(params: dict | None = None) -> dict:
             "to_version": result.get("_migrated_version", to_version),
             "data": result,
         }
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return {
             "format_version": FORMAT_VERSION,
             "schema": schema_name,
@@ -203,7 +203,7 @@ def handle_define(params: dict | None = None) -> dict:
         ft = FieldType.STRING
         try:
             ft = FieldType(str(fd.get("type", "string")))
-        except Exception:
+        except Exception:  # noqa: BLE001
             pass
         fields.append(
             SchemaField(
@@ -365,7 +365,7 @@ def _list_tools() -> dict:
 def _handle_fastmcp() -> Any:
     try:
         from fastmcp import FastMCP
-    except Exception:
+    except Exception:  # noqa: BLE001
         return None
 
     app = FastMCP("eidos-mcp")
@@ -441,7 +441,7 @@ def handle_mcp_request(request: dict) -> dict:
         return {"jsonrpc": "2.0", "id": req_id, "error": {"code": -32601, "message": f"Unknown method: {method}"}}
     except KeyError as exc:
         return {"jsonrpc": "2.0", "id": req_id, "error": {"code": -32601, "message": str(exc)}}
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return {"jsonrpc": "2.0", "id": req_id, "error": {"code": -1, "message": str(exc)}}
 
 
@@ -468,6 +468,6 @@ def main() -> None:
                 resp = handle_mcp_request(request)
         except json.JSONDecodeError:
             resp["error"] = {"code": -32700, "message": "Parse error: invalid JSON"}
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             resp["error"] = {"code": -1, "message": f"Internal error: {exc}"}
         print(json.dumps(resp, ensure_ascii=False), flush=True)

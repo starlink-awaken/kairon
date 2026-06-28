@@ -221,7 +221,7 @@ class TriageRouter:
         # Phase 1: Try LLM classification
         try:
             scores = await self._llm_classify(query)
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             logger.warning("llm_classify_failed", error=str(exc))
             # Phase 2: Rule-based fallback
             scores = self._rule_classify(query)

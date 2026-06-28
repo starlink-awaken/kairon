@@ -257,7 +257,7 @@ class OpenAIEmbeddingProvider(BaseEmbeddingProvider):
 
             return embeddings
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             _log.error(f"[OpenAIEmbedding] API call failed: {e}")
             raise RuntimeError(f"OpenAI embedding generation failed: {e}") from e
 
@@ -376,7 +376,7 @@ class LocalEmbeddingProvider(BaseEmbeddingProvider):
             _log.debug(f"[LocalEmbedding] Generated {len(embeddings)} embeddings")
             return cast("list[list[float]]", embeddings)
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             _log.error(f"[LocalEmbedding] Encoding failed: {e}")
             raise RuntimeError(f"Local embedding generation failed: {e}") from e
 

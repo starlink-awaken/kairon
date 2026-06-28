@@ -54,7 +54,7 @@ class MemThetaAdapter:
                 capture_output=True,
                 text=True,
             )
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"[MemTheta] X1 Governance failure - could not emit OMO event: {e}")
 
     def update(self, target_id: str, context: str, confidence: float, trigger_source: str) -> bool:

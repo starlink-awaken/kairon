@@ -62,7 +62,7 @@ def search(q: str, domains: str = "", limit: int = 10) -> dict:  # type: ignore[
             params,
         ).fetchall()
         return {"results": [dict(r) for r in rows], "count": len(rows)}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e)}
     finally:
         conn.close()
@@ -82,7 +82,7 @@ def digest() -> dict:  # type: ignore[type-arg]
     s = status()
     try:
         e = conn.execute("SELECT COUNT(*) FROM kos_entities").fetchone()[0]  # type: ignore[name-defined]
-    except Exception:
+    except Exception:  # noqa: BLE001
         logger.error("Unexpected exception caught", exc_info=True)  # type: ignore[name-defined]
         e = 0
     s["entities"] = e

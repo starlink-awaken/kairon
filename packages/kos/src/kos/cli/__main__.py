@@ -286,7 +286,7 @@ def cmd_status(domain=None) -> dict[str, Any]:  # type: ignore[no-untyped-def]
                 "by_zone": {z["zone"]: z["cnt"] for z in zones},
             }
             conn.close()
-    except Exception:
+    except Exception:  # noqa: BLE001
         result["retrieval_db"] = {"status": "not available"}
     if domain:
         result["domains"] = [d for d in result["domains"] if d["domain"] == domain]
@@ -388,7 +388,7 @@ def cmd_search(  # type: ignore[no-untyped-def]
         results = [dict(r) for r in rows]
         conn.close()
         return {"query": query, "results": results, "count": len(results)}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "results": []}
 
 

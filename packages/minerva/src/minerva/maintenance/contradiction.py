@@ -84,7 +84,7 @@ class ContradictionDetector:
         """Extract claim-source pairs from a report markdown file."""
         try:
             content = filepath.read_text()
-        except Exception:
+        except Exception:  # noqa: BLE001
             return []
 
         if topic_filter and topic_filter.lower() not in content.lower():
@@ -145,7 +145,7 @@ Return only contradictions that exist, as a JSON array. If none found, return em
                     )
                     for c in data
                 ]
-        except Exception:
+        except Exception:  # noqa: BLE001
             pass
 
         return []
@@ -162,7 +162,7 @@ def extract_claims(report_dir: str = "~/knowledge/reports", limit: int = 20) -> 
     for f in report_files:
         try:
             content = f.read_text()
-        except Exception:  # noqa: S112
+        except Exception:  # noqa: BLE001, S112  # defensive fallback
             continue
         for match in re.finditer(r"\|\s*(.+?)\s*\|\s*(https?://[^\s|]+|[^|]+?)\s*\|", content):
             claim = match.group(1).strip()

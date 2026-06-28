@@ -66,7 +66,7 @@ def _load_entities(filter_text: str = "") -> list[dict]:  # type: ignore[type-ar
             ).fetchall()
         conn.close()
         return [dict(r) for r in rows]
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return [{"entity_id": "ERROR", "entity_type": "Error", "label": f"DB error: {str(e)[:60]}"}]
 
 
@@ -95,7 +95,7 @@ def _load_entity_detail(entity_id: str) -> dict:  # type: ignore[type-arg]
             "outgoing_relations": [dict(r) for r in outgoing],
             "incoming_relations": [dict(r) for r in incoming],
         }
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e)}
 
 
@@ -117,7 +117,7 @@ def _load_implicit_connections() -> list[dict]:  # type: ignore[type-arg]
         """).fetchall()
         conn.close()
         return [dict(r) for r in rows]
-    except Exception:
+    except Exception:  # noqa: BLE001
         return []
 
 
@@ -340,7 +340,7 @@ class GraphExplorerApp(App):  # type: ignore[type-arg]
                 )
             else:
                 self.notify("No implicit connections found")
-        except Exception:
+        except Exception:  # noqa: BLE001
             self.notify("Discovery failed")
 
     def action_quit(self) -> None:

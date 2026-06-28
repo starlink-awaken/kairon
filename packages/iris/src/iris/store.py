@@ -19,7 +19,7 @@ class JSONFileStore:
         if self._path.exists():
             try:
                 self._data = json.loads(self._path.read_text())
-            except Exception:
+            except Exception:  # noqa: BLE001
                 self._data = {}
 
     def save(self) -> None:

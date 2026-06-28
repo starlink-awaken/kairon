@@ -129,7 +129,7 @@ class KnowledgeEnhancedThinking:
                 f"[CognitivePatch] Injected {len(knowledge_context.items)} knowledge items into thinking context"
             )
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             _log.warning(f"[CognitivePatch] Knowledge query failed: {e}")
             inputs["knowledge_context"] = {"error": str(e), "items": []}
 
@@ -212,7 +212,7 @@ def patch_cognitive_loop() -> bool:
         _log.info("[CognitivePatch] Successfully patched CognitiveLoop")
         return True
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         _log.error(f"[CognitivePatch] Failed to patch CognitiveLoop: {e}")
         return False
 
@@ -239,7 +239,7 @@ def unpatch_cognitive_loop() -> bool:
         return True
     except ImportError:
         return False
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         _log.error(f"[CognitivePatch] Failed to unpatch: {e}")
         return False
 

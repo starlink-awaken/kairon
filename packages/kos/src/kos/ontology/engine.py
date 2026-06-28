@@ -634,7 +634,7 @@ def enrich() -> dict[str, Any]:  # type: ignore[no-untyped-def]
                         (e["entity_id"], d["doc_id"], 0.5),
                     )
                     enriched += 1
-                except Exception:
+                except Exception:  # noqa: BLE001
                     logger.error("Unexpected exception caught", exc_info=True)  # type: ignore[name-defined]
                     pass
 

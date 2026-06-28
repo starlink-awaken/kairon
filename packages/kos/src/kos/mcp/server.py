@@ -56,7 +56,7 @@ def _bg_run(task_id: str, fn: Any) -> None:
             _bg_tasks[task_id] = result
             _bg_tasks[task_id]["_status"] = "completed"
             _bg_tasks[task_id]["_ts"] = datetime.now().isoformat()
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         with _bg_lock:
             _bg_tasks[task_id] = {"_status": "error", "_error": str(e), "_ts": datetime.now().isoformat()}
 
@@ -234,7 +234,7 @@ def tool_search_knowledge(  # type: ignore[no-untyped-def]
         results = [dict(r) for r in rows]
         conn.close()
         return {"query": query, "results": results, "count": len(results)}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "results": [], "count": 0}
 
 
@@ -260,7 +260,7 @@ def tool_get_knowledge(kos_id: str) -> dict[str, Any]:  # type: ignore[unused-ig
         result["tags"] = [t[0] for t in tags]
         conn.close()
         return result
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e)}
 
 
@@ -284,7 +284,7 @@ def tool_get_system_status() -> dict[str, Any]:  # type: ignore[unused-ignore]
                 "by_zone": {z[0]: z[1] for z in zones},
             }
             conn.close()
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
     # Collect background task status
     bg_tasks = {}
@@ -400,7 +400,7 @@ def tool_onto(cmd: str, entity_type: str = "", confirmed: bool = False) -> dict[
             return {"error": r.stderr or "Graph generation failed"}
         else:
             return {"error": f"Unknown onto command: {cmd}"}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e)}
 
 
@@ -500,7 +500,7 @@ def tool_run_indexer(
         }
     except sp.TimeoutExpired:
         return {"status": "timeout", "error": "Indexer timed out after 300s"}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"status": "error", "error": str(e)}
 
 
@@ -569,7 +569,7 @@ def tool_db_vacuum(
         conn.execute("VACUUM")
         conn.close()
         return {"status": "completed", "operation": "vacuum", "operation_level": "L3"}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e)}
 
 
@@ -579,7 +579,7 @@ def tool_get_entity(entity_id: str) -> dict[str, Any]:  # type: ignore[unused-ig
             [sys.executable, "-m", "kos.ontology.engine", "card", entity_id], capture_output=True, text=True, timeout=10
         )
         return json.loads(r.stdout) if r.stdout else {"error": "Entity not found"}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e)}
 
 
@@ -601,7 +601,7 @@ def tool_search_entity(query: str, entity_type: str = "", limit: int = 10) -> di
         ).fetchall()
         conn.close()
         return {"results": [dict(r) for r in rows], "count": len(rows)}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e), "results": []}
 
 
@@ -628,7 +628,7 @@ def tool_semantic_search(query: str, limit: int = 10) -> dict:  # type: ignore[t
                 data = json.loads(r.stdout)
                 if data.get("results"):
                     return cast("dict", data)
-    except Exception:
+    except Exception:  # noqa: BLE001
         pass
     # Fallback to KOS FTS5
     return tool_search_knowledge(query, limit=limit)  # type: ignore[Any, Any]
@@ -940,7 +940,7 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
                             },
                         }
                     )
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     send_jsonrpc(
                         {
                             "jsonrpc": "2.0",

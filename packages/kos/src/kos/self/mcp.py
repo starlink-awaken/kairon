@@ -102,14 +102,14 @@ SELF_TOOLS: dict[str, dict[str, Any]] = {
 def _handle_get_profile() -> dict[str, Any]:
     try:
         return get_profile()
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e)}
 
 
 def _handle_get_current_role(args: dict[str, Any]) -> dict[str, Any]:
     try:
         return get_current_role(context_hint=args.get("context_hint", ""))
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e)}
 
 
@@ -117,7 +117,7 @@ def _handle_get_vision_summary() -> dict[str, Any]:
     try:
         summary = get_vision_summary()
         return {"summary": summary}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e)}
 
 
@@ -135,7 +135,7 @@ def _handle_skill_router(args: dict[str, Any]) -> dict[str, Any]:
             accepted=bool(args.get("accepted", True)),
             reason=str(args.get("reason", "")),
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return {"error": str(e)}
 
 

@@ -115,7 +115,7 @@ class QueryOptimizer:
                 try:
                     node_results = future.result()
                     results.append(node_results)
-                except Exception:
+                except Exception:  # noqa: BLE001
                     _log.warning(
                         "[QueryOptimizer] Node %s failed within timeout=%.1fs",
                         node_id,

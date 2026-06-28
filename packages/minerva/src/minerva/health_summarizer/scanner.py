@@ -36,6 +36,6 @@ def scan_profiles(root: Path | None = None) -> list[HealthProfile]:
     for json_file in sorted(root.glob("*.json")):
         try:
             profiles.append(read_json(json_file))
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             print(f"[WARN] skip {json_file.name}: {exc}", file=sys.stderr)
     return profiles

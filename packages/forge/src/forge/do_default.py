@@ -9,7 +9,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
     """P57-W0 forge do_default: 真调 forge.cmd_list / cmd_health / cmd_market."""
     try:
         from forge.forge import cmd_health, cmd_list, cmd_market, cmd_status
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return {"_method": "do_default", "_error": f"import: {type(exc).__name__}: {exc}"}
 
     action = args.get("action", "list")
@@ -27,7 +27,7 @@ def do_default(args: dict[str, Any]) -> dict[str, Any]:
             cmd_market([])
             return {"_method": "do_default", "_action": "market", "executed": True}
         return {"_method": "do_default", "_error": f"unknown action: {action}"}
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         return {"_method": "do_default", "_action": action, "_error": f"{type(exc).__name__}: {exc}"}
 
 

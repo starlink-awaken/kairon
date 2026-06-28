@@ -144,7 +144,7 @@ def scan_entities(db_path: str) -> dict:  # type: ignore[type-arg]
 def discover_all() -> dict:
     try:
         db_path = get_artifact_path("retrievalDatabase")
-    except Exception:
+    except Exception:  # noqa: BLE001
         return {"error": "Retrieval database not found"}
 
     if not db_path.exists():  # type: ignore[attr-defined]

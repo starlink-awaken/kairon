@@ -92,7 +92,7 @@ class IKnowledgeSubscriber(ABC):
             else:
                 _log.warning(f"[{self.subscriber_id}] Unknown event type: {event_type}")
 
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             _log.error(f"[{self.subscriber_id}] Failed to handle event {event.event_id}: {exc}", exc_info=True)
             raise
 

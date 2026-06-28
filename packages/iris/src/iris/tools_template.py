@@ -76,7 +76,7 @@ def sample_list_connectors() -> dict[str, Any]:
                 "total": len(connectors),
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -98,7 +98,7 @@ def sample_get_item(platform: str, item_id: str) -> dict[str, Any]:
                 "item": item,
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 
@@ -124,7 +124,7 @@ def sample_validate(
                 "errors": validation_result.get("errors", []),
             }
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return _error(str(e))
 
 

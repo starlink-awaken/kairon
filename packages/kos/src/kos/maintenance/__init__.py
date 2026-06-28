@@ -117,7 +117,7 @@ def audit() -> dict:  # type: ignore[type-arg]
         ).fetchall()
         for z in zone_rows:
             domain_health[z["zone"]] = {"total": z["total"], "canonical": z["canonical"] or 0}
-    except Exception:
+    except Exception:  # noqa: BLE001
         domain_health = {"error": "Could not query zone stats"}  # type: ignore[str, Any]
 
     conn.close()

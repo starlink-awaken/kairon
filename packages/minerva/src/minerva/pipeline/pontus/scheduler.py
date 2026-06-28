@@ -119,5 +119,5 @@ class DAGScheduler:
             else:
                 val = action_fn(step, results)
             return val, ""
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             return None, str(exc)

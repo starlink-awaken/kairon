@@ -123,7 +123,7 @@ def _check_disk() -> None:
         )
         size = result.stdout.strip().split("\t")[0] if result.stdout.strip() else "?"
         _pass(f"项目磁盘: {size}")
-    except Exception:
+    except Exception:  # noqa: BLE001
         _warn("项目磁盘: ?")
 
 
@@ -154,7 +154,7 @@ def _check_kos() -> None:
                 return
         # KOS 状态行未找到
         _warn("KOS: 状态未知 (?)")
-    except Exception:
+    except Exception:  # noqa: BLE001
         _warn("KOS: 探测失败")
 
 

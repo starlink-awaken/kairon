@@ -242,7 +242,7 @@ class AnalyticsEngine:
                         c["category"] = pat.category
                         c["semantic_depth"] = pat.semantic_depth
                     results.extend(conclusions)
-            except Exception:
+            except Exception:  # noqa: BLE001
                 pass
         return results
 

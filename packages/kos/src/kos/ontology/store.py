@@ -27,7 +27,7 @@ def _get_db_path() -> str:
         from kos._default_workspace_config import get_artifact_path  # type: ignore[import-not-found]
 
         return get_artifact_path("retrievalDatabase")
-    except Exception:
+    except Exception:  # noqa: BLE001
         # Ultimate fallback
         kos_home = os.environ.get("KOS_HOME", str(Path.home() / ".kos_home"))
         return str(Path(kos_home) / "kos-index.sqlite")
