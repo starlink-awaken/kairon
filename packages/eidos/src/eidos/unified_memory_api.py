@@ -34,8 +34,6 @@ from collections.abc import Callable, Coroutine, Mapping
 from dataclasses import dataclass, field
 from typing import Any, NotRequired, Protocol, TypedDict, cast, runtime_checkable
 
-from nucleus.Z_Microkernel.organs.async_utils import run_sync
-
 _TRACE_CONTEXT: contextvars.ContextVar[dict[str, str] | None] = contextvars.ContextVar("_TRACE_CONTEXT", default=None)
 
 _log = logging.getLogger(__name__)
@@ -373,6 +371,8 @@ class UnifiedMemoryAPI:
                           :exc:`asyncio.TimeoutError` if the deadline is
                           exceeded before all subsystems respond.
         """
+        from nucleus.Z_Microkernel.organs.async_utils import run_sync  # type: ignore[import-not-found]
+
         return cast("QueryResult", run_sync(asyncio.wait_for(self.query(q, memory_types, limit), timeout=timeout)))
 
     def health_check(self) -> dict:

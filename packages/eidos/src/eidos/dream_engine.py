@@ -24,8 +24,6 @@ import logging
 import math
 from typing import Any, cast
 
-from nucleus.Z_Microkernel.gateways.cognitive_gateway import Gateway
-
 _log = logging.getLogger(__name__)
 
 
@@ -99,6 +97,8 @@ class DreamEngine:
             f"Facts:\n{facts_summary}\n\n"
             "Output a concise description of the pattern."
         )
+
+        from nucleus.Z_Microkernel.gateways.cognitive_gateway import Gateway  # type: ignore[import-not-found]
 
         response = Gateway.call(prompt, iq_req=9.0, spec="philosopher")
         if response.get("status") == "success":
