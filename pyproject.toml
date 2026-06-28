@@ -96,7 +96,8 @@ explicit_package_bases = true
 no_implicit_optional = false
 warn_unused_ignores = false
 show_error_codes = true
-disable_error_code = ["annotation-unchecked", "import-not-found", "import-untyped"]
+disable_error_code = ["annotation-unchecked", "import-not-found", "import-untyped", "no-redef"]
+exclude = ["tests/", "test_.*\\.py", "packages/minerva/", "packages/sophia/"]
 
 [[tool.mypy.overrides]]
 module = ["tests.*"]

@@ -12,10 +12,10 @@ try:
     from .config import Config
     from .derive import OntoDerive as _OD  # noqa: N814
     from .protocols import AnalysisResult, PipelineStage
-except ImportError:
+except ImportError:  # type: ignore[no-redef]
     from ontoderive.foundation.config import Config  # noqa
-    from ontoderive.foundation.protocols import PipelineStage, AnalysisResult
-    from ontoderive.core.derive import OntoDerive as _OD  # noqa: N814  # type: ignore[no-redef]
+    from ontoderive.foundation.protocols import PipelineStage, AnalysisResult  # noqa
+    from ontoderive.core.derive import OntoDerive as _OD  # noqa: N814
 
 
 class ToolForgeStage(PipelineStage):
