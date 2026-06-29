@@ -12,10 +12,10 @@ def test_hybrid_research_analysis():
     结合硬性断言与 LLM-as-Judge 进行验证。
     """
     # 1. 模拟从系统的某一个 Agent 获得了一段研发报告生成结果
-    actual_output = "本系统采用了 eCOS v5 架构，其中包含 L4 的自我感知层，并结合了 Agora 网格路由。"
+    actual_output = "本系统采用了 eCOS v6 架构，其中包含 L4 的自我感知层，并结合了 Agora 网格路由。"
     expected_output = "报告需要包含 eCOS 的分层架构（如 L4 自我感知层）以及路由机制（如 Agora 网格）。"
     input_prompt = "请基于目前的系统文档，写一段关于架构演进的总结报告。"
-    retrieval_context = ["eCOS v5 具有 8 层架构。", "L4 为自我感知与决策层。", "Agora 负责 I0 层的网格路由。"]
+    retrieval_context = ["eCOS v6 具有 8 层架构。", "L4 为自我感知与决策层。", "Agora 负责 I0 层的网格路由。"]
 
     # 2. 硬性代码断言 (Hard Assertion)
     # 确保没有返回空值，或者包含敏感词
