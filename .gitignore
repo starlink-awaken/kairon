@@ -60,3 +60,6 @@ coverage.xml
 .omc/
 
 *.tmp
+
+# Knowledge health cron reports (transient)
+knowledge-health-*.md
