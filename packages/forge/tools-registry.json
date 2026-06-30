@@ -1223,7 +1223,14 @@
       },
       "description": "WPS Office MCP Server — 243 工具操控 Excel/Word/PPT",
       "added": "2026-06-07",
-      "updated": "2026-06-07"
+      "updated": "2026-06-30",
+      "bos_uri": "bos://capability/wps-office-mcp/invoke",
+      "domain": "capability",
+      "cross_references": {
+        "domain": "capability",
+        "realized_by": "agora.register",
+        "upstream": "/Users/xiamingxing/ToolBox/wps-office-mcp/.git"
+      }
     },
     {
       "id": "wps-skills",
@@ -1245,7 +1252,14 @@
       },
       "description": "WPS Office × AI 助手 MCP 框架 — wps-claude-addon + wps-claude-assistant",
       "added": "2026-06-07",
-      "updated": "2026-06-07"
+      "updated": "2026-06-30",
+      "bos_uri": "bos://capability/wps-skills/load",
+      "domain": "capability",
+      "cross_references": {
+        "domain": "capability",
+        "realized_by": "agora.register",
+        "upstream": "/Users/xiamingxing/ToolBox/wps-skills/.git"
+      }
     },
     {
       "id": "bos-skill-cli",
@@ -1267,7 +1281,14 @@
       },
       "description": "Skills 管理 CLI/TUI — 搜索/暂存/promote/回退 skill 包",
       "added": "2026-06-07",
-      "updated": "2026-06-07"
+      "updated": "2026-06-30",
+      "bos_uri": "bos://capability/bos-skill-cli/exec",
+      "domain": "capability",
+      "cross_references": {
+        "domain": "capability",
+        "realized_by": "agora.register",
+        "upstream": "/Users/xiamingxing/ToolBox/bos-skill-cli/.git"
+      }
     }
   ],
   "event_log": [
