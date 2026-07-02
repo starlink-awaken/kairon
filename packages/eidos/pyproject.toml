@@ -34,7 +34,7 @@ eidos = "eidos.cli:main"
 eidos-agent = "eidos.agent:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "pytest-cov"]
+dev = ["pytest>=9.0", "pytest-cov"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/eidos"]

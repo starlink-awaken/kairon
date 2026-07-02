@@ -15,7 +15,7 @@ keywords = ["ai", "tool-registry", "mcp", "asset-management"]
 forge = "forge.forge:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "ruff>=0.8.0"]
+dev = ["pytest>=9.0", "ruff>=0.8.0"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/forge"]

@@ -51,7 +51,7 @@ tier2 = [
     "neo4j>=5.0",
 ]
 dev = [
-    "pytest>=8.0",
+    "pytest>=9.0",
     "pytest-asyncio>=0.24",
     "pytest-cov>=5.0",
     "ruff>=0.8",
