@@ -33,7 +33,7 @@ from kos.config import get_artifact_path, get_workspace_manifest
 
 PREDICATE_RE = re.compile(r"(\w+)::\[\[([^\]]+)\]\]")
 ENTITY_REF_RE = re.compile(
-    r"\[(person|org|project|regulation|doc|concept|event|role|axiom|principle|theory|framework|skill|consensus|task)-([\w-]+)\]",
+    r"\[(person|org|project|regulation|doc|concept|event|role|axiom|principle|theory|framework|skill|consensus|task|node)-([\w-]+)\]",
     re.IGNORECASE,
 )
 FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---", re.DOTALL)
@@ -492,8 +492,115 @@ def _auto_discover_metadata(conn: sqlite3.Connection, now: str) -> int:
                         VALUES (?,?,?,?,?,?,?)""",
                         (entity_id, "member_of", layer_concept, 1.0, str(registry_path), "auto-discover", now),
                     )
+
+            # 2.2 自动提取 omlx Local Compute Mesh Nodes (算力节点席位)
+            nodes_dict = reg_data.get("compute_nodes", {}) or {}
+            for node_name, details in nodes_dict.items():
+                if not details:
+                    continue
+                entity_id = f"N:{node_name}"
+                entity_type = "Node"
+                label = node_name.replace("-", " ")
+                ip = details.get("ip", "unknown")
+                hardware = details.get("hardware", "unknown")
+                vram = details.get("vram", "unknown")
+                description = f"{label} (IP: {ip}) - {hardware}, {vram} VRAM."
+                primary_zone = "workspace"
+                metadata = {"ip": ip, "hardware": hardware, "vram": vram, "role": details.get("role")}
+
+                conn.execute(
+                    """INSERT OR REPLACE INTO kos_entities
+                    (entity_id,entity_type,label,aliases,description,primary_zone,source_file,metadata,updated_at)
+                    VALUES (?,?,?,?,?,?,?,?,?)""",
+                    (
+                        entity_id,
+                        entity_type,
+                        label,
+                        json.dumps([label, node_name]),
+                        description,
+                        primary_zone,
+                        str(registry_path),
+                        json.dumps(metadata),
+                        now,
+                    ),
+                )
+                added += 1
+
+                # 建立与托管模型的 runs_model 关系
+                models_list = details.get("models", []) or []
+                for model in models_list:
+                    model_concept = f"C:Model-{model}"
+                    conn.execute(
+                        """INSERT OR IGNORE INTO kos_entities
+                        (entity_id,entity_type,label,aliases,description,primary_zone,source_file,metadata,updated_at)
+                        VALUES (?,?,?,?,?,?,?,?,?)""",
+                        (
+                            model_concept,
+                            "Concept",
+                            f"Model {model}",
+                            json.dumps([f"Model {model}", model]),
+                            f"omlx Gateway LLM Model: {model}",
+                            "workspace",
+                            str(registry_path),
+                            "{}",
+                            now,
+                        ),
+                    )
+                    conn.execute(
+                        """INSERT OR REPLACE INTO kos_relations
+                        (source_id,predicate,target_id,confidence,source_doc,source_type,updated_at)
+                        VALUES (?,?,?,?,?,?,?)""",
+                        (entity_id, "runs_model", model_concept, 1.0, str(registry_path), "auto-discover", now),
+                    )
         except Exception as ex:
             print(f"  ⚠️  Failed to parse project registry: {ex}", file=sys.stderr)
+
+    # 2.3 自动发现 .omo/_knowledge/patterns/ 下的 Consensus 避坑共识
+    patterns_dir = workspace_root / ".omo/_knowledge/patterns"
+    if patterns_dir.is_dir():
+        try:
+            for md_file in patterns_dir.glob("*.md"):
+                file_name = md_file.stem
+                entity_id = f"S:{file_name}"
+                entity_type = "Consensus"
+
+                label = file_name.replace("-", " ").title()
+                description = "Consensus pattern guidelines"
+
+                try:
+                    with open(md_file, "r", encoding="utf-8") as f:
+                        lines = f.readlines()
+                    for line in lines:
+                        if line.startswith("# "):
+                            label = line.replace("# ", "").strip()
+                            break
+                    for line in lines:
+                        cleaned = line.strip()
+                        if cleaned and not cleaned.startswith("#") and not cleaned.startswith(">"):
+                            description = cleaned[:150] + ("..." if len(cleaned) > 150 else "")
+                            break
+                except Exception:
+                    pass
+
+                conn.execute(
+                    """INSERT OR REPLACE INTO kos_entities
+                    (entity_id,entity_type,label,aliases,description,primary_zone,source_file,metadata,updated_at)
+                    VALUES (?,?,?,?,?,?,?,?,?)""",
+                    (
+                        entity_id,
+                        entity_type,
+                        label,
+                        json.dumps([label, file_name]),
+                        description,
+                        "workspace",
+                        str(md_file),
+                        "{}",
+                        now,
+                    ),
+                )
+                added += 1
+        except Exception as ex:
+            print(f"  ⚠️  Failed to auto-discover Consensus patterns: {ex}", file=sys.stderr)
 
     # 3. 自动提取 .omo/_truth/registry/governance-checks.yaml (X1-X4 治理规则)
     checks_path = workspace_root / ".omo/_truth/registry/governance-checks.yaml"
@@ -950,7 +1057,7 @@ def enrich() -> dict[str, Any]:  # type: ignore[no-untyped-def]
     # 3. Optional local LLM semantic enrichment via omlx gateway (MBP coder model)
     llm_enriched = _enrich_with_local_llm(conn, now)
     if llm_enriched > 0:
-        logger.info(f"Successfully enriched {llm_enriched} entities using local omlx/coder model.")
+        print(f"Successfully enriched {llm_enriched} entities using local omlx/coder model.")
 
     conn.commit()
     conn.close()
