@@ -685,18 +685,47 @@ def main() -> None:
             sys.exit(rc)
         return
     elif args.command == "onto":
-        import subprocess as sp
+        from kos.ontology import engine as onto_engine
 
-        onto_args = [sys.executable, str(SCRIPT_DIR / "kos-ontology.py"), args.onto_cmd]
-        if hasattr(args, "entity_id") and args.entity_id:
-            onto_args.append(args.entity_id)
-        if hasattr(args, "from_id") and args.from_id:
-            onto_args.append(args.from_id)
-        if hasattr(args, "to_id") and args.to_id:
-            onto_args.append(args.to_id)
-        if hasattr(args, "entity_type") and args.entity_type:
-            onto_args.extend(["--type", args.entity_type])
-        sp.run(onto_args)
+        result: Any = {}
+        try:
+            if args.onto_cmd == "rebuild":
+                print("正在重建本体图谱...")
+                result = onto_engine.rebuild()
+            elif args.onto_cmd == "extract":
+                print("正在从源文件提取实体...")
+                result = onto_engine.extract()
+            elif args.onto_cmd == "infer":
+                print("正在从已索引文档中推导关系...")
+                result = onto_engine.infer()
+            elif args.onto_cmd == "card":
+                if not getattr(args, "entity_id", None):
+                    print("错误: 请指定 entity_id. 例如: kos onto card ROL-xia-mingxing")
+                    sys.exit(1)
+                result = onto_engine.card(args.entity_id)
+            elif args.onto_cmd == "path":
+                if not getattr(args, "from_id", None) or not getattr(args, "to_id", None):
+                    print("错误: 请指定 from_id 和 to_id. 例如: kos onto path ID1 ID2")
+                    sys.exit(1)
+                result = onto_engine.find_path(args.from_id, args.to_id)
+            elif args.onto_cmd == "discover":
+                result = onto_engine.discover()
+            elif args.onto_cmd == "graph":
+                result = onto_engine.graph(getattr(args, "entity_type", None))
+            elif args.onto_cmd == "list":
+                result = onto_engine.list_entities(getattr(args, "entity_type", None))
+            else:
+                print(f"未知本体子命令: {args.onto_cmd}")
+                sys.exit(1)
+        except Exception as e:
+            print(f"本体操作执行失败: {type(e).__name__}: {str(e)}")
+            sys.exit(1)
+
+        # 打印输出
+        if args.onto_cmd == "graph" and isinstance(result, dict) and "graph" in result:
+            print(result["graph"])
+        else:
+            print(json.dumps(result, ensure_ascii=False, indent=2))
         return
     else:
         parser.print_help()

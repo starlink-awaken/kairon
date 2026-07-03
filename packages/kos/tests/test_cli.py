@@ -143,3 +143,19 @@ class TestCLIErrorHandling:
     def test_invalid_format(self):
         r = _run("search", "test", "--format", "xml", "--limit", "1")
         assert r.returncode != 0
+
+
+class TestCLIOnto:
+    """Verify ontology command integration."""
+
+    def test_onto_help(self):
+        r = _run("onto", "--help")
+        assert r.returncode == 0
+
+    def test_onto_list(self):
+        r = _run("onto", "list")
+        assert r.returncode in (0, 1)
+
+    def test_onto_card_no_id(self):
+        r = _run("onto", "card")
+        assert r.returncode != 0

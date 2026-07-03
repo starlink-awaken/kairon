@@ -9,13 +9,36 @@ from pathlib import Path
 from typing import Any, cast
 
 
+def _resolve_placeholders(val: Any) -> Any:
+    """Recursively resolve environmental placeholders in configuration variables."""
+    if isinstance(val, dict):
+        return {k: _resolve_placeholders(v) for k, v in val.items()}
+    elif isinstance(val, list):
+        return [_resolve_placeholders(v) for v in val]
+    elif isinstance(val, str):
+        # Dynamic search for Workspace root
+        workspace_root = "/Users/xiamingxing/Workspace"
+        p = Path(__file__).resolve()
+        for parent in p.parents:
+            if (parent / ".omo").is_dir() or (parent / "kos").is_dir():
+                workspace_root = str(parent)
+                break
+        l4_root = os.environ.get("KOS_L4_ROOT", str(Path.home() / "Documents"))
+
+        res = val.replace("${KOS_WORKSPACE}", workspace_root)
+        res = res.replace("${KOS_L4_ROOT}", l4_root)
+        return res
+    return val
+
+
 def get_workspace_manifest() -> dict[str, Any]:
     """Return minimal default manifest. Auto-creates if missing."""
     kos_home = os.environ.get("KOS_HOME")
     if kos_home:
         manifest_path = Path(kos_home) / "manifest.json"
         if manifest_path.exists():  # type: ignore[Any, Any]
-            return cast("dict[str, Any]", json.loads(manifest_path.read_text()))
+            data = json.loads(manifest_path.read_text())
+            return cast("dict[str, Any]", _resolve_placeholders(data))
         # Auto-create default manifest with workspace zone
         default = {
             "name": "kos-default",
@@ -24,7 +47,7 @@ def get_workspace_manifest() -> dict[str, Any]:
                     "label": "KOS Workspace",
                     "authoritative": True,
                     "indexable": True,
-                    "path": kos_home,
+                    "path": "${KOS_WORKSPACE}",
                     "scope": "internal",
                     "filePatterns": ["*.py", "*.md", "*.txt", "*.toml", "*.yaml", "*.json"],
                     "indexingStrategies": {"default": "full_text"},
@@ -45,7 +68,7 @@ def get_workspace_manifest() -> dict[str, Any]:
         }
         manifest_path.parent.mkdir(parents=True, exist_ok=True)
         manifest_path.write_text(json.dumps(default, ensure_ascii=False, indent=2))
-        return default
+        return cast("dict[str, Any]", _resolve_placeholders(default))
     return {
         "name": "kos-default",
         "zones": {},
