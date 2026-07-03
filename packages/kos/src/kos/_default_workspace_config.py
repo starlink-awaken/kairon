@@ -16,11 +16,11 @@ def _resolve_placeholders(val: Any) -> Any:
     elif isinstance(val, list):
         return [_resolve_placeholders(v) for v in val]
     elif isinstance(val, str):
-        # Dynamic search for Workspace root
+        # Dynamic search for main Workspace root (must contain .omo/_truth or project-registry)
         workspace_root = "/Users/xiamingxing/Workspace"
         p = Path(__file__).resolve()
         for parent in p.parents:
-            if (parent / ".omo").is_dir() or (parent / "kos").is_dir():
+            if (parent / "docs/project-registry.yaml").is_file():
                 workspace_root = str(parent)
                 break
         l4_root = os.environ.get("KOS_L4_ROOT", str(Path.home() / "Documents"))

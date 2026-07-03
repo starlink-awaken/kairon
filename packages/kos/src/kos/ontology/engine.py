@@ -22,6 +22,7 @@ import sys
 from collections import deque
 from datetime import datetime
 from pathlib import Path
+import yaml
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 VAULT_OPS_DIR = get_vault_ops_dir()
@@ -397,6 +398,9 @@ def extract() -> dict[str, Any]:  # type: ignore[no-untyped-def]
             )
             added += 1
 
+    # 4. Meta-data driven auto-discovery (EicosParser)
+    added += _auto_discover_metadata(conn, now)
+
     conn.commit()
     # ── Gongwen domain structure (NOT extracted as Concepts) ──
     # Directory names like "组织机构", "制度规范" are file categories, not knowledge concepts.
@@ -406,6 +410,244 @@ def extract() -> dict[str, Any]:  # type: ignore[no-untyped-def]
     conn.commit()
     conn.close()
     return {"extracted": added, "timestamp": now}
+
+
+def _auto_discover_metadata(conn: sqlite3.Connection, now: str) -> int:
+    """自动从项目物理元数据注册表（docs/project-registry.yaml、checks 等）提取本体实体与规则"""
+    added = 0
+
+    # 1. 动态定位 Workspace 根目录
+    workspace_root = None
+    p = Path(__file__).resolve()
+    for parent in p.parents:
+        if (parent / "docs/project-registry.yaml").is_file():
+            workspace_root = parent
+            break
+    if not workspace_root:
+        workspace_root = Path("/Users/xiamingxing/Workspace")
+
+    # 2. 自动提取 docs/project-registry.yaml (项目与微服务席位)
+    registry_path = workspace_root / "docs/project-registry.yaml"
+    if registry_path.is_file():
+        try:
+            with open(registry_path, "r", encoding="utf-8") as f:
+                reg_data = yaml.safe_load(f)
+
+            projects_dict = reg_data.get("projects", {})
+            for proj_name, details in projects_dict.items():
+                if not details:
+                    continue
+                entity_id = f"J:{proj_name}"
+                entity_type = "Project"
+                label = proj_name.replace("-", " ").title()
+                description = details.get("role", f"Subproject in workspace: {proj_name}")
+                primary_zone = "workspace"
+                metadata = {
+                    "layer": details.get("layer"),
+                    "stack": details.get("stack"),
+                    "version": details.get("version"),
+                    "python": details.get("python"),
+                }
+
+                conn.execute(
+                    """INSERT OR REPLACE INTO kos_entities
+                    (entity_id,entity_type,label,aliases,description,primary_zone,source_file,metadata,updated_at)
+                    VALUES (?,?,?,?,?,?,?,?,?)""",
+                    (
+                        entity_id,
+                        entity_type,
+                        label,
+                        json.dumps([label, proj_name]),
+                        description,
+                        primary_zone,
+                        str(registry_path),
+                        json.dumps(metadata),
+                        now,
+                    ),
+                )
+                added += 1
+
+                layer = details.get("layer")
+                if layer:
+                    layer_concept = f"C:Layer-{layer}"
+                    conn.execute(
+                        """INSERT OR IGNORE INTO kos_entities
+                        (entity_id,entity_type,label,aliases,description,primary_zone,source_file,metadata,updated_at)
+                        VALUES (?,?,?,?,?,?,?,?,?)""",
+                        (
+                            layer_concept,
+                            "Concept",
+                            f"Layer {layer}",
+                            json.dumps([f"Layer {layer}"]),
+                            f"eCOS Architecture Layer {layer}",
+                            "workspace",
+                            str(registry_path),
+                            "{}",
+                            now,
+                        ),
+                    )
+                    conn.execute(
+                        """INSERT OR REPLACE INTO kos_relations
+                        (source_id,predicate,target_id,confidence,source_doc,source_type,updated_at)
+                        VALUES (?,?,?,?,?,?,?)""",
+                        (entity_id, "member_of", layer_concept, 1.0, str(registry_path), "auto-discover", now),
+                    )
+        except Exception as ex:
+            print(f"  ⚠️  Failed to parse project registry: {ex}", file=sys.stderr)
+
+    # 3. 自动提取 .omo/_truth/registry/governance-checks.yaml (X1-X4 治理规则)
+    checks_path = workspace_root / ".omo/_truth/registry/governance-checks.yaml"
+    if checks_path.is_file():
+        try:
+            with open(checks_path, "r", encoding="utf-8") as f:
+                contents = f.read()
+                parts = contents.split("---")
+                yaml_content = parts[-1] if len(parts) > 1 else contents
+                checks_data = yaml.safe_load(yaml_content) or {}
+
+            checkers_list = checks_data.get("checkers", [])
+            for checker in checkers_list:
+                cid = checker.get("id")
+                if not cid:
+                    continue
+                entity_id = f"W:checker-{cid}"
+                label = checker.get("name", cid)
+                description = checker.get("description", "")
+                metadata = {
+                    "dimension": checker.get("dimension"),
+                    "severity": checker.get("severity"),
+                    "class": checker.get("class"),
+                }
+                conn.execute(
+                    """INSERT OR REPLACE INTO kos_entities
+                    (entity_id,entity_type,label,aliases,description,primary_zone,source_file,metadata,updated_at)
+                    VALUES (?,?,?,?,?,?,?,?,?)""",
+                    (
+                        entity_id,
+                        "Task",
+                        label,
+                        json.dumps([label, cid]),
+                        description,
+                        "omo",
+                        str(checks_path),
+                        json.dumps(metadata),
+                        now,
+                    ),
+                )
+                added += 1
+
+            gac_dict = checks_data.get("gac") or {}
+            rules_list = gac_dict.get("rules", []) if isinstance(gac_dict, dict) else []
+            for rule in rules_list:
+                rid = rule.get("id")
+                if not rid:
+                    continue
+                entity_id = f"A:{rid}"
+                label = rule.get("name", rid)
+                description = rule.get("description", "")
+                metadata = {
+                    "dimension": rule.get("dimension"),
+                    "layer": rule.get("layer"),
+                    "lifecycle": rule.get("lifecycle"),
+                    "adr": rule.get("adr"),
+                }
+                conn.execute(
+                    """INSERT OR REPLACE INTO kos_entities
+                    (entity_id,entity_type,label,aliases,description,primary_zone,source_file,metadata,updated_at)
+                    VALUES (?,?,?,?,?,?,?,?,?)""",
+                    (
+                        entity_id,
+                        "Axiom",
+                        label,
+                        json.dumps([label, rid]),
+                        description,
+                        "omo",
+                        str(checks_path),
+                        json.dumps(metadata),
+                        now,
+                    ),
+                )
+                added += 1
+
+                adr = rule.get("adr")
+                if adr:
+                    adr_doc = f"D:{adr}"
+                    conn.execute(
+                        """INSERT OR IGNORE INTO kos_entities
+                        (entity_id,entity_type,label,aliases,description,primary_zone,source_file,metadata,updated_at)
+                        VALUES (?,?,?,?,?,?,?,?,?)""",
+                        (
+                            adr_doc,
+                            "Document",
+                            adr,
+                            json.dumps([adr]),
+                            f"Architecture Decision Record: {adr}",
+                            "omo",
+                            str(checks_path),
+                            "{}",
+                            now,
+                        ),
+                    )
+                    conn.execute(
+                        """INSERT OR REPLACE INTO kos_relations
+                        (source_id,predicate,target_id,confidence,source_doc,source_type,updated_at)
+                        VALUES (?,?,?,?,?,?,?)""",
+                        (entity_id, "related_to", adr_doc, 1.0, str(checks_path), "auto-discover", now),
+                    )
+        except Exception as ex:
+            print(f"  ⚠️  Failed to parse governance checks: {ex}", file=sys.stderr)
+
+    # 4. 动态关联 OMO 运行时 Anomaly 异常状况 (MOF Closed-loop Trace)
+    health_path = workspace_root / ".omo/state/health.yaml"
+    if health_path.is_file():
+        try:
+            with open(health_path, "r", encoding="utf-8") as f:
+                health_data = yaml.safe_load(f) or {}
+            anomalies = health_data.get("anomalies", [])
+            for index, anomaly in enumerate(anomalies):
+                checker_id = anomaly.get("checker", "unknown")
+                message = anomaly.get("message", "Anomaly detected")
+                entity_id = f"D:evidence-{checker_id}-{index}"
+                label = f"Evidence ({checker_id})"
+
+                conn.execute(
+                    """INSERT OR REPLACE INTO kos_entities
+                    (entity_id,entity_type,label,aliases,description,primary_zone,source_file,metadata,updated_at)
+                    VALUES (?,?,?,?,?,?,?,?,?)""",
+                    (
+                        entity_id,
+                        "Document",
+                        label,
+                        json.dumps([label]),
+                        message,
+                        "omo",
+                        str(health_path),
+                        json.dumps(anomaly),
+                        now,
+                    ),
+                )
+                added += 1
+
+                rule_rows = conn.execute("SELECT entity_id FROM kos_entities WHERE entity_type='Axiom'").fetchall()
+                matched_rule = None
+                for r in rule_rows:
+                    rid = r["entity_id"]
+                    if checker_id.lower().replace("-", "") in rid.lower().replace("-", "") or rid.lower().replace(
+                        "-", ""
+                    ) in checker_id.lower().replace("-", ""):
+                        matched_rule = rid
+                        break
+                if matched_rule:
+                    conn.execute(
+                        """INSERT OR REPLACE INTO kos_relations
+                        (source_id,predicate,target_id,confidence,source_doc,source_type,updated_at)
+                        VALUES (?,?,?,?,?,?,?)""",
+                        (matched_rule, "has_active_violation", entity_id, 1.0, str(health_path), "mof-linkage", now),
+                    )
+        except Exception as ex:
+            print(f"  ⚠️  Failed to link MOF runtime anomalies: {ex}", file=sys.stderr)
+
+    return added
 
 
 # ── Step 2: Infer relations from indexed documents ───────
@@ -472,9 +714,76 @@ def infer() -> dict[str, Any]:  # type: ignore[no-untyped-def]
                 )
                 inferred += 1
 
+    # 5. Semantic reasoning on L0 architecture & X-axis governance checks
+    inferred += _reason_governance_rules(conn, now)
+
     conn.commit()
     conn.close()
     return {"inferred": inferred, "timestamp": now}
+
+
+def _reason_governance_rules(conn: sqlite3.Connection, now: str) -> int:
+    """结合 L0 层级架构与 X 层一致性规则进行本体推理推导"""
+    inferred = 0
+
+    # 1. L0 层级依赖冲突推导
+    layer_weights = {"L0": 0, "L1": 1, "L2": 2, "L3": 3, "L4": 4, "I0": 5, "M0": 6, "X": 7}
+
+    rows = conn.execute(
+        """SELECT r.source_id as proj, r.target_id as layer_concept 
+           FROM kos_relations r 
+           WHERE r.predicate='member_of' AND r.source_id LIKE 'J:%' AND r.target_id LIKE 'C:Layer-%'"""
+    ).fetchall()
+
+    proj_layers = {}
+    for r in rows:
+        proj = r["proj"]
+        layer_concept = r["layer_concept"]
+        layer_name = layer_concept.replace("C:Layer-", "")
+        if layer_name in layer_weights:
+            proj_layers[proj] = layer_name
+
+    dep_rows = conn.execute(
+        """SELECT source_id, predicate, target_id FROM kos_relations 
+           WHERE source_id LIKE 'J:%' AND target_id LIKE 'J:%' AND predicate != 'violates_layer_dependency'"""
+    ).fetchall()
+
+    for dep in dep_rows:
+        src = dep["source_id"]
+        tgt = dep["target_id"]
+        src_layer = proj_layers.get(src)
+        tgt_layer = proj_layers.get(tgt)
+
+        if src_layer and tgt_layer:
+            # 如果源层级优先级值低于目标层级（即逆向引用，如 L1 引用 L3），说明发生了架构设计违规！
+            if layer_weights[src_layer] < layer_weights[tgt_layer]:
+                conn.execute(
+                    """INSERT OR REPLACE INTO kos_relations
+                    (source_id,predicate,target_id,confidence,source_doc,source_type,updated_at)
+                    VALUES (?,?,?,?,?,?,?)""",
+                    (src, "violates_layer_dependency", tgt, 0.95, "ontology-rules", "reasoning", now),
+                )
+                inferred += 1
+
+    # 2. X4 规则链审计：找出所有未绑定 ADR 决策的 Axiom 规则
+    axioms = conn.execute("SELECT entity_id, label FROM kos_entities WHERE entity_type='Axiom'").fetchall()
+    for ax in axioms:
+        ax_id = ax["entity_id"]
+        has_adr = conn.execute(
+            "SELECT 1 FROM kos_relations WHERE source_id=? AND predicate='related_to' AND target_id LIKE 'D:ADR-%'",
+            (ax_id,),
+        ).fetchone()
+
+        if not has_adr:
+            conn.execute(
+                """INSERT OR REPLACE INTO kos_relations
+                (source_id,predicate,target_id,confidence,source_doc,source_type,updated_at)
+                VALUES (?,?,?,?,?,?,?)""",
+                (ax_id, "lacks_adr_evidence", "A:CR-X4-HEALTH-SSOT", 0.9, "ontology-rules", "reasoning", now),
+            )
+            inferred += 1
+
+    return inferred
 
 
 # ── Step 3: Entity card ──────────────────────────────────
@@ -638,9 +947,103 @@ def enrich() -> dict[str, Any]:  # type: ignore[no-untyped-def]
                     logger.error("Unexpected exception caught", exc_info=True)  # type: ignore[name-defined]
                     pass
 
+    # 3. Optional local LLM semantic enrichment via omlx gateway (MBP coder model)
+    llm_enriched = _enrich_with_local_llm(conn, now)
+    if llm_enriched > 0:
+        logger.info(f"Successfully enriched {llm_enriched} entities using local omlx/coder model.")
+
     conn.commit()
     conn.close()
-    return {"enriched": enriched, "timestamp": now}
+    return {"enriched": enriched + llm_enriched, "timestamp": now}
+
+
+def _enrich_with_local_llm(conn: sqlite3.Connection, now: str) -> int:
+    """利用本地 omlx 推理网关 (http://localhost:4000) 自动为缺失描述的实体进行源码及文档级语义丰富化"""
+    import urllib.request
+    import urllib.error
+
+    # 1. 快速探测本地 omlx 网关是否在线
+    gateway_url = "http://localhost:4000/v1/chat/completions"
+    try:
+        req = urllib.request.Request(
+            "http://localhost:4000/v1/models", headers={"Authorization": "Bearer sk-omlx-admin"}, method="GET"
+        )
+        with urllib.request.urlopen(req, timeout=1.0) as response:
+            if response.status != 200:
+                return 0
+    except Exception:
+        # 网关不在线，直接静默退出
+        return 0
+
+    # 2. 查找所有描述缺失或仅有默认占位描述的实体
+    query = """
+        SELECT entity_id, entity_type, label, source_file, description 
+        FROM kos_entities 
+        WHERE description IS NULL 
+           OR description = '' 
+           OR description LIKE 'Subproject in workspace%'
+        LIMIT 5
+    """
+    targets = conn.execute(query).fetchall()
+    if not targets:
+        return 0
+
+    enriched_count = 0
+    for t in targets:
+        eid = t["entity_id"]
+        etype = t["entity_type"]
+        label = t["label"]
+        src_file = t["source_file"]
+
+        context = ""
+        if src_file and Path(src_file).is_file():
+            try:
+                with open(src_file, "r", encoding="utf-8") as f:
+                    context = f.read(3000)
+            except Exception:
+                pass
+
+        prompt = f"请为实体 '{label}' (类型: {etype}) 生成一段 100 字以内的专业语义摘要。\n"
+        if context:
+            prompt += f"以下是该实体的物理源码或配置片段，请基于它进行总结，不要有虚构内容：\n\n```\n{context}\n```\n"
+        else:
+            prompt += "请直接给出该实体在软件工程或治理规范中的常规定义与定位。"
+
+        payload = {
+            "model": "coder",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "你是一个严谨的产品架构师，请用中文简明扼要地总结，直接输出结果，不要有前言和废话。",
+                },
+                {"role": "user", "content": prompt},
+            ],
+            "temperature": 0.2,
+            "max_tokens": 150,
+        }
+
+        try:
+            data = json.dumps(payload).encode("utf-8")
+            post_req = urllib.request.Request(
+                gateway_url,
+                data=data,
+                headers={"Content-Type": "application/json", "Authorization": "Bearer sk-omlx-admin"},
+                method="POST",
+            )
+            with urllib.request.urlopen(post_req, timeout=12.0) as res:
+                res_data = json.loads(res.read().decode("utf-8"))
+                choices = res_data.get("choices", [])
+                if choices:
+                    summary = choices[0].get("message", {}).get("content", "").strip()
+                    if summary:
+                        conn.execute(
+                            "UPDATE kos_entities SET description=?, updated_at=? WHERE entity_id=?", (summary, now, eid)
+                        )
+                        enriched_count += 1
+        except Exception as ex:
+            print(f"  ⚠️  Local LLM enrichment failed for {eid}: {ex}", file=sys.stderr)
+
+    return enriched_count
 
 
 def graph(entity_type: str | None = None) -> dict:
