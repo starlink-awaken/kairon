@@ -24,9 +24,11 @@ def _resolve_placeholders(val: Any) -> Any:
                 workspace_root = str(parent)
                 break
         l4_root = os.environ.get("KOS_L4_ROOT", str(Path.home() / "Documents"))
+        home_root = os.environ.get("KOS_HOME_ROOT", str(Path.home()))
 
         res = val.replace("${KOS_WORKSPACE}", workspace_root)
         res = res.replace("${KOS_L4_ROOT}", l4_root)
+        res = res.replace("${KOS_HOME_ROOT}", home_root)
         return res
     return val
 

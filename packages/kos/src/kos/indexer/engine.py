@@ -822,7 +822,9 @@ class KosIndexer:
           - additionalPaths: [str] — secondary scan roots
         """
         scan_roots = self._get_scan_roots(zone_id, zone_config)
-        exclude_prefixes = self.manifest.get("indexing", {}).get("excludePrefixes", [])
+        global_excludes = self.manifest.get("indexing", {}).get("excludePrefixes", [])
+        zone_excludes = zone_config.get("excludePrefixes", [])
+        exclude_prefixes = list(set(global_excludes + zone_excludes))
         file_patterns = zone_config.get("filePatterns", [])
         follow_symlinks = zone_config.get("followSymlinks", False)
 

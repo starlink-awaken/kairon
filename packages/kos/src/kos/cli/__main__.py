@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sqlite3
 import sys
 from pathlib import Path
@@ -293,6 +294,59 @@ def cmd_status(domain=None) -> dict[str, Any]:  # type: ignore[no-untyped-def]
     return result
 
 
+def _tokenize_search_query(query: str) -> str:
+    """Prepare a raw query string for FTS5 MATCH.
+
+    - Quoted phrases ("..." or '...') are tokenized with jieba and wrapped as
+      FTS5 phrase queries (e.g. "夏明星" -> "夏 明星") so they match the
+      tokenized indexed tokens in the correct order.
+    - Unquoted segments are tokenized with jieba and joined with OR for better
+      Chinese recall, unless they already contain explicit OR/AND operators.
+    """
+    import re
+
+    def _jieba_tokens(text: str) -> list[str]:
+        try:
+            import jieba  # type: ignore[import-untyped]
+
+            return [t.strip() for t in jieba.cut(text) if t.strip()]
+        except ImportError:
+            return [t.strip() for t in text.split() if t.strip()]
+
+    # Split on quoted segments while keeping the delimiters.
+    segments = re.split(r'''(["'][^"']*["'])''', query)
+    parts: list[str] = []
+
+    for segment in segments:
+        if not segment or not segment.strip():
+            continue
+        segment = segment.strip()
+
+        # Quoted phrase -> tokenize and wrap as FTS5 phrase query.
+        if (
+            (segment.startswith('"') and segment.endswith('"'))
+            or (segment.startswith("'") and segment.endswith("'"))
+        ) and len(segment) > 1:
+            inner = segment[1:-1].strip()
+            tokens = _jieba_tokens(inner)
+            if tokens:
+                parts.append('"' + " ".join(tokens) + '"')
+            continue
+
+        # Already contains boolean operators -> preserve as-is.
+        if " OR " in segment or " AND " in segment:
+            parts.append(segment)
+            continue
+
+        tokens = _jieba_tokens(segment)
+        if len(tokens) > 1:
+            parts.append(" OR ".join(tokens))
+        elif tokens:
+            parts.append(tokens[0])
+
+    return " ".join(parts)
+
+
 def cmd_search(  # type: ignore[no-untyped-def]
     query,
     domains=None,
@@ -317,17 +371,7 @@ def cmd_search(  # type: ignore[no-untyped-def]
         print(f"Output → {pipeline_output}")
         return result
     try:
-        # OR mode: tokenize query for better FTS5 Chinese recall
-        if " OR " not in query and " AND " not in query:
-            # Try jieba for Chinese tokenization, fallback to split for English
-            try:
-                import jieba  # type: ignore[import-untyped, reportMissingImports, unused-ignore]
-
-                tokens = list(jieba.cut(query))
-            except ImportError:
-                tokens = query.split()
-            if len(tokens) > 1:
-                query = " OR ".join(t for t in tokens if len(t.strip()) > 0)
+        query = _tokenize_search_query(query)
         db_path = _artifact_path("retrievalDatabase")
         if not db_path or not os.path.exists(str(db_path)):
             return {"error": "Retrieval database not found. Run 'kos index' first.", "results": []}
@@ -371,25 +415,87 @@ def cmd_search(  # type: ignore[no-untyped-def]
                 extra_where.append(f"d.canonical_path NOT LIKE '%{p}%'")
 
         where_clause = " AND " + " AND ".join(extra_where) if extra_where else ""
-        params.append(limit)
+        # Fetch extra results so deduplication still leaves enough matches.
+        fetch_limit = max(limit * 3, limit)
+        params.append(fetch_limit)
 
+        # Relevance boosting: CARDS and author-linked documents rank higher.
         sql = f"""
-            SELECT d.doc_id, d.title, d.kind, d.zone, d.status,
-                   d.canonical_path, d.trust_level, d.updated_at,
-                   snippet(documents_fts, 1, '<b>', '</b>', '...', 80) AS snippet
-            FROM documents_fts f
-            JOIN documents d ON f.doc_id = d.doc_id
-            WHERE documents_fts MATCH ? {where_clause}
-            ORDER BY rank
+            WITH scored AS (
+                SELECT d.doc_id, d.title, d.kind, d.zone, d.status,
+                       d.canonical_path, d.trust_level, d.updated_at,
+                       snippet(documents_fts, 1, '<b>', '</b>', '...', 80) AS snippet,
+                       f.rank AS fts_rank,
+                       CASE WHEN d.canonical_path LIKE '%CARDS/%' THEN 5.0 ELSE 0.0 END AS cards_boost,
+                       CASE
+                           WHEN d.body LIKE '%author: 夏明星%'
+                                OR d.body LIKE '%author_alias: xiamingxing%'
+                                OR d.metadata_json LIKE '%夏明星%'
+                                OR d.metadata_json LIKE '%xiamingxing%'
+                           THEN 10.0 ELSE 0.0
+                       END AS author_boost
+                FROM documents_fts f
+                JOIN documents d ON f.doc_id = d.doc_id
+                WHERE documents_fts MATCH ? {where_clause}
+            )
+            SELECT doc_id, title, kind, zone, status, canonical_path,
+                   trust_level, updated_at, snippet
+            FROM scored
+            ORDER BY (fts_rank - cards_boost - author_boost) ASC, updated_at DESC
             LIMIT ?
         """
 
         rows = conn.execute(sql, params).fetchall()
         results = [dict(r) for r in rows]
         conn.close()
+        results = _deduplicate_search_results(results)[:limit]
         return {"query": query, "results": results, "count": len(results)}
     except Exception as e:
         return {"error": str(e), "results": []}
+
+
+def _zone_priority(zone: str) -> int:
+    """Return a numeric priority for a zone; higher values rank first."""
+    if zone.startswith("docs-"):
+        return 100
+    if zone.startswith("engine-"):
+        return 80
+    if zone.startswith("config-"):
+        return 60
+    if zone.startswith("tools-"):
+        return 40
+    if zone == "workspace":
+        return 20
+    return 0
+
+
+def _deduplicate_search_results(results: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Deduplicate search results by logical document key.
+
+    CARDS-style files (IDEA-, DEBT-, TASK-, DEL-, RES- prefixes) are
+    deduplicated by their unique filename, since the same card may be indexed
+    from both docs-cockpit and project workspace zones. Non-CARDS documents
+    are kept as-is.
+    """
+    _cards_id_pattern = re.compile(r"^(IDEA|DEBT|TASK|DEL|RES)-\d{4}-\d{2}-\d{2}-\d+\.md$")
+    seen: dict[str, dict[str, Any]] = {}
+    for r in results:
+        canonical = r.get("canonical_path", "")
+        filename = canonical.rsplit("/", 1)[-1] if "/" in canonical else canonical
+        if "CARDS/" in canonical or _cards_id_pattern.match(filename):
+            key = filename
+        else:
+            key = canonical
+        existing = seen.get(key)
+        if existing is None:
+            seen[key] = r
+            continue
+        # Prefer higher-priority zone, then newer updated_at.
+        if _zone_priority(r.get("zone", "")) > _zone_priority(existing.get("zone", "")):
+            seen[key] = r
+        elif r.get("updated_at", "") > existing.get("updated_at", ""):
+            seen[key] = r
+    return list(seen.values())
 
 
 def _print_json_output(tool: str, command: str, data) -> None:  # type: ignore[no-untyped-def]

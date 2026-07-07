@@ -145,6 +145,55 @@ class TestCLIErrorHandling:
         assert r.returncode != 0
 
 
+class TestSearchQueryTokenization:
+    """Verify FTS5 query tokenization helper."""
+
+    def test_unquoted_chinese_uses_or_mode(self):
+        from kos.cli.__main__ import _tokenize_search_query
+
+        result = _tokenize_search_query("信息化平台")
+        assert "信息化" in result
+        assert "平台" in result
+        assert "OR" in result
+
+    def test_quoted_chinese_becomes_phrase(self):
+        from kos.cli.__main__ import _tokenize_search_query
+
+        result = _tokenize_search_query('"夏明星"')
+        assert result.startswith('"')
+        assert result.endswith('"')
+        assert "夏" in result
+        assert "明星" in result
+        assert "OR" not in result
+
+    def test_single_quoted_chinese_becomes_phrase(self):
+        from kos.cli.__main__ import _tokenize_search_query
+
+        result = _tokenize_search_query("'夏明星'")
+        assert result.startswith('"')
+        assert result.endswith('"')
+
+    def test_mixed_quoted_and_unquoted(self):
+        from kos.cli.__main__ import _tokenize_search_query
+
+        result = _tokenize_search_query('"夏明星" card')
+        assert '"' in result
+        assert "card" in result
+        # Quoted part is phrase, unquoted part is OR-joined if multi-token
+
+    def test_existing_boolean_operators_preserved(self):
+        from kos.cli.__main__ import _tokenize_search_query
+
+        result = _tokenize_search_query("信息化 OR 平台")
+        assert "信息化 OR 平台" in result
+
+    def test_english_single_token_unchanged(self):
+        from kos.cli.__main__ import _tokenize_search_query
+
+        result = _tokenize_search_query("xiamingxing")
+        assert result == "xiamingxing"
+
+
 class TestCLIOnto:
     """Verify ontology command integration."""
 
