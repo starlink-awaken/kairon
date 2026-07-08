@@ -69,7 +69,7 @@ class LLMConfig:
 
 @dataclass
 class SearchConfig:
-    searxng_url: str = "http://localhost:8080"
+    searxng_url: str = f"http://localhost:{os.environ.get('ONTODERIVE_WEB_PORT', '8080')}"
     exa_api_key: str | None = None
     jina_api_key: str | None = None
     metaso_api_key: str | None = None
@@ -172,7 +172,7 @@ class MinervaConfig:
             )
         if "search" in tier1:
             s = tier1["search"].get("searxng", {})
-            config.search.searxng_url = s.get("base_url", "http://localhost:8080")
+            config.search.searxng_url = s.get("base_url", f"http://localhost:{os.environ.get('ONTODERIVE_WEB_PORT', '8080')}")
         if "knowledge" in tier1:
             k = tier1["knowledge"]
             config.knowledge = KnowledgeConfig(
