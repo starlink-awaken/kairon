@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 # ruff: noqa
 """
-KOS MCP Server v1.2 — Knowledge Operating System via Model Context Protocol
+KOS MCP Server v1.4 — Knowledge Operating System via Model Context Protocol
 
-13 tools: search_knowledge, get_knowledge, get_system_status, list_domains,
+19 tools: search_knowledge, get_knowledge, get_system_status, list_domains,
          cross_domain_sync, get_entity, search_entity, ontology_rebuild,
-         ontology_graph, run_indexer, full_sync, research_now, semantic_search
+         ontology_graph, run_indexer, full_sync, research_now, semantic_search,
+         build_context, verify_claim, memory_stats, get_stats, subscribe_topic,
+         check_subscription, get_entity_timeline
 """
 
 import json
@@ -17,6 +19,8 @@ import threading
 from datetime import datetime
 from pathlib import Path
 from typing import Any, cast
+
+from kos.db import get_connection
 
 # ── Path setup ──────────────────────────────────────────
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -174,8 +178,7 @@ def tool_search_knowledge(  # type: ignore[no-untyped-def]
         db_path = get_artifact_path("retrievalDatabase")
         if not Path(str(db_path)).exists():
             return {"error": "Retrieval database not found", "results": [], "count": 0}
-        conn = sqlite3.connect(str(db_path))
-        conn.row_factory = sqlite3.Row
+        conn = get_connection(str(db_path))
         exclude_clause = ""
         if not include_templates:
             manifest = get_workspace_manifest()
@@ -640,6 +643,138 @@ def tool_semantic_scholar(query: str, limit: int = 5) -> dict[str, Any]:  # type
     return _get_s2().search(query, limit=limit)  # type: ignore[no-untyped-call]
 
 
+# ── Context Engine MCP Tools ─────────────────────────────
+
+
+def tool_build_context(query: str, mode: str = "balanced", persona: str = "", max_tokens: int = 0) -> dict:
+    """Build LLM-ready context from knowledge base with budget control."""
+    try:
+        from kos.context_engine import ContextEngine
+        engine = ContextEngine()
+        ctx = engine.build_context(
+            query,
+            mode=mode if mode in ContextEngine.MODES else "balanced",
+            persona=persona or None,
+            max_tokens=max_tokens if max_tokens > 0 else None,
+        )
+        engine.close()
+
+        # Add formatted prompt
+        ctx["prompt"] = engine._format_prompt(ctx)
+        return ctx
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def tool_verify_claim(claim: str) -> dict:
+    """Verify a claim against the knowledge base. Returns supporting/contradicting evidence."""
+    try:
+        from kos.hybrid_search import HybridSearchEngine
+        engine = HybridSearchEngine()
+        result = engine.search(claim, mode="hybrid", limit=10)
+        engine.close()
+
+        evidence = []
+        for r in result.get("results", []):
+            snippet = r.get("snippet", "")
+            evidence.append({
+                "title": r.get("title", ""),
+                "snippet": snippet[:300] if snippet else "",
+                "source": r.get("source", ""),
+                "canonical_path": r.get("canonical_path", ""),
+            })
+
+        return {
+            "claim": claim,
+            "evidence_count": len(evidence),
+            "evidence": evidence,
+            "verdict": "supported" if len(evidence) >= 3 else ("partial" if len(evidence) >= 1 else "no_evidence"),
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def tool_memory_stats() -> dict:
+    """Get memory tier statistics (session/history/ontology)."""
+    try:
+        from kos.memory_tier import MemoryTier
+        memory = MemoryTier()
+        stats = memory.get_stats()
+        memory.clear_session()
+        return stats
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def tool_get_stats() -> dict:
+    """Get quick knowledge base statistics."""
+    try:
+        conn = get_connection()
+        stats = {
+            "documents": conn.execute("SELECT COUNT(*) FROM documents").fetchone()[0],
+            "entities": conn.execute("SELECT COUNT(*) FROM kos_entities").fetchone()[0],
+            "relations": conn.execute("SELECT COUNT(*) FROM kos_relations").fetchone()[0],
+            "domains": conn.execute("SELECT COUNT(DISTINCT zone) FROM documents").fetchone()[0],
+        }
+        conn.close()
+        return stats
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def tool_subscribe_topic(topic: str, subscriber_id: str = "mcp-agent") -> dict:
+    """Subscribe to a topic for new document notifications."""
+    try:
+        from kos.agent.subscription import SubscriptionService
+        service = SubscriptionService()
+        service.init_table(get_artifact_path("retrievalDatabase"))
+        return service.subscribe(topic, subscriber_id)
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def tool_check_subscription(sub_id: str) -> dict:
+    """Check a subscription for new matches."""
+    try:
+        from kos.agent.subscription import SubscriptionService
+        service = SubscriptionService()
+        return service.check_matches(sub_id)
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def tool_get_entity_timeline(entity_id: str) -> dict:
+    """Get entity timeline (related documents sorted by date)."""
+    try:
+        conn = get_connection()
+        rows = conn.execute("""
+            SELECT d.title, d.zone, d.canonical_path, d.created_at, d.updated_at, ed.relevance
+            FROM kos_entity_docs ed
+            JOIN documents d ON ed.doc_id = d.doc_id
+            WHERE ed.entity_id = ?
+            ORDER BY d.updated_at DESC LIMIT 20
+        """, (entity_id,)).fetchall()
+        conn.close()
+
+        return {
+            "entity_id": entity_id,
+            "total_docs": len(rows),
+            "timeline": [
+                {
+                    "title": r["title"],
+                    "zone": r["zone"],
+                    "canonical_path": r["canonical_path"],
+                    "created_at": r["created_at"],
+                    "updated_at": r["updated_at"],
+                    "relevance": r["relevance"],
+                }
+                for r in rows
+            ],
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+
 # ── MCP Server main loop ─────────────────────────────────
 
 
@@ -866,6 +1001,68 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
                 "required": ["query"],
             },
         },
+        "build_context": {
+            "description": "Build LLM-ready context from knowledge base with budget control. Returns formatted prompt with relevant knowledge.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Query to build context for"},
+                    "mode": {"type": "string", "description": "Context mode: concise|balanced|detailed (default: balanced)", "default": "balanced"},
+                    "persona": {"type": "string", "description": "Persona/role for context (e.g. '架构师')"},
+                    "max_tokens": {"type": "integer", "description": "Max token budget (default: 0=auto)", "default": 0},
+                },
+                "required": ["query"],
+            },
+        },
+        "verify_claim": {
+            "description": "Verify a claim against the knowledge base. Returns supporting/contradicting evidence.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "claim": {"type": "string", "description": "Claim to verify"},
+                },
+                "required": ["claim"],
+            },
+        },
+        "memory_stats": {
+            "description": "Get memory tier statistics (session queries, search history, popular queries).",
+            "inputSchema": {"type": "object", "properties": {}, "required": []},
+        },
+        "get_stats": {
+            "description": "Get quick knowledge base statistics (documents, entities, relations, domains).",
+            "inputSchema": {"type": "object", "properties": {}, "required": []},
+        },
+        "subscribe_topic": {
+            "description": "Subscribe to a topic. New matching documents will be available via check_subscription.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "topic": {"type": "string", "description": "Topic/keyword to subscribe to"},
+                    "subscriber_id": {"type": "string", "description": "Subscriber identifier (default: mcp-agent)", "default": "mcp-agent"},
+                },
+                "required": ["topic"],
+            },
+        },
+        "check_subscription": {
+            "description": "Check a subscription for new matching documents since last check.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "sub_id": {"type": "string", "description": "Subscription ID"},
+                },
+                "required": ["sub_id"],
+            },
+        },
+        "get_entity_timeline": {
+            "description": "Get entity timeline (related documents sorted by date).",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "entity_id": {"type": "string", "description": "Entity ID (e.g. P:xia-mingxing)"},
+                },
+                "required": ["entity_id"],
+            },
+        },
     }
 
     TOOLS.update(SELF_TOOLS)
@@ -913,6 +1110,15 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
                 ),
                 "semantic_search": lambda: tool_semantic_search(a.get("query", ""), a.get("limit", 10)),
                 "semantic_scholar": lambda: tool_semantic_scholar(a.get("query", ""), a.get("limit", 5)),
+                "build_context": lambda: tool_build_context(
+                    a.get("query", ""), a.get("mode", "balanced"), a.get("persona", ""), a.get("max_tokens", 0)
+                ),
+                "verify_claim": lambda: tool_verify_claim(a.get("claim", "")),
+                "memory_stats": tool_memory_stats,
+                "get_stats": tool_get_stats,
+                "subscribe_topic": lambda: tool_subscribe_topic(a.get("topic", ""), a.get("subscriber_id", "mcp-agent")),
+                "check_subscription": lambda: tool_check_subscription(a.get("sub_id", "")),
+                "get_entity_timeline": lambda: tool_get_entity_timeline(a.get("entity_id", "")),
                 "self.get_profile": lambda: SELF_HANDLERS["self.get_profile"](),
                 "self.get_current_role": lambda: SELF_HANDLERS["self.get_current_role"](a),
                 "self.get_vision_summary": lambda: SELF_HANDLERS["self.get_vision_summary"](),
