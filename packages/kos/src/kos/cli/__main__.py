@@ -190,6 +190,29 @@ def _format_search_table(data: dict):  # type: ignore[no-untyped-def, type-arg]
         by_zone.setdefault(r["zone"], []).append(r)
 
     zone_labels = {
+        "workspace": "📂 Workspace 项目代码",
+        "docs-cockpit": "🔴 驾驶舱",
+        "docs-learning": "🟡 学习进化",
+        "docs-work": "💼 工作文档",
+        "docs-work-weijian": "🏥 卫健委",
+        "docs-work-guozhuan": "🔄 国转中心",
+        "docs-personal": "🟢 个人",
+        "docs-creative": "🎨 创意创作",
+        "docs-public": "🌐 公共",
+        "docs-family": "🏠 家庭生活",
+        "docs-obsidian-vault": "📝 Obsidian Vault",
+        "docs-opc": "⚙️ OPC",
+        "config-ai": "⚙️ ~/.ai 配置",
+        "config-agents": "🤖 ~/.agents 配置",
+        "config-icloud-sharedconf": "☁️ SharedConf",
+        "engine-minerva": "🔬 Minerva 引擎",
+        "engine-knowledge-engine": "🧠 Knowledge 引擎",
+        "engine-l4-kernel": "🧬 L4 Kernel",
+        "tools-bin": "🧰 ~/bin",
+        "tools-toolbox": "🧰 ~/ToolBox",
+        "workspace-spaces": "🌌 Spaces",
+        "workspace-runtime": "⏱️ Runtime Data",
+        "omo": "📋 OMO 治理层",
         "gongwen": "📂 公文",
         "guozhuan": "📂 国转中心",
         "obsidian": "📂 Obsidian",
@@ -419,7 +442,7 @@ def cmd_search(  # type: ignore[no-untyped-def]
         fetch_limit = max(limit * 3, limit)
         params.append(fetch_limit)
 
-        # Relevance boosting: CARDS and author-linked documents rank higher.
+        # Relevance boosting: CARDS, author-linked, and entity-linked documents rank higher.
         sql = f"""
             WITH scored AS (
                 SELECT d.doc_id, d.title, d.kind, d.zone, d.status,
@@ -433,7 +456,15 @@ def cmd_search(  # type: ignore[no-untyped-def]
                                 OR d.metadata_json LIKE '%夏明星%'
                                 OR d.metadata_json LIKE '%xiamingxing%'
                            THEN 10.0 ELSE 0.0
-                       END AS author_boost
+                       END AS author_boost,
+                       CASE WHEN EXISTS (
+                           SELECT 1 FROM kos_entity_docs ed WHERE ed.doc_id = d.doc_id
+                       ) THEN 3.0 ELSE 0.0 END AS entity_boost,
+                       CASE
+                           WHEN d.updated_at >= date('now', '-7 days') THEN 2.0
+                           WHEN d.updated_at >= date('now', '-30 days') THEN 1.0
+                           ELSE 0.0
+                       END AS freshness_boost
                 FROM documents_fts f
                 JOIN documents d ON f.doc_id = d.doc_id
                 WHERE documents_fts MATCH ? {where_clause}
@@ -441,7 +472,7 @@ def cmd_search(  # type: ignore[no-untyped-def]
             SELECT doc_id, title, kind, zone, status, canonical_path,
                    trust_level, updated_at, snippet
             FROM scored
-            ORDER BY (fts_rank - cards_boost - author_boost) ASC, updated_at DESC
+            ORDER BY (fts_rank - cards_boost - author_boost - entity_boost - freshness_boost) ASC, updated_at DESC
             LIMIT ?
         """
 
@@ -635,6 +666,19 @@ def main() -> None:
     p_search.add_argument("--templates", action="store_true", help="Include template/reference documents")
     p_search.add_argument("--web", action="store_true", help="Search via Minerva web backends (8 engines)")
     p_search.add_argument("--semantic", action="store_true", help="Hybrid semantic search (LanceDB + FTS5)")
+    p_search.add_argument(
+        "--mode",
+        choices=["keyword", "semantic", "graph", "hybrid"],
+        default=None,
+        help="Search mode: keyword/semantic/graph/hybrid (default: hybrid if --semantic, else keyword)",
+    )
+    p_search.add_argument(
+        "--context-mode",
+        choices=["concise", "balanced", "detailed"],
+        default="balanced",
+        help="Context mode for result compression (default: balanced)",
+    )
+    p_search.add_argument("--no-cache", action="store_true", help="Bypass cache")
     p_search.add_argument("--pipeline-input", help=argparse.SUPPRESS)
     p_search.add_argument("--pipeline-output", help=argparse.SUPPRESS)
     p_search.add_argument(
@@ -655,6 +699,86 @@ def main() -> None:
         help="Pipeline level: L0=30s/$0, L1=3min/$0, L2=10min/~$0.30, L3=20min/~$2 (default: auto)",
     )
     p_research.add_argument("--max-cost", type=float, default=1.0, help="Max cost in USD (default: 1.0)")
+
+    # suggest
+    p_suggest = sub.add_parser("suggest", help="Search suggestions based on indexed terms")
+    p_suggest.add_argument("prefix", help="Partial search term")
+    p_suggest.add_argument("--limit", type=int, default=8, help="Max suggestions (default: 8)")
+
+    # related
+    p_related = sub.add_parser("related", help="Related searches based on entity co-occurrence")
+    p_related.add_argument("query", help="Current search query")
+    p_related.add_argument("--limit", type=int, default=6, help="Max related queries (default: 6)")
+
+    # history
+    p_history = sub.add_parser("history", help="Search history management")
+    p_history.add_argument(
+        "action",
+        choices=["list", "add", "clear", "popular"],
+        default="list",
+        nargs="?",
+        help="Action: list/add/clear/popular (default: list)",
+    )
+    p_history.add_argument("--query", help="Query to add (for 'add' action)")
+
+    # monitor
+    p_monitor = sub.add_parser("monitor", help="System monitoring and health checks")
+    p_monitor.add_argument(
+        "action",
+        choices=["health", "quality", "performance", "full"],
+        default="full",
+        nargs="?",
+        help="Action: health/quality/performance/full (default: full)",
+    )
+
+    # context
+    p_context = sub.add_parser("context", help="Build LLM-ready context with budget control")
+    p_context.add_argument("query", help="Query to build context for")
+    p_context.add_argument(
+        "--mode", default="balanced", choices=["concise", "balanced", "detailed"],
+        help="Context mode (default: balanced)",
+    )
+    p_context.add_argument("--persona", help="Persona/role for context")
+    p_context.add_argument("--max-tokens", type=int, help="Max token budget")
+    p_context.add_argument("--prompt", action="store_true", help="Output as formatted prompt")
+
+    # memory
+    p_memory = sub.add_parser("memory", help="Memory tier management")
+    p_memory.add_argument(
+        "action",
+        choices=["history", "popular", "stats", "clear"],
+        default="stats",
+        nargs="?",
+        help="Action: history/popular/stats/clear (default: stats)",
+    )
+    p_memory.add_argument("--limit", type=int, default=10, help="Max entries")
+
+    # evolve
+    p_evolve = sub.add_parser("evolve", help="Ontology evolution: deduplicate, normalize, detect issues")
+    p_evolve.add_argument(
+        "action",
+        choices=["evolve", "stats", "recommend"],
+        default="stats",
+        nargs="?",
+        help="Action: evolve/stats/recommend (default: stats)",
+    )
+
+    # multimodal
+    p_multimodal = sub.add_parser("multimodal", help="Process image/audio/video files into searchable content")
+    p_multimodal.add_argument("path", help="File or directory to process")
+    p_multimodal.add_argument("--zone", default="multimodal", help="Target knowledge zone")
+    p_multimodal.add_argument("--recursive", action="store_true", help="Process directory recursively")
+    p_multimodal.add_argument("--formats", action="store_true", help="Show supported formats")
+
+    # cache
+    p_cache = sub.add_parser("cache", help="Search cache management")
+    p_cache.add_argument(
+        "action",
+        choices=["stats", "clear", "benchmark"],
+        default="stats",
+        nargs="?",
+        help="Action: stats/clear/benchmark (default: stats)",
+    )
 
     # ingest
     p_ingest = sub.add_parser("ingest", help="Scan a directory and index Markdown/JSON/TXT files")
@@ -711,38 +835,47 @@ def main() -> None:
         if getattr(args, "web", False):
             result = cmd_search_web(args.query, limit=getattr(args, "limit", 10))
             if result.get("error"):
-                print(RED(f"\n  Error: {result['error']}\n"), file=sys.stderr)  # type: ignore[no-untyped-call]
+                print(RED(f"\n  Error: {result['error']}\n"), file=sys.stderr)
                 sys.exit(1)
             _format_search_table(result)
             return
-        if getattr(args, "semantic", False):
-            # Hybrid semantic search via LanceDB + FTS5
-            import subprocess as sp
 
-            r2 = sp.run(
-                [
-                    sys.executable,
-                    str(SCRIPT_DIR / "kos-semantic.py"),
-                    "hybrid",
-                    args.query,
-                    "--limit",
-                    str(getattr(args, "limit", 10)),
-                ],
-                capture_output=True,
-                text=True,
-                timeout=30,
+        # Determine search mode
+        search_mode = getattr(args, "mode", None)
+        if search_mode is None:
+            if getattr(args, "semantic", False):
+                search_mode = "hybrid"
+            else:
+                search_mode = "keyword"
+
+        # Use HybridSearchEngine for semantic/graph/hybrid modes
+        if search_mode in ("semantic", "graph", "hybrid"):
+            from kos.hybrid_search import HybridSearchEngine
+            engine = HybridSearchEngine()
+            result = engine.search(
+                args.query,
+                mode=search_mode,
+                limit=getattr(args, "limit", 10),
+                context={"mode": getattr(args, "context_mode", "balanced")},
+                use_cache=not getattr(args, "no_cache", False),
             )
-            if r2.returncode == 0:
-                result = json.loads(r2.stdout)
-                if result.get("error"):
-                    print(RED(f"\n  Error: {result['error']}\n"), file=sys.stderr)  # type: ignore[no-untyped-call]
-                    sys.exit(1)
+            engine.close()
+            if result.get("error"):
+                print(RED(f"\n  Error: {result['error']}\n"), file=sys.stderr)
+                sys.exit(1)
+            fmt = "json" if json_output else getattr(args, "format", "table")
+            if json_output or fmt == "json":
+                _print_json_output("kos", "search", result)
+                return
+            if fmt == "table":
                 _format_search_table(result)
                 return
-            else:
-                print(RED("\n  Error: Semantic search failed. Run 'kos-semantic build' first.\n"), file=sys.stderr)  # type: ignore[no-untyped-call]
-                sys.exit(1)
-        result = cmd_search(  # type: ignore[no-untyped-call]
+            elif fmt == "md":
+                _format_search_md(result)
+                return
+
+        # Keyword-only mode: use original cmd_search
+        result = cmd_search(
             args.query,
             domains=getattr(args, "domains", None),
             limit=getattr(args, "limit", 10),
@@ -832,6 +965,110 @@ def main() -> None:
             print(result["graph"])
         else:
             print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+    elif args.command == "suggest":
+        from kos.search_features import SearchFeatures
+        features = SearchFeatures()
+        result = features.suggest(args.prefix, limit=getattr(args, "limit", 8))
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+    elif args.command == "related":
+        from kos.search_features import SearchFeatures
+        features = SearchFeatures()
+        result = features.related(args.query, limit=getattr(args, "limit", 6))
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+    elif args.command == "history":
+        from kos.search_features import SearchFeatures
+        features = SearchFeatures()
+        result = features.history(
+            action=getattr(args, "action", "list"),
+            query=getattr(args, "query", None),
+        )
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+    elif args.command == "monitor":
+        from kos.monitoring import KosMonitor
+        monitor = KosMonitor()
+        action = getattr(args, "action", "full")
+        if action == "health":
+            result = monitor.index_health()
+        elif action == "quality":
+            result = monitor.search_quality()
+        elif action == "performance":
+            result = monitor.performance_metrics()
+        else:
+            result = monitor.full_report()
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+    elif args.command == "context":
+        from kos.context_engine import ContextEngine
+        engine = ContextEngine()
+        result = engine.build_context(
+            args.query,
+            mode=getattr(args, "mode", "balanced"),
+            persona=getattr(args, "persona", None),
+            max_tokens=getattr(args, "max_tokens", None),
+        )
+        if getattr(args, "prompt", False):
+            print(engine._format_prompt(result))
+        else:
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+        engine.close()
+        return
+    elif args.command == "memory":
+        from kos.memory_tier import MemoryTier
+        memory = MemoryTier()
+        action = getattr(args, "action", "stats")
+        if action == "history":
+            result = memory.get_history(limit=getattr(args, "limit", 10))
+        elif action == "popular":
+            result = memory.get_popular(limit=getattr(args, "limit", 10))
+        elif action == "clear":
+            result = memory.clear_history()
+        else:
+            result = memory.get_stats()
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+    elif args.command == "cache":
+        from kos.cache import SearchCache
+        cache = SearchCache()
+        action = getattr(args, "action", "stats")
+        if action == "clear":
+            cache.clear_all()
+            result = {"status": "cleared"}
+        elif action == "benchmark":
+            result = cache.benchmark()
+        else:
+            result = cache.get_stats()
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+    elif args.command == "evolve":
+        from kos.ontology.evolution import OntologyEvolution
+        evo = OntologyEvolution()
+        action = getattr(args, "action", "stats")
+        if action == "evolve":
+            result = evo.evolve()
+        elif action == "recommend":
+            result = evo.get_recommendations()
+        else:
+            result = evo.get_stats()
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+    elif args.command == "multimodal":
+        from kos.multimodal import MultimodalProcessor
+        processor = MultimodalProcessor()
+        if getattr(args, "formats", False):
+            result = processor.supported_formats
+        else:
+            path = Path(args.path)
+            if path.is_file():
+                result = processor.process_file(path, zone=args.zone)
+            elif path.is_dir():
+                result = processor.process_directory(path, zone=args.zone, recursive=args.recursive)
+            else:
+                result = {"error": f"Path not found: {path}"}
+        print(json.dumps(result, ensure_ascii=False, indent=2))
         return
     else:
         parser.print_help()

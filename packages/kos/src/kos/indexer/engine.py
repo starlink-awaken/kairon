@@ -38,6 +38,30 @@ from kos._default_workspace_config import get_artifact_path, get_workspace_manif
 # ── Chinese tokenizer (jieba) ──────────────────────────
 
 _jieba = None
+_USERDICT_LOADED = False
+
+
+def _get_jieba_userdict_path() -> Path | None:
+    """Return the path to the KOS jieba user dictionary, if bundled."""
+    candidate = Path(__file__).with_suffix("").parent / "data" / "jieba_userdict.txt"
+    return candidate if candidate.exists() else None
+
+
+def _load_jieba_userdict() -> None:
+    """Load the bundled user dictionary into jieba once per process."""
+    global _USERDICT_LOADED
+    if _USERDICT_LOADED:
+        return
+    dict_path = _get_jieba_userdict_path()
+    if dict_path is None:
+        _USERDICT_LOADED = True
+        return
+    try:
+        import jieba
+        jieba.load_userdict(str(dict_path))
+    except Exception:
+        pass
+    _USERDICT_LOADED = True
 
 
 def _tokenize_cn(text: str) -> str:
@@ -49,9 +73,9 @@ def _tokenize_cn(text: str) -> str:
     global _jieba
     if _jieba is None:
         try:
-            import jieba  # type: ignore[import-untyped]
-
+            import jieba
             _jieba = jieba
+            _load_jieba_userdict()
         except ImportError:
             return text  # jieba not installed, fallback to raw text
     # Tokenize: join words with spaces so FTS5 sees them as tokens
@@ -653,7 +677,42 @@ class KosIndexer:
         conn.execute("PRAGMA journal_mode=WAL")
         conn.execute("PRAGMA busy_timeout=5000")
         conn.execute("PRAGMA synchronous=NORMAL")
+        conn.execute("PRAGMA cache_size=-64000")  # 64MB cache
+        conn.execute("PRAGMA temp_store=MEMORY")
         return conn
+
+    def _batch_write(self, conn: sqlite3.Connection, pending: list[dict]) -> None:
+        """Write a batch of processed files to the database in a single transaction."""
+        cursor = conn.cursor()
+        doc_cols = [
+            "doc_id", "title", "kind", "zone", "status", "source", "owner",
+            "created_at", "updated_at", "trust_level", "freshness", "review_status",
+            "schema_version", "canonical_path", "source_url", "write_policy",
+            "metadata_json", "body", "file_size", "file_mtime",
+        ]
+        doc_sql = f"INSERT INTO documents VALUES ({','.join(['?'] * len(doc_cols))})"
+        fts_sql = "INSERT INTO documents_fts (doc_id,title,body,tags,canonical_path) VALUES (?,?,?,?,?)"
+        fp_sql = """INSERT OR REPLACE INTO file_fingerprints
+                    (canonical_path,zone,sha256_hash,file_size,file_mtime,last_indexed,absent_since,file_format)
+                    VALUES (?,?,?,?,?,?,NULL,?)"""
+        
+        cursor.execute("BEGIN TRANSACTION")
+        try:
+            for r in pending:
+                d = r["doc"]
+                doc_id = d["doc_id"]
+                # Delete old records first
+                cursor.execute("DELETE FROM documents WHERE doc_id=?", (doc_id,))
+                cursor.execute("DELETE FROM documents_fts WHERE doc_id=?", (doc_id,))
+                # Insert new records
+                cursor.execute(doc_sql, tuple(d[k] for k in doc_cols))
+                cursor.execute(fts_sql, (d["doc_id"], d["title"], d["body"], "", d["canonical_path"]))
+                fp = r["fingerprint"]
+                cursor.execute(fp_sql, fp)
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
 
     def _init_schema(self, conn) -> None:  # type: ignore[no-untyped-def]
         conn.executescript("""
@@ -788,6 +847,23 @@ class KosIndexer:
             return "ERROR"
         h.update(str(file_path.stat().st_size).encode())
         return h.hexdigest()
+
+    def _quick_unchanged_check(self, file_path: Path, existing_hash: str | None) -> bool:
+        """Fast check if file is unchanged using mtime + size (avoids SHA-256).
+        
+        Returns True if the file is definitely unchanged, False if uncertain.
+        """
+        if not existing_hash:
+            return False
+        try:
+            stat = file_path.stat()
+            fmtime = datetime.fromtimestamp(stat.st_mtime).strftime("%Y%m%d%H%M%S")
+            # Quick check: if mtime and size match, file is likely unchanged
+            # The existing_hash contains SHA-256, but we can use mtime as a proxy
+            # since the fingerprint also stores mtime
+            return False  # Still need hash for certainty, but we can optimize later
+        except Exception:
+            return False
 
     def _get_indexing_strategy(self, zone_id: str, relative_path: str) -> str:
         """Determine indexing strategy for a file path within a zone."""
@@ -955,52 +1031,9 @@ class KosIndexer:
                             flush=True,
                         )
 
-                    # Batch-write to DB
+                    # Batch-write to DB (use single transaction)
                     if len(pending) >= batch_size or (completed == total and pending):
-                        for r in pending:
-                            conn.execute("DELETE FROM documents WHERE doc_id=?", (r["doc"]["doc_id"],))
-                            conn.execute("DELETE FROM documents_fts WHERE doc_id=?", (r["doc"]["doc_id"],))
-                            d = r["doc"]
-                            conn.execute(
-                                """INSERT INTO documents VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
-                                tuple(
-                                    d[k]
-                                    for k in [
-                                        "doc_id",
-                                        "title",
-                                        "kind",
-                                        "zone",
-                                        "status",
-                                        "source",
-                                        "owner",
-                                        "created_at",
-                                        "updated_at",
-                                        "trust_level",
-                                        "freshness",
-                                        "review_status",
-                                        "schema_version",
-                                        "canonical_path",
-                                        "source_url",
-                                        "write_policy",
-                                        "metadata_json",
-                                        "body",
-                                        "file_size",
-                                        "file_mtime",
-                                    ]
-                                ),
-                            )
-                            conn.execute(
-                                "INSERT INTO documents_fts (doc_id,title,body,tags,canonical_path) VALUES (?,?,?,?,?)",
-                                (d["doc_id"], d["title"], d["body"], "", d["canonical_path"]),
-                            )
-                            fp = r["fingerprint"]
-                            conn.execute(
-                                """INSERT OR REPLACE INTO file_fingerprints
-                                (canonical_path,zone,sha256_hash,file_size,file_mtime,last_indexed,absent_since,file_format)
-                                VALUES (?,?,?,?,?,?,NULL,?)""",
-                                fp,
-                            )
-                        conn.commit()
+                        self._batch_write(conn, pending)
                         pending.clear()
 
             print(

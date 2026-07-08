@@ -160,6 +160,10 @@ def get_db() -> sqlite3.Connection:  # type: ignore[no-untyped-def]
     conn = sqlite3.connect(str(path))
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA busy_timeout=5000")
+    conn.execute("PRAGMA synchronous=NORMAL")
+    conn.execute("PRAGMA cache_size=-64000")  # 64MB cache
+    conn.execute("PRAGMA temp_store=MEMORY")
     return conn
 
 
@@ -923,6 +927,28 @@ def card(entity_id: str) -> dict[str, Any]:  # type: ignore[no-untyped-def]
         (entity_id,),
     ).fetchall()
 
+    # Enhanced: Document list (top 20 most relevant)
+    doc_list = conn.execute(
+        """SELECT d.doc_id, d.title, d.zone, d.canonical_path, d.updated_at, ed.relevance
+           FROM kos_entity_docs ed JOIN documents d ON ed.doc_id=d.doc_id
+           WHERE ed.entity_id=? ORDER BY ed.relevance DESC, d.updated_at DESC LIMIT 20""",
+        (entity_id,),
+    ).fetchall()
+
+    # Enhanced: Entity graph (all entities within 2 hops)
+    entity_graph = _entity_graph_2hop(conn, entity_id)
+
+    # Enhanced: Related entities (co-occurring in same docs)
+    related_entities = conn.execute(
+        """SELECT e2.entity_id, e2.label, e2.entity_type, COUNT(*) as shared_docs
+           FROM kos_entity_docs ed1
+           JOIN kos_entity_docs ed2 ON ed1.doc_id = ed2.doc_id AND ed1.entity_id != ed2.entity_id
+           JOIN kos_entities e2 ON ed2.entity_id = e2.entity_id
+           WHERE ed1.entity_id = ?
+           GROUP BY e2.entity_id ORDER BY shared_docs DESC LIMIT 10""",
+        (entity_id,),
+    ).fetchall()
+
     conn.close()
 
     return {
@@ -940,6 +966,72 @@ def card(entity_id: str) -> dict[str, Any]:  # type: ignore[no-untyped-def]
         ],
         "document_zones": {r["zone"]: r["cnt"] for r in doc_zones},
         "total_docs": sum(r["cnt"] for r in doc_zones),
+        # Enhanced fields
+        "documents": [
+            {
+                "doc_id": d["doc_id"],
+                "title": d["title"],
+                "zone": d["zone"],
+                "canonical_path": d["canonical_path"],
+                "updated_at": d["updated_at"],
+                "relevance": d["relevance"],
+            }
+            for d in doc_list
+        ],
+        "entity_graph": entity_graph,
+        "related_entities": [
+            {"entity_id": r["entity_id"], "label": r["label"], "type": r["entity_type"], "shared_docs": r["shared_docs"]}
+            for r in related_entities
+        ],
+    }
+
+
+def _entity_graph_2hop(conn: sqlite3.Connection, entity_id: str) -> dict[str, Any]:
+    """Get the entity graph within 2 hops of the given entity."""
+    # Direct neighbors (1 hop)
+    neighbors_1 = conn.execute(
+        """SELECT DISTINCT target_id as entity_id FROM kos_relations WHERE source_id = ?
+           UNION
+           SELECT DISTINCT source_id as entity_id FROM kos_relations WHERE target_id = ?""",
+        (entity_id, entity_id),
+    ).fetchall()
+    
+    neighbor_ids = {r["entity_id"] for r in neighbors_1}
+    neighbor_ids.add(entity_id)
+    
+    # 2-hop neighbors
+    if neighbor_ids:
+        placeholders = ",".join(["?"] * len(neighbor_ids))
+        neighbors_2 = conn.execute(
+            f"""SELECT DISTINCT target_id as entity_id FROM kos_relations 
+                WHERE source_id IN ({placeholders}) AND target_id NOT IN ({placeholders})
+                UNION
+                SELECT DISTINCT source_id as entity_id FROM kos_relations 
+                WHERE target_id IN ({placeholders}) AND source_id NOT IN ({placeholders})""",
+            list(neighbor_ids) * 4,
+        ).fetchall()
+        for r in neighbors_2:
+            neighbor_ids.add(r["entity_id"])
+    
+    # Get all entities and relations in the graph
+    if not neighbor_ids:
+        return {"nodes": [], "edges": []}
+    
+    placeholders = ",".join(["?"] * len(neighbor_ids))
+    nodes = conn.execute(
+        f"SELECT entity_id, entity_type, label FROM kos_entities WHERE entity_id IN ({placeholders})",
+        list(neighbor_ids),
+    ).fetchall()
+    
+    edges = conn.execute(
+        f"""SELECT source_id, predicate, target_id FROM kos_relations 
+            WHERE source_id IN ({placeholders}) AND target_id IN ({placeholders})""",
+        list(neighbor_ids) * 2,
+    ).fetchall()
+    
+    return {
+        "nodes": [{"id": n["entity_id"], "type": n["entity_type"], "label": n["label"]} for n in nodes],
+        "edges": [{"source": e["source_id"], "predicate": e["predicate"], "target": e["target_id"]} for e in edges],
     }
 
 
@@ -974,7 +1066,107 @@ def find_path(from_id: str, to_id: str) -> dict[str, Any] | None:  # type: ignor
 # ── Step 5: Discover implicit connections ────────────────
 
 
-def discover() -> dict[str, Any]:  # type: ignore[no-untyped-def]
+def deduplicate_entities() -> dict[str, Any]:
+    """Merge duplicate entities based on label similarity.
+    
+    Returns:
+        Dict with merge results.
+    """
+    conn = get_db()  # type: ignore[no-untyped-call]
+    init_schema(conn)  # type: ignore[no-untyped-call]
+    
+    # Find entities with duplicate labels (case-insensitive)
+    duplicates = conn.execute("""
+        SELECT LOWER(label) as low_label, COUNT(*) as cnt,
+               GROUP_CONCAT(entity_id, '|||') as ids,
+               GROUP_CONCAT(entity_type, '|||') as types
+        FROM kos_entities
+        GROUP BY LOWER(label)
+        HAVING cnt > 1
+    """).fetchall()
+    
+    merged = 0
+    for dup in duplicates:
+        ids = dup["ids"].split("|||")
+        types = dup["types"].split("|||")
+        # Keep the first entity, merge others into it
+        canonical_id = ids[0]
+        for other_id in ids[1:]:
+            # Update all relations pointing to other_id to point to canonical_id
+            conn.execute(
+                "UPDATE OR IGNORE kos_relations SET target_id=? WHERE target_id=?",
+                (canonical_id, other_id)
+            )
+            conn.execute(
+                "UPDATE OR IGNORE kos_relations SET source_id=? WHERE source_id=?",
+                (canonical_id, other_id)
+            )
+            # Update entity_docs
+            conn.execute(
+                "UPDATE OR IGNORE kos_entity_docs SET entity_id=? WHERE entity_id=?",
+                (canonical_id, other_id)
+            )
+            # Delete the duplicate
+            conn.execute("DELETE FROM kos_entities WHERE entity_id=?", (other_id,))
+            merged += 1
+    
+    conn.commit()
+    conn.close()
+    
+    return {
+        "duplicate_groups": len(duplicates),
+        "entities_merged": merged,
+    }
+
+
+def entity_timeline(entity_id: str) -> dict[str, Any]:
+    """Get the timeline of an entity based on document creation dates.
+    
+    Args:
+        entity_id: The entity ID.
+        
+    Returns:
+        Dict with timeline data.
+    """
+    conn = get_db()  # type: ignore[no-untyped-call]
+    init_schema(conn)  # type: ignore[no-untyped-call]
+    
+    entity = conn.execute("SELECT * FROM kos_entities WHERE entity_id=?", (entity_id,)).fetchone()
+    if not entity:
+        conn.close()
+        return {"error": f"Entity not found: {entity_id}"}
+    
+    # Get document timeline
+    timeline = conn.execute(
+        """SELECT d.title, d.zone, d.canonical_path, d.created_at, d.updated_at, ed.relevance,
+                  SUBSTR(d.body, 1, 200) as snippet
+           FROM kos_entity_docs ed
+           JOIN documents d ON ed.doc_id = d.doc_id
+           WHERE ed.entity_id = ?
+           ORDER BY d.created_at DESC""",
+        (entity_id,),
+    ).fetchall()
+    
+    conn.close()
+    
+    return {
+        "entity_id": entity_id,
+        "label": entity["label"],
+        "entity_type": entity["entity_type"],
+        "total_docs": len(timeline),
+        "timeline": [
+            {
+                "title": t["title"],
+                "zone": t["zone"],
+                "canonical_path": t["canonical_path"],
+                "created_at": t["created_at"],
+                "updated_at": t["updated_at"],
+                "relevance": t["relevance"],
+                "snippet": t["snippet"],
+            }
+            for t in timeline
+        ],
+    }
     conn = get_db()  # type: ignore[no-untyped-call]
     # Find entities that co-occur in same docs but have no explicit relation
     implicit = conn.execute("""
