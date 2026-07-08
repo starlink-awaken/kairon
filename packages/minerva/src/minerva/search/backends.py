@@ -114,7 +114,7 @@ async def _api_post(url: str, json_data: dict, headers: dict | None = None, time
 
 
 async def search_searxng(
-    query: str, base_url: str = "http://localhost:8080", max_results: int = 10
+    query: str, base_url: str = f"http://localhost:{os.environ.get('ONTODERIVE_WEB_PORT', '8080')}", max_results: int = 10
 ) -> list[SearchResult]:
     """Search via self-hosted SearXNG meta-search engine.
 

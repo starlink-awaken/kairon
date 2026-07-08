@@ -436,9 +436,9 @@ def _run_check() -> int:
 
     # 2. SearXNG
     try:
-        r = httpx.get("http://localhost:8080/health", timeout=5)
+        r = httpx.get(f"http://localhost:{os.environ.get('ONTODERIVE_WEB_PORT', '8080')}/health", timeout=5)
         if r.status_code == 200:
-            print("  ✅ SearXNG running (localhost:8080)")
+            print(f"  ✅ SearXNG running (localhost:{os.environ.get('ONTODERIVE_WEB_PORT', '8080')})")
             passed += 1
         else:
             raise Exception("not ok")
