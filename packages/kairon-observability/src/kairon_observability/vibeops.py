@@ -11,7 +11,7 @@ class AgoraGatewayLLM(DeepEvalBaseLLM):
 
     def __init__(self, model_name: str = "gpt-4o-mini") -> None:
         self.model_name = model_name
-        self.gateway_url = os.environ.get("AGORA_HTTP_PORT", "http://localhost:8080")
+        self.gateway_url = os.environ.get("AGORA_HTTP_PORT", f"http://localhost:{os.environ.get('ONTODERIVE_WEB_PORT', '8080')}")
 
     def load_model(self) -> "AgoraGatewayLLM":
         return self

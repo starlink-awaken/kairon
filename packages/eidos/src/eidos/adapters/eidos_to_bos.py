@@ -26,7 +26,7 @@ SHAREDBRAIN_DATA_DIR = Path(
         str(Path.home() / "Workspace" / "projects" / "SharedBrain" / "data"),
     )
 )
-AGORA_MCP_ENDPOINT = __import__("os").environ.get("AGORA_MCP_ENDPOINT", "http://localhost:7422")
+AGORA_MCP_ENDPOINT = __import__("os").environ.get("AGORA_MCP_ENDPOINT", f"http://localhost:{os.environ.get('AGORA_MCP_HTTP_PORT', '7422')}")
 
 BOS_TARGETS = {
     "minerva": "mcp://sharedbrain/memory/minerva",
