@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import atexit
 import contextlib
+import os
 from typing import Any, cast
 
 import httpx

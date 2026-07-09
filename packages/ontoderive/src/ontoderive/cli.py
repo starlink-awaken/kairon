@@ -320,5 +320,52 @@ def main() -> None:
         )
 
 
+def _do_audit(args: Any) -> None:
+    """Run OntoDerive audit — check inference chain completeness."""
+    project = getattr(args, "project", ".")
+    try:
+        from ontoderive.mcp_handlers import handle_audit_chain
+
+        result = handle_audit_chain({"project": project})
+        if getattr(args, "json", False):
+            import json
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+        else:
+            print(f"\n  🔍 OntoDerive 审计 ({project})")
+            if "error" in result:
+                print(f"  ❌ {result['error']}")
+            else:
+                data = result.get("data", result)
+                summary = data.get("summary", data)
+                print(f"  完整性: {summary.get('completeness', '?')}")
+                print(f"  一致性: {summary.get('consistency', '?')}")
+    except Exception as e:
+        print(f"\n  ❌ Audit error: {e}")
+
+
+def _do_fact_check(args: Any) -> None:
+    """Run fact-check on a claim."""
+    claim = args.claim
+    project = getattr(args, "project", ".")
+    try:
+        from ontoderive.mcp_handlers import handle_fact_check
+
+        result = handle_fact_check({"claim": claim, "project": project})
+        if getattr(args, "json", False):
+            import json
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+        else:
+            print("\n  🔎 事实核查")
+            print(f"  声明: {claim}")
+            if "error" in result:
+                print(f"  ❌ {result['error']}")
+            else:
+                data = result.get("data", result)
+                verdict = data.get("verdict", data.get("conclusion", "?"))
+                print(f"  结论: {verdict}")
+    except Exception as e:
+        print(f"\n  ❌ Fact-check error: {e}")
+
+
 if __name__ == "__main__":
     main()

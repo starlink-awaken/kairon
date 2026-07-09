@@ -12,6 +12,7 @@ Gracefully skips if immune bridge is unavailable (audit only).
 from __future__ import annotations
 
 import logging
+import os
 from typing import Any, cast
 
 import httpx
