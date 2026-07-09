@@ -14,6 +14,7 @@ class PipelineStep:
     tool: str
     action: str
     args: dict = field(default_factory=dict)
+    positionals: list = field(default_factory=list)
     input_file: str = ""
     output_file: str = ""
 
@@ -29,6 +30,8 @@ class PipelineStep:
             cmd = [sys.executable, "-m", "ontoderive.cli", self.action]
         else:
             raise ValueError(f"Unknown tool: {self.tool}")
+        for p in self.positionals:
+            cmd.append(str(p))
         for k, v in self.args.items():
             if isinstance(v, bool):
                 if v:
