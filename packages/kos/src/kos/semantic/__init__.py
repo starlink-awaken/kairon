@@ -33,16 +33,71 @@ OMLX_URL = os.environ.get("OMLX_URL", "http://localhost:8000")
 OMLX_API_KEY = os.environ.get("OMLX_API_KEY", "123456")
 OMLX_EMBED_MODEL = os.environ.get("OMLX_EMBED_MODEL", "qwen3-embedding-8b")
 
-# Fallback: sentence-transformers
-ST_MODEL_NAME = "all-MiniLM-L6-v2"
-ST_EMBEDDING_DIM = 384
+# ── Model Registry ─────────────────────────────────────
+# Available embedding models with auto-switching support.
+# Switch model via: kos-semantic build --model <name>
+# Or environment: KOS_EMBED_MODEL=<name>
+
+EMBED_MODEL_REGISTRY = {
+    # Local models (sentence-transformers)
+    "all-MiniLM-L6-v2": {
+        "source": "st",
+        "dim": 384,
+        "description": "General purpose, fast, multilingual (default fallback)",
+        "chinese_quality": "medium",
+        "speed": "~5ms/text",
+    },
+    "BAAI/bge-small-zh-v1.5": {
+        "source": "st",
+        "dim": 512,
+        "description": "Chinese-optimized, fast, good quality (recommended)",
+        "chinese_quality": "excellent",
+        "speed": "~24ms/text",
+    },
+    "BAAI/bge-base-zh-v1.5": {
+        "source": "st",
+        "dim": 768,
+        "description": "Chinese-optimized, balanced quality/speed",
+        "chinese_quality": "excellent",
+        "speed": "~50ms/text",
+    },
+    "BAAI/bge-large-zh-v1.5": {
+        "source": "st",
+        "dim": 1024,
+        "description": "Chinese-optimized, highest quality, slower",
+        "chinese_quality": "excellent",
+        "speed": "~150ms/text",
+    },
+    # Remote models (omlx gateway)
+    "embed": {
+        "source": "omlx",
+        "dim": 4096,
+        "description": "Qwen3-Embedding-8B via omlx (high quality, slower)",
+        "chinese_quality": "excellent",
+        "speed": "~174ms/text",
+    },
+    "embed-bge": {
+        "source": "omlx",
+        "dim": 1024,
+        "description": "BGE via omlx gateway",
+        "chinese_quality": "excellent",
+        "speed": "~50ms/text",
+    },
+}
+
+# Active model selection (override with KOS_MODEL env or --model CLI)
+ACTIVE_MODEL = os.environ.get("KOS_EMBED_MODEL", "BAAI/bge-small-zh-v1.5")
+
+# Legacy fallback config (kept for backward compatibility)
+ST_MODEL_NAME = ACTIVE_MODEL if EMBED_MODEL_REGISTRY.get(ACTIVE_MODEL, {}).get("source") == "st" else "all-MiniLM-L6-v2"
+ST_EMBEDDING_DIM = EMBED_MODEL_REGISTRY.get(ST_MODEL_NAME, {}).get("dim", 384)
 
 # Vector storage
 VECTOR_TABLE = "kos_documents"
 VECTOR_CHUNK_TABLE = "kos_chunks"  # Chunked documents
-BATCH_SIZE = 32
-CHUNK_SIZE = 512
-CHUNK_OVERLAP = 64
+BATCH_SIZE = 128  # Optimized for larger batches
+CHUNK_SIZE = 1024  # Larger chunks = fewer embeddings needed
+CHUNK_OVERLAP = 128
 
 # Lazy imports
 _embedder = None
@@ -431,6 +486,17 @@ def hybrid_search(query: str, limit: int = 10) -> dict:
     }
 
 
+def list_models() -> dict:
+    """List all available embedding models."""
+    return {
+        "active": ACTIVE_MODEL,
+        "models": {
+            name: {**cfg, "selected": name == ACTIVE_MODEL}
+            for name, cfg in EMBED_MODEL_REGISTRY.items()
+        },
+    }
+
+
 def status() -> dict:
     """Get vector index status."""
     try:
@@ -459,6 +525,7 @@ def main() -> None:
     domain = None
     limit = 10
     incremental = "--incremental" in sys.argv
+    model = None
     for i, a in enumerate(sys.argv):
         if a == "--domain" and i + 1 < len(sys.argv):
             domain = sys.argv[i + 1]
@@ -467,6 +534,16 @@ def main() -> None:
                 limit = int(sys.argv[i + 1])
             except ValueError:
                 pass
+        if a == "--model" and i + 1 < len(sys.argv):
+            model = sys.argv[i + 1]
+
+    # Override active model if specified
+    global ACTIVE_MODEL
+    if model:
+        if model in EMBED_MODEL_REGISTRY:
+            ACTIVE_MODEL = model
+        else:
+            print(f"Warning: Unknown model '{model}'. Available: {list(EMBED_MODEL_REGISTRY.keys())}")
 
     if cmd == "build":
         result = build_index(domain=domain, incremental=incremental)
@@ -478,8 +555,13 @@ def main() -> None:
         result = hybrid_search(query, limit=limit)
     elif cmd == "status":
         result = status()
+    elif cmd == "list-models":
+        result = list_models()
     else:
-        result = {"error": f"Unknown: {cmd}", "usage": "build|search|hybrid|status"}
+        result = {
+            "error": f"Unknown: {cmd}",
+            "usage": "build|search|hybrid|status|list-models",
+        }
 
     print(json.dumps(result, ensure_ascii=False, indent=2))
 

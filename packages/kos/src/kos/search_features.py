@@ -347,3 +347,162 @@ class SearchFeatures:
         """Save history to file."""
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(history, ensure_ascii=False, indent=2))
+
+    # ── 智能聚类 ────────────────────────────────────────────
+
+    def cluster_by_topic(self, results: list[dict[str, Any]]) -> dict[str, Any]:
+        """按主题聚类搜索结果。
+        
+        基于域(zone) + 实体 + 关键词自动分组。
+        
+        Returns:
+            {
+                "clusters": [...],
+                "ungrouped": [...]
+            }
+        """
+        if not results:
+            return {"clusters": [], "ungrouped": []}
+
+        conn = self._connect()
+
+        # 域图标映射
+        zone_icons = {
+            "default": "📋",
+            "docs-cockpit": "🔴",
+            "docs-learning": "🟡",
+            "docs-work": "💼",
+            "docs-work-weijian": "🏥",
+            "docs-work-guozhuan": "🔄",
+            "docs-personal": "🟢",
+            "docs-creative": "🎨",
+            "docs-public": "🌐",
+            "docs-family": "🏠",
+            "docs-obsidian-vault": "📝",
+            "workspace": "💻",
+            "config-ai": "⚙️",
+            "config-agents": "🤖",
+        }
+
+        zone_labels = {
+            "default": "默认",
+            "docs-cockpit": "驾驶舱",
+            "docs-learning": "学习进化",
+            "docs-work": "工作文档",
+            "docs-work-weijian": "卫健委",
+            "docs-work-guozhuan": "国转中心",
+            "docs-personal": "个人",
+            "docs-creative": "创意创作",
+            "docs-public": "公共",
+            "docs-family": "家庭生活",
+            "docs-obsidian-vault": "Obsidian",
+            "workspace": "项目代码",
+        }
+
+        # 按域分组
+        zone_results: dict[str, list] = {}
+        for r in results:
+            zone = r.get("zone", "unknown")
+            if zone not in zone_results:
+                zone_results[zone] = []
+            zone_results[zone].append(r)
+
+        # 构建聚类
+        clusters = []
+        for zone, zone_docs in zone_results.items():
+            if len(zone_docs) >= 2:
+                # 子聚类: 按实体分组
+                entity_groups = self._sub_cluster_by_entity(conn, zone_docs)
+                if entity_groups:
+                    for entity_label, entity_docs in entity_groups.items():
+                        clusters.append({
+                            "label": entity_label,
+                            "icon": "🏷️",
+                            "results": entity_docs,
+                            "count": len(entity_docs),
+                            "zone": zone,
+                        })
+                    # 剩余文档归入域聚类
+                    grouped_docs = set()
+                    for docs in entity_groups.values():
+                        for d in docs:
+                            grouped_docs.add(d.get("doc_id", ""))
+                    remaining = [d for d in zone_docs if d.get("doc_id", "") not in grouped_docs]
+                    if remaining:
+                        clusters.append({
+                            "label": zone_labels.get(zone, zone),
+                            "icon": zone_icons.get(zone, "📂"),
+                            "results": remaining,
+                            "count": len(remaining),
+                            "zone": zone,
+                        })
+                else:
+                    clusters.append({
+                        "label": zone_labels.get(zone, zone),
+                        "icon": zone_icons.get(zone, "📂"),
+                        "results": zone_docs,
+                        "count": len(zone_docs),
+                        "zone": zone,
+                    })
+            else:
+                clusters.append({
+                    "label": zone_labels.get(zone, zone),
+                    "icon": zone_icons.get(zone, "📂"),
+                    "results": zone_docs,
+                    "count": len(zone_docs),
+                    "zone": zone,
+                })
+
+        # 按数量排序 (大到小)
+        clusters.sort(key=lambda c: -c["count"])
+
+        conn.close()
+        return {"clusters": clusters, "ungrouped": []}
+
+    def _sub_cluster_by_entity(self, conn, docs: list[dict]) -> dict[str, list]:
+        """子聚类: 按实体分组。"""
+        doc_entities = {}
+        for d in docs:
+            doc_id = d.get("doc_id", "")
+            if not doc_id:
+                continue
+            try:
+                rows = conn.execute(
+                    """SELECT e.label FROM kos_entity_docs ed
+                       JOIN kos_entities e ON ed.entity_id = e.entity_id
+                       WHERE ed.doc_id = ? AND ed.relevance >= 0.3
+                       ORDER BY ed.relevance DESC LIMIT 3""",
+                    (doc_id,)
+                ).fetchall()
+                doc_entities[doc_id] = [r["label"] for r in rows]
+            except sqlite3.OperationalError:
+                doc_entities[doc_id] = []
+
+        entity_groups = {}
+        for d in docs:
+            doc_id = d.get("doc_id", "")
+            entities = doc_entities.get(doc_id, [])
+            for ent in entities:
+                if ent not in entity_groups:
+                    entity_groups[ent] = []
+                entity_groups[ent].append(d)
+
+        # 仅保留 ≥2 文档的组
+        return {k: v for k, v in entity_groups.items() if len(v) >= 2}
+
+    def format_clusters(self, cluster_result: dict) -> str:
+        """格式化聚类结果为可读文本。"""
+        lines = []
+        for cluster in cluster_result.get("clusters", []):
+            icon = cluster.get("icon", "📂")
+            label = cluster.get("label", "Unknown")
+            count = cluster.get("count", 0)
+            lines.append(f"{icon} {label} ({count})")
+            for r in cluster.get("results", [])[:3]:
+                title = r.get("title", "Untitled")[:50]
+                lines.append(f"  - {title}")
+            remaining = len(cluster.get("results", [])) - 3
+            if remaining > 0:
+                lines.append(f"  ... 还有 {remaining} 条")
+            lines.append("")
+        return "\n".join(lines)
