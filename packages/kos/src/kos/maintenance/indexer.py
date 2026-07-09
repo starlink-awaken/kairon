@@ -53,7 +53,7 @@ class IncrementalIndexer:
 
     # ── 核心 API ────────────────────────────────────────────
 
-    def run(self, embed: bool = True) -> dict[str, Any]:
+    def run(self, embed: bool = True, force_embed: bool = False) -> dict[str, Any]:
         """运行增量索引更新。
         
         Args:
@@ -85,9 +85,9 @@ class IncrementalIndexer:
             # 3. 清理已删除文档
             stats["removed"] += self._cleanup_deleted()
 
-            # 4. 更新向量索引 (如果启用)
-            if embed and (stats["added"] > 0 or stats["updated"] > 0):
-                vector_stats = self._update_vector_index()
+            # 4. 更新向量索引 (如果启用). force_embed 回灌模式忽略 added/updated 触发.
+            if embed and (force_embed or stats["added"] > 0 or stats["updated"] > 0):
+                vector_stats = self._update_vector_index(full=force_embed)
                 stats["vector"] = vector_stats
 
         except Exception as e:
@@ -269,20 +269,30 @@ class IncrementalIndexer:
 
     # ── 向量索引更新 ───────────────────────────────────────
 
-    def _update_vector_index(self) -> dict[str, int]:
-        """更新向量索引 (仅变更的文档)。"""
+    def _update_vector_index(self, full: bool = False) -> dict[str, int]:
+        """更新向量索引.
+
+        Args:
+            full: True=回灌全量 (LIMIT 5000, 忽略时间窗口, 历史文档回灌);
+                  False=最近1小时增量 (默认).
+        """
         stats = {"embedded": 0, "errors": 0}
 
         try:
             from kos.semantic import _embed_texts_st
 
-            # 获取需要向量化的文档 (最近添加/更新的)
-            docs = self.conn.execute("""
-                SELECT doc_id, title, body FROM documents
-                WHERE updated_at >= datetime('now', '-1 hour')
-                AND body != ''
-                LIMIT 100
-            """).fetchall()
+            # 获取需要向量化的文档 (full=回灌全量; 默认=最近增量)
+            if full:
+                docs = self.conn.execute(
+                    "SELECT doc_id, title, body FROM documents WHERE body != '' ORDER BY updated_at DESC LIMIT 5000"
+                ).fetchall()
+            else:
+                docs = self.conn.execute("""
+                    SELECT doc_id, title, body FROM documents
+                    WHERE updated_at >= datetime('now', '-1 hour')
+                    AND body != ''
+                    LIMIT 100
+                """).fetchall()
 
             if not docs:
                 return stats
@@ -319,12 +329,15 @@ class IncrementalIndexer:
                         "chunk_idx": i,
                     })
 
+            # 写入 LanceDB. 用 try open/except create 替代 `"x" in db.list_tables()`
+            # 判断 — list_tables 返回 ListTablesResponse (非 list), `in` 判断失效
+            # (Pyright L334 警告, 致 "Table already exists" 错). mode=overwrite 清脏状态.
             if table_data:
-                if "kos_documents" in db.list_tables():
+                try:
                     tbl = db.open_table("kos_documents")
                     tbl.add(table_data)
-                else:
-                    db.create_table("kos_documents", table_data)
+                except Exception:
+                    db.create_table("kos_documents", table_data, mode="overwrite")
 
             stats["embedded"] = len(table_data)
 
@@ -435,13 +448,25 @@ def main():
 
     parser = argparse.ArgumentParser(description="KOS Incremental Indexer")
     parser.add_argument("--no-embed", action="store_true", help="Skip vector index update")
-    args = parse_args = parser.parse_args()
+    parser.add_argument("--daemon", action="store_true", help="Run as daemon (loop until killed)")
+    parser.add_argument("--interval", type=int, default=300, help="Daemon loop interval seconds (default 300)")
+    parser.add_argument("--full-embed", action="store_true", help="Force embed all docs (backfill, ignores added/updated trigger)")
+    args = parser.parse_args()
 
     indexer = IncrementalIndexer()
-    result = indexer.run(embed=not args.no_embed)
-    indexer.close()
-
-    print(json.dumps(result, ensure_ascii=False, indent=2))
+    if args.daemon:
+        # 守护模式: 循环 run 直到被 kill. daemon.py DAEMONS["indexer"] 传 --daemon 依赖此模式.
+        while True:
+            try:
+                result = indexer.run(embed=not args.no_embed, force_embed=args.full_embed)
+                print(json.dumps(result, ensure_ascii=False), flush=True)
+            except Exception as e:  # noqa: BLE001
+                print(json.dumps({"error": str(e)}), flush=True)
+            time.sleep(args.interval)
+    else:
+        result = indexer.run(embed=not args.no_embed, force_embed=args.full_embed)
+        indexer.close()
+        print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
