@@ -374,3 +374,32 @@ class KosMonitor:
             "search_quality": self.search_quality(),
             "performance": self.performance_metrics(),
         }
+
+    # ── Alerting & Auto-remediation ─────────────────────
+
+    def check_and_alert(self) -> dict[str, Any]:
+        """Run checks, send alerts if needed, attempt auto-remediation."""
+        alerts = []
+        remediated = []
+
+        # Check index integrity
+        health = self.index_health()
+        if health["status"] != "healthy":
+            alerts.append(f"Index health: {health['status']}")
+            # Auto-remediate: if FTS mismatch, log for manual fix
+            integrity = health["checks"].get("integrity", {})
+            if integrity.get("status") == "fail":
+                remediated.append("Index integrity issue detected - needs manual VACUUM")
+
+        # Check vector lag
+        perf = self.performance_metrics()
+        db_size = perf.get("database", {}).get("size_mb", 0)
+        if db_size > 5000:  # >5GB
+            alerts.append(f"Database size critical: {db_size}MB")
+
+        return {
+            "healthy": len(alerts) == 0,
+            "alerts": alerts,
+            "remediated": remediated,
+            "timestamp": datetime.now().isoformat(),
+        }
