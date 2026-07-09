@@ -703,6 +703,97 @@ def tool_research_pipeline(question: str, level: str = "auto", max_cost: float =
         return {"error": str(e)}
 
 
+def tool_graph_search(query: str, max_hops: int = 3, limit: int = 10) -> dict:
+    """Multi-hop graph search with reasoning paths."""
+    try:
+        from kos.graphrag.reasoner import GraphRAGReasoner
+        reasoner = GraphRAGReasoner()
+        result = reasoner.reason(query, max_hops=max_hops, max_evidence=limit)
+        reasoner.close()
+        return result
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def tool_entity_explore(entity_id: str, depth: int = 2) -> dict:
+    """Explore an entity: relations, documents, and connected entities."""
+    try:
+        conn = get_connection()
+        entity = conn.execute(
+            "SELECT * FROM kos_entities WHERE entity_id = ?", (entity_id,)
+        ).fetchone()
+        if not entity:
+            return {"error": f"Entity not found: {entity_id}"}
+
+        # Outgoing relations
+        outgoing = conn.execute(
+            "SELECT predicate, target_id, confidence FROM kos_relations WHERE source_id = ?",
+            (entity_id,)
+        ).fetchall()
+
+        # Incoming relations
+        incoming = conn.execute(
+            "SELECT source_id, predicate, confidence FROM kos_relations WHERE target_id = ?",
+            (entity_id,)
+        ).fetchall()
+
+        # Documents
+        docs = conn.execute(
+            """SELECT d.title, d.canonical_path, ed.relevance
+               FROM kos_entity_docs ed JOIN documents d ON ed.doc_id = d.doc_id
+               WHERE ed.entity_id = ? ORDER BY ed.relevance DESC LIMIT 10""",
+            (entity_id,)
+        ).fetchall()
+
+        # Connected entities (neighbors)
+        connected = set()
+        for r in outgoing:
+            connected.add(r["target_id"])
+        for r in incoming:
+            connected.add(r["source_id"])
+        connected.discard(entity_id)
+
+        conn.close()
+
+        return {
+            "entity": {
+                "id": entity["entity_id"],
+                "type": entity["entity_type"],
+                "label": entity["label"],
+                "description": entity["description"],
+            },
+            "outgoing_relations": [
+                {"predicate": r["predicate"], "target": r["target_id"], "confidence": r["confidence"]}
+                for r in outgoing
+            ],
+            "incoming_relations": [
+                {"source": r["source_id"], "predicate": r["predicate"], "confidence": r["confidence"]}
+                for r in incoming
+            ],
+            "documents": [dict(d) for d in docs],
+            "connected_entities": list(connected)[:20],
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def tool_knowledge_ask(question: str, include_paths: bool = True) -> dict:
+    """Ask a question using GraphRAG reasoning."""
+    try:
+        from kos.graphrag.reasoner import GraphRAGReasoner
+        reasoner = GraphRAGReasoner()
+        result = reasoner.reason(question, max_hops=3, max_evidence=5)
+        reasoner.close()
+
+        if not include_paths:
+            result.pop("reasoning_paths", None)
+            result.pop("prompt", None)
+
+        return result
+    except Exception as e:
+        return {"error": str(e)}
+
+
 def tool_fact_check(claim: str) -> dict:
     """Verify a factual claim against KOS knowledge base."""
     try:
@@ -1114,6 +1205,40 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
                 "required": [],
             },
         },
+        "graph_search": {
+            "description": "Multi-hop knowledge graph search with reasoning. Finds entities connected by relationships.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Search query"},
+                    "max_hops": {"type": "integer", "description": "Max hops (default: 3)", "default": 3},
+                    "limit": {"type": "integer", "description": "Max results (default: 10)", "default": 10},
+                },
+                "required": ["query"],
+            },
+        },
+        "entity_explore": {
+            "description": "Explore an entity: show its relations, related documents, and connected entities.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "entity_id": {"type": "string", "description": "Entity ID (e.g. P:xia-mingxing)"},
+                    "depth": {"type": "integer", "description": "Exploration depth (default: 2)", "default": 2},
+                },
+                "required": ["entity_id"],
+            },
+        },
+        "knowledge_ask": {
+            "description": "Ask a question about your knowledge base. Uses GraphRAG to find reasoning paths and evidence.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "question": {"type": "string", "description": "Question to answer"},
+                    "include_paths": {"type": "boolean", "description": "Include reasoning paths (default: true)", "default": True},
+                },
+                "required": ["question"],
+            },
+        },
     }
 
     TOOLS.update(SELF_TOOLS)
@@ -1189,6 +1314,15 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
                 "fact_check": lambda: tool_fact_check(a.get("claim", "")),
                 "sync_gbrain": lambda: tool_sync_gbrain(
                     a.get("direction", "both"), a.get("limit", 100)
+                ),
+                "graph_search": lambda: tool_graph_search(
+                    a.get("query", ""), a.get("max_hops", 3), a.get("limit", 10)
+                ),
+                "entity_explore": lambda: tool_entity_explore(
+                    a.get("entity_id", ""), a.get("depth", 2)
+                ),
+                "knowledge_ask": lambda: tool_knowledge_ask(
+                    a.get("question", ""), a.get("include_paths", True)
                 ),
             }
             h = handlers.get(tn)
