@@ -35,21 +35,21 @@ mcp:
   proxy: via agora.ProxyManager
 
 http:
+  - port: 8090
+    enforcement: cockpit-proxy
+    protocol: FastAPI
+    owner: kos (via cockpit)
+    note: "KOS REST API 代理路径 (cockpit /api/kos/* -> KOS :8766)"
+  - port: 8766
+    enforcement: active
+    protocol: FastAPI (uvicorn)
+    owner: kos
+    note: "KOS REST API v1 — 9 endpoints. Cross-project integration via HTTP."
   - port: 8765
     enforcement: env-only
-    protocol: FastAPI
+    protocol: mcp (deprecated)
     owner: minerva
-    note: "Dev only — primary access via cockpit /dev/kos, /dev/minerva"
-  - port: 8081
-    enforcement: env-only
-    protocol: web_server
-    owner: ontoderive
-    note: "Dev only — primary access via cockpit /dev/ontoderive"
-  - port: 8766
-    enforcement: env-only
-    protocol: http.server
-    owner: forge
-    note: "Dev only — primary access via cockpit /dev/forge"
+    note: "Deprecated — 2026-07 收敛到 cockpit /dev/*"
 
 dependencies:
   runtime: [fastmcp, httpx, structlog, pydantic, pyyaml, rich, openai, ...]

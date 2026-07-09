@@ -706,7 +706,7 @@ def tool_research_pipeline(question: str, level: str = "auto", max_cost: float =
 def tool_graph_search(query: str, max_hops: int = 3, limit: int = 10) -> dict:
     """Multi-hop graph search with reasoning paths."""
     try:
-        from kos.graphrag.reasoner import GraphRAGReasoner
+        from kos.graphrag_engine.reasoner import GraphRAGReasoner
         reasoner = GraphRAGReasoner()
         result = reasoner.reason(query, max_hops=max_hops, max_evidence=limit)
         reasoner.close()
@@ -780,7 +780,7 @@ def tool_entity_explore(entity_id: str, depth: int = 2) -> dict:
 def tool_knowledge_ask(question: str, include_paths: bool = True) -> dict:
     """Ask a question using GraphRAG reasoning."""
     try:
-        from kos.graphrag.reasoner import GraphRAGReasoner
+        from kos.graphrag_engine.reasoner import GraphRAGReasoner
         reasoner = GraphRAGReasoner()
         result = reasoner.reason(question, max_hops=3, max_evidence=5)
         reasoner.close()
