@@ -366,8 +366,37 @@ def _detect_ollama_model() -> str:
     return "qwen2.5:7b"
 
 
+# omlx 默认 model (Apple Silicon MLX server :8000, aetherforge 统一网关的本地 Provider).
+# 替代 Ollama 推理. aetherforge SSOT 网关跨包 (kairon 不依赖 aetherforge) 待 BOS RPC 工程化,
+# 当前 kronos 直连 omlx :8000 (OpenAI 兼容), omlx 即 aetherforge 路由的 local engine.
+_DEFAULT_OMLX_MODEL = "mythos-fast"
+
+
 def call_ollama(prompt: str, model: str | None = None, system_prompt: str | None = None) -> str:
-    """调用本地 Ollama 模型"""
+    """调用本地 LLM (优先 omlx :8000 OpenAI 兼容, fallback Ollama).
+
+    omlx = Apple Silicon MLX server (aetherforge 统一网关的本地 Provider, 替代 Ollama 推理).
+    Ollama 保留 fallback (过渡). aetherforge SSOT 网关 (run_generate) 跨包待 BOS RPC 工程化.
+    """
+    # 优先 omlx :8000 (OpenAI 兼容 /v1/chat/completions)
+    try:
+        import httpx
+
+        messages: list[dict[str, str]] = []
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": prompt})
+        resp = httpx.post(
+            "http://localhost:8000/v1/chat/completions",
+            json={"model": model or _DEFAULT_OMLX_MODEL, "messages": messages, "stream": False},
+            timeout=120,
+        )
+        if resp.status_code == 200:
+            return resp.json()["choices"][0]["message"]["content"]
+    except Exception:
+        pass  # omlx 不可用, fallback Ollama
+
+    # fallback Ollama (旧逻辑, 过渡保留)
     if model is None:
         model = _detect_ollama_model()
     payload: dict = {"model": model, "prompt": prompt, "stream": False}
