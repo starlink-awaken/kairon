@@ -47,19 +47,19 @@ REASONING = Pipeline(
 #   python -m kos.maintenance.indexer --daemon --interval 300
 # (indexer --daemon/--full-embed/L323 修复见 kairon commit d3329c1)
 KOS_DATA = Pipeline(
-    name="KOS 数据管线状态验证 (索引由 kos daemon 常驻维护)",
+    name="KOS 数据管线 (摄取→FTS5索引→状态, 向量由 kos daemon 常驻维护)",
     steps=[
+        PipelineStep(
+            tool="kos",
+            action="ingest",
+            positionals=[os.path.join(_WORKSPACE, "data", "kos")],
+            output_file="/tmp/pipe-kos-ingest.json",
+        ),
         PipelineStep(
             tool="kos",
             action="status",
             args={"format": "json"},
             output_file="/tmp/pipe-kos-status.json",
-        ),
-        PipelineStep(
-            tool="kos",
-            action="domains",
-            args={"limit": 10},
-            output_file="/tmp/pipe-kos-domains.json",
         ),
     ],
 )
