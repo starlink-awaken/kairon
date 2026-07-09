@@ -694,6 +694,59 @@ def tool_verify_claim(claim: str) -> dict:
         return {"error": str(e)}
 
 
+def tool_research_pipeline(question: str, level: str = "auto", max_cost: float = 1.0) -> dict:
+    """Full research pipeline: KOS search → context → Minerva research → fact check."""
+    try:
+        from kos.minerva.bridge import cmd_research
+        return cmd_research(question, level, max_cost)
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def tool_fact_check(claim: str) -> dict:
+    """Verify a factual claim against KOS knowledge base."""
+    try:
+        from kos.hybrid_search import HybridSearchEngine
+        engine = HybridSearchEngine()
+        result = engine.search(claim, mode="hybrid", limit=10)
+        engine.close()
+
+        evidence = []
+        for r in result.get("results", []):
+            evidence.append({
+                "title": r.get("title", ""),
+                "snippet": r.get("snippet", "")[:300],
+                "source": r.get("source", ""),
+            })
+
+        return {
+            "claim": claim,
+            "evidence_count": len(evidence),
+            "evidence": evidence,
+            "verdict": "supported" if len(evidence) >= 3 else ("partial" if len(evidence) >= 1 else "no_evidence"),
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def tool_sync_gbrain(direction: str = "both", limit: int = 100) -> dict:
+    """Sync KOS documents with gbrain memory graph."""
+    try:
+        from kos.gbrain_bridge import GbrainBridge
+        bridge = GbrainBridge()
+        result = {}
+
+        if direction in ("export", "both"):
+            result["export"] = bridge.export_to_gbrain(limit=limit)
+        if direction in ("import", "both"):
+            result["import"] = bridge.import_from_gbrain(limit=limit)
+
+        bridge.close()
+        return result
+    except Exception as e:
+        return {"error": str(e)}
+
+
 def tool_memory_stats() -> dict:
     """Get memory tier statistics (session/history/ontology)."""
     try:
@@ -1028,39 +1081,37 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
             "description": "Get memory tier statistics (session queries, search history, popular queries).",
             "inputSchema": {"type": "object", "properties": {}, "required": []},
         },
-        "get_stats": {
-            "description": "Get quick knowledge base statistics (documents, entities, relations, domains).",
-            "inputSchema": {"type": "object", "properties": {}, "required": []},
-        },
-        "subscribe_topic": {
-            "description": "Subscribe to a topic. New matching documents will be available via check_subscription.",
+        "research_pipeline": {
+            "description": "Full research pipeline: KOS hybrid search → context engineering → Minerva deep research → fact verification. Returns structured report.",
             "inputSchema": {
                 "type": "object",
                 "properties": {
-                    "topic": {"type": "string", "description": "Topic/keyword to subscribe to"},
-                    "subscriber_id": {"type": "string", "description": "Subscriber identifier (default: mcp-agent)", "default": "mcp-agent"},
+                    "question": {"type": "string", "description": "Research question"},
+                    "level": {"type": "string", "description": "Minerva level: auto|L0|L1|L2|L3|L4 (default: auto)", "default": "auto"},
+                    "max_cost": {"type": "number", "description": "Max cost in USD (default: 1.0)", "default": 1.0},
                 },
-                "required": ["topic"],
+                "required": ["question"],
             },
         },
-        "check_subscription": {
-            "description": "Check a subscription for new matching documents since last check.",
+        "fact_check": {
+            "description": "Verify a factual claim against KOS knowledge base. Returns evidence and verdict.",
             "inputSchema": {
                 "type": "object",
                 "properties": {
-                    "sub_id": {"type": "string", "description": "Subscription ID"},
+                    "claim": {"type": "string", "description": "Factual claim to verify"},
                 },
-                "required": ["sub_id"],
+                "required": ["claim"],
             },
         },
-        "get_entity_timeline": {
-            "description": "Get entity timeline (related documents sorted by date).",
+        "sync_gbrain": {
+            "description": "Sync KOS documents with gbrain memory graph. Direction: export|import|both.",
             "inputSchema": {
                 "type": "object",
                 "properties": {
-                    "entity_id": {"type": "string", "description": "Entity ID (e.g. P:xia-mingxing)"},
+                    "direction": {"type": "string", "description": "Sync direction: export|import|both (default: both)", "default": "both"},
+                    "limit": {"type": "integer", "description": "Max items to sync (default: 100)", "default": 100},
                 },
-                "required": ["entity_id"],
+                "required": [],
             },
         },
     }
@@ -1132,6 +1183,13 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
                 "consensus.get": lambda: CONSENSUS_HANDLERS["consensus.get"](a),
                 "consensus.list_expired": lambda: CONSENSUS_HANDLERS["consensus.list_expired"](a),
                 "consensus.renew": lambda: CONSENSUS_HANDLERS["consensus.renew"](a),
+                "research_pipeline": lambda: tool_research_pipeline(
+                    a.get("question", ""), a.get("level", "auto"), a.get("max_cost", 1.0)
+                ),
+                "fact_check": lambda: tool_fact_check(a.get("claim", "")),
+                "sync_gbrain": lambda: tool_sync_gbrain(
+                    a.get("direction", "both"), a.get("limit", 100)
+                ),
             }
             h = handlers.get(tn)
             if h:
