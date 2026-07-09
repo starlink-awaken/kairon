@@ -35,6 +35,13 @@ from typing import Any
 from kos.config import get_artifact_path
 from kos.db import get_connection
 
+# ─── gbrain MCP Configuration ──────────────────────────
+# When gbrain MCP is running, KOS can sync live via HTTP + bearer <REDACTED>
+# Falls back to file-based export when MCP unavailable
+
+MCP_URL = os.environ.get("GBRAIN_MCP_URL", "http://localhost:3131/mcp")
+MCP_TOKEN = os.environ.get("GBRAIN_MCP_TOKEN", "")
+
 
 class GbrainBridge:
     """双向同步桥接器：KOS ↔ gbrain。
@@ -105,43 +112,47 @@ class GbrainBridge:
     def _export_single(self, doc: sqlite3.Row) -> bool:
         """导出单个文档到 gbrain。
         
-        使用 gbrain 的 ingest API 或 MCP 接口。
+        策略:
+        1. MCP HTTP endpoint (如果 MCP_TOKEN 已配置)
+        2. 文件级 fallback
         """
-        try:
-            # Method 1: Try gbrain MCP if available
-            # gbrain exposes memory_ingest MCP tool
-            import urllib.request
-
-            # gbrain MCP endpoint (if running)
-            gbrain_url = os.environ.get("GBRAIN_URL", "http://localhost:3131")
-
-            payload = json.dumps({
-                "operation": "ingest",
-                "content": f"# {doc['title']}\n\n{doc['body'][:4000]}",
-                "metadata": {
-                    "source": "kos",
-                    "doc_id": doc["doc_id"],
-                    "zone": doc["zone"],
-                    "kind": doc["kind"],
-                    "canonical_path": doc["canonical_path"],
-                }
-            }).encode("utf-8")
-
-            req = urllib.request.Request(
-                f"{gbrain_url}/mcp/ingest",
-                data=payload,
-                headers={"Content-Type": "application/json"},
-                method="POST",
-            )
-
+        # Strategy 1: MCP HTTP with bearer <REDACTED>
+        if MCP_TOKEN:
             try:
+                import urllib.request
+                import urllib.parse
+
+                payload = json.dumps({
+                    "jsonrpc": "2.0",
+                    "method": "tools/call",
+                    "params": {
+                        "name": "log_ingest",
+                        "arguments": {
+                            "content": f"# {doc['title']}\n\n{doc['body'][:4000]}",
+                            "source": "kos",
+                            "source_id": doc["doc_id"],
+                        }
+                    },
+                    "id": doc["doc_id"],
+                }).encode("utf-8")
+
+                req = urllib.request.Request(
+                    MCP_URL,
+                    data=payload,
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {MCP_TOKEN}",
+                    },
+                    method="POST",
+                )
+
                 with urllib.request.urlopen(req, timeout=10.0) as resp:
                     return resp.status == 200
             except Exception:
-                # gbrain not available, fall through
-                pass
+                pass  # Fall through to file-based
 
-            # Method 2: File-based export (gbrain can ingest from files)
+        # Strategy 2: File-based export (fallback)
+        try:
             gbrain_ingest_dir = Path.home() / ".gbrain" / "ingest"
             if gbrain_ingest_dir.exists():
                 export_file = gbrain_ingest_dir / f"kos_{doc['doc_id']}.md"
@@ -153,11 +164,10 @@ class GbrainBridge:
                     encoding="utf-8"
                 )
                 return True
-
-            return False
-
         except Exception:
-            return False
+            pass
+
+        return False
 
     # ── 导入 gbrain → KOS ──────────────────────────────────
 
