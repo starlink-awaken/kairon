@@ -202,12 +202,9 @@ def dispatch(
     except Exception as e:
         result["wps"] = {"status": "failed", "error": str(e)}
 
-    # → KOS（通过 Python API）
-    try:
-        import kos  # noqa: F401  # type: ignore[import-not-found]
-
-        result["kos"] = True
-    except ImportError:
-        result["kos"] = False
+    # KOS 索引不由 dispatcher 写 (KOS 由 kos indexer daemon 扫 workspace zones 维护
+    # FTS5+LanceDB 向量, 见 kos.maintenance.indexer --daemon; dispatcher 写会重复).
+    # 旧 `import kos; result["kos"]=True` 是假接通 (不调任何 API), 已移除.
+    # result["kos"] 保持初始化 False (DispatchResult 结构保留, 诚实标注 dispatcher 不接 KOS).
 
     return result
