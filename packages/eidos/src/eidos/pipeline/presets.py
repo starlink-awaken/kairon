@@ -41,7 +41,31 @@ REASONING = Pipeline(
     ],
 )
 
+# KOS 数据管线 preset. 注: kos ingest/search 的 path/query 是 positional, 但 eidos
+# to_cli() 只生成 --flag (L32-37), 不兼容. 故本 preset 用 status/domains (无
+# positional) 做状态验证. 实质索引 (FTS5 + LanceDB 向量) 由 kos daemon 常驻维护:
+#   python -m kos.maintenance.indexer --daemon --interval 300
+# (indexer --daemon/--full-embed/L323 修复见 kairon commit d3329c1)
+KOS_DATA = Pipeline(
+    name="KOS 数据管线状态验证 (索引由 kos daemon 常驻维护)",
+    steps=[
+        PipelineStep(
+            tool="kos",
+            action="status",
+            args={"format": "json"},
+            output_file="/tmp/pipe-kos-status.json",
+        ),
+        PipelineStep(
+            tool="kos",
+            action="domains",
+            args={"limit": 10},
+            output_file="/tmp/pipe-kos-domains.json",
+        ),
+    ],
+)
+
 PRESETS = {
     "knowledge-base": KNOWLEDGE_BASE,
     "reasoning": REASONING,
+    "kos-data": KOS_DATA,
 }
