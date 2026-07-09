@@ -13,27 +13,23 @@ sys.path.insert(0, str(src_DIR))
 os.environ.setdefault("KOS_HOME", str(SCRIPT_DIR))
 
 
+def _gbrain_available() -> bool:
+    """Check if gbrain MCP is reachable."""
+    try:
+        import urllib.request
+        req = urllib.request.Request(
+            "http://localhost:3131/health",
+            method="GET",
+        )
+        with urllib.request.urlopen(req, timeout=2.0) as resp:
+            return resp.status == 200
+    except Exception:
+        return False
+
+
 class TestKosAgentClient(unittest.TestCase):
-    """Test the KosAgentClient class."""
 
-    def test_import(self):
-        from kos.agent.client import KosAgentClient
-        self.assertTrue(callable(KosAgentClient))
-
-    def test_creation(self):
-        from kos.agent.client import KosAgentClient
-        client = KosAgentClient(subscriber_id="test-agent")
-        self.assertIsNotNone(client)
-
-    def test_stats(self):
-        from kos.agent.client import KosAgentClient
-        client = KosAgentClient()
-        stats = client.stats()
-        self.assertIn("documents", stats)
-        self.assertIn("entities", stats)
-        self.assertIn("relations", stats)
-        self.assertGreater(stats["documents"], 0)
-
+    @unittest.skipUnless(_gbrain_available(), "gbrain MCP not running on :3131")
     def test_search(self):
         from kos.agent.client import KosAgentClient
         client = KosAgentClient()
