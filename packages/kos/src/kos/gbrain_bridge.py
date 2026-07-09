@@ -110,11 +110,11 @@ class GbrainBridge:
         return stats
 
     def _export_single(self, doc: sqlite3.Row) -> bool:
-        """导出单个文档到 gbrain。
-        
+        """导出单个文档到 gbrain.
+
         策略:
-        1. MCP HTTP endpoint (如果 MCP_TOKEN 已配置)
-        2. 文件级 fallback
+        1. MCP HTTP endpoint (如果 MCP_TOKEN 已配置, 走 serve-http)
+        2. subprocess gbrain capture (本地兜底, --source kos 已注册, 验证 100/100 通)
         """
         # Strategy 1: MCP HTTP with bearer <REDACTED>
         if MCP_TOKEN:
@@ -151,23 +151,28 @@ class GbrainBridge:
             except Exception:
                 pass  # Fall through to file-based
 
-        # Strategy 2: File-based export (fallback)
-        try:
-            gbrain_ingest_dir = Path.home() / ".gbrain" / "ingest"
-            if gbrain_ingest_dir.exists():
-                export_file = gbrain_ingest_dir / f"kos_{doc['doc_id']}.md"
-                export_file.write_text(
-                    f"# {doc['title']}\n\n"
-                    f"Source: {doc['canonical_path']}\n"
-                    f"Zone: {doc['zone']}\n\n"
-                    f"{doc['body'][:8000]}",
-                    encoding="utf-8"
-                )
-                return True
-        except Exception:
-            pass
+        # Strategy 2: subprocess gbrain capture (本地兜底, 验证 100/100 通).
+        # 替代旧 ~/.gbrain/ingest 文件目录 (gbrain 不扫该目录, 死路).
+        # gbrain capture --stdin --source kos 走官方摄取入口, 自带 24h content-hash dedup.
+        import subprocess
 
-        return False
+        content = (
+            f"# {doc['title']}\n\n"
+            f"Source: {doc['canonical_path']}\n"
+            f"Zone: {doc['zone']}\n\n"
+            f"{doc['body'][:4000]}"
+        )
+        try:
+            result = subprocess.run(
+                ["gbrain", "capture", "--stdin", "--json", "--quiet", "--source", "kos"],
+                input=content,
+                capture_output=True,
+                text=True,
+                timeout=30.0,
+            )
+            return result.returncode == 0
+        except Exception:
+            return False
 
     # ── 导入 gbrain → KOS ──────────────────────────────────
 
