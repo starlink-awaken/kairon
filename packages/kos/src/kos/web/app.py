@@ -41,6 +41,109 @@ except ImportError:
 
 app = FastAPI(title="KOS Dashboard", version="2.0")
 
+# ── REST API v1 (for cross-project integration) ────────
+
+
+@app.get("/api/v1/search")
+async def api_search(q: str = Query(...), mode: str = "hybrid", limit: int = 10):
+    """Search knowledge base. Used by cockpit proxy and other integrations."""
+    try:
+        from kos.hybrid_search import HybridSearchEngine
+        engine = HybridSearchEngine()
+        result = engine.search(q, mode=mode, limit=limit)
+        engine.close()
+        return JSONResponse(content=result)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+
+@app.get("/api/v1/suggest")
+async def api_suggest(prefix: str = Query(...), limit: int = 8):
+    """Get search suggestions."""
+    try:
+        from kos.search_features import SearchFeatures
+        features = SearchFeatures()
+        result = features.suggest(prefix, limit=limit)
+        return JSONResponse(content=result)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+
+@app.get("/api/v1/context")
+async def api_context(q: str = Query(...), mode: str = "balanced"):
+    """Build LLM-ready context."""
+    try:
+        from kos.context_engine import ContextEngine
+        engine = ContextEngine()
+        result = engine.build_context(q, mode=mode)
+        engine.close()
+        return JSONResponse(content=result)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+
+@app.post("/api/v1/verify")
+async def api_verify(data: dict):
+    """Verify a claim against knowledge base."""
+    claim = data.get("claim", "")
+    try:
+        from kos.hybrid_search import HybridSearchEngine
+        engine = HybridSearchEngine()
+        result = engine.search(claim, mode="hybrid", limit=10)
+        engine.close()
+        return JSONResponse(content={
+            "claim": claim,
+            "evidence_count": result.get("count", 0),
+            "results": result.get("results", []),
+        })
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+
+@app.get("/api/v1/stats")
+async def api_stats():
+    """Get knowledge base statistics."""
+    try:
+        conn = sqlite3.connect(str(get_artifact_path("retrievalDatabase")))
+        conn.row_factory = sqlite3.Row
+        stats = {
+            "documents": conn.execute("SELECT COUNT(*) FROM documents").fetchone()[0],
+            "entities": conn.execute("SELECT COUNT(*) FROM kos_entities").fetchone()[0],
+            "relations": conn.execute("SELECT COUNT(*) FROM kos_relations").fetchone()[0],
+        }
+        conn.close()
+        return JSONResponse(content=stats)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+
+@app.get("/api/v1/health")
+async def api_health():
+    """Check knowledge base health."""
+    try:
+        from kos.monitoring import KosMonitor
+        monitor = KosMonitor()
+        result = monitor.index_health()
+        return JSONResponse(content=result)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+
+@app.get("/api/v1/clusters")
+async def api_clusters(q: str = Query(...), limit: int = 10):
+    """Search and cluster results by topic."""
+    try:
+        from kos.hybrid_search import HybridSearchEngine
+        from kos.search_features import SearchFeatures
+        engine = HybridSearchEngine()
+        result = engine.search(q, mode="hybrid", limit=limit)
+        engine.close()
+        features = SearchFeatures()
+        clusters = features.cluster_by_topic(result.get("results", []))
+        return JSONResponse(content=clusters)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
 CSS = """
 *{margin:0;padding:0;box-sizing:border-box}
 body{font:14px/1.6 -apple-system,sans-serif;background:#0d1117;color:#c9d1d9;max-width:1200px;margin:0 auto;padding:20px}

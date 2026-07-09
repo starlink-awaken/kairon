@@ -129,8 +129,9 @@ def cmd_status() -> dict:  # type: ignore[type-arg]
     index_status: dict[str, Any] = {"documents": 0}
     try:
         db_path = get_artifact_path("retrievalDatabase")
-        if db_path.exists():  # type: ignore[attr-defined]
-            conn = sqlite3.connect(str(db_path))
+        db_path_str = str(db_path)
+        if os.path.exists(db_path_str):
+            conn = sqlite3.connect(db_path_str)
             count = conn.execute("SELECT COUNT(*) FROM documents WHERE zone='minerva'").fetchone()[0]
             docs = conn.execute(
                 "SELECT title, kind, updated_at FROM documents WHERE zone='minerva' ORDER BY updated_at DESC LIMIT 5"
