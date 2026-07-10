@@ -532,77 +532,8 @@ class TestGraphViz:
 
 
 # ═══════════════════════════════════════════════════
-# 6. mcp_server.py 核心函数测试（已由 server/mcp_server.py 替代）
 # ═══════════════════════════════════════════════════
-
-
-@pytest.mark.skip(reason="src/mcp_server 已合并到 server/mcp_server.py，API 变更")
-class TestMCPServerCore:
-    """测试 MCP 服务器的核心查询函数（无需 FastMCP）。"""
-
-    @pytest.fixture
-    def mcp(self):
-        import mcp_server
-
-        return mcp_server
-
-    def test_search_tools_returns_list(self, mcp):
-        result = mcp.search_tools("PDF", limit=5)
-        assert isinstance(result, list)
-        # Tools exist in the real registry, so should find something
-        assert len(result) <= 5
-
-    def test_search_tools_with_capabilities(self, mcp):
-        result = mcp.search_tools("", capabilities=["code"], limit=3)
-        assert isinstance(result, list)
-        # All returned tools should have "code" capability
-        for tool in result:
-            caps = [c.lower() for c in tool.get("capabilities", [])]
-            assert any("code" in c for c in caps), f"Tool {tool['id']} lacks 'code' capability"
-
-    def test_list_candidates(self, mcp):
-        result = mcp.list_candidates()
-        assert isinstance(result, list)
-
-    def test_list_by_category(self, mcp):
-        result = mcp.list_by_category("MCP")
-        assert isinstance(result, list)
-        # All should have "MCP" category
-        for tool in result:
-            assert "MCP" in tool.get("category", [])
-
-    def test_health_check_returns_dict(self, mcp):
-        result = mcp.health_check()
-        assert isinstance(result, dict)
-        assert "schema" in result
-        assert "tools" in result
-        assert "active" in result
-        assert isinstance(result["tools"], int)
-        assert isinstance(result["active"], int)
-
-    def test_get_status_returns_dict(self, mcp):
-        result = mcp.get_status()
-        assert isinstance(result, dict)
-        assert "schema" in result
-        assert "tools" in result
-        assert "candidates" in result
-
-    def test_get_graph_stats(self, mcp):
-        result = mcp.get_graph_stats()
-        assert isinstance(result, dict)
-
-    def test_run_self_test(self, mcp):
-        # Self-test should pass with real data
-        result = mcp.run_self_test()
-        assert result is True, "Self-test should pass"
-
-    def test_query_graph(self, mcp):
-        result = mcp.query_graph("PDF")
-        assert isinstance(result, list)
-
-
-# ═══════════════════════════════════════════════════
-# 7. http_api.py 搜索/查询函数测试
+# 6. http_api.py 搜索/查询函数测试
 # ═══════════════════════════════════════════════════
 
 

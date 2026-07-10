@@ -1,11 +1,21 @@
 """Basic tests for Forge tool registry and discovery."""
 
+import os
 import shutil
 import subprocess
+from pathlib import Path
 
 import pytest
 
-FORGE = shutil.which("forge") or shutil.which("forge-bridge")
+# Locate forge CLI - check PATH first, then fallback to venv
+_FORGE_PATH = shutil.which("forge") or shutil.which("forge-bridge")
+if not _FORGE_PATH:
+    # Fallback to venv bin
+    _VENV_FORGE = Path(__file__).resolve().parents[3] / ".venv" / "bin" / "forge"
+    if _VENV_FORGE.exists():
+        _FORGE_PATH = str(_VENV_FORGE)
+
+FORGE = _FORGE_PATH
 
 
 def _run_cli(*args: str) -> tuple[int, str]:
