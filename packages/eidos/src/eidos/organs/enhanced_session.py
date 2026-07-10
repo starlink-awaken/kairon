@@ -1,6 +1,6 @@
 """Enhanced session organ — session management with checkpoint support.
 
-TODO: implement full enhanced session logic.
+Provides enhanced session management with context tracking.
 """
 
 from __future__ import annotations

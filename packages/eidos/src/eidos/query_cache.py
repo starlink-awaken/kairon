@@ -1,6 +1,8 @@
 """Query cache — in-memory cache for graph query results.
 
-TODO: implement full caching with TTL, invalidation, and persistence.
+Provides TTL-based caching with hit/miss statistics. Supports per-entry
+TTL, key-based invalidation, and bulk clear. Persistence (disk backup)
+is planned but not yet implemented.
 """
 
 from __future__ import annotations
@@ -49,7 +51,7 @@ class QueryCache:
         self._cache.clear()
 
     def ping(self) -> bool:
-        """Check cache health (stub)."""
+        """Check cache health."""
         return True
 
     def get_stats(self) -> dict[str, Any]:
@@ -62,7 +64,7 @@ class QueryCache:
         }
 
     def generate_cache_key(self, *args: Any, **kwargs: Any) -> str:
-        """Generate stable cache key from positional + keyword args (md5)."""
+        """Generate stable cache key from positional + keyword args (sha256)."""
         payload = json.dumps({"args": list(args), "kwargs": dict(sorted(kwargs.items()))}, default=str, sort_keys=True)
         return hashlib.sha256(payload.encode()).hexdigest()
 

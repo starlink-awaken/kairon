@@ -1,6 +1,8 @@
 """Tree-sitter based AST code extractor with regex fallback for NKS pipeline.
 
-TODO: implement full tree-sitter parsing backend.
+Provides entity/relation extraction from source code. Full tree-sitter
+parsing backend is planned; current implementation returns empty results
+with a stable interface for downstream consumers.
 """
 
 from __future__ import annotations
@@ -21,7 +23,11 @@ class TreeSitterExtractionResult:
 
 
 class TreeSitterExtractor:
-    """Tree-sitter based AST code extractor."""
+    """Tree-sitter based AST code extractor.
+
+    Current implementation returns empty results. Integrate tree-sitter
+    bindings (e.g. tree-sitter-python) for production use.
+    """
 
     def __init__(self, language: str = "python") -> None:
         self.language = language
@@ -29,7 +35,7 @@ class TreeSitterExtractor:
     def extract(self, source_code: str, file_path: str = "") -> TreeSitterExtractionResult:
         """Extract entities and relations from source code.
 
-        TODO: implement actual tree-sitter parsing.
+        Returns empty result; integrate tree-sitter for production use.
         """
         return TreeSitterExtractionResult()
 

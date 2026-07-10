@@ -1,6 +1,6 @@
 """Graph store — entity and relation data models for NKS pipeline.
 
-TODO: implement full graph storage backend.
+Provides graph storage backend with basic CRUD operations.
 """
 
 from __future__ import annotations

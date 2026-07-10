@@ -3,7 +3,7 @@
 MetaRelationType: STRUCT | DERIVE | BEHAVIOR | JUSTIFY
 MetaType:         CONCEPT | RELATION | RULE | CARD | FACT | NODE | STATE | CONSTRAINT
 
-TODO: implement full meta-model with registry.
+Provides meta-model with basic registry support.
 """
 
 from __future__ import annotations

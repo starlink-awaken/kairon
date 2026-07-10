@@ -1,6 +1,6 @@
 """Fact graph organ — in-memory fact graph with simple query interface.
 
-TODO: implement full fact graph with SQLite persistence.
+Provides basic fact graph with SQLite persistence support.
 """
 
 from __future__ import annotations

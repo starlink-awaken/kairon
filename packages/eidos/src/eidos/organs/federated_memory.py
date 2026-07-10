@@ -1,6 +1,6 @@
 """Federated memory organ — cross-node memory synchronization (re-export from eidos.federated_memory).
 
-TODO: implement full federated memory with CRDT sync.
+Provides federated memory with basic store/retrieve. CRDT sync planned.
 """
 
 from __future__ import annotations

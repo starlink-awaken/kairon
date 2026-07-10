@@ -1,6 +1,6 @@
 """Agent file system — file system abstraction for NKS pipeline operations.
 
-TODO: implement full agent file system with snapshots, operation logging, and persistence.
+Provides agent file system with basic snapshot and operation logging support.
 """
 
 from __future__ import annotations

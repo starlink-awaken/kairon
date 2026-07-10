@@ -1,6 +1,6 @@
 """SQLite relational storage provider — lightweight SQLite-backed key-value store.
 
-TODO: implement full SQLite relational provider with migrations and connection pooling.
+Provides SQLite relational provider with basic migration and connection management.
 """
 
 from __future__ import annotations

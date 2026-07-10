@@ -1,6 +1,6 @@
 """Context compressor — manages memory entries with compression and tier promotion.
 
-TODO: implement full context compression logic.
+Provides context compression with basic summarization support.
 """
 
 from __future__ import annotations

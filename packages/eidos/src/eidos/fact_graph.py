@@ -1,6 +1,7 @@
-"""Fact graph — an in-memory/durable graph of atomic facts.
+"""Fact graph — an in-memory graph of atomic facts.
 
-TODO: implement full fact graph with querying and persistence.
+Provides basic fact storage and retrieval. Advanced features (persistence,
+complex querying, graph algorithms) are planned for future enhancement.
 """
 
 from __future__ import annotations

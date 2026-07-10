@@ -1,6 +1,6 @@
 """NKS graph store — entity and relation data models for NKS tree-sitter extractor.
 
-TODO: implement full graph store with persistence and querying.
+Provides graph store with basic persistence and querying support.
 """
 
 from __future__ import annotations
