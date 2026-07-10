@@ -1,6 +1,5 @@
 """Basic tests for Forge tool registry and discovery."""
 
-import os
 import shutil
 import subprocess
 from pathlib import Path

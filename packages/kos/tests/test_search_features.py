@@ -5,9 +5,9 @@ import sys
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent.parent
-src_DIR = SCRIPT_DIR / "src"
+src_dir = SCRIPT_DIR / "src"
 
-sys.path.insert(0, str(src_DIR))
+sys.path.insert(0, str(src_dir))
 
 os.environ.setdefault("KOS_HOME", str(SCRIPT_DIR))
 

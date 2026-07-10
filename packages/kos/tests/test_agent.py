@@ -6,8 +6,8 @@ import unittest
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent.parent
-src_DIR = SCRIPT_DIR / "src"
-sys.path.insert(0, str(src_DIR))
+src_dir = SCRIPT_DIR / "src"
+sys.path.insert(0, str(src_dir))
 
 os.environ.setdefault("KOS_HOME", str(SCRIPT_DIR))
 
@@ -20,7 +20,7 @@ def _gbrain_available() -> bool:
             "http://localhost:3131/health",
             method="GET",
         )
-        with urllib.request.urlopen(req, timeout=2.0) as resp:
+        with urllib.request.urlopen(req, timeout=2.0) as resp:  # noqa: S310
             return resp.status == 200
     except Exception:
         return False
