@@ -7,10 +7,10 @@ KOS Alert Service — 健康告警服务
 
 Usage:
     from kos.maintenance.alerts import AlertService
-    
+
     alerts = AlertService()
     alerts.check_all()  # Run all checks
-    
+
     # Or via CLI:
     # kos monitor alerts
 """
@@ -97,11 +97,13 @@ class AlertService:
                     if alert["severity"] in ("critical", "warning"):
                         results["healthy"] = False
             except Exception as e:
-                results["alerts"].append({
-                    "check": check_name,
-                    "severity": "warning",
-                    "message": f"Check failed: {e}",
-                })
+                results["alerts"].append(
+                    {
+                        "check": check_name,
+                        "severity": "warning",
+                        "message": f"Check failed: {e}",
+                    }
+                )
 
         results["alert_count"] = len(results["alerts"])
         return results
@@ -133,6 +135,7 @@ class AlertService:
         """检查向量索引滞后。"""
         try:
             import lancedb
+
             lancedb_dir = self.db_path.parent / "vectors"
             db = lancedb.connect(str(lancedb_dir))
             if "kos_documents" in db.list_tables():
@@ -187,9 +190,7 @@ class AlertService:
     def _check_cache_hit_rate(self, config: dict) -> dict | None:
         """检查缓存命中率。"""
         try:
-            stats = self.conn.execute(
-                "SELECT COUNT(*) FROM search_cache"
-            ).fetchone()[0]
+            stats = self.conn.execute("SELECT COUNT(*) FROM search_cache").fetchone()[0]
             # Simplified: just check if cache table exists and has entries
             if stats == 0:
                 return {
@@ -241,6 +242,7 @@ class AlertService:
         """发送告警通知。"""
         try:
             from kos.push_engine import send_notification
+
             send_notification(
                 title=f"[KOS] {alert['check']}",
                 message=alert["message"],
@@ -260,6 +262,7 @@ class AlertService:
 
 
 # ── CLI 入口 ──────────────────────────────────────────────
+
 
 def main():
     import argparse

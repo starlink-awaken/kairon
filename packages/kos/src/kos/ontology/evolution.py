@@ -12,7 +12,7 @@ KOS Ontology Evolution Engine — 本体演化引擎
 
 Usage:
     from kos.ontology.evolution import OntologyEvolution
-    
+
     evo = OntologyEvolution()
     report = evo.evolve()
     print(report)
@@ -30,7 +30,7 @@ from kos.db import get_connection
 
 class OntologyEvolution:
     """本体演化引擎。
-    
+
     自动发现和修复本体中的质量问题。
     """
 
@@ -61,7 +61,7 @@ class OntologyEvolution:
 
     def evolve(self) -> dict[str, Any]:
         """运行一次完整的本体演化循环。
-        
+
         Returns:
             演化报告。
         """
@@ -217,11 +217,13 @@ class OntologyEvolution:
         """).fetchall()
 
         if orphans:
-            recommendations.append({
-                "type": "orphan_entities",
-                "message": f"Found {len(orphans)} entities without document links",
-                "entities": [o["label"] for o in orphans],
-            })
+            recommendations.append(
+                {
+                    "type": "orphan_entities",
+                    "message": f"Found {len(orphans)} entities without document links",
+                    "entities": [o["label"] for o in orphans],
+                }
+            )
 
         # 2. 低置信度关系
         low_conf = conn.execute("""
@@ -230,16 +232,19 @@ class OntologyEvolution:
         """).fetchall()
 
         if low_conf:
-            recommendations.append({
-                "type": "low_confidence_relations",
-                "message": f"Found {len(low_conf)} relations with confidence < 0.5",
-            })
+            recommendations.append(
+                {
+                    "type": "low_confidence_relations",
+                    "message": f"Found {len(low_conf)} relations with confidence < 0.5",
+                }
+            )
 
         conn.close()
         return recommendations
 
 
 # ── CLI 入口 ──────────────────────────────────────────────
+
 
 def main() -> None:
     import argparse

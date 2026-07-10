@@ -58,6 +58,7 @@ def _load_jieba_userdict() -> None:
         return
     try:
         import jieba
+
         jieba.load_userdict(str(dict_path))
     except Exception:
         pass
@@ -74,6 +75,7 @@ def _tokenize_cn(text: str) -> str:
     if _jieba is None:
         try:
             import jieba
+
             _jieba = jieba
             _load_jieba_userdict()
         except ImportError:
@@ -685,17 +687,33 @@ class KosIndexer:
         """Write a batch of processed files to the database in a single transaction."""
         cursor = conn.cursor()
         doc_cols = [
-            "doc_id", "title", "kind", "zone", "status", "source", "owner",
-            "created_at", "updated_at", "trust_level", "freshness", "review_status",
-            "schema_version", "canonical_path", "source_url", "write_policy",
-            "metadata_json", "body", "file_size", "file_mtime",
+            "doc_id",
+            "title",
+            "kind",
+            "zone",
+            "status",
+            "source",
+            "owner",
+            "created_at",
+            "updated_at",
+            "trust_level",
+            "freshness",
+            "review_status",
+            "schema_version",
+            "canonical_path",
+            "source_url",
+            "write_policy",
+            "metadata_json",
+            "body",
+            "file_size",
+            "file_mtime",
         ]
         doc_sql = f"INSERT INTO documents VALUES ({','.join(['?'] * len(doc_cols))})"
         fts_sql = "INSERT INTO documents_fts (doc_id,title,body,tags,canonical_path) VALUES (?,?,?,?,?)"
         fp_sql = """INSERT OR REPLACE INTO file_fingerprints
                     (canonical_path,zone,sha256_hash,file_size,file_mtime,last_indexed,absent_since,file_format)
                     VALUES (?,?,?,?,?,?,NULL,?)"""
-        
+
         cursor.execute("BEGIN TRANSACTION")
         try:
             for r in pending:
@@ -850,7 +868,7 @@ class KosIndexer:
 
     def _quick_unchanged_check(self, file_path: Path, existing_hash: str | None) -> bool:
         """Fast check if file is unchanged using mtime + size (avoids SHA-256).
-        
+
         Returns True if the file is definitely unchanged, False if uncertain.
         """
         if not existing_hash:

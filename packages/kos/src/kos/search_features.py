@@ -55,16 +55,18 @@ class SearchFeatures:
                 """SELECT label, entity_type FROM kos_entities
                    WHERE label LIKE ? OR label LIKE ?
                    ORDER BY entity_type, label LIMIT ?""",
-                (f"{prefix}%", f"% {prefix}%", limit)
+                (f"{prefix}%", f"% {prefix}%", limit),
             ).fetchall()
             for row in entity_rows:
                 label = row["label"]
                 if label.lower() not in seen:
-                    suggestions.append({
-                        "text": label,
-                        "type": "entity",
-                        "entity_type": row["entity_type"],
-                    })
+                    suggestions.append(
+                        {
+                            "text": label,
+                            "type": "entity",
+                            "entity_type": row["entity_type"],
+                        }
+                    )
                     seen.add(label.lower())
         except sqlite3.OperationalError:
             pass
@@ -75,15 +77,17 @@ class SearchFeatures:
                 """SELECT DISTINCT title FROM documents
                    WHERE title LIKE ? OR title LIKE ?
                    ORDER BY title LIMIT ?""",
-                (f"{prefix}%", f"% {prefix}%", limit)
+                (f"{prefix}%", f"% {prefix}%", limit),
             ).fetchall()
             for row in title_rows:
                 title = row["title"]
                 if title.lower() not in seen:
-                    suggestions.append({
-                        "text": title,
-                        "type": "title",
-                    })
+                    suggestions.append(
+                        {
+                            "text": title,
+                            "type": "title",
+                        }
+                    )
                     seen.add(title.lower())
         except sqlite3.OperationalError:
             pass
@@ -96,7 +100,7 @@ class SearchFeatures:
                    FROM documents
                    WHERE canonical_path LIKE ? AND title != ''
                    GROUP BY term ORDER BY COUNT(*) DESC LIMIT ?""",
-                (f"%{prefix}%", limit)
+                (f"%{prefix}%", limit),
             ).fetchall()
             for row in term_rows:
                 term = row["term"]
@@ -104,10 +108,12 @@ class SearchFeatures:
                     # Extract just the filename part
                     short = term.split("/")[-1] if "/" in term else term
                     if len(short) > 2:
-                        suggestions.append({
-                            "text": short,
-                            "type": "path",
-                        })
+                        suggestions.append(
+                            {
+                                "text": short,
+                                "type": "path",
+                            }
+                        )
                         seen.add(short.lower())
         except sqlite3.OperationalError:
             pass
@@ -148,7 +154,7 @@ class SearchFeatures:
                        JOIN kos_entities e ON ed.entity_id = e.entity_id
                        WHERE ed.doc_id = ?
                        ORDER BY ed.relevance DESC LIMIT 5""",
-                    (doc_id,)
+                    (doc_id,),
                 ).fetchall()
                 doc_entities[doc_id] = [
                     {"entity_id": row["entity_id"], "label": row["label"], "type": row["entity_type"]}
@@ -192,11 +198,13 @@ class SearchFeatures:
         for eid, cluster_results in sorted_clusters:
             if len(cluster_results) >= 2:  # Only cluster if 2+ results
                 entity_info = all_entities.get(eid, {})
-                clusters.append({
-                    "entity": entity_info,
-                    "results": cluster_results,
-                    "count": len(cluster_results),
-                })
+                clusters.append(
+                    {
+                        "entity": entity_info,
+                        "results": cluster_results,
+                        "count": len(cluster_results),
+                    }
+                )
 
         return {
             "clusters": clusters,
@@ -233,15 +241,17 @@ class SearchFeatures:
                      AND ed1.entity_id != ed2.entity_id
                    GROUP BY e2.entity_id
                    ORDER BY co_count DESC LIMIT ?""",
-                (query, limit * 2)
+                (query, limit * 2),
             ).fetchall()
             for row in co_entity_rows:
                 if row["label"].lower() != query.lower():
-                    related.append({
-                        "text": row["label"],
-                        "type": "co-occurring entity",
-                        "score": row["co_count"],
-                    })
+                    related.append(
+                        {
+                            "text": row["label"],
+                            "type": "co-occurring entity",
+                            "score": row["co_count"],
+                        }
+                    )
         except sqlite3.OperationalError:
             pass
 
@@ -251,15 +261,17 @@ class SearchFeatures:
                 """SELECT DISTINCT title FROM documents
                    WHERE title LIKE ? AND title != ''
                    ORDER BY updated_at DESC LIMIT ?""",
-                (f"%{query[:3]}%", limit)
+                (f"%{query[:3]}%", limit),
             ).fetchall()
             for row in title_rows:
                 if row["title"].lower() != query.lower():
-                    related.append({
-                        "text": row["title"],
-                        "type": "similar title",
-                        "score": 1,
-                    })
+                    related.append(
+                        {
+                            "text": row["title"],
+                            "type": "similar title",
+                            "score": 1,
+                        }
+                    )
         except sqlite3.OperationalError:
             pass
 
@@ -304,6 +316,7 @@ class SearchFeatures:
         """Add a query to history."""
         history = self._load_history(path)
         from datetime import datetime
+
         entry = {"query": query, "timestamp": datetime.now().isoformat()}
         # Remove duplicate if exists
         history = [h for h in history if h["query"] != query]
@@ -327,6 +340,7 @@ class SearchFeatures:
         """Get popular queries."""
         history = self._load_history(path)
         from collections import Counter
+
         queries = [h["query"] for h in history]
         popular = Counter(queries).most_common(10)
         return {
@@ -415,13 +429,15 @@ class SearchFeatures:
                 entity_groups = self._sub_cluster_by_entity(conn, zone_docs)
                 if entity_groups:
                     for entity_label, entity_docs in entity_groups.items():
-                        clusters.append({
-                            "label": entity_label,
-                            "icon": "🏷️",
-                            "results": entity_docs,
-                            "count": len(entity_docs),
-                            "zone": zone,
-                        })
+                        clusters.append(
+                            {
+                                "label": entity_label,
+                                "icon": "🏷️",
+                                "results": entity_docs,
+                                "count": len(entity_docs),
+                                "zone": zone,
+                            }
+                        )
                     # 剩余文档归入域聚类
                     grouped_docs = set()
                     for docs in entity_groups.values():
@@ -429,29 +445,35 @@ class SearchFeatures:
                             grouped_docs.add(d.get("doc_id", ""))
                     remaining = [d for d in zone_docs if d.get("doc_id", "") not in grouped_docs]
                     if remaining:
-                        clusters.append({
+                        clusters.append(
+                            {
+                                "label": zone_labels.get(zone, zone),
+                                "icon": zone_icons.get(zone, "📂"),
+                                "results": remaining,
+                                "count": len(remaining),
+                                "zone": zone,
+                            }
+                        )
+                else:
+                    clusters.append(
+                        {
                             "label": zone_labels.get(zone, zone),
                             "icon": zone_icons.get(zone, "📂"),
-                            "results": remaining,
-                            "count": len(remaining),
+                            "results": zone_docs,
+                            "count": len(zone_docs),
                             "zone": zone,
-                        })
-                else:
-                    clusters.append({
+                        }
+                    )
+            else:
+                clusters.append(
+                    {
                         "label": zone_labels.get(zone, zone),
                         "icon": zone_icons.get(zone, "📂"),
                         "results": zone_docs,
                         "count": len(zone_docs),
                         "zone": zone,
-                    })
-            else:
-                clusters.append({
-                    "label": zone_labels.get(zone, zone),
-                    "icon": zone_icons.get(zone, "📂"),
-                    "results": zone_docs,
-                    "count": len(zone_docs),
-                    "zone": zone,
-                })
+                    }
+                )
 
         # 按数量排序 (大到小)
         clusters.sort(key=lambda c: -c["count"])
@@ -472,7 +494,7 @@ class SearchFeatures:
                        JOIN kos_entities e ON ed.entity_id = e.entity_id
                        WHERE ed.doc_id = ? AND ed.relevance >= 0.3
                        ORDER BY ed.relevance DESC LIMIT 3""",
-                    (doc_id,)
+                    (doc_id,),
                 ).fetchall()
                 doc_entities[doc_id] = [r["label"] for r in rows]
             except sqlite3.OperationalError:

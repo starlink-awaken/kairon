@@ -48,6 +48,7 @@ def get_ontology_connection() -> sqlite3.Connection:
         sqlite3.Connection with Row factory and optimized PRAGMA settings.
     """
     from kos.ontology.engine import get_db
+
     conn = get_db()
     _set_pragmas(conn)
     return conn

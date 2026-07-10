@@ -7,7 +7,7 @@ KOS GraphRAG Reasoner — LLM 驱动的图谱深度推理.
 
 Usage:
     from kos.graphrag_reasoner import GraphRAGReasoner
-    
+
     reasoner = GraphRAGReasoner()
     result = reasoner.reason("夏明星参与的项目的上下游依赖")
 """
@@ -84,18 +84,18 @@ class GraphRAGReasoner:
     def _extract_entities(self, query: str) -> list[dict]:
         """从查询中提取已知实体。"""
         entities = []
-        rows = self.conn.execute(
-            "SELECT entity_id, label, entity_type FROM kos_entities"
-        ).fetchall()
+        rows = self.conn.execute("SELECT entity_id, label, entity_type FROM kos_entities").fetchall()
 
         query_lower = query.lower()
         for row in rows:
             if row["label"].lower() in query_lower:
-                entities.append({
-                    "entity_id": row["entity_id"],
-                    "label": row["label"],
-                    "type": row["entity_type"],
-                })
+                entities.append(
+                    {
+                        "entity_id": row["entity_id"],
+                        "label": row["label"],
+                        "type": row["entity_type"],
+                    }
+                )
 
         return entities
 
@@ -115,8 +115,7 @@ class GraphRAGReasoner:
 
             # Get neighbors
             neighbors = self.conn.execute(
-                "SELECT target_id, predicate, confidence FROM kos_relations WHERE source_id = ?",
-                (node,)
+                "SELECT target_id, predicate, confidence FROM kos_relations WHERE source_id = ?", (node,)
             ).fetchall()
 
             for nb in neighbors:
@@ -126,12 +125,14 @@ class GraphRAGReasoner:
                     new_preds = predicates + [nb["predicate"]]
 
                     if len(new_path) >= 2:
-                        paths.append({
-                            "path": new_path,
-                            "predicates": new_preds,
-                            "hops": len(new_path) - 1,
-                            "min_confidence": min(p["confidence"] for p in [nb]),
-                        })
+                        paths.append(
+                            {
+                                "path": new_path,
+                                "predicates": new_preds,
+                                "hops": len(new_path) - 1,
+                                "min_confidence": min(p["confidence"] for p in [nb]),
+                            }
+                        )
 
                     queue.append((nb["target_id"], new_path, new_preds))
 

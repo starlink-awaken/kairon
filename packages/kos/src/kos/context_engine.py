@@ -11,10 +11,10 @@ KOS Context Engine — 上下文工程引擎
 
 Usage:
     from kos.context_engine import ContextEngine
-    
+
     engine = ContextEngine()
     context = engine.build_context("数据治理", mode="balanced")
-    
+
     # 带完整配置
     context = engine.build_context(
         "数据治理",
@@ -41,7 +41,7 @@ from kos.db import get_connection
 
 class ContextEngine:
     """KOS 上下文工程引擎。
-    
+
     将检索结果转化为 LLM 可消费的精简上下文，
     实现检索预算控制、结果压缩、分层记忆。
     """
@@ -93,7 +93,7 @@ class ContextEngine:
         results: list[dict] | None = None,
     ) -> dict[str, Any]:
         """构建 LLM 上下文。
-        
+
         Args:
             query: 用户查询。
             mode: 上下文模式: concise | balanced | detailed
@@ -101,7 +101,7 @@ class ContextEngine:
             history: 搜索历史。
             max_tokens: 自定义 token 限制。
             results: 预检索结果 (可选，未提供时自动检索)。
-            
+
         Returns:
             上下文 dict，包含 sections、total_tokens、sources 等。
         """
@@ -146,13 +146,13 @@ class ContextEngine:
         mode: str = "balanced",
     ) -> str:
         """为 AI Agent 构建上下文字符串 (直接可注入 prompt)。
-        
+
         Args:
             task: 任务描述。
             persona: Agent 角色。
             history: 对话历史。
             mode: 上下文模式。
-            
+
         Returns:
             格式化的上下文字符串。
         """
@@ -165,6 +165,7 @@ class ContextEngine:
         """执行混合检索。"""
         try:
             from kos.hybrid_search import HybridSearchEngine
+
             engine = HybridSearchEngine(self.db_path)
             result = engine.search(
                 query,
@@ -222,16 +223,18 @@ class ContextEngine:
             if len(snippet) > snippet_len:
                 snippet = snippet[:snippet_len].rsplit(" ", 1)[0] + "..."
 
-            compressed.append({
-                "doc_id": r["doc_id"],
-                "title": r.get("title", ""),
-                "zone": r.get("zone", ""),
-                "kind": r.get("kind", ""),
-                "canonical_path": r.get("canonical_path", ""),
-                "snippet": snippet,
-                "source": r.get("source", "unknown"),
-                "relevance": r.get("_rrf_score", r.get("_score", 0)),
-            })
+            compressed.append(
+                {
+                    "doc_id": r["doc_id"],
+                    "title": r.get("title", ""),
+                    "zone": r.get("zone", ""),
+                    "kind": r.get("kind", ""),
+                    "canonical_path": r.get("canonical_path", ""),
+                    "snippet": snippet,
+                    "source": r.get("source", "unknown"),
+                    "relevance": r.get("_rrf_score", r.get("_score", 0)),
+                }
+            )
 
         return compressed
 
@@ -250,27 +253,33 @@ class ContextEngine:
 
         # 1. 角色段落
         if persona:
-            sections.append({
-                "type": "persona",
-                "content": f"You are: {persona}",
-                "tokens": self._estimate_tokens(f"You are: {persona}"),
-            })
+            sections.append(
+                {
+                    "type": "persona",
+                    "content": f"You are: {persona}",
+                    "tokens": self._estimate_tokens(f"You are: {persona}"),
+                }
+            )
 
         # 2. 任务段落
-        sections.append({
-            "type": "task",
-            "content": f"Query: {query}",
-            "tokens": self._estimate_tokens(f"Query: {query}"),
-        })
+        sections.append(
+            {
+                "type": "task",
+                "content": f"Query: {query}",
+                "tokens": self._estimate_tokens(f"Query: {query}"),
+            }
+        )
 
         # 3. 历史段落
         if cfg.get("include_history") and history:
             hist_text = "\n".join(f"- {h}" for h in history[-5:])
-            sections.append({
-                "type": "history",
-                "content": f"Recent searches:\n{hist_text}",
-                "tokens": self._estimate_tokens(hist_text),
-            })
+            sections.append(
+                {
+                    "type": "history",
+                    "content": f"Recent searches:\n{hist_text}",
+                    "tokens": self._estimate_tokens(hist_text),
+                }
+            )
 
         # 4. 知识段落
         if compressed:
@@ -282,11 +291,13 @@ class ContextEngine:
                 knowledge_lines.append(line)
 
             knowledge_text = "\n".join(knowledge_lines)
-            sections.append({
-                "type": "knowledge",
-                "content": knowledge_text,
-                "tokens": self._estimate_tokens(knowledge_text),
-            })
+            sections.append(
+                {
+                    "type": "knowledge",
+                    "content": knowledge_text,
+                    "tokens": self._estimate_tokens(knowledge_text),
+                }
+            )
 
         return sections
 
@@ -363,13 +374,16 @@ class ContextEngine:
 
 # ── CLI 入口 ──────────────────────────────────────────────
 
+
 def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser(description="KOS Context Engine")
     parser.add_argument("query", help="Query to build context for")
     parser.add_argument(
-        "--mode", default="balanced", choices=["concise", "balanced", "detailed"],
+        "--mode",
+        default="balanced",
+        choices=["concise", "balanced", "detailed"],
         help="Context mode (default: balanced)",
     )
     parser.add_argument("--persona", help="Persona/role")

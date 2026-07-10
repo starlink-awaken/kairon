@@ -27,7 +27,9 @@ class SharedBrainHealingTrigger:
 
     def __init__(self, agora_endpoint: str | None = None, timeout: int = 5) -> None:
         if agora_endpoint is None:
-            agora_endpoint = os.environ.get("AGORA_ENDPOINT", f"http://localhost:{os.environ.get('AGORA_INTERNAL_PORT', '7430')}")
+            agora_endpoint = os.environ.get(
+                "AGORA_ENDPOINT", f"http://localhost:{os.environ.get('AGORA_INTERNAL_PORT', '7430')}"
+            )
         self.endpoint = agora_endpoint.rstrip("/")
         self.timeout = timeout
         self.RULES = self._load_rules()

@@ -16,6 +16,7 @@ def _gbrain_available() -> bool:
     """Check if gbrain MCP is reachable."""
     try:
         import urllib.request
+
         req = urllib.request.Request(
             "http://localhost:3131/health",
             method="GET",
@@ -27,10 +28,10 @@ def _gbrain_available() -> bool:
 
 
 class TestKosAgentClient(unittest.TestCase):
-
     @unittest.skipUnless(_gbrain_available(), "gbrain MCP not running on :3131")
     def test_search(self):
         from kos.agent.client import KosAgentClient
+
         client = KosAgentClient()
         result = client.search("test", limit=3)
         self.assertIn("results", result)
@@ -38,6 +39,7 @@ class TestKosAgentClient(unittest.TestCase):
 
     def test_verify(self):
         from kos.agent.client import KosAgentClient
+
         client = KosAgentClient()
         result = client.verify("test claim")
         self.assertIn("claim", result)
@@ -47,12 +49,14 @@ class TestKosAgentClient(unittest.TestCase):
 
     def test_search_entities(self):
         from kos.agent.client import KosAgentClient
+
         client = KosAgentClient()
         entities = client.search_entities("test")
         self.assertIsInstance(entities, list)
 
     def test_subscribe(self):
         from kos.agent.client import KosAgentClient
+
         client = KosAgentClient(subscriber_id="test-sub")
         result = client.subscribe("test-topic")
         self.assertIn("sub_id", result)
@@ -61,6 +65,7 @@ class TestKosAgentClient(unittest.TestCase):
 
     def test_list_subscriptions(self):
         from kos.agent.client import KosAgentClient
+
         client = KosAgentClient(subscriber_id="test-list")
         client.subscribe("topic-1")
         subs = client.list_subscriptions()
@@ -72,16 +77,19 @@ class TestSubscriptionService(unittest.TestCase):
 
     def test_import(self):
         from kos.agent.subscription import SubscriptionService
+
         self.assertTrue(callable(SubscriptionService))
 
     def test_creation(self):
         from kos.agent.subscription import SubscriptionService
+
         service = SubscriptionService()
         self.assertIsNotNone(service)
 
     def test_subscribe_unsubscribe(self):
         from kos.agent.subscription import SubscriptionService
         from kos.config import get_artifact_path
+
         service = SubscriptionService()
         service.init_table(get_artifact_path("retrievalDatabase"))
 
@@ -95,6 +103,7 @@ class TestSubscriptionService(unittest.TestCase):
     def test_check_matches(self):
         from kos.agent.subscription import SubscriptionService
         from kos.config import get_artifact_path
+
         service = SubscriptionService()
         service.init_table(get_artifact_path("retrievalDatabase"))
 
@@ -106,6 +115,7 @@ class TestSubscriptionService(unittest.TestCase):
     def test_list_subscriptions(self):
         from kos.agent.subscription import SubscriptionService
         from kos.config import get_artifact_path
+
         service = SubscriptionService()
         service.init_table(get_artifact_path("retrievalDatabase"))
 
@@ -116,6 +126,7 @@ class TestSubscriptionService(unittest.TestCase):
     def test_check_all(self):
         from kos.agent.subscription import SubscriptionService
         from kos.config import get_artifact_path
+
         service = SubscriptionService()
         service.init_table(get_artifact_path("retrievalDatabase"))
 

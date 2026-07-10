@@ -7,10 +7,10 @@ KOS File Watcher — 文件系统实时监控
 
 Usage:
     from kos.maintenance.watcher import FileWatcher
-    
+
     watcher = FileWatcher()
     watcher.start()  # Blocking
-    
+
     # Or via CLI:
     # kos index --watch
 """
@@ -29,7 +29,7 @@ from kos.maintenance.indexer import IncrementalIndexer
 
 class FileWatcher:
     """文件系统变更监控器。
-    
+
     使用轮询方式检测文件变更 (跨平台兼容)。
     对于 macOS/Linux 可使用 fsevents/inotify 进一步优化。
     """
@@ -125,14 +125,12 @@ class FileWatcher:
 
 # ── CLI 入口 ──────────────────────────────────────────────
 
+
 def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="KOS File Watcher")
-    parser.add_argument(
-        "--interval", type=float, default=60.0,
-        help="Polling interval in seconds (default: 60)"
-    )
+    parser.add_argument("--interval", type=float, default=60.0, help="Polling interval in seconds (default: 60)")
     args = parser.parse_args()
 
     watcher = FileWatcher(poll_interval=args.interval)

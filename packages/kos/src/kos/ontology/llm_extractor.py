@@ -8,15 +8,15 @@ KOS LLM Entity Extractor — 利用本地 LLM 从文档中自动抽取实体和�
 
 Usage:
     from kos.ontology.llm_extractor import LLMEntityExtractor
-    
+
     extractor = LLMEntityExtractor()
-    
+
     # 从单篇文档抽取
     result = extractor.extract_from_document("文档内容...")
-    
+
     # 批量抽取
     results = extractor.extract_batch([doc1, doc2, doc3])
-    
+
     # 从已索引文档抽取
     stats = extractor.extract_from_index(limit=10)
 """
@@ -35,7 +35,7 @@ from kos.db import get_connection
 
 class LLMEntityExtractor:
     """LLM 辅助实体抽取器。
-    
+
     通过本地 omlx 网关调用 LLM，从文档中自动提取实体和关系。
     """
 
@@ -56,11 +56,11 @@ class LLMEntityExtractor:
         existing_entities: list[dict] | None = None,
     ) -> dict[str, Any]:
         """从单篇文档中抽取实体和关系。
-        
+
         Args:
             doc_text: 文档文本内容。
             existing_entities: 已有实体列表 (用于去重)。
-            
+
         Returns:
             {"entities": [...], "relations": [...]}
         """
@@ -74,17 +74,17 @@ class LLMEntityExtractor:
         batch_size: int = 3,
     ) -> list[dict[str, Any]]:
         """批量抽取文档中的实体和关系。
-        
+
         Args:
             docs: 文档列表 [{"doc_id": "...", "text": "..."}]
             batch_size: 每次批量处理的文档数。
-            
+
         Returns:
             抽取结果列表。
         """
         results = []
         for i in range(0, len(docs), batch_size):
-            batch = docs[i:i + batch_size]
+            batch = docs[i : i + batch_size]
             batch_text = self._combine_docs(batch)
             prompt = self._build_batch_extraction_prompt(batch_text, len(batch))
             response = self._call_llm(prompt)
@@ -98,11 +98,11 @@ class LLMEntityExtractor:
         domain: str | None = None,
     ) -> dict[str, Any]:
         """从已索引文档中抽取实体和关系。
-        
+
         Args:
             limit: 最多处理的文档数。
             domain: 域过滤。
-            
+
         Returns:
             抽取统计和结果。
         """
@@ -221,7 +221,7 @@ class LLMEntityExtractor:
         parts = []
         for i, doc in enumerate(docs):
             text = doc.get("text", "")[:1000]
-            parts.append(f"--- 文档 {i+1} ---\n{text}")
+            parts.append(f"--- 文档 {i + 1} ---\n{text}")
         return "\n\n".join(parts)
 
     # ── LLM 调用 ────────────────────────────────────────────
@@ -231,18 +231,20 @@ class LLMEntityExtractor:
         import urllib.request
         import urllib.error
 
-        payload = json.dumps({
-            "model": self.model,
-            "messages": [
-                {
-                    "role": "system",
-                    "content": "你是一个严谨的知识工程师，擅长从文档中抽取结构化实体和关系。只输出 JSON，不要解释。",
-                },
-                {"role": "user", "content": prompt},
-            ],
-            "temperature": 0.2,
-            "max_tokens": 2000,
-        }).encode("utf-8")
+        payload = json.dumps(
+            {
+                "model": self.model,
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "你是一个严谨的知识工程师，擅长从文档中抽取结构化实体和关系。只输出 JSON，不要解释。",
+                    },
+                    {"role": "user", "content": prompt},
+                ],
+                "temperature": 0.2,
+                "max_tokens": 2000,
+            }
+        ).encode("utf-8")
 
         req = urllib.request.Request(
             f"{self.omlx_url}/v1/chat/completions",
@@ -286,21 +288,25 @@ class LLMEntityExtractor:
         entities = []
         for e in data.get("entities", []):
             if isinstance(e, dict) and e.get("label"):
-                entities.append({
-                    "label": str(e["label"]).strip(),
-                    "type": str(e.get("type", "Concept")).strip(),
-                    "description": str(e.get("description", ""))[:200],
-                })
+                entities.append(
+                    {
+                        "label": str(e["label"]).strip(),
+                        "type": str(e.get("type", "Concept")).strip(),
+                        "description": str(e.get("description", ""))[:200],
+                    }
+                )
 
         relations = []
         for r in data.get("relations", []):
             if isinstance(r, dict) and r.get("source") and r.get("target"):
-                relations.append({
-                    "source": str(r["source"]).strip(),
-                    "predicate": str(r.get("predicate", "related_to")).strip(),
-                    "target": str(r["target"]).strip(),
-                    "confidence": float(r.get("confidence", 0.5)),
-                })
+                relations.append(
+                    {
+                        "source": str(r["source"]).strip(),
+                        "predicate": str(r.get("predicate", "related_to")).strip(),
+                        "target": str(r["target"]).strip(),
+                        "confidence": float(r.get("confidence", 0.5)),
+                    }
+                )
 
         return {"entities": entities, "relations": relations}
 
@@ -320,7 +326,7 @@ class LLMEntityExtractor:
                 elif c in "}]":
                     depth -= 1
                     if depth == 0:
-                        return text[start:i + 1]
+                        return text[start : i + 1]
             return text[start:]
 
         # 尝试从 markdown 代码块中提取
@@ -332,6 +338,7 @@ class LLMEntityExtractor:
 
 
 # ── CLI 入口 ──────────────────────────────────────────────
+
 
 def main() -> None:
     import argparse
@@ -362,7 +369,7 @@ def main() -> None:
         print(json.dumps(result, ensure_ascii=False, indent=2))
     else:
         # Test: check if omlx is available
-        test_prompt = "Hello, respond with just: {\"status\": \"ok\"}"
+        test_prompt = 'Hello, respond with just: {"status": "ok"}'
         response = extractor._call_llm(test_prompt)
         if response:
             print(json.dumps({"status": "available", "response": response[:200]}, ensure_ascii=False))

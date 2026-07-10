@@ -215,12 +215,12 @@ def cmd_report() -> dict[str, Any]:
 
 def cmd_research(question: str, level: str = "auto", max_cost: float = 1.0) -> dict:
     """深度研究流水线: KOS检索 → Minerva研究 → 事实核查 → 结构化报告。
-    
+
     Args:
         question: 研究问题。
         level: Minerva 研究级别 (auto/L0/L1/L2/L3/L4)。
         max_cost: 最大费用 (USD)。
-        
+
     Returns:
         结构化研究报告。
     """
@@ -233,6 +233,7 @@ def cmd_research(question: str, level: str = "auto", max_cost: float = 1.0) -> d
     # Step 1: KOS 混合检索
     try:
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         search_result = engine.search(question, mode="hybrid", limit=10)
         engine.close()
@@ -247,6 +248,7 @@ def cmd_research(question: str, level: str = "auto", max_cost: float = 1.0) -> d
     # Step 2: 上下文工程
     try:
         from kos.context_engine import ContextEngine
+
         ctx_engine = ContextEngine()
         ctx = ctx_engine.build_context(question, mode="detailed")
         ctx_engine.close()
@@ -262,9 +264,7 @@ def cmd_research(question: str, level: str = "auto", max_cost: float = 1.0) -> d
     adapter = _get_minerva()
     if adapter.health()["available"]:
         try:
-            research_result = adapter.research(
-                question, level=level, max_cost=max_cost, timeout=600
-            )
+            research_result = adapter.research(question, level=level, max_cost=max_cost, timeout=600)
             result["steps"]["minerva_research"] = {
                 "status": "complete" if research_result.get("success") else "failed",
                 "output_length": len(research_result.get("output", "")),
@@ -277,6 +277,7 @@ def cmd_research(question: str, level: str = "auto", max_cost: float = 1.0) -> d
     # Step 4: 事实核查
     try:
         from kos.hybrid_search import HybridSearchEngine
+
         verify_engine = HybridSearchEngine()
         # Extract key claims from question and verify
         verify_result = verify_engine.search(question, mode="hybrid", limit=5)

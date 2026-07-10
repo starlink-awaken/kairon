@@ -17,16 +17,19 @@ class TestHybridSearchEngine(unittest.TestCase):
 
     def test_import(self):
         from kos.hybrid_search import HybridSearchEngine
+
         self.assertTrue(callable(HybridSearchEngine))
 
     def test_engine_creation(self):
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         self.assertIsNotNone(engine)
         engine.close()
 
     def test_empty_query(self):
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         result = engine.search("")
         self.assertEqual(result["count"], 0)
@@ -35,6 +38,7 @@ class TestHybridSearchEngine(unittest.TestCase):
 
     def test_whitespace_query(self):
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         result = engine.search("   ")
         self.assertEqual(result["count"], 0)
@@ -43,6 +47,7 @@ class TestHybridSearchEngine(unittest.TestCase):
     def test_keyword_search(self):
         from kos.cache import SearchCache
         from kos.hybrid_search import HybridSearchEngine
+
         SearchCache().clear_all()
         engine = HybridSearchEngine()
         result = engine.search("test", mode="keyword", limit=3)
@@ -55,6 +60,7 @@ class TestHybridSearchEngine(unittest.TestCase):
     def test_hybrid_search(self):
         from kos.cache import SearchCache
         from kos.hybrid_search import HybridSearchEngine
+
         SearchCache().clear_all()
         engine = HybridSearchEngine()
         result = engine.search("测试", mode="hybrid", limit=5)
@@ -68,6 +74,7 @@ class TestHybridSearchEngine(unittest.TestCase):
 
     def test_graph_search(self):
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         result = engine.search("kairon", mode="graph", limit=5)
         self.assertIn("results", result)
@@ -75,6 +82,7 @@ class TestHybridSearchEngine(unittest.TestCase):
 
     def test_context_modes(self):
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         # Use keyword mode with no_cache to get fresh results
         for mode in ["concise", "balanced", "detailed"]:
@@ -85,6 +93,7 @@ class TestHybridSearchEngine(unittest.TestCase):
     def test_limit_respected(self):
         from kos.cache import SearchCache
         from kos.hybrid_search import HybridSearchEngine
+
         # Clear L2 cache to avoid contamination from previous tests
         SearchCache().clear_all()
         engine = HybridSearchEngine()
@@ -97,6 +106,7 @@ class TestHybridSearchEngine(unittest.TestCase):
     def test_no_duplicates(self):
         from kos.cache import SearchCache
         from kos.hybrid_search import HybridSearchEngine
+
         SearchCache().clear_all()
         engine = HybridSearchEngine()
         result = engine.search("test", mode="hybrid", limit=10)
@@ -107,6 +117,7 @@ class TestHybridSearchEngine(unittest.TestCase):
     def test_query_plan_structure(self):
         from kos.cache import SearchCache
         from kos.hybrid_search import HybridSearchEngine
+
         SearchCache().clear_all()
         engine = HybridSearchEngine()
         result = engine.search("数字化平台", limit=5)
@@ -120,6 +131,7 @@ class TestHybridSearchEngine(unittest.TestCase):
 
     def test_chinese_tokenization_in_query(self):
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         result = engine.search("数字化平台", mode="keyword", limit=3)
         # Should tokenize and find results
@@ -128,6 +140,7 @@ class TestHybridSearchEngine(unittest.TestCase):
 
     def test_context_manager(self):
         from kos.hybrid_search import HybridSearchEngine
+
         with HybridSearchEngine() as engine:
             result = engine.search("test", mode="keyword", limit=1)
             self.assertIn("results", result)
@@ -138,6 +151,7 @@ class TestSemanticModule(unittest.TestCase):
 
     def test_chunking(self):
         from kos.semantic import _chunk_text
+
         text = "测试文本。" * 200
         chunks = _chunk_text(text, chunk_size=100, overlap=20)
         self.assertGreater(len(chunks), 1)
@@ -148,6 +162,7 @@ class TestSemanticModule(unittest.TestCase):
 
     def test_chunking_small_last_chunk_merge(self):
         from kos.semantic import _chunk_text
+
         # Text that would produce a tiny last chunk
         text = "A" * 515  # Just over one chunk
         chunks = _chunk_text(text, chunk_size=512, overlap=64)
@@ -157,11 +172,13 @@ class TestSemanticModule(unittest.TestCase):
 
     def test_backend_detection(self):
         from kos.semantic import _get_embed_backend
+
         backend = _get_embed_backend()
         self.assertIn(backend, ["omlx", "st", "none"])
 
     def test_status(self):
         from kos.semantic import status
+
         result = status()
         self.assertIn("status", result)
 
@@ -171,6 +188,7 @@ class TestRRFFusion(unittest.TestCase):
 
     def test_fusion_basic(self):
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         results = {
             "keyword": [
@@ -192,6 +210,7 @@ class TestRRFFusion(unittest.TestCase):
 
     def test_fusion_weights(self):
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         # Same doc at rank 0 in both sources
         results = {

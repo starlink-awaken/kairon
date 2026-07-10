@@ -11,7 +11,7 @@ KOS Query Understanding — 查询理解增强
 
 Usage:
     from kos.query import QueryUnderstanding
-    
+
     qu = QueryUnderstanding()
     analysis = qu.analyze("最近一周关于数据治理的通知")
     # {
@@ -61,14 +61,14 @@ class QueryUnderstanding:
     }
 
     # 查询语法解析
-    FIELD_FILTER_PATTERN = re.compile(r'(\w+):([^\s]+)')
+    FIELD_FILTER_PATTERN = re.compile(r"(\w+):([^\s]+)")
 
     def analyze(self, query: str) -> dict[str, Any]:
         """分析查询。
-        
+
         Args:
             query: 原始查询字符串。
-            
+
         Returns:
             查询分析结果。
         """
@@ -181,6 +181,7 @@ class QueryUnderstanding:
 
 # ── 工具函数 ─────────────────────────────────────────────
 
+
 def quick_analyze(query: str) -> dict[str, Any]:
     """快速分析查询。"""
     qu = QueryUnderstanding()
@@ -188,6 +189,7 @@ def quick_analyze(query: str) -> dict[str, Any]:
 
 
 # ── CLI 入口 ──────────────────────────────────────────────
+
 
 def main():
     import argparse

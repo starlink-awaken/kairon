@@ -7,7 +7,7 @@ KOS Search Ranker — 学习型排序.
 
 Usage:
     from kos.search.ranker import SearchRanker
-    
+
     ranker = SearchRanker()
     ranker.log_feedback(query, doc_id, action)
     ranker.get_weight_stats()

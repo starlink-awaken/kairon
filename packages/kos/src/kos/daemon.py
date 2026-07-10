@@ -67,7 +67,7 @@ class DaemonManager:
 
     def start(self, daemon_name: str | None = None) -> dict[str, Any]:
         """启动守护进程。
-        
+
         Args:
             daemon_name: 指定守护进程名，None 表示全部。
         """
@@ -258,6 +258,7 @@ class DaemonManager:
 
 
 # ── CLI 入口 ──────────────────────────────────────────────
+
 
 def main():
     import argparse

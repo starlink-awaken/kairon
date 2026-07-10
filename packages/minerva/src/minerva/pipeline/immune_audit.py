@@ -36,7 +36,11 @@ class ImmuneAuditStage(IPipelineStage):
 
     name = "immune_audit"
 
-    def __init__(self, agora_endpoint: str = f"http://localhost:{os.environ.get('AGORA_MCP_HTTP_PORT', '7422')}", timeout: int = 10) -> None:
+    def __init__(
+        self,
+        agora_endpoint: str = f"http://localhost:{os.environ.get('AGORA_MCP_HTTP_PORT', '7422')}",
+        timeout: int = 10,
+    ) -> None:
         self._endpoint = agora_endpoint.rstrip("/")
         self._timeout = timeout
 

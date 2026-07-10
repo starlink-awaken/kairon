@@ -14,7 +14,7 @@ Usage:
     kos bridge gbrain export
     kos bridge gbrain import
     kos bridge gbrain sync
-    
+
     # Python
     from kos.gbrain_bridge import GbrainBridge
     bridge = GbrainBridge()
@@ -45,7 +45,7 @@ MCP_TOKEN = os.environ.get("GBRAIN_MCP_TOKEN", "")
 
 class GbrainBridge:
     """双向同步桥接器：KOS ↔ gbrain。
-    
+
     KOS (SQLite + LANCEDB) ←→ gbrain (Postgres + 向量)
     """
 
@@ -64,10 +64,10 @@ class GbrainBridge:
 
     def export_to_gbrain(self, limit: int = 100) -> dict[str, Any]:
         """导出 KOS 文档到 gbrain 记忆图谱。
-        
+
         Args:
             limit: 最大导出文档数
-            
+
         Returns:
             导出统计 dict。
         """
@@ -75,14 +75,17 @@ class GbrainBridge:
 
         try:
             # Get documents not yet exported
-            docs = self.conn.execute("""
+            docs = self.conn.execute(
+                """
                 SELECT d.doc_id, d.title, d.body, d.zone, d.kind, d.canonical_path
                 FROM documents d
                 LEFT JOIN _gbrain_sync gs ON d.doc_id = gs.doc_id
                 WHERE gs.doc_id IS NULL
                 ORDER BY d.updated_at DESC
                 LIMIT ?
-            """, (limit,)).fetchall()
+            """,
+                (limit,),
+            ).fetchall()
 
             for doc in docs:
                 try:
@@ -92,7 +95,7 @@ class GbrainBridge:
                         # Mark as synced
                         self.conn.execute(
                             "INSERT OR REPLACE INTO _gbrain_sync (doc_id, synced_at) VALUES (?, ?)",
-                            (doc["doc_id"], datetime.now().isoformat())
+                            (doc["doc_id"], datetime.now().isoformat()),
                         )
                     else:
                         stats["skipped"] += 1
@@ -122,19 +125,21 @@ class GbrainBridge:
                 import urllib.request
                 import urllib.parse
 
-                payload = json.dumps({
-                    "jsonrpc": "2.0",
-                    "method": "tools/call",
-                    "params": {
-                        "name": "log_ingest",
-                        "arguments": {
-                            "content": f"# {doc['title']}\n\n{doc['body'][:4000]}",
-                            "source": "kos",
-                            "source_id": doc["doc_id"],
-                        }
-                    },
-                    "id": doc["doc_id"],
-                }).encode("utf-8")
+                payload = json.dumps(
+                    {
+                        "jsonrpc": "2.0",
+                        "method": "tools/call",
+                        "params": {
+                            "name": "log_ingest",
+                            "arguments": {
+                                "content": f"# {doc['title']}\n\n{doc['body'][:4000]}",
+                                "source": "kos",
+                                "source_id": doc["doc_id"],
+                            },
+                        },
+                        "id": doc["doc_id"],
+                    }
+                ).encode("utf-8")
 
                 req = urllib.request.Request(
                     MCP_URL,
@@ -156,12 +161,7 @@ class GbrainBridge:
         # gbrain capture --stdin --source kos 走官方摄取入口, 自带 24h content-hash dedup.
         import subprocess
 
-        content = (
-            f"# {doc['title']}\n\n"
-            f"Source: {doc['canonical_path']}\n"
-            f"Zone: {doc['zone']}\n\n"
-            f"{doc['body'][:4000]}"
-        )
+        content = f"# {doc['title']}\n\nSource: {doc['canonical_path']}\nZone: {doc['zone']}\n\n{doc['body'][:4000]}"
         try:
             result = subprocess.run(
                 ["gbrain", "capture", "--stdin", "--json", "--quiet", "--source", "kos"],
@@ -178,10 +178,10 @@ class GbrainBridge:
 
     def import_from_gbrain(self, limit: int = 100) -> dict[str, Any]:
         """导入 gbrain 记忆三元组到 KOS 本体。
-        
+
         Args:
             limit: 最大导入条目数
-            
+
         Returns:
             导入统计 dict。
         """
@@ -200,35 +200,34 @@ class GbrainBridge:
                     # Create or update entities
                     if subject.get("name"):
                         entity_id = self._ensure_entity(
-                            subject["name"],
-                            subject.get("type", "Concept"),
-                            subject.get("description", "")
+                            subject["name"], subject.get("type", "Concept"), subject.get("description", "")
                         )
                         stats["entities"] += 1
 
                     if obj.get("name"):
                         target_id = self._ensure_entity(
-                            obj["name"],
-                            obj.get("type", "Concept"),
-                            obj.get("description", "")
+                            obj["name"], obj.get("type", "Concept"), obj.get("description", "")
                         )
                         stats["entities"] += 1
 
                     # Create relation
                     if subject.get("name") and obj.get("name"):
-                        self.conn.execute("""
+                        self.conn.execute(
+                            """
                             INSERT OR REPLACE INTO kos_relations
                             (source_id, predicate, target_id, confidence, source_doc, source_type, updated_at)
                             VALUES (?, ?, ?, ?, ?, ?, ?)
-                        """, (
-                            f"C:{subject['name']}",
-                            predicate,
-                            f"C:{obj['name']}",  # type: ignore[arg-type]
-                            triple.get("confidence", 0.7),
-                            "gbrain-import",
-                            "auto-sync",
-                            datetime.now().strftime("%Y%m%d%H%M%S"),
-                        ))
+                        """,
+                            (
+                                f"C:{subject['name']}",
+                                predicate,
+                                f"C:{obj['name']}",  # type: ignore[arg-type]
+                                triple.get("confidence", 0.7),
+                                "gbrain-import",
+                                "auto-sync",
+                                datetime.now().strftime("%Y%m%d%H%M%S"),
+                            ),
+                        )
                         stats["relations"] += 1
 
                     stats["imported"] += 1
@@ -269,26 +268,27 @@ class GbrainBridge:
         """确保实体存在，返回 entity_id。"""
         entity_id = f"C:{name}"
 
-        existing = self.conn.execute(
-            "SELECT entity_id FROM kos_entities WHERE entity_id = ?", (entity_id,)
-        ).fetchone()
+        existing = self.conn.execute("SELECT entity_id FROM kos_entities WHERE entity_id = ?", (entity_id,)).fetchone()
 
         if not existing:
-            self.conn.execute("""
+            self.conn.execute(
+                """
                 INSERT OR REPLACE INTO kos_entities
                 (entity_id, entity_type, label, aliases, description, primary_zone, source_file, metadata, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                entity_id,
-                entity_type,
-                name,
-                json.dumps([name]),
-                description[:200],
-                "gbrain",
-                "gbrain-sync",
-                json.dumps({"source": "gbrain"}),
-                datetime.now().strftime("%Y%m%d%H%M%S"),
-            ))
+            """,
+                (
+                    entity_id,
+                    entity_type,
+                    name,
+                    json.dumps([name]),
+                    description[:200],
+                    "gbrain",
+                    "gbrain-sync",
+                    json.dumps({"source": "gbrain"}),
+                    datetime.now().strftime("%Y%m%d%H%M%S"),
+                ),
+            )
 
         return entity_id
 
@@ -345,6 +345,7 @@ class GbrainBridge:
 
 
 # ── CLI 入口 ──────────────────────────────────────────────
+
 
 def main():
     import argparse

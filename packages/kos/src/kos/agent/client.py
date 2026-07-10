@@ -8,21 +8,21 @@ KOS Agent SDK — AI Agent 知识后端 SDK
 
 Usage:
     from kos.agent import KosAgentClient
-    
+
     client = KosAgentClient()
-    
+
     # 智能问答
     answer = client.ask("数据治理的最佳实践是什么？")
-    
+
     # 构建上下文
     context = client.build_context("数字化转型", mode="detailed")
-    
+
     # 搜索
     results = client搜索("平台", limit=5)
-    
+
     # 订阅主题
     sub = client.subscribe("数字化平台")
-    
+
     # 验证声明
     verification = client.verify("夏明星参与了数字化平台项目")
 """
@@ -42,7 +42,7 @@ from kos.db import get_connection
 
 class KosAgentClient:
     """KOS Agent SDK — AI Agent 知识后端客户端。
-    
+
     提供高层次的知识操作 API，封装底层检索、上下文、订阅逻辑。
     """
 
@@ -59,14 +59,14 @@ class KosAgentClient:
         persona: str | None = None,
     ) -> dict[str, Any]:
         """基于知识库回答问题。
-        
+
         检索相关知识并组装为 LLM 可消费的上下文。
-        
+
         Args:
             question: 问题。
             mode: 上下文模式 concise|balanced|detailed。
             persona: Agent 角色。
-            
+
         Returns:
             包含 context、sources、prompt 的 dict。
         """
@@ -95,13 +95,13 @@ class KosAgentClient:
         max_tokens: int | None = None,
     ) -> dict[str, Any]:
         """为任务构建上下文。
-        
+
         Args:
             query: 查询/任务。
             mode: 上下文模式。
             persona: 角色。
             max_tokens: token 限制。
-            
+
         Returns:
             上下文 dict。
         """
@@ -121,12 +121,12 @@ class KosAgentClient:
         limit: int = 10,
     ) -> dict[str, Any]:
         """搜索知识库。
-        
+
         Args:
             query: 搜索查询。
             mode: 搜索模式 keyword|semantic|graph|hybrid。
             limit: 最大结果数。
-            
+
         Returns:
             搜索结果。
         """
@@ -141,10 +141,10 @@ class KosAgentClient:
 
     def explore_entity(self, entity_id: str) -> dict[str, Any]:
         """探索实体详情。
-        
+
         Args:
             entity_id: 实体 ID。
-            
+
         Returns:
             实体卡片。
         """
@@ -154,11 +154,11 @@ class KosAgentClient:
 
     def search_entities(self, query: str, limit: int = 10) -> list[dict]:
         """搜索实体。
-        
+
         Args:
             query: 查询。
             limit: 最大结果数。
-            
+
         Returns:
             实体列表。
         """
@@ -186,10 +186,10 @@ class KosAgentClient:
 
     def verify(self, claim: str) -> dict[str, Any]:
         """验证声明是否被知识库支持。
-        
+
         Args:
             claim: 要验证的声明。
-            
+
         Returns:
             验证结果。
         """
@@ -201,11 +201,13 @@ class KosAgentClient:
 
         evidence = []
         for r in result.get("results", []):
-            evidence.append({
-                "title": r.get("title", ""),
-                "snippet": r.get("snippet", "")[:300],
-                "source": r.get("source", ""),
-            })
+            evidence.append(
+                {
+                    "title": r.get("title", ""),
+                    "snippet": r.get("snippet", "")[:300],
+                    "source": r.get("source", ""),
+                }
+            )
 
         return {
             "claim": claim,
@@ -218,11 +220,11 @@ class KosAgentClient:
 
     def subscribe(self, topic: str, threshold: float = 0.5) -> dict[str, Any]:
         """订阅主题。
-        
+
         Args:
             topic: 主题/关键词。
             threshold: 匹配阈值。
-            
+
         Returns:
             订阅信息。
         """
@@ -284,6 +286,7 @@ class KosAgentClient:
 
 
 # ── CLI 入口 ──────────────────────────────────────────────
+
 
 def main() -> None:
     import argparse

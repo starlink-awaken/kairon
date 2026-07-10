@@ -980,7 +980,12 @@ def card(entity_id: str) -> dict[str, Any]:  # type: ignore[no-untyped-def]
         ],
         "entity_graph": entity_graph,
         "related_entities": [
-            {"entity_id": r["entity_id"], "label": r["label"], "type": r["entity_type"], "shared_docs": r["shared_docs"]}
+            {
+                "entity_id": r["entity_id"],
+                "label": r["label"],
+                "type": r["entity_type"],
+                "shared_docs": r["shared_docs"],
+            }
             for r in related_entities
         ],
     }
@@ -995,10 +1000,10 @@ def _entity_graph_2hop(conn: sqlite3.Connection, entity_id: str) -> dict[str, An
            SELECT DISTINCT source_id as entity_id FROM kos_relations WHERE target_id = ?""",
         (entity_id, entity_id),
     ).fetchall()
-    
+
     neighbor_ids = {r["entity_id"] for r in neighbors_1}
     neighbor_ids.add(entity_id)
-    
+
     # 2-hop neighbors
     if neighbor_ids:
         placeholders = ",".join(["?"] * len(neighbor_ids))
@@ -1012,23 +1017,23 @@ def _entity_graph_2hop(conn: sqlite3.Connection, entity_id: str) -> dict[str, An
         ).fetchall()
         for r in neighbors_2:
             neighbor_ids.add(r["entity_id"])
-    
+
     # Get all entities and relations in the graph
     if not neighbor_ids:
         return {"nodes": [], "edges": []}
-    
+
     placeholders = ",".join(["?"] * len(neighbor_ids))
     nodes = conn.execute(
         f"SELECT entity_id, entity_type, label FROM kos_entities WHERE entity_id IN ({placeholders})",
         list(neighbor_ids),
     ).fetchall()
-    
+
     edges = conn.execute(
         f"""SELECT source_id, predicate, target_id FROM kos_relations 
             WHERE source_id IN ({placeholders}) AND target_id IN ({placeholders})""",
         list(neighbor_ids) * 2,
     ).fetchall()
-    
+
     return {
         "nodes": [{"id": n["entity_id"], "type": n["entity_type"], "label": n["label"]} for n in nodes],
         "edges": [{"source": e["source_id"], "predicate": e["predicate"], "target": e["target_id"]} for e in edges],
@@ -1068,13 +1073,13 @@ def find_path(from_id: str, to_id: str) -> dict[str, Any] | None:  # type: ignor
 
 def deduplicate_entities() -> dict[str, Any]:
     """Merge duplicate entities based on label similarity.
-    
+
     Returns:
         Dict with merge results.
     """
     conn = get_db()  # type: ignore[no-untyped-call]
     init_schema(conn)  # type: ignore[no-untyped-call]
-    
+
     # Find entities with duplicate labels (case-insensitive)
     duplicates = conn.execute("""
         SELECT LOWER(label) as low_label, COUNT(*) as cnt,
@@ -1084,7 +1089,7 @@ def deduplicate_entities() -> dict[str, Any]:
         GROUP BY LOWER(label)
         HAVING cnt > 1
     """).fetchall()
-    
+
     merged = 0
     for dup in duplicates:
         ids = dup["ids"].split("|||")
@@ -1093,26 +1098,17 @@ def deduplicate_entities() -> dict[str, Any]:
         canonical_id = ids[0]
         for other_id in ids[1:]:
             # Update all relations pointing to other_id to point to canonical_id
-            conn.execute(
-                "UPDATE OR IGNORE kos_relations SET target_id=? WHERE target_id=?",
-                (canonical_id, other_id)
-            )
-            conn.execute(
-                "UPDATE OR IGNORE kos_relations SET source_id=? WHERE source_id=?",
-                (canonical_id, other_id)
-            )
+            conn.execute("UPDATE OR IGNORE kos_relations SET target_id=? WHERE target_id=?", (canonical_id, other_id))
+            conn.execute("UPDATE OR IGNORE kos_relations SET source_id=? WHERE source_id=?", (canonical_id, other_id))
             # Update entity_docs
-            conn.execute(
-                "UPDATE OR IGNORE kos_entity_docs SET entity_id=? WHERE entity_id=?",
-                (canonical_id, other_id)
-            )
+            conn.execute("UPDATE OR IGNORE kos_entity_docs SET entity_id=? WHERE entity_id=?", (canonical_id, other_id))
             # Delete the duplicate
             conn.execute("DELETE FROM kos_entities WHERE entity_id=?", (other_id,))
             merged += 1
-    
+
     conn.commit()
     conn.close()
-    
+
     return {
         "duplicate_groups": len(duplicates),
         "entities_merged": merged,
@@ -1121,21 +1117,21 @@ def deduplicate_entities() -> dict[str, Any]:
 
 def entity_timeline(entity_id: str) -> dict[str, Any]:
     """Get the timeline of an entity based on document creation dates.
-    
+
     Args:
         entity_id: The entity ID.
-        
+
     Returns:
         Dict with timeline data.
     """
     conn = get_db()  # type: ignore[no-untyped-call]
     init_schema(conn)  # type: ignore[no-untyped-call]
-    
+
     entity = conn.execute("SELECT * FROM kos_entities WHERE entity_id=?", (entity_id,)).fetchone()
     if not entity:
         conn.close()
         return {"error": f"Entity not found: {entity_id}"}
-    
+
     # Get document timeline
     timeline = conn.execute(
         """SELECT d.title, d.zone, d.canonical_path, d.created_at, d.updated_at, ed.relevance,
@@ -1146,9 +1142,9 @@ def entity_timeline(entity_id: str) -> dict[str, Any]:
            ORDER BY d.created_at DESC""",
         (entity_id,),
     ).fetchall()
-    
+
     conn.close()
-    
+
     return {
         "entity_id": entity_id,
         "label": entity["label"],

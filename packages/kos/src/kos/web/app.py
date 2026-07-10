@@ -49,6 +49,7 @@ async def api_search(q: str = Query(...), mode: str = "hybrid", limit: int = 10)
     """Search knowledge base. Used by cockpit proxy and other integrations."""
     try:
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         result = engine.search(q, mode=mode, limit=limit)
         engine.close()
@@ -62,6 +63,7 @@ async def api_suggest(prefix: str = Query(...), limit: int = 8):
     """Get search suggestions."""
     try:
         from kos.search_features import SearchFeatures
+
         features = SearchFeatures()
         result = features.suggest(prefix, limit=limit)
         return JSONResponse(content=result)
@@ -74,6 +76,7 @@ async def api_context(q: str = Query(...), mode: str = "balanced"):
     """Build LLM-ready context."""
     try:
         from kos.context_engine import ContextEngine
+
         engine = ContextEngine()
         result = engine.build_context(q, mode=mode)
         engine.close()
@@ -88,14 +91,17 @@ async def api_verify(data: dict):
     claim = data.get("claim", "")
     try:
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         result = engine.search(claim, mode="hybrid", limit=10)
         engine.close()
-        return JSONResponse(content={
-            "claim": claim,
-            "evidence_count": result.get("count", 0),
-            "results": result.get("results", []),
-        })
+        return JSONResponse(
+            content={
+                "claim": claim,
+                "evidence_count": result.get("count", 0),
+                "results": result.get("results", []),
+            }
+        )
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
@@ -122,6 +128,7 @@ async def api_health():
     """Check knowledge base health."""
     try:
         from kos.monitoring import KosMonitor
+
         monitor = KosMonitor()
         result = monitor.index_health()
         return JSONResponse(content=result)
@@ -135,6 +142,7 @@ async def api_clusters(q: str = Query(...), limit: int = 10):
     try:
         from kos.hybrid_search import HybridSearchEngine
         from kos.search_features import SearchFeatures
+
         engine = HybridSearchEngine()
         result = engine.search(q, mode="hybrid", limit=limit)
         engine.close()
@@ -143,6 +151,7 @@ async def api_clusters(q: str = Query(...), limit: int = 10):
         return JSONResponse(content=clusters)
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+
 
 CSS = """
 *{margin:0;padding:0;box-sizing:border-box}

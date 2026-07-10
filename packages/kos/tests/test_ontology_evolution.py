@@ -17,15 +17,18 @@ class TestLLMEntityExtractor(unittest.TestCase):
 
     def test_import(self):
         from kos.ontology.llm_extractor import LLMEntityExtractor
+
         self.assertTrue(callable(LLMEntityExtractor))
 
     def test_creation(self):
         from kos.ontology.llm_extractor import LLMEntityExtractor
+
         extractor = LLMEntityExtractor()
         self.assertIsNotNone(extractor)
 
     def test_json_extraction_plain(self):
         from kos.ontology.llm_extractor import LLMEntityExtractor
+
         extractor = LLMEntityExtractor()
         text = '{"entities": [{"label": "Test", "type": "Person"}], "relations": []}'
         result = extractor._extract_json(text)
@@ -33,6 +36,7 @@ class TestLLMEntityExtractor(unittest.TestCase):
 
     def test_json_extraction_markdown(self):
         from kos.ontology.llm_extractor import LLMEntityExtractor
+
         extractor = LLMEntityExtractor()
         text = '```json\n{"entities": [], "relations": []}\n```'
         result = extractor._extract_json(text)
@@ -40,8 +44,9 @@ class TestLLMEntityExtractor(unittest.TestCase):
 
     def test_parse_response_valid(self):
         from kos.ontology.llm_extractor import LLMEntityExtractor
+
         extractor = LLMEntityExtractor()
-        response = '''
+        response = """
         {
             "entities": [
                 {"label": "夏明星", "type": "Person", "description": "项目参与者"},
@@ -51,7 +56,7 @@ class TestLLMEntityExtractor(unittest.TestCase):
                 {"source": "夏明星", "predicate": "works_on", "target": "数字化平台", "confidence": 0.9}
             ]
         }
-        '''
+        """
         result = extractor._parse_response(response)
         self.assertEqual(len(result["entities"]), 2)
         self.assertEqual(len(result["relations"]), 1)
@@ -61,6 +66,7 @@ class TestLLMEntityExtractor(unittest.TestCase):
 
     def test_parse_response_empty(self):
         from kos.ontology.llm_extractor import LLMEntityExtractor
+
         extractor = LLMEntityExtractor()
         result = extractor._parse_response("")
         self.assertEqual(result["entities"], [])
@@ -68,6 +74,7 @@ class TestLLMEntityExtractor(unittest.TestCase):
 
     def test_parse_response_invalid_json(self):
         from kos.ontology.llm_extractor import LLMEntityExtractor
+
         extractor = LLMEntityExtractor()
         result = extractor._parse_response("not json at all")
         self.assertEqual(result["entities"], [])
@@ -75,6 +82,7 @@ class TestLLMEntityExtractor(unittest.TestCase):
 
     def test_build_extraction_prompt(self):
         from kos.ontology.llm_extractor import LLMEntityExtractor
+
         extractor = LLMEntityExtractor()
         prompt = extractor._build_extraction_prompt("测试文本内容")
         self.assertIn("测试文本内容", prompt)
@@ -83,6 +91,7 @@ class TestLLMEntityExtractor(unittest.TestCase):
 
     def test_build_extraction_prompt_with_existing(self):
         from kos.ontology.llm_extractor import LLMEntityExtractor
+
         extractor = LLMEntityExtractor()
         existing = [{"label": "已有实体", "type": "Person"}]
         prompt = extractor._build_extraction_prompt("测试文本", existing_entities=existing)
@@ -90,6 +99,7 @@ class TestLLMEntityExtractor(unittest.TestCase):
 
     def test_combine_docs(self):
         from kos.ontology.llm_extractor import LLMEntityExtractor
+
         extractor = LLMEntityExtractor()
         docs = [
             {"text": "文档1内容"},
@@ -105,15 +115,18 @@ class TestOntologyEvolution(unittest.TestCase):
 
     def test_import(self):
         from kos.ontology.evolution import OntologyEvolution
+
         self.assertTrue(callable(OntologyEvolution))
 
     def test_creation(self):
         from kos.ontology.evolution import OntologyEvolution
+
         evo = OntologyEvolution()
         self.assertIsNotNone(evo)
 
     def test_get_stats(self):
         from kos.ontology.evolution import OntologyEvolution
+
         evo = OntologyEvolution()
         stats = evo.get_stats()
         self.assertIn("entities", stats)
@@ -124,6 +137,7 @@ class TestOntologyEvolution(unittest.TestCase):
 
     def test_evolve(self):
         from kos.ontology.evolution import OntologyEvolution
+
         evo = OntologyEvolution()
         report = evo.evolve()
         self.assertIn("timestamp", report)
@@ -134,12 +148,14 @@ class TestOntologyEvolution(unittest.TestCase):
 
     def test_get_recommendations(self):
         from kos.ontology.evolution import OntologyEvolution
+
         evo = OntologyEvolution()
         recs = evo.get_recommendations()
         self.assertIsInstance(recs, list)
 
     def test_type_normalization_map(self):
         from kos.ontology.evolution import OntologyEvolution
+
         self.assertIn("concept", OntologyEvolution.TYPE_NORMALIZATION)
         self.assertEqual(OntologyEvolution.TYPE_NORMALIZATION["concept"], "Concept")
         self.assertEqual(OntologyEvolution.TYPE_NORMALIZATION["person"], "Person")

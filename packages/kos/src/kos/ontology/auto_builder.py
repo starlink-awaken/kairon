@@ -7,7 +7,7 @@ KOS Auto Ontology Builder — LLM 辅助本体自动构建.
 
 Usage:
     from kos.ontology.auto_builder import AutoBuilder
-    
+
     builder = AutoBuilder()
     builder.run_batch(limit=100)
 """
@@ -43,13 +43,16 @@ class AutoBuilder:
         stats = {"processed": 0, "entities": 0, "relations": 0, "skipped": 0}
 
         # Get documents not yet processed
-        docs = self.conn.execute("""
+        docs = self.conn.execute(
+            """
             SELECT d.doc_id, d.title, d.body, d.zone
             FROM documents d
             LEFT JOIN _auto_build_meta ab ON d.doc_id = ab.doc_id
             WHERE ab.doc_id IS NULL AND d.body != ''
             ORDER BY d.updated_at DESC LIMIT ?
-        """, (limit,)).fetchall()
+        """,
+            (limit,),
+        ).fetchall()
 
         for doc in docs:
             try:
@@ -59,34 +62,47 @@ class AutoBuilder:
                 # Save results
                 for e in entities:
                     if e["confidence"] >= self.BATCH_CONFIDENCE_THRESHOLD:
-                        self.conn.execute("""
+                        self.conn.execute(
+                            """
                             INSERT OR REPLACE INTO kos_entities
                             (entity_id, entity_type, label, description, primary_zone, source_file, metadata, updated_at)
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                        """, (
-                            e["entity_id"], e["type"], e["label"], e["description"],
-                            doc["zone"], e.get("source_doc_id", doc["doc_id"]),
-                            json.dumps({"confidence": e["confidence"], "auto": True}),
-                            datetime.now().strftime("%Y%m%d%H%M%S"),
-                        ))
+                        """,
+                            (
+                                e["entity_id"],
+                                e["type"],
+                                e["label"],
+                                e["description"],
+                                doc["zone"],
+                                e.get("source_doc_id", doc["doc_id"]),
+                                json.dumps({"confidence": e["confidence"], "auto": True}),
+                                datetime.now().strftime("%Y%m%d%H%M%S"),
+                            ),
+                        )
                         stats["entities"] += 1
 
                 for r in relations:
                     if r["confidence"] >= self.BATCH_CONFIDENCE_THRESHOLD:
-                        self.conn.execute("""
+                        self.conn.execute(
+                            """
                             INSERT OR REPLACE INTO kos_relations
                             (source_id, predicate, target_id, confidence, source_type, updated_at)
                             VALUES (?, ?, ?, ?, 'auto-build', ?)
-                        """, (
-                            r["source"], r["predicate"], r["target"],
-                            r["confidence"], datetime.now().strftime("%Y%m%d%H%M%S"),
-                        ))
+                        """,
+                            (
+                                r["source"],
+                                r["predicate"],
+                                r["target"],
+                                r["confidence"],
+                                datetime.now().strftime("%Y%m%d%H%M%S"),
+                            ),
+                        )
                         stats["relations"] += 1
 
                 # Mark as processed
                 self.conn.execute(
                     "INSERT OR REPLACE INTO _auto_build_meta (doc_id, processed_at) VALUES (?, ?)",
-                    (doc["doc_id"], datetime.now().isoformat())
+                    (doc["doc_id"], datetime.now().isoformat()),
                 )
                 stats["processed"] += 1
 
@@ -99,6 +115,7 @@ class AutoBuilder:
     def _extract_entities(self, doc: sqlite3.Row) -> list[dict]:
         """从文档中提取实体（规则+模式）。"""
         import sqlite3
+
         entities = []
         body = doc["body"] or ""
 
@@ -106,28 +123,32 @@ class AutoBuilder:
         title = doc["title"] or ""
         if title and not title.startswith("["):
             entity_id = f"C:{title[:50].replace(' ', '_')}"
-            entities.append({
-                "entity_id": entity_id,
-                "type": "Concept",
-                "label": title[:50],
-                "description": (body or "")[:200],
-                "confidence": 0.7,
-                "source_doc_id": doc["doc_id"],
-            })
+            entities.append(
+                {
+                    "entity_id": entity_id,
+                    "type": "Concept",
+                    "label": title[:50],
+                    "description": (body or "")[:200],
+                    "confidence": 0.7,
+                    "source_doc_id": doc["doc_id"],
+                }
+            )
 
         # Pattern 2: Section headers (## Entity Name)
         for m in re.finditer(r"^##\s+(.+)$", body, re.MULTILINE):
             heading = m.group(1).strip()
             if 2 <= len(heading) <= 50:
                 entity_id = f"C:{heading[:50].replace(' ', '_')}"
-                entities.append({
-                    "entity_id": entity_id,
-                    "type": "Concept",
-                    "label": heading,
-                    "description": (body[m.end():m.end()+200].strip())[:200],
-                    "confidence": 0.6,
-                    "source_doc_id": doc["doc_id"],
-                })
+                entities.append(
+                    {
+                        "entity_id": entity_id,
+                        "type": "Concept",
+                        "label": heading,
+                        "description": (body[m.end() : m.end() + 200].strip())[:200],
+                        "confidence": 0.6,
+                        "source_doc_id": doc["doc_id"],
+                    }
+                )
 
         # Deduplicate by entity_id
         seen = set()
@@ -143,13 +164,15 @@ class AutoBuilder:
         """推断实体间关系。"""
         relations = []
         for i, e1 in enumerate(entities):
-            for e2 in entities[i+1:]:
-                relations.append({
-                    "source": e1["entity_id"],
-                    "predicate": "related_to",
-                    "target": e2["entity_id"],
-                    "confidence": min(e1["confidence"], e2["confidence"]) * 0.8,
-                })
+            for e2 in entities[i + 1 :]:
+                relations.append(
+                    {
+                        "source": e1["entity_id"],
+                        "predicate": "related_to",
+                        "target": e2["entity_id"],
+                        "confidence": min(e1["confidence"], e2["confidence"]) * 0.8,
+                    }
+                )
         return relations
 
     def ensure_meta_table(self):

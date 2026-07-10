@@ -7,15 +7,15 @@ KOS Knowledge Subscription — 知识订阅服务
 
 Usage:
     from kos.agent.subscription import SubscriptionService
-    
+
     service = SubscriptionService()
-    
+
     # 订阅主题
     sub = service.subscribe("数字化平台", subscriber_id="agent-1")
-    
+
     # 检查新匹配
     matches = service.check_matches("digital-platform-agent-1")
-    
+
     # 取消订阅
     service.unsubscribe("digital-platform-agent-1")
 """
@@ -36,7 +36,7 @@ from kos.db import get_connection
 
 class SubscriptionService:
     """知识订阅服务。
-    
+
     Agent 可以订阅特定主题，当新文档匹配时获得通知。
     """
 
@@ -50,12 +50,12 @@ class SubscriptionService:
         threshold: float = 0.5,
     ) -> dict[str, Any]:
         """订阅一个主题。
-        
+
         Args:
             topic: 订阅主题/关键词。
             subscriber_id: 订阅者标识 (如 agent ID)。
             threshold: 匹配阈值 (0-1)。
-            
+
         Returns:
             订阅信息。
         """
@@ -64,11 +64,14 @@ class SubscriptionService:
         sub_id = hashlib.sha1(f"{topic}:{subscriber_id}".encode()).hexdigest()[:16]
         now = datetime.now().isoformat()
 
-        conn.execute("""
+        conn.execute(
+            """
             INSERT OR REPLACE INTO kos_subscriptions
             (sub_id, topic, subscriber_id, threshold, created_at, last_check, active)
             VALUES (?, ?, ?, ?, ?, ?, 1)
-        """, (sub_id, topic, subscriber_id, threshold, now, now))
+        """,
+            (sub_id, topic, subscriber_id, threshold, now, now),
+        )
 
         conn.commit()
         conn.close()
@@ -94,9 +97,7 @@ class SubscriptionService:
         conn = get_connection(self.db_path)
 
         # 获取订阅信息
-        sub = conn.execute(
-            "SELECT * FROM kos_subscriptions WHERE sub_id=? AND active=1", (sub_id,)
-        ).fetchone()
+        sub = conn.execute("SELECT * FROM kos_subscriptions WHERE sub_id=? AND active=1", (sub_id,)).fetchone()
 
         if not sub:
             conn.close()
@@ -107,13 +108,16 @@ class SubscriptionService:
 
         # 查找新文档 (last_check 之后索引的)
         try:
-            new_docs = conn.execute("""
+            new_docs = conn.execute(
+                """
                 SELECT d.doc_id, d.title, d.zone, d.canonical_path, d.updated_at
                 FROM documents_fts f
                 JOIN documents d ON f.doc_id = d.doc_id
                 WHERE documents_fts MATCH ? AND d.updated_at > ?
                 ORDER BY d.updated_at DESC LIMIT 10
-            """, (topic, last_check)).fetchall()
+            """,
+                (topic, last_check),
+            ).fetchall()
         except sqlite3.OperationalError:
             new_docs = []
 
@@ -152,9 +156,7 @@ class SubscriptionService:
                 (subscriber_id,),
             ).fetchall()
         else:
-            rows = conn.execute(
-                "SELECT * FROM kos_subscriptions WHERE active=1"
-            ).fetchall()
+            rows = conn.execute("SELECT * FROM kos_subscriptions WHERE active=1").fetchall()
 
         conn.close()
 
@@ -173,9 +175,7 @@ class SubscriptionService:
     def check_all_subscriptions(self) -> list[dict]:
         """检查所有活跃订阅的新匹配。"""
         conn = get_connection(self.db_path)
-        subs = conn.execute(
-            "SELECT sub_id FROM kos_subscriptions WHERE active=1"
-        ).fetchall()
+        subs = conn.execute("SELECT sub_id FROM kos_subscriptions WHERE active=1").fetchall()
         conn.close()
 
         results = []
@@ -210,6 +210,7 @@ class SubscriptionService:
 
 
 # ── CLI 入口 ──────────────────────────────────────────────
+
 
 def main() -> None:
     import argparse

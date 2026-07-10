@@ -13,15 +13,15 @@ KOS Multimodal Processor — 多模态内容处理
 
 Usage:
     from kos.multimodal import MultimodalProcessor
-    
+
     processor = MultimodalProcessor()
-    
+
     # 处理单个文件
     result = processor.process_file("/path/to/image.png")
-    
+
     # 批量处理目录
     results = processor.process_directory("/path/to/media/")
-    
+
     # 获取支持格式
     formats = processor.supported_formats
 """
@@ -43,7 +43,7 @@ from kos.db import get_connection
 
 class MultimodalProcessor:
     """多模态内容处理器。
-    
+
     将图片/音频/视频转换为可搜索的文本内容，
     并创建对应的 KOS 文档记录。
     """
@@ -73,11 +73,11 @@ class MultimodalProcessor:
 
     def process_file(self, file_path: str | Path, zone: str = "multimodal") -> dict[str, Any]:
         """处理单个多模态文件。
-        
+
         Args:
             file_path: 文件路径。
             zone: 目标知识域。
-            
+
         Returns:
             处理结果 dict。
         """
@@ -131,12 +131,12 @@ class MultimodalProcessor:
         recursive: bool = True,
     ) -> dict[str, Any]:
         """批量处理目录中的多模态文件。
-        
+
         Args:
             dir_path: 目录路径。
             zone: 目标知识域。
             recursive: 是否递归子目录。
-            
+
         Returns:
             批量处理结果。
         """
@@ -202,7 +202,9 @@ class MultimodalProcessor:
             # 方法1: arkcli-understand (如果可用)
             r = sp.run(
                 ["arkcli", "understand", "image", str(file_path), "--task", "ocr"],
-                capture_output=True, text=True, timeout=60,
+                capture_output=True,
+                text=True,
+                timeout=60,
             )
             if r.returncode == 0 and r.stdout.strip():
                 return r.stdout.strip()
@@ -213,7 +215,9 @@ class MultimodalProcessor:
         try:
             r = sp.run(
                 ["tesseract", str(file_path), "stdout", "-l", "chi_sim+eng"],
-                capture_output=True, text=True, timeout=30,
+                capture_output=True,
+                text=True,
+                timeout=30,
             )
             if r.returncode == 0 and r.stdout.strip():
                 return r.stdout.strip()
@@ -238,25 +242,27 @@ class MultimodalProcessor:
             return ""
 
         # 调用 omlx 视觉模型
-        payload = json.dumps({
-            "model": "qwen3.6-27b-4bit",
-            "messages": [
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "image_url",
-                            "image_url": {"url": f"data:image/jpeg;base64,{img_data}"},
-                        },
-                        {
-                            "type": "text",
-                            "content": "用一句话描述这张图片的主要内容，包括可见的文字、物体和场景。",
-                        },
-                    ],
-                }
-            ],
-            "max_tokens": 200,
-        }).encode("utf-8")
+        payload = json.dumps(
+            {
+                "model": "qwen3.6-27b-4bit",
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "image_url",
+                                "image_url": {"url": f"data:image/jpeg;base64,{img_data}"},
+                            },
+                            {
+                                "type": "text",
+                                "content": "用一句话描述这张图片的主要内容，包括可见的文字、物体和场景。",
+                            },
+                        ],
+                    }
+                ],
+                "max_tokens": 200,
+            }
+        ).encode("utf-8")
 
         req = urllib.request.Request(
             "http://localhost:8000/v1/chat/completions",
@@ -299,7 +305,9 @@ class MultimodalProcessor:
         try:
             r = sp.run(
                 ["arkcli", "understand", "audio", str(file_path), "--task", "asr"],
-                capture_output=True, text=True, timeout=120,
+                capture_output=True,
+                text=True,
+                timeout=120,
             )
             if r.returncode == 0 and r.stdout.strip():
                 return r.stdout.strip()
@@ -310,7 +318,9 @@ class MultimodalProcessor:
         try:
             r = sp.run(
                 ["whisper", str(file_path), "--model", "base", "--output_format", "txt", "--output_dir", "/tmp"],
-                capture_output=True, text=True, timeout=120,
+                capture_output=True,
+                text=True,
+                timeout=120,
             )
             if r.returncode == 0:
                 # 读取输出文件
@@ -356,8 +366,23 @@ class MultimodalProcessor:
             try:
                 # 提取音频
                 r = sp.run(
-                    ["ffmpeg", "-i", str(file_path), "-vn", "-acodec", "pcm_s16le", "-ar", "16000", "-ac", "1", tmp.name, "-y"],
-                    capture_output=True, text=True, timeout=60,
+                    [
+                        "ffmpeg",
+                        "-i",
+                        str(file_path),
+                        "-vn",
+                        "-acodec",
+                        "pcm_s16le",
+                        "-ar",
+                        "16000",
+                        "-ac",
+                        "1",
+                        tmp.name,
+                        "-y",
+                    ],
+                    capture_output=True,
+                    text=True,
+                    timeout=60,
                 )
                 if r.returncode != 0:
                     return ""
@@ -372,8 +397,21 @@ class MultimodalProcessor:
         try:
             # 提取关键帧
             r = sp.run(
-                ["ffmpeg", "-i", str(file_path), "-vf", "select='gt(scene,0.3)',", "-vsync", "vfr", "-q:v", "2", "/tmp/frame_%03d.jpg"],
-                capture_output=True, text=True, timeout=60,
+                [
+                    "ffmpeg",
+                    "-i",
+                    str(file_path),
+                    "-vf",
+                    "select='gt(scene,0.3)',",
+                    "-vsync",
+                    "vfr",
+                    "-q:v",
+                    "2",
+                    "/tmp/frame_%03d.jpg",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=60,
             )
             if r.returncode != 0:
                 return ""
@@ -417,6 +455,7 @@ class MultimodalProcessor:
         """提取 PDF 文本。"""
         try:
             import fitz  # PyMuPDF
+
             doc = fitz.open(str(file_path))
             text = "\n".join(page.get_text() for page in doc)
             doc.close()
@@ -428,7 +467,9 @@ class MultimodalProcessor:
         try:
             r = sp.run(
                 ["pdftotext", str(file_path), "-"],
-                capture_output=True, text=True, timeout=30,
+                capture_output=True,
+                text=True,
+                timeout=30,
             )
             if r.returncode == 0:
                 return r.stdout.strip()
@@ -441,6 +482,7 @@ class MultimodalProcessor:
         """OCR 扫描版 PDF。"""
         try:
             import fitz
+
             doc = fitz.open(str(file_path))
             texts = []
             for page in doc:
@@ -448,6 +490,7 @@ class MultimodalProcessor:
                 img_data = pix.tobytes("png")
                 # 临时保存并 OCR
                 import tempfile
+
                 with tempfile.NamedTemporaryFile(suffix=".png", delete=True) as tmp:
                     tmp.write(img_data)
                     tmp.flush()
@@ -486,14 +529,16 @@ class MultimodalProcessor:
                         f"[Multimedia] {file_path.name}",
                         text[:8000],
                         datetime.now().strftime("%Y%m%d%H%M%S"),
-                        json.dumps({
-                            "type": result.get("type", "unknown"),
-                            "source_path": str(file_path),
-                            "file_size": result.get("size_bytes", 0),
-                            "extraction_method": result.get("extraction_method", "auto"),
-                            "ocr_text": result.get("ocr_text", ""),
-                            "description": result.get("description", ""),
-                        }),
+                        json.dumps(
+                            {
+                                "type": result.get("type", "unknown"),
+                                "source_path": str(file_path),
+                                "file_size": result.get("size_bytes", 0),
+                                "extraction_method": result.get("extraction_method", "auto"),
+                                "ocr_text": result.get("ocr_text", ""),
+                                "description": result.get("description", ""),
+                            }
+                        ),
                         doc_id,
                     ),
                 )
@@ -510,7 +555,8 @@ class MultimodalProcessor:
                         "active",
                         "multimodal-processor",
                         "",
-                        now, now,
+                        now,
+                        now,
                         "working",
                         "active",
                         "pending",
@@ -518,11 +564,13 @@ class MultimodalProcessor:
                         canonical,
                         str(file_path),
                         "managed",
-                        json.dumps({
-                            "type": result.get("type", "unknown"),
-                            "source_path": str(file_path),
-                            "file_size": result.get("size_bytes", 0),
-                        }),
+                        json.dumps(
+                            {
+                                "type": result.get("type", "unknown"),
+                                "source_path": str(file_path),
+                                "file_size": result.get("size_bytes", 0),
+                            }
+                        ),
                         text[:8000],
                         result.get("size_bytes", 0),
                         now,
@@ -549,6 +597,7 @@ class MultimodalProcessor:
             return self._llm_available
 
         import urllib.request
+
         try:
             req = urllib.request.Request(
                 "http://localhost:8000/v1/models",
@@ -564,6 +613,7 @@ class MultimodalProcessor:
 
 
 # ── CLI 入口 ──────────────────────────────────────────────
+
 
 def main() -> None:
     import argparse

@@ -10,18 +10,18 @@ KOS Memory Tier — 三层记忆架构
 
 Usage:
     from kos.memory_tier import MemoryTier
-    
+
     memory = MemoryTier()
-    
+
     # 记录搜索
     memory.record_search("数字化平台")
-    
+
     # 获取历史
     history = memory.get_history(limit=10)
-    
+
     # 获取热门查询
     popular = memory.get_popular(limit=5)
-    
+
     # 获取完整上下文 (三层合并)
     context = memory.get_full_context("查询")
 """
@@ -38,7 +38,7 @@ from typing import Any
 
 class MemoryTier:
     """三层记忆架构管理。
-    
+
     L1 (短期): 当前会话查询 (内存)
     L2 (中期): 搜索历史 (JSON 文件)
     L3 (长期): 本体图谱 (SQLite)
@@ -240,6 +240,7 @@ class MemoryTier:
 
 
 # ── CLI 入口 ──────────────────────────────────────────────
+
 
 def main() -> None:
     import argparse

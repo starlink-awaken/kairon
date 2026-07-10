@@ -7,10 +7,10 @@ KOS Incremental Indexer — 增量索引服务
 
 Usage:
     from kos.maintenance.indexer import IncrementalIndexer
-    
+
     indexer = IncrementalIndexer()
     result = indexer.run()  # Run incremental update
-    
+
     # Or via CLI:
     # kos index --incremental
     # kos index --watch     # continuous watching
@@ -35,7 +35,7 @@ from kos.semantic import _chunk_text
 
 class IncrementalIndexer:
     """增量索引器。
-    
+
     检测文件系统变更，仅对新增/变更的文档重新索引。
     使用 SHA-256 指纹对比判断文件是否变更。
     """
@@ -55,10 +55,10 @@ class IncrementalIndexer:
 
     def run(self, embed: bool = True, force_embed: bool = False) -> dict[str, Any]:
         """运行增量索引更新。
-        
+
         Args:
             embed: 是否更新向量索引 (False 仅更新 FTS5)
-            
+
         Returns:
             更新统计 dict。
         """
@@ -103,12 +103,10 @@ class IncrementalIndexer:
     def _get_zones(self) -> dict[str, dict]:
         """获取所有 indexable 域配置。"""
         from kos.config import get_workspace_manifest
+
         manifest = get_workspace_manifest()
         zones = manifest.get("zones", {})
-        return {
-            zid: zcfg for zid, zcfg in zones.items()
-            if zcfg.get("indexable") and zcfg.get("authoritative")
-        }
+        return {zid: zcfg for zid, zcfg in zones.items() if zcfg.get("indexable") and zcfg.get("authoritative")}
 
     def _scan_zone(self, zone_id: str, zone_config: dict) -> dict[str, int]:
         """扫描单个域的文件变更。"""
@@ -129,8 +127,7 @@ class IncrementalIndexer:
 
         # 获取已索引文件的最后时间戳 (用于快速跳过)
         last_index = self.conn.execute(
-            "SELECT MAX(last_indexed) FROM file_fingerprints WHERE zone = ?",
-            (zone_id,)
+            "SELECT MAX(last_indexed) FROM file_fingerprints WHERE zone = ?", (zone_id,)
         ).fetchone()
         last_index_ts = last_index[0] if last_index and last_index[0] else "20000101000000"
 
@@ -138,9 +135,9 @@ class IncrementalIndexer:
         for root, dirs, files in os.walk(str(scan_path)):
             # 过滤排除目录
             dirs[:] = [
-                d for d in dirs
-                if not d.startswith(".")
-                and not any(d == ep or d.startswith(ep + os.sep) for ep in exclude_prefixes)
+                d
+                for d in dirs
+                if not d.startswith(".") and not any(d == ep or d.startswith(ep + os.sep) for ep in exclude_prefixes)
             ]
 
             for fname in files:
@@ -169,7 +166,7 @@ class IncrementalIndexer:
                     # 检查是否已索引
                     existing = self.conn.execute(
                         "SELECT sha256_hash FROM file_fingerprints WHERE canonical_path = ?",
-                        (f"{zone_id}::{rel_path}",)
+                        (f"{zone_id}::{rel_path}",),
                     ).fetchone()
 
                     if not existing:
@@ -209,11 +206,26 @@ class IncrementalIndexer:
         self.conn.execute(
             """INSERT INTO documents VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (
-                doc_id, title, "note", zone_id, "active", "auto-index",
-                "", self.now, self.now, "working", "active", "pending", "1.0",
-                canonical, str(fpath), "managed",
+                doc_id,
+                title,
+                "note",
+                zone_id,
+                "active",
+                "auto-index",
+                "",
+                self.now,
+                self.now,
+                "working",
+                "active",
+                "pending",
+                "1.0",
+                canonical,
+                str(fpath),
+                "managed",
                 json.dumps({"source_path": str(fpath)}),
-                body, len(body.encode("utf-8")), fmtime,
+                body,
+                len(body.encode("utf-8")),
+                fmtime,
             ),
         )
         self.conn.execute(
@@ -247,11 +259,26 @@ class IncrementalIndexer:
         self.conn.execute(
             """INSERT INTO documents VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (
-                doc_id, title, "note", zone_id, "active", "auto-index",
-                "", self.now, self.now, "working", "active", "pending", "1.0",
-                canonical, str(fpath), "managed",
+                doc_id,
+                title,
+                "note",
+                zone_id,
+                "active",
+                "auto-index",
+                "",
+                self.now,
+                self.now,
+                "working",
+                "active",
+                "pending",
+                "1.0",
+                canonical,
+                str(fpath),
+                "managed",
                 json.dumps({"source_path": str(fpath)}),
-                body, len(body.encode("utf-8")), fmtime,
+                body,
+                len(body.encode("utf-8")),
+                fmtime,
             ),
         )
         self.conn.execute(
@@ -317,17 +344,20 @@ class IncrementalIndexer:
 
             # 存储到 LanceDB
             import lancedb
+
             lancedb_dir = Path(self.db_path).parent / "vectors"
             db = lancedb.connect(str(lancedb_dir))
 
             table_data = []
             for i, doc_id in enumerate(all_doc_ids):
                 if i < len(embeddings) and embeddings[i]:
-                    table_data.append({
-                        "vector": embeddings[i],
-                        "doc_id": doc_id,
-                        "chunk_idx": i,
-                    })
+                    table_data.append(
+                        {
+                            "vector": embeddings[i],
+                            "doc_id": doc_id,
+                            "chunk_idx": i,
+                        }
+                    )
 
             # 写入 LanceDB. 用 try open/except create 替代 `"x" in db.list_tables()`
             # 判断 — list_tables 返回 ListTablesResponse (非 list), `in` 判断失效
@@ -367,8 +397,7 @@ class IncrementalIndexer:
                 zone_path = parts[2]
                 # 简化处理: 检查 fingerprint 是否超过 7 天未更新
                 fp = self.conn.execute(
-                    "SELECT last_indexed FROM file_fingerprints WHERE canonical_path=?",
-                    (canonical,)
+                    "SELECT last_indexed FROM file_fingerprints WHERE canonical_path=?", (canonical,)
                 ).fetchone()
                 if fp and fp["last_indexed"]:
                     try:
@@ -376,7 +405,7 @@ class IncrementalIndexer:
                         if (datetime.now() - last).days > 7:
                             self.conn.execute(
                                 "UPDATE file_fingerprints SET absent_since=? WHERE canonical_path=?",
-                                (self.now, canonical)
+                                (self.now, canonical),
                             )
                             removed += 1
                     except ValueError:
@@ -403,6 +432,7 @@ class IncrementalIndexer:
     def _match_pattern(filename: str, pattern: str) -> bool:
         """简单的 glob 匹配。"""
         import fnmatch
+
         return fnmatch.fnmatch(filename, pattern) or fnmatch.fnmatch(filename.lower(), pattern.lower())
 
     @staticmethod
@@ -423,6 +453,7 @@ class IncrementalIndexer:
     def _extract_title(text: str, fallback: str) -> str:
         """从文本提取标题。"""
         import re
+
         m = re.search(r"^#\s+(.+)$", text, re.MULTILINE)
         if m:
             return m.group(1).strip()
@@ -443,6 +474,7 @@ class IncrementalIndexer:
 
 # ── CLI 入口 ──────────────────────────────────────────────
 
+
 def main():
     import argparse
 
@@ -450,7 +482,9 @@ def main():
     parser.add_argument("--no-embed", action="store_true", help="Skip vector index update")
     parser.add_argument("--daemon", action="store_true", help="Run as daemon (loop until killed)")
     parser.add_argument("--interval", type=int, default=300, help="Daemon loop interval seconds (default 300)")
-    parser.add_argument("--full-embed", action="store_true", help="Force embed all docs (backfill, ignores added/updated trigger)")
+    parser.add_argument(
+        "--full-embed", action="store_true", help="Force embed all docs (backfill, ignores added/updated trigger)"
+    )
     args = parser.parse_args()
 
     indexer = IncrementalIndexer()

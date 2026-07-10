@@ -116,6 +116,7 @@ def _get_embed_backend() -> str:
     # Try omlx first (faster, better Chinese support)
     try:
         import urllib.request
+
         req = urllib.request.Request(
             f"{OMLX_URL}/v1/models",
             headers={"Authorization": f"Bearer {OMLX_API_KEY}"},
@@ -131,6 +132,7 @@ def _get_embed_backend() -> str:
     # Fallback to sentence-transformers
     try:
         import sentence_transformers  # noqa: F401
+
         _embed_backend = "st"
         return "st"
     except ImportError:
@@ -144,6 +146,7 @@ def _get_embedder() -> Any:
     global _embedder
     if _embedder is None:
         from sentence_transformers import SentenceTransformer
+
         _embedder = SentenceTransformer(ST_MODEL_NAME)
     return _embedder
 
@@ -153,10 +156,12 @@ def _embed_texts_omlx(texts: list[str]) -> list[list[float]]:
     import urllib.request
     import urllib.error
 
-    payload = json.dumps({
-        "model": OMLX_EMBED_MODEL,
-        "input": texts,
-    }).encode("utf-8")
+    payload = json.dumps(
+        {
+            "model": OMLX_EMBED_MODEL,
+            "input": texts,
+        }
+    ).encode("utf-8")
 
     req = urllib.request.Request(
         f"{OMLX_URL}/v1/embeddings",
@@ -210,6 +215,7 @@ def _get_lancedb() -> Any:
     global _lancedb
     if _lancedb is None:
         import lancedb
+
         db_path = Path(get_artifact_path("retrievalDatabase"))
         lancedb_dir = db_path.parent / "vectors"
         lancedb_dir.mkdir(parents=True, exist_ok=True)
@@ -227,7 +233,7 @@ def _chunk_text(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OV
 
     chunks = []
     for i in range(0, len(text), chunk_size - overlap):
-        chunk = text[i:i + chunk_size]
+        chunk = text[i : i + chunk_size]
         if chunk.strip():
             # Merge very small last chunk with previous
             if len(chunk) < 50 and chunks:
@@ -242,7 +248,7 @@ def _chunk_text(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OV
 
 def build_index(domain: str | None = None, incremental: bool = False) -> dict:
     """Build/rebuild vector index.
-    
+
     Args:
         domain: Optional domain filter.
         incremental: If True, only embed new/changed documents.
@@ -251,7 +257,9 @@ def build_index(domain: str | None = None, incremental: bool = False) -> dict:
 
     backend = _get_embed_backend()
     if backend == "none":
-        return {"error": "No embedding backend available. Install lancedb + sentence-transformers or start omlx gateway."}
+        return {
+            "error": "No embedding backend available. Install lancedb + sentence-transformers or start omlx gateway."
+        }
 
     try:
         db = _get_lancedb()
@@ -317,23 +325,27 @@ def build_index(domain: str | None = None, incremental: bool = False) -> dict:
 
         for chunk_idx, chunk_text in enumerate(chunks):
             all_texts.append(chunk_text[:2000])  # Cap at 2000 chars per chunk
-            all_meta.append({
-                "doc_id": d["doc_id"],
-                "title": title,
-                "zone": d["zone"],
-                "kind": d["kind"],
-                "canonical_path": d["canonical_path"],
-                "chunk_idx": chunk_idx,
-            })
+            all_meta.append(
+                {
+                    "doc_id": d["doc_id"],
+                    "title": title,
+                    "zone": d["zone"],
+                    "kind": d["kind"],
+                    "canonical_path": d["canonical_path"],
+                    "chunk_idx": chunk_idx,
+                }
+            )
 
     # Embed in batches
     total_chunks = len(all_texts)
-    print(f"  Backend: {backend}  ·  Embedding {total_chunks} chunks from {len(docs_to_process)} docs...", file=sys.stderr)
+    print(
+        f"  Backend: {backend}  ·  Embedding {total_chunks} chunks from {len(docs_to_process)} docs...", file=sys.stderr
+    )
 
     embeddings: list[list[float]] = []
     batch_size = BATCH_SIZE
     for i in range(0, total_chunks, batch_size):
-        batch = all_texts[i:i + batch_size]
+        batch = all_texts[i : i + batch_size]
         batch_vecs = _embed_texts(batch)
         embeddings.extend(batch_vecs)
         if (i + batch_size) % 200 == 0 or i + batch_size >= total_chunks:
@@ -346,10 +358,12 @@ def build_index(domain: str | None = None, incremental: bool = False) -> dict:
     table_data = []
     for i, meta in enumerate(all_meta):
         if i < len(embeddings) and embeddings[i]:
-            table_data.append({
-                "vector": embeddings[i],
-                **meta,
-            })
+            table_data.append(
+                {
+                    "vector": embeddings[i],
+                    **meta,
+                }
+            )
 
     # Drop and recreate (or merge for incremental)
     try:
@@ -490,10 +504,7 @@ def list_models() -> dict:
     """List all available embedding models."""
     return {
         "active": ACTIVE_MODEL,
-        "models": {
-            name: {**cfg, "selected": name == ACTIVE_MODEL}
-            for name, cfg in EMBED_MODEL_REGISTRY.items()
-        },
+        "models": {name: {**cfg, "selected": name == ACTIVE_MODEL} for name, cfg in EMBED_MODEL_REGISTRY.items()},
     }
 
 

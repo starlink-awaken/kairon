@@ -17,16 +17,19 @@ class TestContextEngine(unittest.TestCase):
 
     def test_import(self):
         from kos.context_engine import ContextEngine
+
         self.assertTrue(callable(ContextEngine))
 
     def test_engine_creation(self):
         from kos.context_engine import ContextEngine
+
         engine = ContextEngine()
         self.assertIsNotNone(engine)
         engine.close()
 
     def test_build_context_concise(self):
         from kos.context_engine import ContextEngine
+
         engine = ContextEngine()
         ctx = engine.build_context("test", mode="concise")
         self.assertIn("sections", ctx)
@@ -39,6 +42,7 @@ class TestContextEngine(unittest.TestCase):
 
     def test_build_context_balanced(self):
         from kos.context_engine import ContextEngine
+
         engine = ContextEngine()
         ctx = engine.build_context("test", mode="balanced")
         self.assertIn("sections", ctx)
@@ -47,6 +51,7 @@ class TestContextEngine(unittest.TestCase):
 
     def test_build_context_detailed(self):
         from kos.context_engine import ContextEngine
+
         engine = ContextEngine()
         ctx = engine.build_context("test", mode="detailed")
         self.assertIn("sections", ctx)
@@ -56,6 +61,7 @@ class TestContextEngine(unittest.TestCase):
 
     def test_build_context_with_persona(self):
         from kos.context_engine import ContextEngine
+
         engine = ContextEngine()
         ctx = engine.build_context("test", mode="balanced", persona="架构师")
         # Should have persona section
@@ -65,6 +71,7 @@ class TestContextEngine(unittest.TestCase):
 
     def test_build_context_with_history(self):
         from kos.context_engine import ContextEngine
+
         engine = ContextEngine()
         ctx = engine.build_context(
             "test",
@@ -78,6 +85,7 @@ class TestContextEngine(unittest.TestCase):
 
     def test_build_context_for_agent(self):
         from kos.context_engine import ContextEngine
+
         engine = ContextEngine()
         prompt = engine.build_context_for_agent("测试任务", persona="开发者")
         self.assertIsInstance(prompt, str)
@@ -87,6 +95,7 @@ class TestContextEngine(unittest.TestCase):
 
     def test_token_estimation(self):
         from kos.context_engine import ContextEngine
+
         # Chinese text
         tokens_cn = ContextEngine._estimate_tokens("中文测试文本")
         self.assertGreater(tokens_cn, 0)
@@ -98,6 +107,7 @@ class TestContextEngine(unittest.TestCase):
 
     def test_custom_max_tokens(self):
         from kos.context_engine import ContextEngine
+
         engine = ContextEngine()
         ctx = engine.build_context("test", mode="detailed", max_tokens=500)
         self.assertLessEqual(ctx["total_tokens"], 600)  # Allow small overflow
@@ -105,6 +115,7 @@ class TestContextEngine(unittest.TestCase):
 
     def test_context_manager(self):
         from kos.context_engine import ContextEngine
+
         with ContextEngine() as engine:
             ctx = engine.build_context("test", mode="concise")
             self.assertIn("sections", ctx)
@@ -115,15 +126,18 @@ class TestMemoryTier(unittest.TestCase):
 
     def test_import(self):
         from kos.memory_tier import MemoryTier
+
         self.assertTrue(callable(MemoryTier))
 
     def test_creation(self):
         from kos.memory_tier import MemoryTier
+
         memory = MemoryTier()
         self.assertIsNotNone(memory)
 
     def test_record_and_get_session(self):
         from kos.memory_tier import MemoryTier
+
         memory = MemoryTier()
         memory.record_search("test_query")
         history = memory.get_session_history()
@@ -131,6 +145,7 @@ class TestMemoryTier(unittest.TestCase):
 
     def test_record_and_get_persistent(self):
         from kos.memory_tier import MemoryTier
+
         memory = MemoryTier()
         memory.record_search("persistent_query")
         history = memory.get_history(limit=10)
@@ -139,6 +154,7 @@ class TestMemoryTier(unittest.TestCase):
 
     def test_popular_queries(self):
         from kos.memory_tier import MemoryTier
+
         memory = MemoryTier()
         memory.record_search("popular_q")
         memory.record_search("popular_q")
@@ -148,6 +164,7 @@ class TestMemoryTier(unittest.TestCase):
 
     def test_clear_session(self):
         from kos.memory_tier import MemoryTier
+
         memory = MemoryTier()
         memory.record_search("query1")
         memory.clear_session()
@@ -155,6 +172,7 @@ class TestMemoryTier(unittest.TestCase):
 
     def test_clear_history(self):
         from kos.memory_tier import MemoryTier
+
         memory = MemoryTier()
         memory.record_search("query1")
         result = memory.clear_history()
@@ -162,6 +180,7 @@ class TestMemoryTier(unittest.TestCase):
 
     def test_get_stats(self):
         from kos.memory_tier import MemoryTier
+
         memory = MemoryTier()
         stats = memory.get_stats()
         self.assertIn("session_queries", stats)
@@ -170,6 +189,7 @@ class TestMemoryTier(unittest.TestCase):
 
     def test_get_recent_unique(self):
         from kos.memory_tier import MemoryTier
+
         memory = MemoryTier()
         memory.record_search("unique1")
         memory.record_search("unique2")
@@ -182,6 +202,7 @@ class TestTokenBudget(unittest.TestCase):
 
     def test_budget_modes(self):
         from kos.context_engine import ContextEngine
+
         self.assertIn("concise", ContextEngine.MODES)
         self.assertIn("balanced", ContextEngine.MODES)
         self.assertIn("detailed", ContextEngine.MODES)

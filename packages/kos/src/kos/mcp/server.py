@@ -650,6 +650,7 @@ def tool_build_context(query: str, mode: str = "balanced", persona: str = "", ma
     """Build LLM-ready context from knowledge base with budget control."""
     try:
         from kos.context_engine import ContextEngine
+
         engine = ContextEngine()
         ctx = engine.build_context(
             query,
@@ -670,6 +671,7 @@ def tool_verify_claim(claim: str) -> dict:
     """Verify a claim against the knowledge base. Returns supporting/contradicting evidence."""
     try:
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         result = engine.search(claim, mode="hybrid", limit=10)
         engine.close()
@@ -677,12 +679,14 @@ def tool_verify_claim(claim: str) -> dict:
         evidence = []
         for r in result.get("results", []):
             snippet = r.get("snippet", "")
-            evidence.append({
-                "title": r.get("title", ""),
-                "snippet": snippet[:300] if snippet else "",
-                "source": r.get("source", ""),
-                "canonical_path": r.get("canonical_path", ""),
-            })
+            evidence.append(
+                {
+                    "title": r.get("title", ""),
+                    "snippet": snippet[:300] if snippet else "",
+                    "source": r.get("source", ""),
+                    "canonical_path": r.get("canonical_path", ""),
+                }
+            )
 
         return {
             "claim": claim,
@@ -698,6 +702,7 @@ def tool_research_pipeline(question: str, level: str = "auto", max_cost: float =
     """Full research pipeline: KOS search → context → Minerva research → fact check."""
     try:
         from kos.minerva.bridge import cmd_research
+
         return cmd_research(question, level, max_cost)
     except Exception as e:
         return {"error": str(e)}
@@ -707,6 +712,7 @@ def tool_graph_search(query: str, max_hops: int = 3, limit: int = 10) -> dict:
     """Multi-hop graph search with reasoning paths."""
     try:
         from kos.graphrag_engine.reasoner import GraphRAGReasoner
+
         reasoner = GraphRAGReasoner()
         result = reasoner.reason(query, max_hops=max_hops, max_evidence=limit)
         reasoner.close()
@@ -719,22 +725,18 @@ def tool_entity_explore(entity_id: str, depth: int = 2) -> dict:
     """Explore an entity: relations, documents, and connected entities."""
     try:
         conn = get_connection()
-        entity = conn.execute(
-            "SELECT * FROM kos_entities WHERE entity_id = ?", (entity_id,)
-        ).fetchone()
+        entity = conn.execute("SELECT * FROM kos_entities WHERE entity_id = ?", (entity_id,)).fetchone()
         if not entity:
             return {"error": f"Entity not found: {entity_id}"}
 
         # Outgoing relations
         outgoing = conn.execute(
-            "SELECT predicate, target_id, confidence FROM kos_relations WHERE source_id = ?",
-            (entity_id,)
+            "SELECT predicate, target_id, confidence FROM kos_relations WHERE source_id = ?", (entity_id,)
         ).fetchall()
 
         # Incoming relations
         incoming = conn.execute(
-            "SELECT source_id, predicate, confidence FROM kos_relations WHERE target_id = ?",
-            (entity_id,)
+            "SELECT source_id, predicate, confidence FROM kos_relations WHERE target_id = ?", (entity_id,)
         ).fetchall()
 
         # Documents
@@ -742,7 +744,7 @@ def tool_entity_explore(entity_id: str, depth: int = 2) -> dict:
             """SELECT d.title, d.canonical_path, ed.relevance
                FROM kos_entity_docs ed JOIN documents d ON ed.doc_id = d.doc_id
                WHERE ed.entity_id = ? ORDER BY ed.relevance DESC LIMIT 10""",
-            (entity_id,)
+            (entity_id,),
         ).fetchall()
 
         # Connected entities (neighbors)
@@ -763,12 +765,10 @@ def tool_entity_explore(entity_id: str, depth: int = 2) -> dict:
                 "description": entity["description"],
             },
             "outgoing_relations": [
-                {"predicate": r["predicate"], "target": r["target_id"], "confidence": r["confidence"]}
-                for r in outgoing
+                {"predicate": r["predicate"], "target": r["target_id"], "confidence": r["confidence"]} for r in outgoing
             ],
             "incoming_relations": [
-                {"source": r["source_id"], "predicate": r["predicate"], "confidence": r["confidence"]}
-                for r in incoming
+                {"source": r["source_id"], "predicate": r["predicate"], "confidence": r["confidence"]} for r in incoming
             ],
             "documents": [dict(d) for d in docs],
             "connected_entities": list(connected)[:20],
@@ -781,6 +781,7 @@ def tool_knowledge_ask(question: str, include_paths: bool = True) -> dict:
     """Ask a question using GraphRAG reasoning."""
     try:
         from kos.graphrag_engine.reasoner import GraphRAGReasoner
+
         reasoner = GraphRAGReasoner()
         result = reasoner.reason(question, max_hops=3, max_evidence=5)
         reasoner.close()
@@ -798,17 +799,20 @@ def tool_fact_check(claim: str) -> dict:
     """Verify a factual claim against KOS knowledge base."""
     try:
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         result = engine.search(claim, mode="hybrid", limit=10)
         engine.close()
 
         evidence = []
         for r in result.get("results", []):
-            evidence.append({
-                "title": r.get("title", ""),
-                "snippet": r.get("snippet", "")[:300],
-                "source": r.get("source", ""),
-            })
+            evidence.append(
+                {
+                    "title": r.get("title", ""),
+                    "snippet": r.get("snippet", "")[:300],
+                    "source": r.get("source", ""),
+                }
+            )
 
         return {
             "claim": claim,
@@ -824,6 +828,7 @@ def tool_sync_gbrain(direction: str = "both", limit: int = 100) -> dict:
     """Sync KOS documents with gbrain memory graph."""
     try:
         from kos.gbrain_bridge import GbrainBridge
+
         bridge = GbrainBridge()
         result = {}
 
@@ -842,6 +847,7 @@ def tool_memory_stats() -> dict:
     """Get memory tier statistics (session/history/ontology)."""
     try:
         from kos.memory_tier import MemoryTier
+
         memory = MemoryTier()
         stats = memory.get_stats()
         memory.clear_session()
@@ -870,6 +876,7 @@ def tool_subscribe_topic(topic: str, subscriber_id: str = "mcp-agent") -> dict:
     """Subscribe to a topic for new document notifications."""
     try:
         from kos.agent.subscription import SubscriptionService
+
         service = SubscriptionService()
         service.init_table(get_artifact_path("retrievalDatabase"))
         return service.subscribe(topic, subscriber_id)
@@ -881,6 +888,7 @@ def tool_check_subscription(sub_id: str) -> dict:
     """Check a subscription for new matches."""
     try:
         from kos.agent.subscription import SubscriptionService
+
         service = SubscriptionService()
         return service.check_matches(sub_id)
     except Exception as e:
@@ -891,13 +899,16 @@ def tool_get_entity_timeline(entity_id: str) -> dict:
     """Get entity timeline (related documents sorted by date)."""
     try:
         conn = get_connection()
-        rows = conn.execute("""
+        rows = conn.execute(
+            """
             SELECT d.title, d.zone, d.canonical_path, d.created_at, d.updated_at, ed.relevance
             FROM kos_entity_docs ed
             JOIN documents d ON ed.doc_id = d.doc_id
             WHERE ed.entity_id = ?
             ORDER BY d.updated_at DESC LIMIT 20
-        """, (entity_id,)).fetchall()
+        """,
+            (entity_id,),
+        ).fetchall()
         conn.close()
 
         return {
@@ -1151,9 +1162,17 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
                 "type": "object",
                 "properties": {
                     "query": {"type": "string", "description": "Query to build context for"},
-                    "mode": {"type": "string", "description": "Context mode: concise|balanced|detailed (default: balanced)", "default": "balanced"},
+                    "mode": {
+                        "type": "string",
+                        "description": "Context mode: concise|balanced|detailed (default: balanced)",
+                        "default": "balanced",
+                    },
                     "persona": {"type": "string", "description": "Persona/role for context (e.g. '架构师')"},
-                    "max_tokens": {"type": "integer", "description": "Max token budget (default: 0=auto)", "default": 0},
+                    "max_tokens": {
+                        "type": "integer",
+                        "description": "Max token budget (default: 0=auto)",
+                        "default": 0,
+                    },
                 },
                 "required": ["query"],
             },
@@ -1178,7 +1197,11 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
                 "type": "object",
                 "properties": {
                     "question": {"type": "string", "description": "Research question"},
-                    "level": {"type": "string", "description": "Minerva level: auto|L0|L1|L2|L3|L4 (default: auto)", "default": "auto"},
+                    "level": {
+                        "type": "string",
+                        "description": "Minerva level: auto|L0|L1|L2|L3|L4 (default: auto)",
+                        "default": "auto",
+                    },
                     "max_cost": {"type": "number", "description": "Max cost in USD (default: 1.0)", "default": 1.0},
                 },
                 "required": ["question"],
@@ -1199,7 +1222,11 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
             "inputSchema": {
                 "type": "object",
                 "properties": {
-                    "direction": {"type": "string", "description": "Sync direction: export|import|both (default: both)", "default": "both"},
+                    "direction": {
+                        "type": "string",
+                        "description": "Sync direction: export|import|both (default: both)",
+                        "default": "both",
+                    },
                     "limit": {"type": "integer", "description": "Max items to sync (default: 100)", "default": 100},
                 },
                 "required": [],
@@ -1234,7 +1261,11 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
                 "type": "object",
                 "properties": {
                     "question": {"type": "string", "description": "Question to answer"},
-                    "include_paths": {"type": "boolean", "description": "Include reasoning paths (default: true)", "default": True},
+                    "include_paths": {
+                        "type": "boolean",
+                        "description": "Include reasoning paths (default: true)",
+                        "default": True,
+                    },
                 },
                 "required": ["question"],
             },
@@ -1292,7 +1323,9 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
                 "verify_claim": lambda: tool_verify_claim(a.get("claim", "")),
                 "memory_stats": tool_memory_stats,
                 "get_stats": tool_get_stats,
-                "subscribe_topic": lambda: tool_subscribe_topic(a.get("topic", ""), a.get("subscriber_id", "mcp-agent")),
+                "subscribe_topic": lambda: tool_subscribe_topic(
+                    a.get("topic", ""), a.get("subscriber_id", "mcp-agent")
+                ),
                 "check_subscription": lambda: tool_check_subscription(a.get("sub_id", "")),
                 "get_entity_timeline": lambda: tool_get_entity_timeline(a.get("entity_id", "")),
                 "self.get_profile": lambda: SELF_HANDLERS["self.get_profile"](),
@@ -1312,18 +1345,10 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
                     a.get("question", ""), a.get("level", "auto"), a.get("max_cost", 1.0)
                 ),
                 "fact_check": lambda: tool_fact_check(a.get("claim", "")),
-                "sync_gbrain": lambda: tool_sync_gbrain(
-                    a.get("direction", "both"), a.get("limit", 100)
-                ),
-                "graph_search": lambda: tool_graph_search(
-                    a.get("query", ""), a.get("max_hops", 3), a.get("limit", 10)
-                ),
-                "entity_explore": lambda: tool_entity_explore(
-                    a.get("entity_id", ""), a.get("depth", 2)
-                ),
-                "knowledge_ask": lambda: tool_knowledge_ask(
-                    a.get("question", ""), a.get("include_paths", True)
-                ),
+                "sync_gbrain": lambda: tool_sync_gbrain(a.get("direction", "both"), a.get("limit", 100)),
+                "graph_search": lambda: tool_graph_search(a.get("query", ""), a.get("max_hops", 3), a.get("limit", 10)),
+                "entity_explore": lambda: tool_entity_explore(a.get("entity_id", ""), a.get("depth", 2)),
+                "knowledge_ask": lambda: tool_knowledge_ask(a.get("question", ""), a.get("include_paths", True)),
             }
             h = handlers.get(tn)
             if h:

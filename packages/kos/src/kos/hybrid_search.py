@@ -8,18 +8,18 @@ KOS Hybrid Search Engine — 统一混合检索引擎
 
 Usage:
     from kos.hybrid_search import HybridSearchEngine
-    
+
     engine = HybridSearchEngine()
-    
+
     # 混合检索 (自动选择最优路径)
     result = engine.search("数据治理", mode="hybrid", limit=10)
-    
+
     # 仅关键词
     result = engine.search("数据治理", mode="keyword", limit=10)
-    
+
     # 仅语义
     result = engine.search("数据治理", mode="semantic", limit=10)
-    
+
     # 带上下文配置
     result = engine.search("数据治理", context={"mode": "detailed", "persona": "架构师"})
 
@@ -47,7 +47,7 @@ from kos.db import get_connection
 
 class HybridSearchEngine:
     """统一混合检索引擎。
-    
+
     将多种检索策略 (关键词/语义/图谱) 通过 RRF 融合，
     为 AI Agent 提供统一的知识检索入口。
     """
@@ -61,6 +61,7 @@ class HybridSearchEngine:
     def cache(self) -> "SearchCache | None":
         if self._cache is None:
             from kos.cache import SearchCache
+
             self._cache = SearchCache(db_path=self.db_path)
         return self._cache
 
@@ -85,14 +86,14 @@ class HybridSearchEngine:
         use_cache: bool = True,
     ) -> dict[str, Any]:
         """统一搜索入口。
-        
+
         Args:
             query: 搜索查询。
             mode: 检索模式: keyword | semantic | graph | hybrid
             limit: 最大返回结果数。
             context: 上下文配置 {"mode": "concise|balanced|detailed", "persona": "...", "domain": "..."}
             use_cache: 是否使用缓存 (默认 True)。
-            
+
         Returns:
             搜索结果 dict，包含 results、query_plan、sources 等。
         """
@@ -153,12 +154,18 @@ class HybridSearchEngine:
 
         # 写入缓存
         if use_cache and self._cache is not False and final:
-            self.cache.set(query, mode, final, limit, {
-                "sources": result["sources"],
-                "elapsed_ms": elapsed_ms,
-                "query_plan": plan,
-                "count": len(final),
-            })
+            self.cache.set(
+                query,
+                mode,
+                final,
+                limit,
+                {
+                    "sources": result["sources"],
+                    "elapsed_ms": elapsed_ms,
+                    "query_plan": plan,
+                    "count": len(final),
+                },
+            )
 
         return result
 
@@ -341,17 +348,19 @@ class HybridSearchEngine:
                     doc_id = r["doc_id"]
                     if doc_id not in seen_doc_ids:
                         seen_doc_ids.add(doc_id)
-                        results.append({
-                            "doc_id": doc_id,
-                            "title": r["title"],
-                            "zone": r["zone"],
-                            "kind": r["kind"],
-                            "canonical_path": r["canonical_path"],
-                            "updated_at": r["updated_at"],
-                            "relevance": r["relevance"],
-                            "matched_entity": ent["label"],
-                            "source": "graph",
-                        })
+                        results.append(
+                            {
+                                "doc_id": doc_id,
+                                "title": r["title"],
+                                "zone": r["zone"],
+                                "kind": r["kind"],
+                                "canonical_path": r["canonical_path"],
+                                "updated_at": r["updated_at"],
+                                "relevance": r["relevance"],
+                                "matched_entity": ent["label"],
+                                "source": "graph",
+                            }
+                        )
 
                     if len(results) >= limit:
                         break
@@ -372,10 +381,10 @@ class HybridSearchEngine:
         plan: dict[str, Any],
     ) -> list[dict]:
         """Reciprocal Rank Fusion 多路结果融合。
-        
+
         不同检索源的结果通过 RRF 公式合并：
         score(d) = Σ w_s / (k + rank_s(d))
-        
+
         k=60 避免对低排名结果的过度奖励。
         """
         k = 60
@@ -385,7 +394,7 @@ class HybridSearchEngine:
         weights = {
             "keyword": 1.0,
             "semantic": 1.2,  # 语义结果给予轻微加权
-            "graph": 0.8,     # 图谱结果作为补充
+            "graph": 0.8,  # 图谱结果作为补充
         }
 
         for source, source_results in results.items():
@@ -444,18 +453,23 @@ class HybridSearchEngine:
 
 # ── CLI 入口 ──────────────────────────────────────────────
 
+
 def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser(description="KOS Hybrid Search Engine")
     parser.add_argument("query", help="Search query")
     parser.add_argument(
-        "--mode", default="hybrid", choices=["keyword", "semantic", "graph", "hybrid"],
+        "--mode",
+        default="hybrid",
+        choices=["keyword", "semantic", "graph", "hybrid"],
         help="Search mode (default: hybrid)",
     )
     parser.add_argument("--limit", type=int, default=10, help="Max results (default: 10)")
     parser.add_argument(
-        "--context-mode", default="balanced", choices=["concise", "balanced", "detailed"],
+        "--context-mode",
+        default="balanced",
+        choices=["concise", "balanced", "detailed"],
         help="Context mode (default: balanced)",
     )
     parser.add_argument("--json", action="store_true", help="JSON output")
@@ -473,7 +487,9 @@ def main() -> None:
     if args.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))
     else:
-        print(f"\n🔍 {result['query']}  ·  {result['mode']}  ·  {result['count']} results  ·  {result['elapsed_ms']}ms\n")
+        print(
+            f"\n🔍 {result['query']}  ·  {result['mode']}  ·  {result['count']} results  ·  {result['elapsed_ms']}ms\n"
+        )
         for i, r in enumerate(result["results"], 1):
             title = r.get("title", "Untitled")[:60]
             path = r.get("canonical_path", "")

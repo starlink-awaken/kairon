@@ -18,10 +18,12 @@ class TestLRUCache(unittest.TestCase):
 
     def test_import(self):
         from kos.cache import LRUCache
+
         self.assertTrue(callable(LRUCache))
 
     def test_set_get(self):
         from kos.cache import LRUCache
+
         cache = LRUCache(capacity=10, default_ttl=60)
         cache.set("key1", {"data": "value1"})
         result = cache.get("key1")
@@ -29,12 +31,14 @@ class TestLRUCache(unittest.TestCase):
 
     def test_miss(self):
         from kos.cache import LRUCache
+
         cache = LRUCache(capacity=10, default_ttl=60)
         result = cache.get("nonexistent")
         self.assertIsNone(result)
 
     def test_eviction(self):
         from kos.cache import LRUCache
+
         cache = LRUCache(capacity=3, default_ttl=60)
         cache.set("a", 1)
         cache.set("b", 2)
@@ -45,6 +49,7 @@ class TestLRUCache(unittest.TestCase):
 
     def test_expiration(self):
         from kos.cache import LRUCache
+
         cache = LRUCache(capacity=10, default_ttl=0.1)
         cache.set("key", "value")
         time.sleep(0.15)
@@ -53,6 +58,7 @@ class TestLRUCache(unittest.TestCase):
 
     def test_stats(self):
         from kos.cache import LRUCache
+
         cache = LRUCache(capacity=10, default_ttl=60)
         cache.set("a", 1)
         cache.get("a")  # hit
@@ -64,6 +70,7 @@ class TestLRUCache(unittest.TestCase):
 
     def test_clear(self):
         from kos.cache import LRUCache
+
         cache = LRUCache(capacity=10, default_ttl=60)
         cache.set("a", 1)
         cache.set("b", 2)
@@ -72,6 +79,7 @@ class TestLRUCache(unittest.TestCase):
 
     def test_invalidate(self):
         from kos.cache import LRUCache
+
         cache = LRUCache(capacity=10, default_ttl=60)
         cache.set("a", 1)
         self.assertTrue(cache.invalidate("a"))
@@ -84,15 +92,18 @@ class TestSearchCache(unittest.TestCase):
 
     def test_import(self):
         from kos.cache import SearchCache
+
         self.assertTrue(callable(SearchCache))
 
     def test_creation(self):
         from kos.cache import SearchCache
+
         cache = SearchCache()
         self.assertIsNotNone(cache)
 
     def test_set_get(self):
         from kos.cache import SearchCache
+
         cache = SearchCache()
         cache.set("test query", "keyword", [{"doc_id": "1", "title": "Test"}])
         result = cache.get("test query", "keyword")
@@ -101,12 +112,14 @@ class TestSearchCache(unittest.TestCase):
 
     def test_miss(self):
         from kos.cache import SearchCache
+
         cache = SearchCache()
         result = cache.get("nonexistent query", "keyword")
         self.assertIsNone(result)
 
     def test_different_modes(self):
         from kos.cache import SearchCache
+
         cache = SearchCache()
         cache.set("query", "keyword", [{"doc_id": "1"}])
         cache.set("query", "semantic", [{"doc_id": "2"}])
@@ -117,6 +130,7 @@ class TestSearchCache(unittest.TestCase):
 
     def test_different_limits(self):
         from kos.cache import SearchCache
+
         cache = SearchCache()
         cache.set("query", "keyword", [{"doc_id": "1"}], limit=5)
         result = cache.get("query", "keyword", limit=10)
@@ -124,6 +138,7 @@ class TestSearchCache(unittest.TestCase):
 
     def test_stats(self):
         from kos.cache import SearchCache
+
         cache = SearchCache()
         cache.set("q1", "keyword", [{"doc_id": "1"}])
         stats = cache.get_stats()
@@ -132,6 +147,7 @@ class TestSearchCache(unittest.TestCase):
 
     def test_clear_all(self):
         from kos.cache import SearchCache
+
         cache = SearchCache()
         cache.set("q1", "keyword", [{"doc_id": "1"}])
         cache.clear_all()
@@ -139,6 +155,7 @@ class TestSearchCache(unittest.TestCase):
 
     def test_search_with_cache(self):
         from kos.cache import SearchCache
+
         cache = SearchCache()
         result = cache.search_with_cache("测试", mode="keyword", limit=3)
         self.assertIn("results", result)
@@ -146,6 +163,7 @@ class TestSearchCache(unittest.TestCase):
 
     def test_search_with_cache_hit(self):
         from kos.cache import SearchCache
+
         cache = SearchCache()
         # First call populates cache
         cache.search_with_cache("测试", mode="keyword", limit=3)
@@ -155,6 +173,7 @@ class TestSearchCache(unittest.TestCase):
 
     def test_invalidate(self):
         from kos.cache import SearchCache
+
         cache = SearchCache()
         cache.set("query", "keyword", [{"doc_id": "1"}])
         cache.invalidate("query", "keyword")
@@ -166,6 +185,7 @@ class TestCacheIntegration(unittest.TestCase):
 
     def test_engine_caching(self):
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         # First search
         r1 = engine.search("integration_test", mode="keyword", limit=3, use_cache=True)
@@ -177,6 +197,7 @@ class TestCacheIntegration(unittest.TestCase):
 
     def test_no_cache_option(self):
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
         r1 = engine.search("测试", mode="keyword", limit=3, use_cache=False)
         self.assertGreater(r1["count"], 0)

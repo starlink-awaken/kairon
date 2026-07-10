@@ -18,15 +18,18 @@ class TestMultimodalProcessor(unittest.TestCase):
 
     def test_import(self):
         from kos.multimodal import MultimodalProcessor
+
         self.assertTrue(callable(MultimodalProcessor))
 
     def test_creation(self):
         from kos.multimodal import MultimodalProcessor
+
         processor = MultimodalProcessor()
         self.assertIsNotNone(processor)
 
     def test_supported_formats(self):
         from kos.multimodal import MultimodalProcessor
+
         processor = MultimodalProcessor()
         formats = processor.supported_formats
         self.assertIn("image", formats)
@@ -38,18 +41,21 @@ class TestMultimodalProcessor(unittest.TestCase):
 
     def test_process_nonexistent_file(self):
         from kos.multimodal import MultimodalProcessor
+
         processor = MultimodalProcessor()
         result = processor.process_file("/non/existent/file.png")
         self.assertIn("error", result)
 
     def test_process_nonexistent_directory(self):
         from kos.multimodal import MultimodalProcessor
+
         processor = MultimodalProcessor()
         result = processor.process_directory("/non/existent/dir")
         self.assertIn("error", result)
 
     def test_process_unsupported_format(self):
         from kos.multimodal import MultimodalProcessor
+
         processor = MultimodalProcessor()
         with tempfile.NamedTemporaryFile(suffix=".xyz", delete=False) as tmp:
             tmp.write(b"test data")
@@ -60,23 +66,27 @@ class TestMultimodalProcessor(unittest.TestCase):
 
     def test_image_extensions(self):
         from kos.multimodal import MultimodalProcessor
+
         self.assertIn(".png", MultimodalProcessor.IMAGE_EXTENSIONS)
         self.assertIn(".jpg", MultimodalProcessor.IMAGE_EXTENSIONS)
         self.assertIn(".webp", MultimodalProcessor.IMAGE_EXTENSIONS)
 
     def test_audio_extensions(self):
         from kos.multimodal import MultimodalProcessor
+
         self.assertIn(".mp3", MultimodalProcessor.AUDIO_EXTENSIONS)
         self.assertIn(".wav", MultimodalProcessor.AUDIO_EXTENSIONS)
         self.assertIn(".m4a", MultimodalProcessor.AUDIO_EXTENSIONS)
 
     def test_video_extensions(self):
         from kos.multimodal import MultimodalProcessor
+
         self.assertIn(".mp4", MultimodalProcessor.VIDEO_EXTENSIONS)
         self.assertIn(".mov", MultimodalProcessor.VIDEO_EXTENSIONS)
 
     def test_all_extensions_union(self):
         from kos.multimodal import MultimodalProcessor
+
         expected = (
             MultimodalProcessor.IMAGE_EXTENSIONS
             | MultimodalProcessor.AUDIO_EXTENSIONS
@@ -87,6 +97,7 @@ class TestMultimodalProcessor(unittest.TestCase):
 
     def test_ocr_image_unavailable(self):
         from kos.multimodal import MultimodalProcessor
+
         processor = MultimodalProcessor()
         # Without tesseract/arkcli, OCR returns empty
         with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
@@ -99,6 +110,7 @@ class TestMultimodalProcessor(unittest.TestCase):
 
     def test_describe_image_no_llm(self):
         from kos.multimodal import MultimodalProcessor
+
         processor = MultimodalProcessor()
         processor._llm_available = False  # Force unavailable
         result = processor._describe_image(Path("/tmp/fake.png"))
@@ -106,6 +118,7 @@ class TestMultimodalProcessor(unittest.TestCase):
 
     def test_transcribe_unavailable(self):
         from kos.multimodal import MultimodalProcessor
+
         processor = MultimodalProcessor()
         # Without whisper/arkcli, returns empty
         with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
@@ -117,6 +130,7 @@ class TestMultimodalProcessor(unittest.TestCase):
 
     def test_check_llm_available(self):
         from kos.multimodal import MultimodalProcessor
+
         processor = MultimodalProcessor()
         # Should return a boolean
         result = processor._check_llm_available()
@@ -124,6 +138,7 @@ class TestMultimodalProcessor(unittest.TestCase):
 
     def test_process_directory_empty(self):
         from kos.multimodal import MultimodalProcessor
+
         processor = MultimodalProcessor()
         # Create empty temp directory
         with tempfile.TemporaryDirectory() as tmpdir:

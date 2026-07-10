@@ -29,6 +29,7 @@ BATCH_SIZE = 64  # texts per encode call
 def load_embedder():
     """Load sentence-transformers embedder."""
     from sentence_transformers import SentenceTransformer
+
     return SentenceTransformer("all-MiniLM-L6-v2")
 
 
@@ -46,7 +47,7 @@ def build_index(db_path, docs, model, batch_docs=500):
             return [text] if text.strip() else []
         chunks = []
         for i in range(0, len(text), chunk_size - overlap):
-            chunk = text[i:i + chunk_size]
+            chunk = text[i : i + chunk_size]
             if chunk.strip():
                 if len(chunk) < 50 and chunks:
                     chunks[-1] += chunk
@@ -62,17 +63,19 @@ def build_index(db_path, docs, model, batch_docs=500):
         text = f"{d['title'] or ''}\n{d['body'] or ''}"
         chunks = chunk_text(text)
         if not chunks:
-            chunks = [d['title'] or '']
+            chunks = [d["title"] or ""]
         for idx, chunk in enumerate(chunks):
             all_texts.append(chunk[:2000])
-            all_meta.append({
-                'doc_id': d['doc_id'],
-                'title': d['title'],
-                'zone': d['zone'],
-                'kind': d['kind'],
-                'canonical_path': d['canonical_path'],
-                'chunk_idx': idx,
-            })
+            all_meta.append(
+                {
+                    "doc_id": d["doc_id"],
+                    "title": d["title"],
+                    "zone": d["zone"],
+                    "kind": d["kind"],
+                    "canonical_path": d["canonical_path"],
+                    "chunk_idx": idx,
+                }
+            )
 
     if not all_texts:
         return 0
@@ -84,13 +87,14 @@ def build_index(db_path, docs, model, batch_docs=500):
 
     # Store in LanceDB
     import lancedb
+
     lancedb_dir = Path(db_path).parent / "vectors"
     db = lancedb.connect(str(lancedb_dir))
 
     table_data = []
     for i, meta in enumerate(all_meta):
         if i < len(embeddings) and embeddings[i]:
-            table_data.append({'vector': embeddings[i], **meta})
+            table_data.append({"vector": embeddings[i], **meta})
 
     if table_data:
         try:
@@ -118,6 +122,7 @@ def main():
 
     if args.status:
         from kos.semantic import status
+
         print(f"Index status: {status()}")
         return
 
@@ -128,6 +133,7 @@ def main():
 
     # Clear existing index for fresh build
     import lancedb
+
     lancedb_dir = Path(db_path).parent / "vectors"
     db = lancedb.connect(str(lancedb_dir))
     try:
@@ -186,7 +192,9 @@ def main():
         conn = sqlite3.connect(db_path)
         now = time.strftime("%Y%m%d%H%M%S")
         for d in docs_this_batch:
-            conn.execute("INSERT OR REPLACE INTO _index_progress (doc_id, indexed_at) VALUES (?, ?)", (d["doc_id"], now))
+            conn.execute(
+                "INSERT OR REPLACE INTO _index_progress (doc_id, indexed_at) VALUES (?, ?)", (d["doc_id"], now)
+            )
         conn.commit()
         conn.close()
 
@@ -196,10 +204,12 @@ def main():
         rate = docs_done / elapsed_total if elapsed_total > 0 else 0
         eta = len(pending) / rate if rate > 0 else 0
 
-        print(f"  Done: {indexed} chunks in {elapsed:.1f}s | Total: {total_indexed} | Rate: {rate:.0f} docs/min | ETA: {eta/60:.0f}min")
+        print(
+            f"  Done: {indexed} chunks in {elapsed:.1f}s | Total: {total_indexed} | Rate: {rate:.0f} docs/min | ETA: {eta / 60:.0f}min"
+        )
         sys.stdout.flush()
 
-    print(f"\nComplete! Total indexed: {total_indexed} chunks in {(time.time()-t_start)/60:.1f}min")
+    print(f"\nComplete! Total indexed: {total_indexed} chunks in {(time.time() - t_start) / 60:.1f}min")
 
 
 if __name__ == "__main__":

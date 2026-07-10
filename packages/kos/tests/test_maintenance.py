@@ -17,16 +17,19 @@ class TestIncrementalIndexer(unittest.TestCase):
 
     def test_import(self):
         from kos.maintenance.indexer import IncrementalIndexer
+
         self.assertTrue(callable(IncrementalIndexer))
 
     def test_creation(self):
         from kos.maintenance.indexer import IncrementalIndexer
+
         indexer = IncrementalIndexer()
         self.assertIsNotNone(indexer)
         indexer.close()
 
     def test_get_zones(self):
         from kos.maintenance.indexer import IncrementalIndexer
+
         indexer = IncrementalIndexer()
         zones = indexer._get_zones()
         self.assertIsInstance(zones, dict)
@@ -38,7 +41,8 @@ class TestIncrementalIndexer(unittest.TestCase):
         import tempfile
 
         from kos.maintenance.indexer import IncrementalIndexer
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
             f.write("Test content")
             f.flush()
             h = IncrementalIndexer._compute_hash(Path(f.name))
@@ -48,6 +52,7 @@ class TestIncrementalIndexer(unittest.TestCase):
 
     def test_match_pattern(self):
         from kos.maintenance.indexer import IncrementalIndexer
+
         self.assertTrue(IncrementalIndexer._match_pattern("test.md", "*.md"))
         self.assertTrue(IncrementalIndexer._match_pattern("test.txt", "*.txt"))
         self.assertFalse(IncrementalIndexer._match_pattern("test.md", "*.txt"))
@@ -56,7 +61,8 @@ class TestIncrementalIndexer(unittest.TestCase):
         import tempfile
 
         from kos.maintenance.indexer import IncrementalIndexer
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
             f.write("# Title\n\nBody content")
             f.flush()
             text = IncrementalIndexer._extract_text(Path(f.name))
@@ -66,11 +72,13 @@ class TestIncrementalIndexer(unittest.TestCase):
 
     def test_extract_title(self):
         from kos.maintenance.indexer import IncrementalIndexer
+
         self.assertEqual(IncrementalIndexer._extract_title("# My Title\n\nBody", "default"), "My Title")
         self.assertEqual(IncrementalIndexer._extract_title("No heading", "default"), "default")
 
     def test_context_manager(self):
         from kos.maintenance.indexer import IncrementalIndexer
+
         with IncrementalIndexer() as indexer:
             zones = indexer._get_zones()
             self.assertGreater(len(zones), 0)
@@ -81,10 +89,12 @@ class TestFileWatcher(unittest.TestCase):
 
     def test_import(self):
         from kos.maintenance.watcher import FileWatcher
+
         self.assertTrue(callable(FileWatcher))
 
     def test_creation(self):
         from kos.maintenance.watcher import FileWatcher
+
         watcher = FileWatcher(poll_interval=10)
         self.assertIsNotNone(watcher)
         self.assertEqual(watcher.poll_interval, 10)
@@ -96,16 +106,19 @@ class TestAlertService(unittest.TestCase):
 
     def test_import(self):
         from kos.maintenance.alerts import AlertService
+
         self.assertTrue(callable(AlertService))
 
     def test_creation(self):
         from kos.maintenance.alerts import AlertService
+
         service = AlertService()
         self.assertIsNotNone(service)
         service.close()
 
     def test_checks_defined(self):
         from kos.maintenance.alerts import AlertService
+
         self.assertIn("index_integrity", AlertService.CHECKS)
         self.assertIn("vector_lag", AlertService.CHECKS)
         self.assertIn("search_latency", AlertService.CHECKS)
@@ -115,6 +128,7 @@ class TestAlertService(unittest.TestCase):
 
     def test_check_index_integrity(self):
         from kos.maintenance.alerts import AlertService
+
         service = AlertService()
         result = service._check_index_integrity(AlertService.CHECKS["index_integrity"])
         # Should return None if healthy
@@ -123,6 +137,7 @@ class TestAlertService(unittest.TestCase):
 
     def test_check_orphan_entities(self):
         from kos.maintenance.alerts import AlertService
+
         service = AlertService()
         result = service._check_orphan_entities(AlertService.CHECKS["orphan_entities"])
         # Should return None if no orphans
@@ -131,6 +146,7 @@ class TestAlertService(unittest.TestCase):
 
     def test_check_all(self):
         from kos.maintenance.alerts import AlertService
+
         service = AlertService()
         results = service.check_all()
         self.assertIn("timestamp", results)

@@ -11,15 +11,15 @@ KOS GraphRAG — 图谱多跳推理
 
 Usage:
     from kos.graphrag import GraphRAG
-    
+
     rag = GraphRAG()
-    
+
     # 多跳搜索
     results = rag.multi_hop_search("夏明星", hops=3, limit=10)
-    
+
     # 路径查找
     path = rag.find_path("P:xia-mingxing", "J:kairon")
-    
+
     # 隐含关联
     associations = rag.discover_implicit("数字化平台")
 """
@@ -56,15 +56,15 @@ class GraphRAG:
         limit: int = 10,
     ) -> dict[str, Any]:
         """多跳图谱搜索。
-        
+
         从查询匹配的实体出发，沿关系边进行 BFS 遍历，
         找到多跳后的关联文档。
-        
+
         Args:
             query: 搜索查询。
             hops: 最大跳数。
             limit: 最大结果数。
-            
+
         Returns:
             搜索结果 + 推理路径。
         """
@@ -108,11 +108,13 @@ class GraphRAG:
                     if doc_id not in found_docs or found_docs[doc_id] < doc_score:
                         found_docs[doc_id] = doc_score
 
-                all_paths.append({
-                    "path": new_path,
-                    "score": new_score,
-                    "hops": current_hop + 1,
-                })
+                all_paths.append(
+                    {
+                        "path": new_path,
+                        "score": new_score,
+                        "hops": current_hop + 1,
+                    }
+                )
 
                 visited.add(neighbor_id)
                 queue.append((neighbor_id, current_hop + 1, new_path, new_score))
@@ -123,17 +125,18 @@ class GraphRAG:
         results = []
         for doc_id, score in sorted_docs:
             doc = self.conn.execute(
-                "SELECT doc_id, title, zone, canonical_path FROM documents WHERE doc_id = ?",
-                (doc_id,)
+                "SELECT doc_id, title, zone, canonical_path FROM documents WHERE doc_id = ?", (doc_id,)
             ).fetchone()
             if doc:
-                results.append({
-                    "doc_id": doc["doc_id"],
-                    "title": doc["title"],
-                    "zone": doc["zone"],
-                    "canonical_path": doc["canonical_path"],
-                    "score": round(score, 4),
-                })
+                results.append(
+                    {
+                        "doc_id": doc["doc_id"],
+                        "title": doc["title"],
+                        "zone": doc["zone"],
+                        "canonical_path": doc["canonical_path"],
+                        "score": round(score, 4),
+                    }
+                )
 
         # 4. 排序路径
         sorted_paths = sorted(all_paths, key=lambda x: -x["score"])[:limit]
@@ -155,14 +158,14 @@ class GraphRAG:
         max_hops: int = 5,
     ) -> dict[str, Any]:
         """查找两个实体之间的最短路径。
-        
+
         使用 Dijkstra 算法 (基于置信度倒数为权重)。
-        
+
         Args:
             source_id: 源实体 ID。
             target_id: 目标实体 ID。
             max_hops: 最大跳数。
-            
+
         Returns:
             最短路径 + 详情。
         """
@@ -205,12 +208,12 @@ class GraphRAG:
         min_shared_docs: int = 2,
     ) -> dict[str, Any]:
         """发现隐含关联实体。
-        
+
         找到与查询实体共现但未直接关联的实体。
-        
+
         Args:
             query: 搜索查询。
-            min_shared_docs: 最小共享文档数。            
+            min_shared_docs: 最小共享文档数。
         Returns:
             隐含关联列表。
         """
@@ -223,7 +226,8 @@ class GraphRAG:
 
         for ent in entities:
             # 找到共现但未关联的实体
-            implicit = self.conn.execute("""
+            implicit = self.conn.execute(
+                """
                 SELECT e2.entity_id, e2.label, e2.entity_type, COUNT(*) as shared_docs
                 FROM kos_entity_docs ed1
                 JOIN kos_entity_docs ed2 ON ed1.doc_id = ed2.doc_id AND ed1.entity_id != ed2.entity_id
@@ -238,15 +242,19 @@ class GraphRAG:
                 HAVING shared_docs >= ?
                 ORDER BY shared_docs DESC
                 LIMIT 10
-            """, (ent["entity_id"], min_shared_docs)).fetchall()
+            """,
+                (ent["entity_id"], min_shared_docs),
+            ).fetchall()
 
             for imp in implicit:
-                associations.append({
-                    "from_entity": ent["label"],
-                    "to_entity": imp["label"],
-                    "to_type": imp["entity_type"],
-                    "shared_docs": imp["shared_docs"],
-                })
+                associations.append(
+                    {
+                        "from_entity": ent["label"],
+                        "to_entity": imp["label"],
+                        "to_type": imp["entity_type"],
+                        "shared_docs": imp["shared_docs"],
+                    }
+                )
 
         return {
             "query": query,
@@ -258,25 +266,26 @@ class GraphRAG:
 
     def _find_entities(self, query: str) -> list[dict]:
         """根据查询查找实体。"""
-        rows = self.conn.execute("""
+        rows = self.conn.execute(
+            """
             SELECT entity_id, label, entity_type
             FROM kos_entities
             WHERE label LIKE ? OR ? LIKE '%' || label || '%'
             ORDER BY entity_type, label LIMIT 10
-        """, (f"%{query}%", query)).fetchall()
+        """,
+            (f"%{query}%", query),
+        ).fetchall()
 
         return [dict(r) for r in rows]
 
     def _get_neighbors(self, entity_id: str) -> list[tuple[str, str, float]]:
         """获取实体的邻居 (出边 + 入边)。"""
         outgoing = self.conn.execute(
-            "SELECT target_id, predicate, confidence FROM kos_relations WHERE source_id = ?",
-            (entity_id,)
+            "SELECT target_id, predicate, confidence FROM kos_relations WHERE source_id = ?", (entity_id,)
         ).fetchall()
 
         incoming = self.conn.execute(
-            "SELECT source_id, predicate, confidence FROM kos_relations WHERE target_id = ?",
-            (entity_id,)
+            "SELECT source_id, predicate, confidence FROM kos_relations WHERE target_id = ?", (entity_id,)
         ).fetchall()
 
         neighbors = []
@@ -289,11 +298,14 @@ class GraphRAG:
 
     def _get_entity_docs(self, entity_id: str) -> list[dict]:
         """获取实体关联的文档。"""
-        rows = self.conn.execute("""
+        rows = self.conn.execute(
+            """
             SELECT doc_id, relevance FROM kos_entity_docs
             WHERE entity_id = ?
             ORDER BY relevance DESC LIMIT 5
-        """, (entity_id,)).fetchall()
+        """,
+            (entity_id,),
+        ).fetchall()
 
         return [dict(r) for r in rows]
 
@@ -311,6 +323,7 @@ class GraphRAG:
 
 
 # ── CLI 入口 ──────────────────────────────────────────────
+
 
 def main():
     import argparse

@@ -87,8 +87,7 @@ class KosMonitor:
         try:
             stale_threshold = (datetime.now() - timedelta(days=90)).strftime("%Y%m%d%H%M%S")
             stale_count = conn.execute(
-                "SELECT COUNT(*) FROM documents WHERE updated_at < ?",
-                (stale_threshold,)
+                "SELECT COUNT(*) FROM documents WHERE updated_at < ?", (stale_threshold,)
             ).fetchone()[0]
             stale_pct = (stale_count / doc_count * 100) if doc_count > 0 else 0
             result["checks"]["stale_documents"] = {
@@ -148,19 +147,23 @@ class KosMonitor:
                     """SELECT d.doc_id FROM documents_fts f
                        JOIN documents d ON f.doc_id = d.doc_id
                        WHERE documents_fts MATCH ? LIMIT 5""",
-                    (query,)
+                    (query,),
                 ).fetchall()
-                test_results.append({
-                    "query": query,
-                    "found": len(rows) > 0,
-                    "result_count": len(rows),
-                })
+                test_results.append(
+                    {
+                        "query": query,
+                        "found": len(rows) > 0,
+                        "result_count": len(rows),
+                    }
+                )
             except sqlite3.OperationalError:
-                test_results.append({
-                    "query": query,
-                    "found": False,
-                    "result_count": 0,
-                })
+                test_results.append(
+                    {
+                        "query": query,
+                        "found": False,
+                        "result_count": 0,
+                    }
+                )
 
         passed = sum(1 for t in test_results if t["found"])
         result["tests"]["keyword_search"] = {
@@ -176,8 +179,7 @@ class KosMonitor:
             start = time.time()
             try:
                 conn.execute(
-                    "SELECT doc_id FROM documents_fts WHERE documents_fts MATCH ? LIMIT 1",
-                    ("test",)
+                    "SELECT doc_id FROM documents_fts WHERE documents_fts MATCH ? LIMIT 1", ("test",)
                 ).fetchall()
             except sqlite3.OperationalError:
                 pass
@@ -219,10 +221,7 @@ class KosMonitor:
 
         result["quality_score"] = quality_score
         result["quality_grade"] = (
-            "A" if quality_score >= 90 else
-            "B" if quality_score >= 70 else
-            "C" if quality_score >= 50 else
-            "D"
+            "A" if quality_score >= 90 else "B" if quality_score >= 70 else "C" if quality_score >= 50 else "D"
         )
 
         conn.close()
@@ -244,9 +243,7 @@ class KosMonitor:
         doc_count = conn.execute("SELECT COUNT(*) FROM documents").fetchone()[0]
 
         # Zone distribution
-        zones = conn.execute(
-            "SELECT zone, COUNT(*) as cnt FROM documents GROUP BY zone ORDER BY cnt DESC"
-        ).fetchall()
+        zones = conn.execute("SELECT zone, COUNT(*) as cnt FROM documents GROUP BY zone ORDER BY cnt DESC").fetchall()
 
         # Ontology metrics
         try:
@@ -260,9 +257,7 @@ class KosMonitor:
 
         # FTS index size
         try:
-            fts_size = conn.execute(
-                "SELECT COUNT(*) FROM documents_fts"
-            ).fetchone()[0]
+            fts_size = conn.execute("SELECT COUNT(*) FROM documents_fts").fetchone()[0]
         except sqlite3.Error:
             fts_size = 0
 
@@ -323,8 +318,16 @@ class KosMonitor:
 
         if queries is None:
             queries = [
-                "数字化平台", "数据治理", "测试", "项目", "文档",
-                "报告", "制度", "方案", "总结", "计划",
+                "数字化平台",
+                "数据治理",
+                "测试",
+                "项目",
+                "文档",
+                "报告",
+                "制度",
+                "方案",
+                "总结",
+                "计划",
             ]
 
         engine = HybridSearchEngine(self.db_path)

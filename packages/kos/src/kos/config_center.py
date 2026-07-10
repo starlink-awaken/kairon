@@ -125,11 +125,11 @@ class ConfigCenter:
 
     def get(self, key: str, default: Any = None) -> Any:
         """获取配置值。
-        
+
         Args:
             key: 配置键 (如 "embedding.model")。
             default: 默认值。
-            
+
         Returns:
             配置值，不存在返回 default。
         """
@@ -144,7 +144,7 @@ class ConfigCenter:
 
     def set(self, key: str, value: Any):
         """设置配置值。
-        
+
         Args:
             key: 配置键。
             value: 配置值。
@@ -172,6 +172,7 @@ class ConfigCenter:
 
         # 检查模型是否有效
         from kos.semantic import EMBED_MODEL_REGISTRY
+
         model = self.get("embedding.model")
         if model and model not in EMBED_MODEL_REGISTRY:
             warnings.append(f"模型 '{model}' 不在注册表中")
@@ -210,9 +211,17 @@ class ConfigCenter:
                             "description": CONFIG_DESCRIPTIONS.get(full_key, ""),
                         }
                 elif key in default:
-                    changes[full_key] = {"default": default[key], "current": None, "description": CONFIG_DESCRIPTIONS.get(full_key, "")}
+                    changes[full_key] = {
+                        "default": default[key],
+                        "current": None,
+                        "description": CONFIG_DESCRIPTIONS.get(full_key, ""),
+                    }
                 else:
-                    changes[full_key] = {"default": None, "current": current[key], "description": CONFIG_DESCRIPTIONS.get(full_key, "")}
+                    changes[full_key] = {
+                        "default": None,
+                        "current": current[key],
+                        "description": CONFIG_DESCRIPTIONS.get(full_key, ""),
+                    }
 
         compare(DEFAULT_CONFIG, self.config)
         return changes
@@ -233,6 +242,7 @@ class ConfigCenter:
 
 
 # ── CLI 入口 ──────────────────────────────────────────────
+
 
 def main():
     import argparse

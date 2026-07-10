@@ -337,7 +337,7 @@ def _tokenize_search_query(query: str) -> str:
             return [t.strip() for t in text.split() if t.strip()]
 
     # Split on quoted segments while keeping the delimiters.
-    segments = re.split(r'''(["'][^"']*["'])''', query)
+    segments = re.split(r"""(["'][^"']*["'])""", query)
     parts: list[str] = []
 
     for segment in segments:
@@ -347,8 +347,7 @@ def _tokenize_search_query(query: str) -> str:
 
         # Quoted phrase -> tokenize and wrap as FTS5 phrase query.
         if (
-            (segment.startswith('"') and segment.endswith('"'))
-            or (segment.startswith("'") and segment.endswith("'"))
+            (segment.startswith('"') and segment.endswith('"')) or (segment.startswith("'") and segment.endswith("'"))
         ) and len(segment) > 1:
             inner = segment[1:-1].strip()
             tokens = _jieba_tokens(inner)
@@ -735,7 +734,9 @@ def main() -> None:
     p_context = sub.add_parser("context", help="Build LLM-ready context with budget control")
     p_context.add_argument("query", help="Query to build context for")
     p_context.add_argument(
-        "--mode", default="balanced", choices=["concise", "balanced", "detailed"],
+        "--mode",
+        default="balanced",
+        choices=["concise", "balanced", "detailed"],
         help="Context mode (default: balanced)",
     )
     p_context.add_argument("--persona", help="Persona/role for context")
@@ -851,6 +852,7 @@ def main() -> None:
         # Use HybridSearchEngine for semantic/graph/hybrid modes
         if search_mode in ("semantic", "graph", "hybrid"):
             from kos.hybrid_search import HybridSearchEngine
+
             engine = HybridSearchEngine()
             result = engine.search(
                 args.query,
@@ -968,18 +970,21 @@ def main() -> None:
         return
     elif args.command == "suggest":
         from kos.search_features import SearchFeatures
+
         features = SearchFeatures()
         result = features.suggest(args.prefix, limit=getattr(args, "limit", 8))
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return
     elif args.command == "related":
         from kos.search_features import SearchFeatures
+
         features = SearchFeatures()
         result = features.related(args.query, limit=getattr(args, "limit", 6))
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return
     elif args.command == "history":
         from kos.search_features import SearchFeatures
+
         features = SearchFeatures()
         result = features.history(
             action=getattr(args, "action", "list"),
@@ -989,6 +994,7 @@ def main() -> None:
         return
     elif args.command == "monitor":
         from kos.monitoring import KosMonitor
+
         monitor = KosMonitor()
         action = getattr(args, "action", "full")
         if action == "health":
@@ -1003,6 +1009,7 @@ def main() -> None:
         return
     elif args.command == "context":
         from kos.context_engine import ContextEngine
+
         engine = ContextEngine()
         result = engine.build_context(
             args.query,
@@ -1018,6 +1025,7 @@ def main() -> None:
         return
     elif args.command == "memory":
         from kos.memory_tier import MemoryTier
+
         memory = MemoryTier()
         action = getattr(args, "action", "stats")
         if action == "history":
@@ -1032,6 +1040,7 @@ def main() -> None:
         return
     elif args.command == "cache":
         from kos.cache import SearchCache
+
         cache = SearchCache()
         action = getattr(args, "action", "stats")
         if action == "clear":
@@ -1045,6 +1054,7 @@ def main() -> None:
         return
     elif args.command == "evolve":
         from kos.ontology.evolution import OntologyEvolution
+
         evo = OntologyEvolution()
         action = getattr(args, "action", "stats")
         if action == "evolve":
@@ -1057,6 +1067,7 @@ def main() -> None:
         return
     elif args.command == "multimodal":
         from kos.multimodal import MultimodalProcessor
+
         processor = MultimodalProcessor()
         if getattr(args, "formats", False):
             result = processor.supported_formats

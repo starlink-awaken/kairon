@@ -10,15 +10,15 @@ KOS Cache — 三级缓存管理器
 
 Usage:
     from kos.cache import SearchCache
-    
+
     cache = SearchCache()
-    
+
     # 获取缓存结果
     result = cache.get("query", mode="hybrid")
-    
+
     # 设置缓存
     cache.set("query", mode="hybrid", results=[...])
-    
+
     # 获取统计
     stats = cache.stats()
 """
@@ -38,6 +38,7 @@ from typing import Any
 @dataclass
 class CacheEntry:
     """缓存条目。"""
+
     key: str
     data: Any
     created_at: float
@@ -120,15 +121,13 @@ class LRUCache:
                 "capacity": self.capacity,
                 "hits": self._hits,
                 "misses": self._misses,
-                "hit_rate": round(
-                    self._hits / max(self._hits + self._misses, 1) * 100, 1
-                ),
+                "hit_rate": round(self._hits / max(self._hits + self._misses, 1) * 100, 1),
             }
 
 
 class SearchCache:
     """搜索三级缓存管理器。
-    
+
     L1: 内存 LRU (热缓存, TTL 5min)
     L2: SQLite 持久化缓存 (温缓存, TTL 1hour)
     L3: 实际检索 (冷检索)
@@ -157,9 +156,9 @@ class SearchCache:
         limit: int = 10,
     ) -> dict[str, Any] | None:
         """获取缓存结果。
-        
+
         按 L1 → L2 顺序查找。
-        
+
         Returns:
             缓存命中返回结果，否则返回 None。
         """
@@ -232,15 +231,15 @@ class SearchCache:
         search_fn=None,
     ) -> dict[str, Any]:
         """带缓存的搜索。
-        
+
         先查缓存，未命中时调用 search_fn 执行实际检索。
-        
+
         Args:
             query: 搜索查询。
             mode: 检索模式。
             limit: 最大结果数。
             search_fn: 实际检索函数 (query, mode, limit) -> result。
-            
+
         Returns:
             搜索结果。
         """
@@ -252,6 +251,7 @@ class SearchCache:
         # 缓存未命中: 执行实际检索
         if search_fn is None:
             from kos.hybrid_search import HybridSearchEngine
+
             engine = HybridSearchEngine(self.db_path)
             result = engine.search(query, mode=mode, limit=limit, context={"mode": "balanced"})
             engine.close()
@@ -260,10 +260,16 @@ class SearchCache:
 
         # 写入缓存 (只缓存有结果的查询)
         if result.get("results"):
-            self.set(query, mode, result.get("results", []), limit, {
-                "sources": result.get("sources", {}),
-                "elapsed_ms": result.get("elapsed_ms", 0),
-            })
+            self.set(
+                query,
+                mode,
+                result.get("results", []),
+                limit,
+                {
+                    "sources": result.get("sources", {}),
+                    "elapsed_ms": result.get("elapsed_ms", 0),
+                },
+            )
             result["cache_hit"] = None  # 未命中
         else:
             result["cache_hit"] = None
@@ -395,6 +401,7 @@ class SearchCache:
 
 # ── CLI 入口 ──────────────────────────────────────────────
 
+
 def main() -> None:
     import argparse
 
@@ -418,6 +425,7 @@ def main() -> None:
     elif args.action == "benchmark":
         # Simple benchmark
         from kos.hybrid_search import HybridSearchEngine
+
         engine = HybridSearchEngine()
 
         queries = ["测试", "数字化", "平台", "数据治理", "项目"]

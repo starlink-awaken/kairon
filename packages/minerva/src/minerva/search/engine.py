@@ -158,7 +158,12 @@ class SearchEngine:
     async def _search_searxng(self, query: str) -> list[SearchResult]:
         from minerva.search.backends import search_searxng
 
-        return await search_searxng(query, base_url=self.config.get("searxng_url", f"http://localhost:{os.environ.get('ONTODERIVE_WEB_PORT', '8080')}"))
+        return await search_searxng(
+            query,
+            base_url=self.config.get(
+                "searxng_url", f"http://localhost:{os.environ.get('ONTODERIVE_WEB_PORT', '8080')}"
+            ),
+        )
 
     async def _search_metaso(self, query: str) -> list[SearchResult]:
         from minerva.search.backends import search_metaso

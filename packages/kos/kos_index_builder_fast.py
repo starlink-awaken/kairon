@@ -24,13 +24,14 @@ EMBED_URL = "http://100.96.126.35:4000/v1/embeddings"
 EMBED_MODEL = "embed"
 EMBED_KEY = "sk-omlx-admin"
 BATCH_SIZE = 128  # texts per API call
-MAX_WORKERS = 4   # parallel API calls
+MAX_WORKERS = 4  # parallel API calls
 
 
 def embed_batch(texts):
     """Embed a batch of texts via API."""
     payload = json.dumps({"model": EMBED_MODEL, "input": texts}).encode("utf-8")
     import urllib.request
+
     req = urllib.request.Request(
         EMBED_URL,
         data=payload,
@@ -47,7 +48,7 @@ def embed_batch(texts):
 
 def embed_parallel(all_texts, num_workers=MAX_WORKERS):
     """Embed texts in parallel batches."""
-    batches = [all_texts[i:i+BATCH_SIZE] for i in range(0, len(all_texts), BATCH_SIZE)]
+    batches = [all_texts[i : i + BATCH_SIZE] for i in range(0, len(all_texts), BATCH_SIZE)]
     results = [None] * len(batches)
 
     def process_batch(idx, batch):
@@ -84,36 +85,39 @@ def build_index(db_path, docs, batch_docs=200):
         text = f"{d['title'] or ''}\n{d['body'] or ''}"
         chunks = _chunk_text(text)
         if not chunks:
-            chunks = [d['title'] or '']
+            chunks = [d["title"] or ""]
         for idx, chunk in enumerate(chunks):
             all_texts.append(chunk[:2000])
-            all_meta.append({
-                'doc_id': d['doc_id'],
-                'title': d['title'],
-                'zone': d['zone'],
-                'kind': d['kind'],
-                'canonical_path': d['canonical_path'],
-                'chunk_idx': idx,
-            })
-            doc_ids.append(d['doc_id'])
+            all_meta.append(
+                {
+                    "doc_id": d["doc_id"],
+                    "title": d["title"],
+                    "zone": d["zone"],
+                    "kind": d["kind"],
+                    "canonical_path": d["canonical_path"],
+                    "chunk_idx": idx,
+                }
+            )
+            doc_ids.append(d["doc_id"])
 
     if not all_texts:
         return 0
 
     # Embed in parallel
-    print(f"  Embedding {len(all_texts)} chunks ({len(all_texts)//BATCH_SIZE} batches of {BATCH_SIZE})...")
+    print(f"  Embedding {len(all_texts)} chunks ({len(all_texts) // BATCH_SIZE} batches of {BATCH_SIZE})...")
     sys.stdout.flush()
     embeddings = embed_parallel(all_texts)
 
     # Store in LanceDB
     import lancedb
+
     lancedb_dir = Path(db_path).parent / "vectors"
     db = lancedb.connect(str(lancedb_dir))
 
     table_data = []
     for i, meta in enumerate(all_meta):
         if i < len(embeddings) and embeddings[i]:
-            table_data.append({'vector': embeddings[i], **meta})
+            table_data.append({"vector": embeddings[i], **meta})
 
     if table_data:
         if "kos_documents" in db.list_tables():
@@ -136,6 +140,7 @@ def main():
 
     if args.status:
         from kos.semantic import status
+
         print(f"Index status: {status()}")
         return
 
@@ -188,7 +193,9 @@ def main():
         conn = sqlite3.connect(db_path)
         now = time.strftime("%Y%m%d%H%M%S")
         for d in docs_this_batch:
-            conn.execute("INSERT OR REPLACE INTO _index_progress (doc_id, indexed_at) VALUES (?, ?)", (d["doc_id"], now))
+            conn.execute(
+                "INSERT OR REPLACE INTO _index_progress (doc_id, indexed_at) VALUES (?, ?)", (d["doc_id"], now)
+            )
         conn.commit()
         conn.close()
 
@@ -198,10 +205,12 @@ def main():
         rate = docs_done / elapsed_total if elapsed_total > 0 else 0
         eta = len(pending) / rate if rate > 0 else 0
 
-        print(f"  Done: {indexed} chunks in {elapsed:.1f}s | Total: {total_indexed} | Rate: {rate:.0f} docs/min | ETA: {eta/60:.0f}min")
+        print(
+            f"  Done: {indexed} chunks in {elapsed:.1f}s | Total: {total_indexed} | Rate: {rate:.0f} docs/min | ETA: {eta / 60:.0f}min"
+        )
         sys.stdout.flush()
 
-    print(f"\nComplete! Total indexed: {total_indexed} chunks in {(time.time()-t_start)/60:.1f}min")
+    print(f"\nComplete! Total indexed: {total_indexed} chunks in {(time.time() - t_start) / 60:.1f}min")
 
 
 if __name__ == "__main__":
