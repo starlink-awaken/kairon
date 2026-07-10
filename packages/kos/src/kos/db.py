@@ -2,13 +2,12 @@
 
 Usage:
     from kos.db import get_connection, get_ontology_connection
-    
+
     conn = get_connection()  # Main retrieval database
     conn = get_ontology_connection()  # Ontology database
 """
 
 import sqlite3
-from pathlib import Path
 from typing import Any
 
 from kos.config import get_artifact_path
@@ -26,16 +25,16 @@ def _set_pragmas(conn: sqlite3.Connection) -> None:
 
 def get_connection(db_path: str | None = None) -> sqlite3.Connection:
     """Get a connection to the main retrieval database with optimized settings.
-    
+
     Args:
         db_path: Optional path to database. If None, uses default retrieval database.
-        
+
     Returns:
         sqlite3.Connection with Row factory and optimized PRAGMA settings.
     """
     if db_path is None:
         db_path = get_artifact_path("retrievalDatabase")
-    
+
     conn = sqlite3.connect(str(db_path))
     conn.row_factory = sqlite3.Row
     _set_pragmas(conn)
@@ -44,7 +43,7 @@ def get_connection(db_path: str | None = None) -> sqlite3.Connection:
 
 def get_ontology_connection() -> sqlite3.Connection:
     """Get a connection to the ontology database with optimized settings.
-    
+
     Returns:
         sqlite3.Connection with Row factory and optimized PRAGMA settings.
     """
@@ -56,12 +55,12 @@ def get_ontology_connection() -> sqlite3.Connection:
 
 def execute_batch(conn: sqlite3.Connection, sql: str, params_list: list[tuple[Any, ...]]) -> int:
     """Execute a batch of INSERT/UPDATE statements in a single transaction.
-    
+
     Args:
         conn: Database connection.
         sql: SQL statement with placeholders.
         params_list: List of parameter tuples.
-        
+
     Returns:
         Number of rows affected.
     """

@@ -1,6 +1,5 @@
 """Tests for KOS ecosystem integration modules."""
 
-import json
 import os
 import sys
 import unittest

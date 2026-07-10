@@ -1,6 +1,5 @@
 """Tests for KOS Cache Manager and performance."""
 
-import json
 import os
 import sys
 import time

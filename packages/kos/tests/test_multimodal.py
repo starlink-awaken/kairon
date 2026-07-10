@@ -1,6 +1,5 @@
 """Tests for KOS Multimodal Processor."""
 
-import json
 import os
 import sys
 import tempfile

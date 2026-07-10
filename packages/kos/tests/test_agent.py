@@ -1,6 +1,5 @@
 """Tests for KOS Agent SDK and Subscription Service."""
 
-import json
 import os
 import sys
 import unittest

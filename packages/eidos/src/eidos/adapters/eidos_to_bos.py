@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field
+from os import environ as os_environ
 from pathlib import Path
 from typing import Any, cast
 from urllib.request import Request, urlopen
@@ -21,12 +22,12 @@ _log = logging.getLogger(__name__)
 
 # SharedBrain D-Memory paths (for direct file fallback)
 SHAREDBRAIN_DATA_DIR = Path(
-    __import__("os").environ.get(
+    os_environ.get(
         "SHAREDBRAIN_DATA",
         str(Path.home() / "Workspace" / "projects" / "SharedBrain" / "data"),
     )
 )
-AGORA_MCP_ENDPOINT = __import__("os").environ.get("AGORA_MCP_ENDPOINT", f"http://localhost:{os.environ.get('AGORA_MCP_HTTP_PORT', '7422')}")
+AGORA_MCP_ENDPOINT = os_environ.get("AGORA_MCP_ENDPOINT", f"http://localhost:{os_environ.get('AGORA_MCP_HTTP_PORT', '7422')}")
 
 BOS_TARGETS = {
     "minerva": "mcp://sharedbrain/memory/minerva",

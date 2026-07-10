@@ -1,6 +1,5 @@
 """Tests for KOS search features: suggestions, clustering, related searches, history."""
 
-import json
 import os
 import sys
 from pathlib import Path

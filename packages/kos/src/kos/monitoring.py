@@ -2,14 +2,13 @@
 
 Usage:
     from kos.monitoring import KosMonitor
-    
+
     monitor = KosMonitor()
     health = monitor.index_health()
     quality = monitor.search_quality()
     metrics = monitor.performance_metrics()
 """
 
-import json
 import sqlite3
 import time
 from datetime import datetime, timedelta
@@ -21,22 +20,22 @@ from kos.config import get_artifact_path
 
 class KosMonitor:
     """KOS system monitoring and health checks."""
-    
+
     def __init__(self, db_path: str | None = None):
         if db_path is None:
             db_path = get_artifact_path("retrievalDatabase")
         self.db_path = str(db_path)
-    
+
     def _connect(self) -> sqlite3.Connection:
         conn = sqlite3.connect(self.db_path)
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA journal_mode=WAL")
         conn.execute("PRAGMA busy_timeout=5000")
         return conn
-    
+
     def index_health(self) -> dict[str, Any]:
         """Check index health: integrity, freshness, coverage.
-        
+
         Returns:
             Dict with health status and details.
         """
@@ -46,7 +45,7 @@ class KosMonitor:
             "checks": {},
             "timestamp": datetime.now().isoformat(),
         }
-        
+
         # 1. Database integrity check
         try:
             integrity = conn.execute("PRAGMA integrity_check").fetchone()[0]
@@ -59,7 +58,7 @@ class KosMonitor:
         except sqlite3.Error as e:
             result["checks"]["integrity"] = {"status": "error", "detail": str(e)}
             result["status"] = "error"
-        
+
         # 2. Document count
         try:
             doc_count = conn.execute("SELECT COUNT(*) FROM documents").fetchone()[0]
@@ -69,7 +68,7 @@ class KosMonitor:
             }
         except sqlite3.Error as e:
             result["checks"]["document_count"] = {"status": "error", "detail": str(e)}
-        
+
         # 3. FTS table consistency
         try:
             fts_count = conn.execute("SELECT COUNT(*) FROM documents_fts").fetchone()[0]
@@ -83,7 +82,7 @@ class KosMonitor:
                 result["status"] = "degraded"
         except sqlite3.Error as e:
             result["checks"]["fts_consistency"] = {"status": "error", "detail": str(e)}
-        
+
         # 4. Stale documents (not updated in 90 days)
         try:
             stale_threshold = (datetime.now() - timedelta(days=90)).strftime("%Y%m%d%H%M%S")
@@ -99,7 +98,7 @@ class KosMonitor:
             }
         except sqlite3.Error as e:
             result["checks"]["stale_documents"] = {"status": "error", "detail": str(e)}
-        
+
         # 5. Zone coverage
         try:
             zones = conn.execute(
@@ -112,7 +111,7 @@ class KosMonitor:
             }
         except sqlite3.Error as e:
             result["checks"]["zone_coverage"] = {"status": "error", "detail": str(e)}
-        
+
         # 6. Ontology health
         try:
             entity_count = conn.execute("SELECT COUNT(*) FROM kos_entities").fetchone()[0]
@@ -124,13 +123,13 @@ class KosMonitor:
             }
         except sqlite3.Error as e:
             result["checks"]["ontology"] = {"status": "error", "detail": str(e)}
-        
+
         conn.close()
         return result
-    
+
     def search_quality(self) -> dict[str, Any]:
         """Monitor search quality metrics.
-        
+
         Returns:
             Dict with search quality metrics.
         """
@@ -139,7 +138,7 @@ class KosMonitor:
             "timestamp": datetime.now().isoformat(),
             "tests": {},
         }
-        
+
         # Test 1: Chinese search returns results
         test_queries = ["数字化", "平台", "文档", "报告", "项目"]
         test_results = []
@@ -162,7 +161,7 @@ class KosMonitor:
                     "found": False,
                     "result_count": 0,
                 })
-        
+
         passed = sum(1 for t in test_results if t["found"])
         result["tests"]["keyword_search"] = {
             "passed": passed,
@@ -170,7 +169,7 @@ class KosMonitor:
             "pass_rate": round(passed / len(test_queries) * 100, 1) if test_queries else 0,
             "details": test_results,
         }
-        
+
         # Test 2: Search latency (measure time for a simple query)
         latencies = []
         for _ in range(3):
@@ -183,14 +182,14 @@ class KosMonitor:
             except sqlite3.OperationalError:
                 pass
             latencies.append(time.time() - start)
-        
+
         avg_latency = sum(latencies) / len(latencies) if latencies else 0
         result["tests"]["search_latency"] = {
             "status": "pass" if avg_latency < 0.1 else "warn",
             "avg_seconds": round(avg_latency, 4),
             "max_seconds": round(max(latencies), 4) if latencies else 0,
         }
-        
+
         # Test 3: Entity search
         try:
             entity_search = conn.execute(
@@ -204,20 +203,20 @@ class KosMonitor:
             }
         except sqlite3.Error as e:
             result["tests"]["entity_search"] = {"status": "error", "detail": str(e)}
-        
+
         # Overall quality score
         quality_score = 0
         if result["tests"]["keyword_search"]["pass_rate"] >= 80:
             quality_score += 40
         elif result["tests"]["keyword_search"]["pass_rate"] >= 50:
             quality_score += 20
-        
+
         if result["tests"]["search_latency"]["status"] == "pass":
             quality_score += 30
-        
+
         if result["tests"]["entity_search"].get("status") == "pass":
             quality_score += 30
-        
+
         result["quality_score"] = quality_score
         result["quality_grade"] = (
             "A" if quality_score >= 90 else
@@ -225,30 +224,30 @@ class KosMonitor:
             "C" if quality_score >= 50 else
             "D"
         )
-        
+
         conn.close()
         return result
-    
+
     def performance_metrics(self) -> dict[str, Any]:
         """Get system performance metrics.
-        
+
         Returns:
             Dict with performance metrics.
         """
         conn = self._connect()
-        
+
         # Database file size
         db_size = Path(self.db_path).stat().st_size
         db_size_mb = round(db_size / (1024 * 1024), 2)
-        
+
         # Document metrics
         doc_count = conn.execute("SELECT COUNT(*) FROM documents").fetchone()[0]
-        
+
         # Zone distribution
         zones = conn.execute(
             "SELECT zone, COUNT(*) as cnt FROM documents GROUP BY zone ORDER BY cnt DESC"
         ).fetchall()
-        
+
         # Ontology metrics
         try:
             entity_count = conn.execute("SELECT COUNT(*) FROM kos_entities").fetchone()[0]
@@ -258,7 +257,7 @@ class KosMonitor:
             entity_count = 0
             relation_count = 0
             entity_doc_count = 0
-        
+
         # FTS index size
         try:
             fts_size = conn.execute(
@@ -266,7 +265,7 @@ class KosMonitor:
             ).fetchone()[0]
         except sqlite3.Error:
             fts_size = 0
-        
+
         # Document age distribution
         now = datetime.now()
         age_buckets = {
@@ -291,9 +290,9 @@ class KosMonitor:
                     age_buckets["older"] += 1
             except (ValueError, TypeError):
                 age_buckets["older"] += 1
-        
+
         conn.close()
-        
+
         return {
             "timestamp": datetime.now().isoformat(),
             "database": {
@@ -312,15 +311,15 @@ class KosMonitor:
 
     def cache_benchmark(self, queries: list[str] | None = None) -> dict[str, Any]:
         """Run cache performance benchmark.
-        
+
         Args:
             queries: Custom queries to benchmark. None uses defaults.
-            
+
         Returns:
             Benchmark results.
         """
-        from kos.hybrid_search import HybridSearchEngine
         from kos.cache import SearchCache
+        from kos.hybrid_search import HybridSearchEngine
 
         if queries is None:
             queries = [
@@ -365,7 +364,7 @@ class KosMonitor:
 
     def full_report(self) -> dict[str, Any]:
         """Generate a full monitoring report.
-        
+
         Returns:
             Dict with all monitoring data.
         """

@@ -1,5 +1,5 @@
 {
-  "derived_at": "2026-06-29T07:36:56.934474",
+  "derived_at": "2026-07-10T15:07:09.283777",
   "facts": 8,
   "entities": 0,
   "inferences": 0,
@@ -40,14 +40,14 @@
       "certainty": "certain",
       "method": "modus_ponens_valid",
       "derives_from": [
-        "D-F1",
         "D-F3",
-        "D-F2",
-        "D-F4"
+        "D-F4",
+        "D-F1",
+        "D-F2"
       ],
       "confidence": 0.9,
       "source": "rule_engine",
-      "derivation_trail": "R7: D-F1→D-F3→D-F2→D-F4",
+      "derivation_trail": "R7: D-F3→D-F4→D-F1→D-F2",
       "type": "modus_ponens_valid"
     },
     {
@@ -146,17 +146,17 @@
       "type": "subsumption"
     },
     {
-      "conclusion": "最具影响力的前提: D-F3(被2个推论引用); D-F1(被1个推论引用); D-F2(被1个推论引用)",
+      "conclusion": "最具影响力的前提: D-F3(被2个推论引用); D-F4(被1个推论引用); D-F1(被1个推论引用)",
       "certainty": "probable",
       "method": "influence_analysis",
       "derives_from": [
         "D-F3",
-        "D-F1",
-        "D-F2"
+        "D-F4",
+        "D-F1"
       ],
       "confidence": 0.8,
       "source": "rule_engine",
-      "derivation_trail": "R10: D-F3→D-F1→D-F2",
+      "derivation_trail": "R10: D-F3→D-F4→D-F1",
       "type": "influence_analysis"
     },
     {
@@ -164,14 +164,14 @@
       "certainty": "probable",
       "method": "structural_hole",
       "derives_from": [
-        "D-F1",
-        "D-F3",
+        "D-F4",
         "D-F2",
-        "D-F4"
+        "D-F1",
+        "D-F3"
       ],
       "confidence": 0.65,
       "source": "rule_engine",
-      "derivation_trail": "R17: D-F1→D-F3→D-F2→D-F4",
+      "derivation_trail": "R17: D-F4→D-F2→D-F1→D-F3",
       "type": "structural_hole"
     },
     {

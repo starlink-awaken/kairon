@@ -1,6 +1,5 @@
 """Tests for KOS Context Engine and Memory Tier."""
 
-import json
 import os
 import sys
 import unittest

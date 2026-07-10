@@ -34,9 +34,10 @@ class TestIncrementalIndexer(unittest.TestCase):
         indexer.close()
 
     def test_compute_hash(self):
-        from kos.maintenance.indexer import IncrementalIndexer
         # Create a temp file
         import tempfile
+
+        from kos.maintenance.indexer import IncrementalIndexer
         with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
             f.write("Test content")
             f.flush()
@@ -52,8 +53,9 @@ class TestIncrementalIndexer(unittest.TestCase):
         self.assertFalse(IncrementalIndexer._match_pattern("test.md", "*.txt"))
 
     def test_extract_text(self):
-        from kos.maintenance.indexer import IncrementalIndexer
         import tempfile
+
+        from kos.maintenance.indexer import IncrementalIndexer
         with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
             f.write("# Title\n\nBody content")
             f.flush()

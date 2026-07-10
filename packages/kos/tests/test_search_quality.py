@@ -64,7 +64,7 @@ class TestSearchQuality:
             data = json.loads(r.stdout)
             for result in data["data"]["results"]:
                 # node_modules should be excluded if searchDefaultExclude is configured
-                path = result.get("canonical_path", "").lower()
+                result.get("canonical_path", "").lower()
                 # This test may pass if node_modules are not indexed
                 # or if searchDefaultExclude is configured
                 pass  # Just verify search works
@@ -98,7 +98,7 @@ class TestSearchQuality:
         if r.returncode == 0:
             data = json.loads(r.stdout)
             if data["data"]["count"] > 0:
-                zones = set(r["zone"] for r in data["data"]["results"])
+                set(r["zone"] for r in data["data"]["results"])
                 # Should have results from multiple zones
                 # (This may fail if only one zone has indexed docs)
 

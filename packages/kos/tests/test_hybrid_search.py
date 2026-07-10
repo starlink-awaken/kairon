@@ -1,6 +1,5 @@
 """Tests for KOS Hybrid Search Engine."""
 
-import json
 import os
 import sys
 import unittest
@@ -42,8 +41,8 @@ class TestHybridSearchEngine(unittest.TestCase):
         engine.close()
 
     def test_keyword_search(self):
-        from kos.hybrid_search import HybridSearchEngine
         from kos.cache import SearchCache
+        from kos.hybrid_search import HybridSearchEngine
         SearchCache().clear_all()
         engine = HybridSearchEngine()
         result = engine.search("test", mode="keyword", limit=3)
@@ -54,8 +53,8 @@ class TestHybridSearchEngine(unittest.TestCase):
         engine.close()
 
     def test_hybrid_search(self):
-        from kos.hybrid_search import HybridSearchEngine
         from kos.cache import SearchCache
+        from kos.hybrid_search import HybridSearchEngine
         SearchCache().clear_all()
         engine = HybridSearchEngine()
         result = engine.search("测试", mode="hybrid", limit=5)
@@ -84,29 +83,20 @@ class TestHybridSearchEngine(unittest.TestCase):
         engine.close()
 
     def test_limit_respected(self):
+        from kos.cache import SearchCache
         from kos.hybrid_search import HybridSearchEngine
+        # Clear L2 cache to avoid contamination from previous tests
+        SearchCache().clear_all()
         engine = HybridSearchEngine()
-        # Use unique query to avoid cache contamination
         for limit in [1, 3, 5]:
             result = engine.search("平台架构设计方法论", mode="keyword", limit=limit, use_cache=False)
             self.assertIn("count", result)
             self.assertLessEqual(result["count"], limit)
         engine.close()
 
-    def test_limit_respected(self):
-        from kos.hybrid_search import HybridSearchEngine
-        from kos.cache import SearchCache
-        # Clear L2 cache to avoid contamination from previous tests
-        SearchCache().clear_all()
-        engine = HybridSearchEngine()
-        for limit in [1, 3, 5]:
-            result = engine.search("test", mode="keyword", limit=limit, use_cache=False)
-            self.assertLessEqual(result["count"], limit)
-        engine.close()
-
     def test_no_duplicates(self):
-        from kos.hybrid_search import HybridSearchEngine
         from kos.cache import SearchCache
+        from kos.hybrid_search import HybridSearchEngine
         SearchCache().clear_all()
         engine = HybridSearchEngine()
         result = engine.search("test", mode="hybrid", limit=10)
@@ -115,8 +105,8 @@ class TestHybridSearchEngine(unittest.TestCase):
         engine.close()
 
     def test_query_plan_structure(self):
-        from kos.hybrid_search import HybridSearchEngine
         from kos.cache import SearchCache
+        from kos.hybrid_search import HybridSearchEngine
         SearchCache().clear_all()
         engine = HybridSearchEngine()
         result = engine.search("数字化平台", limit=5)

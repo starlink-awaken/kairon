@@ -1,6 +1,5 @@
 """Tests for KOS LLM Entity Extractor and Ontology Evolution."""
 
-import json
 import os
 import sys
 import unittest
