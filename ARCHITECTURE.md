@@ -54,7 +54,7 @@ graph TB
 |:--|:--|
 | `packages/kos/` | 跨域语义搜索 / KOS 知识图谱 |
 | `packages/minerva/` | 深度研究引擎 |
-| `packages/eidos/` | Schema 约束与建模 |
+| `packages/eidos/` | 认知记忆系统 (memory/nks/continuity/CRDT/learning + schema) — **kairon 枢纽**, 39K LOC, 被最多外部包依赖 |
 | `packages/kronos/` | 知识摄取管线 |
 | `packages/ontoderive/` | 本体推导与推理 |
 | `packages/codeanalyze/` | AST 代码分析 |
