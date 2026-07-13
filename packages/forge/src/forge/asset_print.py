@@ -12,10 +12,16 @@ from __future__ import annotations
 from datetime import datetime
 from pathlib import Path
 
-from forge.asset_cli import _get_item_id, _port_check, _resolve_process
+
+def _helpers():
+    """延迟 import asset_cli helpers 解循环 (asset_cli import asset_print 时 asset_cli 未加载完)."""
+    from forge.asset_cli import _get_item_id, _port_check, _resolve_process
+
+    return _get_item_id, _port_check, _resolve_process
 
 
 def _print_summary(assets: list[dict]) -> None:
+    _g, _pc, _rp = _helpers()  # 解包 helpers (延迟 import 解循环)
     print(f"\n  Forge Asset — 统一摘要 ({datetime.now().strftime('%H:%M')})")
     print(f"  {'─' * 40}")
     icons = {
@@ -43,12 +49,13 @@ def _print_summary(assets: list[dict]) -> None:
     print(f"  {'─' * 40}")
     print(f"  总计 {len(assets)}")
     with_port = [a for a in assets if a.get("port")]
-    online = sum(1 for a in with_port if _port_check(a["port"])[0])
+    online = sum(1 for a in with_port if _pc(a["port"])[0])
     if with_port:
         print(f"  服务在线: {online}/{len(with_port)} ({online / len(with_port) * 100:.0f}%)")
 
 
 def _print_detailed(assets: list[dict], filter_type: str) -> None:
+    _g, _pc, _rp = _helpers()  # 解包 helpers (延迟 import 解循环)
     if not assets:
         print(f"  无 {filter_type} 类型资产")
         return
@@ -58,9 +65,9 @@ def _print_detailed(assets: list[dict], filter_type: str) -> None:
         print(f"  {'─' * 65}")
         for a in assets:
             port = a.get("port") or 0
-            online, host = _port_check(port) if port else (False, "")
+            online, host = _pc(port) if port else (False, "")
             status = "✅" if online else "❌"
-            proc = _resolve_process(port) if online else ""
+            proc = _rp(port) if online else ""
             name = a.get("id", a.get("name", "?"))
             port_str = str(port) if port else "—"
             print(f"  {name:<24} {port_str:>6} {status:<6} {proc}")
@@ -99,6 +106,7 @@ def _print_detailed(assets: list[dict], filter_type: str) -> None:
 
 
 def _print_category_items(cat_data: dict, category: str) -> None:
+    _g, _pc, _rp = _helpers()  # 解包 helpers (延迟 import 解循环)
     """Print items from a v4 category with appropriate schema-aware columns."""
     items = cat_data.get("items", [])
     if not items:
@@ -112,7 +120,7 @@ def _print_category_items(cat_data: dict, category: str) -> None:
         print(f"  {'ID':<24} {'端口':>6} {'协议':<6} {'描述'}")
         print(f"  {'─' * 68}")
         for item in items:
-            iid = _get_item_id(item)
+            iid = _g(item)
             port = item.get("port", "—")
             proto = item.get("protocol", "—")
             desc = (item.get("description") or "")[:30]
@@ -143,7 +151,7 @@ def _print_category_items(cat_data: dict, category: str) -> None:
         print(f"  {'ID':<22} {'语言':<10} {'状态':<8} {'描述'}")
         print(f"  {'─' * 68}")
         for item in items:
-            iid = _get_item_id(item)
+            iid = _g(item)
             lang = item.get("language", "—")
             st = item.get("status", "—")
             desc = (item.get("description") or "")[:20]
@@ -153,6 +161,6 @@ def _print_category_items(cat_data: dict, category: str) -> None:
         print(f"  {'ID':<24} {'其他字段'}")
         print(f"  {'─' * 68}")
         for item in items:
-            iid = _get_item_id(item)
+            iid = _g(item)
             extra = ", ".join(f"{k}={v}" for k, v in list(item.items())[:4] if k not in ("id", "name"))
             print(f"  {iid:<24} {extra}")
