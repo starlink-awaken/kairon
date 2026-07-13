@@ -54,12 +54,17 @@ async def trigger_downstream_processing(md_file_path: Path) -> None:
         md_file_path: 新写入的 Markdown 文件路径
     """
     _log.info(f"Triggering downstream processing for: {md_file_path}")
+    # Round 2: announce to bus-foundation before any actual work.
+    _bus_emit_downstream(md_file_path, status="started")
 
     try:
         # 异步触发，不阻塞主流程
         await _process_downstream_async(md_file_path)
     except _DOWNSTREAM_PROCESSING_ERRORS as exc:
         _log.warning(f"Downstream processing failed for {md_file_path}: {exc}")
+        _bus_emit_downstream(md_file_path, status="failed", error=str(exc))
+    else:
+        _bus_emit_downstream(md_file_path, status="completed")
 
 
 async def _process_downstream_async(md_file_path: Path) -> None:
@@ -157,3 +162,30 @@ def get_downstream_trigger(
     return DownstreamTrigger(
         processing_delay_seconds=processing_delay_seconds,
     )
+
+
+def _bus_emit_downstream(md_file_path: Path, status: str, error: str | None = None) -> None:
+    """Best-effort bus-foundation emit for downstream events (Round 2).
+
+    Topics: ``kairon:downstream:dispatched`` (status=started/completed)
+            ``kairon:downstream:failed``      (status=failed)
+    """
+    try:
+        from kairon_pipeline import bus_adapter
+    except ImportError:
+        return
+    payload: dict = {
+        "md_file": str(md_file_path),
+        "status": status,
+    }
+    if error is not None:
+        payload["error"] = error
+    topic = "kairon:downstream:failed" if status == "failed" else "kairon:downstream:dispatched"
+    try:
+        bus_adapter.emit_event(
+            event_type=topic,
+            source="kairon-pipeline.downstream_trigger",
+            payload=payload,
+        )
+    except Exception:  # defensive
+        pass
