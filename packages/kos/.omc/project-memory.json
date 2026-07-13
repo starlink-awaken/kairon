@@ -73,6 +73,12 @@
   },
   "hotPaths": [
     {
+      "path": "src/kos/mcp/server.py",
+      "accessCount": 4,
+      "lastAccessed": 1783927198981,
+      "type": "file"
+    },
+    {
       "path": "src/kos/web/app.py",
       "accessCount": 2,
       "lastAccessed": 1781928939874,
@@ -82,6 +88,12 @@
       "path": "src/kos/context_injector.py",
       "accessCount": 2,
       "lastAccessed": 1781928939928,
+      "type": "file"
+    },
+    {
+      "path": "src/kos/mcp/tools_schema.py",
+      "accessCount": 2,
+      "lastAccessed": 1783927192449,
       "type": "file"
     },
     {
@@ -100,6 +112,18 @@
       "path": "src/kos/commands/ingest.py",
       "accessCount": 1,
       "lastAccessed": 1781928939942,
+      "type": "file"
+    },
+    {
+      "path": "src/kos/viz_unified.py",
+      "accessCount": 1,
+      "lastAccessed": 1783927332324,
+      "type": "file"
+    },
+    {
+      "path": "src/kos/stream_pipeline.py",
+      "accessCount": 1,
+      "lastAccessed": 1783927854040,
       "type": "file"
     }
   ],

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1780835344371,
+  "lastScanned": 1783924937276,
   "projectRoot": "/Users/xiamingxing/Workspace/projects/kairon",
   "techStack": {
     "languages": [
@@ -27,7 +27,7 @@
   },
   "build": {
     "buildCommand": "make build",
-    "testCommand": "cd /Users/xiamingxing/Workspace/projects/kairon 2>/dev/null\necho \"=== 跑 test_dashboard ===\"\nuv run pytest packages/kairon-observability/tests/test_dashboard.py -q 2>&1 | tail -3\ngit add packages/kairon-observability/tests/test_dashboard.py\ngit commit -m \"test(kairon-observability): 补 dashboard 测试 (功能 P1, 392 LOC 核心零覆盖)\" -m \"dashboard 392 LOC (服务拓扑仪表盘) 零覆盖. 补 test_dashboard (12: ServiceCard/TopologyEdge defaults + DashboardData update/add_edge/get_overview/get_detail/to_json/reset/health_summary). get_service_detail 返回 service/metrics/connections 结构.\" 2>&1 | tail -3\ngit push origin main 2>&1 | tail -4",
+    "testCommand": "cd /Users/xiamingxing/Workspace/projects/kairon\nuv run pytest packages/kos/tests/test_search_quality.py::TestIndexHealth::test_index_has_zones packages/kos/tests/test_integration.py::TestGbrainBridge::test_sync_status -x 2>&1 | tail -22",
     "lintCommand": "ruff check",
     "devCommand": null,
     "scripts": {}
@@ -58,31 +58,25 @@
     "_derivation_logs": {
       "path": "_derivation_logs",
       "purpose": null,
-      "fileCount": 1,
-      "lastAccessed": 1780835344359,
+      "fileCount": 2,
+      "lastAccessed": 1783924937262,
       "keyFiles": [
+        "insight-derive-2f44bc092cf7.json",
         "insight-derive-46c51c1b1d6c.json"
       ]
-    },
-    "_staging": {
-      "path": "_staging",
-      "purpose": null,
-      "fileCount": 0,
-      "lastAccessed": 1780835344359,
-      "keyFiles": []
     },
     "data": {
       "path": "data",
       "purpose": "Data files",
       "fileCount": 0,
-      "lastAccessed": 1780835344360,
+      "lastAccessed": 1783924937263,
       "keyFiles": []
     },
     "dist": {
       "path": "dist",
       "purpose": "Distribution/build output",
       "fileCount": 3,
-      "lastAccessed": 1780835344360,
+      "lastAccessed": 1783924937263,
       "keyFiles": [
         "kairon-0.1.0-py3-none-any.whl",
         "kairon-0.1.0.tar.gz"
@@ -91,60 +85,57 @@
     "docker": {
       "path": "docker",
       "purpose": null,
-      "fileCount": 3,
-      "lastAccessed": 1780835344361,
+      "fileCount": 7,
+      "lastAccessed": 1783924937264,
       "keyFiles": [
         "Dockerfile.e2e",
+        "Dockerfile.gbrain",
+        "Dockerfile.kairon",
         "docker-compose.e2e.yml",
-        "entrypoint.sh"
+        "docker-compose.yml"
       ]
     },
     "docs": {
       "path": "docs",
       "purpose": "Documentation",
-      "fileCount": 12,
-      "lastAccessed": 1780835344361,
+      "fileCount": 21,
+      "lastAccessed": 1783924937264,
       "keyFiles": [
-        "agora_route_drift_audit.md",
-        "api_reference.md",
-        "architecture_audit.md",
-        "cross_project_boundary_audit.md",
-        "governance_plan.md"
+        "API.md",
+        "ARCHITECTURE.md",
+        "BEST_PRACTICES.md",
+        "DEVELOPMENT.md",
+        "FAQ.md"
       ]
     },
     "examples": {
       "path": "examples",
       "purpose": "Example code",
-      "fileCount": 0,
-      "lastAccessed": 1780835344361,
-      "keyFiles": []
+      "fileCount": 1,
+      "lastAccessed": 1783924937264,
+      "keyFiles": [
+        "README.md"
+      ]
     },
     "graphify-out": {
       "path": "graphify-out",
       "purpose": null,
       "fileCount": 3,
-      "lastAccessed": 1780835344361,
-      "keyFiles": []
-    },
-    "organs": {
-      "path": "organs",
-      "purpose": null,
-      "fileCount": 0,
-      "lastAccessed": 1780835344361,
+      "lastAccessed": 1783924937265,
       "keyFiles": []
     },
     "packages": {
       "path": "packages",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1780835344362,
+      "lastAccessed": 1783924937265,
       "keyFiles": []
     },
     "scripts": {
       "path": "scripts",
       "purpose": "Build/utility scripts",
-      "fileCount": 8,
-      "lastAccessed": 1780835344362,
+      "fileCount": 9,
+      "lastAccessed": 1783924937265,
       "keyFiles": [
         "adr_collect.py",
         "agora_route_generator.py",
@@ -157,27 +148,36 @@
       "path": "src",
       "purpose": "Source code",
       "fileCount": 0,
-      "lastAccessed": 1780835344362,
+      "lastAccessed": 1783924937265,
       "keyFiles": []
     },
     "tests": {
       "path": "tests",
       "purpose": "Test files",
-      "fileCount": 7,
-      "lastAccessed": 1780835344362,
+      "fileCount": 8,
+      "lastAccessed": 1783924937266,
       "keyFiles": [
         "__init__.py",
+        "conftest.py",
         "test_cross_package_integration.py",
         "test_e2e_agora.py",
-        "test_e2e_basic.py",
-        "test_e2e_knowledge.py"
+        "test_e2e_basic.py"
+      ]
+    },
+    "tools": {
+      "path": "tools",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1783924937266,
+      "keyFiles": [
+        "audit.sh"
       ]
     },
     "tests/scripts": {
       "path": "tests/scripts",
       "purpose": "Build/utility scripts",
       "fileCount": 6,
-      "lastAccessed": 1780835344363,
+      "lastAccessed": 1783924937267,
       "keyFiles": [
         "test_adr_collect.py",
         "test_agora_route_generator.py",
@@ -187,303 +187,39 @@
   },
   "hotPaths": [
     {
-      "path": "packages/core-models/tests/test_basic.py",
-      "accessCount": 9,
-      "lastAccessed": 1780547817695,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/task_context.py",
-      "accessCount": 9,
-      "lastAccessed": 1780553334183,
-      "type": "file"
-    },
-    {
-      "path": "packages/shared-lib/src/kairon_lib/workflow_engine.py",
-      "accessCount": 8,
-      "lastAccessed": 1780547558155,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/message_janitor.py",
-      "accessCount": 8,
-      "lastAccessed": 1780547712741,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/__init__.py",
-      "accessCount": 8,
-      "lastAccessed": 1780552542350,
-      "type": "file"
-    },
-    {
-      "path": "packages/agent-hub/src/agent_hub/__init__.py",
-      "accessCount": 7,
-      "lastAccessed": 1780551863805,
-      "type": "file"
-    },
-    {
-      "path": "packages/agora/pyproject.toml",
-      "accessCount": 7,
-      "lastAccessed": 1780552637572,
-      "type": "file"
-    },
-    {
-      "path": "packages/shared-lib/src/kairon_lib/_compat.py",
-      "accessCount": 6,
-      "lastAccessed": 1780552513534,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/auctioneer.py",
+      "path": "packages/forge/src/forge/forge.py",
       "accessCount": 5,
-      "lastAccessed": 1780547777021,
+      "lastAccessed": 1783926564678,
       "type": "file"
     },
     {
-      "path": "packages/pontus/src/pontus/__init__.py",
-      "accessCount": 5,
-      "lastAccessed": 1780551872191,
-      "type": "file"
-    },
-    {
-      "path": "packages/gc-engine/src/gc_engine/__init__.py",
-      "accessCount": 5,
-      "lastAccessed": 1780551892465,
-      "type": "file"
-    },
-    {
-      "path": "packages/core-models/src/core_models/__init__.py",
-      "accessCount": 5,
-      "lastAccessed": 1780835568675,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/perception_manager.py",
-      "accessCount": 4,
-      "lastAccessed": 1780547461758,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/conflict_resolver.py",
-      "accessCount": 4,
-      "lastAccessed": 1780547783074,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/arbitrator.py",
-      "accessCount": 4,
-      "lastAccessed": 1780547795659,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/worker_profile.py",
-      "accessCount": 4,
-      "lastAccessed": 1780547795710,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/worker_abstraction.py",
-      "accessCount": 4,
-      "lastAccessed": 1780552572133,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/pyproject.toml",
-      "accessCount": 4,
-      "lastAccessed": 1780552591075,
-      "type": "file"
-    },
-    {
-      "path": "packages/agora/tests/conftest.py",
-      "accessCount": 4,
-      "lastAccessed": 1780552611904,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/context_injector.py",
-      "accessCount": 3,
-      "lastAccessed": 1780547688726,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/binding_strategies.py",
-      "accessCount": 3,
-      "lastAccessed": 1780547689957,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/bidder.py",
-      "accessCount": 3,
-      "lastAccessed": 1780547693491,
-      "type": "file"
-    },
-    {
-      "path": "packages/agent-hub/tests/test_basic.py",
-      "accessCount": 3,
-      "lastAccessed": 1780551886750,
-      "type": "file"
-    },
-    {
-      "path": "packages/agent-hub/tests/test_agent_hub.py",
-      "accessCount": 3,
-      "lastAccessed": 1780551886804,
-      "type": "file"
-    },
-    {
-      "path": "packages/pontus/tests/test_pontus.py",
-      "accessCount": 3,
-      "lastAccessed": 1780552093437,
-      "type": "file"
-    },
-    {
-      "path": "packages/pontus/tests/test_basic.py",
-      "accessCount": 3,
-      "lastAccessed": 1780552093489,
-      "type": "file"
-    },
-    {
-      "path": "packages/shared-lib/src/kairon_lib/adr_storage.py",
+      "path": "packages/kos/src/kos/stream_pipeline.py",
       "accessCount": 2,
-      "lastAccessed": 1780547474775,
+      "lastAccessed": 1783927779585,
       "type": "file"
     },
     {
-      "path": "packages/shared-lib/src/kairon_lib/retrospective.py",
-      "accessCount": 2,
-      "lastAccessed": 1780547475053,
-      "type": "file"
-    },
-    {
-      "path": "packages/shared-lib/src/kairon_lib/consensus_mechanism.py",
-      "accessCount": 2,
-      "lastAccessed": 1780547475349,
-      "type": "file"
-    },
-    {
-      "path": "packages/shared-lib/src/kairon_lib/audit_trail.py",
-      "accessCount": 2,
-      "lastAccessed": 1780547475622,
-      "type": "file"
-    },
-    {
-      "path": "packages/shared-lib/src/kairon_lib/audit_query.py",
-      "accessCount": 2,
-      "lastAccessed": 1780547475886,
-      "type": "file"
-    },
-    {
-      "path": "packages/shared-lib/src/kairon_lib/evolution_metrics.py",
-      "accessCount": 2,
-      "lastAccessed": 1780547476155,
-      "type": "file"
-    },
-    {
-      "path": "packages/shared-lib/src/kairon_lib/harvest_scheduler.py",
-      "accessCount": 2,
-      "lastAccessed": 1780547476416,
-      "type": "file"
-    },
-    {
-      "path": "packages/shared-lib/src/kairon_lib/committee_hall.py",
-      "accessCount": 2,
-      "lastAccessed": 1780547483237,
-      "type": "file"
-    },
-    {
-      "path": "packages/core-models/tests/test_models.py",
-      "accessCount": 2,
-      "lastAccessed": 1780547607858,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/_compat.py",
-      "accessCount": 2,
-      "lastAccessed": 1780547610844,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/universal_worker.py",
-      "accessCount": 2,
-      "lastAccessed": 1780547620171,
-      "type": "file"
-    },
-    {
-      "path": "packages/llm-gateway/tests/test_basic.py",
-      "accessCount": 2,
-      "lastAccessed": 1780547764687,
-      "type": "file"
-    },
-    {
-      "path": "packages/cron-service/tests/test_basic.py",
-      "accessCount": 2,
-      "lastAccessed": 1780547765019,
-      "type": "file"
-    },
-    {
-      "path": "packages/llm-gateway/tests/test_unified.py",
+      "path": "packages/eidos/src/eidos/entity_collab.py",
       "accessCount": 1,
-      "lastAccessed": 1780547483854,
+      "lastAccessed": 1783926092649,
       "type": "file"
     },
     {
-      "path": "packages/cron-service/tests/test_core.py",
+      "path": "packages/eidos/src/eidos/multimodal.py",
       "accessCount": 1,
-      "lastAccessed": 1780547483865,
+      "lastAccessed": 1783926093059,
       "type": "file"
     },
     {
-      "path": "packages/sharedbrain-bridge/tests/test_bridge.py",
+      "path": "packages/forge/src/forge/discover_mcp.py",
       "accessCount": 1,
-      "lastAccessed": 1780547483907,
+      "lastAccessed": 1783926094340,
       "type": "file"
     },
     {
-      "path": "packages/sharedbrain-bridge/tests/test_basic.py",
+      "path": "packages/kos/src/kos/viz_unified.py",
       "accessCount": 1,
-      "lastAccessed": 1780547519163,
-      "type": "file"
-    },
-    {
-      "path": "packages/gc-engine/tests/test_gc_engine.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547607052,
-      "type": "file"
-    },
-    {
-      "path": "packages/gc-engine/tests/test_basic.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547607140,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/workers/cli_avatar_worker.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547610873,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/conflict_resolution.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547615689,
-      "type": "file"
-    },
-    {
-      "path": "packages/engine-core/src/engine_core/mapping_worker_abstraction.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547615741,
-      "type": "file"
-    },
-    {
-      "path": "packages/core-models/src/core_models/capability.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547676007,
-      "type": "file"
-    },
-    {
-      "path": "packages/core-models/src/core_models/entity.py",
-      "accessCount": 1,
-      "lastAccessed": 1780547691734,
+      "lastAccessed": 1783926094708,
       "type": "file"
     }
   ],
