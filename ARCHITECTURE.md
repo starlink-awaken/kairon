@@ -57,7 +57,7 @@ graph TB
 |:--|:--|
 | `packages/kos/` | 跨域语义搜索 / KOS 知识图谱 |
 | `packages/minerva/` | 深度研究引擎 |
-| `packages/eidos/` | 认知记忆系统 (memory/nks/continuity/CRDT/learning + schema) — **kairon 枢纽**, 36K LOC, 4 包依赖 (codeanalyze/iris/kos/minerva), 反向零耦合 |
+| `packages/eidos/` | 认知记忆系统 (memory/nks/continuity/CRDT/learning + schema) — **kairon 枢纽**, 36K LOC, 被 codeanalyze/iris/kos/minerva 依赖 (反向零耦合) |
 | `packages/kronos/` | 知识摄取管线 |
 | `packages/ontoderive/` | 本体推导与推理 — 28K LOC, **BOS 入口型** (agora `bos://analysis/ontoderive/derive` 活路由, 非死包) |
 | `packages/codeanalyze/` | AST 代码分析 |
