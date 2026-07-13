@@ -27,7 +27,7 @@
   },
   "build": {
     "buildCommand": "make build",
-    "testCommand": "cd /Users/xiamingxing/Workspace/projects/kairon 2>/dev/null\necho \"=== ruff check 全仓 (期望 0 errors) ===\"\nuv run ruff check . 2>&1 | tail -5\necho \"\"\necho \"=== kos tests collect (验证 src_dir 改名后 import 链 OK) ===\"\nuv run pytest packages/kos/tests/test_agent.py packages/kos/tests/test_cache.py --co -q 2>&1 | tail -12",
+    "testCommand": "cd /Users/xiamingxing/Workspace/projects/kairon 2>/dev/null\necho \"=== 跑 test_dashboard ===\"\nuv run pytest packages/kairon-observability/tests/test_dashboard.py -q 2>&1 | tail -3\ngit add packages/kairon-observability/tests/test_dashboard.py\ngit commit -m \"test(kairon-observability): 补 dashboard 测试 (功能 P1, 392 LOC 核心零覆盖)\" -m \"dashboard 392 LOC (服务拓扑仪表盘) 零覆盖. 补 test_dashboard (12: ServiceCard/TopologyEdge defaults + DashboardData update/add_edge/get_overview/get_detail/to_json/reset/health_summary). get_service_detail 返回 service/metrics/connections 结构.\" 2>&1 | tail -3\ngit push origin main 2>&1 | tail -4",
     "lintCommand": "ruff check",
     "devCommand": null,
     "scripts": {}
