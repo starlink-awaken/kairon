@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa
 """
 KOS CLI — Knowledge Operating System Command Line Interface (v2.0)
 
@@ -74,49 +75,9 @@ def _artifact_path(name: str) -> str | None:  # type: ignore[no-untyped-def]
     return None
 
 
-# ── Terminal colors ─────────────────────────────────────
+# ── Terminal colors (impl 抽到 colors.py, wave 8) ─────────
 _is_tty = sys.stdout.isatty()
-
-
-def _c(code: str, text: str) -> str:
-    """Apply ANSI color if output is a terminal, otherwise plain text."""
-    if not _is_tty:
-        return text
-    return f"\033[{code}m{text}\033[0m"
-
-
-def BOLD(t) -> str:  # type: ignore[no-untyped-def]  # noqa: N802  # noqa: N802
-    return _c("1", t)
-
-
-def DIM(t) -> str:  # type: ignore[no-untyped-def]  # noqa: N802  # noqa: N802
-    return _c("2", t)
-
-
-def CYAN(t) -> str:  # type: ignore[no-untyped-def]  # noqa: N802  # noqa: N802
-    return _c("36", t)
-
-
-def GREEN(t) -> str:  # type: ignore[no-untyped-def]  # noqa: N802  # noqa: N802
-    return _c("32", t)
-
-
-def YELLOW(t) -> str:  # type: ignore[no-untyped-def]  # noqa: N802  # noqa: N802
-    return _c("33", t)
-
-
-def RED(t) -> str:  # type: ignore[no-untyped-def]  # noqa: N802  # noqa: N802
-    return _c("31", t)
-
-
-def MAG(t) -> str:  # type: ignore[no-untyped-def]  # noqa: N802  # noqa: N802
-    return _c("35", t)
-
-
-# ── Minerva adapter (version-aware discovery) ────────────
-from kos.adapters import MinervaAdapter, NullMinerva  # type: ignore[import-not-found]
-
-_MINERVA = None
+from kos.cli.colors import *  # noqa: F403  # BOLD/DIM/CYAN/GREEN/YELLOW/RED/MAG
 
 
 def _get_minerva() -> Any:
