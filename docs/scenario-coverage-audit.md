@@ -69,17 +69,25 @@
 
 ## 三、场景成熟度矩阵
 
-| 场景 | 成熟度 | 关键缺口 |
-|------|--------|----------|
-| 知识管理 | 🟢 成熟 | 多用户协作 G1 |
-| 深度研究 | 🟢 成熟 | 外部 LLM 深度集成 G3 |
-| 代码分析 | 🟢 成熟 | - |
-| 数据校验 | 🟢 成熟 | - |
-| 资产管理 | 🟡 部分 | 工具市场 G3 |
-| 可观测 | 🔴 骨架 | 测试补全 (P1) |
-| 多模态 | 🔴 缺 | G2 |
-| 可视化 | 🟡 部分 | G4 统一前端 |
-| 流式增量 | 🟡 部分 | G5 统一管线 |
+| 场景 | 成熟度 | 关键缺口 | 实现状态 |
+|------|--------|----------|----------|
+| 知识管理 | 🟢 成熟 | 多用户协作 G1 | ✅ G1 eidos/entity_collab.py (CRDT stub) |
+| 深度研究 | 🟢 成熟 | 外部 LLM 深度集成 G3 | ✅ G3 forge/discover_mcp.py |
+| 代码分析 | 🟢 成熟 | - | - |
+| 数据校验 | 🟢 成熟 | - | - |
+| 资产管理 | 🟡 部分 | 工具市场 G3 | ✅ G3 discover_mcp |
+| 可观测 | 🟢 成熟 | 测试补全 (P1) | ✅ kairon-observability 全模块 114 passed |
+| 多模态 | 🟡 stub | G2 | ✅ G2 eidos/multimodal.py (CLIP/whisper 可选依赖) |
+| 可视化 | 🟢 统一 | G4 统一前端 | ✅ G4 kos/viz_unified.py |
+| 流式增量 | 🟢 stub | G5 统一管线 | ✅ G5 kos/stream_pipeline.py |
+
+> **G1-G5 实现状态 (2026-07-13)**: 5 缺口全部实质代码落地 (stub/编排层).
+> - G1 `eidos/entity_collab.py` (CollaborativeEntity CRDT, demo 验证多用户无冲突合并)
+> - G2 `eidos/multimodal.py` (CLIP 图片 + whisper 音频 embedding, 可选依赖)
+> - G3 `forge/discover_mcp.py` (MCP 外部市场发现: 本地 configs + agora backends + registry)
+> - G4 `kos/viz_unified.py` (统一 kos graph + eidos viz Mermaid, render_all 全景)
+> - G5 `kos/stream_pipeline.py` (kronos→eidos incremental→kos delta 流式编排, watch mtime)
+> stub 说明: 接口 + 编排骨架已就位, 接各包实际 incremental/embed 实现 (注入 handler) 即生产可用.
 
 ---
 
