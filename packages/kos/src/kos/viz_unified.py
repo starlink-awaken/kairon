@@ -32,11 +32,24 @@ def render_unified(viz_type: str, **kwargs: Any) -> str:
     elif viz_type in ("class", "state", "pipeline"):
         from eidos.viz import render  # type: ignore[import-untyped]
 
-        return render(viz_type, **kwargs)
+        # eidos renderer 是对象级 (需 class_name/fields/state_data 等参数), 非系统级无参.
+        # G4 半成品: 系统全景需数据获取层补全; 无数据时返回 help 不 crash.
+        safe = {k: v for k, v in kwargs.items() if k != "entity_type"}
+        try:
+            return render(viz_type, **safe)
+        except TypeError:
+            return (
+                f"%% {viz_type} viz 是对象级渲染, 需数据参数 (如 class_name+fields). "
+                f"直接调 eidos.viz.render('{viz_type}', ...). 系统全景待数据获取层补全 (G4 TODO)."
+            )
     elif viz_type == "memory":
         from eidos.viz import render_ontology_graph  # type: ignore[import-untyped]
 
-        return render_ontology_graph(**kwargs)
+        safe = {k: v for k, v in kwargs.items() if k != "entity_type"}
+        try:
+            return render_ontology_graph(**safe)
+        except TypeError:
+            return "%% memory viz 需 nodes+edges 数据参数. 系统全景待数据获取层补全 (G4 TODO)."
     return f"%% Unknown viz_type: {viz_type}. Supported: {VIZ_TYPES}"
 
 

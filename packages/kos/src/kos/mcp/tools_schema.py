@@ -289,6 +289,37 @@ TOOLS_SCHEMA: dict[str, dict[str, Any]] = {
             "required": ["question"],
         },
     },
+    "mcp_market_discover": {
+        "description": "G3: Discover external MCP tool market. Scans local MCP client configs (Claude/Cursor/Windsurf/VSCode) + agora registered MCP backends + known MCP server registries. Returns aggregated discovery report for tool ecosystem awareness.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "source": {
+                    "type": "string",
+                    "description": "Filter by source: local / agora. Omit for all sources.",
+                },
+            },
+            "required": [],
+        },
+    },
+    "viz_render": {
+        "description": "G4: Render unified Mermaid visualization by type. Aggregates kos graph (ontology relationships) + eidos viz (class/state/pipeline/memory) into a single entry. Bridges the previously fragmented viz surfaces.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "viz_type": {
+                    "type": "string",
+                    "description": "ontology / class / state / pipeline / memory / all. Default: ontology",
+                    "default": "ontology",
+                },
+                "entity_type": {
+                    "type": "string",
+                    "description": "Entity type filter (ontology viz only)",
+                },
+            },
+            "required": [],
+        },
+    },
 }
 
 

@@ -932,6 +932,33 @@ def tool_get_entity_timeline(entity_id: str) -> dict:
         return {"error": str(e)}
 
 
+def tool_mcp_market_discover(source: str | None = None) -> dict:
+    """G3: 发现 MCP 外部工具市场 (本地 configs + agora backends + registries)."""
+    try:
+        from forge.discover_mcp import discover_all, probe_agora_backends, probe_local_mcp_configs
+    except ImportError:
+        return {"error": "forge package not available", "status": "unavailable"}
+    if source == "local":
+        found = probe_local_mcp_configs()
+        return {"local_configs": found, "count": len(found)}
+    if source == "agora":
+        found = probe_agora_backends()
+        return {"agora_backends": found, "count": len(found)}
+    return discover_all()
+
+
+def tool_viz_render(viz_type: str = "ontology", entity_type: str | None = None) -> dict:
+    """G4: 渲染统一 Mermaid 可视化 (ontology/class/state/pipeline/memory)."""
+    try:
+        from kos.viz_unified import list_viz_types, render_all, render_unified
+    except ImportError:
+        return {"error": "viz_unified not available", "status": "unavailable"}
+    if viz_type == "all":
+        return {"viz_types": list_viz_types(), "graphs": render_all(entity_type)}
+    mermaid = render_unified(viz_type, entity_type=entity_type)
+    return {"viz_type": viz_type, "mermaid": mermaid}
+
+
 # ── MCP Server main loop ─────────────────────────────────
 
 
@@ -1038,6 +1065,8 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
                 "graph_search": lambda: tool_graph_search(a.get("query", ""), a.get("max_hops", 3), a.get("limit", 10)),
                 "entity_explore": lambda: tool_entity_explore(a.get("entity_id", ""), a.get("depth", 2)),
                 "knowledge_ask": lambda: tool_knowledge_ask(a.get("question", ""), a.get("include_paths", True)),
+                "mcp_market_discover": lambda: tool_mcp_market_discover(a.get("source")),
+                "viz_render": lambda: tool_viz_render(a.get("viz_type", "ontology"), a.get("entity_type")),
             }
             h = handlers.get(tn)
             if h:

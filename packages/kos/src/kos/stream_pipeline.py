@@ -167,16 +167,64 @@ class StreamPipeline:
         self._stats = {"total": 0, "parsed": 0, "embedded": 0, "indexed": 0, "errors": 0}
 
 
+def build_indexer_pipeline() -> StreamPipeline:
+    """构建注入 kos indexer incremental 的流式管线.
+
+    watch 检测文件变更 → 触发 indexer fingerprint incremental index (subprocess).
+    parse/embed = None (indexer 内部含全流程 parse+embed+index, 不重复).
+    补 indexer 无 daemon 的缺口: indexer 是一次性命令, 本管线提供持续 watch.
+    """
+    import subprocess
+    import sys
+
+    def trigger_incremental(_data: dict[str, Any]) -> bool:
+        try:
+            r = subprocess.run(
+                [sys.executable, "-m", "kos.indexer.engine", "--incremental"],
+                capture_output=True,
+                text=True,
+                timeout=180,
+            )
+            return r.returncode == 0
+        except Exception:
+            return False
+
+    return StreamPipeline(index_handler=trigger_incremental)
+
+
 def main() -> None:
-    """CLI: kos stream-pipeline — 演示单事件处理 (无 handler 则 no-op)."""
-    pipeline = StreamPipeline()
-    event = StreamEvent(path="/tmp/test.md", event_type="created")
-    result = pipeline.process(event)
-    print(
-        json.dumps(
-            {"result": result.__dict__, "stats": pipeline.get_stats()}, ensure_ascii=False, indent=2, default=str
+    """CLI: kos stream-pipeline — 流式增量管线 (单次触发 / watch daemon).
+
+    默认: 单次触发 indexer incremental index.
+    --watch <paths>: 持续监听文件变更, mtime 变 → 触发 incremental (daemon, Ctrl+C 停).
+    """
+    import sys
+
+    if "--watch" in sys.argv:
+        watch_idx = sys.argv.index("--watch")
+        paths = [p for p in sys.argv[watch_idx + 1 :] if not p.startswith("-")]
+        if not paths:
+            print("用法: python -m kos.stream_pipeline --watch <path1> [path2 ...]")
+            return
+        pipeline = build_indexer_pipeline()
+        print(f"👁 stream watch daemon: 监听 {len(paths)} 路径, 变更 → indexer incremental (Ctrl+C 停)")
+        pipeline.watch(
+            paths,
+            poll_interval=5.0,
+            on_event=lambda r: print(f"  [{r.event.event_type}] {r.event.path} → indexed={r.indexed}"),
         )
-    )
+    else:
+        pipeline = build_indexer_pipeline()
+        event = StreamEvent(path=".", event_type="modified")
+        result = pipeline.process(event)
+        print(
+            json.dumps(
+                {"indexed": result.indexed, "error": result.error, "stats": pipeline.get_stats()},
+                ensure_ascii=False,
+                indent=2,
+                default=str,
+            )
+        )
 
 
 if __name__ == "__main__":

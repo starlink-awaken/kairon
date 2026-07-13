@@ -57,6 +57,7 @@ ai_toolbox.py — Forge 统一命令行入口
   rss-manager       — RSS 源管理（list/enable/disable/sync）
   check-updates     — 检查工具更新
   discover-ecosystem — 发现新工具/服务
+  discover-mcp      — 发现 MCP 外部工具市场（本地配置/agora/registry）
 
   # 安装与环境
   sniff             — 环境嗅探（检测依赖/工具/集成点）
@@ -112,6 +113,7 @@ COMMANDS: dict = {
     "sync-registry": ("python", str(SRC / "sync_registry.py"), ""),
     "check-updates": ("python", str(SRC / "sniff.py"), ""),
     "discover-ecosystem": ("python", str(SRC / "discover_ecosystem.py"), ""),
+    "discover-mcp": ("python", str(SRC / "discover_mcp.py"), ""),
     "rss-manager": ("python", str(SCRIPTS / "rss-manager.py"), ""),
     "upgrade-schema": ("python", str(TOOLBOX / "scripts" / "upgrade-schema-v2.py"), ""),
     "asset": ("python", str(SRC / "asset_cli.py"), ""),
@@ -613,6 +615,7 @@ ALIASES = {
     "agora": "sync-agora",
     "updates": "check-updates",
     "ecosystem": "discover-ecosystem",
+    "mcp": "discover-mcp",
     "rss": "rss-manager",
     "watch": "watchdog",
 }
