@@ -35,6 +35,7 @@ eidos-agent = "eidos.agent:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=9.0", "pytest-cov"]
+mcp = ["fastmcp>=2.0"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/eidos"]

@@ -446,28 +446,21 @@ def handle_mcp_request(request: dict) -> dict:
 
 
 def main() -> None:
-    """Run Eidos MCP server in stdio mode."""
+    """Run Eidos MCP server (FastMCP stdio).
+
+    协议统一 (2026-07-13): app 在 _handle_fastmcp() 注册 7 @app.tool, main 走 app.run()
+    (FastMCP stdio, 和 iris/kronos/ontoderive 一致). fastmcp 必装 (eidos[mcp] optional dep).
+    """
     if "--help" in sys.argv or "-h" in sys.argv:
-        print("Eidos MCP Server (stdio)")
+        print("Eidos MCP Server (FastMCP stdio)")
         print("")
         print("Tools:")
         for name, info in TOOLS.items():
             print(f"  {name}: {info['description']}")
         return
 
-    for line in sys.stdin:
-        line = line.strip()
-        if not line:
-            continue
-        resp: dict[str, Any] = {"jsonrpc": "2.0", "id": None}
-        try:
-            request = json.loads(line)
-            if not isinstance(request, dict) or "method" not in request:
-                resp["error"] = {"code": -32600, "message": "Invalid Request: missing 'method'"}
-            else:
-                resp = handle_mcp_request(request)
-        except json.JSONDecodeError:
-            resp["error"] = {"code": -32700, "message": "Parse error: invalid JSON"}
-        except Exception as exc:
-            resp["error"] = {"code": -1, "message": f"Internal error: {exc}"}
-        print(json.dumps(resp, ensure_ascii=False), flush=True)
+    app = _handle_fastmcp()
+    if app is None:
+        print("FastMCP required. Install: uv sync --extra mcp  (or pip install fastmcp)", file=sys.stderr)
+        sys.exit(1)
+    app.run()
