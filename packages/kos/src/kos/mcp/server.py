@@ -1106,8 +1106,19 @@ def run_stdio() -> None:  # type: ignore[unused-ignore]
 
 
 def main() -> None:
-    """Entry point for MCP server. Import-safe wrapper around run_stdio."""
-    run_stdio()
+    """Entry point for kos MCP server (FastMCP stdio).
+
+    协议统一 (2026-07-13): 走 fastmcp_app._create_fastmcp_app().run() (42 工具 @app.tool).
+    run_stdio (手写 stdio) 保留为独立函数 (兼容/测试引用), main 不再调它.
+    延迟 import fastmcp_app 解循环 (fastmcp_app 顶层 import server tool_ 函数).
+    """
+    from kos.mcp.fastmcp_app import _create_fastmcp_app
+
+    app = _create_fastmcp_app()
+    if app is None:
+        print("FastMCP required. Install: uv sync --extra mcp (or pip install fastmcp)", file=sys.stderr)
+        sys.exit(1)
+    app.run()
 
 
 if __name__ == "__main__":
