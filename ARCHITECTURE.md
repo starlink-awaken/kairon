@@ -6,7 +6,7 @@
 > **Health**: See local CI and package-level verification
 > **SSOT**: 运行时健康、测试规模、包数量以本项目 CI、本地测试命令和 workspace governance SSOT 为准
 >
-> **架构审计 (2026-07-13)**: [`docs/analysis/architecture-audit-2026-07-13.md`](docs/analysis/architecture-audit-2026-07-13.md) — 包 LOC + 跨包依赖实测 + 9 MCP server 盘点 + 演进规划
+> **架构审计 (2026-07-13)**: [`docs/analysis/architecture-audit-2026-07-13.md`](docs/analysis/architecture-audit-2026-07-13.md) — 包 LOC + 跨包依赖实测 + MCP server 盘点 + 演进规划
 >
 > 系统全景参见：[`../../docs/PANORAMA.md`](../../docs/PANORAMA.md)
 
