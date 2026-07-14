@@ -63,12 +63,17 @@
 
 **协议统一完成**：9 MCP 全 FastMCP（kos stdio 堡垒已破）。剩 agora 聚合（架构级，跨仓）。
 
-## 5. agora MCP 聚合（架构级，跨仓）
+## 5. agora MCP 聚合（架构级，跨仓）— **现状修正：hub 已存在**
 
-kairon 内 MCP 统一 FastMCP 后，**9 个 MCP 仍散**（各包独立 server）。最终收敛靠 **agora I0 hub**：
-- agora 作 MCP 代理聚合，kairon 9 MCP 作 backend
-- AI agent 单点接入 agora MCP，agora 路由到 kairon 各包 MCP
-- 这是 omostation 主仓的架构议题（agora），非 kairon 内
+> **2026-07-14 核实**：agora **已是 MCP proxy hub**（`projects/agora/src/agora/mcp_proxy/` 完整：client/manager/registry/health/idle_timeout/feature_gate）+ **kos 已接入**（BOS `bos://memory/kos/mcp-server`, action mcp-server, command `bin/mcp-server-kos.py` wrapper）。**原 "agora 聚合 ⬜ 新建" 误判** — hub 不是缺, 是已建。
+
+**真实缺口**：agora 只接了 **kos 1 个 MCP**，剩 **8 个 kairon MCP 未接入**（minerva/eidos/ontoderive/kronos/iris/sophia/forge + ontoderive/toolforge）。接入是**重复 kos 模式**：
+1. 8 BOS 条目（`bos-services.yaml` 加 8 mcp-server，uri `bos://memory/<pkg>/mcp-server`）
+2. 8 wrapper 脚本（`bin/mcp-server-<pkg>.py`，照 `bin/mcp-server-kos.py`）
+3. agora mcp_proxy 路由扩展（已支持 kos，复用机制代理 8 MCP）
+4. 测试（每个 MCP tools/list + tools/call 经 agora）
+
+**跨仓大活**（omostation/agora + bin/ + BOS + 测试，~半天专项）。kairon L2 MCP 协议统一已完成（9 全 FastMCP），agora I0 聚合是下一层（跨仓）。
 
 ## 6. 本规划基线
 
