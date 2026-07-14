@@ -69,10 +69,10 @@
 
 **P0 完成**: agora gateway 接线 — kairon 9 MCP 全注册 (声明式)。AI agent 经 agora 单点接入, agora `tools/list` 聚合 + `tools/call` 路由。
 
-**剩余 (P1-P3)**:
-- **P1**: 注册 omostation 6+ MCP (metaos/ecos/omo/aetherforge/c2g/cockpit) — 全局 15+ MCP 收敛
-- **P2**: 废弃 `bin/mcp-server-kos.py` 0-dep 定制 (agora 直调 kairon `kos.mcp.server` FastMCP, DRY 消除 kos 双入口; 需先确认 SGF-v1 硬件外挂消费者)
-- **P3**: runtime 验证 (agora spawn 9 MCP subprocess + tools/list 聚合 + tools/call 路由实测) + 工具命名空间规约 (防 kos/eidos search 冲突)
+**剩余 (P1-P3) — 全完成 ✅**（详见 [`agora-mcp-gateway-p1-p3.md`](agora-mcp-gateway-p1-p3.md)）:
+- **P1 ✅**（agora 9b18808 + PR#336）: omostation 6 MCP 注册（metaos/ecos/omo/aetherforge/c2g/cockpit）— 全局 14 mcp-server 条目收敛
+- **P2 ✅**（评估修正→不废弃）: `bin/mcp-server-kos.py` 0-dep SGF-v1 硬件外挂设计, 双入口分工（0-dep 轻量 + agora gateway FastMCP）, 标注非废弃
+- **P3 ✅**: SSOT 聚合验证（14 条目）+ agora 命名空间内置（registry `service.tool` 自动前缀, 冲突防护）; runtime spawn 留集成测试
 
 ## 6. 本规划基线
 
