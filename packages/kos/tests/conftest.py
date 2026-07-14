@@ -52,7 +52,9 @@ def _kos_index_has_data() -> bool:
     return cached
 
 
-def pytest_collection_modifyitems(_config: pytest.Config, items: list[pytest.Item]) -> None:
+def pytest_collection_modifyitems(
+    config: pytest.Config, items: list[pytest.Item]
+) -> None:  # config 是 pytest hookspec 必需参数名 (改名 _config 会破坏 hook, PluginValidationError)
     """索引无数据时, 自动 skip _NEEDS_INDEX 列出的 test (环境性, 非代码 bug)."""
     if _kos_index_has_data():
         return
