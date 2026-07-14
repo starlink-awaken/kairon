@@ -43,6 +43,8 @@
 4. 类型注解补全（26 tool_ 函数签名）
 5. 测试：MCP 协议行为不变（tools/list + tools/call 响应格式）
 
+> **✅ 已落地 (2026-07-14, commit 51b0749)**：建 `fastmcp_app.py _create_fastmcp_app`（44 工具 @app.tool：27 本体 + 14 命名空间 + 3 FastMCP 内置）。参数从 dispatch lambda 映射。FastMCP 3.4.2 **不支持 `**kwargs`** → 命名空间用 `arguments: dict | None` 参数。main 走 `app.run()`（延迟 import 解循环），run_stdio 保留独立函数。pyproject 加 `fastmcp>=2.0`。验证 `list_tools()` 44 工具注册。**stdio 堡垒破，9 MCP 协议统一完成**。
+
 **风险**：
 - 命名空间工具（FastMCP 点号工具名支持？要验证）
 - 类型注解补全工作量大（26 函数）
@@ -55,11 +57,11 @@
 ```
 ✅ eidos (4f2c51b): main 接闲置 app (小改, 模式 A)
 ✅ minerva/ontoderive/kronos/iris/sophia/forge: 已 FastMCP (无需迁)
-⬜ kos: 大活 (从头建 app, 模式 B, 专项多轮)
+✅ kos (51b0749): 从头建 fastmcp_app.py _create_fastmcp_app (44 工具, 模式 B) — stdio 堡垒破
 ⬜ agora 聚合: I0 hub 统一 MCP 面 (架构级, 跨仓 omostation)
 ```
 
-**协议统一优先级**：kos 是唯一剩 stdio 堡垒。迁完 kos = kairon MCP 协议全 FastMCP。
+**协议统一完成**：9 MCP 全 FastMCP（kos stdio 堡垒已破）。剩 agora 聚合（架构级，跨仓）。
 
 ## 5. agora MCP 聚合（架构级，跨仓）
 
