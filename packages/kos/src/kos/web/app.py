@@ -109,6 +109,7 @@ async def api_verify(data: dict):
 @app.get("/api/v1/stats")
 async def api_stats():
     """Get knowledge base statistics."""
+    conn = None
     try:
         conn = sqlite3.connect(str(get_artifact_path("retrievalDatabase")))
         conn.row_factory = sqlite3.Row
@@ -117,10 +118,22 @@ async def api_stats():
             "entities": conn.execute("SELECT COUNT(*) FROM kos_entities").fetchone()[0],
             "relations": conn.execute("SELECT COUNT(*) FROM kos_relations").fetchone()[0],
         }
-        conn.close()
         return JSONResponse(content=stats)
+    except sqlite3.OperationalError as e:
+        return JSONResponse(
+            content={
+                "status": "unavailable",
+                "data_quality": "unavailable",
+                "error": str(e),
+                "next_action": "初始化 KOS retrievalDatabase 后再刷新统计。",
+            },
+            status_code=503,
+        )
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+    finally:
+        if conn is not None:
+            conn.close()
 
 
 @app.get("/api/v1/health")

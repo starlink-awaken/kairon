@@ -29,3 +29,16 @@ def test_health_endpoint_reports_workspace_and_database(monkeypatch, tmp_path: P
     assert payload["workspace"]["zones"] == 1
     assert payload["database"]["reachable"] is True
     assert payload["database"]["path"] == str(tmp_path / "kos-index.sqlite")
+
+
+def test_stats_endpoint_reports_uninitialized_database(monkeypatch, tmp_path: Path):
+    web_app = _load_web_app(monkeypatch, tmp_path)
+    client = TestClient(web_app.app)
+
+    response = client.get("/api/v1/stats")
+
+    assert response.status_code == 503
+    payload = response.json()
+    assert payload["status"] == "unavailable"
+    assert payload["data_quality"] == "unavailable"
+    assert "documents" in payload["error"]
