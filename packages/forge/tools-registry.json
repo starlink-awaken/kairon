@@ -1500,6 +1500,98 @@
         "realized_by": "agora.register",
         "upstream": "/Users/xiamingxing/ToolBox/skills/skills-for-fabric/.git"
       }
+    },
+    {
+      "id": "deer-flow",
+      "name": "DeerFlow",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP",
+        "Agent",
+        "Framework"
+      ],
+      "capabilities": [
+        "sub-agent",
+        "memory",
+        "sandbox",
+        "workflow"
+      ],
+      "source": {
+        "provider": "local",
+        "path": "/Users/xiamingxing/ToolBox/mcp/deer-flow/"
+      },
+      "description": "字节开源超 Agent 框架 v2.0 — 子 Agent/记忆/沙箱/技能",
+      "added": "2026-07-21",
+      "updated": "2026-07-21",
+      "bos_uri": "bos://capability/deer-flow/run",
+      "domain": "capability",
+      "cross_references": {
+        "domain": "capability",
+        "realized_by": "agora.register",
+        "upstream": "/Users/xiamingxing/ToolBox/mcp/deer-flow/.git"
+      }
+    },
+    {
+      "id": "datafoundry",
+      "name": "DataFoundry",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "MCP",
+        "Data",
+        "Analysis"
+      ],
+      "capabilities": [
+        "data-agent",
+        "semantics",
+        "multi-step-analysis"
+      ],
+      "source": {
+        "provider": "local",
+        "path": "/Users/xiamingxing/ToolBox/mcp/datafoundry/"
+      },
+      "description": "企业级 Data Agent 工作台 — 28 数据源 + 语义层 + 多步分析",
+      "added": "2026-07-21",
+      "updated": "2026-07-21",
+      "bos_uri": "bos://capability/datafoundry/analyze",
+      "domain": "capability",
+      "cross_references": {
+        "domain": "capability",
+        "realized_by": "agora.register",
+        "upstream": "/Users/xiamingxing/ToolBox/mcp/datafoundry/.git"
+      }
+    },
+    {
+      "id": "knowledge-work-plugins",
+      "name": "Knowledge Work Plugins",
+      "type": "tool",
+      "status": "active",
+      "category": [
+        "Skill",
+        "Claude",
+        "Plugin"
+      ],
+      "capabilities": [
+        "skill",
+        "plugin",
+        "coding",
+        "productivity"
+      ],
+      "source": {
+        "provider": "local",
+        "path": "/Users/xiamingxing/ToolBox/skills/knowledge-work-plugins/"
+      },
+      "description": "Claude Cowork 11 个生产力插件 — Claude Code 兼容",
+      "added": "2026-07-21",
+      "updated": "2026-07-21",
+      "bos_uri": "bos://capability/knowledge-work-plugins/load",
+      "domain": "capability",
+      "cross_references": {
+        "domain": "capability",
+        "realized_by": "agora.register",
+        "upstream": "/Users/xiamingxing/ToolBox/skills/knowledge-work-plugins/.git"
+      }
     }
   ],
   "event_log": [
