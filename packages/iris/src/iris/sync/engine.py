@@ -249,18 +249,25 @@ class SyncEngine:
             # Create in Obsidian vault
             # Provide both frontmatter and body
             tags = item.tags if hasattr(item, "tags") and item.tags else None
-            self._obsidian.create_item(
-                title=item.title,
-                content=md_body,
-                tags=tags,
-                path=obs_path,
-            )
+            try:
+                self._obsidian.create_item(
+                    title=item.title,
+                    content=md_body,
+                    tags=tags,
+                    path=obs_path,
+                )
+                result.created += 1
+                logger.info("  CREATED WPS→Obsidian: '%s' → %s", item.title, obs_path)
+            except FileExistsError:
+                # Path already present (prior partial sync) — adopt mapping without overwrite
+                self.id_map.set_mapping(obs_path, change.item_id)
+                result.synced += 1
+                logger.info("  ADOPTED existing Obsidian path for WPS→Obsidian: '%s' → %s", item.title, obs_path)
+                return
 
             # Record the mapping
             self.id_map.set_mapping(obs_path, change.item_id)
-            result.created += 1
             result.synced += 1
-            logger.info("  CREATED WPS→Obsidian: '%s' → %s", item.title, obs_path)
 
         elif change.type == ChangeType.UPDATED:
             # Get the WPS Note item
