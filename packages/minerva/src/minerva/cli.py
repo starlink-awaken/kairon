@@ -434,11 +434,23 @@ def _run_check() -> int:
         print("  ❌ Ollama not reachable (brew install ollama && ollama serve)")
         failed += 1
 
-    # 2. SearXNG
+    # 2. SearXNG — prefer /health, fall back to / (upstream image often 404s /health)
     try:
-        r = httpx.get(f"http://localhost:{os.environ.get('ONTODERIVE_WEB_PORT', '8080')}/health", timeout=5)
-        if r.status_code == 200:
-            print(f"  ✅ SearXNG running (localhost:{os.environ.get('ONTODERIVE_WEB_PORT', '8080')})")
+        port = os.environ.get("ONTODERIVE_WEB_PORT", "8080")
+        base = f"http://localhost:{port}"
+        ok = False
+        for path in ("/health", "/", "/search?q=ping&format=json"):
+            try:
+                r = httpx.get(f"{base}{path}", timeout=5)
+            except Exception as exc:
+                # Probe next endpoint; connection errors are expected when down.
+                _ = exc
+                continue
+            if r.status_code == 200:
+                ok = True
+                break
+        if ok:
+            print(f"  ✅ SearXNG running (localhost:{port})")
             passed += 1
         else:
             raise Exception("not ok")

@@ -13,9 +13,11 @@ tier1:
     provider: "ollama"
     base_url: "http://localhost:11434/v1"
     models:
-      agent: "qwen3.6:35b-a3b-coding-nvfp4"       # Fast, tool-calling
-      reasoning: "deepseek-r1:70b"     # Deep reasoning
-      writer: "qwen3.5:27b"     # Long-form generation
+      # Align to host Ollama tags (2026-07-23 smoke: gemma4 + north-mini only).
+      # Override via editing this file or local ~/.minerva/config if models change.
+      agent: "gemma4:31b-mlx"       # Fast / general (was qwen3.6 nvfp4 — not on host)
+      reasoning: "gemma4:31b-mlx"   # Deep reasoning fallback to same host model
+      writer: "gemma4:31b-mlx"      # Long-form generation
     defaults:
       temperature: 0.6
       top_p: 0.95
@@ -97,7 +99,7 @@ execution:
       L4: 15.00
 
   triage:
-    model: "qwen3.6:35b-a3b-coding-nvfp4"
+    model: "gemma4:31b-mlx"
     max_latency_ms: 2000
 
 # Pipeline defaults
