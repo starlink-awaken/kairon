@@ -42,11 +42,14 @@ services:
       - NEO4J_PLUGINS=["apoc"]
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "cypher-shell", "-u", "neo4j", "-p", "$${NEO4J_PASSWORD:-changeme}", "RETURN 1"]
+      # CMD (exec) does not expand shell ${VAR:-default}; use fixed default matching
+      # NEO4J_AUTH above. Override via compose env NEO4J_PASSWORD only if you also
+      # change this probe password in lockstep (or switch to CMD-SHELL).
+      test: ["CMD", "cypher-shell", "-u", "neo4j", "-p", "changeme", "RETURN 1"]
       interval: 15s
       timeout: 10s
       retries: 5
-      start_period: 30s
+      start_period: 40s
 
   # ── Minerva: Deep Research Engine ──
 
