@@ -51,7 +51,9 @@ class TestE2ESync:
 
     def _make_connectors(self, vault: Path | None = None) -> tuple:
         """Create Obsidian and WPS connectors with shared config."""
-        config = IrisConfig()
+        # Isolated config file — never write to ~/.iris/config.json
+        cfg_path = Path(tempfile.mkdtemp()) / "iris-config.json"
+        config = IrisConfig(config_path=cfg_path)
         test_vault = vault or _create_vault({})
         config.set("obsidian.vault", str(test_vault))
         config.set("wpsnote.api_key", "test-key-e2e")

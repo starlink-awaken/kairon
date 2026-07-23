@@ -68,19 +68,47 @@ def _extract_notes_from_list(raw: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def _extract_single_result(raw: dict[str, Any]) -> dict[str, Any] | None:
-    """Extract the result metadata from a tool response that returns a single note."""
-    text = ""
-    if "content" in raw:
-        for item in raw.get("content", []):
-            if isinstance(item, dict) and item.get("type") == "text":
-                text = item.get("text", "")
-                break
-    if text:
-        try:
-            return cast("dict[str, Any] | None", json.loads(text))
-        except json.JSONDecodeError:
-            pass
-    return raw
+    """Extract the result metadata from a tool response that returns a single note.
+
+    Cloud MCP may return either:
+      - flat: ``{"note_id": "...", "title": "..."}``
+      - wrapped: ``{"note": {"note_id": "...", ...}, "tags": [...]}``
+      - structuredContent: ``{"structuredContent": {"note": {...}}}``
+    """
+    data: Any = None
+
+    # Prefer structuredContent when present (typed payload)
+    sc = raw.get("structuredContent")
+    if isinstance(sc, dict) and sc:
+        data = sc
+    else:
+        text = ""
+        if "content" in raw:
+            for item in raw.get("content", []):
+                if isinstance(item, dict) and item.get("type") == "text":
+                    text = item.get("text", "")
+                    break
+        if text:
+            try:
+                data = json.loads(text)
+            except json.JSONDecodeError:
+                data = None
+        if data is None:
+            data = raw
+
+    if not isinstance(data, dict):
+        return None
+
+    # Unwrap {"note": {...}, "tags": [...]}
+    note = data.get("note")
+    if isinstance(note, dict) and (note.get("note_id") or note.get("id")):
+        out = dict(note)
+        tags = data.get("tags")
+        if tags is not None and "tags" not in out:
+            out["tags"] = tags
+        return cast("dict[str, Any]", out)
+
+    return cast("dict[str, Any]", data)
 
 
 def _note_from_list_entry(entry: dict[str, Any]) -> Note:
@@ -110,7 +138,17 @@ def _note_from_info(info: dict[str, Any], content_text: str = "") -> Note:
 
 
 def _extract_text_from_content(raw: dict[str, Any]) -> str:
-    """Extract text content from a read_note_content response."""
+    """Extract text content from a read_note_content response.
+
+    Cloud MCP returns body as ``content`` (HTML/XML) and/or ``content_xml`` / ``text``.
+    """
+    # structuredContent first
+    sc = raw.get("structuredContent")
+    if isinstance(sc, dict):
+        body = sc.get("content_xml") or sc.get("content") or sc.get("text") or ""
+        if body:
+            return str(body)
+
     content = raw.get("content", [])
     texts = []
     for item in content:
@@ -120,7 +158,7 @@ def _extract_text_from_content(raw: dict[str, Any]) -> str:
                 parsed = json.loads(t)
                 if isinstance(parsed, dict):
                     # Take the full content text from the response
-                    texts.append(parsed.get("content_xml", "") or parsed.get("text", ""))
+                    texts.append(parsed.get("content_xml", "") or parsed.get("content", "") or parsed.get("text", ""))
                 else:
                     texts.append(t)
             except (json.JSONDecodeError, TypeError):

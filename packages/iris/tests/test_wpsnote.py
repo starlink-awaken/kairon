@@ -111,8 +111,10 @@ class TestNoteFromInfo:
 
 
 @pytest.fixture
-def config():
-    cfg = IrisConfig()
+def config(tmp_path):
+    # Use isolated config path so tests never overwrite ~/.iris/config.json
+    cfg_path = tmp_path / "iris-config.json"
+    cfg = IrisConfig(config_path=cfg_path)
     cfg.set("wpsnote.api_key", "test-key-123")
     return cfg
 
