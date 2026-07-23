@@ -173,9 +173,10 @@ class WPSNoteConnector(BaseConnector):
             # Try listing tools as a health check
             tools = client.list_tools()
             self._available = len(tools) > 0
-        except Exception:
+        except Exception as exc:
             self._available = False
-            logger.exception("WPS Note MCP server unavailable")
+            # Expected when API key missing/invalid; avoid full traceback on `iris list`
+            logger.warning("WPS Note MCP server unavailable: %s", exc)
         return self._available
 
     def list_items(
