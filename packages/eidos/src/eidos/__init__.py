@@ -28,7 +28,7 @@ from .schema import (
     register_migration,
 )
 from .types import Fact, InferenceRule, KnowledgeCard, OntologyNode, Relation, StateMachine, StateTransition
-from .validator import (
+from .core.validator import (
     ValidationError,
     ValidationResult,
     Validator,

@@ -1,5 +1,5 @@
 from eidos.schema import FieldType, Schema, SchemaField, SchemaRegistry
-from eidos.validator import Validator
+from eidos.core.validator import Validator
 
 
 def make_registry() -> SchemaRegistry:

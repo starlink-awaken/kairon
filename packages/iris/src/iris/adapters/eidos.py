@@ -34,7 +34,7 @@ class EidosAdapter:
         """Lazy-init and cache eidos registry + validator."""
         if self._validator is None and self._eidos_available:
             from eidos.registry import create_registry
-            from eidos.validator import Validator
+            from eidos.core.validator import Validator
 
             self._registry = create_registry()
             self._validator = Validator(self._registry)

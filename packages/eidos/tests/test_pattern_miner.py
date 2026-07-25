@@ -1,6 +1,6 @@
 """Tests for PatternMiner -- sequence and temporal pattern detection."""
 
-from eidos.pattern_miner import (
+from eidos.memory.pattern_miner import (
     Pattern,
     PatternMiner,
     PatternType,

@@ -9,7 +9,7 @@ from types import ModuleType, SimpleNamespace
 from typing import Any
 
 from eidos.schema import FieldType, Schema, SchemaField, SchemaRegistry
-from eidos.validator import Validator
+from eidos.core.validator import Validator
 
 KOS_REPO = str(Path(__file__).resolve().parents[2] / "kos/src")
 
