@@ -27,9 +27,9 @@ Layer: L3
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from ..meta_evolve import MetaEvolveEngine
-from ..meta_validate import MetaValidateEngine
-from ..pipeline_models import (
+from .meta_evolve import MetaEvolveEngine
+from .meta_validate import MetaValidateEngine
+from .pipeline_models import (
     BatchItem,
     BatchResult,
     ProgressInfo,

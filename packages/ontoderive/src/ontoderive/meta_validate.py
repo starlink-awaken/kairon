@@ -51,10 +51,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from ontoderive.organs.doc_type_validator import DocTypeValidator
-from ontoderive.organs.meta_validate_benchmark import _MetaBenchmarkMixin
-from ontoderive.organs.meta_validate_persist import _MetaPersistenceMixin
-from ontoderive.organs.meta_validate_types import (
+from ontoderive.doc_type_validator import DocTypeValidator
+from ontoderive.meta_validate_benchmark import _MetaBenchmarkMixin
+from ontoderive.meta_validate_persist import _MetaPersistenceMixin
+from ontoderive.meta_validate_types import (
     BenchmarkResult,
     ConfidenceScore,
     GroundTruth,
@@ -62,8 +62,8 @@ from ontoderive.organs.meta_validate_types import (
     ValidationStatus,
     ValidationVerification,
 )
-from ontoderive.organs.meta_validate_verify import _MetaVerifyMixin
-from ontoderive.organs.quality_probe import QualityProbe, ScanResult
+from ontoderive.meta_validate_verify import _MetaVerifyMixin
+from ontoderive.quality_probe import QualityProbe, ScanResult
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 _log = logging.getLogger(__name__)
