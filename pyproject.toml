@@ -50,7 +50,6 @@ ontoderive = { workspace = true }
 forge = { workspace = true }
 kos = { workspace = true }
 iris = { workspace = true }
-kairon-lib-events = { workspace = true }
 kairon-utils = { workspace = true }
 kairon-plugin-sdk = { workspace = true }
 kairon-observability = { workspace = true }

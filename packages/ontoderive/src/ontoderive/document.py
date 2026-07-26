@@ -55,8 +55,16 @@ from uuid import uuid4
 
 import yaml
 
-# Event bus integration via kairon-lib-events
-from kairon_events import BOSEvent, get_global_event_bus
+# Event bus integration: kairon_events (L0 shared) was removed in P30.5.
+# ontoderive uses its own _DummyBus as no-op fallback when no real bus
+# is registered in-process.
+try:
+    from kairon_events import BOSEvent, get_global_event_bus  # type: ignore[no-redef, import-not-found]
+    _HAS_KAIRON_EVENTS = True
+except ImportError:
+    BOSEvent = None  # type: ignore[no-redef, assignment]
+    get_global_event_bus = None  # type: ignore[no-redef, assignment]
+    _HAS_KAIRON_EVENTS = False
 
 
 class EventType(StrEnum):
@@ -68,7 +76,7 @@ class EventType(StrEnum):
 
 def get_event_bus() -> Any:
     """Return the global EventBus, or a dummy bus if unavailable."""
-    if get_global_event_bus is None:
+    if not _HAS_KAIRON_EVENTS or get_global_event_bus is None:
         return _DummyBus()
     bus = get_global_event_bus()
     if bus is None:
