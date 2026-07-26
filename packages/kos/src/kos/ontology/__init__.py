@@ -18,7 +18,7 @@ Use:
   from kos.ontology.api import handle_action
 """
 
-from kos.ontology.store import (  # type: ignore[import-not-found]  # noqa: F401
+from kos.ontology.store import (  # type: ignore[import-not-found]
     delete_entity,  # type: ignore[import-not-found]
     get_entity,  # type: ignore[import-not-found]
     get_relations,  # type: ignore[import-not-found]

@@ -79,7 +79,7 @@ def create_consensus(
     level = _detect_level(agreed_by, level)
     expires_at = now + timedelta(days=EXPIRY_DAYS[level])
     consensus_id = f"consensus:{entity_id}:{uuid.uuid4().hex[:8]}"
-    provenance_chain_json = json.dumps(provenance_chain or [], ensure_ascii=False)  # noqa
+    provenance_chain_json = json.dumps(provenance_chain or [], ensure_ascii=False)
     conn.execute(
         """INSERT INTO kos_consensus
            (consensus_id, entity_id, level, agreed_by, agreement, source_session,
@@ -115,12 +115,12 @@ def create_consensus(
 
     try:
         ops_url = os.environ.get("HERMES_OPS_URL", "http://localhost:9800")
-        req = urllib.request.Request(  # noqa: S310
+        req = urllib.request.Request(
             f"{ops_url}/event",
             data=json.dumps({"type": "CONSENSUS_CREATED", "payload": {"entity_id": entity_id}}).encode(),
             headers={"Content-Type": "application/json"},
         )
-        urllib.request.urlopen(req, timeout=2)  # noqa: S310
+        urllib.request.urlopen(req, timeout=2)
     except Exception:
         pass
     return _row_to_dict(row)
