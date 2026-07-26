@@ -22,7 +22,6 @@ members = [
     "health-profile",
     "iris",
     "kairon",
-    "kairon-lib-events",
     "kairon-observability",
     "kairon-pipeline",
     "kairon-plugin-sdk",
@@ -2160,21 +2159,6 @@ dev = [
 dev = [{ name = "mypy", specifier = ">=2.1.0" }]
 
 [[package]]
-name = "kairon-lib-events"
-version = "0.4.0"
-source = { editable = "packages/kairon-lib-events" }
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
-[package.metadata]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=9.0" }]
-
-[[package]]
 name = "kairon-observability"
 version = "0.4.0"
 source = { editable = "packages/kairon-observability" }
@@ -2833,7 +2817,6 @@ dependencies = [
     { name = "fastmcp" },
     { name = "health-profile" },
     { name = "httpx" },
-    { name = "kairon-lib-events" },
     { name = "kairon-observability" },
     { name = "kairon-utils" },
     { name = "kos" },
@@ -2877,7 +2860,6 @@ requires-dist = [
     { name = "graphiti-core", extras = ["neo4j"], marker = "extra == 'tier2'", specifier = ">=0.28" },
     { name = "health-profile", editable = "packages/health-profile" },
     { name = "httpx", specifier = ">=0.28.1" },
-    { name = "kairon-lib-events", editable = "packages/kairon-lib-events" },
     { name = "kairon-observability", editable = "packages/kairon-observability" },
     { name = "kairon-utils", editable = "packages/kairon-utils" },
     { name = "kos", editable = "packages/kos" },
@@ -3450,7 +3432,6 @@ source = { editable = "packages/ontoderive" }
 dependencies = [
     { name = "core-models" },
     { name = "fastmcp" },
-    { name = "kairon-lib-events" },
     { name = "pyyaml" },
 ]
 
@@ -3473,7 +3454,6 @@ requires-dist = [
     { name = "core-models", editable = "packages/core-models" },
     { name = "fastapi", marker = "extra == 'web'", specifier = ">=0.128.8" },
     { name = "fastmcp", specifier = ">=3.4.2" },
-    { name = "kairon-lib-events", editable = "packages/kairon-lib-events" },
     { name = "openai", marker = "extra == 'llm'", specifier = ">=2.41.1" },
     { name = "pytest", marker = "extra == 'dev'" },
     { name = "pytest-cov", marker = "extra == 'dev'" },

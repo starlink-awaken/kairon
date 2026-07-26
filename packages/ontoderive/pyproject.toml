@@ -27,7 +27,6 @@ dependencies = [
     "pyyaml>=6.0.3",
     "fastmcp>=3.4.2",
     "core-models",
-    "kairon-lib-events",
 ]
 
 [project.optional-dependencies]
