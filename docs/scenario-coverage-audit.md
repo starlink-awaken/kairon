@@ -24,8 +24,8 @@
 
 ### 4. 数据校验/推导 (eidos schema + ontoderive)
 - **场景**: Schema 约束, 本体推理, 语义验证
-- **包链**: eidos schema 子集 + ontoderive 推理
-- **状态**: 🟢 (ontoderive 48 tests 最厚)
+- **包链**: eidos schema 子集 + ontoderive 验证与演化流水线 (`MetaValidateEngine` / `MetaEvolveEngine` + 单/批 `Step`)
+- **状态**: 🟢 (ontoderive 验证步骤覆盖了单项、批量并行/顺序场景；最厚测试集位于 `packages/ontoderive/tests/test_validation_steps.py`)
 
 ### 5. 资产管理 (forge + iris)
 - **场景**: AI 数字资产管理, 工具注册/发现, 平台同步
@@ -69,14 +69,16 @@
 
 ## 三、场景成熟度矩阵
 
+成熟度与缺口状态以代码实现 + 回归测试为准；具体测试数量以 CI 产物为权威，本表不硬编码计数。
+
 | 场景 | 成熟度 | 关键缺口 | 实现状态 |
 |------|--------|----------|----------|
 | 知识管理 | 🟢 成熟 | 多用户协作 G1 | ✅ G1 eidos/entity_collab.py (CRDT stub) |
 | 深度研究 | 🟢 成熟 | 外部 LLM 深度集成 G3 | ✅ G3 forge/discover_mcp.py |
 | 代码分析 | 🟢 成熟 | - | - |
-| 数据校验 | 🟢 成熟 | - | - |
+| 数据校验 | 🟢 成熟 | - | ✅ ontoderive.validation_steps + meta_validate/meta_evolve |
 | 资产管理 | 🟡 部分 | 工具市场 G3 | ✅ G3 discover_mcp |
-| 可观测 | 🟢 成熟 | 测试补全 (P1) | ✅ kairon-observability 全模块 114 passed |
+| 可观测 | 🟢 成熟 | 测试补全 (P1) | ✅ kairon-observability 全模块测试通过 |
 | 多模态 | 🟡 stub | G2 | ✅ G2 eidos/multimodal.py (CLIP/whisper 可选依赖) |
 | 可视化 | 🟢 统一 | G4 统一前端 | ✅ G4 kos/viz_unified.py |
 | 流式增量 | 🟢 stub | G5 统一管线 | ✅ G5 kos/stream_pipeline.py |

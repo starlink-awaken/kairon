@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### OntoDerive
+
+- Restored the validation and evolution engines required by the pipeline after cleanup removed their modules.
+- Expanded batch item and result models to match validation-step consumers while preserving compatibility fields.
+- Preserved `SKIPPED` for items without alignment reports instead of overwriting it with `COMPLETED`.
+- Added focused validation and adjacent governance regression coverage, with documented hard-timeout commands to prevent test-runner hangs from blocking delivery.
+
 ## [0.1.0] - 2026-06-04
 
 ### Governance & Tooling

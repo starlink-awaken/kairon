@@ -10,10 +10,9 @@ agent_context pipeline step still imports from this module.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List
 
 
-def find_missing_contexts(root: Path) -> List[Path]:
+def find_missing_contexts(root: Path) -> list[Path]:
     """Return a list of directories under `root` that lack an AGENTS.md file.
 
     Only directories that are registered as "required" (i.e. listed in
@@ -21,7 +20,7 @@ def find_missing_contexts(root: Path) -> List[Path]:
     interface, we conservatively treat every first-level subdirectory
     that does not have an AGENTS.md as "missing".
     """
-    required: List[Path] = []
+    required: list[Path] = []
     if not root.exists():
         return required
     for child in sorted(root.iterdir()):
