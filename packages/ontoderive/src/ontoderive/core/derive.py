@@ -226,6 +226,159 @@ class OntoDerive(DeriveInterface):
 
         save_json(self.log_dir / "derive-summary.json", summary)
 
+    def build_alignment_report(self) -> Any:
+        """Build an alignment report from the latest derive() summary.
+
+        The validation and evolution pipeline steps consume this object via
+        the `alignment_report` context key. Exposed publicly so callers can
+        either run a single `derive()` and feed the result, or rebuild a
+        report from cached JSON.
+        """
+        summary = self._read_summary_cache() or self.derive()
+        derived_conclusions = summary.get("derived_conclusions", []) or []
+        derivation_hints = summary.get("derivation_hints", []) or []
+        entailment = summary.get("entailment_graph", {}) or {}
+
+        issues: list[dict[str, Any]] = []
+        for hint in derivation_hints:
+            issues.append(
+                {
+                    "declaration_name": hint.split(":", 1)[0] if ":" in hint else hint,
+                    "category": "STRUCTURE",
+                    "description": hint,
+                }
+            )
+        for conclusion in derived_conclusions:
+            if conclusion.get("confidence", 1.0) < 0.6:
+                issues.append(
+                    {
+                        "declaration_name": conclusion.get("title", ""),
+                        "category": "LOW_CONFIDENCE",
+                        "description": conclusion.get("summary", ""),
+                    }
+                )
+
+        facts = summary.get("facts", 0) or 0
+        if facts == 0:
+            alignment_rate = 0.0
+        else:
+            penalties = min(len(issues), facts)
+            alignment_rate = max(0.0, 1.0 - penalties / max(facts, 1))
+
+        return {
+            "id": f"AR-{summary.get('derived_at', '')}",
+            "facts": facts,
+            "entities": summary.get("entities", 0),
+            "inferences": summary.get("inferences", 0),
+            "entailment": entailment,
+            "issues": issues,
+            "alignment_rate": alignment_rate,
+            "generated_at": summary.get("derived_at", ""),
+        }
+
+    def _read_summary_cache(self) -> Any:
+        cache_path = self.log_dir / "derive-summary.json"
+        if not cache_path.exists():
+            return None
+        try:
+            import json as _json
+
+            return _json.loads(cache_path.read_text(encoding="utf-8"))
+        except Exception:
+            return None
+
+    def run_validation_pipeline(
+        self,
+        batch_items: list[Any] | None = None,
+        auto_apply: bool = False,
+    ) -> Any:
+        """Run the validation + evolution pipeline against a derive summary.
+
+        Returns a dict containing the validation step result, batch step
+        result, evolution step result, and a flattened summary consumable
+        by callers that do not want to walk the StepResult dataclass tree.
+        """
+        from ontoderive.pipeline_models import (
+            BatchItem,
+            ProgressInfo,
+            StepStatus,
+        )
+        from ontoderive.validation_steps import (
+            BatchEvolveStep,
+            BatchValidateStep,
+            EvolveStep,
+            ValidateStep,
+        )
+
+        progress = ProgressInfo(step_name="validate_pipeline", current=0, total=4)
+        report = self.build_alignment_report()
+        context: dict[str, Any] = {"alignment_report": report}
+
+        single = ValidateStep().execute(context, progress)
+        if batch_items is None:
+            batch_items = [
+                BatchItem(
+                    id=f"INF-{index}",
+                    data={"category": "INFERENCE"},
+                    metadata={},
+                    status=StepStatus.PENDING,
+                    result={"inferences": [conclusion], "alignment_rate": 0.9},
+                    error="",
+                )
+                for index, conclusion in enumerate(
+                    report.get("entailment", {}).get("high_risk", [])
+                )
+            ]
+            if not batch_items:
+                for index, issue in enumerate(report.get("issues", [])[:5]):
+                    batch_items.append(
+                        BatchItem(
+                            id=f"ISS-{index}",
+                            data={"category": issue.get("category", "ISSUE")},
+                            metadata={},
+                            status=StepStatus.PENDING,
+                            result={"issues": [issue], "alignment_rate": 0.7},
+                            error="",
+                        )
+                    )
+        batch = BatchValidateStep(items=batch_items).execute(context, progress)
+        evolve = EvolveStep(auto_apply=auto_apply).execute(context, progress)
+        batch_evolve = BatchEvolveStep(items=batch_items).execute(context, progress)
+
+        def _to_dict(step: Any) -> dict[str, Any]:
+            output = step.output if step.status is not StepStatus.FAILED else {}
+            return {
+                "step": step.step_name,
+                "status": step.status.value,
+                "duration": step.duration,
+                "error": step.error,
+                "output": _to_payload(output),
+            }
+
+        return {
+            "alignment_report": report,
+            "steps": [
+                _to_dict(single),
+                _to_dict(batch),
+                _to_dict(evolve),
+                _to_dict(batch_evolve),
+            ],
+            "summary": {
+                "validated": single.status is StepStatus.COMPLETED,
+                "batch_pass_rate": (
+                    batch.output.get("pass_rate", 0.0)
+                    if isinstance(batch.output, dict)
+                    else 0.0
+                ),
+                "suggestions": (
+                    evolve.output.get("suggestions_count", 0)
+                    if isinstance(evolve.output, dict)
+                    else 0
+                ),
+                "items": len(batch_items),
+            },
+        }
+
     def derive_formal(self, text: Any = None) -> Any:
         """
         v3.2: 形式化推理 — 四阶段管线。
@@ -353,3 +506,12 @@ if __name__ == "__main__":
 
     main()
     sys.exit(0)
+
+
+def _to_payload(output: Any) -> Any:
+    """Convert dataclass-like outputs into JSON-friendly dicts."""
+    if hasattr(output, "to_dict") and callable(getattr(output, "to_dict")):
+        return output.to_dict()
+    if hasattr(output, "__dict__"):
+        return {k: v for k, v in output.__dict__.items() if not k.startswith("_")}
+    return output
