@@ -28,7 +28,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        # P82-S1收尾: 根 pyproject requires-python>=3.13, 根 uv sync 在 3.10-3.12 必挂;
+        # test-codeanalyze 虽跑 packages/codeanalyze/tests (子包>=3.10) 但 install 步骤
+        # 用根 uv sync, 故矩阵只留 3.13. 子包跨版本兼容由子包自身 CI 保证.
+        python-version: ["3.13"]
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
