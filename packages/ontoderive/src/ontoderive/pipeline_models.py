@@ -53,15 +53,23 @@ class BatchItem:
     id: str
     data: dict[str, Any]
     metadata: dict[str, Any] = field(default_factory=dict)
+    status: StepStatus = StepStatus.PENDING
+    result: Any = None
+    error: str = ""
 
 
 @dataclass
 class BatchResult:
     """Result of a batch operation."""
-    items: list[BatchItem]
+    items: list[BatchItem] = field(default_factory=list)
     succeeded: int = 0
     failed: int = 0
     errors: dict[str, str] = field(default_factory=dict)
+    total: int = 0
+    completed: int = 0
+    skipped: int = 0
+    results: list[BatchItem] = field(default_factory=list)
+    duration: float = 0.0
 
 
 __all__ = [
