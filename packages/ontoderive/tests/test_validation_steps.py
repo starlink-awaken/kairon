@@ -431,6 +431,9 @@ class TestBatchEvolveStep:
         report = MagicMock()
         report.issues = []
         items = [_make_batch_item(1)]
+        # Make item.result expose an iterable `issues` list so _evolve_single
+        # does not iterate a plain MagicMock (which raises on 3.13).
+        items[0].result.issues = []
         step = BatchEvolveStep(items=items)
         context = {"alignment_report": report}
         result = step.execute(context, progress)
