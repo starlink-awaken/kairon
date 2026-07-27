@@ -11,13 +11,12 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
-
 from ontoderive.governance_steps import (
     AgentContextStep,
     RootNamespaceStep,
     SectionIndexStep,
 )
-from ontoderive.pipeline_models import ProgressInfo, StepResult, StepStatus
+from ontoderive.pipeline_models import ProgressInfo, StepStatus
 
 
 @pytest.fixture

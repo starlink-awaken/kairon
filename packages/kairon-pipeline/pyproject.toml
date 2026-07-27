@@ -20,7 +20,6 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-    "bus-foundation",
 ]
 
 [dependency-groups]
@@ -32,7 +31,6 @@ dev = [
 packages = ["src/kairon_pipeline"]
 
 [tool.uv.sources]
-bus-foundation = { path = "../../../bus-foundation" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
