@@ -194,11 +194,11 @@ class BatchValidateStep(PipelineStep):
             validator = MetaValidateEngine()
             verification = validator.verify_alignment_result(item.result)
             item.result = verification
+            item.status = StepStatus.COMPLETED
         else:
             item.status = StepStatus.SKIPPED
             item.error = "No alignment report to validate"
 
-        item.status = StepStatus.COMPLETED
         return item
 
 
@@ -375,9 +375,9 @@ class BatchEvolveStep(PipelineStep):
                     suggestions.append(suggestion)
 
             item.result = suggestions
+            item.status = StepStatus.COMPLETED
         else:
             item.status = StepStatus.SKIPPED
             item.error = "No alignment report to evolve"
 
-        item.status = StepStatus.COMPLETED
         return item
