@@ -4,17 +4,16 @@ Covers schema setup, log entry creation with unique IDs, query with
 filters (action/result/since), aggregate stats, and module-level
 log_operation convenience function.
 """
+
 from __future__ import annotations
 
 import sqlite3
 from pathlib import Path
 
 import pytest
-
 from minerva.audit_store import (
     AuditEntry,
     AuditLogger,
-    _DB_PATH,
     get_logger,
     log_operation,
 )
@@ -46,9 +45,7 @@ class TestAuditLoggerConstruction:
         AuditLogger(db_path=str(tmp_db))
         conn = sqlite3.connect(str(tmp_db))
         try:
-            tables = [r[0] for r in conn.execute(
-                "SELECT name FROM sqlite_master WHERE type='table'"
-            ).fetchall()]
+            tables = [r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()]
             assert "audit_log" in tables
         finally:
             conn.close()
@@ -64,8 +61,7 @@ class TestAuditLoggerConstruction:
         conn = sqlite3.connect(str(tmp_db))
         try:
             cols = [r[1] for r in conn.execute("PRAGMA table_info(audit_log)").fetchall()]
-            for required in ("id", "timestamp", "actor", "action", "resource", "result",
-                             "detail", "duration_ms"):
+            for required in ("id", "timestamp", "actor", "action", "resource", "result", "detail", "duration_ms"):
                 assert required in cols
         finally:
             conn.close()
@@ -166,6 +162,7 @@ class TestQuery:
         logger.log("cli", "x", "r_old", "success")
         # Query with future since filter
         from datetime import UTC, datetime, timedelta
+
         future = (datetime.now(UTC) + timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
         result = logger.query(since=future)
         assert result == []
@@ -178,11 +175,13 @@ class TestQuery:
     def test_order_descending_by_timestamp(self, logger: AuditLogger):
         # Insert entries with explicit timestamps via direct SQL
         from datetime import UTC, datetime
+
         conn = sqlite3.connect(logger._db_path)
         try:
             for i, ts_offset in enumerate([3, 1, 2]):
-                ts = (datetime.now(UTC).timestamp() + ts_offset)
+                ts = datetime.now(UTC).timestamp() + ts_offset
                 from datetime import datetime as dt
+
                 ts_str = dt.fromtimestamp(ts, tz=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
                 conn.execute(
                     "INSERT INTO audit_log VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
@@ -246,6 +245,7 @@ class TestLogOperation:
         # Reset the global logger to use our tmp_db by re-initializing
         import minerva.audit_store as mod
         from minerva.audit_store import AuditLogger
+
         monkeypatch.setattr(mod, "_logger", AuditLogger(db_path=str(tmp_db)))
         entry_id = log_operation("cli", "x", "r", "success")
         assert isinstance(entry_id, str) and len(entry_id) == 12
@@ -260,6 +260,7 @@ class TestLogOperation:
     def test_log_operation_default_detail(self, tmp_db: Path, monkeypatch):
         import minerva.audit_store as mod
         from minerva.audit_store import AuditLogger
+
         monkeypatch.setattr(mod, "_logger", AuditLogger(db_path=str(tmp_db)))
         log_operation("cli", "x", "r", "success")
         conn = sqlite3.connect(str(tmp_db))
@@ -273,10 +274,12 @@ class TestLogOperation:
     def test_log_operation_uses_default_path_when_unset(self, monkeypatch):
         """When _logger is None, get_logger() creates a default AuditLogger."""
         import minerva.audit_store as mod
+
         monkeypatch.setattr(mod, "_logger", None)
         # Avoid touching the real ~/.minerva path
         import tempfile
         from pathlib import Path
+
         with tempfile.TemporaryDirectory() as tmpdir:
             fake_db = str(Path(tmpdir) / "fake.db")
             monkeypatch.setattr(mod, "_DB_PATH", type(mod._DB_PATH)(fake_db))

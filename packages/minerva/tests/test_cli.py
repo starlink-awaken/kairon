@@ -5,18 +5,15 @@ sub-commands (list/show/delete/stats), and _run_audit (JSON + text output).
 Heavy sub-commands (_run_research, _run_init, _run_check, _run_maintenance)
 are tested lightly via main() mocking since they require external services.
 """
+
 from __future__ import annotations
 
 import argparse
 import json
 import sys
-from io import StringIO
-from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
-
-from minerva import cli
 from minerva.cli import (
     _run_audit,
     _run_results,
@@ -199,18 +196,21 @@ class TestRunResultsList:
         assert "No saved research results found." in captured.out
 
     def test_list_text(self, monkeypatch, capsys):
-        monkeypatch.setattr("minerva.persistence.list_results", lambda limit=20: [
-            {
-                "id": "123_q",
-                "query": "What is AI?",
-                "has_report": True,
-                "timestamp": "2026-07-26T00:00:00Z",
-                "level": "L2",
-                "quality_score": 85,
-                "source_count": 10,
-                "cost_usd": 0.5,
-            }
-        ])
+        monkeypatch.setattr(
+            "minerva.persistence.list_results",
+            lambda limit=20: [
+                {
+                    "id": "123_q",
+                    "query": "What is AI?",
+                    "has_report": True,
+                    "timestamp": "2026-07-26T00:00:00Z",
+                    "level": "L2",
+                    "quality_score": 85,
+                    "source_count": 10,
+                    "cost_usd": 0.5,
+                }
+            ],
+        )
         args = MagicMock()
         args.results_cmd = "list"
         args.json = False
@@ -223,10 +223,21 @@ class TestRunResultsList:
         assert "📄" in captured.out  # has_report=True
 
     def test_list_json(self, monkeypatch, capsys):
-        monkeypatch.setattr("minerva.persistence.list_results", lambda limit=20: [
-            {"id": "x", "query": "q", "has_report": False, "timestamp": "t",
-             "level": "L0", "quality_score": "A", "source_count": 1, "cost_usd": 0.1}
-        ])
+        monkeypatch.setattr(
+            "minerva.persistence.list_results",
+            lambda limit=20: [
+                {
+                    "id": "x",
+                    "query": "q",
+                    "has_report": False,
+                    "timestamp": "t",
+                    "level": "L0",
+                    "quality_score": "A",
+                    "source_count": 1,
+                    "cost_usd": 0.1,
+                }
+            ],
+        )
         args = MagicMock()
         args.results_cmd = "list"
         args.json = True
@@ -235,6 +246,7 @@ class TestRunResultsList:
         captured = capsys.readouterr()
         # Output may include ANSI codes; find JSON portion
         import re
+
         json_matches = re.findall(r'\{[^{]*"id":[^}]*\}', captured.out)
         assert json_matches, f"no JSON found in output: {captured.out!r}"
         # First match should be parseable
@@ -253,9 +265,10 @@ class TestRunResultsShow:
         assert "not found" in captured.out
 
     def test_found(self, monkeypatch, capsys):
-        monkeypatch.setattr("minerva.persistence.get_result", lambda rid: {
-            "id": rid, "query": "q", "level": "L1", "report": "## Report"
-        })
+        monkeypatch.setattr(
+            "minerva.persistence.get_result",
+            lambda rid: {"id": rid, "query": "q", "level": "L1", "report": "## Report"},
+        )
         args = MagicMock()
         args.results_cmd = "show"
         args.result_id = "abc"
@@ -269,9 +282,7 @@ class TestRunResultsShow:
 
     def test_long_report_truncated(self, monkeypatch, capsys):
         long_report = "x" * 3000
-        monkeypatch.setattr("minerva.persistence.get_result", lambda rid: {
-            "id": rid, "report": long_report
-        })
+        monkeypatch.setattr("minerva.persistence.get_result", lambda rid: {"id": rid, "report": long_report})
         args = MagicMock()
         args.results_cmd = "show"
         args.result_id = "abc"
@@ -305,11 +316,14 @@ class TestRunResultsDelete:
 
 class TestRunResultsStats:
     def test_text(self, monkeypatch, capsys):
-        monkeypatch.setattr("minerva.persistence.get_storage_stats", lambda: {
-            "total_results": 5,
-            "total_size_mb": 1.5,
-            "storage_dir": "/tmp/storage",
-        })
+        monkeypatch.setattr(
+            "minerva.persistence.get_storage_stats",
+            lambda: {
+                "total_results": 5,
+                "total_size_mb": 1.5,
+                "storage_dir": "/tmp/storage",
+            },
+        )
         args = MagicMock()
         args.results_cmd = "stats"
         args.json = False
@@ -320,9 +334,10 @@ class TestRunResultsStats:
         assert "1.5" in captured.out
 
     def test_json(self, monkeypatch, capsys):
-        monkeypatch.setattr("minerva.persistence.get_storage_stats", lambda: {
-            "total_results": 1, "total_size_mb": 0.1, "storage_dir": "/x"
-        })
+        monkeypatch.setattr(
+            "minerva.persistence.get_storage_stats",
+            lambda: {"total_results": 1, "total_size_mb": 0.1, "storage_dir": "/x"},
+        )
         args = MagicMock()
         args.results_cmd = "stats"
         args.json = True
@@ -331,6 +346,7 @@ class TestRunResultsStats:
         captured = capsys.readouterr()
         # Output may include header text; find JSON portion
         import re
+
         json_matches = re.findall(r'\{[^{]*"total_results":[^}]*\}', captured.out)
         assert json_matches, f"no JSON in output: {captured.out!r}"
         json.loads(json_matches[0])
@@ -356,8 +372,7 @@ class TestRunAudit:
     def test_text(self, monkeypatch, capsys):
         fake_logger = MagicMock()
         fake_logger.query.return_value = [
-            {"timestamp": "2026-07-26T00:00:00Z", "action": "research.run",
-             "result": "success", "resource": "test"},
+            {"timestamp": "2026-07-26T00:00:00Z", "action": "research.run", "result": "success", "resource": "test"},
         ]
         fake_logger.stats.return_value = {"total_entries": 1}
         monkeypatch.setattr("minerva.audit_store.get_logger", lambda: fake_logger)
@@ -374,9 +389,7 @@ class TestRunAudit:
 
     def test_json(self, monkeypatch, capsys):
         fake_logger = MagicMock()
-        fake_logger.query.return_value = [
-            {"timestamp": "t", "action": "x", "result": "ok", "resource": "r"}
-        ]
+        fake_logger.query.return_value = [{"timestamp": "t", "action": "x", "result": "ok", "resource": "r"}]
         monkeypatch.setattr("minerva.audit_store.get_logger", lambda: fake_logger)
         args = MagicMock()
         args.json = True
@@ -409,6 +422,7 @@ class TestMain:
     def test_research_dispatch(self, monkeypatch):
         async def fake_run_research(args):
             return 0
+
         monkeypatch.setattr("minerva.cli._run_research", fake_run_research)
         # Patch asyncio.run
         with patch("asyncio.run", return_value=0):
@@ -420,6 +434,7 @@ class TestMain:
         with patch.dict(sys.modules, {"minerva.mcp_server.server": MagicMock(main=fake_main)}):
             # Direct import path
             import importlib
+
             mcp_module = importlib.import_module("minerva.mcp_server.server")
             mcp_module.main = fake_main
             result = _run_main(["mcp"])
@@ -441,6 +456,7 @@ class TestMain:
         fake_main = MagicMock(return_value=0)
         with patch.dict(sys.modules, {"minerva.executor.daemon": MagicMock(main=fake_main)}):
             import importlib
+
             daemon_module = importlib.import_module("minerva.executor.daemon")
             daemon_module.main = fake_main
             result = _run_main(["daemon"])
@@ -470,7 +486,7 @@ class TestMain:
 
 class TestMainStderrWarning:
     def test_writes_deprecation_warning(self, capsys):
-        result = _run_main([])  # no command, just help
+        _run_main([])  # no command, just help
         captured = capsys.readouterr()
         # Should have printed deprecation warning to stderr
         assert "⚠️" in captured.err or "弃用" in captured.err or "cockpit" in captured.err

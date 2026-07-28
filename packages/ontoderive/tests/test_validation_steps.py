@@ -3,6 +3,7 @@
 Covers ValidateStep (single), BatchValidateStep (batch parallel/sequential),
 EvolveStep (single), BatchEvolveStep (batch parallel/sequential).
 """
+
 from __future__ import annotations
 
 from unittest.mock import MagicMock, patch
@@ -360,8 +361,9 @@ class TestEvolveStep:
 
     def test_execute_limits_to_10_issues(self, progress):
         report = MagicMock()
-        report.issues = [MagicMock(declaration_name=f"x{i}", category=MagicMock(value="C"), description="d")
-                          for i in range(15)]
+        report.issues = [
+            MagicMock(declaration_name=f"x{i}", category=MagicMock(value="C"), description="d") for i in range(15)
+        ]
 
         with patch("ontoderive.validation_steps.MetaEvolveEngine") as mock_engine:
             mock_inst = MagicMock()
@@ -526,6 +528,7 @@ class TestBatchEvolveStep:
 class TestStepCommonBehavior:
     def test_all_steps_inherit_from_pipeline_step(self):
         from ontoderive.pipeline_steps.base import PipelineStep
+
         for cls in (ValidateStep, BatchValidateStep, EvolveStep, BatchEvolveStep):
             assert issubclass(cls, PipelineStep)
 

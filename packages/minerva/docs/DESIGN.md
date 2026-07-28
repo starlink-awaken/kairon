@@ -175,8 +175,8 @@ SUPER_TOOLS = {
         "parameters": {
             "query": "string (required) — research question",
             "level": "string (optional) — auto|L0|L1|L2|L3|L4, default auto",
-            "max_cost": "float (optional) — max cost in USD, default by level"
-        }
+            "max_cost": "float (optional) — max cost in USD, default by level",
+        },
     },
     "research_schedule": {
         "description": "Schedule recurring research. Supports cron expressions.",
@@ -184,8 +184,8 @@ SUPER_TOOLS = {
             "query": "string (required)",
             "cron": "string (required) — e.g., '0 8 * * *'",
             "level": "string (optional)",
-            "notify": "string (optional) — mcp|none"
-        }
+            "notify": "string (optional) — mcp|none",
+        },
     },
     "research_watch": {
         "description": "Watch topics for new content. Triggers research automatically.",
@@ -193,23 +193,17 @@ SUPER_TOOLS = {
             "topic": "string (required)",
             "sources": "list[string] — arxiv,github_trending,reddit,zhihu,...",
             "check_interval": "string — hourly|daily|weekly",
-            "max_cost_per_run": "float (optional)"
-        }
+            "max_cost_per_run": "float (optional)",
+        },
     },
     "knowledge_search": {
         "description": "Search existing knowledge base.",
-        "parameters": {
-            "query": "string (required)",
-            "mode": "string — hybrid|fulltext|semantic|graph|timeline"
-        }
+        "parameters": {"query": "string (required)", "mode": "string — hybrid|fulltext|semantic|graph|timeline"},
     },
     "knowledge_ingest": {
         "description": "Ingest new content into knowledge base.",
-        "parameters": {
-            "source": "string — URL or file path",
-            "source_type": "string — auto|url|pdf|markdown|code"
-        }
-    }
+        "parameters": {"source": "string — URL or file path", "source_type": "string — auto|url|pdf|markdown|code"},
+    },
 }
 ```
 
@@ -222,12 +216,14 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
 
+
 class ResearchLevel(Enum):
     L0 = "L0"  # Quick: <30s, $0
     L1 = "L1"  # Standard: <3min, $0
     L2 = "L2"  # Deep: 5-15min, ~$0.30
     L3 = "L3"  # Comprehensive: 10-30min, ~$2
     L4 = "L4"  # Max: 30min+, $2-10
+
 
 @dataclass
 class TriageResult:
@@ -237,6 +233,7 @@ class TriageResult:
     model_plan: dict  # {agent_model, reasoning_model, writer_model}
     search_plan: list[str]  # ["searxng", "exa", "scholar", ...]
     warnings: list[str]
+
 
 class ITriageRouter(ABC):
     @abstractmethod
@@ -265,11 +262,13 @@ class ResearchContext:
     started_at: str = None
     completed_at: str = None
 
+
 class IPipelineStage(ABC):
     @abstractmethod
     async def execute(self, ctx: ResearchContext) -> ResearchContext:
         """Execute this stage, mutating context."""
         ...
+
 
 class IPipeline(ABC):
     @abstractmethod
@@ -292,6 +291,7 @@ class Entity:
     source_ids: list[str]
     confidence: str
 
+
 @dataclass
 class Relation:
     id: str
@@ -302,6 +302,7 @@ class Relation:
     valid_until: str | None
     confidence: str
     source_ids: list[str]
+
 
 class IKnowledgeStore(ABC):
     @abstractmethod
@@ -331,6 +332,7 @@ class SearchResult:
     published_date: str | None
     rank_score: float
 
+
 class ISearchEngine(ABC):
     @abstractmethod
     async def search(self, query: str, backends: list[str], max_results: int = 10) -> list[SearchResult]:
@@ -358,6 +360,7 @@ class ResearchTask:
     sources: list[str] | None = None
     check_interval: str | None = None
 
+
 @dataclass
 class ResearchResult:
     task_id: str
@@ -367,13 +370,14 @@ class ResearchResult:
     cost: float
     completed_at: str
 
+
 class IExecutor(ABC):
     @abstractmethod
     async def execute_now(self, task: ResearchTask) -> ResearchResult: ...
     @abstractmethod
     async def schedule(self, task: ResearchTask) -> str: ...  # returns task_id
     @abstractmethod
-    async def watch(self, task: ResearchTask) -> str: ...     # returns task_id
+    async def watch(self, task: ResearchTask) -> str: ...  # returns task_id
     @abstractmethod
     async def cancel(self, task_id: str) -> bool: ...
     @abstractmethod

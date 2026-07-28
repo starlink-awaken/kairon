@@ -62,10 +62,10 @@ async def test_classify_uses_llm_when_available():
     # exposes a model role mapping; assert the result has one of
     # the documented role keys.
     assert result.cost_estimate >= 0
-    assert any(
-        role in result.model_plan
-        for role in ("agent", "reasoner", "reasoning", "writer")
-    ) or result.model_plan == {}
+    assert (
+        any(role in result.model_plan for role in ("agent", "reasoner", "reasoning", "writer"))
+        or result.model_plan == {}
+    )
 
 
 # ── Level mapping ─────────────────────────────────────────────
@@ -109,9 +109,7 @@ async def test_classify_emits_cost_plan_search_plan():
 @pytest.mark.asyncio
 async def test_classify_collects_warnings_when_privacy_hints_present():
     router = _router_with_llm([RuntimeError("force rule path")])
-    result = await router.classify(
-        "Decrypt my private medical record and summarize my confidential diagnosis"
-    )
+    result = await router.classify("Decrypt my private medical record and summarize my confidential diagnosis")
     # Privacy keyword should trigger a warning; rule path may also
     # produce domain-specific warnings. The contract: warnings is a list.
     assert isinstance(result.warnings, list)

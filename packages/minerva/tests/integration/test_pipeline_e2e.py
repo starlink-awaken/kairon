@@ -23,7 +23,13 @@ from minerva.triage.router import ResearchLevel, TriageResult
 def _triage(level: ResearchLevel = ResearchLevel.L1) -> TriageResult:
     return TriageResult(
         level=level,
-        scores={"domain_complexity": 60, "depth_required": 60, "multi_source": 60, "timeliness": 40, "privacy_sensitivity": 0},
+        scores={
+            "domain_complexity": 60,
+            "depth_required": 60,
+            "multi_source": 60,
+            "timeliness": 40,
+            "privacy_sensitivity": 0,
+        },
         cost_estimate=0.05,
         model_plan={"reasoner": "mock", "long_context": "mock"},
         search_plan=["ddg", "scholar"],
@@ -64,7 +70,11 @@ async def test_pipeline_runs_all_stages_in_order():
     ctx = await pipeline.run("What is X?", ResearchLevel.L1, _triage(ResearchLevel.L1))
     assert seen == ["a", "b", "c"]
     assert ctx.completed_at is not None
-    assert ctx.stage_timings == {"a": pytest.approx(0.0, abs=0.1), "b": pytest.approx(0.0, abs=0.1), "c": pytest.approx(0.0, abs=0.1)}
+    assert ctx.stage_timings == {
+        "a": pytest.approx(0.0, abs=0.1),
+        "b": pytest.approx(0.0, abs=0.1),
+        "c": pytest.approx(0.0, abs=0.1),
+    }
 
 
 @pytest.mark.asyncio
@@ -105,7 +115,9 @@ async def test_pipeline_retries_after_quality_gate_failure():
         calls.append("deep_read_retry")
 
     retry_stage = _stage("deep_read", side_effect=_hook)
-    pipeline = Pipeline({ResearchLevel.L2: [retry_stage, _stage("verify", side_effect=lambda c: calls.append("verify"))]})
+    pipeline = Pipeline(
+        {ResearchLevel.L2: [retry_stage, _stage("verify", side_effect=lambda c: calls.append("verify"))]}
+    )
     await pipeline.run("hi", ResearchLevel.L2, _triage(ResearchLevel.L2))
     assert "verify" in calls
     assert "deep_read_retry" in calls
@@ -200,9 +212,7 @@ async def test_pipeline_with_kos_save_appends_save_stage():
         seen.append("kos_save")
 
     save_stage = _stage("KOSSaveStage", side_effect=_record)
-    pipeline = Pipeline(
-        {ResearchLevel.L1: [_stage("search"), _stage("analyze"), save_stage]}
-    )
+    pipeline = Pipeline({ResearchLevel.L1: [_stage("search"), _stage("analyze"), save_stage]})
     ctx = await pipeline.run("hi", ResearchLevel.L1, _triage(ResearchLevel.L1))
     assert seen == ["kos_save"]
     assert ctx.metadata["stages_touched"] == ["kos_save"]
@@ -213,6 +223,7 @@ async def test_pipeline_vault_sink_emits_publish_metadata():
     """Mirrors the L4 vault sink: a stage that publishes the report
     path into the context so downstream search engines can pick it up.
     """
+
     def _publish(ctx: ResearchContext) -> None:
         ctx.report = "# mock report body"
         ctx.report_path = "/vault/notes/minerva-mock.md"
@@ -224,4 +235,3 @@ async def test_pipeline_vault_sink_emits_publish_metadata():
     assert ctx.report == "# mock report body"
     assert ctx.report_path == "/vault/notes/minerva-mock.md"
     assert ctx.metadata["vault_published"] is True
-

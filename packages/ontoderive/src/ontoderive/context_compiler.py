@@ -7,6 +7,7 @@ by the agent_context CI gate step.
 Restored after the 0-ref cleanup (PR #521) deleted it; the
 agent_context pipeline step still imports from this module.
 """
+
 from __future__ import annotations
 
 from pathlib import Path

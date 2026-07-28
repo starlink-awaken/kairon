@@ -31,6 +31,7 @@ def __getattr__(name):
             RootNamespaceStep,
             SectionIndexStep,
         )
+
         return {"RootNamespaceStep": RootNamespaceStep, "SectionIndexStep": SectionIndexStep}[name]
     if name in ("BatchValidateStep", "EvolveStep", "ValidateStep"):
         from ontoderive.validation_steps import (
@@ -38,6 +39,7 @@ def __getattr__(name):
             EvolveStep,
             ValidateStep,
         )
+
         return {
             "BatchValidateStep": BatchValidateStep,
             "EvolveStep": EvolveStep,

@@ -5,6 +5,7 @@ SectionIndexStep (numbered dirs need README.md), AgentContextStep
 (AGENTS.md presence). All 3 are part of the doc governance pipeline
 gate (Mechanism 2 + 3).
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -363,6 +364,7 @@ class TestStepCommonBehavior:
     def test_all_steps_inherit_from_pipeline_step(self):
         """All 3 step classes are PipelineStep subclasses."""
         from ontoderive.pipeline_steps.base import PipelineStep
+
         for cls in (RootNamespaceStep, SectionIndexStep, AgentContextStep):
             assert issubclass(cls, PipelineStep)
 

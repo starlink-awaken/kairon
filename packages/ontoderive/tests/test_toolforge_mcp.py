@@ -68,9 +68,7 @@ def test_handle_request_guide():
 
 
 def test_handle_request_unknown_tool():
-    resp = handle_request(
-        {"method": "tools/call", "id": 5, "params": {"name": "does_not_exist"}}
-    )
+    resp = handle_request({"method": "tools/call", "id": 5, "params": {"name": "does_not_exist"}})
     assert "error" in resp
 
 

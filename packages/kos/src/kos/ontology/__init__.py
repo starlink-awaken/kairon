@@ -27,3 +27,13 @@ from kos.ontology.store import (  # type: ignore[import-not-found]
     put_relation,  # type: ignore[import-not-found]
     search_entities,  # type: ignore[import-not-found]
 )  # type: ignore[import-not-found]
+
+__all__ = [
+    "delete_entity",
+    "get_entity",
+    "get_relations",
+    "import_entities",
+    "put_entity",
+    "put_relation",
+    "search_entities",
+]

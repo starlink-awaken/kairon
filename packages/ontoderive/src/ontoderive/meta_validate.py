@@ -3,6 +3,7 @@
 Restored after the 0-ref cleanup (PR #521) deleted this module;
 validation_steps.ValidateStep and BatchValidateStep still import it.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -21,9 +22,7 @@ class MetaValidateEngine:
             - false_negatives: list (or None)
     """
 
-    def verify_alignment_result(
-        self, alignment_report: Any
-    ) -> Any:
+    def verify_alignment_result(self, alignment_report: Any) -> Any:
         """Verify an alignment report.
 
         Minimal implementation: returns a mock verification result.

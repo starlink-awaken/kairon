@@ -8,8 +8,8 @@ from pathlib import Path
 from types import ModuleType, SimpleNamespace
 from typing import Any
 
-from eidos.schema import FieldType, Schema, SchemaField, SchemaRegistry
 from eidos.core.validator import Validator
+from eidos.schema import FieldType, Schema, SchemaField, SchemaRegistry
 
 KOS_REPO = str(Path(__file__).resolve().parents[2] / "kos/src")
 

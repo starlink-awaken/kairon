@@ -325,9 +325,7 @@ class OntoDerive(DeriveInterface):
                     result={"inferences": [conclusion], "alignment_rate": 0.9},
                     error="",
                 )
-                for index, conclusion in enumerate(
-                    report.get("entailment", {}).get("high_risk", [])
-                )
+                for index, conclusion in enumerate(report.get("entailment", {}).get("high_risk", []))
             ]
             if not batch_items:
                 for index, issue in enumerate(report.get("issues", [])[:5]):
@@ -365,16 +363,8 @@ class OntoDerive(DeriveInterface):
             ],
             "summary": {
                 "validated": single.status is StepStatus.COMPLETED,
-                "batch_pass_rate": (
-                    batch.output.get("pass_rate", 0.0)
-                    if isinstance(batch.output, dict)
-                    else 0.0
-                ),
-                "suggestions": (
-                    evolve.output.get("suggestions_count", 0)
-                    if isinstance(evolve.output, dict)
-                    else 0
-                ),
+                "batch_pass_rate": (batch.output.get("pass_rate", 0.0) if isinstance(batch.output, dict) else 0.0),
+                "suggestions": (evolve.output.get("suggestions_count", 0) if isinstance(evolve.output, dict) else 0),
                 "items": len(batch_items),
             },
         }

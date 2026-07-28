@@ -3,26 +3,18 @@
 Covers dataclass defaults, _from_dict YAML parsing, _apply_env_overrides
 behavior, and full MinervaConfig.load() integration.
 """
+
 from __future__ import annotations
 
 import os
-from pathlib import Path
-from unittest.mock import patch
-
-import pytest
 
 from minerva.config import (
-    CloudLLMConfig,
-    ConfigError,
     ExecutionConfig,
-    KnowledgeConfig,
     LLMConfig,
     MinervaConfig,
-    NLPConfig,
     SearchConfig,
     _load_forge_env,
 )
-
 
 # ── Dataclass defaults ───────────────────────────────────────────────
 
@@ -81,7 +73,9 @@ class TestLoadForgeEnv:
     def test_loads_exports_from_config(self, tmp_path, monkeypatch):
         """When config.py prints 'export KEY=val', env var is set (if not already)."""
         config = tmp_path / "config.py"
-        config.write_text("#!/usr/bin/env python3\nprint('export FOO_TEST_KEY=foo_value')\nprint('export BAR_TEST_KEY=bar_value')\n")
+        config.write_text(
+            "#!/usr/bin/env python3\nprint('export FOO_TEST_KEY=foo_value')\nprint('export BAR_TEST_KEY=bar_value')\n"
+        )
         monkeypatch.setattr(os.path, "expanduser", lambda x: str(config))
         monkeypatch.delenv("FOO_TEST_KEY", raising=False)
         monkeypatch.delenv("BAR_TEST_KEY", raising=False)
@@ -190,9 +184,18 @@ class TestApplyEnvOverrides:
 
     def test_no_env_no_change(self, monkeypatch):
         # Strip all overrides before testing
-        for k in ["DEEPSEEK_API_KEY", "METASO_API_KEY", "EXA_API_KEY", "JINA_API_KEY",
-                  "LLM_PROVIDER", "LLM_BASE_URL", "OLLAMA_BASE_URL", "LLM_API_KEY",
-                  "LLM_MODEL", "MINERVA_HOME"]:
+        for k in [
+            "DEEPSEEK_API_KEY",
+            "METASO_API_KEY",
+            "EXA_API_KEY",
+            "JINA_API_KEY",
+            "LLM_PROVIDER",
+            "LLM_BASE_URL",
+            "OLLAMA_BASE_URL",
+            "LLM_API_KEY",
+            "LLM_MODEL",
+            "MINERVA_HOME",
+        ]:
             monkeypatch.delenv(k, raising=False)
         c = self.config
         out = MinervaConfig._apply_env_overrides(c)

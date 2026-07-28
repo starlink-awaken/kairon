@@ -4,11 +4,10 @@ Covers VectorClock comparison/merge, CRDTSet add/remove/merge, FederatedMemory
 put/get/delete/query, sync peer management, prepare_sync_data/apply_sync_data
 with conflict resolution, merge_with, and stats aggregation.
 """
+
 from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
-
-import pytest
 
 from eidos.federated_memory import (
     CRDTSet,
@@ -16,7 +15,6 @@ from eidos.federated_memory import (
     FederatedMemoryEntry,
     VectorClock,
 )
-
 
 # ── VectorClock ────────────────────────────────────────────────
 
@@ -105,31 +103,43 @@ class TestVectorClock:
 class TestFederatedMemoryEntry:
     def test_post_init_computes_hash(self):
         entry = FederatedMemoryEntry(
-            key="k", value={"a": 1}, version=VectorClock({"n": 1}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value={"a": 1},
+            version=VectorClock({"n": 1}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         assert entry.content_hash != ""
         assert len(entry.content_hash) == 16  # sha256[:16]
 
     def test_explicit_hash_preserved(self):
         entry = FederatedMemoryEntry(
-            key="k", value={"a": 1}, version=VectorClock({"n": 1}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value={"a": 1},
+            version=VectorClock({"n": 1}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
             content_hash="custom_hash_value",
         )
         assert entry.content_hash == "custom_hash_value"
 
     def test_verify_integrity_valid(self):
         entry = FederatedMemoryEntry(
-            key="k", value={"a": 1}, version=VectorClock({"n": 1}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value={"a": 1},
+            version=VectorClock({"n": 1}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         assert entry.verify_integrity() is True
 
     def test_verify_integrity_tampered(self):
         entry = FederatedMemoryEntry(
-            key="k", value={"a": 1}, version=VectorClock({"n": 1}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value={"a": 1},
+            version=VectorClock({"n": 1}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         # Tamper with value (hash becomes invalid)
         entry.value = {"a": 2}
@@ -137,34 +147,49 @@ class TestFederatedMemoryEntry:
 
     def test_default_trust_level(self):
         entry = FederatedMemoryEntry(
-            key="k", value=1, version=VectorClock(),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value=1,
+            version=VectorClock(),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         assert entry.trust_level == 0.5
 
     def test_default_sync_priority(self):
         entry = FederatedMemoryEntry(
-            key="k", value=1, version=VectorClock(),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value=1,
+            version=VectorClock(),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         assert entry.sync_priority == 1
 
     def test_default_not_deleted(self):
         entry = FederatedMemoryEntry(
-            key="k", value=1, version=VectorClock(),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value=1,
+            version=VectorClock(),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         assert entry.deleted is False
 
     def test_hash_deterministic(self):
         """Same key+value → same hash (regardless of clock/timestamp)."""
         e1 = FederatedMemoryEntry(
-            key="k", value={"a": 1, "b": 2}, version=VectorClock({"n": 5}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value={"a": 1, "b": 2},
+            version=VectorClock({"n": 5}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         e2 = FederatedMemoryEntry(
-            key="k", value={"b": 2, "a": 1}, version=VectorClock({"n": 99}),
-            timestamp=datetime(2020, 1, 1), node_id="other",
+            key="k",
+            value={"b": 2, "a": 1},
+            version=VectorClock({"n": 99}),
+            timestamp=datetime(2020, 1, 1),
+            node_id="other",
         )
         assert e1.content_hash == e2.content_hash
 
@@ -176,8 +201,11 @@ class TestCRDTSet:
     def test_add_and_get(self):
         s = CRDTSet()
         entry = FederatedMemoryEntry(
-            key="k", value=1, version=VectorClock({"n": 1}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value=1,
+            version=VectorClock({"n": 1}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         s.add(entry)
         assert s.get("k") is entry
@@ -189,12 +217,18 @@ class TestCRDTSet:
     def test_add_merges_existing_versions(self):
         s = CRDTSet()
         old = FederatedMemoryEntry(
-            key="k", value=1, version=VectorClock({"n": 1}),
-            timestamp=datetime.now(UTC) - timedelta(hours=1), node_id="n",
+            key="k",
+            value=1,
+            version=VectorClock({"n": 1}),
+            timestamp=datetime.now(UTC) - timedelta(hours=1),
+            node_id="n",
         )
         new = FederatedMemoryEntry(
-            key="k", value=2, version=VectorClock({"n": 2}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value=2,
+            version=VectorClock({"n": 2}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         s.add(old)
         s.add(new)
@@ -205,12 +239,18 @@ class TestCRDTSet:
         """If new entry has older timestamp, old value wins."""
         s = CRDTSet()
         old = FederatedMemoryEntry(
-            key="k", value="current", version=VectorClock({"n": 2}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value="current",
+            version=VectorClock({"n": 2}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         older = FederatedMemoryEntry(
-            key="k", value="stale", version=VectorClock({"n": 1}),
-            timestamp=datetime.now(UTC) - timedelta(hours=1), node_id="n",
+            key="k",
+            value="stale",
+            version=VectorClock({"n": 1}),
+            timestamp=datetime.now(UTC) - timedelta(hours=1),
+            node_id="n",
         )
         s.add(old)
         s.add(older)
@@ -219,8 +259,11 @@ class TestCRDTSet:
     def test_remove_soft_delete(self):
         s = CRDTSet()
         entry = FederatedMemoryEntry(
-            key="k", value=1, version=VectorClock({"n": 1}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value=1,
+            version=VectorClock({"n": 1}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         s.add(entry)
         s.remove("k", "n")
@@ -235,12 +278,18 @@ class TestCRDTSet:
         """Re-adding a key removes it from the deletion set."""
         s = CRDTSet()
         old = FederatedMemoryEntry(
-            key="k", value=1, version=VectorClock({"n": 1}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value=1,
+            version=VectorClock({"n": 1}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         new = FederatedMemoryEntry(
-            key="k", value=2, version=VectorClock({"n": 2}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value=2,
+            version=VectorClock({"n": 2}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         s.add(old)
         s.remove("k", "n")
@@ -250,16 +299,25 @@ class TestCRDTSet:
     def test_values_returns_active_only(self):
         s = CRDTSet()
         active = FederatedMemoryEntry(
-            key="a", value=1, version=VectorClock({"n": 1}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="a",
+            value=1,
+            version=VectorClock({"n": 1}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         deleted = FederatedMemoryEntry(
-            key="b", value=2, version=VectorClock({"n": 1}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="b",
+            value=2,
+            version=VectorClock({"n": 1}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         soft_deleted = FederatedMemoryEntry(
-            key="c", value=3, version=VectorClock({"n": 1}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="c",
+            value=3,
+            version=VectorClock({"n": 1}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         s.add(active)
         s.add(deleted)
@@ -279,10 +337,16 @@ class TestCRDTSet:
     def test_merge_disjoint_keys(self):
         s1 = CRDTSet()
         s2 = CRDTSet()
-        s1.add(FederatedMemoryEntry(key="a", value=1, version=VectorClock({"n1": 1}),
-                                     timestamp=datetime.now(UTC), node_id="n1"))
-        s2.add(FederatedMemoryEntry(key="b", value=2, version=VectorClock({"n2": 1}),
-                                     timestamp=datetime.now(UTC), node_id="n2"))
+        s1.add(
+            FederatedMemoryEntry(
+                key="a", value=1, version=VectorClock({"n1": 1}), timestamp=datetime.now(UTC), node_id="n1"
+            )
+        )
+        s2.add(
+            FederatedMemoryEntry(
+                key="b", value=2, version=VectorClock({"n2": 1}), timestamp=datetime.now(UTC), node_id="n2"
+            )
+        )
         merged = s1.merge(s2)
         keys = {e.key for e in merged.values()}
         assert keys == {"a", "b"}
@@ -290,12 +354,18 @@ class TestCRDTSet:
     def test_merge_overlapping_newer_wins(self):
         """When same key in both, the one with later timestamp wins."""
         older = FederatedMemoryEntry(
-            key="shared", value="old", version=VectorClock({"n": 1}),
-            timestamp=datetime(2020, 1, 1), node_id="n",
+            key="shared",
+            value="old",
+            version=VectorClock({"n": 1}),
+            timestamp=datetime(2020, 1, 1),
+            node_id="n",
         )
         newer = FederatedMemoryEntry(
-            key="shared", value="new", version=VectorClock({"n": 1}),
-            timestamp=datetime(2025, 1, 1), node_id="n",
+            key="shared",
+            value="new",
+            version=VectorClock({"n": 1}),
+            timestamp=datetime(2025, 1, 1),
+            node_id="n",
         )
         s1 = CRDTSet()
         s2 = CRDTSet()
@@ -309,8 +379,11 @@ class TestCRDTSet:
         s1 = CRDTSet()
         s2 = CRDTSet()
         entry = FederatedMemoryEntry(
-            key="k", value=1, version=VectorClock({"n": 1}),
-            timestamp=datetime.now(UTC), node_id="n",
+            key="k",
+            value=1,
+            version=VectorClock({"n": 1}),
+            timestamp=datetime.now(UTC),
+            node_id="n",
         )
         s1.add(entry)
         s2.add(entry)
@@ -378,7 +451,7 @@ class TestFederatedMemory:
     def test_query_filters_by_since(self):
         fm = FederatedMemory("node-a")
         old = datetime.now(UTC) - timedelta(hours=2)
-        new = datetime.now(UTC)
+        _new = datetime.now(UTC)
         fm.put("old_key", "v1")
         # Manually override timestamp
         fm._local_memory._additions["old_key"].timestamp = old
@@ -460,12 +533,18 @@ class TestFederatedMemory:
         fm.add_sync_peer("node-b", 0.5)
         sync_data = {
             "source": "node-b",
-            "entries": [{
-                "key": "k", "value": "v", "version": {"node-b": 1},
-                "timestamp": datetime.now(UTC).isoformat(),
-                "node_id": "node-b", "trust_level": 0.5,
-                "deleted": False, "content_hash": "",
-            }],
+            "entries": [
+                {
+                    "key": "k",
+                    "value": "v",
+                    "version": {"node-b": 1},
+                    "timestamp": datetime.now(UTC).isoformat(),
+                    "node_id": "node-b",
+                    "trust_level": 0.5,
+                    "deleted": False,
+                    "content_hash": "",
+                }
+            ],
         }
         result = fm.apply_sync_data(sync_data)
         assert result["added"] == 1
@@ -477,12 +556,18 @@ class TestFederatedMemory:
         fm.put("k", "old")
         sync_data = {
             "source": "node-b",
-            "entries": [{
-                "key": "k", "value": "new", "version": {"node-b": 1},
-                "timestamp": datetime.now(UTC).isoformat(),
-                "node_id": "node-b", "trust_level": 0.5,
-                "deleted": False, "content_hash": "",
-            }],
+            "entries": [
+                {
+                    "key": "k",
+                    "value": "new",
+                    "version": {"node-b": 1},
+                    "timestamp": datetime.now(UTC).isoformat(),
+                    "node_id": "node-b",
+                    "trust_level": 0.5,
+                    "deleted": False,
+                    "content_hash": "",
+                }
+            ],
         }
         result = fm.apply_sync_data(sync_data)
         assert result["updated"] >= 1

@@ -15,6 +15,11 @@
 
 __version__ = "0.5.0"
 
+from .core.validator import (
+    ValidationError,
+    ValidationResult,
+    Validator,
+)
 from .meta import MetaRelationType, MetaType
 from .registry import create_registry, registry
 from .schema import (
@@ -28,11 +33,6 @@ from .schema import (
     register_migration,
 )
 from .types import Fact, InferenceRule, KnowledgeCard, OntologyNode, Relation, StateMachine, StateTransition
-from .core.validator import (
-    ValidationError,
-    ValidationResult,
-    Validator,
-)
 
 __all__ = (
     "Fact",

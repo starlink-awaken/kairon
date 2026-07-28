@@ -25,9 +25,7 @@ def _seed_project(root: Path) -> None:
     for sub in ("facts", "entities", "inferences", "scheme", "protocols", "_logs"):
         (root / sub).mkdir(parents=True, exist_ok=True)
     (root / "facts" / "D-F1.md").write_text(
-        "| 编号 | 数据 | 数值 | 来源 |\n"
-        "|------|------|------|------|\n"
-        "| D-F1 | 测试事实 | 100 | 测试 |\n",
+        "| 编号 | 数据 | 数值 | 来源 |\n|------|------|------|------|\n| D-F1 | 测试事实 | 100 | 测试 |\n",
         encoding="utf-8",
     )
     (root / "entities" / "ORG-X.md").write_text(
@@ -54,7 +52,9 @@ def test_run_validation_pipeline_smoke(project_root: Path) -> None:
     statuses = {step["status"] for step in result["steps"]}
     # The evolution step may return SKIPPED when the LLM is unavailable,
     # but the validation and batch steps should at least report status.
-    assert all(status in {StepStatus.COMPLETED.value, StepStatus.FAILED.value, StepStatus.SKIPPED.value} for status in statuses)
+    assert all(
+        status in {StepStatus.COMPLETED.value, StepStatus.FAILED.value, StepStatus.SKIPPED.value} for status in statuses
+    )
     assert "summary" in result
 
 

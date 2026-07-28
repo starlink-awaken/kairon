@@ -62,7 +62,7 @@ facts:
 
     def _check_ssot(self) -> bool:
         try:
-            import ssot_kernel
+            import ssot_kernel  # noqa: F401
 
             return True
         except ImportError:

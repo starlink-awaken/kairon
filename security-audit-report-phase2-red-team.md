@@ -42,8 +42,12 @@
 ```python
 # tools.py:126-128
 r = subprocess.run(
-    command, shell=True, capture_output=True, text=True,
-    cwd=cwd or str(ECOS_DIR), timeout=timeout,
+    command,
+    shell=True,
+    capture_output=True,
+    text=True,
+    cwd=cwd or str(ECOS_DIR),
+    timeout=timeout,
 )
 ```
 
@@ -119,11 +123,19 @@ def http_get(url: str, timeout: int = 30) -> dict:
 ```python
 # push_engine.py:25-29
 payload_json = json.dumps(rule)
-subprocess.run(["python3", "-c", f"""
+subprocess.run(
+    [
+        "python3",
+        "-c",
+        f"""
 import sys, json; sys.path.insert(0, '{hermes_src}')
 from hermes_ops.events import emit
 emit('RULE_GENERATED', {payload_json})
-"""], capture_output=True, timeout=5)
+""",
+    ],
+    capture_output=True,
+    timeout=5,
+)
 ```
 
 **利用场景**:

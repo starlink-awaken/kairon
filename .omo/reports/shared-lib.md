@@ -184,7 +184,9 @@ tests/
    ```
 2. 或创建 `conftest.py`:
    ```python
-   import sys; sys.path.insert(0, "src")
+   import sys
+
+   sys.path.insert(0, "src")
    ```
 3. 如果断链 import 未修复，测试执行时部分模块仍会 ImportError
 

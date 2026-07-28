@@ -329,6 +329,7 @@ triage = TriageRouter(llm)
 
 # Quick research
 from minerva.pipeline.engine import ResearchContext
+
 ctx = ResearchContext(
     query="What is quantum computing?",
     level=ResearchLevel.L0,

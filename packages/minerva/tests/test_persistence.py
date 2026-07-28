@@ -4,18 +4,15 @@ Covers slug generation, save_research with metadata + report + search results
 serialization, list_results ordering, get_result with report loading,
 delete_result cleanup, get_storage_stats aggregation.
 """
+
 from __future__ import annotations
 
 import json
 from datetime import UTC, datetime
 from pathlib import Path
-from unittest.mock import patch
-
-import pytest
 
 from minerva import persistence
 from minerva.persistence import (
-    _RESULTS_DIR,
     _slugify,
     delete_result,
     get_result,
@@ -23,7 +20,6 @@ from minerva.persistence import (
     list_results,
     save_research,
 )
-
 
 # ── _slugify ─────────────────────────────────────────────────────
 
@@ -135,9 +131,17 @@ class TestSaveResearch:
     def test_writes_report_md(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="# Hello\nWorld", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="# Hello\nWorld",
+            report_path=None,
         )
         report = (tmp_path / "research" / result_id / "report.md").read_text()
         assert report == "# Hello\nWorld"
@@ -145,18 +149,34 @@ class TestSaveResearch:
     def test_no_report_file_when_empty(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
         )
         assert not (tmp_path / "research" / result_id / "report.md").exists()
 
     def test_writes_search_results_json(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
             search_results=[{"title": "T1", "url": "u1"}, {"title": "T2"}],
         )
         path = tmp_path / "research" / result_id / "search_results.json"
@@ -172,9 +192,17 @@ class TestSaveResearch:
 
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
             search_results=[FakeResult()],
         )
 
@@ -183,15 +211,25 @@ class TestSaveResearch:
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         results = [{"id": i} for i in range(100)]
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None, search_results=results,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
+            search_results=results,
         )
         data = json.loads((tmp_path / "research" / result_id / "search_results.json").read_text())
         assert len(data) == 50
 
     def test_search_results_serialization_failure_swallowed(self, tmp_path: Path, monkeypatch):
         """Non-serializable search results don't crash save_research."""
+
         class BadResult:
             def __getattr__(self, name):
                 raise RuntimeError("cannot serialize")
@@ -199,9 +237,18 @@ class TestSaveResearch:
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         # Should not raise
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None, search_results=[BadResult()],
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
+            search_results=[BadResult()],
         )
         # search_results.json not created (since serialization failed)
         assert not (tmp_path / "research" / result_id / "search_results.json").exists()
@@ -211,9 +258,17 @@ class TestSaveResearch:
         original = tmp_path / "src_report.md"
         original.write_text("# Original\n")
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=str(original),
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=str(original),
         )
         copy = tmp_path / "research" / result_id / "report_original.md"
         assert copy.exists()
@@ -225,9 +280,17 @@ class TestSaveResearch:
         external = tmp_path / "external_report.md"
         external.write_text("# External Report\n")
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=str(external),
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=str(external),
         )
         copy = tmp_path / "research" / result_id / "report_original.md"
         assert copy.exists()
@@ -237,18 +300,34 @@ class TestSaveResearch:
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         # report_path points to nonexistent file
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=str(tmp_path / "nonexistent.md"),
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=str(tmp_path / "nonexistent.md"),
         )
         assert not (tmp_path / "research" / result_id / "report_original.md").exists()
 
     def test_id_includes_slugified_query(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         result_id = save_research(
-            query="Quantum Computing@2024!", level="L1", quality_score=80,
-            source_count=1, entity_count=1, cost_usd=0.1, elapsed_s=1.0,
-            paradigm_name="p", stage_timings={}, report="", report_path=None,
+            query="Quantum Computing@2024!",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
         )
         # ID should have "quantum_computing_2024_" or similar
         assert "quantum" in result_id or "computing" in result_id
@@ -257,9 +336,17 @@ class TestSaveResearch:
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         before = datetime.now(UTC)
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
         )
         meta = json.loads((tmp_path / "research" / result_id / "meta.json").read_text())
         ts = datetime.fromisoformat(meta["timestamp"])
@@ -279,14 +366,30 @@ class TestListResults:
     def test_returns_metadata(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         save_research(
-            query="q1", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q1",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
         )
         save_research(
-            query="q2", level="L2", quality_score=90, source_count=2, entity_count=2,
-            cost_usd=0.2, elapsed_s=2.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q2",
+            level="L2",
+            quality_score=90,
+            source_count=2,
+            entity_count=2,
+            cost_usd=0.2,
+            elapsed_s=2.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
         )
         result = list_results()
         assert len(result) == 2
@@ -296,14 +399,30 @@ class TestListResults:
     def test_has_report_flag(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         save_research(
-            query="q1", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="report content", report_path=None,
+            query="q1",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="report content",
+            report_path=None,
         )
         save_research(
-            query="q2", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q2",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
         )
         result = list_results()
         by_query = {r["query"]: r["has_report"] for r in result}
@@ -314,9 +433,17 @@ class TestListResults:
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         for i in range(10):
             save_research(
-                query=f"q{i}", level="L1", quality_score=80, source_count=1, entity_count=1,
-                cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-                report="", report_path=None,
+                query=f"q{i}",
+                level="L1",
+                quality_score=80,
+                source_count=1,
+                entity_count=1,
+                cost_usd=0.1,
+                elapsed_s=1.0,
+                paradigm_name="p",
+                stage_timings={},
+                report="",
+                report_path=None,
             )
         assert len(list_results(limit=3)) == 3
 
@@ -324,9 +451,17 @@ class TestListResults:
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         for i in range(3):
             save_research(
-                query=f"q{i}", level="L1", quality_score=80, source_count=1, entity_count=1,
-                cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-                report="", report_path=None,
+                query=f"q{i}",
+                level="L1",
+                quality_score=80,
+                source_count=1,
+                entity_count=1,
+                cost_usd=0.1,
+                elapsed_s=1.0,
+                paradigm_name="p",
+                stage_timings={},
+                report="",
+                report_path=None,
             )
         result = list_results()
         # Sorted by directory name (timestamp_slug) desc
@@ -338,9 +473,17 @@ class TestListResults:
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         (tmp_path / "research" / "broken_dir").mkdir(parents=True)
         save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
         )
         result = list_results()
         # broken_dir has no meta.json so should be skipped
@@ -375,9 +518,17 @@ class TestGetResult:
     def test_returns_metadata_for_existing_id(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
         )
         result = get_result(result_id)
         assert result is not None
@@ -386,9 +537,17 @@ class TestGetResult:
     def test_includes_report_content(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="# My Report", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="# My Report",
+            report_path=None,
         )
         result = get_result(result_id)
         assert result["report"] == "# My Report"
@@ -396,9 +555,17 @@ class TestGetResult:
     def test_omits_report_when_missing(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
         )
         result = get_result(result_id)
         assert "report" not in result
@@ -406,9 +573,17 @@ class TestGetResult:
     def test_includes_search_results(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
             search_results=[{"id": 1}, {"id": 2}],
         )
         result = get_result(result_id)
@@ -417,9 +592,17 @@ class TestGetResult:
     def test_corrupt_search_results_swallowed(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
             search_results=[{"id": 1}],
         )
         # Corrupt the search_results.json
@@ -433,9 +616,17 @@ class TestGetResult:
     def test_corrupt_meta_returns_none(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
         )
         # Corrupt the meta.json
         meta_path = tmp_path / "research" / result_id / "meta.json"
@@ -455,9 +646,17 @@ class TestDeleteResult:
     def test_delete_existing(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
         )
         assert delete_result(result_id) is True
         assert not (tmp_path / "research" / result_id).exists()
@@ -469,9 +668,17 @@ class TestDeleteResult:
     def test_delete_removes_all_files(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="report", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="report",
+            report_path=None,
             search_results=[{"id": 1}],
         )
         result_dir = tmp_path / "research" / result_id
@@ -499,18 +706,34 @@ class TestGetStorageStats:
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         for i in range(3):
             save_research(
-                query=f"q{i}", level="L1", quality_score=80, source_count=1, entity_count=1,
-                cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-                report="", report_path=None,
+                query=f"q{i}",
+                level="L1",
+                quality_score=80,
+                source_count=1,
+                entity_count=1,
+                cost_usd=0.1,
+                elapsed_s=1.0,
+                paradigm_name="p",
+                stage_timings={},
+                report="",
+                report_path=None,
             )
         assert get_storage_stats()["total_results"] == 3
 
     def test_sums_file_sizes(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
         result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="", report_path=None,
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="",
+            report_path=None,
         )
         # Add a 1MB file
         (tmp_path / "research" / result_id / "extra.bin").write_bytes(b"x" * (1024 * 1024))
@@ -523,10 +746,18 @@ class TestGetStorageStats:
     def test_total_size_bytes_aggregates_recursively(self, tmp_path: Path, monkeypatch):
         """get_storage_stats uses rglob, so nested files count."""
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
-        result_id = save_research(
-            query="q", level="L1", quality_score=80, source_count=1, entity_count=1,
-            cost_usd=0.1, elapsed_s=1.0, paradigm_name="p", stage_timings={},
-            report="r", report_path=None,
+        save_research(
+            query="q",
+            level="L1",
+            quality_score=80,
+            source_count=1,
+            entity_count=1,
+            cost_usd=0.1,
+            elapsed_s=1.0,
+            paradigm_name="p",
+            stage_timings={},
+            report="r",
+            report_path=None,
             search_results=[{"a": 1}],
         )
         stats = get_storage_stats()

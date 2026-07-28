@@ -58,7 +58,7 @@ class TestChainAgoraToAgentRuntime:
 
         registry = ServiceRegistry(storage_path=str(tmp_path / "agora2.json"))
         registry.register(Service(name="agent-runtime", protocol="mcp", port=8765, tags=["agent-runtime"]))
-        registry.register(Service(name="llm-gateway", protocol="mcp", port=8771, tags=["llm"]  # use KOS_RESERVED))
+        registry.register(Service(name="llm-gateway", protocol="mcp", port=8771, tags=["llm"]))  # use KOS_RESERVED
 
         services = registry.list_all()
         names = {s.name for s in services}

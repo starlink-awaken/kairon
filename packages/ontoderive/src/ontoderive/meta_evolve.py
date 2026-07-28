@@ -3,6 +3,7 @@
 Restored after the 0-ref cleanup (PR #521) deleted this module;
 validation_steps.EvolveStep and BatchEvolveStep still import it.
 """
+
 from __future__ import annotations
 
 
@@ -27,9 +28,7 @@ class MetaEvolveEngine:
         """
         if not declaration_name or not category:
             return None
-        return (
-            f"Update '{declaration_name}' in category {category}: {description}"
-        )
+        return f"Update '{declaration_name}' in category {category}: {description}"
 
 
 __all__ = ["MetaEvolveEngine"]

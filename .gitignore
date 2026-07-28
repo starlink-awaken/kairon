@@ -64,3 +64,4 @@ coverage.xml
 # Knowledge health cron reports (transient)
 knowledge-health-*.md
 _derivation_logs/
+data/*.db

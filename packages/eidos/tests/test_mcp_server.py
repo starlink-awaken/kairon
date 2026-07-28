@@ -4,14 +4,13 @@ Covers 7 handler functions (list, validate, meta, migrate, migration_list,
 define, export) + helpers (_json_default, _dump, _call_tool, _list_tools,
 handle_mcp_request, main).
 """
+
 from __future__ import annotations
 
 import json
-from io import StringIO
 from unittest.mock import MagicMock, patch
 
 import pytest
-
 from eidos import mcp_server
 from eidos.mcp_server import (
     FORMAT_VERSION,
@@ -30,7 +29,6 @@ from eidos.mcp_server import (
     handle_validate,
     main,
 )
-
 
 # ── _json_default ──────────────────────────────────────────────
 
@@ -61,11 +59,13 @@ class TestJsonDefault:
         class WithToDict:
             def to_dict(self):
                 return {"converted": True}
+
         assert _json_default(WithToDict()) == {"converted": True}
 
     def test_object_with_dict_attr(self):
         class WithDict:
             pass
+
         obj = WithDict()
         obj.attr1 = 1
         obj.attr2 = "x"
@@ -127,9 +127,12 @@ class TestHandleList:
         with patch("eidos.core.schema.SchemaRegistry") as mock_reg:
             mock_inst = mock_reg.return_value
             mock_inst._registry = {}
-            with patch("eidos.meta.list_types", return_value=[
-                {"type_name": "Fact", "meta_type": "M0_FACT"},
-            ]):
+            with patch(
+                "eidos.meta.list_types",
+                return_value=[
+                    {"type_name": "Fact", "meta_type": "M0_FACT"},
+                ],
+            ):
                 result = handle_list()
         assert result["count"] == 1
         assert result["schemas"][0]["name"] == "Fact"
@@ -257,9 +260,7 @@ class TestHandleMeta:
         assert "meta_relations" in result
 
     def test_includes_type_mappings(self):
-        with patch("eidos.meta.list_types", return_value=[
-            {"type_name": "T1", "meta_type": "M0"}
-        ]):
+        with patch("eidos.meta.list_types", return_value=[{"type_name": "T1", "meta_type": "M0"}]):
             result = handle_meta()
         assert result["type_mappings"] == [{"type_name": "T1", "meta_type": "M0"}]
 
@@ -286,7 +287,9 @@ class TestHandleMigrate:
 
     def test_successful_migration(self):
         with patch("eidos.core.schema.get_migrations", return_value={"m1": "fake"}):
-            with patch("eidos.core.schema.migrate_schema_instance", return_value={"_migrated_version": "2.0", "data": "ok"}):
+            with patch(
+                "eidos.core.schema.migrate_schema_instance", return_value={"_migrated_version": "2.0", "data": "ok"}
+            ):
                 result = handle_migrate({"schema_name": "x", "data": {"a": 1}})
         assert result["migrated"] is True
         assert result["from_version"] == "1.0"
@@ -295,10 +298,14 @@ class TestHandleMigrate:
     def test_custom_versions(self):
         with patch("eidos.core.schema.get_migrations", return_value={"m1": "fake"}):
             with patch("eidos.core.schema.migrate_schema_instance", return_value={"_migrated_version": "3.5"}):
-                result = handle_migrate({
-                    "schema_name": "x", "data": {"a": 1},
-                    "from_version": "2.0", "to_version": "3.5",
-                })
+                result = handle_migrate(
+                    {
+                        "schema_name": "x",
+                        "data": {"a": 1},
+                        "from_version": "2.0",
+                        "to_version": "3.5",
+                    }
+                )
         # If success path, from_version should be in result
         if "from_version" in result:
             assert result["from_version"] == "2.0"
@@ -344,10 +351,13 @@ class TestHandleMigrationList:
     def test_multiple_migrations(self):
         m1 = MagicMock(from_version="1.0", to_version="2.0", description="A")
         m2 = MagicMock(from_version="2.0", to_version="3.0", description="B")
-        with patch("eidos.core.schema._SCHEMA_MIGRATIONS", {
-            "s1": [m1, m2],
-            "s2": [m1],
-        }):
+        with patch(
+            "eidos.core.schema._SCHEMA_MIGRATIONS",
+            {
+                "s1": [m1, m2],
+                "s2": [m1],
+            },
+        ):
             result = handle_migration_list()
         assert result["count"] == 3
 
@@ -378,13 +388,15 @@ class TestHandleDefine:
     def test_with_fields(self):
         with patch("eidos.core.schema.SchemaRegistry") as mock_reg:
             mock_reg.return_value.register = MagicMock()
-            result = handle_define({
-                "name": "X",
-                "fields": [
-                    {"name": "title", "type": "string", "required": True, "description": "Title"},
-                    {"name": "count", "type": "int", "required": False, "description": "Count"},
-                ],
-            })
+            result = handle_define(
+                {
+                    "name": "X",
+                    "fields": [
+                        {"name": "title", "type": "string", "required": True, "description": "Title"},
+                        {"name": "count", "type": "int", "required": False, "description": "Count"},
+                    ],
+                }
+            )
         assert result["fields"] == 2
 
     def test_invalid_field_type_defaults_to_string(self):
@@ -393,10 +405,12 @@ class TestHandleDefine:
             with patch("eidos.core.schema.FieldType") as mock_ft:
                 mock_ft.STRING = "string"
                 mock_ft.side_effect = ValueError("bad type")
-                result = handle_define({
-                    "name": "X",
-                    "fields": [{"name": "f", "type": "unknown_type"}],
-                })
+                result = handle_define(
+                    {
+                        "name": "X",
+                        "fields": [{"name": "f", "type": "unknown_type"}],
+                    }
+                )
         assert result["fields"] == 1
 
     def test_register_called(self):
@@ -477,8 +491,13 @@ class TestHandleExport:
 class TestToolsRegistry:
     def test_all_handlers_registered(self):
         assert set(TOOLS.keys()) == {
-            "eidos_list", "eidos_validate", "eidos_meta", "eidos_define",
-            "eidos_export", "eidos_migrate", "eidos_migration_list",
+            "eidos_list",
+            "eidos_validate",
+            "eidos_meta",
+            "eidos_define",
+            "eidos_export",
+            "eidos_migrate",
+            "eidos_migration_list",
         }
 
     def test_each_tool_has_callable_func(self):
@@ -512,19 +531,31 @@ class TestCallTool:
 
     def test_params_passed_to_handler(self):
         mock_func = MagicMock(return_value={"is_valid": True})
-        with patch.dict(mcp_server.TOOLS, {"eidos_validate": {
-            "func": mock_func, "description": "x",
-            "input_schema": {"type": "object", "properties": {}, "additionalProperties": False}
-        }}):
-            result = _call_tool("eidos_validate", {"data": "x"})
+        with patch.dict(
+            mcp_server.TOOLS,
+            {
+                "eidos_validate": {
+                    "func": mock_func,
+                    "description": "x",
+                    "input_schema": {"type": "object", "properties": {}, "additionalProperties": False},
+                }
+            },
+        ):
+            _call_tool("eidos_validate", {"data": "x"})
         mock_func.assert_called_once_with({"data": "x"})
 
     def test_none_params_becomes_empty_dict(self):
         mock_func = MagicMock(return_value={"is_valid": True})
-        with patch.dict(mcp_server.TOOLS, {"eidos_validate": {
-            "func": mock_func, "description": "x",
-            "input_schema": {"type": "object", "properties": {}, "additionalProperties": False}
-        }}):
+        with patch.dict(
+            mcp_server.TOOLS,
+            {
+                "eidos_validate": {
+                    "func": mock_func,
+                    "description": "x",
+                    "input_schema": {"type": "object", "properties": {}, "additionalProperties": False},
+                }
+            },
+        ):
             _call_tool("eidos_validate", None)
         mock_func.assert_called_once_with({})
 

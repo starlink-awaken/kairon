@@ -23,7 +23,7 @@ xia = HealthProfile(
     blood_type="A",
 )
 xia.add_check(HealthCheckRecord(date(2024, 3, 1), 95.0, 14.5, 0.8, 0.8, "半年度体检"))
-print(xia.age_years())          # 4
+print(xia.age_years())  # 4
 print(xia.upcoming_vaccinations())
 ```
 

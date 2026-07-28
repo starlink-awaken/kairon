@@ -118,7 +118,7 @@ def infer_entity_type(entity_id: str) -> EntityType | None:
 
 def migrate_id(old_id: str) -> str:
     """将旧 ID 格式迁移到新标准"""
-    MIGRATION_MAP = {
+    migration_map = {
         "P:": "ROL-",
         "O:": "ORG-",
         "J:": "PRJ-",
@@ -127,7 +127,7 @@ def migrate_id(old_id: str) -> str:
         "proj_": "PRJ-",
         "mem_": "RES-",
     }
-    for old_prefix, new_prefix in MIGRATION_MAP.items():
+    for old_prefix, new_prefix in migration_map.items():
         if old_id.startswith(old_prefix):
             return new_prefix + old_id[len(old_prefix) :]
     return old_id

@@ -109,18 +109,17 @@ def create_consensus(
     row = conn.execute("SELECT * FROM kos_consensus WHERE consensus_id=?", (consensus_id,)).fetchone()
     conn.close()
     # 发射 KOS 共识创建事件 (hermes-ops)
-    import json
     import os  # type: ignore[import-untyped]
     import urllib.request
 
     try:
         ops_url = os.environ.get("HERMES_OPS_URL", "http://localhost:9800")
-        req = urllib.request.Request(
+        req = urllib.request.Request(  # noqa: S310
             f"{ops_url}/event",
             data=json.dumps({"type": "CONSENSUS_CREATED", "payload": {"entity_id": entity_id}}).encode(),
             headers={"Content-Type": "application/json"},
         )
-        urllib.request.urlopen(req, timeout=2)
+        urllib.request.urlopen(req, timeout=2)  # noqa: S310
     except Exception:
         pass
     return _row_to_dict(row)

@@ -38,7 +38,9 @@ def _engine() -> ToolForge:
 
 
 @mcp.tool()
-def toolforge_match(goal: str, context: str = "", mode: str = "keyword", limit: int = 3) -> dict[str, list[dict[str, Any]]]:
+def toolforge_match(
+    goal: str, context: str = "", mode: str = "keyword", limit: int = 3
+) -> dict[str, list[dict[str, Any]]]:
     """分组匹配思维工具 — 按 6 大类别返回结果."""
     return _engine().match(goal, context, limit=limit, mode=mode)
 

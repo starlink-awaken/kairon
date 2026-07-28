@@ -10,6 +10,7 @@ Used by:
   - governance_steps (RootNamespaceStep, SectionIndexStep, AgentContextStep)
   - validation_steps (BatchValidateStep, EvolveStep, ValidateStep)
 """
+
 from __future__ import annotations
 
 import enum
@@ -17,7 +18,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 
-class StepStatus(str, enum.Enum):
+class StepStatus(str, enum.Enum):  # noqa: UP042
     """Status of a pipeline step."""
 
     PENDING = "pending"
@@ -42,9 +43,7 @@ class ProgressInfo:
         if self.total < 0:
             raise ValueError(f"total must be >= 0, got {self.total}")
         if self.total and self.current > self.total:
-            raise ValueError(
-                f"current ({self.current}) cannot exceed total ({self.total})"
-            )
+            raise ValueError(f"current ({self.current}) cannot exceed total ({self.total})")
 
 
 @dataclass(slots=True)
@@ -63,23 +62,15 @@ class StepResult:
 
     def __post_init__(self) -> None:
         if self.items_processed < 0:
-            raise ValueError(
-                f"items_processed must be >= 0, got {self.items_processed}"
-            )
+            raise ValueError(f"items_processed must be >= 0, got {self.items_processed}")
         if self.items_failed < 0:
-            raise ValueError(
-                f"items_failed must be >= 0, got {self.items_failed}"
-            )
+            raise ValueError(f"items_failed must be >= 0, got {self.items_failed}")
         if self.items_failed > self.items_processed:
             raise ValueError(
-                f"items_failed ({self.items_failed}) cannot exceed "
-                f"items_processed ({self.items_processed})"
+                f"items_failed ({self.items_failed}) cannot exceed items_processed ({self.items_processed})"
             )
         if self.end_time and self.start_time and self.end_time < self.start_time:
-            raise ValueError(
-                f"end_time ({self.end_time}) cannot precede "
-                f"start_time ({self.start_time})"
-            )
+            raise ValueError(f"end_time ({self.end_time}) cannot precede start_time ({self.start_time})")
 
 
 @dataclass(slots=True)
@@ -97,13 +88,9 @@ class BatchItem:
         if not self.id:
             raise ValueError("BatchItem id must be a non-empty string")
         if not isinstance(self.data, dict):
-            raise ValueError(
-                f"BatchItem.data must be a dict, got {type(self.data).__name__}"
-            )
+            raise ValueError(f"BatchItem.data must be a dict, got {type(self.data).__name__}")
         if not isinstance(self.metadata, dict):
-            raise ValueError(
-                f"BatchItem.metadata must be a dict, got {type(self.metadata).__name__}"
-            )
+            raise ValueError(f"BatchItem.metadata must be a dict, got {type(self.metadata).__name__}")
 
 
 @dataclass(slots=True)
@@ -121,12 +108,7 @@ class BatchResult:
     duration: float = 0.0
 
     def __post_init__(self) -> None:
-        if (
-            self.succeeded < 0
-            or self.failed < 0
-            or self.completed < 0
-            or self.skipped < 0
-        ):
+        if self.succeeded < 0 or self.failed < 0 or self.completed < 0 or self.skipped < 0:
             raise ValueError("counters must be non-negative")
         if self.duration < 0:
             raise ValueError(f"duration must be >= 0, got {self.duration}")
