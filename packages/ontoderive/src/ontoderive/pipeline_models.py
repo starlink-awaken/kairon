@@ -34,11 +34,17 @@ class ProgressInfo:
     step_name: str
     current: int = 0
     total: int = 0
+    completed: int = 0
+    failed: int = 0
     message: str = ""
 
     def __post_init__(self) -> None:
         if self.current < 0:
             raise ValueError(f"current must be >= 0, got {self.current}")
+        if self.completed < 0:
+            raise ValueError(f"completed must be >= 0, got {self.completed}")
+        if self.failed < 0:
+            raise ValueError(f"failed must be >= 0, got {self.failed}")
         if self.total < 0:
             raise ValueError(f"total must be >= 0, got {self.total}")
         if self.total and self.current > self.total:
