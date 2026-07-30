@@ -2,7 +2,6 @@
 
 from kos.kems import analyze_policy_document, analyze_policy_file
 
-
 FIXTURE = """# 关于推进基层医疗信息化建设的通知
 发布单位：省卫生健康委
 文号：卫办〔2026〕12号
