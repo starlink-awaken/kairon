@@ -12,12 +12,9 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-
 _DATE = re.compile(r"(?:20\d{2})[年./-]\s*\d{1,2}[月./-]\s*\d{1,2}日?")
 _DOC_NUMBER = re.compile(r"[\u4e00-\u9fff]{1,12}[〔(（]\d{4}[〕)）]\d{1,8}号?")
-_LABEL = re.compile(
-    r"(?:发布单位|发布机构|发文机关|制定机关|牵头单位|责任单位)\s*[:：]\s*([^\n，。；;]{2,40})"
-)
+_LABEL = re.compile(r"(?:发布单位|发布机构|发文机关|制定机关|牵头单位|责任单位)\s*[:：]\s*([^\n，。；;]{2,40})")
 
 _TYPE_RULES = (
     ("通知", ("通知", "印发", "转发")),
@@ -99,11 +96,7 @@ def _first_title(lines: list[str], source_name: str) -> str:
 
 
 def _sentences(text: str) -> list[str]:
-    return [
-        item.strip()
-        for item in re.split(r"(?<=[。！？!?；;])\s*", text)
-        if len(item.strip()) >= 12
-    ]
+    return [item.strip() for item in re.split(r"(?<=[。！？!?；;])\s*", text) if len(item.strip()) >= 12]
 
 
 def analyze_policy_document(
@@ -141,11 +134,7 @@ def analyze_policy_document(
     key_points = tuple(sentences[:5])
     summary = "".join(sentences[:3])[:360] or text[:360]
     actions = tuple(
-        dict.fromkeys(
-            line[:240]
-            for line in lines
-            if any(word in line for word in _ACTION_WORDS) and len(line) >= 12
-        )
+        dict.fromkeys(line[:240] for line in lines if any(word in line for word in _ACTION_WORDS) and len(line) >= 12)
     )[:10]
 
     evidence: list[Evidence] = []
