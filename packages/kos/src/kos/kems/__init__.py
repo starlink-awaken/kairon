@@ -14,6 +14,8 @@ from .forecast import (
 from .forecast_store import ForecastStore
 from .graph_store import DocumentVersion, EvidenceSpan, GraphEntity, GraphRelation, GraphStore
 from .ingest import ImportedDocument, ImportPolicy, import_document
+from .model_acceptance import ModelInputError, evaluate_candidate
+from .model_acceptance_store import ModelAcceptanceStore
 from .ocr_quality import OCRPageQuality, OCRQualityPolicy, OCRQualityReport, assess_ocr_quality
 from .ocr_quality_store import OCRQualityStore
 from .omo_adapter import OmoTaskAdapter
@@ -38,6 +40,9 @@ __all__ = (
     "EvaluationSample",
     "EvaluationStore",
     "AdjudicationStore",
+    "ModelAcceptanceStore",
+    "ModelInputError",
+    "evaluate_candidate",
     "ShadowForecast",
     "ShadowForecastEvaluation",
     "ForecastStore",
