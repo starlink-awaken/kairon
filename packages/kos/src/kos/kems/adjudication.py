@@ -166,11 +166,16 @@ class AdjudicationStore:
         self.initialize()
         now = datetime.now(UTC).isoformat()
         with self._connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
             row = connection.execute("SELECT * FROM adjudication_queue WHERE sample_id=?", (sample_id,)).fetchone()
             if row is None:
                 raise KeyError(sample_id)
             if row["annotation_status"] == "adjudicated":
                 raise ValueError("adjudicated samples cannot be claimed")
+            if row["annotation_status"] == "reviewed":
+                if row["annotator"] == annotator:
+                    return self._row(row)
+                raise ValueError("sample is already claimed by another annotator")
             connection.execute(
                 "UPDATE adjudication_queue SET annotation_status='reviewed', annotator=?, claimed_at=?, updated_at=? WHERE sample_id=?",
                 (annotator, now, now, sample_id),
