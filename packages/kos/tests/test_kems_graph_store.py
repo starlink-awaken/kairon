@@ -3,6 +3,13 @@
 from kos.kems import DocumentVersion, EvidenceSpan, GraphEntity, GraphRelation, GraphStore
 
 
+def test_graph_store_module_imports_graph_store_contract():
+    """Keep the module import covered independently from graph operations."""
+    import kos.kems.graph_store as graph_store
+
+    assert hasattr(graph_store, "GraphStore")
+
+
 def seeded_store(tmp_path):
     store = GraphStore(tmp_path / "graph.sqlite")
     store.put_document_version(
