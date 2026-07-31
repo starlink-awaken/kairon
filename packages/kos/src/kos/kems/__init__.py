@@ -2,9 +2,11 @@
 
 from .enrichment import EnrichmentResult, EvaluationReport, enrich_policy, evaluate_policy_fixture
 from .evaluation import EvaluationManifest, EvaluationRun, EvaluationSample, evaluate_field_mapping
+from .evaluation_store import EvaluationStore
 from .graph_store import DocumentVersion, EvidenceSpan, GraphEntity, GraphRelation, GraphStore
 from .ingest import ImportedDocument, ImportPolicy, import_document
 from .ocr_quality import OCRPageQuality, OCRQualityPolicy, OCRQualityReport, assess_ocr_quality
+from .omo_adapter import OmoTaskAdapter
 from .pipeline import PipelineRun, SourceManifest, StepRun
 from .policy import PolicyAnalysis, analyze_policy_document, analyze_policy_file
 from .run_record import KemsRunRecord, create_run_record
@@ -24,6 +26,7 @@ __all__ = (
     "EvaluationManifest",
     "EvaluationRun",
     "EvaluationSample",
+    "EvaluationStore",
     "DocumentVersion",
     "EvidenceSpan",
     "GraphEntity",
@@ -43,6 +46,7 @@ __all__ = (
     "OCRPageQuality",
     "OCRQualityPolicy",
     "OCRQualityReport",
+    "OmoTaskAdapter",
     "ScenarioAnalysis",
     "analyze_ai_survey",
     "analyze_policy_document",
