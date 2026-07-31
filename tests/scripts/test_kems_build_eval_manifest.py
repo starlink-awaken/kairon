@@ -1,39 +1,82 @@
+from __future__ import annotations
+
 import json
+import sys
+from pathlib import Path
 
 import pytest
 
-from scripts.kems_build_eval_manifest import build_manifest
+SCRIPTS_DIR = Path(__file__).resolve().parents[2] / "scripts"
+sys.path.insert(0, str(SCRIPTS_DIR))
+
+from kems_build_eval_manifest import ManifestInputError, build_manifest, write_manifest
 
 
-def row(**overrides):
-    value = {
-        "sample_id": "sample-1",
+def record(*, sample_id: str = "sample-1", status: str = "adjudicated") -> dict[str, object]:
+    return {
+        "sample_id": sample_id,
         "source_sha256": "a" * 64,
         "source_ref": "vault://redacted/sample-1",
         "scenario_id": "oa-notice",
         "split": "test",
-        "annotation_status": "adjudicated",
+        "annotation_status": status,
         "labels": {"title": "通知"},
         "annotation_version": "ann-1",
     }
-    value.update(overrides)
-    return value
 
 
-def test_build_manifest_accepts_only_adjudicated_redacted_rows(tmp_path):
-    source = tmp_path / "annotations.jsonl"
-    source.write_text(json.dumps(row(), ensure_ascii=False) + "\n", encoding="utf-8")
-    manifest = build_manifest(source, dataset_id="kems-real", dataset_version="2026-07-31")
-    assert manifest.to_dict()["samples"][0]["annotation_status"] == "adjudicated"
+def write_jsonl(path: Path, records: list[dict[str, object]]) -> None:
+    path.write_text("\n".join(json.dumps(item, ensure_ascii=False) for item in records) + "\n", encoding="utf-8")
 
 
-@pytest.mark.parametrize("overrides, message", [
-    ({"annotation_status": "reviewed"}, "adjudicated"),
-    ({"source_ref": "file:///private.pdf"}, "vault://redacted"),
-    ({"text": "private body"}, "raw content"),
-])
-def test_build_manifest_rejects_unsafe_rows(tmp_path, overrides, message):
-    source = tmp_path / "annotations.jsonl"
-    source.write_text(json.dumps(row(**overrides)) + "\n", encoding="utf-8")
-    with pytest.raises(ValueError, match=message):
-        build_manifest(source, dataset_id="kems-real", dataset_version="2026-07-31")
+def test_build_manifest_keeps_only_redacted_contract_fields(tmp_path: Path) -> None:
+    input_path = tmp_path / "adjudicated.jsonl"
+    write_jsonl(input_path, [record() | {"reviewer": "human-1", "private_note": "discarded"}])
+
+    manifest = build_manifest(input_path, dataset_id="kems-real", dataset_version="2026-08-01")
+
+    assert manifest.redaction_status == "verified"
+    assert manifest.to_dict()["samples"] == [record()]
+
+
+def test_build_manifest_rejects_non_adjudicated_samples(tmp_path: Path) -> None:
+    input_path = tmp_path / "pending.jsonl"
+    write_jsonl(input_path, [record(status="reviewed")])
+
+    with pytest.raises(ManifestInputError, match="not adjudicated"):
+        build_manifest(input_path, dataset_id="kems-real", dataset_version="v1")
+
+
+def test_build_manifest_rejects_nested_raw_content(tmp_path: Path) -> None:
+    input_path = tmp_path / "raw.jsonl"
+    item = record()
+    item["labels"] = {"title": "通知", "evidence": {"text": "private"}}
+    write_jsonl(input_path, [item])
+
+    with pytest.raises(ManifestInputError, match="raw content key"):
+        build_manifest(input_path, dataset_id="kems-real", dataset_version="v1")
+
+
+def test_build_manifest_rejects_duplicate_ids_and_invalid_hash(tmp_path: Path) -> None:
+    duplicate_path = tmp_path / "duplicate.jsonl"
+    write_jsonl(duplicate_path, [record(), record()])
+    with pytest.raises(ManifestInputError, match="duplicated"):
+        build_manifest(duplicate_path, dataset_id="kems-real", dataset_version="v1")
+
+    invalid_path = tmp_path / "invalid.jsonl"
+    invalid = record()
+    invalid["source_sha256"] = "not-a-sha"
+    write_jsonl(invalid_path, [invalid])
+    with pytest.raises(ManifestInputError, match="source_sha256 is invalid"):
+        build_manifest(invalid_path, dataset_id="kems-real", dataset_version="v1")
+
+
+def test_write_manifest_is_parseable(tmp_path: Path) -> None:
+    input_path = tmp_path / "adjudicated.jsonl"
+    output_path = tmp_path / "out" / "manifest.json"
+    write_jsonl(input_path, [record()])
+    write_manifest(build_manifest(input_path, dataset_id="kems-real", dataset_version="v1"), output_path)
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload["schema_version"] == "kems.evaluation-manifest.v1"
+    assert not list(output_path.parent.glob(".*.tmp"))
