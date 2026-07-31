@@ -1,7 +1,12 @@
 """Tests for shadow-only KEMS forecasting."""
 
 import pytest
-from kos.kems import ShadowForecast, build_naive_shadow_forecast, evaluate_shadow_forecast
+from kos.kems import (
+    ShadowForecast,
+    build_moving_average_shadow_forecast,
+    build_naive_shadow_forecast,
+    evaluate_shadow_forecast,
+)
 
 
 def test_naive_forecast_is_interval_bound_and_shadow_only():
@@ -27,3 +32,9 @@ def test_forecast_rejects_non_shadow_mode_and_bad_history():
     assert forecast.mode == "shadow"
     with pytest.raises(ValueError, match="finite"):
         build_naive_shadow_forecast((float("nan"),), series_id="s", source_run_id="r", horizon=1)
+
+
+def test_moving_average_shadow_forecast_is_deterministic():
+    forecast = build_moving_average_shadow_forecast((10.0, 12.0, 14.0), series_id="s", source_run_id="r", horizon=2)
+    assert forecast.predictions == (12.0, 12.0)
+    assert forecast.baseline_value == 14.0

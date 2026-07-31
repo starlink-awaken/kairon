@@ -11,6 +11,7 @@ import json
 import sqlite3
 from collections.abc import Iterable
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Literal
 
@@ -276,6 +277,112 @@ class GraphStore:
             row = connection.execute("SELECT * FROM entities WHERE entity_id = ?", (entity_id,)).fetchone()
         return dict(row) if row else None
 
+    def search_entities(
+        self, query: str, *, review_state: ReviewState | None = None, limit: int = 50
+    ) -> list[dict[str, Any]]:
+        """Search active entities without returning source document text."""
+        if not query.strip():
+            raise ValueError("entity search requires a non-empty query")
+        if limit <= 0 or limit > 500:
+            raise ValueError("entity search limit must be between 1 and 500")
+        self.initialize()
+        clauses = ["canonical_name LIKE ?", "review_state != 'rejected'", "valid_to IS NULL"]
+        values: list[object] = [f"%{query.strip()}%"]
+        if review_state is not None:
+            clauses.append("review_state = ?")
+            values.append(review_state)
+        with self._connect() as connection:
+            rows = connection.execute(
+                f"SELECT entity_id, entity_type, canonical_name, source_document_id, source_version_id, "
+                f"evidence_span, confidence, review_state, valid_from, valid_to, created_by_run "
+                f"FROM entities WHERE {' AND '.join(clauses)} ORDER BY canonical_name, entity_id LIMIT ?",
+                (*values, limit),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def neighbors(self, entity_id: str, *, limit: int = 50) -> list[dict[str, Any]]:
+        """Return active, evidence-linked graph edges around one entity."""
+        if limit <= 0 or limit > 500:
+            raise ValueError("neighbor limit must be between 1 and 500")
+        self.initialize()
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT r.relation_id, r.predicate, r.subject_id, r.object_id,
+                          r.evidence_refs, r.confidence, r.review_state,
+                          e.entity_id AS neighbor_id, e.entity_type AS neighbor_type,
+                          e.canonical_name AS neighbor_name
+                   FROM relations r
+                   JOIN entities e ON e.entity_id = CASE
+                       WHEN r.subject_id = ? THEN r.object_id ELSE r.subject_id END
+                   WHERE (r.subject_id = ? OR r.object_id = ?)
+                     AND r.review_state != 'rejected' AND r.valid_to IS NULL
+                     AND e.review_state != 'rejected' AND e.valid_to IS NULL
+                   ORDER BY r.relation_id LIMIT ?""",
+                (entity_id, entity_id, entity_id, limit),
+            ).fetchall()
+        result = []
+        for row in rows:
+            item = dict(row)
+            item["evidence_refs"] = json.loads(str(item["evidence_refs"]))
+            result.append(item)
+        return result
+
+    def review_entity(
+        self,
+        *,
+        entity_id: str,
+        decision: Literal["human_verified", "rejected", "pending"],
+        reviewer: str,
+        reason: str,
+        decision_id: str,
+        created_at: str | None = None,
+    ) -> None:
+        """Record an auditable human decision without deleting graph history."""
+        if not reviewer.strip() or not reason.strip():
+            raise ValueError("graph review requires reviewer and reason")
+        self.initialize()
+        timestamp = created_at or datetime.now(UTC).isoformat()
+        with self._connect() as connection:
+            updated = connection.execute(
+                "UPDATE entities SET review_state = ?, valid_to = CASE WHEN ? = 'rejected' THEN ? ELSE valid_to END WHERE entity_id = ?",
+                (decision, decision, timestamp, entity_id),
+            ).rowcount
+            if not updated:
+                raise KeyError(f"unknown graph entity: {entity_id}")
+            connection.execute(
+                "INSERT INTO review_decisions VALUES (?, ?, ?, ?, ?, ?, ?) "
+                "ON CONFLICT(decision_id) DO UPDATE SET decision=excluded.decision, reason=excluded.reason",
+                (decision_id, "entity", entity_id, decision, reviewer, reason, timestamp),
+            )
+
+    def rollback_run(self, run_id: str, *, reviewer: str, reason: str, decision_id: str) -> dict[str, int]:
+        """Invalidate all facts produced by a run while preserving its audit trail."""
+        if not run_id.strip() or not reviewer.strip() or not reason.strip():
+            raise ValueError("graph rollback requires run_id, reviewer, and reason")
+        self.initialize()
+        timestamp = datetime.now(UTC).isoformat()
+        with self._connect() as connection:
+            counts = {
+                "entities": connection.execute(
+                    "UPDATE entities SET review_state='rejected', valid_to=? WHERE created_by_run=? AND valid_to IS NULL",
+                    (timestamp, run_id),
+                ).rowcount,
+                "relations": connection.execute(
+                    "UPDATE relations SET review_state='rejected', valid_to=? WHERE created_by_run=? AND valid_to IS NULL",
+                    (timestamp, run_id),
+                ).rowcount,
+                "documents": connection.execute(
+                    "UPDATE document_versions SET review_state='rejected' WHERE run_id=? AND review_state != 'rejected'",
+                    (run_id,),
+                ).rowcount,
+            }
+            connection.execute(
+                "INSERT INTO review_decisions VALUES (?, ?, ?, ?, ?, ?, ?) "
+                "ON CONFLICT(decision_id) DO UPDATE SET decision=excluded.decision, reason=excluded.reason",
+                (decision_id, "run", run_id, "rollback", reviewer, reason, timestamp),
+            )
+        return counts
+
     def list_evidence(self, document_id: str, version_id: str) -> list[dict[str, Any]]:
         self.initialize()
         with self._connect() as connection:
@@ -285,12 +392,15 @@ class GraphStore:
             ).fetchall()
         return [dict(row) for row in rows]
 
-    def export_snapshot(self) -> dict[str, list[dict[str, Any]]]:
-        """Return a deterministic, redaction-ready graph snapshot."""
+    def export_snapshot(self, *, include_text: bool = False) -> dict[str, list[dict[str, Any]]]:
+        """Return a deterministic snapshot; raw document text is opt-in."""
         self.initialize()
         with self._connect() as connection:
             result: dict[str, list[dict[str, Any]]] = {}
             for table in ("document_versions", "evidence_spans", "entities", "relations"):
-                rows = connection.execute(f"SELECT * FROM {table} ORDER BY rowid").fetchall()
+                columns = "*"
+                if table == "document_versions" and not include_text:
+                    columns = "document_id, version_id, source_sha256, domain, sensitivity, review_state, run_id"
+                rows = connection.execute(f"SELECT {columns} FROM {table} ORDER BY rowid").fetchall()
                 result[table] = [dict(row) for row in rows]
         return result
