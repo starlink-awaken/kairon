@@ -24,6 +24,9 @@ def test_queue_is_idempotent_and_adjudication_is_auditable(tmp_path) -> None:
 
     claimed = store.claim("sample-1", annotator="reviewer-1")
     assert claimed["annotation_status"] == "reviewed"
+    assert store.claim("sample-1", annotator="reviewer-1")["annotator"] == "reviewer-1"
+    with pytest.raises(ValueError, match="another annotator"):
+        store.claim("sample-1", annotator="reviewer-2")
     result = store.adjudicate(
         "sample-1",
         labels={"category": "notice", "priority": "normal"},
