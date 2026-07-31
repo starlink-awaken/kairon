@@ -18,6 +18,20 @@ _BOOLEAN_FIELDS = {"has_deadline", "has_owner", "requires_omo_task"}
 _REQUIRED_FIELDS = frozenset((*_ENUM_FIELDS, *_BOOLEAN_FIELDS))
 
 
+def annotation_schema(scenario_id: str) -> dict[str, Any]:
+    """Return the versioned public label contract for a scenario."""
+    if scenario_id != PRIVATE_SOURCE_REVIEW_SCENARIO:
+        return {"scenario_id": scenario_id, "schema_version": "generic-v1", "fields": []}
+
+    fields = [{"name": field, "type": "enum", "values": sorted(values)} for field, values in _ENUM_FIELDS.items()]
+    fields.extend({"name": field, "type": "boolean"} for field in sorted(_BOOLEAN_FIELDS))
+    return {
+        "scenario_id": PRIVATE_SOURCE_REVIEW_SCENARIO,
+        "schema_version": PRIVATE_SOURCE_REVIEW_VERSION,
+        "fields": fields,
+    }
+
+
 def validate_annotation_labels(scenario_id: str, labels: Mapping[str, Any]) -> dict[str, Any]:
     """Validate and return labels without accepting free-form schema drift.
 

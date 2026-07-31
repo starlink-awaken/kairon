@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pytest
 from kos.kems import AdjudicationStore
+from kos.kems.annotation_schema import annotation_schema
 
 
 def item(sample_id: str = "sample-1") -> dict[str, object]:
@@ -167,3 +168,18 @@ def test_private_source_review_enforces_versioned_label_contract(tmp_path) -> No
         adjudicator="reviewer-c",
     )
     assert result["annotation_status"] == "adjudicated"
+
+
+def test_private_source_review_schema_is_versioned_and_public() -> None:
+    schema = annotation_schema("private-source-review-v1")
+
+    assert schema["schema_version"] == "private-source-review-v1.0"
+    assert [field["name"] for field in schema["fields"]] == [
+        "source_kind",
+        "document_type",
+        "actionability",
+        "priority",
+        "has_deadline",
+        "has_owner",
+        "requires_omo_task",
+    ]
