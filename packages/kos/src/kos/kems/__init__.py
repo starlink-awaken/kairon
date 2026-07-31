@@ -8,6 +8,7 @@ from .ocr_quality import OCRPageQuality, OCRQualityPolicy, OCRQualityReport, ass
 from .pipeline import PipelineRun, SourceManifest, StepRun
 from .policy import PolicyAnalysis, analyze_policy_document, analyze_policy_file
 from .run_record import KemsRunRecord, create_run_record
+from .run_store import RunStore
 from .scenarios import (
     ScenarioAnalysis,
     analyze_ai_survey,
@@ -30,6 +31,7 @@ __all__ = (
     "ImportPolicy",
     "ImportedDocument",
     "KemsRunRecord",
+    "RunStore",
     "PolicyAnalysis",
     "PipelineRun",
     "SourceManifest",
