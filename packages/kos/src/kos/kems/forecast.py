@@ -81,6 +81,36 @@ def build_naive_shadow_forecast(
     )
 
 
+def build_moving_average_shadow_forecast(
+    values: tuple[float, ...],
+    *,
+    series_id: str,
+    source_run_id: str,
+    horizon: int,
+    window: int = 3,
+    model_id: str = "moving-average-v1",
+) -> ShadowForecast:
+    """Build a deterministic moving-average candidate for shadow evaluation."""
+    if not values or any(not isfinite(value) for value in values):
+        raise ValueError("forecast history must contain finite values")
+    if horizon <= 0 or window <= 0:
+        raise ValueError("forecast horizon and window must be positive")
+    history = values[-window:]
+    baseline = sum(history) / len(history)
+    deviations = tuple(abs(value - baseline) for value in history)
+    spread = max(sum(deviations) / len(deviations), 1.0)
+    return ShadowForecast(
+        series_id,
+        source_run_id,
+        model_id,
+        horizon,
+        (baseline,) * horizon,
+        (baseline - spread,) * horizon,
+        (baseline + spread,) * horizon,
+        values[-1],
+    )
+
+
 def evaluate_shadow_forecast(
     *,
     model_id: str,
