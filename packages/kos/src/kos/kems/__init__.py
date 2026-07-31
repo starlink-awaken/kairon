@@ -2,6 +2,7 @@
 
 from .enrichment import EnrichmentResult, EvaluationReport, enrich_policy, evaluate_policy_fixture
 from .evaluation import EvaluationManifest, EvaluationRun, EvaluationSample, evaluate_field_mapping
+from .evaluation_store import EvaluationStore
 from .graph_store import DocumentVersion, EvidenceSpan, GraphEntity, GraphRelation, GraphStore
 from .ingest import ImportedDocument, ImportPolicy, import_document
 from .ocr_quality import OCRPageQuality, OCRQualityPolicy, OCRQualityReport, assess_ocr_quality
@@ -25,6 +26,7 @@ __all__ = (
     "EvaluationManifest",
     "EvaluationRun",
     "EvaluationSample",
+    "EvaluationStore",
     "DocumentVersion",
     "EvidenceSpan",
     "GraphEntity",
