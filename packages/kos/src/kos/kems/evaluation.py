@@ -90,10 +90,7 @@ class EvaluationRun:
 
     def to_dict(self) -> dict[str, Any]:
         result = asdict(self)
-        result["fields"] = [
-            {**asdict(item), "accuracy": item.accuracy}
-            for item in self.fields
-        ]
+        result["fields"] = [{**asdict(item), "accuracy": item.accuracy} for item in self.fields]
         result["accuracy"] = self.accuracy
         return result
 

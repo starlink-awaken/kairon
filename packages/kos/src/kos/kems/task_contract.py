@@ -45,7 +45,9 @@ class TaskDraft:
             raise ValueError("task approval requires a reviewer")
         if self.status != "draft":
             raise ValueError(f"only draft tasks can be approved, got {self.status}")
-        return self.__class__(**{**asdict(self), "status": "approved", "evidence_refs": self.evidence_refs, "graph_refs": self.graph_refs})
+        return self.__class__(
+            **{**asdict(self), "status": "approved", "evidence_refs": self.evidence_refs, "graph_refs": self.graph_refs}
+        )
 
     def to_omo_payload(self) -> dict[str, Any]:
         """Return a transport payload; OMO remains the task state authority."""

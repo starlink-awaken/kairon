@@ -10,10 +10,8 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-
 from ontoderive.pipeline_models import (
     ProgressInfo,
-    StepResult,
     StepStatus,
 )
 from ontoderive.pipeline_steps.core_steps import (
@@ -21,7 +19,6 @@ from ontoderive.pipeline_steps.core_steps import (
     ReportStep,
     ScanStep,
 )
-
 
 # ── ScanStep ───────────────────────────────────────────────
 

@@ -15,8 +15,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-import pytest
-
 from ontoderive.core.derive import OntoDerive
 from ontoderive.toolforge import ToolForge
 

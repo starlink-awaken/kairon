@@ -6,7 +6,15 @@ from kos.kems import PipelineRun, RunStore, SourceManifest, StepRun
 
 def source(digest="a" * 64):
     return SourceManifest(
-        "source-1", "oa", "vault://official/one", digest, "official_work", "internal", "verified", "oa-v1", "2026-07-31T00:00:00Z"
+        "source-1",
+        "oa",
+        "vault://official/one",
+        digest,
+        "official_work",
+        "internal",
+        "verified",
+        "oa-v1",
+        "2026-07-31T00:00:00Z",
     )
 
 

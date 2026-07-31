@@ -7,7 +7,15 @@ from kos.kems import PipelineExecutor, PipelineStep, RunStore
 from kos.kems.pipeline import SourceManifest
 
 SOURCE = SourceManifest(
-    "source-1", "oa", "vault://official/one", "a" * 64, "official_work", "internal", "verified", "oa-v1", "2026-07-31T00:00:00Z"
+    "source-1",
+    "oa",
+    "vault://official/one",
+    "a" * 64,
+    "official_work",
+    "internal",
+    "verified",
+    "oa-v1",
+    "2026-07-31T00:00:00Z",
 )
 
 
