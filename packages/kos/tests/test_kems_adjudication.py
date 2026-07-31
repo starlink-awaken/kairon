@@ -38,6 +38,10 @@ def test_queue_is_idempotent_and_adjudication_is_auditable(tmp_path) -> None:
             annotation_version="ann-1",
             annotator="reviewer-1",
         )
+    second_claim = store.claim("sample-1", annotator="reviewer-2")
+    assert second_claim["claimed_annotators"] == ["reviewer-1", "reviewer-2"]
+    with pytest.raises(ValueError, match="two independent annotator slots"):
+        store.claim("sample-1", annotator="reviewer-3")
     second = store.submit_annotation(
         "sample-1",
         labels={"category": "notice", "priority": "normal"},
@@ -81,12 +85,27 @@ def test_adjudication_rejects_raw_labels_and_unknown_samples(tmp_path) -> None:
 def test_conflicting_annotations_require_external_adjudicator(tmp_path) -> None:
     store = AdjudicationStore(tmp_path / "adjudication.sqlite")
     store.ingest_queue([item()])
+    store.claim("sample-1", annotator="a")
+    store.claim("sample-1", annotator="b")
     store.submit_annotation("sample-1", labels={"priority": "high"}, annotation_version="ann-1", annotator="a")
-    conflict = store.submit_annotation("sample-1", labels={"priority": "low"}, annotation_version="ann-1", annotator="b")
+    conflict = store.submit_annotation(
+        "sample-1", labels={"priority": "low"}, annotation_version="ann-1", annotator="b"
+    )
     assert conflict["annotation_status"] == "conflict"
     assert conflict["annotation_conflict"] is True
     with pytest.raises(ValueError, match="independent from annotators"):
         store.adjudicate("sample-1", labels={"priority": "high"}, annotation_version="ann-2", annotator="a")
-    final = store.adjudicate("sample-1", labels={"priority": "high"}, annotation_version="ann-2", annotator="adjudicator")
+    final = store.adjudicate(
+        "sample-1", labels={"priority": "high"}, annotation_version="ann-2", annotator="adjudicator"
+    )
     assert final["annotation_status"] == "adjudicated"
     assert final["adjudicator"] == "adjudicator"
+
+
+def test_annotation_requires_a_claim(tmp_path) -> None:
+    store = AdjudicationStore(tmp_path / "adjudication.sqlite")
+    store.ingest_queue([item()])
+    with pytest.raises(ValueError, match="must claim"):
+        store.submit_annotation(
+            "sample-1", labels={"priority": "normal"}, annotation_version="ann-1", annotator="unassigned"
+        )
