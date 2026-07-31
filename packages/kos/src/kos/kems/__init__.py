@@ -2,8 +2,10 @@
 
 from .enrichment import EnrichmentResult, EvaluationReport, enrich_policy, evaluate_policy_fixture
 from .evaluation import EvaluationManifest, EvaluationRun, EvaluationSample, evaluate_field_mapping
+from .graph_store import DocumentVersion, EvidenceSpan, GraphEntity, GraphRelation, GraphStore
 from .ingest import ImportedDocument, ImportPolicy, import_document
 from .ocr_quality import OCRPageQuality, OCRQualityPolicy, OCRQualityReport, assess_ocr_quality
+from .pipeline import PipelineRun, SourceManifest, StepRun
 from .policy import PolicyAnalysis, analyze_policy_document, analyze_policy_file
 from .run_record import KemsRunRecord, create_run_record
 from .scenarios import (
@@ -19,10 +21,18 @@ __all__ = (
     "EvaluationManifest",
     "EvaluationRun",
     "EvaluationSample",
+    "DocumentVersion",
+    "EvidenceSpan",
+    "GraphEntity",
+    "GraphRelation",
+    "GraphStore",
     "ImportPolicy",
     "ImportedDocument",
     "KemsRunRecord",
     "PolicyAnalysis",
+    "PipelineRun",
+    "SourceManifest",
+    "StepRun",
     "OCRPageQuality",
     "OCRQualityPolicy",
     "OCRQualityReport",
