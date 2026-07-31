@@ -9,6 +9,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from .annotation_schema import validate_annotation_labels
+
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _SPLITS = {"train", "validation", "test", "shadow"}
 _PRIVATE_KEYS = {"body", "content", "ocr_text", "raw_text", "text"}
@@ -248,7 +250,7 @@ class AdjudicationStore:
         labels_json = json.dumps(labels, ensure_ascii=False, sort_keys=True)
         with self._connect() as connection:
             row = connection.execute(
-                "SELECT annotation_status FROM adjudication_queue WHERE sample_id=?",
+                "SELECT annotation_status, scenario_id FROM adjudication_queue WHERE sample_id=?",
                 (sample_id,),
             ).fetchone()
             if row is None:
@@ -261,6 +263,7 @@ class AdjudicationStore:
             ).fetchone()
             if claimed is None:
                 raise ValueError("annotator must claim the sample before submitting an annotation")
+            labels = validate_annotation_labels(str(row["scenario_id"]), labels)
             try:
                 connection.execute(
                     """INSERT INTO adjudication_annotations
@@ -349,7 +352,10 @@ class AdjudicationStore:
         self.initialize()
         now = datetime.now(UTC).isoformat()
         with self._connect() as connection:
-            if not connection.execute("SELECT 1 FROM adjudication_queue WHERE sample_id=?", (sample_id,)).fetchone():
+            row = connection.execute(
+                "SELECT scenario_id FROM adjudication_queue WHERE sample_id=?", (sample_id,)
+            ).fetchone()
+            if row is None:
                 raise KeyError(sample_id)
             annotations = connection.execute(
                 "SELECT annotator FROM adjudication_annotations WHERE sample_id=?", (sample_id,)
@@ -359,6 +365,7 @@ class AdjudicationStore:
                 raise ValueError("adjudication requires two independent annotators")
             if actor in annotators:
                 raise ValueError("adjudicator must be independent from annotators")
+            labels = validate_annotation_labels(str(row["scenario_id"]), labels)
             connection.execute(
                 """UPDATE adjudication_queue
                    SET annotation_status='adjudicated', labels_json=?, annotation_version=?, annotator=?, adjudicator=?, updated_at=?
