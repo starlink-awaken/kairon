@@ -16,6 +16,7 @@ SOURCE_PATTERNS = (
     "*-auto-iphone-sms.md",
 )
 QUEUE_SCHEMA = "kems.adjudication-queue.v1"
+DEFAULT_SCENARIO_ID = "private-source-review-v1"
 SPLITS = {"train", "validation", "test", "shadow"}
 
 
@@ -34,12 +35,7 @@ def _sha256(path: Path) -> str:
 def _source_files(docs_root: Path) -> list[Path]:
     inbox = docs_root / "_inbox"
     return sorted(
-        {
-            path
-            for pattern in SOURCE_PATTERNS
-            for path in inbox.glob(pattern)
-            if path.is_file()
-        },
+        {path for pattern in SOURCE_PATTERNS for path in inbox.glob(pattern) if path.is_file()},
         key=lambda path: path.name,
     )
 
@@ -104,7 +100,7 @@ def main() -> int:
         default=Path(os.environ.get("BOS_DOCS_ROOT", "/Users/xiamingxing/Documents")),
     )
     parser.add_argument("--output", required=True, type=Path, help="redacted adjudication JSONL")
-    parser.add_argument("--scenario-id", default="private-source-review")
+    parser.add_argument("--scenario-id", default=DEFAULT_SCENARIO_ID)
     parser.add_argument("--split", default="shadow", choices=sorted(SPLITS))
     args = parser.parse_args()
     try:

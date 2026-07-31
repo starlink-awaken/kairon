@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.kems_build_adjudication_queue import QueueInputError, build_queue, write_queue
+from scripts.kems_build_adjudication_queue import DEFAULT_SCENARIO_ID, QueueInputError, build_queue, write_queue
 
 
 def _docs(tmp_path: Path) -> Path:
@@ -28,6 +28,10 @@ def test_queue_is_redacted_pending_and_deterministic(tmp_path: Path) -> None:
     assert all(row["labels"] == {} for row in first)
     assert all("private body" not in json.dumps(row) for row in first)
     assert all(str(row["source_ref"]).startswith("vault://redacted/") for row in first)
+
+
+def test_default_scenario_matches_private_source_contract() -> None:
+    assert DEFAULT_SCENARIO_ID == "private-source-review-v1"
 
 
 def test_write_queue_is_atomic_and_private_free(tmp_path: Path) -> None:
