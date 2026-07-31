@@ -1,5 +1,6 @@
 """KEMS domain adapters built on top of the generic KOS ingestion layer."""
 
+from .adjudication import AdjudicationStore
 from .enrichment import EnrichmentResult, EvaluationReport, enrich_policy, evaluate_policy_fixture
 from .evaluation import EvaluationManifest, EvaluationRun, EvaluationSample, evaluate_field_mapping
 from .evaluation_store import EvaluationStore
@@ -36,6 +37,7 @@ __all__ = (
     "EvaluationRun",
     "EvaluationSample",
     "EvaluationStore",
+    "AdjudicationStore",
     "ShadowForecast",
     "ShadowForecastEvaluation",
     "ForecastStore",
