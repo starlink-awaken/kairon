@@ -82,9 +82,7 @@ class PipelineRun:
 
     def finish(self, *, required_steps: tuple[str, ...]) -> None:
         missing = set(required_steps) - {step.step_id for step in self.steps}
-        failed = {
-            step.step_id for step in self.steps if step.step_id in required_steps and step.status != "succeeded"
-        }
+        failed = {step.step_id for step in self.steps if step.step_id in required_steps and step.status != "succeeded"}
         if missing or failed:
             self.status = "failed"
             self.error_count += len(missing | failed)

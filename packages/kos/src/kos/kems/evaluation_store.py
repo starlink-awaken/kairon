@@ -76,7 +76,13 @@ class EvaluationStore:
                 return False
             connection.execute(
                 "INSERT INTO datasets VALUES (?, ?, ?, ?, ?)",
-                (manifest.dataset_id, manifest.dataset_version, manifest.schema_version, manifest.redaction_status, len(manifest.samples)),
+                (
+                    manifest.dataset_id,
+                    manifest.dataset_version,
+                    manifest.schema_version,
+                    manifest.redaction_status,
+                    len(manifest.samples),
+                ),
             )
             for sample in manifest.samples:
                 connection.execute(

@@ -11,7 +11,7 @@ import json
 import sqlite3
 from collections.abc import Iterable
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Literal
 
@@ -341,7 +341,7 @@ class GraphStore:
         if not reviewer.strip() or not reason.strip():
             raise ValueError("graph review requires reviewer and reason")
         self.initialize()
-        timestamp = created_at or datetime.now(timezone.utc).isoformat()
+        timestamp = created_at or datetime.now(UTC).isoformat()
         with self._connect() as connection:
             updated = connection.execute(
                 "UPDATE entities SET review_state = ?, valid_to = CASE WHEN ? = 'rejected' THEN ? ELSE valid_to END WHERE entity_id = ?",
@@ -360,7 +360,7 @@ class GraphStore:
         if not run_id.strip() or not reviewer.strip() or not reason.strip():
             raise ValueError("graph rollback requires run_id, reviewer, and reason")
         self.initialize()
-        timestamp = datetime.now(timezone.utc).isoformat()
+        timestamp = datetime.now(UTC).isoformat()
         with self._connect() as connection:
             counts = {
                 "entities": connection.execute(

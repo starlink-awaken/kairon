@@ -56,9 +56,16 @@ class ForecastStore:
         with self._connect() as connection:
             existing = connection.execute("SELECT * FROM forecasts WHERE forecast_id=?", (forecast_id,)).fetchone()
             payload = (
-                forecast_id, forecast.series_id, forecast.source_run_id, forecast.model_id, forecast.horizon,
-                json.dumps(forecast.predictions), json.dumps(forecast.lower_bounds),
-                json.dumps(forecast.upper_bounds), forecast.baseline_value, forecast.mode,
+                forecast_id,
+                forecast.series_id,
+                forecast.source_run_id,
+                forecast.model_id,
+                forecast.horizon,
+                json.dumps(forecast.predictions),
+                json.dumps(forecast.lower_bounds),
+                json.dumps(forecast.upper_bounds),
+                forecast.baseline_value,
+                forecast.mode,
             )
             if existing:
                 if tuple(existing) != payload:
@@ -72,8 +79,18 @@ class ForecastStore:
         with self._connect() as connection:
             if not connection.execute("SELECT 1 FROM forecasts WHERE forecast_id=?", (forecast_id,)).fetchone():
                 raise KeyError(f"unknown forecast: {forecast_id}")
-            existing = connection.execute("SELECT * FROM forecast_evaluations WHERE evaluation_id=?", (evaluation_id,)).fetchone()
-            payload = (evaluation_id, forecast_id, evaluation.model_id, evaluation.baseline_mae, evaluation.model_mae, int(evaluation.beats_baseline), evaluation.mode)
+            existing = connection.execute(
+                "SELECT * FROM forecast_evaluations WHERE evaluation_id=?", (evaluation_id,)
+            ).fetchone()
+            payload = (
+                evaluation_id,
+                forecast_id,
+                evaluation.model_id,
+                evaluation.baseline_mae,
+                evaluation.model_mae,
+                int(evaluation.beats_baseline),
+                evaluation.mode,
+            )
             if existing:
                 if tuple(existing) != payload:
                     raise ValueError("evaluation_id already exists with different output")
