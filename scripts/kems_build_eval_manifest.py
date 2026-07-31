@@ -4,13 +4,12 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import re
 import sys
 from pathlib import Path
 from typing import Any
-
-from kos.kems import EvaluationManifest, EvaluationSample
 
 FORBIDDEN_KEYS = {"body", "content", "ocr_text", "raw_text", "text"}
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
@@ -19,6 +18,28 @@ SPLITS = {"train", "validation", "test", "shadow"}
 
 class ManifestInputError(ValueError):
     """The adjudication input cannot be admitted to a redacted manifest."""
+
+
+def _load_evaluation_types() -> tuple[type, type]:
+    """Load only the KEMS contract so system Python skips unrelated package imports."""
+    try:
+        from kos.kems import EvaluationManifest, EvaluationSample
+
+        return EvaluationManifest, EvaluationSample
+    except (ImportError, TypeError):
+        module_path = (
+            Path(__file__).resolve().parents[1] / "packages" / "kos" / "src" / "kos" / "kems" / "evaluation.py"
+        )
+        spec = importlib.util.spec_from_file_location("kems_evaluation_contract", module_path)
+        if spec is None or spec.loader is None:
+            raise ManifestInputError("KEMS evaluation contract is unavailable")
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[spec.name] = module
+        spec.loader.exec_module(module)
+        return module.EvaluationManifest, module.EvaluationSample
+
+
+EvaluationManifest, EvaluationSample = _load_evaluation_types()
 
 
 def _forbidden_key(value: object) -> str | None:
