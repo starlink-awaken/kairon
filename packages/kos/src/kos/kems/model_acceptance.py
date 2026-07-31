@@ -50,11 +50,24 @@ def evaluate_candidate(
     baseline_model_id: str = "naive-last-v1",
     min_cases: int = 1,
     min_relative_improvement: float = 0.0,
+    dataset_id: str | None = None,
+    dataset_version: str | None = None,
+    evaluation_manifest_sha256: str | None = None,
+    dataset_sample_count: int | None = None,
 ) -> dict[str, Any]:
     if not candidate_model_id.strip() or not baseline_model_id.strip():
         raise ModelInputError("model ids are required")
     if min_cases <= 0 or not 0 <= min_relative_improvement < 1:
         raise ModelInputError("invalid admission thresholds")
+    binding = (dataset_id, dataset_version, evaluation_manifest_sha256)
+    if any(value is not None for value in binding) and not all(
+        isinstance(value, str) and value.strip() for value in binding
+    ):
+        raise ModelInputError("dataset_id, dataset_version, and evaluation_manifest_sha256 are required together")
+    if dataset_sample_count is not None and dataset_sample_count <= 0:
+        raise ModelInputError("dataset_sample_count must be positive")
+    if binding[0] is not None and dataset_sample_count is None:
+        raise ModelInputError("dataset_sample_count is required with manifest binding")
     if not isinstance(payload, list) or not payload:
         raise ModelInputError("evaluation payload must be a non-empty list")
     cases = [_case(record, index) for index, record in enumerate(payload, start=1)]
@@ -68,7 +81,7 @@ def evaluate_candidate(
     baseline_mae = baseline_total / observations
     relative_improvement = (baseline_mae - model_mae) / baseline_mae if baseline_mae else 0.0
     passes = len(cases) >= min_cases and model_mae <= baseline_mae * (1.0 - min_relative_improvement)
-    return {
+    report: dict[str, Any] = {
         "schema_version": SCHEMA,
         "candidate_model_id": candidate_model_id.strip(),
         "baseline_model_id": baseline_model_id.strip(),
@@ -83,3 +96,13 @@ def evaluate_candidate(
         "status": "shadow_pass" if passes else "needs_review",
         "promotion": "blocked_until_omo_approval",
     }
+    if all(isinstance(value, str) and value.strip() for value in binding):
+        report.update(
+            {
+                "dataset_id": dataset_id.strip(),
+                "dataset_version": dataset_version.strip(),
+                "evaluation_manifest_sha256": evaluation_manifest_sha256.strip(),
+                "dataset_sample_count": dataset_sample_count,
+            }
+        )
+    return report

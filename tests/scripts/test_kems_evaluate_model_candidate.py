@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import json
 import sys
 
 import pytest
 
 sys.path.insert(0, "scripts")
 
-from kems_evaluate_model_candidate import ModelInputError, evaluate_candidate
+from kems_evaluate_model_candidate import ModelInputError, evaluate_candidate, main
 
 
 def case(case_id: str, predictions: list[float], actual: list[float], baseline: float) -> dict[str, object]:
@@ -51,3 +52,41 @@ def test_duplicate_case_ids_are_rejected() -> None:
             [case("a", [1], [1], 2), case("a", [1], [1], 2)],
             candidate_model_id="candidate-v1",
         )
+
+
+def test_cli_emits_manifest_bound_report(tmp_path, monkeypatch) -> None:
+    cases_path = tmp_path / "cases.json"
+    cases_path.write_text(json.dumps([case("a", [2], [2], 4)]), encoding="utf-8")
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "schema_version": "kems.evaluation-manifest.v1",
+                "dataset_id": "kems-real",
+                "dataset_version": "v1",
+                "redaction_status": "verified",
+                "samples": [{"sample_id": "s-1"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    output_path = tmp_path / "acceptance.json"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "kems_evaluate_model_candidate.py",
+            "--input",
+            str(cases_path),
+            "--output",
+            str(output_path),
+            "--candidate-model-id",
+            "candidate-v1",
+            "--evaluation-manifest",
+            str(manifest_path),
+        ],
+    )
+    assert main() == 0
+    report = json.loads(output_path.read_text(encoding="utf-8"))
+    assert report["dataset_id"] == "kems-real"
+    assert report["dataset_sample_count"] == 1

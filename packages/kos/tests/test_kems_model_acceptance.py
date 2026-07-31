@@ -31,3 +31,23 @@ def test_acceptance_store_cannot_authorize_promotion(tmp_path) -> None:
 def test_candidate_rejects_raw_content() -> None:
     with pytest.raises(ModelInputError, match="raw content"):
         evaluate_candidate(cases() + [{"case_id": "bad", "text": "private"}], candidate_model_id="candidate-v1")
+
+
+def test_candidate_can_bind_acceptance_to_evaluation_manifest() -> None:
+    report = evaluate_candidate(
+        cases(),
+        candidate_model_id="candidate-v1",
+        dataset_id="kems-real",
+        dataset_version="v1",
+        evaluation_manifest_sha256="a" * 64,
+        dataset_sample_count=2,
+    )
+    assert report["dataset_id"] == "kems-real"
+    assert report["dataset_version"] == "v1"
+    assert report["evaluation_manifest_sha256"] == "a" * 64
+    assert report["dataset_sample_count"] == 2
+
+
+def test_candidate_rejects_partial_manifest_binding() -> None:
+    with pytest.raises(ModelInputError, match="required together"):
+        evaluate_candidate(cases(), candidate_model_id="candidate-v1", dataset_id="kems-real")
