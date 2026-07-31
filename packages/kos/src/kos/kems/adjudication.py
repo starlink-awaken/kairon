@@ -89,14 +89,9 @@ class AdjudicationStore:
                 )
                 """
             )
-            columns = {
-                row["name"]
-                for row in connection.execute("PRAGMA table_info(adjudication_queue)").fetchall()
-            }
+            columns = {row["name"] for row in connection.execute("PRAGMA table_info(adjudication_queue)").fetchall()}
             if "adjudicator" not in columns:
-                connection.execute(
-                    "ALTER TABLE adjudication_queue ADD COLUMN adjudicator TEXT NOT NULL DEFAULT ''"
-                )
+                connection.execute("ALTER TABLE adjudication_queue ADD COLUMN adjudicator TEXT NOT NULL DEFAULT ''")
             connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS adjudication_annotations (
@@ -110,6 +105,24 @@ class AdjudicationStore:
                     FOREIGN KEY (sample_id) REFERENCES adjudication_queue(sample_id)
                 )
                 """
+            )
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS adjudication_claims (
+                    claim_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    sample_id TEXT NOT NULL,
+                    annotator TEXT NOT NULL,
+                    claimed_at TEXT NOT NULL,
+                    UNIQUE(sample_id, annotator),
+                    FOREIGN KEY (sample_id) REFERENCES adjudication_queue(sample_id)
+                )
+                """
+            )
+            connection.execute(
+                """INSERT OR IGNORE INTO adjudication_claims (sample_id, annotator, claimed_at)
+                   SELECT sample_id, annotator, claimed_at
+                   FROM adjudication_queue
+                   WHERE annotator != ''"""
             )
 
     def ingest_queue(self, items: list[object]) -> int:
@@ -164,8 +177,7 @@ class AdjudicationStore:
     def _annotation_summary(self, sample_id: str) -> tuple[int, list[str], bool]:
         with self._connect() as connection:
             rows = connection.execute(
-                "SELECT annotator, labels_json FROM adjudication_annotations "
-                "WHERE sample_id=? ORDER BY annotation_id",
+                "SELECT annotator, labels_json FROM adjudication_annotations WHERE sample_id=? ORDER BY annotation_id",
                 (sample_id,),
             ).fetchall()
         labels = [str(row["labels_json"]) for row in rows]
@@ -175,11 +187,20 @@ class AdjudicationStore:
             len(set(labels)) > 1,
         )
 
+    def _claim_summary(self, sample_id: str) -> list[str]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                "SELECT annotator FROM adjudication_claims WHERE sample_id=? ORDER BY claim_id",
+                (sample_id,),
+            ).fetchall()
+        return [str(row["annotator"]) for row in rows]
+
     def _with_annotation_summary(self, item: dict[str, Any]) -> dict[str, Any]:
         count, annotators, conflict = self._annotation_summary(str(item["sample_id"]))
         item["annotation_count"] = count
         item["annotation_annotators"] = annotators
         item["annotation_conflict"] = conflict
+        item["claimed_annotators"] = self._claim_summary(str(item["sample_id"]))
         return item
 
     def list_items(self, *, status: str | None = None, limit: int = 100) -> list[dict[str, Any]]:
@@ -234,6 +255,12 @@ class AdjudicationStore:
                 raise KeyError(sample_id)
             if row["annotation_status"] == "adjudicated":
                 raise ValueError("adjudicated samples cannot receive new annotations")
+            claimed = connection.execute(
+                "SELECT 1 FROM adjudication_claims WHERE sample_id=? AND annotator=?",
+                (sample_id, annotator),
+            ).fetchone()
+            if claimed is None:
+                raise ValueError("annotator must claim the sample before submitting an annotation")
             try:
                 connection.execute(
                     """INSERT INTO adjudication_annotations
@@ -275,14 +302,30 @@ class AdjudicationStore:
                 raise KeyError(sample_id)
             if row["annotation_status"] == "adjudicated":
                 raise ValueError("adjudicated samples cannot be claimed")
-            if row["annotation_status"] == "reviewed":
-                if row["annotator"] == annotator:
-                    return self._row(row)
-                raise ValueError("sample is already claimed by another annotator")
-            connection.execute(
-                "UPDATE adjudication_queue SET annotation_status='reviewed', annotator=?, claimed_at=?, updated_at=? WHERE sample_id=?",
-                (annotator, now, now, sample_id),
-            )
+            existing_claim = connection.execute(
+                "SELECT 1 FROM adjudication_claims WHERE sample_id=? AND annotator=?",
+                (sample_id, annotator),
+            ).fetchone()
+            if existing_claim is None:
+                claim_count = connection.execute(
+                    "SELECT COUNT(*) FROM adjudication_claims WHERE sample_id=?", (sample_id,)
+                ).fetchone()[0]
+                if claim_count >= 2:
+                    raise ValueError("two independent annotator slots are already claimed")
+                connection.execute(
+                    "INSERT INTO adjudication_claims (sample_id, annotator, claimed_at) VALUES (?, ?, ?)",
+                    (sample_id, annotator, now),
+                )
+            if not row["annotator"]:
+                connection.execute(
+                    "UPDATE adjudication_queue SET annotation_status='reviewed', annotator=?, claimed_at=?, updated_at=? WHERE sample_id=?",
+                    (annotator, now, now, sample_id),
+                )
+            else:
+                connection.execute(
+                    "UPDATE adjudication_queue SET updated_at=? WHERE sample_id=?",
+                    (now, sample_id),
+                )
         result = self.get_item(sample_id)
         assert result is not None
         return result
@@ -320,7 +363,14 @@ class AdjudicationStore:
                 """UPDATE adjudication_queue
                    SET annotation_status='adjudicated', labels_json=?, annotation_version=?, annotator=?, adjudicator=?, updated_at=?
                    WHERE sample_id=?""",
-                (json.dumps(labels, ensure_ascii=False, sort_keys=True), annotation_version, actor, actor, now, sample_id),
+                (
+                    json.dumps(labels, ensure_ascii=False, sort_keys=True),
+                    annotation_version,
+                    actor,
+                    actor,
+                    now,
+                    sample_id,
+                ),
             )
         result = self.get_item(sample_id)
         assert result is not None
