@@ -109,3 +109,61 @@ def test_annotation_requires_a_claim(tmp_path) -> None:
         store.submit_annotation(
             "sample-1", labels={"priority": "normal"}, annotation_version="ann-1", annotator="unassigned"
         )
+
+
+def private_item() -> dict[str, object]:
+    return item("private-sample") | {"scenario_id": "private-source-review-v1", "split": "shadow"}
+
+
+def private_labels() -> dict[str, object]:
+    return {
+        "source_kind": "email",
+        "document_type": "request",
+        "actionability": "follow_up",
+        "priority": "normal",
+        "has_deadline": True,
+        "has_owner": False,
+        "requires_omo_task": True,
+    }
+
+
+def test_private_source_review_enforces_versioned_label_contract(tmp_path) -> None:
+    store = AdjudicationStore(tmp_path / "adjudication.sqlite")
+    store.ingest_queue([private_item()])
+    store.claim("private-sample", annotator="reviewer-a")
+
+    with pytest.raises(ValueError, match="schema mismatch"):
+        store.submit_annotation(
+            "private-sample",
+            labels={"priority": "normal"},
+            annotation_version="private-source-review-v1.0",
+            annotator="reviewer-a",
+        )
+    with pytest.raises(ValueError, match="unsupported fields"):
+        store.submit_annotation(
+            "private-sample",
+            labels=private_labels() | {"note": "free text"},
+            annotation_version="private-source-review-v1.0",
+            annotator="reviewer-a",
+        )
+
+    store.submit_annotation(
+        "private-sample",
+        labels=private_labels(),
+        annotation_version="private-source-review-v1.0",
+        annotator="reviewer-a",
+    )
+    store.claim("private-sample", annotator="reviewer-b")
+    store.submit_annotation(
+        "private-sample",
+        labels=private_labels(),
+        annotation_version="private-source-review-v1.0",
+        annotator="reviewer-b",
+    )
+    result = store.adjudicate(
+        "private-sample",
+        labels=private_labels(),
+        annotation_version="private-source-review-v1.0",
+        adjudicator="reviewer-c",
+    )
+    assert result["annotation_status"] == "adjudicated"
