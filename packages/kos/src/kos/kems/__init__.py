@@ -14,6 +14,7 @@ from .scenarios import (
     analyze_reconsideration,
     analyze_tri_medical_minutes,
 )
+from .task_contract import TaskDraft
 
 __all__ = (
     "EnrichmentResult",
@@ -33,6 +34,7 @@ __all__ = (
     "PipelineRun",
     "SourceManifest",
     "StepRun",
+    "TaskDraft",
     "OCRPageQuality",
     "OCRQualityPolicy",
     "OCRQualityReport",
