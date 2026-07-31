@@ -9,6 +9,7 @@ from .pipeline import PipelineRun, SourceManifest, StepRun
 from .policy import PolicyAnalysis, analyze_policy_document, analyze_policy_file
 from .run_record import KemsRunRecord, create_run_record
 from .run_store import RunStore
+from .runner import PipelineExecutor, PipelineStep
 from .scenarios import (
     ScenarioAnalysis,
     analyze_ai_survey,
@@ -36,6 +37,8 @@ __all__ = (
     "PipelineRun",
     "SourceManifest",
     "StepRun",
+    "PipelineExecutor",
+    "PipelineStep",
     "TaskDraft",
     "OCRPageQuality",
     "OCRQualityPolicy",
