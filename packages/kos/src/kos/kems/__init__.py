@@ -7,6 +7,7 @@ from .forecast import ShadowForecast, ShadowForecastEvaluation, build_naive_shad
 from .graph_store import DocumentVersion, EvidenceSpan, GraphEntity, GraphRelation, GraphStore
 from .ingest import ImportedDocument, ImportPolicy, import_document
 from .ocr_quality import OCRPageQuality, OCRQualityPolicy, OCRQualityReport, assess_ocr_quality
+from .ocr_quality_store import OCRQualityStore
 from .omo_adapter import OmoTaskAdapter
 from .pipeline import PipelineRun, SourceManifest, StepRun
 from .policy import PolicyAnalysis, analyze_policy_document, analyze_policy_file
@@ -51,6 +52,7 @@ __all__ = (
     "OCRPageQuality",
     "OCRQualityPolicy",
     "OCRQualityReport",
+    "OCRQualityStore",
     "OmoTaskAdapter",
     "ScenarioAnalysis",
     "analyze_ai_survey",
