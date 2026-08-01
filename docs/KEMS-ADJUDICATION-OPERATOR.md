@@ -99,6 +99,28 @@ manifest: `dataset_id`, `dataset_version`, `dataset_sample_count`, and
 `evaluation_manifest_sha256`. A successful shadow report remains
 `promotion=blocked_until_omo_approval`.
 
+For the complete candidate-model path, use the unified command below. It runs
+the redacted predictor, validates and hashes the manifest, records the report
+in the acceptance store, and writes the canonical JSON consumed by Runtime
+preflight. Re-running the same `run_id` is idempotent.
+
+```bash
+PYTHONPATH="$KAIRON_ROOT/packages/kos/src" \
+  uv run --project "$KAIRON_ROOT" python \
+  "$KAIRON_ROOT/scripts/kems_evaluate_and_record_model.py" \
+  --input "$KEMS_REDACTED_CASES" \
+  --evaluation-manifest "$KEMS_EVALUATION_MANIFEST" \
+  --output "$KEMS_MODEL_ACCEPTANCE_REPORT" \
+  --run-id "$KEMS_MODEL_RUN_ID" \
+  --database "$HOME/.kems/model-acceptance.sqlite" \
+  --candidate-model-id moving-average-v1 \
+  --strategy moving-average --window 3
+```
+
+The command fails closed when the manifest is missing, empty, or not
+`redaction_status=verified`. It never grants promotion; OMO approval remains a
+separate required artifact.
+
 ## Release Gates
 
 The operator must retain these artifacts together:
