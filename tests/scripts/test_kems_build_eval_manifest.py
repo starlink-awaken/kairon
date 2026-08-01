@@ -7,9 +7,17 @@ from pathlib import Path
 import pytest
 
 SCRIPTS_DIR = Path(__file__).resolve().parents[2] / "scripts"
+KOS_SRC_DIR = Path(__file__).resolve().parents[2] / "packages" / "kos" / "src"
 sys.path.insert(0, str(SCRIPTS_DIR))
+sys.path.insert(0, str(KOS_SRC_DIR))
 
-from kems_build_eval_manifest import ManifestInputError, build_manifest, write_manifest
+from kems_build_eval_manifest import (
+    ManifestInputError,
+    build_manifest,
+    build_manifest_from_database,
+    write_manifest,
+)
+from kos.kems import AdjudicationStore
 
 
 def record(*, sample_id: str = "sample-1", status: str = "adjudicated") -> dict[str, object]:
@@ -80,3 +88,28 @@ def test_write_manifest_is_parseable(tmp_path: Path) -> None:
     payload = json.loads(output_path.read_text(encoding="utf-8"))
     assert payload["schema_version"] == "kems.evaluation-manifest.v1"
     assert not list(output_path.parent.glob(".*.tmp"))
+
+
+def test_build_manifest_from_persisted_adjudication(tmp_path: Path) -> None:
+    database_path = tmp_path / "adjudication.sqlite"
+    store = AdjudicationStore(database_path)
+    store.ingest_queue([record(status="pending")])
+    store.claim("sample-1", annotator="annotator-a")
+    store.claim("sample-1", annotator="annotator-b")
+    store.submit_annotation("sample-1", labels={"title": "通知"}, annotation_version="ann-1", annotator="annotator-a")
+    store.submit_annotation("sample-1", labels={"title": "通知"}, annotation_version="ann-1", annotator="annotator-b")
+    store.adjudicate("sample-1", labels={"title": "通知"}, annotation_version="ann-1", adjudicator="reviewer")
+
+    manifest = build_manifest_from_database(database_path, dataset_id="kems-real", dataset_version="v1")
+
+    assert manifest.to_dict()["samples"] == [record()]
+    assert "annotator" not in manifest.to_json()
+
+
+def test_build_manifest_from_database_rejects_pending_only_queue(tmp_path: Path) -> None:
+    database_path = tmp_path / "adjudication.sqlite"
+    store = AdjudicationStore(database_path)
+    store.ingest_queue([record(status="pending")])
+
+    with pytest.raises(ManifestInputError, match="no adjudicated samples"):
+        build_manifest_from_database(database_path, dataset_id="kems-real", dataset_version="v1")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a redacted KEMS evaluation manifest from adjudicated JSONL metadata."""
+"""Build a redacted KEMS evaluation manifest from adjudicated JSONL or SQLite data."""
 
 from __future__ import annotations
 
@@ -111,23 +111,66 @@ def build_manifest(input_path: Path, *, dataset_id: str, dataset_version: str) -
     if not input_path.is_file():
         raise ManifestInputError("adjudication JSONL is unavailable")
 
-    samples: list[EvaluationSample] = []
-    seen_ids: set[str] = set()
     try:
         lines = input_path.read_text(encoding="utf-8").splitlines()
     except (OSError, UnicodeError) as exc:
         raise ManifestInputError(f"unable to read adjudication JSONL: {type(exc).__name__}") from exc
+    records: list[tuple[int, object]] = []
     for line_number, line in enumerate(lines, start=1):
         if not line.strip():
             continue
         try:
-            record = json.loads(line)
+            records.append((line_number, json.loads(line)))
         except json.JSONDecodeError as exc:
             raise ManifestInputError(f"line {line_number}: invalid JSON") from exc
+    return _build_manifest_from_records(
+        records,
+        dataset_id=dataset_id,
+        dataset_version=dataset_version,
+        empty_message="adjudication JSONL has no samples",
+    )
+
+
+def build_manifest_from_database(
+    database_path: Path, *, dataset_id: str, dataset_version: str, limit: int = 10000
+) -> EvaluationManifest:
+    """Build a manifest from persisted, already-adjudicated redacted records."""
+    if not database_path.is_file():
+        raise ManifestInputError("adjudication database is unavailable")
+    if limit <= 0:
+        raise ManifestInputError("database limit must be positive")
+    try:
+        from kos.kems import AdjudicationStore
+    except (ImportError, TypeError) as exc:
+        raise ManifestInputError("KEMS adjudication store is unavailable") from exc
+    try:
+        records = AdjudicationStore(database_path).adjudicated_items(limit=limit)
+    except (OSError, ValueError) as exc:
+        raise ManifestInputError(f"unable to read adjudication database: {type(exc).__name__}") from exc
+    return _build_manifest_from_records(
+        [(index, record) for index, record in enumerate(records, start=1)],
+        dataset_id=dataset_id,
+        dataset_version=dataset_version,
+        empty_message="adjudication database has no adjudicated samples",
+    )
+
+
+def _build_manifest_from_records(
+    records: list[tuple[int, object]],
+    *,
+    dataset_id: str,
+    dataset_version: str,
+    empty_message: str,
+) -> EvaluationManifest:
+    if not dataset_id.strip() or not dataset_version.strip():
+        raise ManifestInputError("dataset_id and dataset_version are required")
+    samples: list[EvaluationSample] = []
+    seen_ids: set[str] = set()
+    for line_number, record in records:
         validated = _validate_sample(record, line_number, seen_ids)
         samples.append(EvaluationSample(**validated))
     if not samples:
-        raise ManifestInputError("adjudication JSONL has no samples")
+        raise ManifestInputError(empty_message)
     return EvaluationManifest(
         schema_version="kems.evaluation-manifest.v1",
         dataset_id=dataset_id.strip(),
@@ -153,17 +196,26 @@ def write_manifest(manifest: EvaluationManifest, output_path: Path) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--input", required=True, type=Path, help="adjudicated JSONL metadata")
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--input", type=Path, help="adjudicated JSONL metadata")
+    source.add_argument("--database", type=Path, help="persistent adjudication SQLite database")
     parser.add_argument("--output", required=True, type=Path, help="redacted manifest JSON")
     parser.add_argument("--dataset-id", required=True)
     parser.add_argument("--dataset-version", required=True)
     args = parser.parse_args()
     try:
-        manifest = build_manifest(
-            args.input.expanduser().resolve(),
-            dataset_id=args.dataset_id,
-            dataset_version=args.dataset_version,
-        )
+        if args.database is not None:
+            manifest = build_manifest_from_database(
+                args.database.expanduser().resolve(),
+                dataset_id=args.dataset_id,
+                dataset_version=args.dataset_version,
+            )
+        else:
+            manifest = build_manifest(
+                args.input.expanduser().resolve(),
+                dataset_id=args.dataset_id,
+                dataset_version=args.dataset_version,
+            )
         write_manifest(manifest, args.output.expanduser().resolve())
     except (ManifestInputError, OSError) as exc:
         print(json.dumps({"status": "failed", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
