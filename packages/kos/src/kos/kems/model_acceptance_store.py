@@ -7,6 +7,19 @@ import sqlite3
 from pathlib import Path
 from typing import Any
 
+_FORBIDDEN_KEYS = {"body", "content", "ocr_text", "raw_text", "text"}
+
+
+def _reject_private(value: object) -> None:
+    if isinstance(value, dict):
+        if _FORBIDDEN_KEYS.intersection(str(key).lower() for key in value):
+            raise ValueError("raw content fields are forbidden")
+        for child in value.values():
+            _reject_private(child)
+    elif isinstance(value, list):
+        for child in value:
+            _reject_private(child)
+
 
 class ModelAcceptanceStore:
     """Persist acceptance evidence without prediction features or source text."""
@@ -42,6 +55,10 @@ class ModelAcceptanceStore:
             raise ValueError("unsupported model acceptance schema")
         if report.get("promotion") != "blocked_until_omo_approval":
             raise ValueError("model acceptance cannot authorize promotion")
+        _reject_private(report)
+        for field in ("candidate_model_id", "baseline_model_id", "status"):
+            if not isinstance(report.get(field), str) or not report[field].strip():
+                raise ValueError(f"model acceptance field is required: {field}")
         self.initialize()
         with self._connect() as connection:
             existing = connection.execute(
