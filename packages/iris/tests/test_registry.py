@@ -1,5 +1,8 @@
 """Tests for connector registry."""
 
+import tomllib
+from pathlib import Path
+
 import pytest
 from iris.base import BaseConnector
 from iris.registry import ConnectorRegistry
@@ -98,3 +101,46 @@ class TestRegistry:
         assert len(registry) == 0
         registry.register(MockConnector())
         assert len(registry) == 1
+
+    def test_external_descriptor_is_credential_free(self):
+        descriptor = MockConnector().external_descriptor()
+        assert descriptor["id"] == "iris:mock"
+        assert descriptor["kind"] == "knowledge_source"
+        assert descriptor["lifecycle"] == "active"
+        assert descriptor["health"]["available"] is True
+        assert "access_token" not in descriptor
+        assert "password" not in descriptor
+
+    def test_iris_package_declares_connector_entry_points(self):
+        package_root = Path(__file__).resolve().parents[1]
+        with (package_root / "pyproject.toml").open("rb") as stream:
+            project = tomllib.load(stream)
+
+        entry_points = project["project"]["entry-points"]["iris.connectors"]
+        assert set(entry_points) == {
+            "local_files",
+            "obsidian",
+            "openhuman",
+            "wpsnote",
+            "notebooklm",
+            "zhihu",
+            "wxread",
+            "telegram",
+            "wechat",
+            "pocket",
+            "polar",
+            "applenotes",
+            "github",
+            "rss",
+            "dingtalk",
+            "feishu",
+        }
+
+    def test_iris_connectors_are_external_resource_providers(self):
+        package_root = Path(__file__).resolve().parents[1]
+        with (package_root / "pyproject.toml").open("rb") as stream:
+            project = tomllib.load(stream)
+
+        external_entries = project["project"]["entry-points"]["external.resources"]
+        iris_entries = project["project"]["entry-points"]["iris.connectors"]
+        assert external_entries == iris_entries
