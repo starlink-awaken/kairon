@@ -43,6 +43,10 @@ class BaseConnector(ABC):
 
     name: str = ""
     display_name: str = ""
+    connection_kind: str = "knowledge_source"
+    protocol: str = "iris.connector.v1"
+    capabilities: tuple[str, ...] = ("discover", "search", "read")
+    data_classification: str = "private"
 
     @abstractmethod
     def is_available(self) -> bool:
@@ -84,6 +88,38 @@ class BaseConnector(ABC):
     def status(self) -> dict[str, Any]:
         """Return connector health/configuration/count status."""
         ...
+
+    def external_descriptor(self) -> dict[str, Any]:
+        """Expose a credential-free descriptor for the External Connection Fabric."""
+        try:
+            available = bool(self.is_available())
+        except Exception as exc:  # pragma: no cover - defensive boundary for third-party adapters
+            available = False
+            availability_error = type(exc).__name__
+        else:
+            availability_error = None
+
+        try:
+            health = self.status()
+        except Exception as exc:  # pragma: no cover - defensive boundary for third-party adapters
+            health = {"error": type(exc).__name__}
+
+        if availability_error:
+            health = {**health, "availability_error": availability_error}
+
+        return {
+            "id": f"iris:{self.name}",
+            "kind": self.connection_kind,
+            "provider": self.name,
+            "protocol": self.protocol,
+            "capabilities": list(self.capabilities),
+            "data_classification": self.data_classification,
+            "provenance": {"adapter": "kairon.iris", "connector": self.name},
+            "lifecycle": "active" if available else "degraded",
+            "health": {"available": available, "details": health},
+            "owner": "kairon.iris",
+            "version": "1",
+        }
 
     def sync(self, dry_run: bool = False) -> SyncResult:
         """Pull latest data from platform (default: unsupported message)."""
