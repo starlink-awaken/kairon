@@ -119,6 +119,9 @@ class BaseConnector(ABC):
             "health": {"available": available, "details": health},
             "owner": "kairon.iris",
             "version": "1",
+            # This is an opaque reference, never a credential value. The
+            # scene admission layer must still match it to an operator grant.
+            "permission_ref": f"credential://iris/{self.name}",
         }
 
     def sync(self, dry_run: bool = False) -> SyncResult:

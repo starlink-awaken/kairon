@@ -135,3 +135,12 @@ class TestRegistry:
             "dingtalk",
             "feishu",
         }
+
+    def test_iris_connectors_are_external_resource_providers(self):
+        package_root = Path(__file__).resolve().parents[1]
+        with (package_root / "pyproject.toml").open("rb") as stream:
+            project = tomllib.load(stream)
+
+        external_entries = project["project"]["entry-points"]["external.resources"]
+        iris_entries = project["project"]["entry-points"]["iris.connectors"]
+        assert external_entries == iris_entries
