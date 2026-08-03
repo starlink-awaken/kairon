@@ -122,7 +122,7 @@ def read_jsonrpc() -> dict[str, Any]:
 def tool_list_domains() -> dict[str, Any]:  # type: ignore[unused-ignore]
     if not KOS_READY:
         return KOS_INIT_ERROR
-    manifest = get_workspace_manifest()
+    manifest = get_workspace_manifest()  # type: ignore[reportPossiblyUnboundVariable]
     domains = manifest.get("domains", {})
     zones = manifest.get("zones", {})
     result = []
@@ -177,13 +177,13 @@ def tool_search_knowledge(  # type: ignore[no-untyped-def]
                     query = " OR ".join(tokens)
         from pathlib import Path
 
-        db_path = get_artifact_path("retrievalDatabase")
+        db_path = get_artifact_path("retrievalDatabase")  # type: ignore[reportPossiblyUnboundVariable]
         if not Path(str(db_path)).exists():
             return {"error": "Retrieval database not found", "results": [], "count": 0}
         conn = get_connection(str(db_path))
         exclude_clause = ""
         if not include_templates:
-            manifest = get_workspace_manifest()
+            manifest = get_workspace_manifest()  # type: ignore[reportPossiblyUnboundVariable]
             excludes = manifest.get("indexing", {}).get("searchDefaultExclude", [])
             if excludes:
                 clauses = [f"d.canonical_path NOT LIKE '%{p}%'" for p in excludes]
@@ -211,7 +211,7 @@ def tool_search_knowledge(  # type: ignore[no-untyped-def]
                 break
             like_params = [f"%{term}%", f"%{term}%"]
             if domains:
-                like_params.extend(domain_list)
+                like_params.extend(domain_list)  # type: ignore[reportPossiblyUnboundVariable]
             like_params.append(limit - len(rows))  # type: ignore[arg-type]
             for row in conn.execute(like_sql, like_params).fetchall():
                 if row["doc_id"] not in seen_doc_ids:
@@ -249,7 +249,7 @@ def tool_get_knowledge(kos_id: str) -> dict[str, Any]:  # type: ignore[unused-ig
     try:
         from pathlib import Path
 
-        db_path = get_artifact_path("retrievalDatabase")
+        db_path = get_artifact_path("retrievalDatabase")  # type: ignore[reportPossiblyUnboundVariable]
         if not Path(str(db_path)).exists():
             return {"error": "Retrieval database not found"}
         conn = sqlite3.connect(str(db_path))
@@ -277,7 +277,7 @@ def tool_get_system_status() -> dict[str, Any]:  # type: ignore[unused-ignore]
     try:
         from pathlib import Path
 
-        db_path = get_artifact_path("retrievalDatabase")
+        db_path = get_artifact_path("retrievalDatabase")  # type: ignore[reportPossiblyUnboundVariable]
         if Path(str(db_path)).exists():
             conn = sqlite3.connect(str(db_path))
             count = conn.execute("SELECT COUNT(*) FROM documents").fetchone()[0]
@@ -319,7 +319,7 @@ def tool_onto(cmd: str, entity_type: str = "", confirmed: bool = False) -> dict[
     try:
         from pathlib import Path
 
-        db_path = get_artifact_path("retrievalDatabase")
+        db_path = get_artifact_path("retrievalDatabase")  # type: ignore[reportPossiblyUnboundVariable]
 
         # ── Helper: init ontology schema if needed ──────────
         def _ensure_onto_schema(conn: Any) -> None:
@@ -567,7 +567,7 @@ def tool_db_vacuum(
     try:
         from pathlib import Path
 
-        db_path = get_artifact_path("retrievalDatabase")
+        db_path = get_artifact_path("retrievalDatabase")  # type: ignore[reportPossiblyUnboundVariable]
         if not Path(str(db_path)).exists():
             return {"error": "Retrieval database not found"}
         conn = sqlite3.connect(str(db_path))
@@ -592,7 +592,7 @@ def tool_search_entity(query: str, entity_type: str = "", limit: int = 10) -> di
     try:
         from pathlib import Path
 
-        db_path = get_artifact_path("retrievalDatabase")
+        db_path = get_artifact_path("retrievalDatabase")  # type: ignore[reportPossiblyUnboundVariable]
         conn = sqlite3.connect(str(db_path))
         conn.row_factory = sqlite3.Row
         params = [f"%{query}%", limit]
@@ -880,7 +880,7 @@ def tool_subscribe_topic(topic: str, subscriber_id: str = "mcp-agent") -> dict:
         from kos.agent.subscription import SubscriptionService
 
         service = SubscriptionService()
-        service.init_table(get_artifact_path("retrievalDatabase"))
+        service.init_table(get_artifact_path("retrievalDatabase"))  # type: ignore[reportPossiblyUnboundVariable]
         return service.subscribe(topic, subscriber_id)
     except Exception as e:
         return {"error": str(e)}

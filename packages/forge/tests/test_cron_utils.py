@@ -10,6 +10,8 @@ cron_utils 共享工具库单元测试
 - get_cron_items / find_cron_item —— 注册表字典解析
 - 路径辅助函数
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import subprocess
 import sys

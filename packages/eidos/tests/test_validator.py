@@ -1,3 +1,5 @@
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 from eidos.core.validator import Validator
 from eidos.schema import FieldType, Schema, SchemaField, SchemaRegistry
 

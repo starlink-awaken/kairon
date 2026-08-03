@@ -1,6 +1,8 @@
 """
 测试数据模型模块
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.foundation.models import (
     CheckResult,
@@ -123,4 +125,4 @@ def test_derive_snapshot_with_metrics():
     ds = DeriveSnapshot(
         timestamp="2026-05-18T10:00:00", facts=8, entities=4, inferences=2, scheme_files=1, metrics=metrics
     )
-    assert ds.metrics["kqi"] == 0.42
+    assert ds.metrics["kqi"] == 0.42  # type: ignore[reportOptionalSubscript]

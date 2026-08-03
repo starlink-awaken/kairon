@@ -1,3 +1,6 @@
+# pyright: reportArgumentType=false
+# pyright: reportAttributeAccessIssue=false
+
 import pytest
 from deepeval import assert_test
 from deepeval.metrics import AnswerRelevancyMetric, FaithfulnessMetric

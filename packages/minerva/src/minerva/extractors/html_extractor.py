@@ -61,7 +61,7 @@ class HtmlContentExtractor(IContentExtractor):
     def __init__(self, config: ExtractionConfig | None = None) -> None:
         self.config = config or ExtractionConfig()
 
-    async def extract(self, raw: RawContent) -> list[StructuredKnowledge]:
+    async def extract(self, raw: RawContent) -> list[StructuredKnowledge]:  # type: ignore[override]
         """Extract structured knowledge from HTML content"""
         # Decode bytes if needed
         if isinstance(raw.data, bytes):

@@ -26,7 +26,7 @@ import logging
 import os
 import time
 
-from eidos.base import VectorSearchResult, VectorStoreBackend
+from eidos.base import VectorSearchResult, VectorStoreBackend  # type: ignore[reportMissingImports]
 
 _log = logging.getLogger(__name__)
 
@@ -84,10 +84,10 @@ class LanceDBBackend(VectorStoreBackend):
             raise
 
         # Lazy load embedding model and database connection
-        self._model: SentenceTransformer | None = None
+        self._model: SentenceTransformer | None = None  # type: ignore[reportInvalidTypeForm]
         self._table: Any | None = None
 
-    def _get_model(self) -> SentenceTransformer:
+    def _get_model(self) -> SentenceTransformer:  # type: ignore[reportInvalidTypeForm]
         """Lazy-load the sentence transformer model."""
         if self._model is None:
             _log.info("🧠 Loading sentence-transformers model (all-MiniLM-L6-v2)...")

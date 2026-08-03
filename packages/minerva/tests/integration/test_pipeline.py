@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from minerva.knowledge.store import SQLiteKnowledgeStore
-from minerva.pipeline.engine import Pipeline, ResearchLevel
+from minerva.pipeline.engine import Pipeline, ResearchLevel  # type: ignore[reportPrivateImportUsage]
 from minerva.pipeline.stages import (
     CrossAnalyzeStageImpl as CrossAnalyzeStage,
 )

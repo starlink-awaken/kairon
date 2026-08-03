@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parents[2] / "scripts"))
 
-from kems_build_annotation_handoff import build_handoff, write_packet
+from kems_build_annotation_handoff import build_handoff, write_packet  # type: ignore[reportMissingImports]
 from kos.kems import AdjudicationStore
 
 

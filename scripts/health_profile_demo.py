@@ -100,8 +100,8 @@ def main() -> None:
     print(f"[年龄] 当前 ({TODAY}) 年龄 = {xia.age_years(TODAY)} 岁")
 
     last = xia.last_check()
-    print(f"\n[最近体检] {last.check_date}  身高 {last.height_cm}cm  体重 {last.weight_kg}kg")
-    print(f"[最近体检] 视力 L={last.vision_left} R={last.vision_right}  notes={last.notes!r}")
+    print(f"\n[最近体检] {last.check_date}  身高 {last.height_cm}cm  体重 {last.weight_kg}kg")  # type: ignore[reportOptionalMemberAccess]
+    print(f"[最近体检] 视力 L={last.vision_left} R={last.vision_right}  notes={last.notes!r}")  # type: ignore[reportOptionalMemberAccess]
 
     upcoming = xia.upcoming_vaccinations(on=TODAY, window_days=60)
     print(f"\n[未来 60 天疫苗] 共 {len(upcoming)} 条")
@@ -120,7 +120,7 @@ def main() -> None:
     assert xia2.member_id == xia.member_id
     assert len(xia2.checks) == len(xia.checks)
     assert len(xia2.vaccinations) == len(xia.vaccinations)
-    assert xia2.last_check().check_date == xia.last_check().check_date
+    assert xia2.last_check().check_date == xia.last_check().check_date  # type: ignore[reportOptionalMemberAccess]
     print("[JSON] roundtrip OK  (字段一致)")
 
     print("\n" + "=" * 60)

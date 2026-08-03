@@ -16,7 +16,7 @@ def source(**overrides):
         "captured_at": "2026-07-31T00:00:00Z",
     }
     values.update(overrides)
-    return SourceManifest(**values)
+    return SourceManifest(**values)  # type: ignore[reportArgumentType]
 
 
 def test_source_admission_blocks_personal_and_unredacted_data():

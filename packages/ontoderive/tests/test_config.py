@@ -1,4 +1,6 @@
 """配置系统测试"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.foundation.config import Config
 

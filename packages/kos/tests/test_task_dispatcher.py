@@ -1,5 +1,7 @@
 """Tests for kos.task_dispatcher — priority queues, QoS, preemption."""
 
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 import time
 import unittest
 
@@ -26,42 +28,42 @@ class TestPriorityOrdering(unittest.TestCase):
         self.d.submit("low", Priority.P1_HIGH)
         self.d.submit("high", Priority.P0_CRITICAL)
         t = self.d.next()
-        self.assertEqual(t.description, "high")
+        self.assertEqual(t.description, "high")  # type: ignore[reportOptionalMemberAccess]
 
     def test_p1_before_p2(self):
         self.d.submit("normal", Priority.P2_NORMAL)
         self.d.submit("high", Priority.P1_HIGH)
         t = self.d.next()
-        self.assertEqual(t.description, "high")
+        self.assertEqual(t.description, "high")  # type: ignore[reportOptionalMemberAccess]
 
     def test_p2_before_p3(self):
         self.d.submit("low", Priority.P3_LOW)
         self.d.submit("normal", Priority.P2_NORMAL)
         t = self.d.next()
-        self.assertEqual(t.description, "normal")
+        self.assertEqual(t.description, "normal")  # type: ignore[reportOptionalMemberAccess]
 
     def test_fifo_within_same_priority(self):
         self.d.submit("first", Priority.P2_NORMAL)
         self.d.submit("second", Priority.P2_NORMAL)
         t1 = self.d.next()
-        self.assertEqual(t1.description, "first")
+        self.assertEqual(t1.description, "first")  # type: ignore[reportOptionalMemberAccess]
         # Complete first task before dequeuing second
         self.d.running = None
         t2 = self.d.next()
-        self.assertEqual(t2.description, "second")
+        self.assertEqual(t2.description, "second")  # type: ignore[reportOptionalMemberAccess]
 
     def test_mixed_priority_fifo(self):
         self.d.submit("p3", Priority.P3_LOW)
         self.d.submit("p2", Priority.P2_NORMAL)
         self.d.submit("p1", Priority.P1_HIGH)
         self.d.submit("p0", Priority.P0_CRITICAL)
-        self.assertEqual(self.d.next().description, "p0")
+        self.assertEqual(self.d.next().description, "p0")  # type: ignore[reportOptionalMemberAccess]
         self.d.running = None
-        self.assertEqual(self.d.next().description, "p1")
+        self.assertEqual(self.d.next().description, "p1")  # type: ignore[reportOptionalMemberAccess]
         self.d.running = None
-        self.assertEqual(self.d.next().description, "p2")
+        self.assertEqual(self.d.next().description, "p2")  # type: ignore[reportOptionalMemberAccess]
         self.d.running = None
-        self.assertEqual(self.d.next().description, "p3")
+        self.assertEqual(self.d.next().description, "p3")  # type: ignore[reportOptionalMemberAccess]
 
     def test_empty_queue_returns_none(self):
         self.assertIsNone(self.d.next())
@@ -95,12 +97,12 @@ class TestPreemption(unittest.TestCase):
     def test_p0_preempts_p2(self):
         self.d.submit("normal", Priority.P2_NORMAL)
         self.d.next()  # start running P2
-        self.assertEqual(self.d.running.description, "normal")
+        self.assertEqual(self.d.running.description, "normal")  # type: ignore[reportOptionalMemberAccess]
         self.d.submit("critical", Priority.P0_CRITICAL)
         t = self.d.next()
-        self.assertEqual(t.description, "critical")
+        self.assertEqual(t.description, "critical")  # type: ignore[reportOptionalMemberAccess]
         # Running task should have been preempted back to queue
-        self.assertEqual(self.d.running.description, "critical")
+        self.assertEqual(self.d.running.description, "critical")  # type: ignore[reportOptionalMemberAccess]
         # P2 should be back in queue
         self.assertEqual(len(self.d.queues[Priority.P2_NORMAL]), 1)
 
@@ -109,7 +111,7 @@ class TestPreemption(unittest.TestCase):
         self.d.next()
         self.d.submit("critical", Priority.P0_CRITICAL)
         t = self.d.next()
-        self.assertEqual(t.description, "critical")
+        self.assertEqual(t.description, "critical")  # type: ignore[reportOptionalMemberAccess]
 
     def test_p1_does_not_preempt_p0(self):
         self.d.submit("critical", Priority.P0_CRITICAL)
@@ -152,7 +154,7 @@ class TestPreemption(unittest.TestCase):
             self.d.submit(f"p0-{i}", Priority.P0_CRITICAL)
             # P0 preempts P3 (lower priority)
             t = self.d.next()
-            self.assertEqual(t.description, f"p0-{i}")
+            self.assertEqual(t.description, f"p0-{i}")  # type: ignore[reportOptionalMemberAccess]
             # Complete this P0 before next one can start
             self.d.running = None
 
@@ -164,7 +166,7 @@ class TestPreemption(unittest.TestCase):
         # Manually "complete" P0 — set running = None
         self.d.running = None
         t = self.d.next()  # Should get P2 back
-        self.assertEqual(t.description, "normal")
+        self.assertEqual(t.description, "normal")  # type: ignore[reportOptionalMemberAccess]
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -390,12 +392,12 @@ class TestEdgeCases(unittest.TestCase):
     def test_running_task_started_at_set(self):
         self.d.submit("test", Priority.P0_CRITICAL)
         t = self.d.next()
-        self.assertIsNotNone(t.started_at)
+        self.assertIsNotNone(t.started_at)  # type: ignore[reportOptionalMemberAccess]
 
     def test_running_task_status_is_running(self):
         self.d.submit("test", Priority.P0_CRITICAL)
         t = self.d.next()
-        self.assertEqual(t.status, "running")
+        self.assertEqual(t.status, "running")  # type: ignore[reportOptionalMemberAccess]
 
     def test_submit_many_then_drain(self):
         for i in range(10):
@@ -406,12 +408,12 @@ class TestEdgeCases(unittest.TestCase):
         self.d.running = None
         for i in range(5):
             t = self.d.next()
-            self.assertIn(t.description, [f"high-{j}" for j in range(5)])
+            self.assertIn(t.description, [f"high-{j}" for j in range(5)])  # type: ignore[reportOptionalMemberAccess]
             self.d.running = None
         for i in range(10):
             self.d.running = None
             t = self.d.next()
-            self.assertIn(t.description, [f"task-{j}" for j in range(10)])
+            self.assertIn(t.description, [f"task-{j}" for j in range(10)])  # type: ignore[reportOptionalMemberAccess]
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -460,10 +462,10 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(t.status, "queued")
         # Start it
         t = self.d.next()
-        self.assertEqual(t.status, "running")
-        self.assertEqual(t.description, "simple task")
+        self.assertEqual(t.status, "running")  # type: ignore[reportOptionalMemberAccess]
+        self.assertEqual(t.description, "simple task")  # type: ignore[reportOptionalMemberAccess]
         # Query status
-        self.assertEqual(self.d.status(t.id), "running")
+        self.assertEqual(self.d.status(t.id), "running")  # type: ignore[reportOptionalMemberAccess]
 
     def test_complex_preemption_scenario(self):
         """Submit P3, P2, then P0 — verify proper ordering."""
@@ -472,22 +474,22 @@ class TestIntegration(unittest.TestCase):
         self.d.submit("p3-2", Priority.P3_LOW)
         # P2 should start first
         t = self.d.next()
-        self.assertEqual(t.description, "p2-1")
+        self.assertEqual(t.description, "p2-1")  # type: ignore[reportOptionalMemberAccess]
         # Now submit P0
         self.d.submit("p0-1", Priority.P0_CRITICAL)
         # P0 preempts
         t = self.d.next()
-        self.assertEqual(t.description, "p0-1")
+        self.assertEqual(t.description, "p0-1")  # type: ignore[reportOptionalMemberAccess]
         # When P0 completes, P2 should resume, then P3s in order
         self.d.running = None
         t = self.d.next()
-        self.assertEqual(t.description, "p2-1")
+        self.assertEqual(t.description, "p2-1")  # type: ignore[reportOptionalMemberAccess]
         self.d.running = None
         t = self.d.next()
-        self.assertEqual(t.description, "p3-1")
+        self.assertEqual(t.description, "p3-1")  # type: ignore[reportOptionalMemberAccess]
         self.d.running = None
         t = self.d.next()
-        self.assertEqual(t.description, "p3-2")
+        self.assertEqual(t.description, "p3-2")  # type: ignore[reportOptionalMemberAccess]
 
     def test_qos_and_agent_match_stubs(self):
         """QoS check + agent match both work independently."""

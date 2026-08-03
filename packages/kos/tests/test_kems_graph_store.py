@@ -57,7 +57,7 @@ def test_graph_store_supports_evidence_bound_search_review_and_rollback(tmp_path
     store.review_entity(
         entity_id="ent-1", decision="human_verified", reviewer="alice", reason="证据充分", decision_id="decision-1"
     )
-    assert store.get_entity("ent-1")["review_state"] == "human_verified"
+    assert store.get_entity("ent-1")["review_state"] == "human_verified"  # type: ignore[reportOptionalSubscript]
     counts = store.rollback_run("run-1", reviewer="alice", reason="来源版本撤回", decision_id="decision-2")
     assert counts == {"entities": 2, "relations": 1, "documents": 1}
     assert store.search_entities("政策") == []

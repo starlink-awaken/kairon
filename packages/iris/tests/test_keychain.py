@@ -1,4 +1,6 @@
 """Tests for keychain module."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from iris.keychain import delete_password, get_password, set_password
 

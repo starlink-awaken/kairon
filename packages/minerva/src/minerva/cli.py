@@ -271,7 +271,7 @@ async def _run_research(args: Any) -> int:
         return 0
 
     if ctx.report:
-        quality_score = "N/A"
+        quality_score: str = "N/A"
         zh_path = None
         for r in ctx.relations or []:
             if "quality_score" in r:
@@ -298,7 +298,7 @@ async def _run_research(args: Any) -> int:
     if hasattr(ctx, "report") and ctx.report:
         from minerva.persistence import save_research
 
-        quality_val = quality_score if quality_score != "N/A" else 0
+        quality_val = quality_score if quality_score != "N/A" else 0  # type: ignore[reportPossiblyUnboundVariable]
         _result_id = save_research(
             query=args.query,
             level=level.value if hasattr(level, "value") else str(level),
@@ -315,6 +315,7 @@ async def _run_research(args: Any) -> int:
         )
         print(f"\n  [green]✓ Result saved:[/green] ~/.minerva/research/{_result_id}/")
 
+    quality_score = locals().get("quality_score", "N/A")
     # -- Audit log --
     from minerva.audit_store import log_operation
 

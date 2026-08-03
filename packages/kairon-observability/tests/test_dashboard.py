@@ -1,3 +1,5 @@
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 """Tests for kairon_observability.dashboard — 服务拓扑仪表盘.
 
 补 dashboard 零测试债 (功能 P1, 392 LOC 核心模块零覆盖)."""

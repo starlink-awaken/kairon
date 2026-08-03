@@ -415,7 +415,7 @@ class WebhookAlertChannel(AlertChannel):
             with urllib.request.urlopen(req, timeout=self.timeout) as response:  # noqa: S310
                 return cast("bool", response.status == 200)
 
-        except (OSError, urllib.error.URLError, ValueError, TypeError) as e:
+        except (OSError, urllib.error.URLError, ValueError, TypeError) as e:  # type: ignore[reportAttributeAccessIssue]
             logger.error(f"Webhook send failed: {e}")
             return False
 
@@ -648,7 +648,7 @@ class HarvestAlertManager:
         with self._lock:
             self.channels.append(channel)
 
-    def evaluate(self, metrics_getter: Callable[[str], float | None] | None = None) -> list[Alert]:
+    def evaluate(self, metrics_getter: Callable[[str], float | None] | None = None) -> list[Alert]:  # type: ignore[no-redef]
         """
         评估规则并发送告警
 

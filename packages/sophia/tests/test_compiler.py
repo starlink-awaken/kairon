@@ -1,4 +1,6 @@
 """Tests for sophia.compiler — 范式编译器"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from sophia.compiler import _default_ops, _template_compile, compile_paradigm_sync
 from sophia.symbols import ParadigmProgram

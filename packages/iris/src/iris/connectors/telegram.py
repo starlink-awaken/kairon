@@ -133,7 +133,7 @@ class TelegramConnector(BaseConnector):
             self._config.get("telegram.polling_interval", default=str(DEFAULT_POLLING_INTERVAL)),
         )
         try:
-            return max(5, int(raw))
+            return max(5, int(raw))  # type: ignore[reportArgumentType]
         except (ValueError, TypeError):
             return DEFAULT_POLLING_INTERVAL
 
@@ -241,7 +241,7 @@ class TelegramConnector(BaseConnector):
         # getUpdates returns an array of Update objects, each with a 'message' key
         messages: list[Note] = []
         for update in result if isinstance(result, list) else []:
-            msg = update.get("message") or update.get("channel_post") or update.get("edited_message")
+            msg = update.get("message") or update.get("channel_post") or update.get("edited_message")  # type: ignore[reportAttributeAccessIssue]
             if not msg:
                 continue
 
@@ -249,7 +249,7 @@ class TelegramConnector(BaseConnector):
             messages.append(note)
 
             # Track the latest update_id for pagination
-            upd_id = update.get("update_id", 0)
+            upd_id = update.get("update_id", 0)  # type: ignore[reportAttributeAccessIssue]
             if upd_id > self._last_update_id:
                 self._last_update_id = upd_id
 
@@ -281,7 +281,7 @@ class TelegramConnector(BaseConnector):
             return None
 
         for update in result if isinstance(result, list) else []:
-            msg = update.get("message") or update.get("channel_post")
+            msg = update.get("message") or update.get("channel_post")  # type: ignore[reportAttributeAccessIssue]
             if msg and str(msg.get("message_id")) == id:
                 return _message_to_note(msg, target_chat)
 
@@ -336,10 +336,10 @@ class TelegramConnector(BaseConnector):
         updates: list[dict[str, Any]] = result if isinstance(result, list) else []
         new_messages = 0
         for update in updates:
-            msg = update.get("message") or update.get("channel_post") or update.get("edited_message")
+            msg = update.get("message") or update.get("channel_post") or update.get("edited_message")  # type: ignore[reportAttributeAccessIssue]
             if msg:
                 new_messages += 1
-            upd_id = update.get("update_id", 0)
+            upd_id = update.get("update_id", 0)  # type: ignore[reportAttributeAccessIssue]
             if upd_id > self._last_update_id:
                 self._last_update_id = upd_id
 
@@ -429,7 +429,7 @@ class TelegramConnector(BaseConnector):
             text = title
         return self.send_message(text=text)
 
-    def update_item(self, id: str, data: dict[str, Any]) -> dict[str, Any]:
+    def update_item(self, id: str, data: dict[str, Any]) -> dict[str, Any]:  # type: ignore[reportIncompatibleMethodOverride]
         """Edit a sent message (only works for bot's own messages).
 
         Args:

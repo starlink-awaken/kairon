@@ -19,7 +19,7 @@ def test_candidate_result_is_redacted_and_store_is_idempotent(tmp_path) -> None:
     assert report["promotion"] == "blocked_until_omo_approval"
     assert store.record("run-1", report) is True
     assert store.record("run-1", report) is False
-    assert store.get("run-1")["report"] == report
+    assert store.get("run-1")["report"] == report  # type: ignore[reportOptionalSubscript]
 
 
 def test_acceptance_store_cannot_authorize_promotion(tmp_path) -> None:

@@ -4,6 +4,8 @@ Drives `OntoDerive.run_validation_pipeline()` against a fixture project
 in `tmp_path` and asserts the validation / evolution steps produce
 non-empty results from the derive summary without mocking the engine.
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

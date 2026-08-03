@@ -9,7 +9,7 @@ KOS_SRC_DIR = Path(__file__).resolve().parents[2] / "packages" / "kos" / "src"
 sys.path.insert(0, str(SCRIPTS_DIR))
 sys.path.insert(0, str(KOS_SRC_DIR))
 
-from kems_sync_adjudication_queue import sync_queue
+from kems_sync_adjudication_queue import sync_queue  # type: ignore[reportMissingImports]
 from kos.kems import AdjudicationStore
 
 

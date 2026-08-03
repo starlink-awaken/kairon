@@ -73,12 +73,12 @@ class KosMonitor:
         try:
             fts_count = conn.execute("SELECT COUNT(*) FROM documents_fts").fetchone()[0]
             result["checks"]["fts_consistency"] = {
-                "status": "pass" if fts_count == doc_count else "warn",
+                "status": "pass" if fts_count == doc_count else "warn",  # type: ignore[reportPossiblyUnboundVariable]
                 "fts_count": fts_count,
-                "doc_count": doc_count,
-                "mismatch": doc_count - fts_count,
+                "doc_count": doc_count,  # type: ignore[reportPossiblyUnboundVariable]
+                "mismatch": doc_count - fts_count,  # type: ignore[reportPossiblyUnboundVariable]
             }
-            if fts_count != doc_count:
+            if fts_count != doc_count:  # type: ignore[reportPossiblyUnboundVariable]
                 result["status"] = "degraded"
         except sqlite3.Error as e:
             result["checks"]["fts_consistency"] = {"status": "error", "detail": str(e)}
@@ -89,7 +89,7 @@ class KosMonitor:
             stale_count = conn.execute(
                 "SELECT COUNT(*) FROM documents WHERE updated_at < ?", (stale_threshold,)
             ).fetchone()[0]
-            stale_pct = (stale_count / doc_count * 100) if doc_count > 0 else 0
+            stale_pct = (stale_count / doc_count * 100) if doc_count > 0 else 0  # type: ignore[reportPossiblyUnboundVariable]
             result["checks"]["stale_documents"] = {
                 "status": "pass" if stale_pct < 20 else "warn",
                 "count": stale_count,

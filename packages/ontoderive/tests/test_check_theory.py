@@ -1,4 +1,6 @@
 """Tests for check_theory — C-09~C-13 理论层规约检查"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.core.check_theory import (
     THEORY_CHECKS,

@@ -17,7 +17,7 @@ import pytest
 SCRIPTS_DIR = Path(__file__).resolve().parents[2] / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
 
-import governance_audit as ga
+import governance_audit as ga  # type: ignore[reportMissingImports]
 
 # ── 公共 fixture ──────────────────────────────────────────────
 

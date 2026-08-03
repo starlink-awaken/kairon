@@ -4,6 +4,8 @@ Covers 7 handler functions (list, validate, meta, migrate, migration_list,
 define, export) + helpers (_json_default, _dump, _call_tool, _list_tools,
 handle_mcp_request, main).
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

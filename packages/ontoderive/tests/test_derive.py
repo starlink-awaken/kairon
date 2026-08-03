@@ -1,3 +1,5 @@
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 import json
 
 from ontoderive.core.derive import OntoDerive

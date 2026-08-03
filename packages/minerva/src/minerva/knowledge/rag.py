@@ -18,7 +18,7 @@ logger = structlog.get_logger(__name__)
 try:
     from cachetools import TTLCache
 
-    _embedding_cache: TTLCache = TTLCache(maxsize=1000, ttl=3600)
+    _embedding_cache: TTLCache = TTLCache(maxsize=1000, ttl=3600)  # type: ignore[reportAssignmentType]
 except ImportError:
     _embedding_cache: dict = {}  # type: ignore[no-redef]  # Fallback if cachetools unavailable
 

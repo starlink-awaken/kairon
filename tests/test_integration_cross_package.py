@@ -30,8 +30,8 @@ class TestChainAgoraToAgentRuntime:
 
     def test_service_registration(self, tmp_path):
         """Register service in Agora, verify it is discoverable."""
-        from agora.core.registry import ServiceRegistry
-        from agora.core.service_base import Service
+        from agora.core.registry import ServiceRegistry  # type: ignore[reportMissingImports]
+        from agora.core.service_base import Service  # type: ignore[reportMissingImports]
 
         registry = ServiceRegistry(storage_path=str(tmp_path / "agora.json"), cb_max_failures=5)
 
@@ -53,8 +53,8 @@ class TestChainAgoraToAgentRuntime:
 
     def test_service_listing(self, tmp_path):
         """Registered services appear in list_all."""
-        from agora.core.registry import ServiceRegistry
-        from agora.core.service_base import Service
+        from agora.core.registry import ServiceRegistry  # type: ignore[reportMissingImports]
+        from agora.core.service_base import Service  # type: ignore[reportMissingImports]
 
         registry = ServiceRegistry(storage_path=str(tmp_path / "agora2.json"))
         registry.register(Service(name="agent-runtime", protocol="mcp", port=8765, tags=["agent-runtime"]))
@@ -68,7 +68,7 @@ class TestChainAgoraToAgentRuntime:
     def test_agent_hub_register(self):
         """AgentHub works independently and is compatible with Agora types."""
 
-        hub = AgentHub()  # noqa: F821
+        hub = AgentHub()  # noqa: F821  # type: ignore[reportUndefinedVariable]
         agent_id = hub.register_agent(
             name="agora-worker",
             capabilities=["task:execute", "llm:chat"],
@@ -110,7 +110,7 @@ class TestChainAgentRuntimeToEngineCore:
 
     def test_dag_orchestrates_workflow(self):
         """Engine-core TaskDAG can orchestrate multi-step workflows."""
-        from engine_core.dag import TaskDAG, TaskNode
+        from engine_core.dag import TaskDAG, TaskNode  # type: ignore[reportMissingImports]
 
         dag = TaskDAG()
 
@@ -149,7 +149,7 @@ class TestChainAgentRuntimeToEngineCore:
 
     def test_capability_catalog_register(self):
         """Engine-core CapabilityCatalog stores agent-runtime capabilities."""
-        from engine_core.capability import Capability, CapabilityCatalog
+        from engine_core.capability import Capability, CapabilityCatalog  # type: ignore[reportMissingImports]
 
         catalog = CapabilityCatalog()
         catalog.register(Capability(id="llm:chat", name="Chat via LLM", source="local"))
@@ -188,7 +188,7 @@ class TestChainEngineCoreToLlmGateway:
 
     def test_mock_llm_provider_returns_string_content(self):
         """MockLLMProvider returns string content (not list-based)."""
-        from llm_gateway.provider import LLMRequest, MockLLMProvider
+        from llm_gateway.provider import LLMRequest, MockLLMProvider  # type: ignore[reportMissingImports]
 
         provider = MockLLMProvider()
         request = LLMRequest(prompt="Hello from engine-core")
@@ -202,7 +202,7 @@ class TestChainEngineCoreToLlmGateway:
         """RetryPolicy delay logic is usable alongside LLMRequest."""
         import importlib
 
-        from llm_gateway.provider import LLMRequest, MockLLMProvider
+        from llm_gateway.provider import LLMRequest, MockLLMProvider  # type: ignore[reportMissingImports]
 
         rp = importlib.import_module("engine_core.retry_policy")
 
@@ -220,7 +220,7 @@ class TestChainEngineCoreToLlmGateway:
         """TaskContext and LLMResponse types coexist without conflict."""
         import importlib
 
-        from llm_gateway.provider import LLMRequest, MockLLMProvider
+        from llm_gateway.provider import LLMRequest, MockLLMProvider  # type: ignore[reportMissingImports]
 
         tc = importlib.import_module("engine_core.task_context")
 
@@ -234,7 +234,7 @@ class TestChainEngineCoreToLlmGateway:
 
     def test_capability_catalog_agent_card_uses_llm_gateway_types(self):
         """CapabilityCatalog's to_agent_card() works with MockLLMProvider types."""
-        from engine_core.capability import Capability, CapabilityCatalog
+        from engine_core.capability import Capability, CapabilityCatalog  # type: ignore[reportMissingImports]
 
         catalog = CapabilityCatalog()
         catalog.register(Capability(id="code_gen", name="Code generation", source="local"))
@@ -245,8 +245,8 @@ class TestChainEngineCoreToLlmGateway:
 
     def test_cost_aware_dispatcher_constructs(self):
         """CostAwareDispatcher can be instantiated alongside LLM types."""
-        from engine_core.cost_aware_dispatcher import CostAwareDispatcher
-        from llm_gateway.provider import MockLLMProvider
+        from engine_core.cost_aware_dispatcher import CostAwareDispatcher  # type: ignore[reportMissingImports]
+        from llm_gateway.provider import MockLLMProvider  # type: ignore[reportMissingImports]
 
         dispatcher = CostAwareDispatcher()
         provider = MockLLMProvider()
@@ -257,7 +257,7 @@ class TestChainEngineCoreToLlmGateway:
 
     def test_llm_response_metadata_compatible_with_engine_core(self):
         """LLMResponse metadata structure matches engine-core expectations."""
-        from llm_gateway.provider import LLMRequest, MockLLMProvider
+        from llm_gateway.provider import LLMRequest, MockLLMProvider  # type: ignore[reportMissingImports]
 
         provider = MockLLMProvider()
         request = LLMRequest(prompt="test metadata")

@@ -9,6 +9,8 @@ Forge 核心模块单元测试
 - mcp_server.py 核心查询函数
 - http_api.py 的搜索和查询函数
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import json
 import sys

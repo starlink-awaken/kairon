@@ -13,14 +13,14 @@ class TestPontusPipeline:
     """Test pontus pipeline: DSL → quality → checkpoint."""
 
     def test_quality_validator(self):
-        from pontus.quality import QualityValidator
+        from pontus.quality import QualityValidator  # type: ignore[reportMissingImports]
 
         v = QualityValidator()
         assert v.validate_format({"id": 1, "name": "test"}, {"id": "int", "name": "str"})
         assert not v.validate_format({"id": "not_int"}, {"id": "int"})
 
     def test_deduplicator(self):
-        from pontus.quality import Deduplicator
+        from pontus.quality import Deduplicator  # type: ignore[reportMissingImports]
 
         d = Deduplicator()
         entries = [{"id": 1}, {"id": 2}, {"id": 1}]
@@ -31,7 +31,7 @@ class TestPontusPipeline:
         import os
         import tempfile
 
-        from pontus.checkpoint import CheckpointManager
+        from pontus.checkpoint import CheckpointManager  # type: ignore[reportMissingImports]
 
         with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
             db_path = f.name

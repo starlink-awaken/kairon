@@ -1,6 +1,8 @@
 """
 测试 ToolForge v2 匹配引擎
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import pytest
 from ontoderive.toolforge.matcher import ToolForge, _tokenize

@@ -1,4 +1,6 @@
 """Tests for GoT (Graph of Thoughts) — 图思维推理引擎"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.intelligence.got import GraphOfThoughts
 

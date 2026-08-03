@@ -93,7 +93,7 @@ def test_model_enrichment_rejects_uncited_claim_and_falls_back():
 
     result = enrich_policy(
         baseline,
-        lambda _: {"summary": "未经证据的摘要", "claims": [{"text": "无来源结论", "evidence_indexes": []}]},
+        lambda _: {"summary": "未经证据的摘要", "claims": [{"text": "无来源结论", "evidence_indexes": []}]},  # type: ignore[reportArgumentType]
         model_id="test-model",
     )
 
@@ -106,7 +106,7 @@ def test_model_enrichment_accepts_claims_with_valid_evidence():
     baseline = analyze_policy_document(POLICY, source_name="policy.md")
     result = enrich_policy(
         baseline,
-        lambda _: {"summary": "有证据摘要", "claims": [{"text": "这是可复核结论", "evidence_indexes": [0]}]},
+        lambda _: {"summary": "有证据摘要", "claims": [{"text": "这是可复核结论", "evidence_indexes": [0]}]},  # type: ignore[reportArgumentType]
         model_id="test-model",
     )
 

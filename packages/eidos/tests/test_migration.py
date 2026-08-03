@@ -1,4 +1,6 @@
 """测试 Schema 迁移功能 — SchemaMigration + MCP 工具入口"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from eidos.errors import EidosError, ErrorCode
 from eidos.mcp_server import handle_migrate, handle_migration_list

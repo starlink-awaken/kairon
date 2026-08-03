@@ -95,7 +95,7 @@ def check_ontolang(root: Any = None) -> dict[str, Any]:
         import sys
 
         sys.path.insert(0, str(Path(__file__).parent))
-        from ontolang import OntoLangParser
+        from ontolang import OntoLangParser  # type: ignore[reportMissingImports]
 
         parser = OntoLangParser()
         parser.test_suite()

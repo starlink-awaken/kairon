@@ -1,4 +1,6 @@
 """Tests for eidos.archetype_loader."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 
 class TestParseYamlFrontmatter:

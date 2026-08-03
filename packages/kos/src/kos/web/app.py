@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# fastapi is optional; Query/Request degrade to None.
+# pyright: reportOptionalCall=false
 # ruff: noqa
 import logging
 
@@ -13,7 +15,7 @@ import re
 import sqlite3
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Iterator, Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 try:
@@ -35,6 +37,8 @@ try:
     HAS_FASTAPI = True
 except ImportError:
     FastAPI = None  # type: ignore[assignment,misc]
+    Query = None  # type: ignore[assignment,misc]
+    Request = None  # type: ignore[assignment,misc]
     from fastapi.responses import HTMLResponse, JSONResponse  # type: ignore[import-not-found]
 
     HAS_FASTAPI = False
@@ -270,7 +274,7 @@ def render(template: str, **ctx) -> str:  # type: ignore[no-untyped-def]
     return html
 
 
-def _render_content(template, ctx) -> None:  # type: ignore[no-untyped-def, misc]
+def _render_content(template, ctx) -> Iterator[str]:  # type: ignore[no-untyped-def]
     if template == "search":
         yield from _render_search(ctx)  # type: ignore[no-untyped-call, misc, func-returns-value]
     elif template == "ontology":
@@ -281,7 +285,7 @@ def _render_content(template, ctx) -> None:  # type: ignore[no-untyped-def, misc
         yield from _render_entity(ctx)  # type: ignore[no-untyped-call, misc, func-returns-value]
 
 
-def _render_search(ctx) -> None:  # type: ignore[no-untyped-def, misc]
+def _render_search(ctx) -> Iterator[str]:  # type: ignore[no-untyped-def]
     q = ctx.get("q", "")
     zone = ctx.get("zone", "")
     results = ctx.get("results", [])
@@ -309,7 +313,7 @@ def _render_search(ctx) -> None:  # type: ignore[no-untyped-def, misc]
             yield "</div>"
 
 
-def _render_ontology(ctx) -> None:  # type: ignore[no-untyped-def, misc]
+def _render_ontology(ctx) -> Iterator[str]:  # type: ignore[no-untyped-def]
     entities = ctx.get("entities", [])
     q = ctx.get("q", "")
     yield "<h1>🕸 Knowledge Ontology</h1>"
@@ -372,7 +376,7 @@ def _render_ontology(ctx) -> None:  # type: ignore[no-untyped-def, misc]
     yield f'<p style="color:#8b949e;margin-top:16px">{total} entities total · {orphan} orphans ({orphan * 100 // max(total, 1)}%)</p>'
 
 
-def _render_entity(ctx) -> None:  # type: ignore[no-untyped-def, misc]
+def _render_entity(ctx) -> Iterator[str]:  # type: ignore[no-untyped-def]
     e = ctx.get("entity", {})
     outgoing = ctx.get("outgoing", [])
     incoming = ctx.get("incoming", [])
@@ -454,8 +458,8 @@ async def search_page(q: str = "", zone: str = "", limit: int = 20) -> Any:
 
 
 @app.get("/api/search")
-async def api_search(q: str, zone: str = "", limit: int = 10):  # type: ignore[no-untyped-def]
-    """Search API endpoint."""
+async def api_search_legacy(q: str, zone: str = "", limit: int = 10):  # type: ignore[no-untyped-def]
+    """Search API endpoint (legacy stub; primary is /api/v1/search)."""
     return {"results": []}
 
 

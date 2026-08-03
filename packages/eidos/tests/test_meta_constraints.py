@@ -1,4 +1,6 @@
 """Tests for meta-model constraints."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import sys
 from pathlib import Path

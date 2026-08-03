@@ -1,4 +1,6 @@
 """Tests for kairon_lib.errors — error hierarchy and error utilities."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from kairon_utils.errors import (
     ERROR_REGISTRY,

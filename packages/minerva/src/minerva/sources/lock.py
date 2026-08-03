@@ -152,7 +152,7 @@ class SourceLock:
                     lock_data = json.load(f)
                     holder = lock_data.get("holder_id", "unknown")
                 return LockResult(acquired=False, error=f"Source {source_id} is locked by {holder}")
-            except (OSError, json.JSONDecodeError):
+            except (OSError, json.JSONDecodeError):  # type: ignore[reportPossiblyUnboundVariable]
                 return LockResult(acquired=False, error=f"Source {source_id} is locked")
 
         except OSError as e:
@@ -191,7 +191,7 @@ class SourceLock:
         except FileNotFoundError:
             _log.warning(f"Lock file not found for source {source_id}")
             return False
-        except (OSError, json.JSONDecodeError) as e:
+        except (OSError, json.JSONDecodeError) as e:  # type: ignore[reportPossiblyUnboundVariable]
             _log.error(f"Failed to release lock for {source_id}: {e}")
             return False
 

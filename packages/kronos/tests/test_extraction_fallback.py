@@ -1,4 +1,6 @@
 """Tests for kronos extractor — 3-level fallback: LLM → rules → default."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 
@@ -152,14 +154,14 @@ class TestExtractWithRules:
         assert result["title"] == "测试标题"
         assert len(result["key_points"]) == 2
         assert result["content_type"] == "文章"
-        assert result["_fallback"] == "rules"
+        assert result["_fallback"] == "rules"  # type: ignore[reportTypedDictNotRequiredAccess]
 
     def test_default_result(self):
         """_default_result returns safe fallback with empty fields."""
         result = _default_result("test reason")
         assert result["title"] == "未命名"
-        assert result["_fallback"] == "default"
-        assert "test reason" in result["fallback_reason"]
+        assert result["_fallback"] == "default"  # type: ignore[reportTypedDictNotRequiredAccess]
+        assert "test reason" in result["fallback_reason"]  # type: ignore[reportTypedDictNotRequiredAccess]
 
 
 class TestExtract:
@@ -168,13 +170,13 @@ class TestExtract:
     def test_empty_text_returns_default(self):
         """Empty text → immediate default fallback."""
         result = extract("")  # empty
-        assert result["_fallback"] == "default"
+        assert result["_fallback"] == "default"  # type: ignore[reportTypedDictNotRequiredAccess]
         assert result["title"] == "未命名"
 
     def test_whitespace_only_returns_default(self):
         """Whitespace-only text → immediate default fallback."""
         result = extract("   \n  \t  ")
-        assert result["_fallback"] == "default"
+        assert result["_fallback"] == "default"  # type: ignore[reportTypedDictNotRequiredAccess]
 
     def test_nonempty_text_returns_result(self, monkeypatch):
         """Non-empty text returns a result (rules path, LLM mocked off).
@@ -189,7 +191,7 @@ class TestExtract:
             lambda *_args, **_kwargs: {"error": "mocked off (unit test)"},
         )
         result = extract(text)
-        assert result["_fallback"] == "rules"
+        assert result["_fallback"] == "rules"  # type: ignore[reportTypedDictNotRequiredAccess]
         assert result["title"]
         assert result["title"] == "规则提取测试"
 

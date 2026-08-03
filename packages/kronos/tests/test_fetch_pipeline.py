@@ -1,4 +1,6 @@
 """Tests for kronos fetch_router — 5-layer fetch architecture & URL routing."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

@@ -1,6 +1,8 @@
 from pathlib import Path
 
 """Tests for Insight, InsightCache, and InsightEngine"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import json
 

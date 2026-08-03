@@ -14,7 +14,7 @@ Usage:
 """
 
 import sqlite3
-from __future__ import annotations
+from __future__ import annotations  # type: ignore[reportGeneralTypeIssues]
 
 import json
 import os
@@ -45,6 +45,7 @@ class SearchRanker:
 
     def _ensure_tables(self):
         """确保反馈表存在。"""
+        assert self._conn is not None
         self._conn.executescript("""
             CREATE TABLE IF NOT EXISTS search_queries (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,

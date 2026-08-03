@@ -1,4 +1,6 @@
 """Tests for SSOT and eidos adapters."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import tempfile
 from pathlib import Path

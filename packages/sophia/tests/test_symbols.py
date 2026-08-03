@@ -1,4 +1,6 @@
 """Tests for sophia.symbols — 研究范式的符号系统"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from sophia.symbols import (
     AtomicOp,

@@ -23,7 +23,7 @@ import sys
 
 sys.path.insert(0, str(SCRIPTS_DIR))
 
-import e2e_health_demo as demo
+import e2e_health_demo as demo  # type: ignore[reportMissingImports]
 from kos.ontology._types import Entity, EntityType
 
 # ── Fake KOS 客户端 ───────────────────────────────────────────

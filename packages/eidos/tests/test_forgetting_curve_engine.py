@@ -1,4 +1,7 @@
 """Tests for ForgettingCurveEngine — Ebbinghaus spaced-repetition engine."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
+# pyright: reportOptionalMemberAccess=false
 
 import math
 import time

@@ -39,7 +39,7 @@ def test_memtheta_merge_quality():
     test_case = LLMTestCase(
         input="Summarize the user's frontend preferences.",
         actual_output=actual_output,
-        retrieval_context=retrieval_context,
+        retrieval_context=retrieval_context,  # type: ignore[reportArgumentType]
     )
 
     # If the workspace doesn't have an OpenAI key injected, we skip the actual remote LLM call

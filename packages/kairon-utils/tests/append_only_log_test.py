@@ -1,4 +1,6 @@
 """append_only_log tests — B-1 P0 跨仓 SSOT 验证."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

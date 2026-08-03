@@ -171,7 +171,7 @@ def ingest_file(filepath: str) -> dict:  # type: ignore[type-arg]
             import fitz  # type: ignore[import-untyped]
 
             doc = fitz.open(str(src))
-            text = "\n".join(page.get_text() for page in doc)[:8000]
+            text = "\n".join(page.get_text() for page in doc)[:8000]  # type: ignore[reportArgumentType]
             doc.close()
     except Exception:  # noqa: BLE001
         text = f"[{suffix} file: {src.name}]"

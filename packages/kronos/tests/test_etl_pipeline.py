@@ -1,4 +1,6 @@
 """Tests for kronos ETL pipeline — adapters + dispatcher data flow."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

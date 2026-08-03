@@ -5,6 +5,8 @@ SectionIndexStep (numbered dirs need README.md), AgentContextStep
 (AGENTS.md presence). All 3 are part of the doc governance pipeline
 gate (Mechanism 2 + 3).
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

@@ -17,7 +17,7 @@ import pytest
 SCRIPTS_DIR = Path(__file__).resolve().parents[2] / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
 
-import adr_collect as ac
+import adr_collect as ac  # type: ignore[reportMissingImports]
 
 # ── 公共 fixture ──────────────────────────────────────────────
 

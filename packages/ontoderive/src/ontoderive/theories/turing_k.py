@@ -12,8 +12,8 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from .models import DeriveSnapshot
-    from .utils import all_md, rf, wf
+    from .models import DeriveSnapshot  # type: ignore[reportMissingImports]
+    from .utils import all_md, rf, wf  # type: ignore[reportMissingImports]
 except ImportError:
     from ontoderive.foundation.utils import all_md, rf, wf  # noqa
     from ontoderive.foundation.models import DeriveSnapshot

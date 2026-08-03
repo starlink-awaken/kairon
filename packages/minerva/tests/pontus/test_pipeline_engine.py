@@ -298,8 +298,8 @@ class TestQualityValidator:
 
     def test_non_dict_data(self):
         v = QualityValidator()
-        assert v.validate_format("not-a-dict", {"x": "int"}) is False
-        assert v.validate_format({"x": 1}, "not-a-schema") is False
+        assert v.validate_format("not-a-dict", {"x": "int"}) is False  # type: ignore[reportArgumentType]
+        assert v.validate_format({"x": 1}, "not-a-schema") is False  # type: ignore[reportArgumentType]
 
 
 class TestDeduplicator:

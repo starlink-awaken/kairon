@@ -6,6 +6,8 @@
 - run() 主入口
 - 错误/边界路径
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import json
 import sys

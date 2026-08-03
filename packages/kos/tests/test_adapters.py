@@ -1,3 +1,5 @@
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 # ruff: noqa
 """KOS external adapter tests — version parsing, discovery, protocol negotiation."""
 
@@ -11,21 +13,21 @@ class TestMinervaVersion:
 
     def test_parse_standard(self):
         v = MinervaVersion.parse("minerva 1.2.3")
-        assert v.major == 1 and v.minor == 2 and v.patch == 3
+        assert v.major == 1 and v.minor == 2 and v.patch == 3  # type: ignore[reportOptionalMemberAccess]
 
     def test_parse_plain(self):
         v = MinervaVersion.parse("0.10.0")
-        assert v.major == 0 and v.minor == 10 and v.patch == 0
+        assert v.major == 0 and v.minor == 10 and v.patch == 0  # type: ignore[reportOptionalMemberAccess]
 
     def test_parse_none(self):
         assert MinervaVersion.parse("no version here") is None
 
     def test_comparison(self):
         v = MinervaVersion.parse("2.0.0")
-        assert v >= (1, 5, 0)
-        assert v >= (2, 0, 0)
-        assert not (v < (2, 0, 0))
-        assert v < (3, 0, 0)
+        assert v >= (1, 5, 0)  # type: ignore[reportOptionalOperand]
+        assert v >= (2, 0, 0)  # type: ignore[reportOptionalOperand]
+        assert not (v < (2, 0, 0))  # type: ignore[reportOptionalOperand]
+        assert v < (3, 0, 0)  # type: ignore[reportOptionalOperand]
 
 
 class TestMinervaAdapterDiscovery:
@@ -47,12 +49,12 @@ class TestMinervaAdapterDiscovery:
         from kos.adapters import NullMinerva
 
         r = NullMinerva.research("test")
-        assert "error" in r
-        assert "not available" in r["error"].lower()
+        assert "error" in r  # type: ignore[reportOperatorIssue]
+        assert "not available" in r["error"].lower()  # type: ignore[reportOptionalSubscript]
 
     def test_version_parse_from_pip_show(self):
         v = MinervaVersion.parse("Version: 1.5.2")
-        assert v.major == 1 and v.minor == 5 and v.patch == 2
+        assert v.major == 1 and v.minor == 5 and v.patch == 2  # type: ignore[reportOptionalMemberAccess]
 
 
 class TestSemanticScholarAdapter:

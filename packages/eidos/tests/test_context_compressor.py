@@ -1,4 +1,6 @@
 """Tests for ContextCompressor — hot/warm/cold compression."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import time
 

@@ -71,7 +71,7 @@ def _workspace_manifest() -> dict[str, Any]:  # type: ignore[no-untyped-def]
 def _artifact_path(name: str) -> str | None:  # type: ignore[no-untyped-def]
     if callable(get_artifact_path):
         path = get_artifact_path(name)
-        return path if path else None
+        return path if path else None  # type: ignore[reportReturnType]
     return None
 
 
@@ -82,8 +82,8 @@ from kos.cli.colors import *  # noqa: F403  # BOLD/DIM/CYAN/GREEN/YELLOW/RED/MAG
 
 def _get_minerva() -> Any:
     global _MINERVA
-    if _MINERVA is None:
-        _MINERVA = MinervaAdapter.discover() or NullMinerva
+    if _MINERVA is None:  # type: ignore[reportUnboundVariable]
+        _MINERVA = MinervaAdapter.discover() or NullMinerva  # type: ignore[reportUndefinedVariable]
     return _MINERVA
 
 
@@ -400,7 +400,7 @@ def cmd_search(  # type: ignore[no-untyped-def]
         where_clause = " AND " + " AND ".join(extra_where) if extra_where else ""
         # Fetch extra results so deduplication still leaves enough matches.
         fetch_limit = max(limit * 3, limit)
-        params.append(fetch_limit)
+        params.append(fetch_limit)  # type: ignore[reportArgumentType]
 
         # Relevance boosting: CARDS, author-linked, and entity-linked documents rank higher.
         sql = f"""
@@ -911,7 +911,7 @@ def main() -> None:
                     sys.exit(1)
                 result = onto_engine.find_path(args.from_id, args.to_id)
             elif args.onto_cmd == "discover":
-                result = onto_engine.discover()
+                result = onto_engine.discover()  # type: ignore[reportAttributeAccessIssue]
             elif args.onto_cmd == "graph":
                 result = onto_engine.graph(getattr(args, "entity_type", None))
             elif args.onto_cmd == "list":
@@ -1008,7 +1008,7 @@ def main() -> None:
             cache.clear_all()
             result = {"status": "cleared"}
         elif action == "benchmark":
-            result = cache.benchmark()
+            result = cache.benchmark()  # type: ignore[reportAttributeAccessIssue]
         else:
             result = cache.get_stats()
         print(json.dumps(result, ensure_ascii=False, indent=2))

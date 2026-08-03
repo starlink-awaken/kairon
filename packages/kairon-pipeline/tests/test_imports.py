@@ -1,4 +1,6 @@
 """Tests for kairon_pipeline — importability and basic smoke tests."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 
 class TestImports:
@@ -7,7 +9,7 @@ class TestImports:
     def test_import_source_connectors(self):
         from kairon_pipeline.source_connectors import RawContent
 
-        content = RawContent(uri="http://example.com", data=b"test", content_type="text/html")
+        content = RawContent(uri="http://example.com", data=b"test", content_type="text/html")  # type: ignore[reportArgumentType]
         assert content.uri == "http://example.com"
 
     def test_import_source_registry(self):

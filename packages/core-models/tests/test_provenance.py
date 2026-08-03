@@ -1,4 +1,6 @@
 """Tests for core-models provenance."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from core_models.provenance import Provenance
 

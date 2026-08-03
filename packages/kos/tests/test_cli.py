@@ -61,8 +61,8 @@ class TestCLIDomains:
         # May fail if workspace_config not found in CI
         if r.returncode == 0:
             data = json.loads(r.stdout)
-        assert "command" in data
-        assert data["data"]["count"] >= 0
+        assert "command" in data  # type: ignore[reportPossiblyUnboundVariable]
+        assert data["data"]["count"] >= 0  # type: ignore[reportPossiblyUnboundVariable]
 
     def test_domains_table(self):
         r = _run("domains", "--format", "table")
@@ -78,7 +78,7 @@ class TestCLIStatus:
         r = _run("status", "--format", "json")
         if r.returncode == 0:
             data = json.loads(r.stdout)
-        assert "domains" in data
+        assert "domains" in data  # type: ignore[reportPossiblyUnboundVariable]
 
 
 class TestCLISearch:

@@ -1,4 +1,6 @@
 """SemanticMatcher 测试 — TF-IDF + 余弦相似度"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import pytest
 from ontoderive.foundation.semantic import SemanticMatcher

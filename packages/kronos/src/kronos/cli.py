@@ -108,9 +108,9 @@ def fetch(url: str, dry_run: bool = False) -> None:
     result = execute_fetch(url)
     _spinning = False
     if result.get("ok"):
-        method = result["method"]
+        method = result["method"]  # type: ignore[reportTypedDictNotRequiredAccess]
         title = result.get("title", "")
-        content = result["content"]
+        content = result["content"]  # type: ignore[reportTypedDictNotRequiredAccess]
         text = result.get("text", content[:50000])
         markdown = result.get("markdown", text)
         content_preview = markdown[:500]
@@ -243,7 +243,7 @@ def batch(save: bool) -> None:
         result = execute_fetch(url)
         if result.get("ok"):
             success += 1
-            method = result["method"]
+            method = result["method"]  # type: ignore[reportTypedDictNotRequiredAccess]
             title = result.get("title", "")[:60]
             markdown = result.get("markdown", "")
             click.echo(f"  ✅ {method} → {title}")

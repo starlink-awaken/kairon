@@ -1,6 +1,8 @@
 """
 测试 foundation/rule_loader.py - 规则加载器
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import json
 

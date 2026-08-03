@@ -194,9 +194,9 @@ class GraphRAG:
                 new_cost = cost + weight
 
                 if neighbor_id not in dist or new_cost < dist[neighbor_id]:
-                    dist[neighbor_id] = new_cost
-                    prev[neighbor_id] = (node, predicate)
-                    heapq.heappush(pq, (new_cost, neighbor_id, path + [(node, predicate)]))
+                    dist[neighbor_id] = new_cost  # type: ignore[reportArgumentType]
+                    prev[neighbor_id] = (node, predicate)  # type: ignore[reportArgumentType]
+                    heapq.heappush(pq, (new_cost, neighbor_id, path + [(node, predicate)]))  # type: ignore[reportArgumentType]
 
         return {"found": False, "message": f"No path found within {max_hops} hops"}
 
@@ -366,7 +366,7 @@ def main():
         result = {"error": f"Unknown command: {args.command}"}
 
     rag.close()
-    print(json.dumps(result, ensure_ascii=False, indent=2))
+    print(json.dumps(result, ensure_ascii=False, indent=2))  # type: ignore[reportUndefinedVariable]
 
 
 if __name__ == "__main__":

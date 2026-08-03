@@ -1,4 +1,6 @@
 """Tests for ToolForge MCP server — 真实工具覆盖 match / select / guide."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

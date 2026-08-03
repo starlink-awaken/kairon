@@ -24,8 +24,8 @@ def test_report_is_persisted_without_raw_text_and_replay_is_idempotent(tmp_path)
     assert store.record_report(quality, source_sha256="a" * 64) is True
     assert store.record_report(quality, source_sha256="a" * 64) is False
     stored = store.get_report("ocr-1")
-    assert stored["quality_status"] == "pass"
-    assert "text" not in stored["report"]
+    assert stored["quality_status"] == "pass"  # type: ignore[reportOptionalSubscript]
+    assert "text" not in stored["report"]  # type: ignore[reportOptionalSubscript]
     assert store.can_admit("ocr-1") is True
 
 
@@ -58,7 +58,7 @@ def test_correction_is_append_only_and_removes_item_from_pending_queue(tmp_path)
     )
     assert correction_id > 0
     assert store.review_queue() == []
-    assert store.get_report("ocr-review")["review_status"] == "corrected"
+    assert store.get_report("ocr-review")["review_status"] == "corrected"  # type: ignore[reportOptionalSubscript]
 
 
 def test_store_rejects_raw_or_invalid_hashes(tmp_path):

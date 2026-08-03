@@ -1,4 +1,6 @@
 """kairon-pipeline 基础测试"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import kairon_pipeline
 

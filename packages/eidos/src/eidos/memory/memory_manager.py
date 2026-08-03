@@ -24,8 +24,8 @@ from typing import Any, Protocol, cast
 
 from kairon_utils import atomic_write_json
 
-from .archetype_loader import ArchetypeLoader, get_archetype_loader
-from .storage_dal import SQLiteError, SQLiteRelationalProvider
+from .archetype_loader import ArchetypeLoader, get_archetype_loader  # type: ignore[reportMissingImports]
+from .storage_dal import SQLiteError, SQLiteRelationalProvider  # type: ignore[reportMissingImports]
 
 # =============================================================================
 # 0. 形式化摘要 ≝

@@ -21,7 +21,7 @@ import pytest
 SCRIPT_PATH = Path(__file__).resolve().parent.parent.parent / "scripts" / "agora_route_generator.py"
 sys.path.insert(0, str(SCRIPT_PATH.parent))
 
-import agora_route_generator as arg
+import agora_route_generator as arg  # type: ignore[reportMissingImports]
 
 # ── 1. AST 提取 ─────────────────────────────────────────
 

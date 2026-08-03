@@ -6,7 +6,7 @@ from typing import Any
 def is_available() -> bool:
     """Check if notebooklm-py is installed."""
     try:
-        import notebooklm  # noqa: F401
+        import notebooklm  # noqa: F401  # type: ignore[reportMissingImports]
 
         return True
     except ImportError:
@@ -18,7 +18,7 @@ def create_client(auth_tokens: dict | None = None) -> Any | None:
     if not is_available():
         return None
     try:
-        from notebooklm import NotebookLMClient
+        from notebooklm import NotebookLMClient  # type: ignore[reportMissingImports]
 
         if auth_tokens:
             return NotebookLMClient(**auth_tokens)
@@ -44,7 +44,7 @@ def generate_audio_overview(report_path: str, auth_tokens: dict | None = None) -
         if not path.exists():
             return {"status": "error", "reason": f"Report not found: {report_path}"}
 
-        from notebooklm import Notebook, Source
+        from notebooklm import Notebook, Source  # type: ignore[reportMissingImports]
 
         notebook = Notebook(client, title=f"Research: {path.stem}")
         source = Source.from_file(path)

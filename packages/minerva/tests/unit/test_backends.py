@@ -68,7 +68,7 @@ class TestSearchBackends:
         assert len(results) == 1
         assert results[0].title == "Attention Is All You Need"
         assert results[0].source == "scholar"
-        assert "2017" in results[0].published_date
+        assert "2017" in results[0].published_date  # type: ignore[reportOperatorIssue]
         assert results[0].snippet == "Transformers introduced self-attention mechanism"
 
     @pytest.mark.asyncio

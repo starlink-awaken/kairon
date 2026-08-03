@@ -34,4 +34,4 @@ def test_store_persists_regression_report(tmp_path):
     stored = store.get_run("eval-run-1")
     assert stored is not None
     assert stored["accuracy"] == 1.0
-    assert stored["report"]["model_id"] == "rules-v1"
+    assert stored["report"]["model_id"] == "rules-v1"  # type: ignore[reportIndexIssue]

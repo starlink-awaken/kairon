@@ -27,9 +27,9 @@ def main() -> int:
     )
     console.print()
 
-    from .compiler import compile_paradigm_sync
-    from .learner import ParadigmLearner
-    from .symbols import BASE_TRANSITIONS, AtomicOp, ResearchState
+    from .compiler import compile_paradigm_sync  # type: ignore[reportMissingImports]
+    from .learner import ParadigmLearner  # type: ignore[reportMissingImports]
+    from .symbols import BASE_TRANSITIONS, AtomicOp, ResearchState  # type: ignore[reportMissingImports]
 
     learner = ParadigmLearner()
 
@@ -108,7 +108,7 @@ def main() -> int:
                 for i in issues:
                     console.print(f"  [yellow]⚠ {i}[/yellow]")
             # Record trace
-            from .learner import ResearchTrace
+            from .learner import ResearchTrace  # type: ignore[reportMissingImports]
 
             learner.record(
                 ResearchTrace(

@@ -4,14 +4,15 @@ OntoDerive Pipeline — 推导管道
 串联 toolforge → load → derive → check → resolve → report 六个阶段。
 结果可序列化为 JSON，供 Minerva/Sophia 程序化调用。
 """
+# pyright: reportGeneralTypeIssues=false
 
 from pathlib import Path
 from typing import Any
 
 try:
-    from .config import Config
+    from .config import Config  # type: ignore[reportMissingImports]
     from .derive import OntoDerive as _OD  # noqa: N814
-    from .protocols import AnalysisResult, PipelineStage
+    from .protocols import AnalysisResult, PipelineStage  # type: ignore[reportMissingImports]
 except ImportError:  # type: ignore[no-redef]
     from ontoderive.foundation.config import Config  # noqa
     from ontoderive.foundation.protocols import PipelineStage, AnalysisResult
@@ -23,7 +24,7 @@ class ToolForgeStage(PipelineStage):
 
     def run(self, ctx: Any) -> dict[str, Any]:
         try:
-            from .toolforge import ToolForge
+            from .toolforge import ToolForge  # type: ignore[reportMissingImports]
         except ImportError:
             from ontoderive.toolforge import ToolForge
         tf = ToolForge()

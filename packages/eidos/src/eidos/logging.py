@@ -25,7 +25,7 @@ class StructuredFormatter(logging.Formatter):
             "message": record.getMessage(),
         }
         if hasattr(record, "structured"):
-            log_entry.update(record.structured)
+            log_entry.update(record.structured)  # type: ignore[reportAttributeAccessIssue]
         return json.dumps(log_entry, ensure_ascii=False)
 
 

@@ -1,4 +1,6 @@
 """Tests for connector registry."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import tomllib
 from pathlib import Path
@@ -15,7 +17,7 @@ class MockConnector(BaseConnector):
     def is_available(self):
         return True
 
-    def list_items(self, limit=20, cursor=None):
+    def list_items(self, limit=20, cursor=None):  # type: ignore[reportIncompatibleMethodOverride]
         return []
 
     def get_item(self, id):
@@ -35,7 +37,7 @@ class UnavailableConnector(BaseConnector):
     def is_available(self):
         return False
 
-    def list_items(self, limit=20, cursor=None):
+    def list_items(self, limit=20, cursor=None):  # type: ignore[reportIncompatibleMethodOverride]
         return []
 
     def get_item(self, id):

@@ -5,6 +5,8 @@ adoption (Phase B migration), but it had no tests at the time.
 22 months later (R80), we're adding the missing coverage so that
 future changes to the adapter are guarded by regression tests.
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from unittest.mock import patch
 

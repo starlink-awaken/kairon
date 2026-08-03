@@ -1,4 +1,6 @@
 """Tests for ReAct (Reasoning + Acting) — 推理行动引擎"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.intelligence.react import ReActEngine
 

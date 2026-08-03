@@ -85,7 +85,7 @@ class GraphBridge:
         if not self.config.enabled:
             return False
         try:
-            from neo4j import AsyncGraphDatabase
+            from neo4j import AsyncGraphDatabase  # type: ignore[reportMissingImports]
 
             self._driver = AsyncGraphDatabase.driver(
                 self.config.neo4j_uri,

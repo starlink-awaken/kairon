@@ -28,10 +28,10 @@ SCRIPT_DIR = Path(__file__).resolve().parent.parent.parent
 ONTOLOGY_SCRIPT = SCRIPT_DIR / "_legacy" / "kos-ontology.py"
 
 try:
-    from textual.app import App, ComposeResult
-    from textual.binding import Binding
-    from textual.containers import Horizontal, Vertical
-    from textual.widgets import Footer, Header, Label, ListItem, ListView, Static
+    from textual.app import App, ComposeResult  # type: ignore[reportMissingImports]
+    from textual.binding import Binding  # type: ignore[reportMissingImports]
+    from textual.containers import Horizontal, Vertical  # type: ignore[reportMissingImports]
+    from textual.widgets import Footer, Header, Label, ListItem, ListView, Static  # type: ignore[reportMissingImports]
 
     TEXTUAL_OK = True
 except ImportError:
@@ -43,7 +43,7 @@ def _get_onto_db() -> sqlite3.Connection:
     from config import get_vault_ops_dir  # type: ignore[import-not-found]
 
     VAULT_OPS_DIR = get_vault_ops_dir()
-    from config import get_artifact_path
+    from config import get_artifact_path  # type: ignore[reportMissingImports]
 
     db_path = get_artifact_path("retrievalDatabase")
     conn = sqlite3.connect(str(db_path))
@@ -121,7 +121,7 @@ def _load_implicit_connections() -> list[dict]:  # type: ignore[type-arg]
         return []
 
 
-class EntityListWidget(Static):
+class EntityListWidget(Static):  # type: ignore[reportPossiblyUnboundVariable]
     """Left panel: scrollable entity list."""
 
     def __init__(self) -> None:
@@ -170,7 +170,7 @@ class EntityListWidget(Static):
         return None
 
 
-class EntityDetailWidget(Static):
+class EntityDetailWidget(Static):  # type: ignore[reportPossiblyUnboundVariable]
     """Right panel: entity detail with relations."""
 
     def show_entity(self, entity_id: str) -> None:
@@ -220,7 +220,7 @@ class EntityDetailWidget(Static):
         self.update("\n".join(lines))
 
 
-class GraphViewWidget(Static):
+class GraphViewWidget(Static):  # type: ignore[reportPossiblyUnboundVariable]
     """Bottom panel: ASCII relation graph centered on the current entity."""
 
     def show_graph(self, entity_id: str, label: str) -> None:
@@ -262,14 +262,14 @@ class GraphExplorerApp(App):  # type: ignore[type-arg]
 
     CSS_PATH = "styles/kos.css"
     BINDINGS = [
-        Binding("j", "move_down", "Down", show=True),
-        Binding("k", "move_up", "Up", show=True),
-        Binding("enter", "select_entity", "Detail", show=True),
-        Binding("s", "search_entity", "Search", show=True),
-        Binding("p", "find_path", "Path", show=True),
-        Binding("d", "discover", "Discover", show=True),
-        Binding("r", "refresh", "Refresh", show=True),
-        Binding("q", "quit", "Quit", show=True),
+        Binding("j", "move_down", "Down", show=True),  # type: ignore[reportPossiblyUnboundVariable]
+        Binding("k", "move_up", "Up", show=True),  # type: ignore[reportPossiblyUnboundVariable]
+        Binding("enter", "select_entity", "Detail", show=True),  # type: ignore[reportPossiblyUnboundVariable]
+        Binding("s", "search_entity", "Search", show=True),  # type: ignore[reportPossiblyUnboundVariable]
+        Binding("p", "find_path", "Path", show=True),  # type: ignore[reportPossiblyUnboundVariable]
+        Binding("d", "discover", "Discover", show=True),  # type: ignore[reportPossiblyUnboundVariable]
+        Binding("r", "refresh", "Refresh", show=True),  # type: ignore[reportPossiblyUnboundVariable]
+        Binding("q", "quit", "Quit", show=True),  # type: ignore[reportPossiblyUnboundVariable]
     ]
 
     def __init__(self, view: str = "graph") -> None:
@@ -278,15 +278,15 @@ class GraphExplorerApp(App):  # type: ignore[type-arg]
         self.current_entity_id = None
 
     def compose(self) -> ComposeResult:
-        yield Header()
-        with Horizontal():
+        yield Header()  # type: ignore[reportPossiblyUnboundVariable]
+        with Horizontal():  # type: ignore[reportPossiblyUnboundVariable]
             self.entity_list = EntityListWidget()  # type: ignore[no-untyped-call]
             yield self.entity_list
             self.entity_detail = EntityDetailWidget()
             yield self.entity_detail
         self.graph_panel = GraphViewWidget()
         yield self.graph_panel
-        yield Footer()
+        yield Footer()  # type: ignore[reportPossiblyUnboundVariable]
 
     def on_mount(self) -> None:
         self.title = "KOS Graph Explorer"

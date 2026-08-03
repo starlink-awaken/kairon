@@ -1,4 +1,6 @@
 """Tests for the pipeline module."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import sys
 from pathlib import Path

@@ -2,6 +2,8 @@
 
 QueryCache: get/set/invalidate + TTL + get_stats(统计) + generate_cache_key(hash) + hit/miss.
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

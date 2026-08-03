@@ -1,4 +1,6 @@
 """Tests for RuleReasoner — 规则推导引擎"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.reasoners.reasoner import RuleReasoner
 from ontoderive.reasoners.reasoner_utils import default_rules

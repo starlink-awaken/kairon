@@ -1,4 +1,6 @@
 """Tests for core-models — Entity, Relation, Provenance, KnowledgeGraph."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import json
 from datetime import datetime

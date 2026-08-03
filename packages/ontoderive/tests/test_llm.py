@@ -1,4 +1,6 @@
 """LLM增强层测试 — 后端检测 + 增强入口 + 错误处理"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import os
 from unittest.mock import MagicMock, patch

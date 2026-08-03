@@ -2,6 +2,8 @@
 
 以前仅有 6 个 import 测试。本文件补充 34 个行为测试，覆盖所有核心 API。
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import pytest
 from kairon_observability.alerts import Alert, AlertManager, AlertRule, _eval_condition

@@ -18,7 +18,7 @@ warnings.warn(
     stacklevel=2,
 )
 
-from kairon_governance.sync_state import main
+from kairon_governance.sync_state import main  # type: ignore[reportMissingImports]
 
 if __name__ == "__main__":
     sys.exit(main())

@@ -1,6 +1,8 @@
 from pathlib import Path
 
 """Tests for frontmatter detection — extracted from SharedBrain D_Logos."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import datetime
 import tempfile
@@ -19,9 +21,9 @@ def test_single_valid_frontmatter():
     blocks = detector.detect("---\ntitle: Test\ndate: 2026-01-01\n---\n\n# Content")
     assert len(blocks) == 1
     assert blocks[0].is_valid
-    assert blocks[0].parsed_data["title"] == "Test"
+    assert blocks[0].parsed_data["title"] == "Test"  # type: ignore[reportOptionalSubscript]
     # YAML parses dates as datetime.date objects
-    assert blocks[0].parsed_data["date"] == datetime.date(2026, 1, 1)
+    assert blocks[0].parsed_data["date"] == datetime.date(2026, 1, 1)  # type: ignore[reportOptionalSubscript]
 
 
 def test_no_frontmatter():

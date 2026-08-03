@@ -1,6 +1,8 @@
 from pathlib import Path
 
 """逻辑蕴含图测试"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 
 from ontoderive.theories.logic import EntailmentGraph, build_from_project

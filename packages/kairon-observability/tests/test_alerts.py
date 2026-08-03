@@ -83,6 +83,7 @@ def test_alert_manager_service_label_attached():
 
 def test_eval_condition_operators():
     """条件解析支持 > >= < <= == != 全操作符."""
+
     mgr = AlertManager()
     for cond, val, should_fire in [
         ("x > 5", 6, True),

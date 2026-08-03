@@ -1,6 +1,8 @@
 """
 Forge asset_cli 单元测试
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import json
 import sys

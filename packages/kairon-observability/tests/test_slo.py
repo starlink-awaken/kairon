@@ -1,3 +1,5 @@
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 """Tests for kairon_observability.slo — SLO 追踪 (P99/可用性).
 
 补 slo 零测试债 (功能 P1, 471 LOC 核心模块零覆盖)."""

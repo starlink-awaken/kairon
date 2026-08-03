@@ -62,7 +62,7 @@ facts:
 
     def _check_ssot(self) -> bool:
         try:
-            import ssot_kernel  # noqa: F401
+            import ssot_kernel  # noqa: F401  # type: ignore[reportMissingImports]
 
             return True
         except ImportError:
@@ -111,7 +111,7 @@ facts:
             }
 
         try:
-            from ssot_kernel.config_loader import load_domain
+            from ssot_kernel.config_loader import load_domain  # type: ignore[reportMissingImports]
 
             config = load_domain(str(domain_dir))
             return {

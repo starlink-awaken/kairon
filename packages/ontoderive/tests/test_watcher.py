@@ -1,4 +1,6 @@
 """文件监听器测试"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.watcher import FileWatcher
 

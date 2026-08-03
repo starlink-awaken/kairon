@@ -158,7 +158,7 @@ class VaultSinkStage(IPipelineStage):
 
         # Emit signal via l4-kernel if available
         try:
-            from l4_kernel.signals import SignalBus
+            from l4_kernel.signals import SignalBus  # type: ignore[reportMissingImports]
 
             bus = SignalBus()
             bus.emit("vault", "✅", f"研究归档: {ctx.query[:60]}", source="minerva.vault_sink")

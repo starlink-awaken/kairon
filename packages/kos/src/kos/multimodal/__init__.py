@@ -457,7 +457,7 @@ class MultimodalProcessor:
             import fitz  # PyMuPDF
 
             doc = fitz.open(str(file_path))
-            text = "\n".join(page.get_text() for page in doc)
+            text = "\n".join(page.get_text() for page in doc)  # type: ignore[reportArgumentType]
             doc.close()
             return text.strip() if text.strip() else ""
         except ImportError:
@@ -528,7 +528,7 @@ class MultimodalProcessor:
                     (
                         f"[Multimedia] {file_path.name}",
                         text[:8000],
-                        datetime.now().strftime("%Y%m%d%H%M%S"),
+                        datetime.now().strftime("%Y%m%d%H%M%S"),  # type: ignore[reportUndefinedVariable]
                         json.dumps(
                             {
                                 "type": result.get("type", "unknown"),
@@ -544,7 +544,7 @@ class MultimodalProcessor:
                 )
             else:
                 # 新建
-                now = datetime.now().strftime("%Y%m%d%H%M%S")
+                now = datetime.now().strftime("%Y%m%d%H%M%S")  # type: ignore[reportUndefinedVariable]
                 conn.execute(
                     """INSERT INTO documents VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                     (

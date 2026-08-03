@@ -48,7 +48,7 @@ class ZhihuConnector(BaseConnector):
         try:
             from kronos.fetch_router import execute_fetch
 
-            result = execute_fetch(url, cookie=self._cookie)
+            result = execute_fetch(url, cookie=self._cookie)  # type: ignore[reportCallIssue]
             if result and result.get("content"):
                 return cast("str | None", result["content"])
         except ImportError:

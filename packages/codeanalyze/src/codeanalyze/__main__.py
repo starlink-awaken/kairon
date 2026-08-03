@@ -32,9 +32,9 @@ def do_search(args: dict[str, Any]) -> dict[str, Any]:
         mod = importlib.import_module(__name__)
         for name in dir(mod):
             obj = getattr(mod, name)
-            if inspect.isclass(obj) and hasattr(obj, "search"):
+            if inspect.isclass(obj) and hasattr(obj, "search"):  # type: ignore[reportAttributeAccessIssue]
                 instance = obj()
-                result = instance.search(args.get("query", ""))
+                result = instance.search(args.get("query", ""))  # type: ignore[reportAttributeAccessIssue]
                 return {"_method": "search", "_class": name, "result": str(result)[:500]}
     except Exception as exc:
         return {"_method": "search", "_error": f"{type(exc).__name__}: {exc}"}
@@ -46,9 +46,9 @@ def do_ingest(args: dict[str, Any]) -> dict[str, Any]:
         mod = importlib.import_module(__name__)
         for name in dir(mod):
             obj = getattr(mod, name)
-            if inspect.isclass(obj) and hasattr(obj, "ingest"):
+            if inspect.isclass(obj) and hasattr(obj, "ingest"):  # type: ignore[reportAttributeAccessIssue]
                 instance = obj()
-                result = instance.ingest(args.get("entity", args.get("data", {})))
+                result = instance.ingest(args.get("entity", args.get("data", {})))  # type: ignore[reportAttributeAccessIssue]
                 return {"_method": "ingest", "_class": name, "result": str(result)[:500]}
     except Exception as exc:
         return {"_method": "ingest", "_error": f"{type(exc).__name__}: {exc}"}
@@ -60,9 +60,9 @@ def do_validate(args: dict[str, Any]) -> dict[str, Any]:
         mod = importlib.import_module(__name__)
         for name in dir(mod):
             obj = getattr(mod, name)
-            if inspect.isclass(obj) and hasattr(obj, "validate"):
+            if inspect.isclass(obj) and hasattr(obj, "validate"):  # type: ignore[reportAttributeAccessIssue]
                 instance = obj()
-                result = instance.validate(args.get("data", args.get("entity", {})))
+                result = instance.validate(args.get("data", args.get("entity", {})))  # type: ignore[reportAttributeAccessIssue]
                 return {"_method": "validate", "_class": name, "result": str(result)[:500]}
     except Exception as exc:
         return {"_method": "validate", "_error": f"{type(exc).__name__}: {exc}"}
@@ -74,9 +74,9 @@ def do_register(args: dict[str, Any]) -> dict[str, Any]:
         mod = importlib.import_module(__name__)
         for name in dir(mod):
             obj = getattr(mod, name)
-            if inspect.isclass(obj) and hasattr(obj, "register"):
+            if inspect.isclass(obj) and hasattr(obj, "register"):  # type: ignore[reportAttributeAccessIssue]
                 instance = obj()
-                result = instance.register(args.get("name", "default"), args.get("capabilities", []))
+                result = instance.register(args.get("name", "default"), args.get("capabilities", []))  # type: ignore[reportAttributeAccessIssue]
                 return {"_method": "register", "_class": name, "result": str(result)[:500]}
     except Exception as exc:
         return {"_method": "register", "_error": f"{type(exc).__name__}: {exc}"}
@@ -88,9 +88,9 @@ def do_list(args: dict[str, Any]) -> dict[str, Any]:
         mod = importlib.import_module(__name__)
         for name in dir(mod):
             obj = getattr(mod, name)
-            if inspect.isclass(obj) and hasattr(obj, "list"):
+            if inspect.isclass(obj) and hasattr(obj, "list"):  # type: ignore[reportAttributeAccessIssue]
                 instance = obj()
-                result = instance.list(args)
+                result = instance.list(args)  # type: ignore[reportAttributeAccessIssue]
                 return {"_method": "list", "_class": name, "result": str(result)[:500]}
     except Exception as exc:
         return {"_method": "list", "_error": f"{type(exc).__name__}: {exc}"}
@@ -102,9 +102,9 @@ def do_run(args: dict[str, Any]) -> dict[str, Any]:
         mod = importlib.import_module(__name__)
         for name in dir(mod):
             obj = getattr(mod, name)
-            if inspect.isclass(obj) and hasattr(obj, "run"):
+            if inspect.isclass(obj) and hasattr(obj, "run"):  # type: ignore[reportAttributeAccessIssue]
                 instance = obj()
-                result = instance.run(args.get("query", args.get("task", "")))
+                result = instance.run(args.get("query", args.get("task", "")))  # type: ignore[reportAttributeAccessIssue]
                 return {"_method": "run", "_class": name, "result": str(result)[:500]}
     except Exception as exc:
         return {"_method": "run", "_error": f"{type(exc).__name__}: {exc}"}
@@ -116,9 +116,9 @@ def do_get(args: dict[str, Any]) -> dict[str, Any]:
         mod = importlib.import_module(__name__)
         for name in dir(mod):
             obj = getattr(mod, name)
-            if inspect.isclass(obj) and hasattr(obj, "get"):
+            if inspect.isclass(obj) and hasattr(obj, "get"):  # type: ignore[reportAttributeAccessIssue]
                 instance = obj()
-                result = instance.get(args.get("id", args.get("key", "")))
+                result = instance.get(args.get("id", args.get("key", "")))  # type: ignore[reportAttributeAccessIssue]
                 return {"_method": "get", "_class": name, "result": str(result)[:500]}
     except Exception as exc:
         return {"_method": "get", "_error": f"{type(exc).__name__}: {exc}"}
@@ -130,9 +130,9 @@ def do_sync(args: dict[str, Any]) -> dict[str, Any]:
         mod = importlib.import_module(__name__)
         for name in dir(mod):
             obj = getattr(mod, name)
-            if inspect.isclass(obj) and hasattr(obj, "sync"):
+            if inspect.isclass(obj) and hasattr(obj, "sync"):  # type: ignore[reportAttributeAccessIssue]
                 instance = obj()
-                result = instance.sync(args)
+                result = instance.sync(args)  # type: ignore[reportAttributeAccessIssue]
                 return {"_method": "sync", "_class": name, "result": str(result)[:500]}
     except Exception as exc:
         return {"_method": "sync", "_error": f"{type(exc).__name__}: {exc}"}
@@ -202,7 +202,7 @@ def _call_action(action: str, args: dict[str, Any]) -> dict[str, Any]:
     if fallback_fn is not None and callable(fallback_fn):
         try:
             result = fallback_fn(args)
-            return {"package": __name__.split(".")[0], "action_dispatched": action, "args_echo": args, **result}
+            return {"package": __name__.split(".")[0], "action_dispatched": action, "args_echo": args, **result}  # type: ignore[reportGeneralTypeIssues]
         except Exception as exc:
             return {
                 "package": __name__.split(".")[0],

@@ -1,4 +1,6 @@
 """Basic tests for dispatcher."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from kronos.dispatcher import vault_write, wps_blockquote, wps_heading, wps_highlight, wps_key_points, wps_summary_note
 

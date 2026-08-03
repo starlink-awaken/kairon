@@ -1,4 +1,7 @@
 """Rich terminal output — progress bars, colors, stage visualization."""
+# rich is optional; rich symbols degrade to None.
+# pyright: reportOptionalCall=false
+# pyright: reportOptionalMemberAccess=false
 
 from __future__ import annotations
 
@@ -17,6 +20,12 @@ try:
     RICH_AVAILABLE = True
 except ImportError:
     RICH_AVAILABLE = False
+    Console = None  # type: ignore[assignment]
+    Layout = None  # type: ignore[assignment]
+    Live = None  # type: ignore[assignment]
+    Panel = None  # type: ignore[assignment]
+    Table = None  # type: ignore[assignment]
+    box = None  # type: ignore[assignment]
 
 console = Console() if RICH_AVAILABLE else None
 

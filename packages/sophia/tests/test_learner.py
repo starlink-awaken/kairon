@@ -1,3 +1,5 @@
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 """Tests for sophia.learner — 范式学习循环 (ParadigmLearner).
 
 补 learner 零测试债 (功能维度优化, sophia v1.0 测试补全).

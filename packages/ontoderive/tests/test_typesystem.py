@@ -1,4 +1,6 @@
 """类型系统测试"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.foundation.typesystem import META_TYPES, PREFIX_TO_META, TypeValidator
 

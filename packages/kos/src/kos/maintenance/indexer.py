@@ -88,14 +88,14 @@ class IncrementalIndexer:
             # 4. 更新向量索引 (如果启用). force_embed 回灌模式忽略 added/updated 触发.
             if embed and (force_embed or stats["added"] > 0 or stats["updated"] > 0):
                 vector_stats = self._update_vector_index(full=force_embed)
-                stats["vector"] = vector_stats
+                stats["vector"] = vector_stats  # type: ignore[reportArgumentType]
 
         except Exception as e:
             stats["errors"] += 1
-            stats["error_msg"] = str(e)
+            stats["error_msg"] = str(e)  # type: ignore[reportArgumentType]
 
-        stats["elapsed_seconds"] = round(time.time() - t0, 1)
-        stats["timestamp"] = self.now
+        stats["elapsed_seconds"] = round(time.time() - t0, 1)  # type: ignore[reportArgumentType]
+        stats["timestamp"] = self.now  # type: ignore[reportArgumentType]
         return stats
 
     # ── 域扫描 ──────────────────────────────────────────────
@@ -373,7 +373,7 @@ class IncrementalIndexer:
 
         except Exception as e:
             stats["errors"] += 1
-            stats["error_msg"] = str(e)
+            stats["error_msg"] = str(e)  # type: ignore[reportArgumentType]
 
         return stats
 

@@ -1,4 +1,6 @@
 """Tests for kairon_lib.utils.retry — RetryPolicy, RetryExecutor, CircuitBreaker."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import asyncio
 from unittest.mock import AsyncMock

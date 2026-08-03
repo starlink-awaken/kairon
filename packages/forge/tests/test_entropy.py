@@ -8,6 +8,8 @@ entropy 反熵系统单元测试
 - converge_* —— 收敛检查
 - CLI 调度函数
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import datetime
 import json

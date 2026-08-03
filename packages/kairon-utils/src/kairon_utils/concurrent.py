@@ -163,7 +163,7 @@ class ConcurrencyManager:
                 return ConcurrentResult(success=False, error=e, execution_time=execution_time, source_id=source_id)
 
             finally:
-                self._active_tasks.discard(task)
+                self._active_tasks.discard(task)  # type: ignore[reportPossiblyUnboundVariable]
 
     async def execute_batch(
         self,

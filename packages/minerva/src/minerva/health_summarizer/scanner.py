@@ -35,7 +35,7 @@ def scan_profiles(root: Path | None = None) -> list[HealthProfile]:
     profiles: list[HealthProfile] = []
     for json_file in sorted(root.glob("*.json")):
         try:
-            profiles.append(read_json(json_file))
+            profiles.append(read_json(json_file))  # type: ignore[reportArgumentType]
         except Exception as exc:
             print(f"[WARN] skip {json_file.name}: {exc}", file=sys.stderr)
     return profiles

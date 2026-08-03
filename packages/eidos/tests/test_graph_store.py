@@ -2,6 +2,8 @@
 
 GraphStore 复用 SQLiteRelationalProvider (entities/relations 表) 真实现 CRUD.
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

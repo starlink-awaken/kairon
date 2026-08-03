@@ -1,4 +1,6 @@
 """Tests for PatternMiner -- sequence and temporal pattern detection."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from eidos.memory.pattern_miner import (
     Pattern,
@@ -38,7 +40,7 @@ class TestPatternDataClasses:
         tp = TemporalPattern(
             pattern_id="tp-1",
             event_type="click",
-            time_distribution={"morning": 3.0, "evening": 2.0},
+            time_distribution={"morning": 3.0, "evening": 2.0},  # type: ignore[reportArgumentType]
             peak_hours=[9],
             confidence=0.7,
         )

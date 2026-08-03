@@ -1,4 +1,6 @@
 """AnalyticsEngine 测试 --- A1~A12 全分析模式 + 辅助函数"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.theories.analytics import (
     AnalyticalPattern,

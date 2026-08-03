@@ -1,4 +1,6 @@
 """Tests for kairon_lib.utils.sqlite_utils — managed_connection."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import sqlite3
 import tempfile

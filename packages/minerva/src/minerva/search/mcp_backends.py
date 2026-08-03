@@ -39,7 +39,7 @@ async def _call_mcp_tool(
                 texts = []
                 for block in result.content:
                     if hasattr(block, "text"):
-                        texts.append(block.text)
+                        texts.append(block.text)  # type: ignore[reportAttributeAccessIssue]
                 return "\n".join(texts)
             return None
     except Exception:
@@ -92,7 +92,7 @@ async def search_web_search_prime(
                             source="zhipu-search",
                         )
                     )
-    except (json.JSONDecodeError, TypeError):
+    except (json.JSONDecodeError, TypeError):  # type: ignore[reportPossiblyUnboundVariable]
         pass
     return results
 

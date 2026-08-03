@@ -268,13 +268,13 @@ def main() -> None:
         print(f"  Types normalized: {report['type_normalization']['entities_normalized']}")
         print(f"  Orphans found: {report['orphan_detection']['orphan_count']}")
         print(f"  Conflicts resolved: {report['relation_conflicts']['self_references_removed']}")
-        print(json.dumps(report, ensure_ascii=False, indent=2))
+        print(json.dumps(report, ensure_ascii=False, indent=2))  # type: ignore[reportUndefinedVariable]
     elif args.action == "stats":
         stats = evo.get_stats()
-        print(json.dumps(stats, ensure_ascii=False, indent=2))
+        print(json.dumps(stats, ensure_ascii=False, indent=2))  # type: ignore[reportUndefinedVariable]
     elif args.action == "recommend":
         recs = evo.get_recommendations()
-        print(json.dumps(recs, ensure_ascii=False, indent=2))
+        print(json.dumps(recs, ensure_ascii=False, indent=2))  # type: ignore[reportUndefinedVariable]
 
 
 if __name__ == "__main__":

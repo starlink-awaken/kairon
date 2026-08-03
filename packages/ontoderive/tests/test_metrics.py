@@ -1,6 +1,8 @@
 """
 测试信息论层
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.theories.metrics import MetricsLayer
 

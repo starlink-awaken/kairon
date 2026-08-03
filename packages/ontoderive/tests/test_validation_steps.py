@@ -3,6 +3,8 @@
 Covers ValidateStep (single), BatchValidateStep (batch parallel/sequential),
 EvolveStep (single), BatchEvolveStep (batch parallel/sequential).
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

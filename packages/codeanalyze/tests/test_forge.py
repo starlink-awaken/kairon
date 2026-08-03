@@ -31,7 +31,7 @@ class TestRescueJson:
         assert rescue_json('some text\n```json\n{"a": 1}\n```\nmore text') == {"a": 1}
 
     def test_none_input(self):
-        assert rescue_json(None) is None
+        assert rescue_json(None) is None  # type: ignore[reportArgumentType]
 
     def test_empty_string(self):
         assert rescue_json("") is None
@@ -180,7 +180,7 @@ class TestGuardrailDecorator:
 
         result = string_return()
         assert isinstance(result, dict)
-        assert result["value"] == 42
+        assert result["value"] == 42  # type: ignore[reportArgumentType]
 
     def test_no_rescue_when_disabled(self):
         @guardrail(rescue=False, max_retries=1)

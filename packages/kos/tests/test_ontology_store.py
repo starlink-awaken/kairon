@@ -92,8 +92,8 @@ class TestStoreCRUD(unittest.TestCase):
         self._put(e)
         got = self._get("ROL-a")
         self.assertIsNotNone(got)
-        self.assertEqual(got.entity_id, "ROL-a")
-        self.assertEqual(got.label, "Alice")
+        self.assertEqual(got.entity_id, "ROL-a")  # type: ignore[reportOptionalMemberAccess]
+        self.assertEqual(got.label, "Alice")  # type: ignore[reportOptionalMemberAccess]
 
     def test_put_twice_updates(self):
         e1 = Entity(entity_id="ROL-a", entity_type=EntityType.PERSON, label="Alice")
@@ -101,7 +101,7 @@ class TestStoreCRUD(unittest.TestCase):
         e2 = Entity(entity_id="ROL-a", entity_type=EntityType.PERSON, label="Alice Updated")
         self._put(e2)
         got = self._get("ROL-a")
-        self.assertEqual(got.label, "Alice Updated")
+        self.assertEqual(got.label, "Alice Updated")  # type: ignore[reportOptionalMemberAccess]
 
     def test_get_nonexistent(self):
         got = self._get("ROL-nonexistent")
@@ -111,13 +111,13 @@ class TestStoreCRUD(unittest.TestCase):
         e = Entity(entity_id="ROL-b", entity_type=EntityType.PERSON, label="Bob", aliases=["Robert", "Bobby"])
         self._put(e)
         got = self._get("ROL-b")
-        self.assertEqual(got.aliases, ["Robert", "Bobby"])
+        self.assertEqual(got.aliases, ["Robert", "Bobby"])  # type: ignore[reportOptionalMemberAccess]
 
     def test_entity_with_zone(self):
         e = Entity(entity_id="ROL-c", entity_type=EntityType.PERSON, label="Charlie", zone="gongwen")
         self._put(e)
         got = self._get("ROL-c")
-        self.assertEqual(got.zone, "gongwen")
+        self.assertEqual(got.zone, "gongwen")  # type: ignore[reportOptionalMemberAccess]
 
     def test_multiple_entities(self):
         for i in range(5):

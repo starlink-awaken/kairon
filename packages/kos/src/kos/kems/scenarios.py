@@ -132,8 +132,8 @@ def analyze_tri_medical_minutes(content: str) -> ScenarioAnalysis:
             continue
         item = {
             "task": task.group("task").strip() if task else line[:160],
-            "owner": (_OWNER.search(line).group("owner").strip() if _OWNER.search(line) else ""),
-            "due": (_DUE.search(line).group("due").strip() if _DUE.search(line) else ""),
+            "owner": (_OWNER.search(line).group("owner").strip() if _OWNER.search(line) else ""),  # type: ignore[reportOptionalMemberAccess]
+            "due": (_DUE.search(line).group("due").strip() if _DUE.search(line) else ""),  # type: ignore[reportOptionalMemberAccess]
         }
         tasks.append(item)
         evidence.append(ScenarioEvidence(line_number, line[:240], "task"))

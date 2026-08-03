@@ -1,4 +1,6 @@
 """Pipeline端到端测试"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.core.pipeline import DerivePipeline
 

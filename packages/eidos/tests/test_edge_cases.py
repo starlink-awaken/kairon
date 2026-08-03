@@ -1,4 +1,6 @@
 """Edge case tests — covering gaps found by red team audit."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import sys
 from pathlib import Path
@@ -19,7 +21,7 @@ class TestEdgeCases:
     def test_knowledge_card_none_values(self):
         from eidos.types import KnowledgeCard
 
-        c = KnowledgeCard(id=None, title=None, content="test", source="test", source_type="test", schema_type="test")
+        c = KnowledgeCard(id=None, title=None, content="test", source="test", source_type="test", schema_type="test")  # type: ignore[reportArgumentType]
         errors = c.validate()
         assert len(errors) >= 1  # id required
 

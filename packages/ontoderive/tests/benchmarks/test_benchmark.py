@@ -32,7 +32,7 @@ pytestmark = [
 @pytest.fixture(scope="module")
 def od():
     """创建 OntoDerive 实例（复用）"""
-    return OntoDerive(Z_PARK)
+    return OntoDerive(Z_PARK)  # type: ignore[reportOptionalCall]
 
 
 class TestBenchmarkDerive:

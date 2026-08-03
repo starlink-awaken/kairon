@@ -23,6 +23,7 @@ def test_detector_update_returns_result():
 
 def test_detector_warmup_no_anomaly():
     """预热期 + 正常值不该报异常."""
+
     det = AnomalyDetector(window_size=100, z_threshold=3.0)
     for v in [1.0, 1.1, 0.9, 1.0, 1.05, 0.95]:
         r = det.update(v)

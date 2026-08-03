@@ -1,4 +1,6 @@
 """集成测试 — 生态无关的核心流程"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 
 def test_multi_hop_derivation():

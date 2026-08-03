@@ -1,4 +1,6 @@
 """Basic smoke tests for core-models package."""  # noqa: N999
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

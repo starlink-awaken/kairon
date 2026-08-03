@@ -1,4 +1,6 @@
 """Tests for memory schema — extracted from SharedBrain D_Memory."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from eidos.memory_schema import MemoryRecord, MemorySession
 

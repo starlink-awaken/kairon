@@ -436,7 +436,7 @@ class TestMain:
             import importlib
 
             mcp_module = importlib.import_module("minerva.mcp_server.server")
-            mcp_module.main = fake_main
+            mcp_module.main = fake_main  # type: ignore[reportAttributeAccessIssue]
             result = _run_main(["mcp"])
         assert result == 0
 
@@ -458,7 +458,7 @@ class TestMain:
             import importlib
 
             daemon_module = importlib.import_module("minerva.executor.daemon")
-            daemon_module.main = fake_main
+            daemon_module.main = fake_main  # type: ignore[reportAttributeAccessIssue]
             result = _run_main(["daemon"])
         assert result == 0
 

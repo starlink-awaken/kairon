@@ -32,10 +32,10 @@ class IQualityRule(Protocol):
     """质量规则接口"""
 
     @property
-    def name(self) -> str:
+    def name(self) -> str:  # type: ignore[return]
         """规则名称"""
 
-    async def evaluate(self, knowledge: StructuredKnowledge) -> float:
+    async def evaluate(self, knowledge: StructuredKnowledge) -> float:  # type: ignore[return]
         """评估质量分数 (0.0-1.0)"""
 
 

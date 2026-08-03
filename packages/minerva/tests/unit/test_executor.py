@@ -122,10 +122,10 @@ class TestResearchExecutor:
             level=ResearchLevel.L2,
             triage=TriageResult(
                 level=ResearchLevel.L2,
-                scores={"goal": 0.9, "constraints": 0.8, "criteria": 0.7},
+                scores={"goal": 0.9, "constraints": 0.8, "criteria": 0.7},  # type: ignore[arg-type]
                 cost_estimate=0.3,
-                model_plan={},
-                search_plan={},
+                model_plan={},  # type: ignore[arg-type]
+                search_plan={},  # type: ignore[arg-type]
                 total_score=0.8,
             ),
         )

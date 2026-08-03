@@ -1,4 +1,6 @@
 """Tests for pipeline_models dataclass invariants (slots + __post_init__)."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

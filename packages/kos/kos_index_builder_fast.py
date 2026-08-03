@@ -120,7 +120,7 @@ def build_index(db_path, docs, batch_docs=200):
             table_data.append({"vector": embeddings[i], **meta})
 
     if table_data:
-        if "kos_documents" in db.list_tables():
+        if "kos_documents" in db.list_tables():  # type: ignore[reportOperatorIssue]
             tbl = db.open_table("kos_documents")
             tbl.add(table_data)
         else:

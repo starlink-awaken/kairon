@@ -4,6 +4,8 @@ Drives ScanStep, DiffStep, and ReportStep against a fixture project
 so the cross-step glue is observable from one place rather than
 silently passing as untested code paths.
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 
@@ -57,7 +59,7 @@ def test_scan_step_marks_failed_on_invalid_root(tmp_path: Path):
     progress = ProgressInfo(step_name="scan", current=0, total=0)
     # A non-existent path with strict mode would raise; we want the
     # step to capture the error and mark the result FAILED.
-    step = ScanStep(patterns=["*.md"], root="/nonexistent_root_xyz_12345_abcdef")
+    step = ScanStep(patterns=["*.md"], root="/nonexistent_root_xyz_12345_abcdef")  # type: ignore[reportArgumentType]
     result = step.execute({}, progress)
     # Path.rglob returns [] for non-existent roots, so this actually
     # succeeds with file_count=0; lock the contract that the result

@@ -1,4 +1,6 @@
 """Tests for Plugin SDK."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import pytest
 from kairon_plugin_sdk.context import PluginContext
@@ -98,7 +100,7 @@ class TestAbstractPlugin:
             plugin_id = "incomplete"
 
         with pytest.raises(TypeError) as exc_info:
-            IncompletePlugin()
+            IncompletePlugin()  # type: ignore[reportAbstractUsage]
 
         assert "abstract" in str(exc_info.value).lower()
 

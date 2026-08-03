@@ -185,7 +185,7 @@ class FactGraphImporter:
                 import json
 
                 metadata = json.loads(metadata)
-            except (json.JSONDecodeError, ValueError):
+            except (json.JSONDecodeError, ValueError):  # type: ignore[reportPossiblyUnboundVariable]
                 metadata = {}
 
         if isinstance(metadata, dict):

@@ -1,6 +1,8 @@
 """
 测试 intelligence/prompts.py - 提示词模板系统
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import json
 

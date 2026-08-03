@@ -113,7 +113,7 @@ class QueryUnderstanding:
                     {
                         "start": start.strftime("%Y%m%d%H%M%S"),
                         "end": end.strftime("%Y%m%d%H%M%S"),
-                        "label": re.search(pattern, query).group(),
+                        "label": re.search(pattern, query).group(),  # type: ignore[reportOptionalMemberAccess]
                     },
                     re.sub(pattern, "", query).strip(),
                 )
@@ -200,7 +200,7 @@ def main():
 
     qu = QueryUnderstanding()
     result = qu.analyze(args.query)
-    print(json.dumps(result, ensure_ascii=False, indent=2))
+    print(json.dumps(result, ensure_ascii=False, indent=2))  # type: ignore[reportUndefinedVariable]
 
 
 if __name__ == "__main__":

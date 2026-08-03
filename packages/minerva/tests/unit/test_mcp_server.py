@@ -53,7 +53,7 @@ class TestMCPServer:
         subcommands = set()
         for a in actions:
             if hasattr(a, "choices") and a.choices:
-                subcommands.update(a.choices.keys())
+                subcommands.update(a.choices.keys())  # type: ignore[reportAttributeAccessIssue]
         assert "mcp" in subcommands
 
     def test_cli_maintenance_cleanup_temp_action_registered(self):

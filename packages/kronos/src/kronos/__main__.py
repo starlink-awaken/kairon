@@ -6,6 +6,8 @@ v7: 加 do_default(action, args) 通用 fallback — 反射式调包内任何 'd
 
 POC 业务: 各包 __init__.py 加 do_default (或具体 do_<action>), v7 框架自动 dispatch.
 """
+# Dynamic class dispatch via inspect (hasattr on unknown-typed objects).
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 
@@ -202,7 +204,7 @@ def _call_action(action: str, args: dict[str, Any]) -> dict[str, Any]:
     if fallback_fn is not None and callable(fallback_fn):
         try:
             result = fallback_fn(args)
-            return {"package": __name__.split(".")[0], "action_dispatched": action, "args_echo": args, **result}
+            return {"package": __name__.split(".")[0], "action_dispatched": action, "args_echo": args, **result}  # type: ignore[reportGeneralTypeIssues]
         except Exception as exc:
             return {
                 "package": __name__.split(".")[0],

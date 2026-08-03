@@ -1,3 +1,5 @@
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 """Tests for kairon_observability.metrics — Prometheus-style 收集器.
 
 补 metrics 零测试债 (功能 P1, 场景审计标的)."""

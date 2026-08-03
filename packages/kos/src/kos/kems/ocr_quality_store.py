@@ -128,7 +128,7 @@ class OCRQualityStore:
                 (run_id, corrected_sha256, correction_ref, annotator, datetime.now(UTC).isoformat()),
             )
             connection.execute("UPDATE ocr_runs SET review_status='corrected' WHERE run_id=?", (run_id,))
-        return int(cursor.lastrowid)
+        return int(cursor.lastrowid)  # type: ignore[reportArgumentType]
 
     def get_report(self, run_id: str) -> dict[str, Any] | None:
         self.initialize()

@@ -112,7 +112,7 @@ class AutoBuilder:
         self.conn.commit()
         return stats
 
-    def _extract_entities(self, doc: sqlite3.Row) -> list[dict]:
+    def _extract_entities(self, doc: sqlite3.Row) -> list[dict]:  # type: ignore[reportUndefinedVariable]
         """从文档中提取实体（规则+模式）。"""
         import sqlite3
 
@@ -160,7 +160,7 @@ class AutoBuilder:
 
         return unique[:10]  # Limit per doc
 
-    def _infer_relations(self, doc: sqlite3.Row, entities: list[dict]) -> list[dict]:
+    def _infer_relations(self, doc: sqlite3.Row, entities: list[dict]) -> list[dict]:  # type: ignore[reportUndefinedVariable]
         """推断实体间关系。"""
         relations = []
         for i, e1 in enumerate(entities):

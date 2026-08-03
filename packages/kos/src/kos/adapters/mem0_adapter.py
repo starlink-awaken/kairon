@@ -37,7 +37,7 @@ class Mem0Adapter:
                             },
                         }
                     }
-                self.memory = Memory.from_config(self.config)
+                self.memory = Memory.from_config(self.config)  # type: ignore[reportOptionalMemberAccess]
             except Exception as e:
                 logger.error(f"Failed to initialize Mem0: {e}")
                 self.enabled = False

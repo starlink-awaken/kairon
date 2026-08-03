@@ -1,4 +1,6 @@
 """Tests for FormalPipeline — 四阶段形式化推理管线"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.reasoners.pipeline_v4 import FormalPipeline
 

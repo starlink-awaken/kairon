@@ -1,4 +1,6 @@
 """sophia 基础测试"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from sophia import cli
 from sophia.compiler import compile_paradigm_sync

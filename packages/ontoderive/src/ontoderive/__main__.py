@@ -10,6 +10,8 @@ packages/ontoderive/engine/). 集成测试调 `python -m engine` 时需确保 ve
 
 调用: python -m engine serve --action <action>
 """
+# Dynamic class dispatch via inspect (hasattr on unknown-typed objects).
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

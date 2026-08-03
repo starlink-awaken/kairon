@@ -197,7 +197,7 @@ def scan_directory(root_path: str) -> DirectoryMap:
             dm.version_chains.append(files)
 
     dm.categories = by_cat
-    if is_archive:
+    if is_archive:  # type: ignore[reportPossiblyUnboundVariable]
         dm.archive_files = sum(1 for f in dm.all_files if f.is_archive)
 
     return dm

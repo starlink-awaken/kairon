@@ -9,6 +9,7 @@ Authority: nucleus/Z-Core/L0-Genome/R0-ACT-SYS-AX01-10_holographic_metadata_axio
 Layer: L3
 ---
 """
+# pyright: reportAttributeAccessIssue=false
 # =============================================================================
 # 0. 形式化摘要 ≝
 # =============================================================================

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Build a redacted KEMS evaluation manifest from adjudicated JSONL or SQLite data."""
+# pyright: reportInvalidTypeForm=false
 
 from __future__ import annotations
 
@@ -164,7 +165,7 @@ def _build_manifest_from_records(
 ) -> EvaluationManifest:
     if not dataset_id.strip() or not dataset_version.strip():
         raise ManifestInputError("dataset_id and dataset_version are required")
-    samples: list[EvaluationSample] = []
+    samples: list[EvaluationSample] = []  # type: ignore[reportInvalidTypeForm]
     seen_ids: set[str] = set()
     for line_number, record in records:
         validated = _validate_sample(record, line_number, seen_ids)

@@ -1,3 +1,5 @@
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 from __future__ import annotations
 
 from eidos.protocols.contracts import validate_contract_payload

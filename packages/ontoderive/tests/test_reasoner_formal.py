@@ -1,4 +1,6 @@
 """Tests for FormalReasoner — 形式推理引擎"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.reasoners.reasoner_formal import FormalConclusion, FormalReasoner
 

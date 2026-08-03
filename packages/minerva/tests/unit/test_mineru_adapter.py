@@ -72,7 +72,7 @@ class TestParseDocument:
 
         # Build a fake Path object for rglob to return
         fake_md_path = MagicMock()
-        fake_md_path.__str__.return_value = "/tmp/output/output.md"
+        fake_md_path.__str__.return_value = "/tmp/output/output.md"  # type: ignore[reportAttributeAccessIssue]
 
         with (
             patch("minerva.knowledge.mineru_adapter.is_available", return_value=True),
@@ -253,7 +253,7 @@ class TestParseToText:
                 return False
 
         def _fake_parse_document(input_path, output_dir=None):
-            output_path = Path(output_dir)
+            output_path = Path(output_dir)  # type: ignore[reportArgumentType]
             markdown_path = output_path / "page.md"
             markdown_path.write_text("# Parsed content", encoding="utf-8")
             return {

@@ -164,7 +164,7 @@ class SyncEngine:
             wps_result = self._wpsnote.create_item(
                 title=item.title,
                 content=xml_content,
-                tags=item.tags if hasattr(item, "tags") and item.tags else None,
+                tags=item.tags if hasattr(item, "tags") and item.tags else None,  # type: ignore[reportAttributeAccessIssue]
             )
 
             if isinstance(wps_result, dict) and wps_result.get("note_id"):
@@ -248,7 +248,7 @@ class SyncEngine:
 
             # Create in Obsidian vault
             # Provide both frontmatter and body
-            tags = item.tags if hasattr(item, "tags") and item.tags else None
+            tags = item.tags if hasattr(item, "tags") and item.tags else None  # type: ignore[reportAttributeAccessIssue]
             try:
                 self._obsidian.create_item(
                     title=item.title,

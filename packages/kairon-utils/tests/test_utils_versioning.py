@@ -1,4 +1,6 @@
 """Tests for kairon_lib.utils.versioning — ContentVersion, ContentVersionTracker."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import tempfile
 from pathlib import Path

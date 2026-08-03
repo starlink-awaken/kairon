@@ -131,7 +131,7 @@ def scan_entities(db_path: str) -> dict:  # type: ignore[type-arg]
         ).fetchall()
 
         if rows:
-            entity_refs[entity] = {
+            entity_refs[entity] = {  # type: ignore[reportArgumentType]
                 "count": len(rows),
                 "documents": [{"title": r["title"], "zone": r["zone"]} for r in rows[:3]],
             }

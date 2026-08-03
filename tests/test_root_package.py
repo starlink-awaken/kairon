@@ -12,4 +12,4 @@ def test_root_package_describe_reports_workspace_members():
     description = kairon.describe()
 
     assert description["name"] == "kairon"
-    assert description["workspace_member_count"] >= 1
+    assert description["workspace_member_count"] >= 1  # type: ignore[reportOperatorIssue]

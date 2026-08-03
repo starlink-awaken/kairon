@@ -2,6 +2,8 @@
 
 Uses a temporary vault directory with carefully crafted .md files.
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import tempfile
 from pathlib import Path

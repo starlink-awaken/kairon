@@ -1,4 +1,6 @@
 """Basic tests for adapters."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from kronos.adapters import to_knowledge_card, to_knowledge_card_from_browser_fetch
 

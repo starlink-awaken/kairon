@@ -550,7 +550,7 @@ class TestGetResult:
             report_path=None,
         )
         result = get_result(result_id)
-        assert result["report"] == "# My Report"
+        assert result["report"] == "# My Report"  # type: ignore[reportOptionalSubscript]
 
     def test_omits_report_when_missing(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
@@ -568,7 +568,7 @@ class TestGetResult:
             report_path=None,
         )
         result = get_result(result_id)
-        assert "report" not in result
+        assert "report" not in result  # type: ignore[reportOperatorIssue]
 
     def test_includes_search_results(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")
@@ -587,7 +587,7 @@ class TestGetResult:
             search_results=[{"id": 1}, {"id": 2}],
         )
         result = get_result(result_id)
-        assert result["search_results"] == [{"id": 1}, {"id": 2}]
+        assert result["search_results"] == [{"id": 1}, {"id": 2}]  # type: ignore[reportOptionalSubscript]
 
     def test_corrupt_search_results_swallowed(self, tmp_path: Path, monkeypatch):
         monkeypatch.setattr(persistence, "_RESULTS_DIR", tmp_path / "research")

@@ -1,6 +1,8 @@
 """
 测试控制论层
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.theories.controller import PIDController
 

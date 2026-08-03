@@ -32,13 +32,13 @@ class MarkdownHandler(FormatHandler):
     extensions = {".md", ".txt", ".markdown", ".mdx"}
     priority = 100
 
-    def extract_text(self, p: Path) -> str:
+    def extract_text(self, p: Path) -> str:  # type: ignore[reportIncompatibleMethodOverride]
         try:
             return p.read_text(encoding="utf-8")[:8000]
         except Exception:  # noqa: BLE001
             return f"[{p.suffix}: {p.name}]"
 
-    def extract_metadata(self, p: Path) -> dict:
+    def extract_metadata(self, p: Path) -> dict:  # type: ignore[reportIncompatibleMethodOverride]
         try:
             content = p.read_text(encoding="utf-8")
         except Exception:  # noqa: BLE001
@@ -62,7 +62,7 @@ class DocxHandler(FormatHandler):
     extensions = {".docx"}
     priority = 80
 
-    def extract_text(self, p: Path) -> str:
+    def extract_text(self, p: Path) -> str:  # type: ignore[reportIncompatibleMethodOverride]
         try:
             from docx import Document
 
@@ -71,7 +71,7 @@ class DocxHandler(FormatHandler):
         except Exception:  # noqa: BLE001
             return f"[docx: {p.name}]"
 
-    def extract_metadata(self, p: Path) -> dict:
+    def extract_metadata(self, p: Path) -> dict:  # type: ignore[reportIncompatibleMethodOverride]
         try:
             from docx import Document
 

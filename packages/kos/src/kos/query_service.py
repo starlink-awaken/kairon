@@ -17,7 +17,7 @@ import numpy as np
 import numpy.typing as npt
 
 if TYPE_CHECKING:
-    from eidos.memory_graph import MemoryGraph
+    from eidos.memory_graph import MemoryGraph  # type: ignore[reportMissingImports]
 
 _log = logging.getLogger(__name__)
 

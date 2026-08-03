@@ -11,6 +11,7 @@ from kairon_observability.tracing import get_tracer, setup_tracing
 
 def test_setup_tracing_idempotent():
     """setup_tracing 二次调用该 no-op (_TRACING_INITIALIZED 全局守)."""
+
     setup_tracing("test-service-a")
     # 二次不报错 (已初始化, 直接 return)
     setup_tracing("test-service-b")

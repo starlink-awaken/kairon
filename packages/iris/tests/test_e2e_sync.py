@@ -3,6 +3,8 @@
 Uses a temporary Obsidian vault and mocks the WPS MCP client
 to test the full sync cycle without hitting real cloud services.
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

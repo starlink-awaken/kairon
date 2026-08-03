@@ -1,3 +1,5 @@
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 from ontoderive.foundation.utils import all_md, detect_cycles, load_json, rf, save_json, wf
 
 

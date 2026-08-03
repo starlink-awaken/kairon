@@ -586,7 +586,7 @@ def _check_llm_health() -> tuple[bool, str]:
     except Exception as e:
         err_msg = str(e)
         if "ConnectError" in type(e).__name__ or "Connection refused" in err_msg:
-            messages.append(f"  [WARN] LLM {config.llm.base_url} unreachable — check Ollama is running")
+            messages.append(f"  [WARN] LLM {config.llm.base_url} unreachable — check Ollama is running")  # type: ignore[reportPossiblyUnboundVariable]
         else:
             messages.append(f"  [WARN] LLM health check failed: {e}")
 

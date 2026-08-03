@@ -1,4 +1,6 @@
 """Tests for new Eidos type modules: InferenceRule, StateMachine, Relation."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import sys
 from pathlib import Path

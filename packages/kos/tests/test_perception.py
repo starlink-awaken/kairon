@@ -87,11 +87,11 @@ class TestFactInjector:
         """)
         self.conn.commit()
         self._orig_db_path = self.mod.DB_PATH
-        self.mod.DB_PATH = self.tmp_path
+        self.mod.DB_PATH = self.tmp_path  # type: ignore[reportAttributeAccessIssue]
 
     def teardown_method(self):
         self.conn.close()
-        self.mod.DB_PATH = self._orig_db_path
+        self.mod.DB_PATH = self._orig_db_path  # type: ignore[reportAttributeAccessIssue]
         Path(self.tmp_path).unlink(missing_ok=True)
 
     def test_inject_facts(self):

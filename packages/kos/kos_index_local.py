@@ -98,7 +98,7 @@ def build_index(db_path, docs, model, batch_docs=500):
 
     if table_data:
         try:
-            if "kos_documents" in db.list_tables():
+            if "kos_documents" in db.list_tables():  # type: ignore[reportOperatorIssue]
                 tbl = db.open_table("kos_documents")
                 tbl.add(table_data)
             else:

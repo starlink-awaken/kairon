@@ -56,7 +56,7 @@ class JsonContentExtractor(IContentExtractor):
     def __init__(self, config: JsonExtractionConfig | None = None) -> None:
         self.config = config or JsonExtractionConfig()
 
-    async def extract(self, raw: RawContent) -> list[StructuredKnowledge]:
+    async def extract(self, raw: RawContent) -> list[StructuredKnowledge]:  # type: ignore[override]
         """从JSON内容中提取结构化知识"""
         # 解析JSON数据
         json_data = self._parse_json(raw)

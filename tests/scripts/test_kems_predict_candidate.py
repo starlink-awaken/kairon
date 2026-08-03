@@ -7,7 +7,7 @@ import pytest
 
 sys.path.insert(0, "scripts")
 
-from kems_predict_candidate import ModelInputError, main, predict_cases
+from kems_predict_candidate import ModelInputError, main, predict_cases  # type: ignore[reportMissingImports]
 
 
 def test_moving_average_generates_predictions_without_raw_content() -> None:

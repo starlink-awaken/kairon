@@ -1,4 +1,6 @@
 """Tests for kairon_lib.utils.logging — JSONFormatter, StructuredLogger, get_logger."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import json
 import logging

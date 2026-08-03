@@ -511,7 +511,7 @@ class ForgeAPIHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
         self.end_headers()
 
-    def log_message(self, fmt: str, *args: Any) -> None:
+    def log_message(self, format: str, *args: Any) -> None:  # type: ignore[override]
         print(
             f"[{datetime.now().strftime('%H:%M:%S')}] {args[0] if args else ''} {args[1] if len(args) > 1 else ''} {args[2] if len(args) > 2 else ''}"
         )

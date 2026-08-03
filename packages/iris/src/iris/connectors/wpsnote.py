@@ -326,7 +326,7 @@ class WPSNoteConnector(BaseConnector):
 
         return result
 
-    def update_item(self, id: str, data: dict[str, Any]) -> dict[str, Any]:
+    def update_item(self, id: str, data: dict[str, Any]) -> dict[str, Any]:  # type: ignore[reportIncompatibleMethodOverride]
         """Update a note's title, content, and/or starred status.
 
         Args:

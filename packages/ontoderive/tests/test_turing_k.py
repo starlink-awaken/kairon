@@ -1,6 +1,8 @@
 """
 测试图灵机层 v2
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.theories.turing_k import KnowledgeTM
 

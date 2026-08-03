@@ -369,7 +369,7 @@ class ObsidianConnector(BaseConnector):
             updated_at=now,
         )
 
-    def update_item(self, id: str, data: dict[str, Any]) -> Note | None:
+    def update_item(self, id: str, data: dict[str, Any]) -> Note | None:  # type: ignore[reportIncompatibleMethodOverride]
         """Update an existing note's title, content, or tags.
 
         Args:

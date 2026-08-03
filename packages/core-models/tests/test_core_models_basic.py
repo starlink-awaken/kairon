@@ -1,4 +1,6 @@
 """Basic smoke tests for core-models package."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

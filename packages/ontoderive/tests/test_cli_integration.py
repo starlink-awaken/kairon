@@ -8,6 +8,8 @@ OntoDerive instance and running the commands that the CLI used to
 dispatch. This locks the integration boundary so future refactors
 that drop a method surface a failure here, not in production.
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

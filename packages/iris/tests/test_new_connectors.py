@@ -4,6 +4,8 @@ All connectors are tested with mocked external dependencies
 so tests are fast and deterministic. Each test creates its own
 connector instance to avoid caching issues.
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 
@@ -252,7 +254,7 @@ class TestAppleNotesConnector:
         from iris.connectors.applenotes.connector import _decode_note_id, _make_note_id
 
         note_id = _make_note_id("Folder", "My Note")
-        folder, title = _decode_note_id(note_id)
+        folder, title = _decode_note_id(note_id)  # type: ignore[reportGeneralTypeIssues]
         assert folder == "Folder"
         assert title == "My Note"
 

@@ -1,6 +1,8 @@
 from pathlib import Path
 
 """E2E集成测试 — 全流程Pipeline+生态+MCP"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 
 ZPARK = str(Path(__file__).parent.parent / "examples" / "z-park")

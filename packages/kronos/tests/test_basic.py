@@ -1,4 +1,6 @@
 """Basic tests for kronos — 知识摄取管线."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

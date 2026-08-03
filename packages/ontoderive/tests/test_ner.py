@@ -1,4 +1,6 @@
 """Tests for NER — 中文命名实体识别"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.intelligence.ner import _extract_entities_by_suffix, extract_entities
 

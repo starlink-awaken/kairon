@@ -4,6 +4,8 @@ Covers VectorClock comparison/merge, CRDTSet add/remove/merge, FederatedMemory
 put/get/delete/query, sync peer management, prepare_sync_data/apply_sync_data
 with conflict resolution, merge_with, and stats aggregation.
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from __future__ import annotations
 
@@ -233,7 +235,7 @@ class TestCRDTSet:
         s.add(old)
         s.add(new)
         # New value should win (newer timestamp)
-        assert s.get("k").value == 2
+        assert s.get("k").value == 2  # type: ignore[reportOptionalMemberAccess]
 
     def test_add_older_timestamp_does_not_overwrite(self):
         """If new entry has older timestamp, old value wins."""
@@ -254,7 +256,7 @@ class TestCRDTSet:
         )
         s.add(old)
         s.add(older)
-        assert s.get("k").value == "current"
+        assert s.get("k").value == "current"  # type: ignore[reportOptionalMemberAccess]
 
     def test_remove_soft_delete(self):
         s = CRDTSet()
@@ -294,7 +296,7 @@ class TestCRDTSet:
         s.add(old)
         s.remove("k", "n")
         s.add(new)
-        assert s.get("k").value == 2
+        assert s.get("k").value == 2  # type: ignore[reportOptionalMemberAccess]
 
     def test_values_returns_active_only(self):
         s = CRDTSet()
@@ -517,10 +519,10 @@ class TestFederatedMemory:
         fm.add_sync_peer("node-b", 0.5)
         fm.put("k", "v")
         result = fm.prepare_sync_data("node-b")
-        assert result["source"] == "node-a"
-        assert result["target"] == "node-b"
-        assert "entries" in result
-        assert "sync_timestamp" in result
+        assert result["source"] == "node-a"  # type: ignore[reportOptionalSubscript]
+        assert result["target"] == "node-b"  # type: ignore[reportOptionalSubscript]
+        assert "entries" in result  # type: ignore[reportOperatorIssue]
+        assert "sync_timestamp" in result  # type: ignore[reportOperatorIssue]
 
     def test_apply_sync_data_untrusted_source(self):
         fm = FederatedMemory("node-a")

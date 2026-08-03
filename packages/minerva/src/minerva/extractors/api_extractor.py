@@ -112,7 +112,7 @@ class JsonPathExtractor:
 
         return parts
 
-    def extract(self, data: dict) -> Any | None:
+    def extract(self, data: dict) -> Any | None:  # type: ignore[override]
         """
         从数据中提取指定路径的值
 
@@ -176,7 +176,7 @@ class ApiContentExtractor(IContentExtractor):
     def __init__(self, config: ApiExtractionConfig | None = None) -> None:
         self.config = config or ApiExtractionConfig()
 
-    async def extract(self, raw: RawContent) -> list[StructuredKnowledge]:
+    async def extract(self, raw: RawContent) -> list[StructuredKnowledge]:  # type: ignore[override]
         """从JSON内容中提取结构化知识"""
         # 解析JSON数据
         json_data = self._parse_json(raw)

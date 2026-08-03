@@ -7,6 +7,8 @@
 - respond/error 辅助函数
 - 错误路径
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import io
 import json

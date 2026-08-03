@@ -17,7 +17,7 @@ warnings.warn(
     stacklevel=2,
 )
 
-from kairon_governance.agora_routes import main
+from kairon_governance.agora_routes import main  # type: ignore[reportMissingImports]
 
 if __name__ == "__main__":
     raise SystemExit(main())

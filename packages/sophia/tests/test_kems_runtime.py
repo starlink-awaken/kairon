@@ -37,6 +37,7 @@ def test_kems_runtime_describe_structure():
 
 def test_kems_runtime_describe_returns_copies():
     """describe() 返回的 dict 改动不影响类常量 MAP."""
+
     rt = KemsRuntime()
     d1 = rt.describe()
     d1["planes"]["custom"] = "injected"

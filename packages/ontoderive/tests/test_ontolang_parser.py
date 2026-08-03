@@ -8,6 +8,8 @@ Covers:
 - SemanticAnalyzer validation rules
 - Error handling (malformed input, invalid prefixes, missing fields)
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.ontolang.ast import (
     AST,

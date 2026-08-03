@@ -28,7 +28,7 @@ from typing import Any, cast
 
 import numpy as np
 
-from eidos.base import VectorSearchResult, VectorStoreBackend
+from eidos.base import VectorSearchResult, VectorStoreBackend  # type: ignore[reportMissingImports]
 from eidos.organs.storage_dal import SQLiteOperationalError, SQLiteRelationalProvider
 
 _log = logging.getLogger(__name__)

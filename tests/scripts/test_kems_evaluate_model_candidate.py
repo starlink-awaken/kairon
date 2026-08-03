@@ -7,7 +7,11 @@ import pytest
 
 sys.path.insert(0, "scripts")
 
-from kems_evaluate_model_candidate import ModelInputError, evaluate_candidate, main
+from kems_evaluate_model_candidate import (  # type: ignore[reportMissingImports]
+    ModelInputError,
+    evaluate_candidate,
+    main,
+)
 
 
 def case(case_id: str, predictions: list[float], actual: list[float], baseline: float) -> dict[str, object]:

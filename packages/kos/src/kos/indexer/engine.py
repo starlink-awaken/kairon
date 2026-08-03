@@ -106,13 +106,13 @@ class MarkdownHandler(FormatHandler):
     extensions = {".md", ".txt", ".markdown", ".mdx"}
     priority = 100
 
-    def extract_text(self, p: Path) -> str:
+    def extract_text(self, p: Path) -> str:  # type: ignore[reportIncompatibleMethodOverride]
         try:
             return p.read_text(encoding="utf-8")[:8000]
         except Exception:  # noqa: BLE001
             return f"[{p.suffix}: {p.name}]"
 
-    def extract_metadata(self, p: Path) -> dict:
+    def extract_metadata(self, p: Path) -> dict:  # type: ignore[reportIncompatibleMethodOverride]
         try:
             content = p.read_text(encoding="utf-8")
         except Exception:  # noqa: BLE001
@@ -136,7 +136,7 @@ class DocxHandler(FormatHandler):
     extensions = {".docx"}
     priority = 80
 
-    def extract_text(self, p: Path) -> str:
+    def extract_text(self, p: Path) -> str:  # type: ignore[reportIncompatibleMethodOverride]
         try:
             from docx import Document
 
@@ -145,7 +145,7 @@ class DocxHandler(FormatHandler):
         except Exception:  # noqa: BLE001
             return f"[docx: {p.name}]"
 
-    def extract_metadata(self, p: Path) -> dict:
+    def extract_metadata(self, p: Path) -> dict:  # type: ignore[reportIncompatibleMethodOverride]
         try:
             from docx import Document
 
@@ -161,7 +161,7 @@ class GongwenDocxHandler(FormatHandler):
     extensions = {".docx"}
     priority = 85  # Higher than generic DocxHandler(80)
 
-    def can_handle(self, p: Path) -> bool:
+    def can_handle(self, p: Path) -> bool:  # type: ignore[reportIncompatibleMethodOverride]
         # Activate for gongwen and guozhuan zone docx files
         if p.suffix.lower() not in self.extensions:
             return False
@@ -397,7 +397,7 @@ class GongwenDocxHandler(FormatHandler):
 
         return "\n".join(parts)[:8000]
 
-    def extract_text(self, p: Path) -> str:
+    def extract_text(self, p: Path) -> str:  # type: ignore[reportIncompatibleMethodOverride]
         try:
             from docx import Document
 
@@ -415,7 +415,7 @@ class GongwenDocxHandler(FormatHandler):
                         {
                             "style": style,
                             "text": text,
-                            "is_heading": "Heading" in style or "标题" in style or "heading" in style.lower(),
+                            "is_heading": "Heading" in style or "标题" in style or "heading" in style.lower(),  # type: ignore[reportOptionalMemberAccess]
                         }
                     )
 
@@ -441,7 +441,7 @@ class GongwenDocxHandler(FormatHandler):
         except Exception:  # noqa: BLE001
             return f"[docx: {p.name}]"
 
-    def extract_metadata(self, p: Path) -> dict:
+    def extract_metadata(self, p: Path) -> dict:  # type: ignore[reportIncompatibleMethodOverride]
         try:
             from docx import Document
 
@@ -481,7 +481,7 @@ class PdfHandler(FormatHandler):
     extensions = {".pdf"}
     priority = 70
 
-    def extract_text(self, p: Path) -> str:
+    def extract_text(self, p: Path) -> str:  # type: ignore[reportIncompatibleMethodOverride]
         # Tier 1: MinerU (best quality, Markdown output)
         try:
             from magic_pdf.tools.common import do_parse  # type: ignore[import-untyped, import-not-found]
@@ -498,20 +498,20 @@ class PdfHandler(FormatHandler):
             import fitz  # type: ignore[import-untyped]
 
             doc = fitz.open(str(p))
-            text = "\n".join(page.get_text() for page in doc)
+            text = "\n".join(page.get_text() for page in doc)  # type: ignore[reportArgumentType]
             doc.close()
             return text[:8000]
         except Exception:  # noqa: BLE001
             return f"[pdf: {p.name}]"
 
-    def extract_metadata(self, p: Path) -> dict:
+    def extract_metadata(self, p: Path) -> dict:  # type: ignore[reportIncompatibleMethodOverride]
         try:
             import fitz
 
             doc = fitz.open(str(p))
             meta = doc.metadata
             doc.close()
-            return {"title": meta.get("title") or p.stem}
+            return {"title": meta.get("title") or p.stem}  # type: ignore[reportOptionalMemberAccess]
         except Exception:  # noqa: BLE001
             return {"title": p.stem}
 
@@ -520,7 +520,7 @@ class XlsxHandler(FormatHandler):
     extensions = {".xlsx", ".xls"}
     priority = 60
 
-    def extract_text(self, p: Path) -> str:
+    def extract_text(self, p: Path) -> str:  # type: ignore[reportIncompatibleMethodOverride]
         try:
             import openpyxl  # type: ignore[unknown]
 
@@ -539,7 +539,7 @@ class XlsxHandler(FormatHandler):
         except Exception:  # noqa: BLE001
             return f"[xlsx: {p.name}]"
 
-    def extract_metadata(self, p: Path) -> dict:
+    def extract_metadata(self, p: Path) -> dict:  # type: ignore[reportIncompatibleMethodOverride]
         try:
             import openpyxl
 
@@ -555,13 +555,13 @@ class GenericHandler(FormatHandler):
     extensions = set()  # handles everything
     priority = 0
 
-    def can_handle(self, p: Path) -> bool:
+    def can_handle(self, p: Path) -> bool:  # type: ignore[reportIncompatibleMethodOverride]
         return True
 
-    def extract_text(self, p: Path) -> str:
+    def extract_text(self, p: Path) -> str:  # type: ignore[reportIncompatibleMethodOverride]
         return f"[{p.suffix}: {p.name}]"
 
-    def extract_metadata(self, p: Path) -> dict:
+    def extract_metadata(self, p: Path) -> dict:  # type: ignore[reportIncompatibleMethodOverride]
         return {"title": p.name}
 
 
@@ -603,7 +603,7 @@ def check_handler_deps() -> dict:  # type: ignore[type-arg]
         status["openpyxl"] = False
     # MinerU
     try:
-        from magic_pdf.tools.common import do_parse
+        from magic_pdf.tools.common import do_parse  # type: ignore[reportMissingImports]
 
         status["mineru"] = True
     except ImportError:

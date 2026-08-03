@@ -109,7 +109,7 @@ class OpenAIProvider(BaseProvider):
 class AnthropicProvider(BaseProvider):
     def call(self, prompt: Any, system: Any = "", temperature: Any = 0.3) -> Any:
         try:
-            import anthropic
+            import anthropic  # type: ignore[reportMissingImports]
 
             api_key = os.environ.get("ANTHROPIC_API_KEY")
             if _standard_llm_provider() == "anthropic":
@@ -218,6 +218,6 @@ def detect_backend() -> tuple[str, str]:
 # ── 向后兼容 ──────────────────────────────────────────
 # 新代码优先使用 llm-gateway；若独立 CLI 环境没有安装该包，则回退到本地抽象基类。
 try:
-    from llm_gateway import provider  # noqa: F401
+    from llm_gateway import provider  # noqa: F401  # type: ignore[reportMissingImports]
 except ImportError:
     pass

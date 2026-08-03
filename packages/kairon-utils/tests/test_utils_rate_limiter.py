@@ -1,4 +1,6 @@
 """Tests for kairon_lib.utils.rate_limiter — TokenBucket, RateLimiter."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import pytest
 from kairon_utils.rate_limiter import RateLimiter, TokenBucket

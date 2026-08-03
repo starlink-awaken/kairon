@@ -1,4 +1,6 @@
 """规约检查模块测试"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.core.check import run_check
 

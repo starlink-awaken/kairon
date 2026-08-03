@@ -1,4 +1,6 @@
 """Tests for export — 导出模块"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import pytest
 from ontoderive.core.export import to_html, to_json, to_markdown

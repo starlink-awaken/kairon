@@ -52,13 +52,13 @@ class HybridSearchEngine:
     为 AI Agent 提供统一的知识检索入口。
     """
 
-    def __init__(self, db_path: str | None = None, cache: "SearchCache | None" = None):
+    def __init__(self, db_path: str | None = None, cache: "SearchCache | None" = None):  # type: ignore[reportUndefinedVariable]
         self.db_path = db_path or get_artifact_path("retrievalDatabase")
         self._conn = None
         self._cache = cache
 
     @property
-    def cache(self) -> "SearchCache | None":
+    def cache(self) -> "SearchCache | None":  # type: ignore[reportUndefinedVariable]
         if self._cache is None:
             from kos.cache import SearchCache
 
@@ -66,7 +66,7 @@ class HybridSearchEngine:
         return self._cache
 
     @cache.setter
-    def cache(self, value: "SearchCache | None") -> None:
+    def cache(self, value: "SearchCache | None") -> None:  # type: ignore[reportUndefinedVariable]
         self._cache = value
 
     @property
@@ -106,7 +106,7 @@ class HybridSearchEngine:
 
         # 0. 查缓存
         if use_cache and self._cache is not False:
-            cached = self.cache.get(query, mode, limit)
+            cached = self.cache.get(query, mode, limit)  # type: ignore[reportOptionalMemberAccess]
             if cached is not None:
                 cached["elapsed_ms"] = round((time.monotonic() - t0) * 1000, 2)
                 return cached
@@ -154,7 +154,7 @@ class HybridSearchEngine:
 
         # 写入缓存
         if use_cache and self._cache is not False and final:
-            self.cache.set(
+            self.cache.set(  # type: ignore[reportOptionalMemberAccess]
                 query,
                 mode,
                 final,

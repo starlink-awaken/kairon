@@ -1,4 +1,6 @@
 """Tests for UnifiedReasoner + ReasoningSelector + ContentCanonicalizer"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.reasoners.reasoning import ContentCanonicalizer, DataProfile, ReasoningSelector
 from ontoderive.reasoners.unified_reasoner import UnifiedConclusion, UnifiedReasoner

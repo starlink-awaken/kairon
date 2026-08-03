@@ -1,6 +1,8 @@
 from pathlib import Path
 
 """E2E快照测试 — 确保重构不改变输出质量"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 
 ZPARK = str(Path(__file__).parent.parent / "examples" / "z-park")

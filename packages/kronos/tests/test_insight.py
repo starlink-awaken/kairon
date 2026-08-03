@@ -1,4 +1,6 @@
 """Basic tests for insight_engine."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from kronos.insight_engine import InsightReport, format_insight_report, generate_insight, match_concepts
 

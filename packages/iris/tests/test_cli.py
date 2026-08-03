@@ -1,4 +1,6 @@
 """Tests for iris CLI commands."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from iris.cli import build_parser
 

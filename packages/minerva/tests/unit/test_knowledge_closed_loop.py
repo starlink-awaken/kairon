@@ -100,7 +100,7 @@ class TestKOSSaveStage:
             result = await stage.execute(ctx)
 
             assert result is ctx
-            mock_store.return_value["put_entity"].assert_called_once()
+            mock_store.return_value["put_entity"].assert_called_once()  # type: ignore[reportCallIssue]
 
     @pytest.mark.asyncio
     async def test_skip_without_report(self):

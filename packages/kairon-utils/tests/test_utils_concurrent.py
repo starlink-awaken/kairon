@@ -1,4 +1,6 @@
 """Tests for kairon_lib.utils.concurrent — ConcurrencyManager, ProgressTracker."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import asyncio
 

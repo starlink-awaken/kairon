@@ -28,7 +28,7 @@ def sync_queue(
         existing = existing_by_source.get(str(row["source_ref"]))
         if existing and existing["source_sha256"] != row["source_sha256"]:
             raise ValueError(f"source_ref already exists with different metadata: {row['source_ref']}")
-    inserted = store.ingest_queue(rows)
+    inserted = store.ingest_queue(rows)  # type: ignore[reportArgumentType]
     write_queue(rows, evidence_output)
     return {
         "status": "succeeded",

@@ -99,9 +99,9 @@ def evaluate_candidate(
     if all(isinstance(value, str) and value.strip() for value in binding):
         report.update(
             {
-                "dataset_id": dataset_id.strip(),
-                "dataset_version": dataset_version.strip(),
-                "evaluation_manifest_sha256": evaluation_manifest_sha256.strip(),
+                "dataset_id": dataset_id.strip(),  # type: ignore[reportOptionalMemberAccess]
+                "dataset_version": dataset_version.strip(),  # type: ignore[reportOptionalMemberAccess]
+                "evaluation_manifest_sha256": evaluation_manifest_sha256.strip(),  # type: ignore[reportOptionalMemberAccess]
                 "dataset_sample_count": dataset_sample_count,
             }
         )

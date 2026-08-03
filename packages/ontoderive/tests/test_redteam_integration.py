@@ -1,4 +1,6 @@
 """RedTeam: 跨方法状态污染集成测试"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.core.derive import OntoDerive
 

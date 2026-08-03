@@ -27,7 +27,7 @@ class TestLRUCache(unittest.TestCase):
         cache = LRUCache(capacity=10, default_ttl=60)
         cache.set("key1", {"data": "value1"})
         result = cache.get("key1")
-        self.assertEqual(result["data"], "value1")
+        self.assertEqual(result["data"], "value1")  # type: ignore[reportOptionalSubscript]
 
     def test_miss(self):
         from kos.cache import LRUCache
@@ -108,7 +108,7 @@ class TestSearchCache(unittest.TestCase):
         cache.set("test query", "keyword", [{"doc_id": "1", "title": "Test"}])
         result = cache.get("test query", "keyword")
         self.assertIsNotNone(result)
-        self.assertEqual(result["cache_hit"], "L1")
+        self.assertEqual(result["cache_hit"], "L1")  # type: ignore[reportOptionalSubscript]
 
     def test_miss(self):
         from kos.cache import SearchCache

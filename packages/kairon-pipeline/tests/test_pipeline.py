@@ -2,6 +2,8 @@
 
 以前仅有 5 个 import 测试。本文件补充 22 个行为测试，覆盖核心模块。
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from pathlib import Path
 
@@ -268,7 +270,7 @@ class TestHarvestPriorityQueue:
         await pq.enqueue("task1", priority=Priority.LOW)
         await pq.enqueue("task2", priority=Priority.URGENT)
         job = await pq.dequeue()
-        assert job.source_id == "task2"  # highest priority first
+        assert job.source_id == "task2"  # highest priority first  # type: ignore[reportOptionalMemberAccess]
 
     @pytest.mark.asyncio
     async def test_empty_dequeue_returns_none(self):
@@ -280,8 +282,8 @@ class TestHarvestPriorityQueue:
         pq = HarvestPriorityQueue()
         await pq.enqueue("a", priority=Priority.NORMAL)
         await pq.enqueue("b", priority=Priority.NORMAL)
-        assert (await pq.dequeue()).source_id == "a"
-        assert (await pq.dequeue()).source_id == "b"
+        assert (await pq.dequeue()).source_id == "a"  # type: ignore[reportOptionalMemberAccess]
+        assert (await pq.dequeue()).source_id == "b"  # type: ignore[reportOptionalMemberAccess]
 
     def test_size_property(self):
         pq = HarvestPriorityQueue()
@@ -301,7 +303,7 @@ class TestHarvestPriorityQueue:
     async def test_peek_does_not_remove(self):
         pq = HarvestPriorityQueue()
         await pq.enqueue("task", Priority.URGENT)
-        assert (await pq.peek()).source_id == "task"
+        assert (await pq.peek()).source_id == "task"  # type: ignore[reportOptionalMemberAccess]
         assert pq.size == 1
 
     def test_clear_empties_queue(self):

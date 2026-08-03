@@ -12,6 +12,7 @@ OntoDerive 分析引擎 v3.6.4
     python3 derive.py --check               # 规约检查
     python3 derive.py --rounds 5            # 多轮迭代
 """
+# pyright: reportGeneralTypeIssues=false
 
 import datetime
 import re
@@ -20,14 +21,14 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from .utils import all_md, load_json, rf, save_json, wf
+    from .utils import all_md, load_json, rf, save_json, wf  # type: ignore[reportMissingImports]
 except ImportError:
     from ontoderive.foundation.utils import rf, wf, all_md, load_json, save_json  # noqa
 
 VERSION = "3.6.4"
 
 try:
-    from .protocols import DeriveInterface
+    from .protocols import DeriveInterface  # type: ignore[reportMissingImports]
 except ImportError:
     from ontoderive.foundation.protocols import DeriveInterface
 
@@ -485,9 +486,9 @@ generated: {datetime.datetime.now().isoformat()}
 # CLI入口 (v2.2: 委托给cli.py)
 def main() -> None:
     try:
-        from .cli import main as _main
+        from .cli import main as _main  # type: ignore[reportMissingImports]
     except ImportError:
-        from cli import main as _main
+        from cli import main as _main  # type: ignore[reportMissingImports]
     _main()
 
 

@@ -1,6 +1,8 @@
 """
 测试贝叶斯层
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.theories.bayesian import BayesianLayer
 

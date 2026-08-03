@@ -1,6 +1,8 @@
 """
 测试 intelligence/judge.py - OntoDeriveJudge 评估器
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.intelligence.judge import JudgeResult, OntoDeriveJudge  # type: ignore[import-not-found]
 

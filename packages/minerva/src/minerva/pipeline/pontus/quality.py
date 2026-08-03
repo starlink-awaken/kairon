@@ -20,7 +20,7 @@ class QualityValidator:
         ok = validator.validate_format({"id": 1, "name": "Alice", "score": 9.5}, schema)
     """
 
-    _TYPE_MAP: dict[str, type | tuple[type, ...]] = {
+    _TYPE_MAP: dict[str, Any] = {
         "str": str,
         "int": int,
         "float": float,

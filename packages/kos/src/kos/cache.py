@@ -435,19 +435,19 @@ def main() -> None:
         t0 = time.time()
         for q in queries:
             engine.search(q, mode="keyword", limit=5)
-        results["without_cache_ms"] = round((time.time() - t0) * 1000, 2)
+        results["without_cache_ms"] = round((time.time() - t0) * 1000, 2)  # type: ignore[reportArgumentType]
 
         # With cache (first run populates)
         t0 = time.time()
         for q in queries:
             cache.search_with_cache(q, mode="keyword", limit=5)
-        results["with_cache_first_ms"] = round((time.time() - t0) * 1000, 2)
+        results["with_cache_first_ms"] = round((time.time() - t0) * 1000, 2)  # type: ignore[reportArgumentType]
 
         # With cache (second run hits cache)
         t0 = time.time()
         for q in queries:
             cache.search_with_cache(q, mode="keyword", limit=5)
-        results["with_cache_second_ms"] = round((time.time() - t0) * 1000, 2)
+        results["with_cache_second_ms"] = round((time.time() - t0) * 1000, 2)  # type: ignore[reportArgumentType]
 
         engine.close()
         print(json.dumps(results, ensure_ascii=False, indent=2))

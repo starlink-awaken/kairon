@@ -53,7 +53,7 @@ class JSONFormatter(logging.Formatter):
         }
 
         if hasattr(record, "context"):
-            log_entry["context"] = record.context
+            log_entry["context"] = record.context  # type: ignore[reportAttributeAccessIssue]
 
         if record.exc_info:
             log_entry["exception"] = self.formatException(record.exc_info)

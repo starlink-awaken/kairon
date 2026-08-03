@@ -96,7 +96,7 @@ class AppendOnlyLog:
             **json_kwargs: 透传给 json.dumps (e.g. sort_keys=True).
         """
         if hasattr(record, "model_dump") and callable(getattr(record, "model_dump", None)):
-            record = record.model_dump()
+            record = record.model_dump()  # type: ignore[reportAttributeAccessIssue]
 
         if schema is not None:
             schema.model_validate(record)  # type: ignore[attr-defined]

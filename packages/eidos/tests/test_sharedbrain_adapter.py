@@ -1,4 +1,6 @@
 """Tests for SharedBrain → Eidos ontology adapter — deep integration layer."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import json
 import os

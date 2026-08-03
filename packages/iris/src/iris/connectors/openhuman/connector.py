@@ -87,7 +87,7 @@ class OpenHumanConnector(BaseConnector):
                 return cast("dict[str, Any]", json.loads(resp.read().decode()))
         except json.JSONDecodeError as e:
             return {"error": f"Invalid JSON response: {e}"}
-        except urllib.error.URLError as e:
+        except urllib.error.URLError as e:  # type: ignore[reportAttributeAccessIssue]
             return {"error": f"Connection failed: {e.reason}"}
         except OSError as e:
             return {"error": f"Network error: {e}"}

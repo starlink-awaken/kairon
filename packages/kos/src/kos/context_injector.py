@@ -398,7 +398,7 @@ def get_context_injector(memory_graph: Any | None = None) -> HarvestContextInjec
     """工厂函数：获取 HarvestContextInjector 实例。"""
     if memory_graph is None:
         try:
-            from eidos.memory_graph import MemoryGraph
+            from eidos.memory_graph import MemoryGraph  # type: ignore[reportMissingImports]
 
             memory_graph = MemoryGraph()
         except ImportError:

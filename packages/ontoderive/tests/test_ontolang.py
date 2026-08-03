@@ -1,6 +1,8 @@
 """
 测试OntoLang解析器
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 __all__ = []
 

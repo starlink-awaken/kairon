@@ -1,4 +1,6 @@
 """Tests for Formalizer — 符号化引擎 (Phase 1+2)"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.reasoners.formalize import (
     Formalizer,

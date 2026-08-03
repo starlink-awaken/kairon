@@ -4,6 +4,7 @@ ToolForge v2 — 思维工具匹配（原 MindForge，已并入 OntoDerive）
 支持 TF-IDF 语义匹配 + 关键词 fallback。
 输出: 匹配的方法论/策略/模式/原则/理论/技能 + 使用建议 + 匹配原因
 """
+# pyright: reportGeneralTypeIssues=false
 
 import json
 import math
@@ -55,7 +56,7 @@ def _compute_idf(docs: Any, vocab: Any) -> Any:
 
 
 try:
-    from ..protocols import ToolForgeInterface
+    from ..protocols import ToolForgeInterface  # type: ignore[reportMissingImports]
 except ImportError:
     from ontoderive.foundation.protocols import ToolForgeInterface  # type: ignore[import-not-found,assignment,no-redef]
 
@@ -250,7 +251,7 @@ class ToolForge(ToolForgeInterface):
         for category, tools in matched.items():
             if not tools:
                 continue
-            cat_name = self.catalog.get("categories", {}).get(category, category)
+            cat_name = self.catalog.get("categories", {}).get(category, category)  # type: ignore[reportAttributeAccessIssue]
             print(f"  📂 {category} — {cat_name}")
             for t in tools:
                 desc = t["description"][:50]

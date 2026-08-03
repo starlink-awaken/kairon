@@ -1,4 +1,6 @@
 """Unit tests for analytics_patterns module-level functions"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 # detect/analyze functions take `engine` but don't use it — expected pattern
 

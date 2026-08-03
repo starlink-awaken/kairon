@@ -11,6 +11,7 @@
 
 直接调用 KOS 写入, 绕过 agora(Phase 27 审计发现 agora 路由表基本空).
 """
+# pyright: reportReturnType=false
 
 from __future__ import annotations
 

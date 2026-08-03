@@ -1,4 +1,6 @@
 """Tests for OntoLang code generator"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.ontolang.ast import AST, EntityDef
 from ontoderive.ontolang.codegen import to_json, to_legacy_ast, to_markdown

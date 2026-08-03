@@ -10,7 +10,7 @@ from fastmcp import FastMCP
 if TYPE_CHECKING:
     from openai import AsyncOpenAI
 
-    from .learner import ParadigmLearner
+    from .learner import ParadigmLearner  # type: ignore[reportMissingImports]
 
 FORMAT_VERSION = "sophia-v1"
 
@@ -28,7 +28,7 @@ _llm_client_instance = None
 def _get_learner() -> ParadigmLearner:
     global _learner_instance
     if _learner_instance is None:
-        from .learner import ParadigmLearner
+        from .learner import ParadigmLearner  # type: ignore[reportMissingImports]
 
         _learner_instance = ParadigmLearner()
     return _learner_instance
@@ -98,8 +98,8 @@ async def compile_paradigm(query: str, use_llm: bool = False) -> dict:
         query: The research question to analyze
         use_llm: Whether to use LLM for compilation (default: rule-based)
     """
-    from .compiler import compile_paradigm as compile_paradigm_async
-    from .compiler import compile_paradigm_sync
+    from .compiler import compile_paradigm as compile_paradigm_async  # type: ignore[reportMissingImports]
+    from .compiler import compile_paradigm_sync  # type: ignore[reportMissingImports]
 
     if not query.strip():
         return _error("Query must not be empty")
@@ -150,7 +150,7 @@ def list_operations() -> dict:
 @mcp.tool()
 def list_states() -> dict:
     """List all research states in the paradigm state machine."""
-    from .symbols import ResearchState
+    from .symbols import ResearchState  # type: ignore[reportMissingImports]
 
     states = {s.name: s.value for s in ResearchState}
     return _ok(
@@ -167,7 +167,7 @@ def get_transitions() -> dict:
 
     Returns {from_state, operation, to_state, gate_function, on_fail} for each rule.
     """
-    from .symbols import BASE_TRANSITIONS
+    from .symbols import BASE_TRANSITIONS  # type: ignore[reportMissingImports]
 
     rules = []
     for t in BASE_TRANSITIONS:
@@ -198,8 +198,8 @@ def record_trace(query: str, paradigm_name: str, operations: str, quality_score:
         operations: Comma-separated list of operation names used
         quality_score: Quality score (0-100) of the research
     """
-    from .learner import ResearchTrace
-    from .symbols import AtomicOp
+    from .learner import ResearchTrace  # type: ignore[reportMissingImports]
+    from .symbols import AtomicOp  # type: ignore[reportMissingImports]
 
     if not query.strip():
         return _error("Query must not be empty")

@@ -241,7 +241,7 @@ class SourceChecker:
     async def check_rss(self, feed_url: str, topic: str, since: datetime | None) -> list[dict]:
         """Check RSS feed for new items matching topic."""
         try:
-            import feedparser
+            import feedparser  # type: ignore[reportMissingImports]
 
             feed = feedparser.parse(feed_url)
         except Exception:
@@ -409,7 +409,7 @@ class ResearchExecutor:
             replace_existing=True,
             misfire_grace_time=300,
         )
-        self.scheduled_tasks[task_id] = job
+        self.scheduled_tasks[task_id] = job  # type: ignore[reportArgumentType]
         self._task_meta[task_id] = {
             "query": task.query,
             "cron_expr": task.cron_expr,
@@ -453,7 +453,7 @@ class ResearchExecutor:
             replace_existing=True,
             misfire_grace_time=300,
         )
-        self.watch_tasks[task_id] = job
+        self.watch_tasks[task_id] = job  # type: ignore[reportArgumentType]
         self._task_meta[task_id] = {
             "topic": task.topic,
             "sources": task.sources,

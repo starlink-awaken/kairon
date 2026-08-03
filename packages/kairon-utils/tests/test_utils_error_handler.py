@@ -1,4 +1,6 @@
 """Tests for kairon_lib.utils.error_handler — ErrorHandler, ErrorContext, handle_exception."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import pytest
 from kairon_utils.error_classifier import ErrorCategory
@@ -11,18 +13,18 @@ class TestErrorHandler:
         result = handler.handle_error(ValueError("bad"))
         assert result["category"] == ErrorCategory.VALIDATION_ERROR
         assert result["retryable"] is False
-        assert "Fix input" in result["action"]
+        assert "Fix input" in result["action"]  # type: ignore[reportOperatorIssue]
 
     def test_handle_error_with_source(self):
         handler = ErrorHandler("test-component")
         result = handler.handle_error(TimeoutError("timeout"), source_id="src1")
         assert result["retryable"] is True
-        assert "source_id" in result["context"]
+        assert "source_id" in result["context"]  # type: ignore[reportOperatorIssue]
 
     def test_handle_error_with_context(self):
         handler = ErrorHandler("test-component")
         result = handler.handle_error(RuntimeError("fail"), context={"extra": "info"})
-        assert result["context"]["extra"] == "info"
+        assert result["context"]["extra"] == "info"  # type: ignore[reportIndexIssue]
 
     def test_error_counts(self):
         handler = ErrorHandler("test")
@@ -99,7 +101,7 @@ class TestErrorContext:
         with ErrorContext("test", context={"key": "val"}, source_id="src1") as ctx:
             raise KeyError("missing")
         assert ctx.error_occurred is True
-        assert ctx.error_result["category"] == ErrorCategory.VALIDATION_ERROR
+        assert ctx.error_result["category"] == ErrorCategory.VALIDATION_ERROR  # type: ignore[reportOptionalSubscript]
 
     def test_get_error_result(self):
         with ErrorContext("test") as ctx:

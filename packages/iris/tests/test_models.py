@@ -1,4 +1,6 @@
 """Tests for iris data models."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from iris.models import Article, Bookmark, Highlight, Note, SyncState
 

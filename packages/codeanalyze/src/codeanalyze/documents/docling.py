@@ -44,7 +44,7 @@ def convert_to_markdown(file_path: str) -> str | None:
 def extract_knowledge_graph(file_path: str, template_path: str | None = None) -> dict:
     """使用 Docling-Graph 从文档提取知识图谱。"""
     try:
-        from docling_graph import PipelineContext, run_pipeline  # noqa: F401
+        from docling_graph import PipelineContext, run_pipeline  # noqa: F401  # type: ignore[reportMissingImports]
 
         config = {
             "source": file_path,

@@ -1,6 +1,8 @@
 """
 测试 foundation/ontology_map.py - 本体映射与格式导出
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import json
 

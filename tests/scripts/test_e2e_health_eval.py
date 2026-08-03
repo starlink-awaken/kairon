@@ -19,7 +19,7 @@ import sys
 
 sys.path.insert(0, str(SCRIPTS_DIR))
 
-import e2e_health_eval as ev
+import e2e_health_eval as ev  # type: ignore[reportMissingImports]
 
 # ── DraftStructure ─────────────────────────────────────────
 

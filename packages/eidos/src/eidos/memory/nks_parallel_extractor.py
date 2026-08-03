@@ -40,7 +40,7 @@ _log = logging.getLogger(__name__)
 
 # Optional tqdm for progress tracking
 try:
-    from tqdm import tqdm
+    from tqdm import tqdm  # type: ignore[reportAssignmentType]
 
     TQDM_AVAILABLE = True
 except ImportError:
@@ -443,9 +443,9 @@ class ParallelExtractor:
         start_time = time.time()
 
         # Use tqdm for progress if available
-        iterator = tqdm(file_paths, desc="Extracting (sequential)") if show_progress else file_paths
+        iterator = tqdm(file_paths, desc="Extracting (sequential)") if show_progress else file_paths  # type: ignore[reportArgumentType]
 
-        for file_path in iterator:
+        for file_path in iterator:  # type: ignore[reportGeneralTypeIssues]
             entities, relations, error = self._extract_single(file_path, extractor)
 
             if error:

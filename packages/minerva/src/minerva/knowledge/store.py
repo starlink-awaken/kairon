@@ -659,7 +659,7 @@ class LanceDBVectorStore:
 
             os.makedirs(self.db_path, exist_ok=True)
             db = lancedb.connect(self.db_path)
-            self._table = db.open_table("entities") if "entities" in db.list_tables() else None
+            self._table = db.open_table("entities") if "entities" in db.list_tables() else None  # type: ignore[reportOperatorIssue]
             return self._table
         except Exception:
             return None
@@ -723,7 +723,7 @@ class LanceDBVectorStore:
 
             os.makedirs(self.db_path, exist_ok=True)
             db = lancedb.connect(self.db_path)
-            if mode == "overwrite" or "entities" not in db.list_tables():
+            if mode == "overwrite" or "entities" not in db.list_tables():  # type: ignore[reportOperatorIssue]
                 self._table = db.create_table("entities", rows, mode="overwrite")
             else:
                 self._table = db.open_table("entities")

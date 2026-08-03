@@ -1,4 +1,6 @@
 """Tests for TokenJuicer — HTML/text token compression."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from kronos.compressors.token_juicer import TokenJuicer
 

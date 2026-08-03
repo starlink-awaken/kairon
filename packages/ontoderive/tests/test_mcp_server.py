@@ -1,4 +1,6 @@
 """MCP服务器测试"""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from ontoderive.mcp_server import TOOL_DEFS, handle_mcp_request
 

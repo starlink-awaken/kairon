@@ -1,4 +1,6 @@
 """Tests for kairon_observability — importability and basic smoke tests."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 
 class TestImports:

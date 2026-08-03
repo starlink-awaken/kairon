@@ -8,6 +8,8 @@
 - run() CLI 入口
 - 错误路径和边界条件
 """
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 import json
 import sys

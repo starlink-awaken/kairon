@@ -34,10 +34,10 @@ INSTALL_DIR = Path.home() / ".local" / "share" / "forge" / "market"
 # ── Capabilities root — patchable for tests ──
 # Mirrors agora.mcp.forge_loader.CAPS_ROOT so tests can monkeypatch this module.
 try:
-    from agora.mcp.forge_loader import CAPS_ROOT, MARKET_REGISTRY
+    from agora.mcp.forge_loader import CAPS_ROOT, MARKET_REGISTRY  # type: ignore[import-not-found]
 except ImportError:
     CAPS_ROOT = Path.home() / "Workspace" / ".omo" / "capabilities"
-    MARKET_REGISTRY = CAPS_ROOT / "market.json"
+    MARKET_REGISTRY: Path = CAPS_ROOT / "market.json"  # type: ignore[assignment]
 
 
 def _load_tools_registry() -> dict:

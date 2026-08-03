@@ -107,7 +107,7 @@ class GbrainBridge:
             self.conn.commit()
 
         except Exception as e:
-            stats["error"] = str(e)
+            stats["error"] = str(e)  # type: ignore[reportArgumentType]
 
         stats["total_docs"] = stats["exported"] + stats["errors"] + stats["skipped"]
         return stats
@@ -240,7 +240,7 @@ class GbrainBridge:
             self.conn.commit()
 
         except Exception as e:
-            stats["error"] = str(e)
+            stats["error"] = str(e)  # type: ignore[reportArgumentType]
 
         return stats
 

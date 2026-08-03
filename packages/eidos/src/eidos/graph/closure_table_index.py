@@ -34,7 +34,7 @@ Authority: organs/D-Memory/AGENTS.md
 import logging
 from collections import deque
 
-from organs.D_Memory.organs.storage_dal import SQLiteRelationalProvider
+from organs.D_Memory.organs.storage_dal import SQLiteRelationalProvider  # type: ignore[reportMissingImports]
 
 _log = logging.getLogger(__name__)
 

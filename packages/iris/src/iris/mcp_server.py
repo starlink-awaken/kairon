@@ -190,7 +190,7 @@ def main() -> None:
         print("FastMCP is required. Install: pip install fastmcp", file=__import__("sys").stderr)
         __import__("sys").exit(1)
 
-    mcp = FastMCP("iris-mcp")
+    mcp = FastMCP("iris-mcp")  # type: ignore[reportPossiblyUnboundVariable]
 
     @mcp.tool()
     def iris_list_connectors() -> dict[str, Any]:

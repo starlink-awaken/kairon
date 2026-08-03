@@ -1,4 +1,6 @@
 """Tests for kairon_lib.utils.error_classifier — ErrorCategory, ErrorClassifier, ErrorStatistics."""
+# mock-heavy test: monkeypatch + dynamic attributes.
+# pyright: reportAttributeAccessIssue=false
 
 from kairon_utils.error_classifier import ErrorCategory, ErrorClassifier, ErrorStatistics
 
