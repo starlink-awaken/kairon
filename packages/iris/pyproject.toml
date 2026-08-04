@@ -53,6 +53,10 @@ github = "iris.connectors.github:GitHubConnector"
 rss = "iris.connectors.rss:RssConnector"
 dingtalk = "iris.connectors.dingtalk:DingTalkConnector"
 feishu = "iris.connectors.feishu:FeishuConnector"
+apple_mail = "iris.connectors.apple_mail:AppleMailConnector"
+netease_mailmaster = "iris.connectors.netease_mailmaster:NeteaseMailmasterConnector"
+seeyon_oa = "iris.connectors.seeyon_oa:SeeyonOAConnector"
+cua_browser = "iris.connectors.cua_browser:CuaBrowserConnector"
 
 [project.entry-points."external.resources"]
 local_files = "iris.connectors.local_files:LocalFilesConnector"
@@ -71,6 +75,10 @@ github = "iris.connectors.github:GitHubConnector"
 rss = "iris.connectors.rss:RssConnector"
 dingtalk = "iris.connectors.dingtalk:DingTalkConnector"
 feishu = "iris.connectors.feishu:FeishuConnector"
+apple_mail = "iris.connectors.apple_mail:AppleMailConnector"
+netease_mailmaster = "iris.connectors.netease_mailmaster:NeteaseMailmasterConnector"
+seeyon_oa = "iris.connectors.seeyon_oa:SeeyonOAConnector"
+cua_browser = "iris.connectors.cua_browser:CuaBrowserConnector"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/iris"]
