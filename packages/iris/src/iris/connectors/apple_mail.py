@@ -29,7 +29,7 @@ def _extract_emlx_body(emlx_path: Path) -> dict[str, str]:
         first_nl = raw.find(b"\n")
         if first_nl == -1:
             return {}
-        eml_bytes = raw[first_nl + 1:]
+        eml_bytes = raw[first_nl + 1 :]
         msg = email.message_from_bytes(eml_bytes)
         subject = msg.get("Subject", "")
         sender = msg.get("From", "")

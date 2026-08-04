@@ -25,7 +25,13 @@ def main(argv: list[str] | None = None) -> int:
     except (OSError, ValueError, KemsPersistenceError) as exc:
         print(json.dumps({"status": "failed", "error": str(exc)}, ensure_ascii=False))
         return 1
-    print(json.dumps({"status": "succeeded", "operation": "restore" if args.restore else "backup", **health.to_dict()}, ensure_ascii=False, sort_keys=True))
+    print(
+        json.dumps(
+            {"status": "succeeded", "operation": "restore" if args.restore else "backup", **health.to_dict()},
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+    )
     return 0
 
 

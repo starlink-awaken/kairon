@@ -102,17 +102,13 @@ def build_model_promotion_gate(
 
         model_mae = _finite_number(report.get("model_mae"), "model_mae", index)
         baseline_mae = _finite_number(report.get("baseline_mae"), "baseline_mae", index)
-        relative_improvement = _finite_number(
-            report.get("relative_improvement"), "relative_improvement", index
-        )
+        relative_improvement = _finite_number(report.get("relative_improvement"), "relative_improvement", index)
         observations = report.get("observation_count")
         if isinstance(observations, bool) or not isinstance(observations, int) or observations <= 0:
             raise PromotionGateInputError(f"report {index}: observation_count must be positive")
         if model_mae < 0 or baseline_mae < 0:
             raise PromotionGateInputError(f"report {index}: MAE cannot be negative")
-        computed_improvement = (
-            (baseline_mae - model_mae) / baseline_mae if baseline_mae else 0.0
-        )
+        computed_improvement = (baseline_mae - model_mae) / baseline_mae if baseline_mae else 0.0
         if abs(relative_improvement - computed_improvement) > 1e-9:
             reason_codes.add("relative_improvement_inconsistent")
         if report.get("status") != "shadow_pass":
@@ -146,9 +142,7 @@ def build_model_promotion_gate(
     aggregate_model_mae = model_total / observation_count
     aggregate_baseline_mae = baseline_total / observation_count
     aggregate_relative_improvement = (
-        (aggregate_baseline_mae - aggregate_model_mae) / aggregate_baseline_mae
-        if aggregate_baseline_mae
-        else 0.0
+        (aggregate_baseline_mae - aggregate_model_mae) / aggregate_baseline_mae if aggregate_baseline_mae else 0.0
     )
     if aggregate_relative_improvement < min_relative_improvement:
         reason_codes.add("aggregate_improvement_below_threshold")

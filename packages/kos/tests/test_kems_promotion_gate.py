@@ -54,9 +54,7 @@ def test_gate_blocks_unstable_runs_and_mismatched_manifest() -> None:
     second = report(status="needs_review", relative_improvement=-0.1, report_id="report-2", model_mae=14.0)
     second["evaluation_manifest_sha256"] = "b" * 64
 
-    result = build_model_promotion_gate(
-        [report(), second], candidate_model_id="candidate-v1", min_runs=2
-    )
+    result = build_model_promotion_gate([report(), second], candidate_model_id="candidate-v1", min_runs=2)
 
     assert result["status"] == "blocked"
     assert result["promotion"] == "blocked_until_omo_approval"
@@ -73,9 +71,7 @@ def test_gate_requires_manifest_binding_and_rejects_raw_report_fields() -> None:
     unbound = report()
     unbound.pop("evaluation_manifest_sha256")
     with pytest.raises(PromotionGateInputError, match="model_output"):
-        build_model_promotion_gate(
-            [{**unbound, "model_output": "private"}], candidate_model_id="candidate-v1"
-        )
+        build_model_promotion_gate([{**unbound, "model_output": "private"}], candidate_model_id="candidate-v1")
 
     result = build_model_promotion_gate(
         [unbound, {**unbound, "report_id": "report-2"}], candidate_model_id="candidate-v1"

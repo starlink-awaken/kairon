@@ -11,7 +11,9 @@ from kems_build_engineering_delivery_queue import build_queue, write_queue
 from kos.kems import AdjudicationStore
 
 
-def sync_queue(input_path: Path, database_path: Path, evidence_output: Path, *, split: str = "shadow") -> dict[str, object]:
+def sync_queue(
+    input_path: Path, database_path: Path, evidence_output: Path, *, split: str = "shadow"
+) -> dict[str, object]:
     payload = json.loads(input_path.expanduser().resolve().read_text(encoding="utf-8"))
     rows = build_queue(payload, split=split)
     store = AdjudicationStore(database_path.expanduser().resolve())
@@ -30,7 +32,9 @@ def sync_queue(input_path: Path, database_path: Path, evidence_output: Path, *, 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--input", required=True, type=Path, help="redacted engineering-delivery review projection JSON")
+    parser.add_argument(
+        "--input", required=True, type=Path, help="redacted engineering-delivery review projection JSON"
+    )
     parser.add_argument("--database", required=True, type=Path, help="persistent KEMS adjudication SQLite")
     parser.add_argument("--evidence-output", required=True, type=Path, help="redacted queue evidence JSONL")
     parser.add_argument("--split", default="shadow", choices=("shadow", "train", "validation", "test"))
