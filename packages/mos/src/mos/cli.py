@@ -1,4 +1,4 @@
-"""MOS CLI — write / recall / status."""
+"""MOS CLI — write / recall / status (file-backed for cross-process continuity)."""
 
 from __future__ import annotations
 
@@ -7,17 +7,7 @@ import json
 import sys
 from typing import Any
 
-from mos.service import MemoryOS, default_memory_os_with_fixtures
-
-# Process-local singleton for CLI dual-track continuity in one process
-_OS: MemoryOS | None = None
-
-
-def get_os() -> MemoryOS:
-    global _OS
-    if _OS is None:
-        _OS = default_memory_os_with_fixtures()
-    return _OS
+from mos.persist import FileStore
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -29,7 +19,7 @@ def main(argv: list[str] | None = None) -> int:
     p_write.add_argument("--content", default=None)
     p_write.add_argument("--content-ref", default=None)
     p_write.add_argument("--confidence", type=float, default=0.8)
-    p_write.add_argument("--json", action="store_true", help="Print JSON")
+    p_write.add_argument("--json", action="store_true", help="Pretty JSON")
 
     p_recall = sub.add_parser("recall", help="Recall memories")
     p_recall.add_argument("query")
@@ -40,7 +30,8 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("status", help="Control plane status")
 
     args = parser.parse_args(argv)
-    mos = get_os()
+    store = FileStore()
+    mos = store.build_memory_os()
 
     if args.cmd == "write":
         result = mos.write(
@@ -51,6 +42,7 @@ def main(argv: list[str] | None = None) -> int:
                 "confidence": args.confidence,
             }
         )
+        store.flush_from(mos)
         out: dict[str, Any] = result.to_dict()
         print(json.dumps(out, ensure_ascii=False, indent=2 if args.json else None))
         return 0 if result.ok else 1
@@ -61,7 +53,9 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.cmd == "status":
-        print(json.dumps(mos.status(), ensure_ascii=False, indent=2))
+        st = mos.status()
+        st["store_path"] = str(store.path)
+        print(json.dumps(st, ensure_ascii=False, indent=2))
         return 0
 
     return 2
