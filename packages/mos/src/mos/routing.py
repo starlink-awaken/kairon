@@ -30,7 +30,7 @@ _CODE_RE = re.compile(
     re.I,
 )
 _PREF_RE = re.compile(r"\b(prefer|preference|过敏|素食|喜欢|不要|记住我|my preference)\b", re.I)
-_ENTITY_RE = re.compile(r"\b(relation|related to|works at|invest|关系|谁投资)\b", re.I)
+_ENTITY_RE = re.compile(r"\b(relation|related to|works at|invest(?:ed|or|ment|s)?|关系|谁投资)\b", re.I)
 _TASK_RE = re.compile(r"\b(task|debt|todo|任务|债务|开放任务)\b", re.I)
 _CARD_RE = re.compile(r"\b(card|知识卡片|卡片)\b", re.I)
 _FILE_RE = re.compile(r"\b(ADR|文档|笔记|vault|readme|哪个文件|which (file|doc))\b", re.I)
