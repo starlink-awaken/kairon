@@ -13,7 +13,7 @@ def test_consolidate_uses_fake_runner_and_audits_raw():
     fake = FakeDreamRunner()
     mos = MemoryOS(dream_runner=fake)
     mos.write({"type": "semantic", "content": "pending fact for consolidate", "confidence": 0.9})
-    result = mos.consolidate(dry_run=True)
+    result = mos.consolidate(dry_run=True, role="admin")
     assert result.ok is True
     assert result.dry_run is True
     assert fake.calls and fake.calls[0]["dry_run"] is True
@@ -28,7 +28,7 @@ def test_consolidate_uses_fake_runner_and_audits_raw():
 def test_consolidate_degraded_on_phase_failure():
     fake = FakeDreamRunner(fail_phases={"embed"})
     mos = MemoryOS(dream_runner=fake)
-    result = mos.consolidate()
+    result = mos.consolidate(role="governance-agent")
     assert result.degraded is True
     assert result.ok is False
 

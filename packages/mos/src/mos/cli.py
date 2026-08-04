@@ -57,6 +57,28 @@ def _emit(obj: dict[str, Any], *, pretty: bool = False) -> None:
     print(json.dumps(obj, ensure_ascii=False, indent=2 if pretty else None))
 
 
+def _rbac_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
+    out: dict[str, Any] = {}
+    if kwargs.get("role"):
+        out["role"] = kwargs["role"]
+    if kwargs.get("agent_profile"):
+        out["agent_profile"] = kwargs["agent_profile"]
+    return out
+
+
+def _guarded(fn_name: str, fn, *args: Any, **kwargs: Any) -> int:
+    """Run mos op; map RbacDenied → JSON error exit 3."""
+    try:
+        return fn(*args, **kwargs)
+    except Exception as exc:  # noqa: BLE001
+        from mos.rbac import RbacDenied
+
+        if isinstance(exc, RbacDenied):
+            _emit({"ok": False, "error": "rbac_denied", "detail": str(exc)})
+            return 3
+        raise
+
+
 def _run_write(mos: Any, store: FileStore, kwargs: dict[str, Any], *, pretty: bool = False) -> int:
     envelope: dict[str, Any] = {}
     if isinstance(kwargs.get("envelope"), dict):
@@ -81,10 +103,14 @@ def _run_write(mos: Any, store: FileStore, kwargs: dict[str, Any], *, pretty: bo
         }
     # drop Nones for cleaner validation messages
     envelope = {k: v for k, v in envelope.items() if v is not None}
-    result = mos.write(envelope)
-    store.flush_from(mos)
-    _emit(result.to_dict(), pretty=pretty)
-    return 0 if result.ok else 1
+
+    def _do() -> int:
+        result = mos.write(envelope, role=kwargs.get("role"))
+        store.flush_from(mos)
+        _emit(result.to_dict(), pretty=pretty)
+        return 0 if result.ok else 1
+
+    return _guarded("write", _do)
 
 
 def _run_recall(mos: Any, kwargs: dict[str, Any], args_list: list[Any], *, pretty: bool = False) -> int:
@@ -97,24 +123,41 @@ def _run_recall(mos: Any, kwargs: dict[str, Any], args_list: list[Any], *, prett
     intent = kwargs.get("intent")
     limit = int(kwargs.get("limit", 10))
     scope = kwargs.get("scope") if isinstance(kwargs.get("scope"), dict) else None
-    if scope is None and kwargs.get("principal_id"):
-        scope = {"principal_id": kwargs.get("principal_id")}
-    result = mos.recall(
-        str(query),
-        intent=intent,
-        limit=limit,
-        scope=scope,
-        as_of=kwargs.get("as_of"),
-    )
-    _emit(result.to_dict(), pretty=pretty)
-    return 0
+    if scope is None:
+        scope = {}
+        for k in ("principal_id", "agent_profile", "scene_id"):
+            if kwargs.get(k):
+                scope[k] = kwargs[k]
+        if not scope:
+            scope = None
+    elif kwargs.get("agent_profile") and "agent_profile" not in scope:
+        scope = {**scope, "agent_profile": kwargs["agent_profile"]}
+
+    def _do() -> int:
+        result = mos.recall(
+            str(query),
+            intent=intent,
+            limit=limit,
+            scope=scope,
+            as_of=kwargs.get("as_of"),
+            role=kwargs.get("role"),
+        )
+        _emit(result.to_dict(), pretty=pretty)
+        return 0
+
+    return _guarded("recall", _do)
 
 
-def _run_status(mos: Any, store: FileStore, *, pretty: bool = False) -> int:
-    st = mos.status()
-    st["store_path"] = str(store.path)
-    _emit(st, pretty=pretty)
-    return 0
+def _run_status(mos: Any, store: FileStore, kwargs: dict[str, Any] | None = None, *, pretty: bool = False) -> int:
+    kwargs = kwargs or {}
+
+    def _do() -> int:
+        st = mos.status(role=kwargs.get("role"), agent_profile=kwargs.get("agent_profile"))
+        st["store_path"] = str(store.path)
+        _emit(st, pretty=pretty)
+        return 0
+
+    return _guarded("status", _do)
 
 
 def _run_forget(
@@ -126,10 +169,19 @@ def _run_forget(
     if not mid:
         _emit({"ok": False, "error": "memory_id required"})
         return 2
-    result = mos.forget(str(mid), reason=kwargs.get("reason"))
-    store.flush_from(mos)
-    _emit(result.to_dict(), pretty=pretty)
-    return 0 if result.ok else 1
+
+    def _do() -> int:
+        result = mos.forget(
+            str(mid),
+            reason=kwargs.get("reason"),
+            role=kwargs.get("role"),
+            agent_profile=kwargs.get("agent_profile"),
+        )
+        store.flush_from(mos)
+        _emit(result.to_dict(), pretty=pretty)
+        return 0 if result.ok else 1
+
+    return _guarded("forget", _do)
 
 
 def _run_consolidate(mos: Any, store: FileStore, kwargs: dict[str, Any], *, pretty: bool = False) -> int:
@@ -137,10 +189,22 @@ def _run_consolidate(mos: Any, store: FileStore, kwargs: dict[str, Any], *, pret
     if isinstance(phases, str):
         phases = [p.strip() for p in phases.split(",") if p.strip()]
     dry_run = bool(kwargs.get("dry_run", False))
-    result = mos.consolidate(phases=phases, dry_run=dry_run)
-    store.flush_from(mos)
-    _emit(result.to_dict(), pretty=pretty)
-    return 0 if result.ok or result.degraded else 1
+    # Cron/foundry defaults to governance-agent so consolidate is allowed
+    role = kwargs.get("role")
+    agent_profile = kwargs.get("agent_profile") or ("governance-agent" if not role else None)
+
+    def _do() -> int:
+        result = mos.consolidate(
+            phases=phases,
+            dry_run=dry_run,
+            role=role,
+            agent_profile=agent_profile,
+        )
+        store.flush_from(mos)
+        _emit(result.to_dict(), pretty=pretty)
+        return 0 if result.ok or result.degraded else 1
+
+    return _guarded("consolidate", _do)
 
 
 def _run_knowledge_ref(mos: Any, store: FileStore, kwargs: dict[str, Any], args_list: list[Any], *, pretty: bool = False) -> int:
@@ -153,15 +217,20 @@ def _run_knowledge_ref(mos: Any, store: FileStore, kwargs: dict[str, Any], args_
     scope = kwargs.get("scope") if isinstance(kwargs.get("scope"), dict) else None
     if scope is None and kwargs.get("principal_id"):
         scope = {"principal_id": kwargs.get("principal_id"), "scene_id": kwargs.get("scene_id")}
-    ref = mos.create_knowledge_ref(
-        str(query),
-        intent=kwargs.get("intent"),
-        scope=scope,
-        limit=int(kwargs.get("limit", 5)),
-    )
-    store.flush_from(mos)
-    _emit(ref.to_dict(), pretty=pretty)
-    return 0
+
+    def _do() -> int:
+        ref = mos.create_knowledge_ref(
+            str(query),
+            intent=kwargs.get("intent"),
+            scope=scope,
+            limit=int(kwargs.get("limit", 5)),
+            role=kwargs.get("role"),
+        )
+        store.flush_from(mos)
+        _emit(ref.to_dict(), pretty=pretty)
+        return 0
+
+    return _guarded("knowledge_ref", _do)
 
 
 def dispatch(cmd: str, stdio: dict[str, Any] | None, argv_ns: argparse.Namespace | None = None) -> int:
@@ -183,7 +252,7 @@ def dispatch(cmd: str, stdio: dict[str, Any] | None, argv_ns: argparse.Namespace
         if cmd in {"knowledge-ref", "knowledge_ref", "kref"}:
             return _run_knowledge_ref(mos, store, kwargs, args_list, pretty=False)
         if cmd == "status":
-            return _run_status(mos, store, pretty=False)
+            return _run_status(mos, store, kwargs, pretty=False)
         _emit({"ok": False, "error": f"unknown cmd {cmd}"})
         return 2
 
@@ -253,7 +322,7 @@ def dispatch(cmd: str, stdio: dict[str, Any] | None, argv_ns: argparse.Namespace
             pretty=pretty,
         )
     if cmd == "status":
-        return _run_status(mos, store, pretty=pretty)
+        return _run_status(mos, store, {}, pretty=pretty)
     return 2
 
 

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -19,7 +20,15 @@ from mos.consolidate import (
 )
 from mos.dual_track import DualTrackResult, DualTrackWriter
 from mos.envelope import MemoryEnvelope, validate_envelope
+from mos.neo4j_writer import Neo4jFactWriter, neo4j_configured
+from mos.rbac import check_action, resolve_role
 from mos.routing import backends_for_intent, classify_intent, rrf_fuse
+
+
+def rbac_enforced() -> bool:
+    """RBAC on by default; set MOS_RBAC=0 to disable (tests/dev)."""
+    val = (os.environ.get("MOS_RBAC") or "1").strip().lower()
+    return val not in {"0", "false", "off", "no"}
 
 
 @dataclass
@@ -30,6 +39,7 @@ class WriteResult:
     content_hash: str
     mem0: dict[str, Any] | None = None
     temporal: dict[str, Any] | None = None
+    neo4j: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         dt = self.dual_track
@@ -50,6 +60,8 @@ class WriteResult:
             out["mem0"] = self.mem0
         if self.temporal is not None:
             out["temporal"] = self.temporal
+        if self.neo4j is not None:
+            out["neo4j"] = self.neo4j
         return out
 
 
@@ -134,15 +146,19 @@ class MemoryOS:
         theta: InMemoryThetaBackend | None = None,
         mem0: Mem0ShadowAdapter | None = None,
         temporal: TemporalShadowAdapter | None = None,
+        neo4j: Neo4jFactWriter | None = None,
         confidence_threshold: float = 0.6,
         dream_runner: DreamRunner | None = None,
+        enforce_rbac: bool | None = None,
     ) -> None:
         self._raw = raw or InMemoryRawBackend()
         self._theta = theta or InMemoryThetaBackend()
         self._dual = dual_track or DualTrackWriter(self._raw, self._theta, confidence_threshold=confidence_threshold)
         self._mem0 = mem0 if mem0 is not None else Mem0ShadowAdapter()
         self._temporal = temporal if temporal is not None else build_temporal_backend()
+        self._neo4j = neo4j if neo4j is not None else Neo4jFactWriter()
         self._dream = dream_runner
+        self._enforce_rbac = rbac_enforced() if enforce_rbac is None else enforce_rbac
         self._last_consolidate: dict[str, Any] | None = None
         # Default offline-friendly backends; tests inject corpora
         self._search: dict[str, SearchBackend] = search_backends or {}
@@ -156,6 +172,18 @@ class MemoryOS:
         if "temporal" not in self._search:
             self._search["temporal"] = self._temporal  # type: ignore[assignment]
 
+    def _authorize(
+        self,
+        action: str,
+        *,
+        role: str | None = None,
+        agent_profile: str | None = None,
+        principal_id: str | None = None,
+    ) -> None:
+        if not self._enforce_rbac:
+            return
+        check_action(action, role=role, agent_profile=agent_profile)
+
     @property
     def raw_backend(self) -> InMemoryRawBackend:
         return self._raw  # type: ignore[return-value]
@@ -168,12 +196,24 @@ class MemoryOS:
     def mem0(self) -> Mem0ShadowAdapter:
         return self._mem0
 
-    def write(self, envelope: MemoryEnvelope | dict[str, Any]) -> WriteResult:
+    def write(
+        self,
+        envelope: MemoryEnvelope | dict[str, Any],
+        *,
+        role: str | None = None,
+    ) -> WriteResult:
         env = validate_envelope(envelope)
+        self._authorize(
+            "write",
+            role=role,
+            agent_profile=env.agent_profile,
+            principal_id=env.principal_id,
+        )
         # Store principal on theta text metadata via dual track envelope
         dt = self._dual.write(env)
         mem0_res = None
         temporal_res = None
+        neo4j_res = None
         # Shadow dual-write preferences/semantics when enabled
         if mem0_enabled() and env.type in {"semantic", "episodic"} and env.content:
             mem0_res = self._mem0.add(
@@ -182,10 +222,16 @@ class MemoryOS:
                 metadata={"envelope_id": env.id, "type": env.type},
             )
         # Temporal triple / bi-temporal fact (Graphiti-shaped shadow)
+        env_dict = env.to_dict()
         if temporal_enabled() and (
             (env.subject and env.predicate) or (env.metadata or {}).get("temporal")
         ):
-            temporal_res = self._temporal.upsert_fact(env.to_dict())
+            temporal_res = self._temporal.upsert_fact(env_dict)
+        # Production Neo4j write when NEO4J_URI configured (Graphiti/FACT Cypher)
+        if neo4j_configured() and (
+            (env.subject and env.predicate) or (env.metadata or {}).get("temporal")
+        ):
+            neo4j_res = self._neo4j.upsert_fact(env_dict)
         return WriteResult(
             ok=dt.raw_ok,
             envelope_id=env.id or "",
@@ -193,12 +239,33 @@ class MemoryOS:
             content_hash=env.content_hash or "",
             mem0=mem0_res,
             temporal=temporal_res,
+            neo4j=neo4j_res,
         )
 
-    def forget(self, memory_id: str, *, reason: str | None = None) -> ForgetResult:
+    def forget(
+        self,
+        memory_id: str,
+        *,
+        reason: str | None = None,
+        role: str | None = None,
+        agent_profile: str | None = None,
+    ) -> ForgetResult:
+        self._authorize("forget", role=role, agent_profile=agent_profile)
         dt = self._dual.forget(memory_id, reason=reason)
         mem0_res = self._mem0.forget(memory_id) if mem0_enabled() else {"ok": False, "skipped": True}
-        return ForgetResult(ok=dt.raw_ok, memory_id=memory_id, dual_track=dt, mem0=mem0_res)
+        neo4j_res = None
+        if neo4j_configured():
+            from datetime import datetime, timezone
+
+            now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            neo4j_res = self._neo4j.invalidate(memory_id, now)
+        result = ForgetResult(ok=dt.raw_ok, memory_id=memory_id, dual_track=dt, mem0=mem0_res)
+        # attach neo4j on dict via mem0 slot pattern — extend to_dict below if needed
+        if neo4j_res is not None:
+            # ForgetResult has fixed fields; surface via dual_track reason is wrong —
+            # stash on instance for CLI consumers
+            result.mem0 = {**(mem0_res or {}), "neo4j": neo4j_res} if neo4j_res else mem0_res
+        return result
 
     def recall(
         self,
@@ -208,7 +275,15 @@ class MemoryOS:
         scope: dict[str, Any] | None = None,
         limit: int = 20,
         as_of: str | None = None,
+        role: str | None = None,
     ) -> RecallResult:
+        scope = scope or {}
+        self._authorize(
+            "recall",
+            role=role,
+            agent_profile=scope.get("agent_profile"),
+            principal_id=scope.get("principal_id"),
+        )
         resolved = classify_intent(query, intent)
         names = backends_for_intent(resolved)
         # Skip mem0 backend when feature off
@@ -252,11 +327,19 @@ class MemoryOS:
         intent: str | None = None,
         scope: dict[str, Any] | None = None,
         limit: int = 5,
+        role: str | None = None,
     ) -> KnowledgeRef:
         """Build ADR-0315 knowledge citation from a recall (metadata only)."""
         import hashlib
 
-        result = self.recall(query, intent=intent, scope=scope, limit=limit)
+        scope = scope or {}
+        self._authorize(
+            "knowledge_ref",
+            role=role,
+            agent_profile=scope.get("agent_profile"),
+            principal_id=scope.get("principal_id"),
+        )
+        result = self.recall(query, intent=intent, scope=scope, limit=limit, role=role)
         hit_ids = [str(h.get("id")) for h in result.hits if h.get("id")]
         qh = hashlib.sha256(query.encode("utf-8")).hexdigest()[:16]
         ref_id = f"kref_{qh}_{len(hit_ids)}"
@@ -287,8 +370,11 @@ class MemoryOS:
         *,
         phases: list[str] | None = None,
         dry_run: bool = False,
+        role: str | None = None,
+        agent_profile: str | None = None,
     ) -> ConsolidateResult:
         """Sleep-time consolidation: orchestrate gbrain dream; emit raw audit event."""
+        self._authorize("consolidate", role=role, agent_profile=agent_profile)
         before = measure_backlog(
             list(getattr(self._theta, "docs", []) or []),
             set(getattr(self._theta, "forgotten_ids", set()) or []),
@@ -318,7 +404,8 @@ class MemoryOS:
         self._last_consolidate = result.to_dict()
         return result
 
-    def status(self) -> dict[str, Any]:
+    def status(self, *, role: str | None = None, agent_profile: str | None = None) -> dict[str, Any]:
+        self._authorize("status", role=role, agent_profile=agent_profile)
         raw_n = len(getattr(self._raw, "events", []) or [])
         theta_n = len(getattr(self._theta, "docs", []) or [])
         forgotten = len(getattr(self._theta, "forgotten_ids", set()) or [])
@@ -326,9 +413,14 @@ class MemoryOS:
             list(getattr(self._theta, "docs", []) or []),
             set(getattr(self._theta, "forgotten_ids", set()) or []),
         )
+        neo4j_ok = False
+        try:
+            neo4j_ok = bool(self._neo4j.available())
+        except Exception:  # noqa: BLE001
+            neo4j_ok = False
         return {
             "ok": True,
-            "version": "0.5.0",
+            "version": "0.6.0",
             "raw_events": raw_n,
             "theta_docs": theta_n,
             "forgotten": forgotten,
@@ -337,6 +429,10 @@ class MemoryOS:
             "mem0_enabled": mem0_enabled(),
             "temporal_enabled": temporal_enabled(),
             "temporal_edges": len(getattr(self._temporal, "edges", []) or []),
+            "neo4j_configured": neo4j_configured(),
+            "neo4j_available": neo4j_ok,
+            "rbac_enforced": self._enforce_rbac,
+            "rbac_default_role": resolve_role(),
             "graphiti": graphiti_backend_status(),
             "search_backends": sorted(self._search.keys()),
             "control_plane": "bos://memory/mos/*",

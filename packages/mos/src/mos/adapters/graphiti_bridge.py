@@ -37,10 +37,14 @@ def build_temporal_backend() -> TemporalShadowAdapter:
 
 
 def backend_status() -> dict[str, Any]:
+    from mos.neo4j_writer import neo4j_configured
+
     return {
         "temporal_enabled": temporal_enabled(),
         "graphiti_flag": graphiti_enabled(),
         "graphiti_importable": _can_import_graphiti(),
+        "neo4j_uri_set": neo4j_configured(),
+        "production_path": "Neo4jFactWriter when NEO4J_URI set; else TemporalShadow",
     }
 
 
