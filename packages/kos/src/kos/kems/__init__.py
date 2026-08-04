@@ -29,6 +29,7 @@ from .ocr_quality_store import OCRQualityStore
 from .omo_adapter import OmoTaskAdapter
 from .pipeline import PipelineRun, SourceManifest, StepRun
 from .policy import PolicyAnalysis, analyze_policy_document, analyze_policy_file
+from .promotion_gate import PromotionGateInputError, build_model_promotion_gate
 from .run_record import KemsRunRecord, create_run_record
 from .run_store import RunStore
 from .runner import PipelineExecutor, PipelineStep
@@ -51,6 +52,8 @@ __all__ = (
     "ModelAcceptanceStore",
     "ModelInputError",
     "evaluate_candidate",
+    "PromotionGateInputError",
+    "build_model_promotion_gate",
     "ShadowForecast",
     "ShadowForecastEvaluation",
     "ForecastStore",
