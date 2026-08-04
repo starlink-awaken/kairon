@@ -5,6 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
+from mos.acl import filter_hits
+from mos.adapters.graphiti_bridge import backend_status as graphiti_backend_status
+from mos.adapters.graphiti_bridge import build_temporal_backend
 from mos.adapters.mem0_shadow import Mem0ShadowAdapter, mem0_enabled
 from mos.adapters.temporal_shadow import TemporalShadowAdapter, temporal_enabled
 from mos.backends import InMemoryRawBackend, InMemorySearchBackend, InMemoryThetaBackend, SearchBackend
@@ -138,7 +141,7 @@ class MemoryOS:
         self._theta = theta or InMemoryThetaBackend()
         self._dual = dual_track or DualTrackWriter(self._raw, self._theta, confidence_threshold=confidence_threshold)
         self._mem0 = mem0 if mem0 is not None else Mem0ShadowAdapter()
-        self._temporal = temporal if temporal is not None else TemporalShadowAdapter()
+        self._temporal = temporal if temporal is not None else build_temporal_backend()
         self._dream = dream_runner
         self._last_consolidate: dict[str, Any] | None = None
         # Default offline-friendly backends; tests inject corpora
@@ -227,23 +230,13 @@ class MemoryOS:
                     hits = backend.search(query, limit=limit, scope=scope)
                 for h in hits:
                     h.setdefault("backend", name)
-                # Scope ACL: filter principal_id when requested
-                if scope and scope.get("principal_id"):
-                    pid = scope["principal_id"]
-                    hits = [
-                        h
-                        for h in hits
-                        if not h.get("principal_id") or h.get("principal_id") == pid
-                    ]
+                hits = filter_hits(hits, scope)
                 ranked.append(hits)
                 status[name] = "ok"
             except Exception as exc:
                 status[name] = f"degraded:{exc}"
         fused = rrf_fuse(ranked, limit=limit)
-        # Also filter fused hits by principal
-        if scope and scope.get("principal_id"):
-            pid = scope["principal_id"]
-            fused = [h for h in fused if not h.get("principal_id") or h.get("principal_id") == pid]
+        fused = filter_hits(fused, scope)
         return RecallResult(
             query=query,
             intent=resolved,
@@ -335,7 +328,7 @@ class MemoryOS:
         )
         return {
             "ok": True,
-            "version": "0.4.0",
+            "version": "0.5.0",
             "raw_events": raw_n,
             "theta_docs": theta_n,
             "forgotten": forgotten,
@@ -344,6 +337,7 @@ class MemoryOS:
             "mem0_enabled": mem0_enabled(),
             "temporal_enabled": temporal_enabled(),
             "temporal_edges": len(getattr(self._temporal, "edges", []) or []),
+            "graphiti": graphiti_backend_status(),
             "search_backends": sorted(self._search.keys()),
             "control_plane": "bos://memory/mos/*",
         }

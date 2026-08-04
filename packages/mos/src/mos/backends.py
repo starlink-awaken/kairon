@@ -65,6 +65,8 @@ class InMemoryThetaBackend:
             "content_hash": (envelope.get("provenance") or {}).get("content_hash"),
             "metadata": envelope.get("metadata") or {},
             "principal_id": scope.get("principal_id"),
+            "agent_profile": scope.get("agent_profile"),
+            "scene_id": scope.get("scene_id"),
             "forgotten": False,
         }
         mid = str(doc.get("id") or "")
@@ -87,12 +89,9 @@ class InMemoryThetaBackend:
 
     def search(self, query: str, *, limit: int = 10, scope: dict[str, Any] | None = None) -> list[dict[str, Any]]:
         q = (query or "").lower()
-        principal = (scope or {}).get("principal_id")
         hits = []
         for d in self.docs:
             if d.get("forgotten") or str(d.get("id")) in self.forgotten_ids:
-                continue
-            if principal and d.get("principal_id") and d.get("principal_id") != principal:
                 continue
             text = str(d.get("text") or "").lower()
             if not q or q in text or any(tok and tok in text for tok in q.split()):
@@ -104,6 +103,8 @@ class InMemoryThetaBackend:
                         "backend": "theta",
                         "score": 1.0,
                         "principal_id": d.get("principal_id"),
+                        "agent_profile": d.get("agent_profile"),
+                        "scene_id": d.get("scene_id"),
                     }
                 )
         return hits[:limit]

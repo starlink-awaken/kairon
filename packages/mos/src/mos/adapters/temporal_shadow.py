@@ -77,6 +77,7 @@ class TemporalShadowAdapter:
             "ingested_at": temporal.get("ingested_at") or _now_iso(),
             "invalidated_at": temporal.get("invalidated_at"),
             "principal_id": scope.get("principal_id"),
+            "agent_profile": scope.get("agent_profile"),
             "scene_id": scope.get("scene_id"),
             "content_hash": (envelope.get("provenance") or {}).get("content_hash"),
         }
@@ -104,11 +105,9 @@ class TemporalShadowAdapter:
             return []
         q = (query or "").lower()
         as_of_dt = _parse_ts(as_of) or datetime.now(timezone.utc)
-        principal = (scope or {}).get("principal_id")
         hits: list[dict[str, Any]] = []
         for e in self.edges:
-            if principal and e.get("principal_id") and e.get("principal_id") != principal:
-                continue
+            # Fine ACL applied in mos.acl.filter_hits; still skip obvious principal mismatch early
             if current_only:
                 if e.get("invalidated_at"):
                     continue
@@ -133,6 +132,8 @@ class TemporalShadowAdapter:
                         "valid_to": e.get("valid_to"),
                         "invalidated_at": e.get("invalidated_at"),
                         "principal_id": e.get("principal_id"),
+                        "agent_profile": e.get("agent_profile"),
+                        "scene_id": e.get("scene_id"),
                     }
                 )
         return hits[:limit]
