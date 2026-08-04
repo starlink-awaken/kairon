@@ -57,6 +57,7 @@ apple_mail = "iris.connectors.apple_mail:AppleMailConnector"
 netease_mailmaster = "iris.connectors.netease_mailmaster:NeteaseMailmasterConnector"
 seeyon_oa = "iris.connectors.seeyon_oa:SeeyonOAConnector"
 cua_browser = "iris.connectors.cua_browser:CuaBrowserConnector"
+universal_private = "iris.connectors.universal_private:UniversalPrivateConnector"
 
 [project.entry-points."external.resources"]
 local_files = "iris.connectors.local_files:LocalFilesConnector"
@@ -79,6 +80,7 @@ apple_mail = "iris.connectors.apple_mail:AppleMailConnector"
 netease_mailmaster = "iris.connectors.netease_mailmaster:NeteaseMailmasterConnector"
 seeyon_oa = "iris.connectors.seeyon_oa:SeeyonOAConnector"
 cua_browser = "iris.connectors.cua_browser:CuaBrowserConnector"
+universal_private = "iris.connectors.universal_private:UniversalPrivateConnector"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/iris"]
