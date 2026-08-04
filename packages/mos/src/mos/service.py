@@ -106,9 +106,7 @@ class MemoryOS:
     ) -> None:
         self._raw = raw or InMemoryRawBackend()
         self._theta = theta or InMemoryThetaBackend()
-        self._dual = dual_track or DualTrackWriter(
-            self._raw, self._theta, confidence_threshold=confidence_threshold
-        )
+        self._dual = dual_track or DualTrackWriter(self._raw, self._theta, confidence_threshold=confidence_threshold)
         self._mem0 = mem0 if mem0 is not None else Mem0ShadowAdapter()
         self._dream = dream_runner
         self._last_consolidate: dict[str, Any] | None = None
@@ -184,7 +182,7 @@ class MemoryOS:
                     h.setdefault("backend", name)
                 ranked.append(hits)
                 status[name] = "ok"
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 status[name] = f"degraded:{exc}"
         fused = rrf_fuse(ranked, limit=limit)
         return RecallResult(

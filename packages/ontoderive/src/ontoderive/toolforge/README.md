@@ -53,6 +53,6 @@ MindForge (原独立项目) → ToolForge (OntoDerive 子模块)
 
 ## 相关文档
 
-- [OntoDerive 使用指南](../docs/USER_GUIDE.md)
-- [OntoDerive Agent 指南](../docs/AGENT_GUIDE.md)
-- [产品愿景](../docs/PRODUCT_VISION.md)
+- OntoDerive 使用指南
+- OntoDerive Agent 指南
+- 产品愿景

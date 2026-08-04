@@ -15,7 +15,7 @@ Import package modules directly, e.g. `import kairon_...` or use per-package API
 ## Configuration
 
 - Stack: python
-- Dependencies: see [`../pyproject.toml`](../pyproject.toml) (Python) or [`../package.json`](../package.json) (TypeScript).
+- Dependencies: see [`../pyproject.toml`](../pyproject.toml) (Python) or [`../package.json`](../pyproject.toml) (TypeScript).
 - Environment variables and ports: see workspace `protocols/port-registry.yaml` and root `.env.example`.
 
 ## Tests

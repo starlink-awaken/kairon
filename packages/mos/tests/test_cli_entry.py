@@ -1,7 +1,6 @@
 """CLI entry exercises real main() with file-backed store."""
 
 import json
-import os
 
 from mos.cli import main
 

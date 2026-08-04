@@ -11,7 +11,6 @@ from typing import Any
 from mos.routing import classify_intent
 from mos.service import MemoryOS
 
-
 # 15 fixture cases (v0) — expand later toward 50+
 EVAL_CASES: list[dict[str, Any]] = [
     {"id": "i1", "kind": "intent", "query": "who calls function foo", "expect_intent": "code_structure"},

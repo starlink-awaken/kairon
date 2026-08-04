@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Iterable
+from collections.abc import Iterable
 
 # Backend port names used by MemoryOS
 BACKEND_KOS = "kos"

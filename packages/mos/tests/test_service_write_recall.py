@@ -22,7 +22,9 @@ def test_write_then_recall_preference_path():
     r = mos.recall("dietary restrictions vegetarian nuts", intent="preference_self")
     assert r.intent == "preference_self"
     assert r.empty is False
-    assert any("vegetarian" in (h.get("snippet") or "").lower() or "nuts" in (h.get("snippet") or "").lower() for h in r.hits)
+    assert any(
+        "vegetarian" in (h.get("snippet") or "").lower() or "nuts" in (h.get("snippet") or "").lower() for h in r.hits
+    )
     assert r.backend_status.get("gbrain_facts") == "ok" or r.backend_status.get("gbrain") == "ok"
 
 

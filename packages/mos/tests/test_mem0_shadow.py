@@ -1,6 +1,6 @@
 """Mem0 shadow adapter — default off; on without Qdrant."""
 
-from mos.adapters.mem0_shadow import Mem0ShadowAdapter, mem0_enabled
+from mos.adapters.mem0_shadow import mem0_enabled
 from mos.service import MemoryOS
 
 

@@ -8,7 +8,7 @@ Patch and minor releases should be backwards-compatible. Update your dependency 
 
 When a new major version is released:
 
-1. Read the [`CHANGELOG.md`](CHANGELOG.md) for breaking changes.
+1. Read the [`CHANGELOG.md`](../CHANGELOG.md) for breaking changes.
 2. Update any deprecated APIs.
 3. Run integration tests against the new version.
 4. Report migration issues on GitHub.

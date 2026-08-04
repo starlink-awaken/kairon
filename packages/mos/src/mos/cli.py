@@ -19,7 +19,7 @@ def _read_stdio_request() -> dict[str, Any] | None:
     try:
         if sys.stdin is None or sys.stdin.isatty():
             return None
-    except Exception:  # noqa: BLE001
+    except Exception:
         return None
     # Prefer non-blocking detect so flag-mode does not consume pytest stdin
     try:
@@ -30,7 +30,7 @@ def _read_stdio_request() -> dict[str, Any] | None:
             # Still allow env-forced stdio (tests / adapters that already filled buffer)
             if not __import__("os").environ.get("MOS_STDIO"):
                 return None
-    except Exception:  # noqa: BLE001 — select unavailable
+    except Exception:
         if not __import__("os").environ.get("MOS_STDIO"):
             # Fall through to attempt read only when MOS_STDIO set
             pass
@@ -104,7 +104,9 @@ def _run_status(mos: Any, store: FileStore, *, pretty: bool = False) -> int:
     return 0
 
 
-def _run_forget(mos: Any, store: FileStore, kwargs: dict[str, Any], args_list: list[Any], *, pretty: bool = False) -> int:
+def _run_forget(
+    mos: Any, store: FileStore, kwargs: dict[str, Any], args_list: list[Any], *, pretty: bool = False
+) -> int:
     mid = kwargs.get("memory_id") or kwargs.get("id")
     if mid is None and args_list:
         mid = args_list[0]
