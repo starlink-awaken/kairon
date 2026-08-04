@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mos"
+version = "0.1.0"
+description = "Memory OS control plane — unified write/recall dual-track for eCOS"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Workspace Team"}]
+dependencies = []
+
+[project.scripts]
+mos = "mos.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mos"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

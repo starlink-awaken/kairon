@@ -55,6 +55,7 @@ kairon-plugin-sdk = { workspace = true }
 kairon-observability = { workspace = true }
 kairon-pipeline = { workspace = true }
 health-profile = { workspace = true }
+mos = { workspace = true }
 
 [tool.pytest.ini_options]
 testpaths = ["packages/*/tests"]
