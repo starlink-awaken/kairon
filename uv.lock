@@ -29,6 +29,7 @@ members = [
     "kos",
     "kronos",
     "minerva",
+    "mos",
     "ontoderive",
     "sophia",
 ]
@@ -437,7 +438,7 @@ wheels = [
 [[package]]
 name = "bus-foundation"
 version = "0.3.0"
-source = { directory = "/Users/xiamingxing/Workspace/projects/bus-foundation" }
+source = { directory = "../bus-foundation" }
 dependencies = [
     { name = "hypothesis" },
     { name = "pydantic" },
@@ -2206,7 +2207,7 @@ dev = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "bus-foundation", directory = "/Users/xiamingxing/Workspace/projects/bus-foundation" },
+    { name = "bus-foundation", directory = "../bus-foundation" },
     { name = "pytest", specifier = ">=9.0" },
 ]
 
@@ -2962,6 +2963,11 @@ sdist = { url = "https://files.pythonhosted.org/packages/de/1d/f4da6f02cdffe04d6
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e8/3d/1087453384dbde46a8c7f9356eead2c58be8a7bf156bca40243377c85715/more_itertools-11.1.0-py3-none-any.whl", hash = "sha256:4b65538ae22f6fed0ce4874efd317463a7489796a0939fa66824dd542125a192", size = 72226, upload-time = "2026-05-22T14:14:28.824Z" },
 ]
+
+[[package]]
+name = "mos"
+version = "0.1.0"
+source = { editable = "packages/mos" }
 
 [[package]]
 name = "mpmath"
