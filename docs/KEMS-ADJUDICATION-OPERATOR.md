@@ -56,6 +56,37 @@ independent annotators submit the `delivery_quality`, `evidence_sufficiency`,
 `workflow_alignment`, and `requires_follow_up` labels and an independent
 adjudicator records the final decision.
 
+## Persistence Health And Recovery
+
+Before creating a manifest or running shadow evaluation, inspect every KEMS
+SQLite store used by the run. The command reports integrity, foreign-key
+violations, table counts, and file permissions only; it does not read source
+content.
+
+```bash
+PYTHONPATH="$KAIRON_ROOT/packages/kos/src" \
+  uv run --project "$KAIRON_ROOT" python \
+  "$KAIRON_ROOT/scripts/kems_health_check.py" \
+  --database adjudication="$DB" \
+  --database ocr="$HOME/.kems/ocr.sqlite" \
+  --database model_acceptance="$HOME/.kems/model-acceptance.sqlite"
+```
+
+Create a verified private backup before maintenance or migration:
+
+```bash
+PYTHONPATH="$KAIRON_ROOT/packages/kos/src" \
+  uv run --project "$KAIRON_ROOT" python \
+  "$KAIRON_ROOT/scripts/kems_backup.py" \
+  --source "$DB" \
+  --destination "/path/to/backup/adjudication.sqlite"
+```
+
+Restore only after stopping writers. Existing destinations are protected by
+default; `--force` is required to replace one. Run the health check again after
+restoration and stop if the result is not `healthy`. A restored queue does not
+authorize a manifest, prediction, WorkflowRun mutation, or OMO dispatch.
+
 Inspect the queue without opening source content:
 
 ```bash

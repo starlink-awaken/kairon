@@ -13,6 +13,14 @@ from .forecast import (
 )
 from .forecast_store import ForecastStore
 from .graph_store import DocumentVersion, EvidenceSpan, GraphEntity, GraphRelation, GraphStore
+from .health import (
+    KemsPersistenceError,
+    SQLiteHealth,
+    backup_sqlite_database,
+    inspect_databases,
+    inspect_sqlite_database,
+    restore_sqlite_database,
+)
 from .ingest import ImportedDocument, ImportPolicy, import_document
 from .model_acceptance import ModelInputError, evaluate_candidate
 from .model_acceptance_store import ModelAcceptanceStore
@@ -46,6 +54,12 @@ __all__ = (
     "ShadowForecast",
     "ShadowForecastEvaluation",
     "ForecastStore",
+    "KemsPersistenceError",
+    "SQLiteHealth",
+    "inspect_sqlite_database",
+    "inspect_databases",
+    "backup_sqlite_database",
+    "restore_sqlite_database",
     "build_naive_shadow_forecast",
     "build_moving_average_shadow_forecast",
     "evaluate_shadow_forecast",
