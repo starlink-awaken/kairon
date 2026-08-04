@@ -31,7 +31,7 @@ class Mem0ShadowAdapter:
     def add(self, text: str, *, user_id: str = "default", metadata: dict[str, Any] | None = None) -> dict[str, Any]:
         if not self.enabled:
             return {"ok": False, "skipped": True, "reason": "mem0_off"}
-        mid = f"mem0_{len(self.docs)+1}"
+        mid = f"mem0_{len(self.docs) + 1}"
         doc = {
             "id": mid,
             "text": text,

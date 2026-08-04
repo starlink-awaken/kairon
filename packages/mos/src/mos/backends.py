@@ -10,27 +10,23 @@ from typing import Any, Protocol, runtime_checkable
 class SearchBackend(Protocol):
     name: str
 
-    def search(self, query: str, *, limit: int = 10, scope: dict[str, Any] | None = None) -> list[dict[str, Any]]:
-        ...
+    def search(self, query: str, *, limit: int = 10, scope: dict[str, Any] | None = None) -> list[dict[str, Any]]: ...
 
 
 @runtime_checkable
 class ThetaBackend(Protocol):
     """Searchable theta track (facts/index upsert)."""
 
-    def upsert(self, envelope: dict[str, Any]) -> dict[str, Any]:
-        ...
+    def upsert(self, envelope: dict[str, Any]) -> dict[str, Any]: ...
 
-    def forget(self, memory_id: str) -> dict[str, Any]:
-        ...
+    def forget(self, memory_id: str) -> dict[str, Any]: ...
 
 
 @runtime_checkable
 class RawBackend(Protocol):
     """Auditable raw track."""
 
-    def emit(self, event_type: str, payload: dict[str, Any]) -> dict[str, Any]:
-        ...
+    def emit(self, event_type: str, payload: dict[str, Any]) -> dict[str, Any]: ...
 
 
 @dataclass
@@ -40,7 +36,7 @@ class InMemoryRawBackend:
     events: list[dict[str, Any]] = field(default_factory=list)
 
     def emit(self, event_type: str, payload: dict[str, Any]) -> dict[str, Any]:
-        record = {"event_type": event_type, "payload": dict(payload), "id": f"raw_{len(self.events)+1}"}
+        record = {"event_type": event_type, "payload": dict(payload), "id": f"raw_{len(self.events) + 1}"}
         self.events.append(record)
         return {"ok": True, "id": record["id"]}
 

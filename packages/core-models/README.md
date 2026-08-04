@@ -2,7 +2,7 @@
 
 > Kairon 核心包
 
-此包是 kairon monorepo 的一部分。详见 [CLAUDE.md](../CLAUDE.md)。
+此包是 kairon monorepo 的一部分。详见 CLAUDE.md。
 
 ## 测试
 

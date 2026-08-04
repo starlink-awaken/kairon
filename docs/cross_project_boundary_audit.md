@@ -71,8 +71,8 @@ SharedBrain is now a conceptual or data boundary, not a live sibling package bou
 
 ### Live evidence
 
-- workspace [AGENTS.md](/Users/xiamingxing/Workspace/AGENTS.md:1) previously carried the same stale package-count drift and needed a truth reset
-- repo [AGENTS.md](/Users/xiamingxing/Workspace/projects/kairon/AGENTS.md:1) still said 25 before this audit refresh
+- workspace [AGENTS.md](../../../AGENTS.md) previously carried the same stale package-count drift and needed a truth reset
+- repo [AGENTS.md](../../AGENTS.md) still said 25 before this audit refresh
 - earlier audit docs still reason from deleted package names
 
 ### Finding

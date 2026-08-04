@@ -42,4 +42,4 @@ Thank you for contributing to this project. This guide covers how to set up a lo
 
 ## Releasing
 
-See [`RELEASE.md`](RELEASE.md) for the release checklist.
+See [`RELEASE.md`](../RELEASE.md) for the release checklist.

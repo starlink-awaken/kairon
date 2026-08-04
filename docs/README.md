@@ -24,16 +24,16 @@ This directory collects project-level documentation for **kairon**.
 - [`../SUPPORT.md`](../SUPPORT.md) — 支持与帮助
 - [`DEVELOPMENT.md`](DEVELOPMENT.md) — Development guide
 - [`RELEASE.md`](../RELEASE.md) — Release process
-- [`EXAMPLES.md`](EXAMPLES.md) or [`../examples/`](../examples/) — Examples
+- [`EXAMPLES.md`](../EXAMPLES.md) or [`../examples/`](../examples/) — Examples
 - [`BEST_PRACTICES.md`](BEST_PRACTICES.md) — Best practices
 - [`MIGRATION.md`](MIGRATION.md) — Migration guide
 - [`../CONTRIBUTORS.md`](../CONTRIBUTORS.md) — Contributors and maintainers
 
 ## Workspace Context
 
-- Workspace architecture: [`../../ARCHITECTURE.md`](../../ARCHITECTURE.md)
-- Project metadata SSOT: [`../../docs/project-registry.yaml`](../../docs/project-registry.yaml)
-- Layer placement: [`../../LAYER-INDEX.md`](../../LAYER-INDEX.md)
+- Workspace architecture: [`../../../ARCHITECTURE.md`](../../../ARCHITECTURE.md)
+- Project metadata SSOT: [`../../../docs/project-registry.yaml`](../../../docs/project-registry.yaml)
+- Layer placement: [`../../../LAYER-INDEX.md`](../../../LAYER-INDEX.md)
 
 ## SSOT Rules
 

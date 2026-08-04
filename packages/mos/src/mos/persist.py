@@ -33,7 +33,7 @@ class FileStore:
             return {"raw_events": [], "theta_docs": [], "kos_docs": [], "forgotten_ids": [], "mem0_docs": []}
         try:
             return json.loads(self.path.read_text(encoding="utf-8"))
-        except Exception:  # noqa: BLE001
+        except Exception:
             return {"raw_events": [], "theta_docs": [], "kos_docs": [], "forgotten_ids": [], "mem0_docs": []}
 
     def save(self) -> None:

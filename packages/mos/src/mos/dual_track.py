@@ -71,7 +71,7 @@ class DualTrackWriter:
                 theta_ok=bool(theta_res.get("ok", True)),
                 theta_id=str(theta_res.get("id") or envelope.id or ""),
             )
-        except Exception as exc:  # noqa: BLE001 — intentional degrade
+        except Exception as exc:
             return DualTrackResult(
                 ok=raw_ok,  # raw survived
                 raw_id=raw_id or None,
@@ -98,7 +98,7 @@ class DualTrackWriter:
                 theta_id=str(theta_res.get("id") or memory_id),
                 metadata={"theta_found": theta_res.get("found")},
             )
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return DualTrackResult(
                 ok=raw_ok,
                 raw_id=raw_id or None,

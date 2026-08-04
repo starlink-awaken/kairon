@@ -30,8 +30,7 @@ class DreamRunner(Protocol):
         phases: list[str],
         dry_run: bool,
         json_output: bool,
-    ) -> dict[str, Any]:
-        ...
+    ) -> dict[str, Any]: ...
 
 
 @dataclass

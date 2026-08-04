@@ -22,7 +22,7 @@ The main architecture risk is no longer missing features. It is **topology drift
 
 Live scan result: **16**
 
-See [live_inventory.md](/Users/xiamingxing/Workspace/projects/kairon/docs/live_inventory.md:1) for the full table.
+See [live_inventory.md](./live_inventory.md) for the full table.
 
 ### 1.2 What `kairon` actually contains now
 
@@ -79,7 +79,7 @@ That is healthier than the previous "everything half-lives in kairon" state, but
 
 Agora still exposes historical aliases that imply capabilities no longer backed by live `kairon` packages.
 
-See [agora_route_drift_audit.md](/Users/xiamingxing/Workspace/projects/kairon/docs/agora_route_drift_audit.md:1).
+See [agora_route_drift_audit.md](./agora_route_drift_audit.md).
 
 Most important examples:
 
@@ -90,8 +90,8 @@ Most important examples:
 
 The current drift is structural, not cosmetic:
 
-- workspace [AGENTS.md](/Users/xiamingxing/Workspace/AGENTS.md:1) previously described `kairon` as a 19-package repo and needed the same truth reset
-- repo [AGENTS.md](/Users/xiamingxing/Workspace/projects/kairon/AGENTS.md:1) still says `kairon` has 25 packages
+- workspace [AGENTS.md](../../../AGENTS.md) previously described `kairon` as a 19-package repo and needed the same truth reset
+- repo [AGENTS.md](../../AGENTS.md) still says `kairon` has 25 packages
 - earlier audit docs still analyze `sharedbrain-bridge`, `ssot`, `llm-gateway`, and `engine-core` as live repo members
 
 When those docs are used as planning input, the planning process starts from a false topology.
@@ -122,6 +122,6 @@ When those docs are used as planning input, the planning process starts from a f
 
 ## 8. Related Docs
 
-- [live_inventory.md](/Users/xiamingxing/Workspace/projects/kairon/docs/live_inventory.md:1)
-- [agora_route_drift_audit.md](/Users/xiamingxing/Workspace/projects/kairon/docs/agora_route_drift_audit.md:1)
-- [cross_project_boundary_audit.md](/Users/xiamingxing/Workspace/projects/kairon/docs/cross_project_boundary_audit.md:1)
+- [live_inventory.md](./live_inventory.md)
+- [agora_route_drift_audit.md](./agora_route_drift_audit.md)
+- [cross_project_boundary_audit.md](./cross_project_boundary_audit.md)

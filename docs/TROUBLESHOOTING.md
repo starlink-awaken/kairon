@@ -19,4 +19,4 @@
 
 - Developer rules: [`../AGENTS.md`](../AGENTS.md)
 - AI session context: [`../CLAUDE.md`](../CLAUDE.md)
-- Workspace architecture: [`../../ARCHITECTURE.md`](../../ARCHITECTURE.md)
+- Workspace architecture: [`../../../ARCHITECTURE.md`](../../../ARCHITECTURE.md)
