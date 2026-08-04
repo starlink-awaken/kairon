@@ -14,20 +14,30 @@ from kems_build_engineering_delivery_queue import EngineeringDeliveryQueueError,
 def projection(*, review_status: str = "reviewed", decision: str | None = "adopted") -> dict[str, object]:
     return {
         "schema": "engineering-delivery-review-queue/v1",
-        "scene_binding": {"scene_id": "engineering-delivery", "journey_id": "intent-to-evidence", "outcome_metric": "verified_delivery_lead_time"},
-        "rows": [{
-            "workflow_run_id": "run-1",
-            "trace_id": "trace-1",
-            "delivery_id": "delivery-1",
-            "scene_binding": {"scene_id": "engineering-delivery", "journey_id": "intent-to-evidence", "outcome_metric": "verified_delivery_lead_time"},
-            "workflow_state": "closed",
-            "receipt_event_id": "event-1",
-            "feedback_states": ["submitted", decision] if decision else ["submitted"],
-            "review_status": review_status,
-            "latest_decision": decision,
-            "lead_time_seconds": 420,
-            "evidence_count": 2,
-        }],
+        "scene_binding": {
+            "scene_id": "engineering-delivery",
+            "journey_id": "intent-to-evidence",
+            "outcome_metric": "verified_delivery_lead_time",
+        },
+        "rows": [
+            {
+                "workflow_run_id": "run-1",
+                "trace_id": "trace-1",
+                "delivery_id": "delivery-1",
+                "scene_binding": {
+                    "scene_id": "engineering-delivery",
+                    "journey_id": "intent-to-evidence",
+                    "outcome_metric": "verified_delivery_lead_time",
+                },
+                "workflow_state": "closed",
+                "receipt_event_id": "event-1",
+                "feedback_states": ["submitted", decision] if decision else ["submitted"],
+                "review_status": review_status,
+                "latest_decision": decision,
+                "lead_time_seconds": 420,
+                "evidence_count": 2,
+            }
+        ],
         "controls": {"read_only": True, "workflow_state_mutation": False, "provider_invocation": False},
     }
 

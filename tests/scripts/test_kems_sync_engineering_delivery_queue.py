@@ -25,5 +25,7 @@ def test_sync_queue_is_idempotent_and_persists_redacted_metadata(tmp_path: Path)
     assert first["sample_count"] == 1
     assert first["inserted_count"] == 1
     assert second["inserted_count"] == 0
-    assert AdjudicationStore(database).list_items(status="pending")[0]["scenario_id"] == "engineering-delivery-review-v1"
+    assert (
+        AdjudicationStore(database).list_items(status="pending")[0]["scenario_id"] == "engineering-delivery-review-v1"
+    )
     assert "delivery-1" not in evidence.read_text(encoding="utf-8")

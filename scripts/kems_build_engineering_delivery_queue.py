@@ -66,7 +66,11 @@ def _projection(payload: object) -> dict[str, Any]:
     if scene_binding != expected_scene:
         raise EngineeringDeliveryQueueError("engineering-delivery scene binding is invalid")
     controls = candidate.get("controls")
-    if not isinstance(controls, dict) or controls.get("read_only") is not True or controls.get("provider_invocation") is not False:
+    if (
+        not isinstance(controls, dict)
+        or controls.get("read_only") is not True
+        or controls.get("provider_invocation") is not False
+    ):
         raise EngineeringDeliveryQueueError("review projection controls must remain read-only")
     rows = candidate.get("rows")
     if not isinstance(rows, list):
@@ -75,9 +79,7 @@ def _projection(payload: object) -> dict[str, Any]:
 
 
 def _sample_id(row: dict[str, Any], source_sha256: str) -> str:
-    identity = "\0".join(
-        str(row.get(field) or "") for field in ("workflow_run_id", "delivery_id", "receipt_event_id")
-    )
+    identity = "\0".join(str(row.get(field) or "") for field in ("workflow_run_id", "delivery_id", "receipt_event_id"))
     return f"sample-{hashlib.sha256(f'{identity}\0{source_sha256}'.encode()).hexdigest()[:24]}"
 
 
@@ -147,7 +149,9 @@ def write_queue(rows: list[dict[str, object]], output_path: Path) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--input", required=True, type=Path, help="redacted engineering-delivery review projection JSON")
+    parser.add_argument(
+        "--input", required=True, type=Path, help="redacted engineering-delivery review projection JSON"
+    )
     parser.add_argument("--output", required=True, type=Path, help="redacted KEMS adjudication JSONL")
     parser.add_argument("--split", default="shadow", choices=sorted(SPLITS))
     args = parser.parse_args()
@@ -158,7 +162,18 @@ def main() -> int:
     except (OSError, json.JSONDecodeError, EngineeringDeliveryQueueError) as exc:
         print(json.dumps({"status": "failed", "error": str(exc)}, ensure_ascii=False))
         return 1
-    print(json.dumps({"status": "succeeded", "queue_schema": QUEUE_SCHEMA, "scenario_id": SCENARIO_ID, "sample_count": len(rows), "output": str(args.output.expanduser().resolve())}, ensure_ascii=False))
+    print(
+        json.dumps(
+            {
+                "status": "succeeded",
+                "queue_schema": QUEUE_SCHEMA,
+                "scenario_id": SCENARIO_ID,
+                "sample_count": len(rows),
+                "output": str(args.output.expanduser().resolve()),
+            },
+            ensure_ascii=False,
+        )
+    )
     return 0
 
 
