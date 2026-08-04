@@ -45,6 +45,14 @@ class MemoryEnvelope:
     confidence: float = 0.8
     lifecycle_status: str = "raw"
     metadata: dict[str, Any] = field(default_factory=dict)
+    # Bi-temporal fields (Graphiti-aligned shadow model)
+    valid_from: str | None = None
+    valid_to: str | None = None
+    ingested_at: str | None = None
+    invalidated_at: str | None = None
+    subject: str | None = None
+    predicate: str | None = None
+    object: str | None = None
 
     def body_text(self) -> str:
         return (self.content or "") if self.content is not None else ""
@@ -53,6 +61,8 @@ class MemoryEnvelope:
         if self.content_hash:
             return self.content_hash
         payload = self.content or self.content_ref or ""
+        if self.subject and self.predicate:
+            payload = f"{self.subject}|{self.predicate}|{self.object or ''}|{payload}"
         self.content_hash = hashlib.sha256(payload.encode("utf-8")).hexdigest()
         return self.content_hash
 
@@ -68,6 +78,17 @@ class MemoryEnvelope:
                 "session_id": self.session_id,
                 "run_id": self.run_id,
                 "scene_id": self.scene_id,
+            },
+            "temporal": {
+                "valid_from": self.valid_from,
+                "valid_to": self.valid_to,
+                "ingested_at": self.ingested_at,
+                "invalidated_at": self.invalidated_at,
+            },
+            "graph": {
+                "subject": self.subject,
+                "predicate": self.predicate,
+                "object": self.object,
             },
             "provenance": {
                 "source": self.source,
@@ -89,6 +110,8 @@ def _as_envelope(data: MemoryEnvelope | dict[str, Any]) -> MemoryEnvelope:
     prov = data.get("provenance") or {}
     gov = data.get("governance") or {}
     life = data.get("lifecycle") or {}
+    temporal = data.get("temporal") or {}
+    graph = data.get("graph") or {}
     return MemoryEnvelope(
         id=data.get("id"),
         type=str(data.get("type") or ""),
@@ -106,6 +129,13 @@ def _as_envelope(data: MemoryEnvelope | dict[str, Any]) -> MemoryEnvelope:
         confidence=float(data.get("confidence", 0.8)),
         lifecycle_status=str(life.get("status") or data.get("lifecycle_status") or "raw"),
         metadata=dict(data.get("metadata") or {}),
+        valid_from=temporal.get("valid_from") or data.get("valid_from"),
+        valid_to=temporal.get("valid_to") or data.get("valid_to"),
+        ingested_at=temporal.get("ingested_at") or data.get("ingested_at"),
+        invalidated_at=temporal.get("invalidated_at") or data.get("invalidated_at"),
+        subject=graph.get("subject") or data.get("subject"),
+        predicate=graph.get("predicate") or data.get("predicate"),
+        object=graph.get("object") or data.get("object"),
     )
 
 
@@ -114,8 +144,10 @@ def validate_envelope(data: MemoryEnvelope | dict[str, Any]) -> MemoryEnvelope:
     env = _as_envelope(data)
     if env.type not in MEMORY_TYPES:
         raise ValidationError(f"invalid type {env.type!r}; expected one of {sorted(MEMORY_TYPES)}")
-    if not env.content and not env.content_ref:
-        raise ValidationError("either content or content_ref is required")
+    # Triple writes may omit free-text body
+    has_triple = bool(env.subject and env.predicate)
+    if not env.content and not env.content_ref and not has_triple:
+        raise ValidationError("either content, content_ref, or subject+predicate is required")
     if env.pii_class not in PII_CLASSES:
         raise ValidationError(f"invalid pii_class {env.pii_class!r}")
     if env.lifecycle_status not in LIFECYCLE_STATUSES:

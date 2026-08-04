@@ -13,16 +13,17 @@ BACKEND_CARDS = "cards"
 BACKEND_CODE = "codebase_memory"
 BACKEND_GOV = "governance_omo"
 BACKEND_MEM0 = "mem0"
+BACKEND_TEMPORAL = "temporal"
 
 INTENT_ROUTES: dict[str, list[str]] = {
     "file_note": [BACKEND_KOS],
-    "preference_self": [BACKEND_GBRAIN_FACTS, BACKEND_GBRAIN],
-    "entity_relation": [BACKEND_GBRAIN],
-    "temporal_fact": [BACKEND_GBRAIN],
+    "preference_self": [BACKEND_GBRAIN_FACTS, BACKEND_GBRAIN, BACKEND_MEM0],
+    "entity_relation": [BACKEND_GBRAIN, BACKEND_TEMPORAL],
+    "temporal_fact": [BACKEND_TEMPORAL, BACKEND_GBRAIN],
     "code_structure": [BACKEND_CODE],
     "task_debt": [BACKEND_GOV],
     "card_ops": [BACKEND_CARDS, BACKEND_KOS],
-    "general": [BACKEND_KOS, BACKEND_GBRAIN],
+    "general": [BACKEND_KOS, BACKEND_GBRAIN, BACKEND_TEMPORAL],
 }
 
 _CODE_RE = re.compile(
@@ -34,6 +35,11 @@ _ENTITY_RE = re.compile(r"\b(relation|related to|works at|invest(?:ed|or|ment|s)
 _TASK_RE = re.compile(r"\b(task|debt|todo|任务|债务|开放任务)\b", re.I)
 _CARD_RE = re.compile(r"\b(card|知识卡片|卡片)\b", re.I)
 _FILE_RE = re.compile(r"\b(ADR|文档|笔记|vault|readme|哪个文件|which (file|doc))\b", re.I)
+# Note: avoid \b for CJK tokens (Python word-boundary is ASCII-oriented)
+_TEMPORAL_RE = re.compile(
+    r"(valid(?:_from|_to)?|expired|as[- ]of|until|effective|时效|有效期|何时生效|过期|before \d{4}|after \d{4})",
+    re.I,
+)
 
 
 def classify_intent(query: str, explicit: str | None = None) -> str:
@@ -44,6 +50,8 @@ def classify_intent(query: str, explicit: str | None = None) -> str:
         return "code_structure"
     if _TASK_RE.search(q):
         return "task_debt"
+    if _TEMPORAL_RE.search(q):
+        return "temporal_fact"
     if _PREF_RE.search(q):
         return "preference_self"
     if _ENTITY_RE.search(q):

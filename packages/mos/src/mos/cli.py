@@ -73,6 +73,11 @@ def _run_write(mos: Any, store: FileStore, kwargs: dict[str, Any], *, pretty: bo
             "run_id": kwargs.get("run_id"),
             "source": kwargs.get("source") or "bos-stdio",
             "metadata": kwargs.get("metadata") or {},
+            "subject": kwargs.get("subject"),
+            "predicate": kwargs.get("predicate"),
+            "object": kwargs.get("object"),
+            "valid_from": kwargs.get("valid_from"),
+            "valid_to": kwargs.get("valid_to"),
         }
     # drop Nones for cleaner validation messages
     envelope = {k: v for k, v in envelope.items() if v is not None}
@@ -92,7 +97,15 @@ def _run_recall(mos: Any, kwargs: dict[str, Any], args_list: list[Any], *, prett
     intent = kwargs.get("intent")
     limit = int(kwargs.get("limit", 10))
     scope = kwargs.get("scope") if isinstance(kwargs.get("scope"), dict) else None
-    result = mos.recall(str(query), intent=intent, limit=limit, scope=scope)
+    if scope is None and kwargs.get("principal_id"):
+        scope = {"principal_id": kwargs.get("principal_id")}
+    result = mos.recall(
+        str(query),
+        intent=intent,
+        limit=limit,
+        scope=scope,
+        as_of=kwargs.get("as_of"),
+    )
     _emit(result.to_dict(), pretty=pretty)
     return 0
 
@@ -130,6 +143,27 @@ def _run_consolidate(mos: Any, store: FileStore, kwargs: dict[str, Any], *, pret
     return 0 if result.ok or result.degraded else 1
 
 
+def _run_knowledge_ref(mos: Any, store: FileStore, kwargs: dict[str, Any], args_list: list[Any], *, pretty: bool = False) -> int:
+    query = kwargs.get("query")
+    if query is None and args_list:
+        query = args_list[0]
+    if not query:
+        _emit({"ok": False, "error": "query required"})
+        return 2
+    scope = kwargs.get("scope") if isinstance(kwargs.get("scope"), dict) else None
+    if scope is None and kwargs.get("principal_id"):
+        scope = {"principal_id": kwargs.get("principal_id"), "scene_id": kwargs.get("scene_id")}
+    ref = mos.create_knowledge_ref(
+        str(query),
+        intent=kwargs.get("intent"),
+        scope=scope,
+        limit=int(kwargs.get("limit", 5)),
+    )
+    store.flush_from(mos)
+    _emit(ref.to_dict(), pretty=pretty)
+    return 0
+
+
 def dispatch(cmd: str, stdio: dict[str, Any] | None, argv_ns: argparse.Namespace | None = None) -> int:
     store = FileStore()
     mos = store.build_memory_os()
@@ -146,6 +180,8 @@ def dispatch(cmd: str, stdio: dict[str, Any] | None, argv_ns: argparse.Namespace
             return _run_forget(mos, store, kwargs, args_list, pretty=False)
         if cmd == "consolidate":
             return _run_consolidate(mos, store, kwargs, pretty=False)
+        if cmd in {"knowledge-ref", "knowledge_ref", "kref"}:
+            return _run_knowledge_ref(mos, store, kwargs, args_list, pretty=False)
         if cmd == "status":
             return _run_status(mos, store, pretty=False)
         _emit({"ok": False, "error": f"unknown cmd {cmd}"})
@@ -161,13 +197,27 @@ def dispatch(cmd: str, stdio: dict[str, Any] | None, argv_ns: argparse.Namespace
                 "content": argv_ns.content,
                 "content_ref": argv_ns.content_ref,
                 "confidence": argv_ns.confidence,
+                "principal_id": getattr(argv_ns, "principal_id", None),
+                "subject": getattr(argv_ns, "subject", None),
+                "predicate": getattr(argv_ns, "predicate", None),
+                "object": getattr(argv_ns, "object", None),
+                "valid_from": getattr(argv_ns, "valid_from", None),
+                "valid_to": getattr(argv_ns, "valid_to", None),
             },
             pretty=pretty,
         )
     if cmd == "recall":
+        scope = None
+        if getattr(argv_ns, "principal_id", None):
+            scope = {"principal_id": argv_ns.principal_id}
         return _run_recall(
             mos,
-            {"query": argv_ns.query, "intent": argv_ns.intent, "limit": argv_ns.limit},
+            {
+                "query": argv_ns.query,
+                "intent": argv_ns.intent,
+                "limit": argv_ns.limit,
+                "scope": scope,
+            },
             [],
             pretty=pretty,
         )
@@ -189,6 +239,19 @@ def dispatch(cmd: str, stdio: dict[str, Any] | None, argv_ns: argparse.Namespace
             {"phases": phases, "dry_run": bool(getattr(argv_ns, "dry_run", False))},
             pretty=pretty,
         )
+    if cmd == "knowledge-ref":
+        return _run_knowledge_ref(
+            mos,
+            store,
+            {
+                "query": argv_ns.query,
+                "intent": argv_ns.intent,
+                "principal_id": getattr(argv_ns, "principal_id", None),
+                "limit": argv_ns.limit,
+            },
+            [],
+            pretty=pretty,
+        )
     if cmd == "status":
         return _run_status(mos, store, pretty=pretty)
     return 2
@@ -203,12 +266,19 @@ def main(argv: list[str] | None = None) -> int:
     p_write.add_argument("--content", default=None)
     p_write.add_argument("--content-ref", default=None)
     p_write.add_argument("--confidence", type=float, default=0.8)
+    p_write.add_argument("--principal-id", default=None)
+    p_write.add_argument("--subject", default=None)
+    p_write.add_argument("--predicate", default=None)
+    p_write.add_argument("--object", default=None)
+    p_write.add_argument("--valid-from", default=None)
+    p_write.add_argument("--valid-to", default=None)
     p_write.add_argument("--json", action="store_true", help="Pretty JSON")
 
     p_recall = sub.add_parser("recall", help="Recall memories")
     p_recall.add_argument("query", nargs="?", default=None)
     p_recall.add_argument("--intent", default=None)
     p_recall.add_argument("--limit", type=int, default=10)
+    p_recall.add_argument("--principal-id", default=None)
     p_recall.add_argument("--json", action="store_true")
 
     p_forget = sub.add_parser("forget", help="Forget a memory id (propagates raw+theta+mem0)")
@@ -224,6 +294,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_cons.add_argument("--dry-run", action="store_true")
     p_cons.add_argument("--json", action="store_true")
+
+    p_kref = sub.add_parser("knowledge-ref", help="ADR-0315 citation from recall (no body)")
+    p_kref.add_argument("query", nargs="?", default=None)
+    p_kref.add_argument("--intent", default=None)
+    p_kref.add_argument("--principal-id", default=None)
+    p_kref.add_argument("--limit", type=int, default=5)
+    p_kref.add_argument("--json", action="store_true")
 
     sub.add_parser("status", help="Control plane status")
 

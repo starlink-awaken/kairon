@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from mos.adapters.mem0_shadow import Mem0ShadowAdapter, mem0_enabled
+from mos.adapters.temporal_shadow import TemporalShadowAdapter, temporal_enabled
 from mos.backends import InMemoryRawBackend, InMemorySearchBackend, InMemoryThetaBackend, SearchBackend
 from mos.consolidate import (
     ConsolidateResult,
@@ -25,6 +26,7 @@ class WriteResult:
     dual_track: DualTrackResult
     content_hash: str
     mem0: dict[str, Any] | None = None
+    temporal: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         dt = self.dual_track
@@ -43,7 +45,34 @@ class WriteResult:
         }
         if self.mem0 is not None:
             out["mem0"] = self.mem0
+        if self.temporal is not None:
+            out["temporal"] = self.temporal
         return out
+
+
+@dataclass
+class KnowledgeRef:
+    """ADR-0315 citation: metadata only, no body text."""
+
+    ref_id: str
+    query_hash: str
+    hit_ids: list[str]
+    intent: str | None
+    scene_id: str | None
+    principal_id: str | None
+    created_from: str = "mos.recall"
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "ref_id": self.ref_id,
+            "query_hash": self.query_hash,
+            "hit_ids": self.hit_ids,
+            "intent": self.intent,
+            "scene_id": self.scene_id,
+            "principal_id": self.principal_id,
+            "created_from": self.created_from,
+            "schema": "knowledge-action/v1",
+        }
 
 
 @dataclass
@@ -101,6 +130,7 @@ class MemoryOS:
         raw: InMemoryRawBackend | None = None,
         theta: InMemoryThetaBackend | None = None,
         mem0: Mem0ShadowAdapter | None = None,
+        temporal: TemporalShadowAdapter | None = None,
         confidence_threshold: float = 0.6,
         dream_runner: DreamRunner | None = None,
     ) -> None:
@@ -108,6 +138,7 @@ class MemoryOS:
         self._theta = theta or InMemoryThetaBackend()
         self._dual = dual_track or DualTrackWriter(self._raw, self._theta, confidence_threshold=confidence_threshold)
         self._mem0 = mem0 if mem0 is not None else Mem0ShadowAdapter()
+        self._temporal = temporal if temporal is not None else TemporalShadowAdapter()
         self._dream = dream_runner
         self._last_consolidate: dict[str, Any] | None = None
         # Default offline-friendly backends; tests inject corpora
@@ -119,6 +150,8 @@ class MemoryOS:
             self._search["gbrain"] = _ThetaAsSearch(self._theta, name="gbrain")
         if "mem0" not in self._search:
             self._search["mem0"] = self._mem0  # type: ignore[assignment]
+        if "temporal" not in self._search:
+            self._search["temporal"] = self._temporal  # type: ignore[assignment]
 
     @property
     def raw_backend(self) -> InMemoryRawBackend:
@@ -134,8 +167,10 @@ class MemoryOS:
 
     def write(self, envelope: MemoryEnvelope | dict[str, Any]) -> WriteResult:
         env = validate_envelope(envelope)
+        # Store principal on theta text metadata via dual track envelope
         dt = self._dual.write(env)
         mem0_res = None
+        temporal_res = None
         # Shadow dual-write preferences/semantics when enabled
         if mem0_enabled() and env.type in {"semantic", "episodic"} and env.content:
             mem0_res = self._mem0.add(
@@ -143,12 +178,18 @@ class MemoryOS:
                 user_id=env.principal_id or "default",
                 metadata={"envelope_id": env.id, "type": env.type},
             )
+        # Temporal triple / bi-temporal fact (Graphiti-shaped shadow)
+        if temporal_enabled() and (
+            (env.subject and env.predicate) or (env.metadata or {}).get("temporal")
+        ):
+            temporal_res = self._temporal.upsert_fact(env.to_dict())
         return WriteResult(
             ok=dt.raw_ok,
             envelope_id=env.id or "",
             dual_track=dt,
             content_hash=env.content_hash or "",
             mem0=mem0_res,
+            temporal=temporal_res,
         )
 
     def forget(self, memory_id: str, *, reason: str | None = None) -> ForgetResult:
@@ -163,12 +204,15 @@ class MemoryOS:
         intent: str | None = None,
         scope: dict[str, Any] | None = None,
         limit: int = 20,
+        as_of: str | None = None,
     ) -> RecallResult:
         resolved = classify_intent(query, intent)
         names = backends_for_intent(resolved)
         # Skip mem0 backend when feature off
         if not mem0_enabled():
             names = [n for n in names if n != "mem0"]
+        if not temporal_enabled():
+            names = [n for n in names if n != "temporal"]
         ranked: list[list[dict[str, Any]]] = []
         status: dict[str, str] = {}
         for name in names:
@@ -177,14 +221,29 @@ class MemoryOS:
                 status[name] = "missing"
                 continue
             try:
-                hits = backend.search(query, limit=limit, scope=scope)
+                if name == "temporal" and hasattr(backend, "search"):
+                    hits = backend.search(query, limit=limit, scope=scope, as_of=as_of)  # type: ignore[call-arg]
+                else:
+                    hits = backend.search(query, limit=limit, scope=scope)
                 for h in hits:
                     h.setdefault("backend", name)
+                # Scope ACL: filter principal_id when requested
+                if scope and scope.get("principal_id"):
+                    pid = scope["principal_id"]
+                    hits = [
+                        h
+                        for h in hits
+                        if not h.get("principal_id") or h.get("principal_id") == pid
+                    ]
                 ranked.append(hits)
                 status[name] = "ok"
             except Exception as exc:
                 status[name] = f"degraded:{exc}"
         fused = rrf_fuse(ranked, limit=limit)
+        # Also filter fused hits by principal
+        if scope and scope.get("principal_id"):
+            pid = scope["principal_id"]
+            fused = [h for h in fused if not h.get("principal_id") or h.get("principal_id") == pid]
         return RecallResult(
             query=query,
             intent=resolved,
@@ -192,6 +251,43 @@ class MemoryOS:
             backend_status=status,
             empty=len(fused) == 0,
         )
+
+    def create_knowledge_ref(
+        self,
+        query: str,
+        *,
+        intent: str | None = None,
+        scope: dict[str, Any] | None = None,
+        limit: int = 5,
+    ) -> KnowledgeRef:
+        """Build ADR-0315 knowledge citation from a recall (metadata only)."""
+        import hashlib
+
+        result = self.recall(query, intent=intent, scope=scope, limit=limit)
+        hit_ids = [str(h.get("id")) for h in result.hits if h.get("id")]
+        qh = hashlib.sha256(query.encode("utf-8")).hexdigest()[:16]
+        ref_id = f"kref_{qh}_{len(hit_ids)}"
+        ref = KnowledgeRef(
+            ref_id=ref_id,
+            query_hash=qh,
+            hit_ids=hit_ids,
+            intent=result.intent,
+            scene_id=(scope or {}).get("scene_id"),
+            principal_id=(scope or {}).get("principal_id"),
+        )
+        # Raw audit without storing full body
+        self._raw.emit(
+            "memory.knowledge_ref",
+            {
+                "ref_id": ref.ref_id,
+                "query_hash": ref.query_hash,
+                "hit_ids": ref.hit_ids,
+                "intent": ref.intent,
+                "scene_id": ref.scene_id,
+                "principal_id": ref.principal_id,
+            },
+        )
+        return ref
 
     def consolidate(
         self,
@@ -239,13 +335,15 @@ class MemoryOS:
         )
         return {
             "ok": True,
-            "version": "0.3.0",
+            "version": "0.4.0",
             "raw_events": raw_n,
             "theta_docs": theta_n,
             "forgotten": forgotten,
             "backlog": backlog,
             "last_consolidate": self._last_consolidate,
             "mem0_enabled": mem0_enabled(),
+            "temporal_enabled": temporal_enabled(),
+            "temporal_edges": len(getattr(self._temporal, "edges", []) or []),
             "search_backends": sorted(self._search.keys()),
             "control_plane": "bos://memory/mos/*",
         }

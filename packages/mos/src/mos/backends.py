@@ -53,12 +53,18 @@ class InMemoryThetaBackend:
         if self.fail_next:
             self.fail_next = False
             raise RuntimeError("theta backend forced failure")
+        scope = envelope.get("scope") or {}
+        text = envelope.get("content") or envelope.get("content_ref") or ""
+        graph = envelope.get("graph") or {}
+        if not text and graph.get("subject"):
+            text = f"{graph.get('subject')} {graph.get('predicate')} {graph.get('object') or ''}"
         doc = {
             "id": envelope.get("id"),
             "type": envelope.get("type"),
-            "text": envelope.get("content") or envelope.get("content_ref") or "",
+            "text": text,
             "content_hash": (envelope.get("provenance") or {}).get("content_hash"),
             "metadata": envelope.get("metadata") or {},
+            "principal_id": scope.get("principal_id"),
             "forgotten": False,
         }
         mid = str(doc.get("id") or "")
@@ -81,9 +87,12 @@ class InMemoryThetaBackend:
 
     def search(self, query: str, *, limit: int = 10, scope: dict[str, Any] | None = None) -> list[dict[str, Any]]:
         q = (query or "").lower()
+        principal = (scope or {}).get("principal_id")
         hits = []
         for d in self.docs:
             if d.get("forgotten") or str(d.get("id")) in self.forgotten_ids:
+                continue
+            if principal and d.get("principal_id") and d.get("principal_id") != principal:
                 continue
             text = str(d.get("text") or "").lower()
             if not q or q in text or any(tok and tok in text for tok in q.split()):
@@ -94,6 +103,7 @@ class InMemoryThetaBackend:
                         "snippet": str(d.get("text") or "")[:200],
                         "backend": "theta",
                         "score": 1.0,
+                        "principal_id": d.get("principal_id"),
                     }
                 )
         return hits[:limit]
