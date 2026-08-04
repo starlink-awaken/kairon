@@ -21,6 +21,9 @@ class ThetaBackend(Protocol):
     def upsert(self, envelope: dict[str, Any]) -> dict[str, Any]:
         ...
 
+    def forget(self, memory_id: str) -> dict[str, Any]:
+        ...
+
 
 @runtime_checkable
 class RawBackend(Protocol):
@@ -47,6 +50,7 @@ class InMemoryThetaBackend:
     """In-process searchable store for theta track."""
 
     docs: list[dict[str, Any]] = field(default_factory=list)
+    forgotten_ids: set[str] = field(default_factory=set)
     fail_next: bool = False
 
     def upsert(self, envelope: dict[str, Any]) -> dict[str, Any]:
@@ -59,16 +63,32 @@ class InMemoryThetaBackend:
             "text": envelope.get("content") or envelope.get("content_ref") or "",
             "content_hash": (envelope.get("provenance") or {}).get("content_hash"),
             "metadata": envelope.get("metadata") or {},
+            "forgotten": False,
         }
+        mid = str(doc.get("id") or "")
+        if mid in self.forgotten_ids:
+            self.forgotten_ids.discard(mid)
         # replace same id
         self.docs = [d for d in self.docs if d.get("id") != doc["id"]]
         self.docs.append(doc)
         return {"ok": True, "id": doc["id"]}
 
+    def forget(self, memory_id: str) -> dict[str, Any]:
+        mid = str(memory_id)
+        self.forgotten_ids.add(mid)
+        found = False
+        for d in self.docs:
+            if str(d.get("id")) == mid:
+                d["forgotten"] = True
+                found = True
+        return {"ok": True, "id": mid, "found": found}
+
     def search(self, query: str, *, limit: int = 10, scope: dict[str, Any] | None = None) -> list[dict[str, Any]]:
         q = (query or "").lower()
         hits = []
         for d in self.docs:
+            if d.get("forgotten") or str(d.get("id")) in self.forgotten_ids:
+                continue
             text = str(d.get("text") or "").lower()
             if not q or q in text or any(tok and tok in text for tok in q.split()):
                 hits.append(

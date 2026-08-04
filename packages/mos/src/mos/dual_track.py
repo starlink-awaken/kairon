@@ -81,3 +81,30 @@ class DualTrackWriter:
                 degraded=True,
                 reason="theta_failed",
             )
+
+    def forget(self, memory_id: str, *, reason: str | None = None) -> DualTrackResult:
+        """Propagate forget: raw audit always; theta best-effort."""
+        payload = {"memory_id": memory_id, "reason": reason or "user_forget"}
+        raw_res = self.raw.emit("memory.forget", payload)
+        raw_id = str(raw_res.get("id") or "")
+        raw_ok = bool(raw_res.get("ok", True))
+        try:
+            theta_res = self.theta.forget(memory_id)
+            return DualTrackResult(
+                ok=raw_ok,
+                raw_id=raw_id or None,
+                raw_ok=raw_ok,
+                theta_ok=bool(theta_res.get("ok", True)),
+                theta_id=str(theta_res.get("id") or memory_id),
+                metadata={"theta_found": theta_res.get("found")},
+            )
+        except Exception as exc:  # noqa: BLE001
+            return DualTrackResult(
+                ok=raw_ok,
+                raw_id=raw_id or None,
+                raw_ok=raw_ok,
+                theta_ok=False,
+                theta_error=str(exc),
+                degraded=True,
+                reason="theta_forget_failed",
+            )

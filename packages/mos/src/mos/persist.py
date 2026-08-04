@@ -30,18 +30,22 @@ class FileStore:
 
     def _load(self) -> dict[str, Any]:
         if not self.path.exists():
-            return {"raw_events": [], "theta_docs": [], "kos_docs": []}
+            return {"raw_events": [], "theta_docs": [], "kos_docs": [], "forgotten_ids": [], "mem0_docs": []}
         try:
             return json.loads(self.path.read_text(encoding="utf-8"))
         except Exception:  # noqa: BLE001
-            return {"raw_events": [], "theta_docs": [], "kos_docs": []}
+            return {"raw_events": [], "theta_docs": [], "kos_docs": [], "forgotten_ids": [], "mem0_docs": []}
 
     def save(self) -> None:
         self.path.write_text(json.dumps(self._data, ensure_ascii=False, indent=2), encoding="utf-8")
 
     def build_memory_os(self) -> MemoryOS:
+        forgotten = set(self._data.get("forgotten_ids") or [])
         raw = InMemoryRawBackend(events=list(self._data.get("raw_events") or []))
-        theta = InMemoryThetaBackend(docs=list(self._data.get("theta_docs") or []))
+        theta = InMemoryThetaBackend(
+            docs=list(self._data.get("theta_docs") or []),
+            forgotten_ids=forgotten,
+        )
         kos_docs = list(self._data.get("kos_docs") or [])
         if not kos_docs:
             kos_docs = [
@@ -52,7 +56,10 @@ class FileStore:
                     "path": ".omo/_knowledge/decisions/0372-memory-os-control-plane.md",
                 }
             ]
-        mos = MemoryOS(raw=raw, theta=theta)
+        from mos.adapters.mem0_shadow import Mem0ShadowAdapter
+
+        mem0 = Mem0ShadowAdapter(docs=list(self._data.get("mem0_docs") or []))
+        mos = MemoryOS(raw=raw, theta=theta, mem0=mem0)
         mos.register_search_backend("kos", InMemorySearchBackend(name="kos", docs=kos_docs))
         mos.register_search_backend("cards", InMemorySearchBackend(name="cards", docs=[]))
         mos.register_search_backend("codebase_memory", InMemorySearchBackend(name="codebase_memory", docs=[]))
@@ -64,4 +71,6 @@ class FileStore:
     def flush_from(self, mos: MemoryOS) -> None:
         self._data["raw_events"] = list(getattr(mos.raw_backend, "events", []) or [])
         self._data["theta_docs"] = list(getattr(mos.theta_backend, "docs", []) or [])
+        self._data["forgotten_ids"] = sorted(getattr(mos.theta_backend, "forgotten_ids", set()) or [])
+        self._data["mem0_docs"] = list(getattr(mos.mem0, "docs", []) or [])
         self.save()

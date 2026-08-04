@@ -1,10 +1,11 @@
-"""MemoryOS control plane: write / recall / status."""
+"""MemoryOS control plane: write / recall / forget / status."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any
 
+from mos.adapters.mem0_shadow import Mem0ShadowAdapter, mem0_enabled
 from mos.backends import InMemoryRawBackend, InMemorySearchBackend, InMemoryThetaBackend, SearchBackend
 from mos.dual_track import DualTrackResult, DualTrackWriter
 from mos.envelope import MemoryEnvelope, validate_envelope
@@ -17,10 +18,11 @@ class WriteResult:
     envelope_id: str
     dual_track: DualTrackResult
     content_hash: str
+    mem0: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         dt = self.dual_track
-        return {
+        out = {
             "ok": self.ok,
             "envelope_id": self.envelope_id,
             "content_hash": self.content_hash,
@@ -32,6 +34,30 @@ class WriteResult:
             "skipped_theta": dt.skipped_theta,
             "theta_error": dt.theta_error,
             "reason": dt.reason,
+        }
+        if self.mem0 is not None:
+            out["mem0"] = self.mem0
+        return out
+
+
+@dataclass
+class ForgetResult:
+    ok: bool
+    memory_id: str
+    dual_track: DualTrackResult
+    mem0: dict[str, Any] | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        dt = self.dual_track
+        return {
+            "ok": self.ok,
+            "memory_id": self.memory_id,
+            "raw_ok": dt.raw_ok,
+            "raw_id": dt.raw_id,
+            "theta_ok": dt.theta_ok,
+            "degraded": dt.degraded,
+            "theta_error": dt.theta_error,
+            "mem0": self.mem0,
         }
 
 
@@ -68,6 +94,7 @@ class MemoryOS:
         search_backends: dict[str, SearchBackend] | None = None,
         raw: InMemoryRawBackend | None = None,
         theta: InMemoryThetaBackend | None = None,
+        mem0: Mem0ShadowAdapter | None = None,
         confidence_threshold: float = 0.6,
     ) -> None:
         self._raw = raw or InMemoryRawBackend()
@@ -75,6 +102,7 @@ class MemoryOS:
         self._dual = dual_track or DualTrackWriter(
             self._raw, self._theta, confidence_threshold=confidence_threshold
         )
+        self._mem0 = mem0 if mem0 is not None else Mem0ShadowAdapter()
         # Default offline-friendly backends; tests inject corpora
         self._search: dict[str, SearchBackend] = search_backends or {}
         # Theta store is also searchable under gbrain_facts when no override
@@ -82,6 +110,8 @@ class MemoryOS:
             self._search["gbrain_facts"] = _ThetaAsSearch(self._theta, name="gbrain_facts")
         if "gbrain" not in self._search:
             self._search["gbrain"] = _ThetaAsSearch(self._theta, name="gbrain")
+        if "mem0" not in self._search:
+            self._search["mem0"] = self._mem0  # type: ignore[assignment]
 
     @property
     def raw_backend(self) -> InMemoryRawBackend:
@@ -91,15 +121,33 @@ class MemoryOS:
     def theta_backend(self) -> InMemoryThetaBackend:
         return self._theta  # type: ignore[return-value]
 
+    @property
+    def mem0(self) -> Mem0ShadowAdapter:
+        return self._mem0
+
     def write(self, envelope: MemoryEnvelope | dict[str, Any]) -> WriteResult:
         env = validate_envelope(envelope)
         dt = self._dual.write(env)
+        mem0_res = None
+        # Shadow dual-write preferences/semantics when enabled
+        if mem0_enabled() and env.type in {"semantic", "episodic"} and env.content:
+            mem0_res = self._mem0.add(
+                env.content,
+                user_id=env.principal_id or "default",
+                metadata={"envelope_id": env.id, "type": env.type},
+            )
         return WriteResult(
             ok=dt.raw_ok,
             envelope_id=env.id or "",
             dual_track=dt,
             content_hash=env.content_hash or "",
+            mem0=mem0_res,
         )
+
+    def forget(self, memory_id: str, *, reason: str | None = None) -> ForgetResult:
+        dt = self._dual.forget(memory_id, reason=reason)
+        mem0_res = self._mem0.forget(memory_id) if mem0_enabled() else {"ok": False, "skipped": True}
+        return ForgetResult(ok=dt.raw_ok, memory_id=memory_id, dual_track=dt, mem0=mem0_res)
 
     def recall(
         self,
@@ -111,6 +159,9 @@ class MemoryOS:
     ) -> RecallResult:
         resolved = classify_intent(query, intent)
         names = backends_for_intent(resolved)
+        # Skip mem0 backend when feature off
+        if not mem0_enabled():
+            names = [n for n in names if n != "mem0"]
         ranked: list[list[dict[str, Any]]] = []
         status: dict[str, str] = {}
         for name in names:
@@ -138,11 +189,14 @@ class MemoryOS:
     def status(self) -> dict[str, Any]:
         raw_n = len(getattr(self._raw, "events", []) or [])
         theta_n = len(getattr(self._theta, "docs", []) or [])
+        forgotten = len(getattr(self._theta, "forgotten_ids", set()) or [])
         return {
             "ok": True,
-            "version": "0.1.0",
+            "version": "0.2.0",
             "raw_events": raw_n,
             "theta_docs": theta_n,
+            "forgotten": forgotten,
+            "mem0_enabled": mem0_enabled(),
             "search_backends": sorted(self._search.keys()),
             "control_plane": "bos://memory/mos/*",
         }

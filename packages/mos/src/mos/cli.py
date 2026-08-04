@@ -104,6 +104,19 @@ def _run_status(mos: Any, store: FileStore, *, pretty: bool = False) -> int:
     return 0
 
 
+def _run_forget(mos: Any, store: FileStore, kwargs: dict[str, Any], args_list: list[Any], *, pretty: bool = False) -> int:
+    mid = kwargs.get("memory_id") or kwargs.get("id")
+    if mid is None and args_list:
+        mid = args_list[0]
+    if not mid:
+        _emit({"ok": False, "error": "memory_id required"})
+        return 2
+    result = mos.forget(str(mid), reason=kwargs.get("reason"))
+    store.flush_from(mos)
+    _emit(result.to_dict(), pretty=pretty)
+    return 0 if result.ok else 1
+
+
 def dispatch(cmd: str, stdio: dict[str, Any] | None, argv_ns: argparse.Namespace | None = None) -> int:
     store = FileStore()
     mos = store.build_memory_os()
@@ -116,6 +129,8 @@ def dispatch(cmd: str, stdio: dict[str, Any] | None, argv_ns: argparse.Namespace
             return _run_write(mos, store, kwargs, pretty=False)
         if cmd == "recall":
             return _run_recall(mos, kwargs, args_list, pretty=False)
+        if cmd == "forget":
+            return _run_forget(mos, store, kwargs, args_list, pretty=False)
         if cmd == "status":
             return _run_status(mos, store, pretty=False)
         _emit({"ok": False, "error": f"unknown cmd {cmd}"})
@@ -141,6 +156,14 @@ def dispatch(cmd: str, stdio: dict[str, Any] | None, argv_ns: argparse.Namespace
             [],
             pretty=pretty,
         )
+    if cmd == "forget":
+        return _run_forget(
+            mos,
+            store,
+            {"memory_id": argv_ns.memory_id, "reason": argv_ns.reason},
+            [],
+            pretty=pretty,
+        )
     if cmd == "status":
         return _run_status(mos, store, pretty=pretty)
     return 2
@@ -163,6 +186,11 @@ def main(argv: list[str] | None = None) -> int:
     p_recall.add_argument("--limit", type=int, default=10)
     p_recall.add_argument("--json", action="store_true")
 
+    p_forget = sub.add_parser("forget", help="Forget a memory id (propagates raw+theta+mem0)")
+    p_forget.add_argument("memory_id", nargs="?", default=None)
+    p_forget.add_argument("--reason", default=None)
+    p_forget.add_argument("--json", action="store_true")
+
     sub.add_parser("status", help="Control plane status")
 
     # When invoked via Agora stdio, argv is like ["write"] and payload is on stdin.
@@ -174,6 +202,8 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("write requires --type (or Agora stdin JSON with kwargs.type)")
     if args.cmd == "recall" and stdio is None and not args.query:
         parser.error("recall requires query (or Agora stdin JSON with kwargs.query)")
+    if args.cmd == "forget" and stdio is None and not args.memory_id:
+        parser.error("forget requires memory_id (or Agora stdin JSON with kwargs.memory_id)")
 
     return dispatch(args.cmd, stdio, args)
 
