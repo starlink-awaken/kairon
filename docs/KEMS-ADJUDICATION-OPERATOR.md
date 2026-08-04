@@ -33,6 +33,29 @@ PYTHONPATH="$KAIRON_ROOT/packages/kos/src" \
   --evidence-output "/path/to/evidence/kems-adjudication-queue.jsonl"
 ```
 
+For the first low-risk Workflow Mesh sample stream, export the OMO-owned
+`engineering-delivery-review-queue/v1` projection after human review and convert
+only reviewed rows into a separate redacted queue. Pending machine submissions
+and unreviewed rows are rejected or ignored; this step does not treat a receipt
+or an `adopted` decision as a gold label.
+
+```bash
+PYTHONPATH="$KAIRON_ROOT/packages/kos/src" \
+  uv run --project "$KAIRON_ROOT" python \
+  "$KAIRON_ROOT/scripts/kems_sync_engineering_delivery_queue.py" \
+  --input "/path/to/evidence/engineering-delivery-review-queue.json" \
+  --database "$DB" \
+  --evidence-output "/path/to/evidence/engineering-delivery-adjudication.jsonl" \
+  --split shadow
+```
+
+This queue uses scenario `engineering-delivery-review-v1` and exposes only
+stable WorkflowRun, receipt, scene-binding, lead-time and evidence-count hashes
+through the redacted source reference. The queue is still pending until two
+independent annotators submit the `delivery_quality`, `evidence_sufficiency`,
+`workflow_alignment`, and `requires_follow_up` labels and an independent
+adjudicator records the final decision.
+
 Inspect the queue without opening source content:
 
 ```bash

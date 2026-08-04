@@ -183,3 +183,38 @@ def test_private_source_review_schema_is_versioned_and_public() -> None:
         "has_owner",
         "requires_omo_task",
     ]
+
+
+def test_engineering_delivery_review_has_a_strict_label_contract(tmp_path) -> None:
+    scenario = "engineering-delivery-review-v1"
+    labels = {
+        "delivery_quality": "complete",
+        "evidence_sufficiency": "sufficient",
+        "workflow_alignment": "aligned",
+        "requires_follow_up": False,
+    }
+    schema = annotation_schema(scenario)
+    assert schema["schema_version"] == "engineering-delivery-review-v1.0"
+    assert [field["name"] for field in schema["fields"]] == [
+        "delivery_quality",
+        "evidence_sufficiency",
+        "workflow_alignment",
+        "requires_follow_up",
+    ]
+
+    store = AdjudicationStore(tmp_path / "adjudication.sqlite")
+    store.ingest_queue([item("engineering-sample") | {"scenario_id": scenario, "split": "shadow"}])
+    store.claim("engineering-sample", annotator="reviewer-a")
+    with pytest.raises(ValueError, match="schema mismatch"):
+        store.submit_annotation(
+            "engineering-sample",
+            labels=labels | {"note": "free text"},
+            annotation_version="engineering-delivery-review-v1.0",
+            annotator="reviewer-a",
+        )
+    store.submit_annotation(
+        "engineering-sample",
+        labels=labels,
+        annotation_version="engineering-delivery-review-v1.0",
+        annotator="reviewer-a",
+    )
