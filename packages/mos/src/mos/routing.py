@@ -14,16 +14,19 @@ BACKEND_CODE = "codebase_memory"
 BACKEND_GOV = "governance_omo"
 BACKEND_MEM0 = "mem0"
 BACKEND_TEMPORAL = "temporal"
+BACKEND_NEO4J = "neo4j"
+# Alias used in memory-os.yaml intent routes (graphiti production path → Neo4j FACT)
+BACKEND_GRAPHITI = "neo4j"
 
 INTENT_ROUTES: dict[str, list[str]] = {
     "file_note": [BACKEND_KOS],
     "preference_self": [BACKEND_GBRAIN_FACTS, BACKEND_GBRAIN, BACKEND_MEM0],
-    "entity_relation": [BACKEND_GBRAIN, BACKEND_TEMPORAL],
-    "temporal_fact": [BACKEND_TEMPORAL, BACKEND_GBRAIN],
+    "entity_relation": [BACKEND_NEO4J, BACKEND_GBRAIN, BACKEND_TEMPORAL],
+    "temporal_fact": [BACKEND_NEO4J, BACKEND_TEMPORAL, BACKEND_GBRAIN],
     "code_structure": [BACKEND_CODE],
     "task_debt": [BACKEND_GOV],
     "card_ops": [BACKEND_CARDS, BACKEND_KOS],
-    "general": [BACKEND_KOS, BACKEND_GBRAIN, BACKEND_TEMPORAL],
+    "general": [BACKEND_KOS, BACKEND_GBRAIN, BACKEND_NEO4J, BACKEND_TEMPORAL],
 }
 
 _CODE_RE = re.compile(

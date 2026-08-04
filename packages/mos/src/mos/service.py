@@ -20,7 +20,7 @@ from mos.consolidate import (
 )
 from mos.dual_track import DualTrackResult, DualTrackWriter
 from mos.envelope import MemoryEnvelope, validate_envelope
-from mos.neo4j_writer import Neo4jFactWriter, neo4j_configured
+from mos.neo4j_writer import Neo4jFactWriter, Neo4jSearchBackend, neo4j_configured
 from mos.rbac import check_action, resolve_role
 from mos.routing import backends_for_intent, classify_intent, rrf_fuse
 
@@ -171,6 +171,9 @@ class MemoryOS:
             self._search["mem0"] = self._mem0  # type: ignore[assignment]
         if "temporal" not in self._search:
             self._search["temporal"] = self._temporal  # type: ignore[assignment]
+        # Production graph recall (NEO4J_URI-gated; empty hits when unset)
+        if "neo4j" not in self._search:
+            self._search["neo4j"] = Neo4jSearchBackend(writer=self._neo4j)
 
     def _authorize(
         self,
@@ -291,6 +294,9 @@ class MemoryOS:
             names = [n for n in names if n != "mem0"]
         if not temporal_enabled():
             names = [n for n in names if n != "temporal"]
+        # Drop neo4j from fan-out when URI unset (avoid noisy missing/degraded)
+        if not neo4j_configured():
+            names = [n for n in names if n != "neo4j"]
         ranked: list[list[dict[str, Any]]] = []
         status: dict[str, str] = {}
         for name in names:
@@ -299,7 +305,7 @@ class MemoryOS:
                 status[name] = "missing"
                 continue
             try:
-                if name == "temporal" and hasattr(backend, "search"):
+                if name in {"temporal", "neo4j"} and hasattr(backend, "search"):
                     hits = backend.search(query, limit=limit, scope=scope, as_of=as_of)  # type: ignore[call-arg]
                 else:
                     hits = backend.search(query, limit=limit, scope=scope)
@@ -420,7 +426,7 @@ class MemoryOS:
             neo4j_ok = False
         return {
             "ok": True,
-            "version": "0.6.0",
+            "version": "0.7.0",
             "raw_events": raw_n,
             "theta_docs": theta_n,
             "forgotten": forgotten,
@@ -431,6 +437,7 @@ class MemoryOS:
             "temporal_edges": len(getattr(self._temporal, "edges", []) or []),
             "neo4j_configured": neo4j_configured(),
             "neo4j_available": neo4j_ok,
+            "neo4j_recall": neo4j_configured() and neo4j_ok,
             "rbac_enforced": self._enforce_rbac,
             "rbac_default_role": resolve_role(),
             "graphiti": graphiti_backend_status(),

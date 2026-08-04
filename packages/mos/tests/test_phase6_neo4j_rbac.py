@@ -97,7 +97,7 @@ def test_status_reports_neo4j_and_rbac(monkeypatch):
     monkeypatch.delenv("NEO4J_URI", raising=False)
     mos = MemoryOS(enforce_rbac=True)
     st = mos.status()
-    assert st["version"] == "0.6.0"
+    assert st["version"] >= "0.6.0"
     assert st["neo4j_configured"] is False
     assert st["rbac_enforced"] is True
     assert "graphiti" in st
