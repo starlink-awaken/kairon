@@ -7,6 +7,12 @@ from typing import Any
 
 from mos.adapters.mem0_shadow import Mem0ShadowAdapter, mem0_enabled
 from mos.backends import InMemoryRawBackend, InMemorySearchBackend, InMemoryThetaBackend, SearchBackend
+from mos.consolidate import (
+    ConsolidateResult,
+    DreamRunner,
+    measure_backlog,
+    run_consolidate,
+)
 from mos.dual_track import DualTrackResult, DualTrackWriter
 from mos.envelope import MemoryEnvelope, validate_envelope
 from mos.routing import backends_for_intent, classify_intent, rrf_fuse
@@ -96,6 +102,7 @@ class MemoryOS:
         theta: InMemoryThetaBackend | None = None,
         mem0: Mem0ShadowAdapter | None = None,
         confidence_threshold: float = 0.6,
+        dream_runner: DreamRunner | None = None,
     ) -> None:
         self._raw = raw or InMemoryRawBackend()
         self._theta = theta or InMemoryThetaBackend()
@@ -103,6 +110,8 @@ class MemoryOS:
             self._raw, self._theta, confidence_threshold=confidence_threshold
         )
         self._mem0 = mem0 if mem0 is not None else Mem0ShadowAdapter()
+        self._dream = dream_runner
+        self._last_consolidate: dict[str, Any] | None = None
         # Default offline-friendly backends; tests inject corpora
         self._search: dict[str, SearchBackend] = search_backends or {}
         # Theta store is also searchable under gbrain_facts when no override
@@ -186,16 +195,58 @@ class MemoryOS:
             empty=len(fused) == 0,
         )
 
+    def consolidate(
+        self,
+        *,
+        phases: list[str] | None = None,
+        dry_run: bool = False,
+    ) -> ConsolidateResult:
+        """Sleep-time consolidation: orchestrate gbrain dream; emit raw audit event."""
+        before = measure_backlog(
+            list(getattr(self._theta, "docs", []) or []),
+            set(getattr(self._theta, "forgotten_ids", set()) or []),
+        )
+        result = run_consolidate(
+            dream=self._dream,
+            phases=phases,
+            dry_run=dry_run,
+            backlog_before=before,
+        )
+        after = measure_backlog(
+            list(getattr(self._theta, "docs", []) or []),
+            set(getattr(self._theta, "forgotten_ids", set()) or []),
+        )
+        result.backlog_after = after
+        self._raw.emit(
+            "memory.consolidate",
+            {
+                "ok": result.ok,
+                "dry_run": dry_run,
+                "phases": result.phases,
+                "duration_ms": result.duration_ms,
+                "degraded": result.degraded,
+                "engine": (result.engine_report or {}).get("engine"),
+            },
+        )
+        self._last_consolidate = result.to_dict()
+        return result
+
     def status(self) -> dict[str, Any]:
         raw_n = len(getattr(self._raw, "events", []) or [])
         theta_n = len(getattr(self._theta, "docs", []) or [])
         forgotten = len(getattr(self._theta, "forgotten_ids", set()) or [])
+        backlog = measure_backlog(
+            list(getattr(self._theta, "docs", []) or []),
+            set(getattr(self._theta, "forgotten_ids", set()) or []),
+        )
         return {
             "ok": True,
-            "version": "0.2.0",
+            "version": "0.3.0",
             "raw_events": raw_n,
             "theta_docs": theta_n,
             "forgotten": forgotten,
+            "backlog": backlog,
+            "last_consolidate": self._last_consolidate,
             "mem0_enabled": mem0_enabled(),
             "search_backends": sorted(self._search.keys()),
             "control_plane": "bos://memory/mos/*",

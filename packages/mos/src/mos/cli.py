@@ -117,6 +117,17 @@ def _run_forget(mos: Any, store: FileStore, kwargs: dict[str, Any], args_list: l
     return 0 if result.ok else 1
 
 
+def _run_consolidate(mos: Any, store: FileStore, kwargs: dict[str, Any], *, pretty: bool = False) -> int:
+    phases = kwargs.get("phases")
+    if isinstance(phases, str):
+        phases = [p.strip() for p in phases.split(",") if p.strip()]
+    dry_run = bool(kwargs.get("dry_run", False))
+    result = mos.consolidate(phases=phases, dry_run=dry_run)
+    store.flush_from(mos)
+    _emit(result.to_dict(), pretty=pretty)
+    return 0 if result.ok or result.degraded else 1
+
+
 def dispatch(cmd: str, stdio: dict[str, Any] | None, argv_ns: argparse.Namespace | None = None) -> int:
     store = FileStore()
     mos = store.build_memory_os()
@@ -131,6 +142,8 @@ def dispatch(cmd: str, stdio: dict[str, Any] | None, argv_ns: argparse.Namespace
             return _run_recall(mos, kwargs, args_list, pretty=False)
         if cmd == "forget":
             return _run_forget(mos, store, kwargs, args_list, pretty=False)
+        if cmd == "consolidate":
+            return _run_consolidate(mos, store, kwargs, pretty=False)
         if cmd == "status":
             return _run_status(mos, store, pretty=False)
         _emit({"ok": False, "error": f"unknown cmd {cmd}"})
@@ -164,6 +177,16 @@ def dispatch(cmd: str, stdio: dict[str, Any] | None, argv_ns: argparse.Namespace
             [],
             pretty=pretty,
         )
+    if cmd == "consolidate":
+        phases = None
+        if getattr(argv_ns, "phases", None):
+            phases = [p.strip() for p in argv_ns.phases.split(",") if p.strip()]
+        return _run_consolidate(
+            mos,
+            store,
+            {"phases": phases, "dry_run": bool(getattr(argv_ns, "dry_run", False))},
+            pretty=pretty,
+        )
     if cmd == "status":
         return _run_status(mos, store, pretty=pretty)
     return 2
@@ -190,6 +213,15 @@ def main(argv: list[str] | None = None) -> int:
     p_forget.add_argument("memory_id", nargs="?", default=None)
     p_forget.add_argument("--reason", default=None)
     p_forget.add_argument("--json", action="store_true")
+
+    p_cons = sub.add_parser("consolidate", help="Orchestrate gbrain dream sleep-time cycle")
+    p_cons.add_argument(
+        "--phases",
+        default=None,
+        help="Comma-separated dream phases (default: extract_facts,consolidate,embed)",
+    )
+    p_cons.add_argument("--dry-run", action="store_true")
+    p_cons.add_argument("--json", action="store_true")
 
     sub.add_parser("status", help="Control plane status")
 
