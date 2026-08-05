@@ -73,9 +73,19 @@ SET r.invalidated_at = $invalidated_at,
 RETURN r.id AS id
 """
 
+# When $as_of is null/empty → current-state (invalidated_at IS NULL).
+# When $as_of is set (ISO-8601) → bi-temporal world+system validity at that instant.
 SEARCH_CYPHER = """
 MATCH (s:Entity)-[r:FACT]->(o:Entity)
-WHERE r.invalidated_at IS NULL
+WHERE (
+    ($as_of IS NULL OR $as_of = '') AND r.invalidated_at IS NULL
+  )
+  OR (
+    $as_of IS NOT NULL AND $as_of <> ''
+    AND (r.valid_from IS NULL OR r.valid_from <= $as_of)
+    AND (r.valid_to IS NULL OR r.valid_to > $as_of)
+    AND (r.invalidated_at IS NULL OR r.invalidated_at > $as_of)
+  )
   AND (
     size($tokens) = 0 OR
     any(tok IN $tokens WHERE
@@ -182,10 +192,13 @@ class Neo4jFactWriter:
         query: str,
         *,
         limit: int = 10,
-        as_of: str | None = None,  # reserved for bi-temporal filter expansion
+        as_of: str | None = None,
     ) -> list[dict[str, Any]]:
-        """Lexical CONTAINS search over FACT edges (current-state only)."""
-        _ = as_of  # phase-7: current-state only; full as_of filter can land later
+        """Lexical CONTAINS search over FACT edges.
+
+        as_of=None → current-state (invalidated excluded).
+        as_of=ISO timestamp → bi-temporal filter (valid_from/to + invalidated_at).
+        """
         if not neo4j_configured():
             return []
         driver = self._get_driver()
@@ -196,9 +209,13 @@ class Neo4jFactWriter:
         tokens = [t for t in q.split() if t] if q else []
         if q and q not in tokens:
             tokens = [q] + tokens
+        as_of_param = (as_of or "").strip() or None
         try:
             with driver.session() as session:  # type: ignore[union-attr]
-                result = session.run(SEARCH_CYPHER, {"tokens": tokens, "limit": int(limit)})
+                result = session.run(
+                    SEARCH_CYPHER,
+                    {"tokens": tokens, "limit": int(limit), "as_of": as_of_param},
+                )
                 if hasattr(result, "data"):
                     rows = result.data()
                 else:
@@ -339,9 +356,10 @@ class FakeNeo4jSession:
             if not tokens and params.get("q"):
                 tokens = [str(params.get("q")).lower()]
             limit = int(params.get("limit") or 10)
+            as_of = (params.get("as_of") or "").strip() or None
             rows = []
             for f in self.driver.facts:
-                if f.get("invalidated_at"):
+                if not _fake_fact_visible(f, as_of=as_of):
                     continue
                 blob = " ".join(
                     str(f.get(k) or "")
@@ -351,6 +369,23 @@ class FakeNeo4jSession:
                     rows.append(dict(f))
             return FakeNeo4jResult(rows[:limit])
         return FakeNeo4jResult()
+
+
+def _fake_fact_visible(f: dict[str, Any], *, as_of: str | None) -> bool:
+    """Mirror SEARCH_CYPHER bi-temporal visibility for FakeNeo4jDriver."""
+    if not as_of:
+        return not f.get("invalidated_at")
+    # as_of set: world + system validity
+    vf = f.get("valid_from")
+    vt = f.get("valid_to")
+    inv = f.get("invalidated_at")
+    if vf and str(vf) > as_of:
+        return False
+    if vt and str(vt) <= as_of:
+        return False
+    if inv and str(inv) <= as_of:
+        return False
+    return True
 
 
 class FakeNeo4jResult:

@@ -139,7 +139,7 @@ def _run_recall(mos: Any, kwargs: dict[str, Any], args_list: list[Any], *, prett
             intent=intent,
             limit=limit,
             scope=scope,
-            as_of=kwargs.get("as_of"),
+            as_of=kwargs.get("as_of") or kwargs.get("asOf"),
             role=kwargs.get("role"),
         )
         _emit(result.to_dict(), pretty=pretty)
@@ -286,6 +286,7 @@ def dispatch(cmd: str, stdio: dict[str, Any] | None, argv_ns: argparse.Namespace
                 "intent": argv_ns.intent,
                 "limit": argv_ns.limit,
                 "scope": scope,
+                "as_of": getattr(argv_ns, "as_of", None),
             },
             [],
             pretty=pretty,
@@ -348,6 +349,12 @@ def main(argv: list[str] | None = None) -> int:
     p_recall.add_argument("--intent", default=None)
     p_recall.add_argument("--limit", type=int, default=10)
     p_recall.add_argument("--principal-id", default=None)
+    p_recall.add_argument(
+        "--as-of",
+        dest="as_of",
+        default=None,
+        help="ISO-8601 bi-temporal as-of for neo4j/temporal (current-state if omitted)",
+    )
     p_recall.add_argument("--json", action="store_true")
 
     p_forget = sub.add_parser("forget", help="Forget a memory id (propagates raw+theta+mem0)")

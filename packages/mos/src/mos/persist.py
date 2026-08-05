@@ -77,7 +77,23 @@ class FileStore:
         last = self._data.get("last_consolidate")
         if isinstance(last, dict):
             mos._last_consolidate = last  # type: ignore[attr-defined]
-        mos.register_search_backend("kos", InMemorySearchBackend(name="kos", docs=kos_docs))
+        # Live KOS/gbrain when flags set; else fixture InMemory (honest degrade)
+        from mos.adapters.live_backends import (
+            LiveGbrainSearchBackend,
+            LiveKosSearchBackend,
+            live_gbrain_enabled,
+            live_kos_enabled,
+        )
+
+        if live_kos_enabled():
+            mos.register_search_backend("kos", LiveKosSearchBackend())
+        else:
+            mos.register_search_backend("kos", InMemorySearchBackend(name="kos", docs=kos_docs))
+        if live_gbrain_enabled():
+            # Prefer live gbrain for both gbrain + gbrain_facts fan-out
+            live_gb = LiveGbrainSearchBackend()
+            mos.register_search_backend("gbrain", live_gb)
+            mos.register_search_backend("gbrain_facts", LiveGbrainSearchBackend(name="gbrain_facts"))
         mos.register_search_backend("cards", InMemorySearchBackend(name="cards", docs=[]))
         mos.register_search_backend("codebase_memory", InMemorySearchBackend(name="codebase_memory", docs=[]))
         mos.register_search_backend("governance_omo", InMemorySearchBackend(name="governance_omo", docs=[]))

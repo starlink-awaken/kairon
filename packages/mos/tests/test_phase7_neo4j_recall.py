@@ -74,5 +74,6 @@ def test_recall_skips_neo4j_when_uri_unset(monkeypatch):
 def test_status_reports_neo4j_recall(monkeypatch):
     monkeypatch.delenv("NEO4J_URI", raising=False)
     st = MemoryOS(enforce_rbac=True).status()
-    assert st["version"] == "0.7.0"
+    assert st["version"] == "0.10.0"
+    assert st.get("neo4j_as_of") is True
     assert st["neo4j_recall"] is False

@@ -235,7 +235,17 @@ class MemoryOS:
             (env.subject and env.predicate) or (env.metadata or {}).get("temporal")
         ):
             neo4j_res = self._neo4j.upsert_fact(env_dict)
-        return WriteResult(
+        # Optional live gbrain put (MOS_LIVE_GBRAIN_WRITE=1) — does not replace dual-track
+        gbrain_live_res = None
+        try:
+            from mos.adapters.live_backends import gbrain_put_page, live_gbrain_write_enabled
+
+            if live_gbrain_write_enabled() and env.content and env.type in {"semantic", "episodic", "institutional"}:
+                slug = f"mos/{env.type}/{(env.id or 'anon')[:48]}"
+                gbrain_live_res = gbrain_put_page(slug, env.content)
+        except Exception as exc:  # noqa: BLE001
+            gbrain_live_res = {"ok": False, "error": str(exc)}
+        result = WriteResult(
             ok=dt.raw_ok,
             envelope_id=env.id or "",
             dual_track=dt,
@@ -244,6 +254,11 @@ class MemoryOS:
             temporal=temporal_res,
             neo4j=neo4j_res,
         )
+        if gbrain_live_res is not None:
+            # surface on write dict without expanding WriteResult schema hard
+            result.mem0 = {**(mem0_res or {}), "gbrain_live": gbrain_live_res}
+        return result
+
 
     def forget(
         self,
@@ -427,7 +442,7 @@ class MemoryOS:
         last_c = self._last_consolidate
         return {
             "ok": True,
-            "version": "0.9.0",
+            "version": "0.10.0",
             "raw_events": raw_n,
             "theta_docs": theta_n,
             "forgotten": forgotten,
@@ -447,30 +462,13 @@ class MemoryOS:
             "neo4j_configured": neo4j_configured(),
             "neo4j_available": neo4j_ok,
             "neo4j_recall": neo4j_configured() and neo4j_ok,
+            "neo4j_as_of": True,
             "rbac_enforced": self._enforce_rbac,
             "rbac_default_role": resolve_role(),
             "graphiti": graphiti_backend_status(),
             "search_backends": sorted(self._search.keys()),
             # Honest adapter posture (registry SSOT narrative; runtime probes above)
-            "adapters": {
-                "neo4j": {
-                    "status": "production_path_gated" if neo4j_configured() else "unconfigured",
-                    "available": neo4j_ok,
-                },
-                "mem0": {
-                    "status": "stub_optional" if not mem0_enabled() else "shadow_enabled",
-                    "enabled": mem0_enabled(),
-                },
-                "graphiti": graphiti_backend_status(),
-                "temporal": {
-                    "status": "partial_simulation",
-                    "enabled": temporal_enabled(),
-                },
-                "kos_gbrain_live": {
-                    "status": "fixture_or_partial",
-                    "note": "CLI FileStore kos docs are fixtures unless live backends registered",
-                },
-            },
+            "adapters": self._adapter_status(neo4j_ok=neo4j_ok),
             "events": {
                 "card_updated_canonical": "bos://memory/events/card_updated",
                 "card_updated_legacy": "bos://brain/events/card_updated",
@@ -478,6 +476,33 @@ class MemoryOS:
             },
             "control_plane": "bos://memory/mos/*",
         }
+
+    def _adapter_status(self, *, neo4j_ok: bool) -> dict[str, Any]:
+        try:
+            from mos.adapters.live_backends import live_status_snapshot
+
+            live = live_status_snapshot()
+        except Exception as exc:  # noqa: BLE001
+            live = {"error": str(exc)}
+        return {
+            "neo4j": {
+                "status": "production_path_gated" if neo4j_configured() else "unconfigured",
+                "available": neo4j_ok,
+                "as_of_supported": True,
+            },
+            "mem0": {
+                "status": "stub_optional" if not mem0_enabled() else "shadow_enabled",
+                "enabled": mem0_enabled(),
+            },
+            "graphiti": graphiti_backend_status(),
+            "temporal": {
+                "status": "partial_simulation",
+                "enabled": temporal_enabled(),
+                "as_of_supported": True,
+            },
+            "kos_gbrain_live": live,
+        }
+
 
     def register_search_backend(self, name: str, backend: SearchBackend) -> None:
         self._search[name] = backend
