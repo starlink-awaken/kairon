@@ -424,14 +424,23 @@ class MemoryOS:
             neo4j_ok = bool(self._neo4j.available())
         except Exception:  # noqa: BLE001
             neo4j_ok = False
+        last_c = self._last_consolidate
         return {
             "ok": True,
-            "version": "0.7.0",
+            "version": "0.9.0",
             "raw_events": raw_n,
             "theta_docs": theta_n,
             "forgotten": forgotten,
             "backlog": backlog,
-            "last_consolidate": self._last_consolidate,
+            "last_consolidate": last_c,
+            "consolidate": {
+                "last": last_c,
+                "ok": None if not last_c else bool(last_c.get("ok")),
+                "dry_run": None if not last_c else bool(last_c.get("dry_run")),
+                "degraded": None if not last_c else bool(last_c.get("degraded")),
+                "duration_ms": None if not last_c else last_c.get("duration_ms"),
+                "phases": None if not last_c else last_c.get("phases"),
+            },
             "mem0_enabled": mem0_enabled(),
             "temporal_enabled": temporal_enabled(),
             "temporal_edges": len(getattr(self._temporal, "edges", []) or []),
@@ -442,6 +451,31 @@ class MemoryOS:
             "rbac_default_role": resolve_role(),
             "graphiti": graphiti_backend_status(),
             "search_backends": sorted(self._search.keys()),
+            # Honest adapter posture (registry SSOT narrative; runtime probes above)
+            "adapters": {
+                "neo4j": {
+                    "status": "production_path_gated" if neo4j_configured() else "unconfigured",
+                    "available": neo4j_ok,
+                },
+                "mem0": {
+                    "status": "stub_optional" if not mem0_enabled() else "shadow_enabled",
+                    "enabled": mem0_enabled(),
+                },
+                "graphiti": graphiti_backend_status(),
+                "temporal": {
+                    "status": "partial_simulation",
+                    "enabled": temporal_enabled(),
+                },
+                "kos_gbrain_live": {
+                    "status": "fixture_or_partial",
+                    "note": "CLI FileStore kos docs are fixtures unless live backends registered",
+                },
+            },
+            "events": {
+                "card_updated_canonical": "bos://memory/events/card_updated",
+                "card_updated_legacy": "bos://brain/events/card_updated",
+                "dual_accept": True,
+            },
             "control_plane": "bos://memory/mos/*",
         }
 

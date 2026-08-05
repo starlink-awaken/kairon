@@ -29,12 +29,25 @@ class FileStore:
         self._data = self._load()
 
     def _load(self) -> dict[str, Any]:
+        empty = {
+            "raw_events": [],
+            "theta_docs": [],
+            "kos_docs": [],
+            "forgotten_ids": [],
+            "mem0_docs": [],
+            "last_consolidate": None,
+        }
         if not self.path.exists():
-            return {"raw_events": [], "theta_docs": [], "kos_docs": [], "forgotten_ids": [], "mem0_docs": []}
+            return empty
         try:
-            return json.loads(self.path.read_text(encoding="utf-8"))
+            data = json.loads(self.path.read_text(encoding="utf-8"))
+            if not isinstance(data, dict):
+                return empty
+            for k, v in empty.items():
+                data.setdefault(k, v)
+            return data
         except Exception:
-            return {"raw_events": [], "theta_docs": [], "kos_docs": [], "forgotten_ids": [], "mem0_docs": []}
+            return empty
 
     def save(self) -> None:
         self.path.write_text(json.dumps(self._data, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -60,6 +73,10 @@ class FileStore:
 
         mem0 = Mem0ShadowAdapter(docs=list(self._data.get("mem0_docs") or []))
         mos = MemoryOS(raw=raw, theta=theta, mem0=mem0)
+        # Cross-process continuity for consolidate metrics (cron → CLI → dashboard)
+        last = self._data.get("last_consolidate")
+        if isinstance(last, dict):
+            mos._last_consolidate = last  # type: ignore[attr-defined]
         mos.register_search_backend("kos", InMemorySearchBackend(name="kos", docs=kos_docs))
         mos.register_search_backend("cards", InMemorySearchBackend(name="cards", docs=[]))
         mos.register_search_backend("codebase_memory", InMemorySearchBackend(name="codebase_memory", docs=[]))
@@ -73,4 +90,7 @@ class FileStore:
         self._data["theta_docs"] = list(getattr(mos.theta_backend, "docs", []) or [])
         self._data["forgotten_ids"] = sorted(getattr(mos.theta_backend, "forgotten_ids", set()) or [])
         self._data["mem0_docs"] = list(getattr(mos.mem0, "docs", []) or [])
+        last = getattr(mos, "_last_consolidate", None)
+        if isinstance(last, dict):
+            self._data["last_consolidate"] = last
         self.save()
