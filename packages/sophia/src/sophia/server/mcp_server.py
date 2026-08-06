@@ -68,7 +68,10 @@ def _get_llm_client() -> _LLMClient | None:
             from openai import AsyncOpenAI
 
             _llm_client_instance = _LLMClient(
-                AsyncOpenAI(api_key=api_key, base_url="https://api.deepseek.com"),
+                AsyncOpenAI(
+                api_key=api_key or _local_gateway_key(),
+                base_url=os.environ.get("LLM_GATEWAY_URL", "http://100.96.126.35:4000/v1"),
+            ),
             )
     return _llm_client_instance
 
