@@ -103,7 +103,16 @@ class DeepReadStageImpl(IPipelineStage):
             f"[{i + 1}] {s.get('content', '') or s.get('snippet', '') or ''}"
             for i, s in enumerate(ctx.search_results[:8])
         )
-        analysis = await self._llm.generate(self._prompt.format(query=ctx.query, documents=docs_text[:8000]))
+        try:
+            analysis = await self._llm.generate(self._prompt.format(query=ctx.query, documents=docs_text[:8000]))
+        except Exception as exc:  # noqa: BLE001 - LLM 超时/不可用时降级为原文摘要, 不阻塞管线
+            import logging
+
+            logging.getLogger("minerva.deep_read").warning(f"deep_read LLM 调用失败 (降级): {exc}")
+            analysis = (
+                f"[降级摘要 - LLM 不可用] 基于 {len(ctx.search_results or [])} 个来源的原始内容摘录:\n"
+                + docs_text[:4000]
+            )
         ctx.deep_analysis = analysis
         ctx.stage_timings[self.name] = 0.0
         return ctx
