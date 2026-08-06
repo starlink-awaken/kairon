@@ -58,7 +58,7 @@ DEFAULT_CONFIG = {
         "require_confirmation_l2": True,
     },
     "api": {
-        "omlx_url": "http://localhost:8000",
+        "omlx_url": "http://100.96.126.35:4000",
         "omlx_api_key": "123456",
         "omlx_embed_model": "embed",
     },

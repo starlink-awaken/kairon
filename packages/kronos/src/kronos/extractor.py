@@ -387,7 +387,7 @@ def call_ollama(prompt: str, model: str | None = None, system_prompt: str | None
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": prompt})
         resp = httpx.post(
-            "http://localhost:8000/v1/chat/completions",
+            os.environ.get("LLM_GATEWAY_URL", "http://100.96.126.35:4000") + "/v1/chat/completions",
             json={"model": model or _DEFAULT_OMLX_MODEL, "messages": messages, "stream": False},
             timeout=120,
         )
