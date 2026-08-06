@@ -305,20 +305,12 @@ def live_status_snapshot() -> dict[str, Any]:
         "kos": {
             "flag": live_kos_enabled(),
             "url": kos_api_url() if live_kos_enabled() else None,
-            "status": (
-                "live_enabled"
-                if live_kos_enabled()
-                else "fixture_or_partial"
-            ),
+            "status": ("live_enabled" if live_kos_enabled() else "fixture_or_partial"),
         },
         "gbrain": {
             "flag": live_gbrain_enabled(),
             "write_flag": live_gbrain_write_enabled(),
             "cli_available": gbrain.available() if live_gbrain_enabled() else False,
-            "status": (
-                "live_enabled"
-                if live_gbrain_enabled()
-                else "fixture_or_partial"
-            ),
+            "status": ("live_enabled" if live_gbrain_enabled() else "fixture_or_partial"),
         },
     }

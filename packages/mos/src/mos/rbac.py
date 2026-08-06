@@ -19,9 +19,7 @@ _EMBEDDED: dict[str, Any] = {
         "agent": {"allow": ["write", "recall", "forget", "knowledge_ref", "status"]},
         "readonly": {"allow": ["recall", "knowledge_ref", "status"]},
         "guest": {"allow": ["status"]},
-        "governance-agent": {
-            "allow": ["write", "recall", "forget", "knowledge_ref", "status", "consolidate"]
-        },
+        "governance-agent": {"allow": ["write", "recall", "forget", "knowledge_ref", "status", "consolidate"]},
     },
     "profile_role_map": {
         "governance-agent": "governance-agent",

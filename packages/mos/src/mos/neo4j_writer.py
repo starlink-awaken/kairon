@@ -363,10 +363,7 @@ class FakeNeo4jSession:
             for f in self.driver.facts:
                 if not _fake_fact_visible(f, as_of=as_of):
                     continue
-                blob = " ".join(
-                    str(f.get(k) or "")
-                    for k in ("subject", "predicate", "object", "text", "id")
-                ).lower()
+                blob = " ".join(str(f.get(k) or "") for k in ("subject", "predicate", "object", "text", "id")).lower()
                 if not tokens or any(tok in blob for tok in tokens):
                     rows.append(dict(f))
             return FakeNeo4jResult(rows[:limit])

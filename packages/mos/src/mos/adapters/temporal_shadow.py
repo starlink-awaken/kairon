@@ -55,7 +55,7 @@ class TemporalShadowAdapter:
             subject = subject or "fact"
             predicate = predicate or "states"
             obj = obj or text[:120]
-        eid = envelope.get("id") or f"tmp_{len(self.edges)+1}"
+        eid = envelope.get("id") or f"tmp_{len(self.edges) + 1}"
         # Invalidate previous current edges with same triple
         for e in self.edges:
             if (
@@ -117,9 +117,7 @@ class TemporalShadowAdapter:
                     continue
                 if vt and as_of_dt >= vt:
                     continue
-            blob = " ".join(
-                str(e.get(k) or "") for k in ("subject", "predicate", "object", "text")
-            ).lower()
+            blob = " ".join(str(e.get(k) or "") for k in ("subject", "predicate", "object", "text")).lower()
             if not q or q in blob or any(tok and tok in blob for tok in q.split()):
                 hits.append(
                     {

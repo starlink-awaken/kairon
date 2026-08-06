@@ -207,7 +207,9 @@ def _run_consolidate(mos: Any, store: FileStore, kwargs: dict[str, Any], *, pret
     return _guarded("consolidate", _do)
 
 
-def _run_knowledge_ref(mos: Any, store: FileStore, kwargs: dict[str, Any], args_list: list[Any], *, pretty: bool = False) -> int:
+def _run_knowledge_ref(
+    mos: Any, store: FileStore, kwargs: dict[str, Any], args_list: list[Any], *, pretty: bool = False
+) -> int:
     query = kwargs.get("query")
     if query is None and args_list:
         query = args_list[0]

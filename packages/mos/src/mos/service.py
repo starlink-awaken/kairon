@@ -227,14 +227,10 @@ class MemoryOS:
             )
         # Temporal triple / bi-temporal fact (Graphiti-shaped shadow)
         env_dict = env.to_dict()
-        if temporal_enabled() and (
-            (env.subject and env.predicate) or (env.metadata or {}).get("temporal")
-        ):
+        if temporal_enabled() and ((env.subject and env.predicate) or (env.metadata or {}).get("temporal")):
             temporal_res = self._temporal.upsert_fact(env_dict)
         # Production Neo4j write when NEO4J_URI configured (Graphiti/FACT Cypher)
-        if neo4j_configured() and (
-            (env.subject and env.predicate) or (env.metadata or {}).get("temporal")
-        ):
+        if neo4j_configured() and ((env.subject and env.predicate) or (env.metadata or {}).get("temporal")):
             neo4j_res = self._neo4j.upsert_fact(env_dict)
         # Optional live gbrain put (MOS_LIVE_GBRAIN_WRITE=1) — does not replace dual-track
         gbrain_live_res = None
@@ -259,7 +255,6 @@ class MemoryOS:
             # surface on write dict without expanding WriteResult schema hard
             result.mem0 = {**(mem0_res or {}), "gbrain_live": gbrain_live_res}
         return result
-
 
     def forget(
         self,
@@ -503,7 +498,6 @@ class MemoryOS:
             },
             "kos_gbrain_live": live,
         }
-
 
     def register_search_backend(self, name: str, backend: SearchBackend) -> None:
         self._search[name] = backend
