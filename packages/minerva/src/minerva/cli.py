@@ -6,6 +6,7 @@ import argparse
 import asyncio
 import os
 import sys
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -127,9 +128,23 @@ async def _run_research(args: Any) -> int:
     else:
         sys.stderr.write("[LLM] No cloud API keys — L3/L4 research unavailable\n")
 
-    # Enterprise reasoning — V4 Pro (1M ctx, 2.5折) primary, LongCat free backup
+    # Cloud reasoning — opencode-go (zen/go, 套餐内) primary, DeepSeek 官方 fallback
     cloud_llm = None
-    if os.environ.get("DEEPSEEK_API_KEY"):
+    _og_key_path = os.path.expanduser("~/.config/opencode/keys/opencodego-xiaweizhen.txt")
+    _og_key = ""
+    try:
+        with open(_og_key_path) as _f:
+            _og_key = _f.read().strip()
+    except OSError:
+        _og_key = ""
+    if _og_key:
+        cloud_llm = OpenAICompatibleClient(
+            base_url="https://opencode.ai/zen/go/v1",
+            api_key=_og_key,
+            model="deepseek-v4-flash",
+            timeout=180,
+        )
+    elif os.environ.get("DEEPSEEK_API_KEY"):
         cloud_llm = OpenAICompatibleClient(
             base_url="https://api.deepseek.com",
             api_key=os.environ["DEEPSEEK_API_KEY"],
