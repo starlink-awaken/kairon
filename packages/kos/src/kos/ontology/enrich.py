@@ -70,16 +70,24 @@ def enrich() -> dict[str, Any]:  # type: ignore[no-untyped-def]
     return {"enriched": enriched + llm_enriched, "timestamp": now}
 
 
+import os
+
+# 推理端点: 默认 omlxc 网关 (tailscale), 可通过 LLM_GATEWAY_URL 覆盖
+OMLX_GATEWAY_URL = os.environ.get("LLM_GATEWAY_URL", "http://100.96.126.35:4000")
+OMLX_CHAT_URL = f"{OMLX_GATEWAY_URL}/v1/chat/completions"
+OMLX_MODELS_URL = f"{OMLX_GATEWAY_URL}/v1/models"
+
+
 def _enrich_with_local_llm(conn: sqlite3.Connection, now: str) -> int:
     """利用本地 omlx 推理网关 (http://localhost:4000) 自动为缺失描述的实体进行源码及文档级语义丰富化"""
     import urllib.error
     import urllib.request
 
     # 1. 快速探测本地 omlx 网关是否在线
-    gateway_url = "http://localhost:4000/v1/chat/completions"
+    gateway_url = OMLX_CHAT_URL
     try:
         req = urllib.request.Request(
-            "http://localhost:4000/v1/models", headers={"Authorization": "Bearer sk-omlx-admin"}, method="GET"
+            OMLX_MODELS_URL, headers={"Authorization": "Bearer sk-omlx-admin"}, method="GET"
         )
         with urllib.request.urlopen(req, timeout=1.0) as response:
             if response.status != 200:
