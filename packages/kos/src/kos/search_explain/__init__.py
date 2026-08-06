@@ -39,6 +39,9 @@ OLLAMA_MODEL_CANDIDATES = [
 ]
 TIMEOUT = 90  # seconds for curl --max-time
 
+# 推理端点: 默认本机 ollama, 可通过 OLLAMA_ENDPOINT 指向 omlxc/aetherforge 网关
+OLLAMA_GENERATE_URL = os.environ.get("OLLAMA_ENDPOINT", OLLAMA_GENERATE_URL)
+
 _ollama_model = None
 _ollama_ok = None  # tri-state: None=unknown, True/False
 
@@ -73,7 +76,7 @@ def _call_ollama(model: str, prompt: str) -> str | None:
     payload = json.dumps({"model": model, "prompt": prompt, "stream": False})
     try:
         r = sp.run(
-            ["curl", "-s", "--max-time", str(TIMEOUT), "http://localhost:11434/api/generate", "-d", payload],
+            ["curl", "-s", "--max-time", str(TIMEOUT), OLLAMA_GENERATE_URL, "-d", payload],
             capture_output=True,
             text=True,
             timeout=TIMEOUT + 10,
