@@ -31,7 +31,7 @@ def build_temporal_backend() -> TemporalShadowAdapter:
             adapter = TemporalShadowAdapter(name="graphiti_shadow")
             adapter._graphiti_available = True  # type: ignore[attr-defined]
             return adapter
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             logger.warning("MOS_GRAPHITI=1 but graphiti_core unavailable: %s", exc)
     return TemporalShadowAdapter(name="temporal")
 
@@ -53,5 +53,5 @@ def _can_import_graphiti() -> bool:
         import graphiti_core  # noqa: F401
 
         return True
-    except Exception:  # noqa: BLE001
+    except Exception:
         return False

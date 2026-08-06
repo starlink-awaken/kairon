@@ -32,7 +32,7 @@ _EMBEDDED: dict[str, Any] = {
 }
 
 
-class RbacDenied(PermissionError):
+class RbacDeniedError(PermissionError):
     """Raised when an action is not allowed for the resolved role."""
 
 
@@ -147,5 +147,5 @@ def check_action(
     resolved = resolve_role(role=role, agent_profile=agent_profile, policy=pol)
     ok = action in allowed_actions(resolved, pol)
     if not ok and raise_on_deny:
-        raise RbacDenied(f"role={resolved} denied action={action}")
+        raise RbacDeniedError(f"role={resolved} denied action={action}")
     return ok

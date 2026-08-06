@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 
@@ -19,7 +19,7 @@ def temporal_enabled() -> bool:
 
 
 def _now_iso() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _parse_ts(value: str | None) -> datetime | None:
@@ -104,7 +104,7 @@ class TemporalShadowAdapter:
         if not temporal_enabled():
             return []
         q = (query or "").lower()
-        as_of_dt = _parse_ts(as_of) or datetime.now(timezone.utc)
+        as_of_dt = _parse_ts(as_of) or datetime.now(UTC)
         hits: list[dict[str, Any]] = []
         for e in self.edges:
             # Fine ACL applied in mos.acl.filter_hits; still skip obvious principal mismatch early

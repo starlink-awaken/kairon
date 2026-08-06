@@ -70,7 +70,7 @@ def _guarded(fn_name: str, fn, *args: Any, **kwargs: Any) -> int:
     """Run mos op; map RbacDenied → JSON error exit 3."""
     try:
         return fn(*args, **kwargs)
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         from mos.rbac import RbacDenied
 
         if isinstance(exc, RbacDenied):
