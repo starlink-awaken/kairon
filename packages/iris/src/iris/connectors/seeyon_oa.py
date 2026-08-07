@@ -37,7 +37,8 @@ class SeeyonOAConnector(BaseConnector):
     def is_available(self) -> bool:
         """检查 Chrome 9222 CDP Remote Debugging 开启."""
         try:
-            req = urllib.request.urlopen(f"http://127.0.0.1:{SEEYON_CDP_PORT}/json/version", timeout=2)
+            # Chrome 111+ DNS rebinding 保护: CDP /json/* 拒绝 127.0.0.1 Host (404), 只接受 localhost.
+            req = urllib.request.urlopen(f"http://localhost:{SEEYON_CDP_PORT}/json/version", timeout=2)
             return bool(json.loads(req.read().decode("utf-8")))
         except Exception:
             return False
