@@ -19,9 +19,11 @@ dependencies = [
     "PyMuPDF>=1.23.0",
     "openpyxl>=3.1.0",
     "jieba>=0.42",
-    "mem0ai",
     "fastmcp>=2.0",
 ]
+
+[project.optional-dependencies]
+mem0 = ["mem0ai"]
 
 [project.scripts]
 kos = "kos.cli.__main__:main"

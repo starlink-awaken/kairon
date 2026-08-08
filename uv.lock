@@ -2351,10 +2351,14 @@ dependencies = [
     { name = "fastapi" },
     { name = "fastmcp" },
     { name = "jieba" },
-    { name = "mem0ai" },
     { name = "openpyxl" },
     { name = "pymupdf" },
     { name = "python-docx" },
+]
+
+[package.optional-dependencies]
+mem0 = [
+    { name = "mem0ai" },
 ]
 
 [package.metadata]
@@ -2363,11 +2367,12 @@ requires-dist = [
     { name = "fastapi", specifier = ">=0.128.8" },
     { name = "fastmcp", specifier = ">=2.0" },
     { name = "jieba", specifier = ">=0.42" },
-    { name = "mem0ai" },
+    { name = "mem0ai", marker = "extra == 'mem0'" },
     { name = "openpyxl", specifier = ">=3.1.0" },
     { name = "pymupdf", specifier = ">=1.23.0" },
     { name = "python-docx", specifier = ">=0.8.11" },
 ]
+provides-extras = ["mem0"]
 
 [[package]]
 name = "kronos"

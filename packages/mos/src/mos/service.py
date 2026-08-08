@@ -492,7 +492,7 @@ class MemoryOS:
             },
             "graphiti": graphiti_backend_status(),
             "temporal": {
-                "status": "partial_simulation",
+                "status": "shadow_active" if temporal_enabled() else "shadow_disabled",
                 "enabled": temporal_enabled(),
                 "as_of_supported": True,
             },
