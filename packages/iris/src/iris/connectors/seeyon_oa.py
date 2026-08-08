@@ -96,3 +96,87 @@ class SeeyonOAConnector(BaseConnector):
         items = self.list_items(limit=limit * 3)
         q = query.lower()
         return [it for it in items if q in it.title.lower() or q in it.content.lower()][:limit]
+
+    # ── P4-T5: OA Write Capability (CDP Runtime.evaluate) ──────────
+
+    def _get_ws_url(self) -> str | None:
+        """Get webSocketDebuggerUrl for the OA tab."""
+        if not self.is_available():
+            return None
+        try:
+            req = urllib.request.urlopen(f"http://localhost:{SEEYON_CDP_PORT}/json/list", timeout=3)
+            tabs = json.loads(req.read().decode("utf-8"))
+            for tab in tabs:
+                url = tab.get("url", "")
+                if any(hint in url for hint in SEEYON_URL_HINTS):
+                    return tab.get("webSocketDebuggerUrl")
+        except Exception:
+            return None
+        return None
+
+    def _cdp_evaluate(self, expression: str) -> dict[str, Any] | None:
+        """Execute JavaScript via CDP Runtime.evaluate (requires websockets lib).
+
+        Returns result dict or None if CDP/websockets unavailable.
+        """
+        ws_url = self._get_ws_url()
+        if not ws_url:
+            return None
+        try:
+            import asyncio
+            import json as _json
+
+            async def _eval() -> dict[str, Any] | None:
+                try:
+                    import websockets
+                except ImportError:
+                    return None
+                async with websockets.connect(ws_url) as ws:
+                    msg = _json.dumps({
+                        "id": 1, "method": "Runtime.evaluate",
+                        "params": {"expression": expression, "returnByValue": True},
+                    })
+                    await ws.send(msg)
+                    resp = _json.loads(await ws.recv())
+                    return resp.get("result", {}).get("result", {}).get("value")
+
+            return asyncio.run(_eval())
+        except Exception:
+            return None
+
+    def submit_document(self, form_data: dict[str, str]) -> dict[str, Any]:
+        """Submit a document in OA via CDP DOM manipulation (P4-T5).
+
+        Requires: Chrome CDP 9222 + OA logged in + websockets library.
+        Args:
+            form_data: {field_selector: value} pairs to fill.
+        Returns: {status, submitted, detail}
+        """
+        if not self.is_available():
+            return {"status": "unavailable", "detail": "CDP 9222 not open"}
+
+        # Fill form fields
+        for selector, value in form_data.items():
+            js = f"document.querySelector('{selector}').value = '{value}';"
+            self._cdp_evaluate(js)
+
+        # Click submit button (OA specific — selector needs DOM勘察)
+        result = self._cdp_evaluate(
+            "document.querySelector('input[type=submit], button[type=submit]')?.click() || 'no_submit_button'"
+        )
+
+        if result is None:
+            return {"status": "degraded", "detail": "websockets lib not available, form filled but not submitted"}
+        return {"status": "submitted", "detail": f"form submitted, result={result}"}
+
+    def fill_form(self, form_data: dict[str, str]) -> dict[str, Any]:
+        """Fill OA form fields without submitting (L2 safe action)."""
+        if not self.is_available():
+            return {"status": "unavailable", "detail": "CDP 9222 not open"}
+        filled = 0
+        for selector, value in form_data.items():
+            js = f"document.querySelector('{selector}').value = '{value}';"
+            if self._cdp_evaluate(js) is not None:
+                filled += 1
+        return {"status": "filled", "fields_filled": filled, "total": len(form_data)}
+
