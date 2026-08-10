@@ -1,3 +1,9 @@
+---
+title: API_REFERENCE
+type: doc
+status: active
+---
+
 # Minerva — MCP & API Reference
 
 > 面向机器（AI Agent / MCP Client / 开发者）：工具规范、调用示例、错误处理

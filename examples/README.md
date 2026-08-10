@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # Examples
 
 This directory contains runnable examples for `kairon`.

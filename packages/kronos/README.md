@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # Kronos — 知识摄取管线
 
 > 从外部世界收割内容，注入知识系统。

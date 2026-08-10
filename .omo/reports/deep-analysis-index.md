@@ -1,3 +1,9 @@
+---
+title: deep-analysis-index
+type: doc
+status: active
+---
+
 # 代码深度分析索引
 
 > 分析日期: 2026-06-02

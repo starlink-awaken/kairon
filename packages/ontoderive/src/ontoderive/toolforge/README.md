@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # ToolForge — 思维工具匹配模块
 
 > 从 MindForge 项目并入 OntoDerive，作为推导的前置步骤。

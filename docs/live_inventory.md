@@ -1,3 +1,9 @@
+---
+title: live_inventory
+type: doc
+status: active
+---
+
 # Kairon Live Inventory
 
 > Scope: the current Kairon checkout

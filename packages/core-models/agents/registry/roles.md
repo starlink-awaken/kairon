@@ -1,3 +1,9 @@
+---
+title: roles
+type: doc
+status: active
+---
+
 # Agent Role Registry
 
 This registry defines team roles. A role is not a trusted authority by itself:

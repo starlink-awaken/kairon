@@ -1,3 +1,9 @@
+---
+title: import-rules
+type: doc
+status: active
+---
+
 # Kairon 跨包依赖边界规范
 
 > 定义 kairon 包之间的允许/禁止 import 规则。

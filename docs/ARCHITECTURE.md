@@ -1,3 +1,9 @@
+---
+title: ARCHITECTURE
+type: doc
+status: active
+---
+
 # kairon Architecture
 
 > Architecture overview for **kairon**. For the full workspace architecture, see [`../../../ARCHITECTURE.md`](../../../ARCHITECTURE.md).

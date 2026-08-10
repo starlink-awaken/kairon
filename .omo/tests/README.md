@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # 质量门禁结果
 
 > `gate-results/` 目录存储 CI gate 运行历史。

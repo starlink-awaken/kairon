@@ -1,3 +1,9 @@
+---
+title: team
+type: doc
+status: active
+---
+
 # DigitalBrainOS Agent Team
 
 Status: active bootstrap team.

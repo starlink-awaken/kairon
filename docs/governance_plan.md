@@ -1,3 +1,9 @@
+---
+title: governance_plan
+type: doc
+status: active
+---
+
 # Kairon Remediation Roadmap
 
 > Based on `docs/architecture_audit.md`

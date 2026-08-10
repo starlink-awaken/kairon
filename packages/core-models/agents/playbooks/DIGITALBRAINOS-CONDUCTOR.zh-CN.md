@@ -1,3 +1,9 @@
+---
+title: DIGITALBRAINOS-CONDUCTOR.zh-CN
+type: doc
+status: active
+---
+
 # DigitalBrainOS Conductor 作战手册
 
 ## 目的

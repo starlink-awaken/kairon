@@ -1,3 +1,9 @@
+---
+title: INDEX
+type: doc
+status: active
+---
+
 # `kairon/.omo/` — Kairon 项目治理层
 
 > Kairon 项目专属治理层，链接到工作区根级 `.omo/` 治理体系。

@@ -1,3 +1,9 @@
+---
+title: acp-strategy
+type: doc
+status: active
+---
+
 # ACP Strategy
 
 ACP is the preferred external Agent driving layer for DigitalBrainOS when a

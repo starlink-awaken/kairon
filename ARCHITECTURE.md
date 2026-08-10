@@ -1,3 +1,9 @@
+---
+title: ARCHITECTURE
+type: doc
+status: active
+---
+
 # kairon — Architecture
 
 > **Layer**: L2 引擎面

@@ -1,3 +1,9 @@
+---
+title: deep-analysis-ecos
+type: doc
+status: active
+---
+
 # 深度分析：ecos (packages/ecos/)
 
 ## 1. 包定位与职责

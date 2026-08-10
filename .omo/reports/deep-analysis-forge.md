@@ -1,3 +1,9 @@
+---
+title: deep-analysis-forge
+type: doc
+status: active
+---
+
 # 深度分析：forge (packages/forge/)
 
 ## 1. 包定位与职责

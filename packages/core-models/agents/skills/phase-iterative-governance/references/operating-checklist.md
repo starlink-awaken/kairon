@@ -1,3 +1,9 @@
+---
+title: operating-checklist
+type: doc
+status: active
+---
+
 # Operating Checklist
 
 - [ ] 当前 phase 状态已加载

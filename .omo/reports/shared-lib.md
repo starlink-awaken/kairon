@@ -1,3 +1,9 @@
+---
+title: shared-lib
+type: doc
+status: active
+---
+
 # 深度分析: shared-lib
 
 **分析日期:** 2026-06-02

@@ -1,3 +1,9 @@
+---
+title: kairon-10pkg-analysis
+type: doc
+status: active
+---
+
 # Kairon 10-Package深度分析报告 (gc-engine → minerva)
 
 > 生成时间: 2026-06-03

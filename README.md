@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # kairon
 
 🌐 [简体中文](README.zh.md)

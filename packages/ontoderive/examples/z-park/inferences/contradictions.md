@@ -1,3 +1,9 @@
+---
+title: contradictions
+type: doc
+status: active
+---
+
 ## L1 供需匹配矛盾
 
 推导过程：

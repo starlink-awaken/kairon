@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # kairon-observability
 
 > Monitoring and observability toolkit for kairon

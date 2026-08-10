@@ -1,3 +1,9 @@
+---
+title: API
+type: doc
+status: active
+---
+
 # kairon API / Usage Reference
 
 > Quick reference for using **kairon** programmatically and from the command line.

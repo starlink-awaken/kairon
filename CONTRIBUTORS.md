@@ -1,3 +1,9 @@
+---
+title: CONTRIBUTORS
+type: doc
+status: active
+---
+
 # kairon Contributors
 
 This project is part of the [omostation](https://github.com/starlink-awaken/omostation) workspace.

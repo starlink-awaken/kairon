@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # mos — Memory OS control plane
 
 Unified memory control plane for eCOS (ADR-0372, **phase10**):  

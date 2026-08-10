@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # kairon Documentation
 
 > L2 · 知识工程 monorepo

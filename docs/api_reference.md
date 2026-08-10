@@ -1,3 +1,9 @@
+---
+title: api_reference
+type: doc
+status: active
+---
+
 # kairon API 参考
 
 > 自动生成: 2026-06-04

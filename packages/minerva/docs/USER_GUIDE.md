@@ -1,3 +1,9 @@
+---
+title: USER_GUIDE
+type: doc
+status: active
+---
+
 # Minerva — 用户使用指南
 
 > 面向人类用户：快速上手、常见场景、最佳实践、问题排错

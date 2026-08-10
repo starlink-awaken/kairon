@@ -1,3 +1,9 @@
+---
+title: KEMS-ADJUDICATION-OPERATOR
+type: doc
+status: active
+---
+
 # KEMS Adjudication Operator Runbook
 
 This runbook describes the controlled path from a redacted source queue to a

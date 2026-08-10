@@ -1,3 +1,9 @@
+---
+title: kairon-issue-ledger
+type: doc
+status: active
+---
+
 # kairon 问题台账 · 5+3+1 架构对齐计划
 
 > 2026-06-06 | 基于全面分析 · 按优先级排序 · 含状态追踪

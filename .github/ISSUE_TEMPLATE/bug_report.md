@@ -1,4 +1,10 @@
 ---
+title: bug_report
+type: doc
+status: active
+---
+
+---
 name: Bug report
 about: Create a report to help us improve
 ---

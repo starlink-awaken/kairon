@@ -1,3 +1,9 @@
+---
+title: DIGITALBRAINOS-CONDUCTOR
+type: doc
+status: active
+---
+
 # DigitalBrainOS Conductor Playbook
 
 ## Purpose

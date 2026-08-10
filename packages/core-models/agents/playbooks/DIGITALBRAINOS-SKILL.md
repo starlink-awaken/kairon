@@ -1,3 +1,9 @@
+---
+title: DIGITALBRAINOS-SKILL
+type: doc
+status: active
+---
+
 # DigitalBrainOS Skill
 
 Use this skill when a task involves DigitalBrainOS strategy, architecture,

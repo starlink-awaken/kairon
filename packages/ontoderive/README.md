@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # ontoderive
 
 Ontology derivation package for the Kairon monorepo.

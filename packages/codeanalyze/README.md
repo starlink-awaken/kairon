@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # CodeAnalyze (代码分析核心引擎)
 
 > Unified code & document analysis toolkit for AI Agents

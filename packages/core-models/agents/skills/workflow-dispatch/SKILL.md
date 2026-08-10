@@ -1,3 +1,9 @@
+---
+title: SKILL
+type: doc
+status: active
+---
+
 # Skill: Workflow Dispatch
 
 ## When To Use

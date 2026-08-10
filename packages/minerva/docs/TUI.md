@@ -1,3 +1,9 @@
+---
+title: TUI
+type: doc
+status: active
+---
+
 # Minerva TUI — 终端交互界面规划
 
 > 状态: 规划中 | 目标版本: v0.8.0+ | 2026-05-12

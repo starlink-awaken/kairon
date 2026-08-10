@@ -1,3 +1,9 @@
+---
+title: USER-GUIDE
+type: doc
+status: active
+---
+
 # KOS 用户指南
 
 > 版本: v2.0 | 日期: 2026-07-08

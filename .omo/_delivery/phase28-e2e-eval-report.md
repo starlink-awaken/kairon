@@ -1,3 +1,9 @@
+---
+title: phase28-e2e-eval-report
+type: doc
+status: active
+---
+
 # P29 E2E-DEMO 评估报告 — 2026-06-05
 
 > 工作问题: 基层医疗机构药品集采政策梳理

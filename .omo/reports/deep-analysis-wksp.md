@@ -1,3 +1,9 @@
+---
+title: deep-analysis-wksp
+type: doc
+status: active
+---
+
 # 深度分析：wksp (packages/wksp/)
 
 ## 1. 包定位与职责
