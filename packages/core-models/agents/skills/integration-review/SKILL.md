@@ -1,3 +1,9 @@
+---
+title: SKILL
+type: doc
+status: active
+---
+
 # Skill: Integration Review
 
 ## When To Use

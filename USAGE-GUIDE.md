@@ -1,3 +1,9 @@
+---
+title: USAGE-GUIDE
+type: doc
+status: active
+---
+
 # kairon 使用指南
 
 > 16 个包的快速上手 · 场景示例 · 最佳实践

@@ -1,3 +1,9 @@
+---
+title: AGENTS
+type: doc
+status: active
+---
+
 # AGENTS.md — kairon
 
     > Scope: project-local developer guide for `kairon`.

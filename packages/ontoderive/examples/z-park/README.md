@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # 中关村科学城服务平台方案 — OntoDerive 完整示例
 
 > 本示例展示从零开始使用 OntoDerive 的完整流程。

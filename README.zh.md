@@ -1,3 +1,9 @@
+---
+title: README.zh
+type: doc
+status: active
+---
+
 # Kairon
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)

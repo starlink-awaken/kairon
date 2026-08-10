@@ -1,3 +1,9 @@
+---
+title: SKILL
+type: doc
+status: active
+---
+
 # Skill: Daily Brief
 
 ## When To Use

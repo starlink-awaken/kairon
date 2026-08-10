@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # Eidos — Schema Definition & Validation Layer
 
 元模型驱动的本体建模工具集。

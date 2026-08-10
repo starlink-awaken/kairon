@@ -1,3 +1,9 @@
+---
+title: report
+type: doc
+status: active
+---
+
 # 产品技术策略分析
 
 基于D-F1~F8数据，INF-L1主张稳定性优先，INF-L2主张增长优先，INF-L3主张技术债务优先。

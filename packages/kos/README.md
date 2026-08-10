@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # KOS — Knowledge Operating System
 
 > 薄薄的知识操作系统层。10 域 6,691 文档跨域搜索 · 40 实体本体建模 · 8 定时任务自动维护。

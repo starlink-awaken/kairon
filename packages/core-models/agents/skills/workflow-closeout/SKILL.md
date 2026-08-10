@@ -1,3 +1,9 @@
+---
+title: SKILL
+type: doc
+status: active
+---
+
 # Skill: Workflow Closeout
 
 ## When To Use

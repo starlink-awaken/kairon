@@ -1,3 +1,9 @@
+---
+title: TODO
+type: doc
+status: active
+---
+
 {
   "steps": [
     {"id": "create-parsers-pkg", "description": "Create kos/ingest/parsers/__init__.py"},

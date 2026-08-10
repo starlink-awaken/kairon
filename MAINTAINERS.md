@@ -1,3 +1,9 @@
+---
+title: MAINTAINERS
+type: doc
+status: active
+---
+
 # Maintainers
 
 ## Current Maintainers

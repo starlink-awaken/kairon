@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # Forge — 个人 AI 数字资产管理中心
 
 [![Tests](https://img.shields.io/badge/tests-294%20passed-brightgreen)]()

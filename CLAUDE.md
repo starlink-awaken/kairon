@@ -1,3 +1,9 @@
+---
+title: CLAUDE
+type: doc
+status: active
+---
+
 # CLAUDE.md — kairon AI Context
 
     > Session loader for AI work inside `kairon`.

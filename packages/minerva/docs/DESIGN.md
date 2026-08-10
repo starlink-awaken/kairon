@@ -1,3 +1,9 @@
+---
+title: DESIGN
+type: doc
+status: active
+---
+
 # Minerva — Detailed Technical Design
 
 ## 1. Component Design

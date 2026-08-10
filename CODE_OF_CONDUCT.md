@@ -1,3 +1,9 @@
+---
+title: CODE_OF_CONDUCT
+type: doc
+status: active
+---
+
 # Contributor Covenant Code of Conduct
 
 ## Our Pledge

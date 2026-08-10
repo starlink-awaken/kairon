@@ -1,3 +1,9 @@
+---
+title: BOUNDARY
+type: doc
+status: active
+---
+
 # kairon — System Boundary
 
 > 本文档描述 kairon 与 eCOS 系统其他部分的边界：暴露的接口、依赖的上游、影响的下游。

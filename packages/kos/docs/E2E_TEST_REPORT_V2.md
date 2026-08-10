@@ -1,3 +1,9 @@
+---
+title: E2E_TEST_REPORT_V2
+type: doc
+status: active
+---
+
 # KOS 跨项目端到端测试报告
 
 > 日期: 2026-07-09 | 测试范围: KOS ↔ cockpit / gbrain / Minerva

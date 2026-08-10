@@ -1,3 +1,9 @@
+---
+title: local-cli-inventory
+type: doc
+status: active
+---
+
 # Local CLI Inventory
 
 Detected on 2026-05-14.

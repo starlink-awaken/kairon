@@ -1,3 +1,9 @@
+---
+title: deep-analysis-shared-lib
+type: doc
+status: active
+---
+
 # 深度分析：shared-lib (packages/shared-lib/)
 
 ## 1. 包定位与职责

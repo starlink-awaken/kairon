@@ -1,3 +1,9 @@
+---
+title: ADR-0002-tiered-cache
+type: doc
+status: active
+---
+
 # ADR-0002: 三级缓存架构
 
 > 状态: 接受 | 日期: 2026-07-08

@@ -1,3 +1,9 @@
+---
+title: ecos
+type: doc
+status: active
+---
+
 # 深度分析: ecos
 
 **分析日期:** 2026-06-02

@@ -1,3 +1,9 @@
+---
+title: competitor-analysis
+type: doc
+status: active
+---
+
 # Competitor Analysis
 
 > Deep-dive competitive analysis of a product, company, or technology.

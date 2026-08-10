@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # core-models
 
 > Kairon 核心包

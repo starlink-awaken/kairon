@@ -1,3 +1,9 @@
+---
+title: ARCHITECTURE
+type: doc
+status: active
+---
+
 # KOS — Knowledge Operating System Architecture
 
 > 版本: v2.0 | 日期: 2026-07-08

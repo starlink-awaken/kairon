@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # kairon-plugin-sdk
 
 > Plugin development toolkit for kairon

@@ -1,3 +1,9 @@
+---
+title: BEST_PRACTICES
+type: doc
+status: active
+---
+
 # Best Practices
 
 ## Code

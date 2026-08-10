@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # ADR 目录
 
 > Architecture Decision Records for kairon

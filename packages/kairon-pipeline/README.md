@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # kairon-pipeline
 
 > D-Harvest data pipeline for kairon

@@ -1,3 +1,9 @@
+---
+title: mcp-strategy
+type: doc
+status: active
+---
+
 # MCP Strategy
 
 MCP is the preferred tool and service exposure layer for DigitalBrainOS. It does

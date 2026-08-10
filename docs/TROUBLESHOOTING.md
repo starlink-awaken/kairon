@@ -1,3 +1,9 @@
+---
+title: TROUBLESHOOTING
+type: doc
+status: active
+---
+
 # kairon Troubleshooting
 
 ## Installation / Setup

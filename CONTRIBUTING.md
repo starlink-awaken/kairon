@@ -1,3 +1,9 @@
+---
+title: CONTRIBUTING
+type: doc
+status: active
+---
+
 # Contributing to kairon
 
 欢迎贡献！kairon 是一个 30 包的 Python monorepo。

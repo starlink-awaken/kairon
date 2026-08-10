@@ -1,3 +1,9 @@
+---
+title: ai-zhoubao-2026-06-01
+type: doc
+status: active
+---
+
 # AI 洞察周报 — 2026-06-01
 
 > 合并 kairon 工具生态洞察 + Eureka 知识洞察。自动生成，每周一执行。

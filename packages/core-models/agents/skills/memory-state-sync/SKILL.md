@@ -1,3 +1,9 @@
+---
+title: SKILL
+type: doc
+status: active
+---
+
 # Skill: Memory State Sync
 
 ## When To Use

@@ -1,3 +1,9 @@
+---
+title: CONTRACTS
+type: doc
+status: active
+---
+
 # Minerva Shared Data Contracts
 
 > Single source of truth for all shared interfaces. Every implementor references this document.

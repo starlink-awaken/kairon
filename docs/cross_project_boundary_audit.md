@@ -1,3 +1,9 @@
+---
+title: cross_project_boundary_audit
+type: doc
+status: active
+---
+
 # Kairon Cross-Project Boundary Audit
 
 > Scope: `kairon` as the center, covering `agora`, `aetherforge`, `agentmesh`, `SharedBrain`, and workspace governance docs

@@ -1,3 +1,9 @@
+---
+title: deep-analysis-eu-pricing
+type: doc
+status: active
+---
+
 # 深度分析：eu-pricing (packages/eu-pricing/)
 
 ## 1. 包定位与职责

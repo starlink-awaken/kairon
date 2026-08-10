@@ -1,3 +1,9 @@
+---
+title: phase28-e2e-demo-evidence
+type: doc
+status: active
+---
+
 # Phase 28 — E2E 卫健委工作场景演示证据
 
 > 生成时间: 2026-06-05T19:08:44 · 总耗时: 0.02s

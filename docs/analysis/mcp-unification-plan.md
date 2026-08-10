@@ -1,3 +1,9 @@
+---
+title: mcp-unification-plan
+type: doc
+status: active
+---
+
 # MCP 统一规划 — 2026-07-13
 
 > 承接 [`architecture-audit-2026-07-13.md`](architecture-audit-2026-07-13.md) §2/§4 P0。
