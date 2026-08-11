@@ -1,6 +1,15 @@
 """KEMS domain adapters built on top of the generic KOS ingestion layer."""
 
 from .adjudication import AdjudicationStore
+from .content_checks import (
+    ContentCheckReport,
+    ContentIssue,
+    ContentRecord,
+    SourceConsistencyReport,
+    check_content_records,
+    check_source_consistency,
+)
+from .domain_profile import DomainProfile, build_domain_profile
 from .enrichment import EnrichmentResult, EvaluationReport, enrich_policy, evaluate_policy_fixture
 from .evaluation import EvaluationManifest, EvaluationRun, EvaluationSample, evaluate_field_mapping
 from .evaluation_store import EvaluationStore
@@ -49,6 +58,14 @@ __all__ = (
     "EvaluationSample",
     "EvaluationStore",
     "AdjudicationStore",
+    "ContentCheckReport",
+    "ContentIssue",
+    "ContentRecord",
+    "SourceConsistencyReport",
+    "check_content_records",
+    "check_source_consistency",
+    "DomainProfile",
+    "build_domain_profile",
     "ModelAcceptanceStore",
     "ModelInputError",
     "evaluate_candidate",
