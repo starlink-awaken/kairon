@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 
@@ -19,7 +19,7 @@ def temporal_enabled() -> bool:
 
 
 def _now_iso() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _parse_ts(value: str | None) -> datetime | None:
@@ -55,7 +55,7 @@ class TemporalShadowAdapter:
             subject = subject or "fact"
             predicate = predicate or "states"
             obj = obj or text[:120]
-        eid = envelope.get("id") or f"tmp_{len(self.edges)+1}"
+        eid = envelope.get("id") or f"tmp_{len(self.edges) + 1}"
         # Invalidate previous current edges with same triple
         for e in self.edges:
             if (
@@ -104,7 +104,7 @@ class TemporalShadowAdapter:
         if not temporal_enabled():
             return []
         q = (query or "").lower()
-        as_of_dt = _parse_ts(as_of) or datetime.now(timezone.utc)
+        as_of_dt = _parse_ts(as_of) or datetime.now(UTC)
         hits: list[dict[str, Any]] = []
         for e in self.edges:
             # Fine ACL applied in mos.acl.filter_hits; still skip obvious principal mismatch early
@@ -117,9 +117,7 @@ class TemporalShadowAdapter:
                     continue
                 if vt and as_of_dt >= vt:
                     continue
-            blob = " ".join(
-                str(e.get(k) or "") for k in ("subject", "predicate", "object", "text")
-            ).lower()
+            blob = " ".join(str(e.get(k) or "") for k in ("subject", "predicate", "object", "text")).lower()
             if not q or q in blob or any(tok and tok in blob for tok in q.split()):
                 hits.append(
                     {

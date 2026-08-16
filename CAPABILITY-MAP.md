@@ -1,3 +1,9 @@
+---
+title: CAPABILITY-MAP
+type: doc
+status: active
+---
+
 # kairon 能力地图
 
 > 16 个包的功能全景 · 场景覆盖 · 依赖关系

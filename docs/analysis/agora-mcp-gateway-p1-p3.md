@@ -1,3 +1,9 @@
+---
+title: agora-mcp-gateway-p1-p3
+type: doc
+status: active
+---
+
 # agora MCP Gateway P1-P3 专项 — 2026-07-14
 
 > 承接 [`mcp-unification-plan.md`](mcp-unification-plan.md) §5 P0 ✅（kairon 9 MCP 注册）。

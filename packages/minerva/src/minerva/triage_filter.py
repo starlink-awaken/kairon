@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 # Bridge import — unified AetherForge LLM entry (replaces hardcoded HTTP URL)
-_AF_SRC = str(Path(__file__).resolve().parents[5] / "projects" / "aetherforge" / "src")
+_AF_SRC = str(Path(__file__).resolve().parents[5] / "aetherforge" / "src")
 if _AF_SRC not in sys.path:
     sys.path.insert(0, _AF_SRC)
 

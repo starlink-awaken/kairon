@@ -8,8 +8,10 @@ Injectable driver factory for unit tests (no live Neo4j required).
 from __future__ import annotations
 
 import os
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Callable, Protocol, runtime_checkable
+from datetime import UTC
+from typing import Any, Protocol, runtime_checkable
 
 
 def neo4j_configured() -> bool:
@@ -141,9 +143,9 @@ class Neo4jFactWriter:
         driver = self._get_driver()
         if driver is None:
             return {"ok": False, "skipped": True, "reason": "neo4j_driver_unavailable"}
-        from datetime import datetime, timezone
+        from datetime import datetime
 
-        now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        now = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
         graph = envelope.get("graph") or {}
         temporal = envelope.get("temporal") or {}
         scope = envelope.get("scope") or {}
@@ -171,7 +173,7 @@ class Neo4jFactWriter:
                 elif hasattr(result, "data"):
                     result.data()
             return {"ok": True, "id": params["id"], "store": "neo4j", "uri": os.environ.get("NEO4J_URI")}
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return {"ok": False, "error": str(exc), "store": "neo4j"}
 
     def invalidate(self, edge_id: str, invalidated_at: str) -> dict[str, Any]:
@@ -184,7 +186,7 @@ class Neo4jFactWriter:
             with driver.session() as session:  # type: ignore[union-attr]
                 session.run(INVALIDATE_CYPHER, {"id": edge_id, "invalidated_at": invalidated_at})
             return {"ok": True, "id": edge_id, "store": "neo4j"}
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return {"ok": False, "error": str(exc)}
 
     def search_facts(
@@ -246,14 +248,14 @@ class Neo4jFactWriter:
                     }
                 )
             return hits[:limit]
-        except Exception:  # noqa: BLE001
+        except Exception:
             return []
 
     def close(self) -> None:
         if self._driver is not None:
             try:
                 self._driver.close()
-            except Exception:  # noqa: BLE001
+            except Exception:
                 pass
             self._driver = None
 
@@ -361,10 +363,7 @@ class FakeNeo4jSession:
             for f in self.driver.facts:
                 if not _fake_fact_visible(f, as_of=as_of):
                     continue
-                blob = " ".join(
-                    str(f.get(k) or "")
-                    for k in ("subject", "predicate", "object", "text", "id")
-                ).lower()
+                blob = " ".join(str(f.get(k) or "") for k in ("subject", "predicate", "object", "text", "id")).lower()
                 if not tokens or any(tok in blob for tok in tokens):
                     rows.append(dict(f))
             return FakeNeo4jResult(rows[:limit])

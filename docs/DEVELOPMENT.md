@@ -1,3 +1,9 @@
+---
+title: DEVELOPMENT
+type: doc
+status: active
+---
+
 # Development Guide
 
 Thank you for contributing to this project. This guide covers how to set up a local development environment, run tests, and submit changes.

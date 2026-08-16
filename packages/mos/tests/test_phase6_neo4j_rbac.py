@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import pytest
-
 from mos.neo4j_writer import FakeNeo4jDriver, Neo4jFactWriter, neo4j_configured
 from mos.rbac import RbacDenied, check_action, load_policy, resolve_role
 from mos.service import MemoryOS

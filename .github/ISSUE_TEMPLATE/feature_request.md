@@ -1,4 +1,10 @@
 ---
+title: feature_request
+type: doc
+status: active
+---
+
+---
 name: Feature request
 about: Suggest an idea for kairon
 ---

@@ -1,3 +1,9 @@
+---
+title: MIGRATION
+type: doc
+status: active
+---
+
 # Migration Guide
 
 ## Upgrading Within Major Versions

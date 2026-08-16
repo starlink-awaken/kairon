@@ -1,3 +1,9 @@
+---
+title: architecture_audit
+type: doc
+status: active
+---
+
 # Kairon Architecture Audit v3
 
 > Scope: `/Users/xiamingxing/Workspace/projects/kairon`

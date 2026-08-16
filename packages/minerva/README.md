@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # Minerva — Local-First Deep Research System
 
 > *Minerva: Roman goddess of wisdom, strategic warfare, and the arts.*

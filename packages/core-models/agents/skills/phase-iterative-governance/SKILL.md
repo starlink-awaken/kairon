@@ -1,4 +1,10 @@
 ---
+title: SKILL
+type: doc
+status: active
+---
+
+---
 name: multi-agent-phase-iterative
 description: 用于多Agent持续迭代项目治理。适用于需要Phase关卡、WP拆解并行、严格验收、可审计复盘的任务；当用户要求“持续推进、阶段总结、严格关卡、跨Agent协作、共享状态一致”时触发。
 ---

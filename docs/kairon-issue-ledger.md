@@ -1,3 +1,9 @@
+---
+title: kairon-issue-ledger
+type: doc
+status: active
+---
+
 # 5+4+1+1 架构全量分析 · 最终关闭
 
 > 2026-06-06 · 全量审计 · 全量修复 · CI 补齐 · 台账关闭

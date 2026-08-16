@@ -40,7 +40,7 @@ class LLMEntityExtractor:
     """
 
     # omlx 网关配置
-    OMLX_URL = "http://localhost:8000"
+    OMLX_URL = os.environ.get("LLM_GATEWAY_URL", "http://100.96.126.35:4000")
     OMLX_API_KEY = "123456"
     DEFAULT_MODEL = "qwopus3.6-27b-coder-mlx-8bit"
 

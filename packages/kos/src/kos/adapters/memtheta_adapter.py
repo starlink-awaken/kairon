@@ -9,17 +9,27 @@ Exposes operators:
 - update: Overwrite an existing state instead of appending.
 - merge: Distill multiple fragments into a higher-density meta-node.
 - filter: Evict cold nodes.
+
+.. deprecated:: T3-03 (2026-08-08)
+   Theta track is logger-only simulation. Superseded by MOS DualTrackWriter.
+   Raw-track OMO event emit preserved for backward compat; new writes MUST use MOS.
 """
 
 import json
 import logging
 import os
+import warnings
 from pathlib import Path
 from typing import Any
 
 from kairon_observability.tracing import get_tracer
 
 logger = logging.getLogger(__name__)
+warnings.warn(
+    "kos.adapters.memtheta_adapter is deprecated (T3-03). Use MOS DualTrackWriter instead.",
+    DeprecationWarning,
+    stacklevel=2,
+)
 
 # Fallback workspace directory detection
 WORKSPACE_DIR = os.environ.get("ECOS_WORKSPACE", str(Path.home() / "Workspace"))

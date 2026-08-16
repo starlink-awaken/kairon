@@ -1,3 +1,9 @@
+---
+title: gate-rubric
+type: doc
+status: active
+---
+
 # Gate Rubric
 
 通过条件（必须全部满足）：

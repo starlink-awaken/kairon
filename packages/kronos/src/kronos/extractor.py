@@ -387,7 +387,7 @@ def call_ollama(prompt: str, model: str | None = None, system_prompt: str | None
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": prompt})
         resp = httpx.post(
-            "http://localhost:8000/v1/chat/completions",
+            os.environ.get("LLM_GATEWAY_URL", "http://100.96.126.35:4000") + "/v1/chat/completions",
             json={"model": model or _DEFAULT_OMLX_MODEL, "messages": messages, "stream": False},
             timeout=120,
         )
@@ -405,7 +405,7 @@ def call_ollama(prompt: str, model: str | None = None, system_prompt: str | None
     try:
         import httpx
 
-        resp = httpx.post("http://localhost:11434/api/generate", json=payload, timeout=120)
+        resp = httpx.post(OLLAMA_GENERATE_URL, json=payload, timeout=120)
         if resp.status_code != 200:
             return f"[Ollama HTTP {resp.status_code}: {resp.text[:200]}"
         resp_data: dict[str, Any] = resp.json()

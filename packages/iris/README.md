@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # Iris — Connector Hub for Personal Knowledge Platforms
 
 统一连接器中心，对接多个个人知识平台（Notion、Obsidian、飞书等）。

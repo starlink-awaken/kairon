@@ -19,9 +19,10 @@ import subprocess
 import urllib.error
 import urllib.parse
 import urllib.request
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 
 def _flag(name: str, default: str = "0") -> bool:
@@ -71,7 +72,7 @@ class LiveKosSearchBackend:
             hits = self.search("__mos_probe__", limit=1)
             _ = hits
             return self.last_error is None
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             self.last_error = str(exc)
             return False
 
@@ -94,7 +95,7 @@ class LiveKosSearchBackend:
                 raw = self.http_get(path, params)
             else:
                 raw = self._http_get(path, params)
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             self.last_error = str(exc)
             return []
         return self._normalize(raw, limit=limit)
@@ -102,7 +103,7 @@ class LiveKosSearchBackend:
     def _http_get(self, url: str, params: dict[str, str]) -> Any:
         qs = urllib.parse.urlencode(params)
         full = f"{url}?{qs}" if qs else url
-        req = urllib.request.Request(full, headers={"Accept": "application/json"}, method="GET")
+        req = urllib.request.Request(full, headers={"Accept": "application/json"}, method="GET")  # noqa: S310
         try:
             with urllib.request.urlopen(req, timeout=self.timeout_sec) as resp:  # noqa: S310
                 body = resp.read().decode("utf-8", errors="replace")
@@ -185,7 +186,7 @@ class LiveGbrainSearchBackend:
             if self.run_cmd is not None:
                 stdout = self.run_cmd(cmd)
             else:
-                proc = subprocess.run(  # noqa: S603
+                proc = subprocess.run(
                     cmd,
                     cwd=str(ws / "projects" / "gbrain"),
                     capture_output=True,
@@ -197,7 +198,7 @@ class LiveGbrainSearchBackend:
                     self.last_error = (proc.stderr or proc.stdout or "gbrain_failed")[:300]
                     return []
                 stdout = proc.stdout or ""
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             self.last_error = str(exc)
             return []
         return self._parse_output(stdout, limit=limit)
@@ -280,7 +281,7 @@ def gbrain_put_page(
         else:
             if not cli.is_file() or not shutil.which("bun"):
                 return {"ok": False, "skipped": True, "reason": "gbrain_cli_or_bun_missing"}
-            proc = subprocess.run(  # noqa: S603
+            proc = subprocess.run(
                 cmd,
                 cwd=str(ws / "projects" / "gbrain"),
                 capture_output=True,
@@ -292,32 +293,24 @@ def gbrain_put_page(
         if code != 0:
             return {"ok": False, "error": (err or out or "put_failed")[:300], "slug": slug}
         return {"ok": True, "slug": slug, "store": "gbrain"}
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"ok": False, "error": str(exc), "slug": slug}
 
 
 def live_status_snapshot() -> dict[str, Any]:
     """Honest adapter posture for mos.status()."""
-    kos = LiveKosSearchBackend()
+    _kos = LiveKosSearchBackend()
     gbrain = LiveGbrainSearchBackend()
     return {
         "kos": {
             "flag": live_kos_enabled(),
             "url": kos_api_url() if live_kos_enabled() else None,
-            "status": (
-                "live_enabled"
-                if live_kos_enabled()
-                else "fixture_or_partial"
-            ),
+            "status": ("live_enabled" if live_kos_enabled() else "fixture_or_partial"),
         },
         "gbrain": {
             "flag": live_gbrain_enabled(),
             "write_flag": live_gbrain_write_enabled(),
             "cli_available": gbrain.available() if live_gbrain_enabled() else False,
-            "status": (
-                "live_enabled"
-                if live_gbrain_enabled()
-                else "fixture_or_partial"
-            ),
+            "status": ("live_enabled" if live_gbrain_enabled() else "fixture_or_partial"),
         },
     }

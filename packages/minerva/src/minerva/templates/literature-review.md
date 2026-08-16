@@ -1,3 +1,9 @@
+---
+title: literature-review
+type: doc
+status: active
+---
+
 # Literature Review
 
 > Systematic review of academic literature on a research topic.

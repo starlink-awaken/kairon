@@ -3,12 +3,22 @@ Mem0 Adapter for KOS
 ====================
 Provides a dual-track memory pipeline interface wrapping Mem0.
 Implemented for Phase 1 decoupling and memory engine evaluation.
+
+.. deprecated:: T3-03 (2026-08-08)
+   Superseded by ``mos.adapters.mem0_shadow.Mem0ShadowAdapter``.
+   mem0ai moved to optional dependency. New code MUST use MOS.
 """
 
 import logging
+import warnings
 from typing import Any, cast
 
 logger = logging.getLogger(__name__)
+warnings.warn(
+    "kos.adapters.mem0_adapter is deprecated (T3-03). Use mos.adapters.mem0_shadow instead.",
+    DeprecationWarning,
+    stacklevel=2,
+)
 
 try:
     from mem0 import Memory

@@ -29,7 +29,7 @@ from kos.config import get_artifact_path
 # ── Configuration ──────────────────────────────────────
 
 # Primary embedding backend: omlx gateway (qwen3-embedding-8b, 4096d, Chinese-optimized)
-OMLX_URL = os.environ.get("OMLX_URL", "http://localhost:8000")
+OMLX_URL = os.environ.get("OMLX_URL", "http://100.96.126.35:4000")
 OMLX_API_KEY = os.environ.get("OMLX_API_KEY", "123456")
 OMLX_EMBED_MODEL = os.environ.get("OMLX_EMBED_MODEL", "qwen3-embedding-8b")
 

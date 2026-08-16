@@ -6,6 +6,7 @@ import argparse
 import asyncio
 import os
 import sys
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -127,9 +128,23 @@ async def _run_research(args: Any) -> int:
     else:
         sys.stderr.write("[LLM] No cloud API keys — L3/L4 research unavailable\n")
 
-    # Enterprise reasoning — V4 Pro (1M ctx, 2.5折) primary, LongCat free backup
+    # Cloud reasoning — opencode-go (zen/go, 套餐内) primary, DeepSeek 官方 fallback
     cloud_llm = None
-    if os.environ.get("DEEPSEEK_API_KEY"):
+    _og_key_path = os.path.expanduser("~/.config/opencode/keys/opencodego-xiaweizhen.txt")
+    _og_key = ""
+    try:
+        with open(_og_key_path) as _f:
+            _og_key = _f.read().strip()
+    except OSError:
+        _og_key = ""
+    if _og_key:
+        cloud_llm = OpenAICompatibleClient(
+            base_url="https://opencode.ai/zen/go/v1",
+            api_key=_og_key,
+            model="deepseek-v4-flash",
+            timeout=180,
+        )
+    elif os.environ.get("DEEPSEEK_API_KEY"):
         cloud_llm = OpenAICompatibleClient(
             base_url=os.environ.get("AETHERFORGE_URL", "http://127.0.0.1:9290/v1"),
             api_key=os.environ["DEEPSEEK_API_KEY"],
@@ -314,6 +329,37 @@ async def _run_research(args: Any) -> int:
             search_results=results,
         )
         print(f"\n  [green]✓ Result saved:[/green] ~/.minerva/research/{_result_id}/")
+
+        # -- P0-1 知识回流: 研究结果写回 kos 知识中枢 (markdown + Mem0 双写) --
+        try:
+            from kos.ingest import ingest_text
+
+            _kos_title = f"[minerva] {args.query[:80]}"
+            _kos_result = ingest_text(ctx.report, title=_kos_title)
+            _kos_id = _kos_result.get("note_id") or _kos_result.get("id") or "?"
+            print(f"  [blue]↳ 知识回流 kos: ✓ (note_id={_kos_id})[/blue]")
+        except Exception as _kos_exc:
+            # 降级: kos 不可用时静默跳过, 不阻塞研究主流程 (复用 llm-router 降级哲学)
+            print(f"  [yellow]↳ 知识回流 kos 跳过: {_kos_exc}[/yellow]")
+
+        # -- P1-2 统一记忆: 研究摘要写入 mos (Memory OS), 消除第三套存储 --
+        try:
+            from mos.service import MemoryOS
+
+            _mos = MemoryOS()
+            _mos.write(
+                {
+                    "type": "working",
+                    "agent_profile": "minerva",
+                    "content": f"[minerva] {args.query[:80]} — {ctx.report[:400]}",
+                    "metadata": {"query": args.query, "kind": "research"},
+                },
+                role="agent",
+            )
+            print(f"  [blue]↳ 研究记忆写入 mos: ✓[/blue]")
+        except Exception as _mos_exc:
+            # 降级: mos 不可用时静默跳过
+            print(f"  [yellow]↳ 研究记忆 mos 跳过: {_mos_exc}[/yellow]")
 
     quality_score = locals().get("quality_score", "N/A")
     # -- Audit log --

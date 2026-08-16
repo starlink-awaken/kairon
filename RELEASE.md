@@ -1,3 +1,9 @@
+---
+title: RELEASE
+type: doc
+status: active
+---
+
 # Release Process
 
 This document describes how to cut a new release for `kairon`.

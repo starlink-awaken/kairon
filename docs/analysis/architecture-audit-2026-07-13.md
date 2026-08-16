@@ -1,3 +1,9 @@
+---
+title: architecture-audit-2026-07-13
+type: doc
+status: active
+---
+
 # kairon 架构审计 — 2026-07-13
 
 > 数据驱动审计（包 LOC + 跨包 import + agora BOS 路由 + MCP server 盘点），非印象。

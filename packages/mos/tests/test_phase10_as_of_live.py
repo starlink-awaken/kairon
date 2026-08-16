@@ -116,11 +116,7 @@ def test_live_kos_backend_injectable(monkeypatch):
     assert live_kos_enabled() is True
 
     def fake_get(url: str, params: dict[str, str]):
-        return {
-            "results": [
-                {"id": "kos-1", "title": "KOS doc", "snippet": f"hit for {params.get('q')}", "score": 0.9}
-            ]
-        }
+        return {"results": [{"id": "kos-1", "title": "KOS doc", "snippet": f"hit for {params.get('q')}", "score": 0.9}]}
 
     be = LiveKosSearchBackend(http_get=fake_get)
     hits = be.search("memory os", limit=5)

@@ -1,3 +1,9 @@
+---
+title: ADR-0001-hybrid-rag
+type: doc
+status: active
+---
+
 # ADR-0001: Hybrid RAG 混合检索架构
 
 > 状态: 接受 | 日期: 2026-07-08

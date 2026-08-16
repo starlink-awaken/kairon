@@ -1,3 +1,9 @@
+---
+title: README
+type: doc
+status: active
+---
+
 # health-profile
 
 Phase 28 北极星场景 C 的数据底座 —— 家庭成员健康档案（HealthProfile）。

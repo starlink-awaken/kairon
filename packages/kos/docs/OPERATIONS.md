@@ -1,3 +1,9 @@
+---
+title: OPERATIONS
+type: doc
+status: active
+---
+
 # KOS 运维手册
 
 > 版本: v2.0 | 日期: 2026-07-08

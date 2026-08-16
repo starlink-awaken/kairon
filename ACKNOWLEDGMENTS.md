@@ -1,3 +1,9 @@
+---
+title: ACKNOWLEDGMENTS
+type: doc
+status: active
+---
+
 # Acknowledgments
 
 We thank everyone who has contributed to `kairon` through issues, pull requests, documentation, feedback, and testing.

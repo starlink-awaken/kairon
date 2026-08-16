@@ -1,3 +1,9 @@
+---
+title: _toolforge_guide
+type: doc
+status: active
+---
+
 # ToolForge → OntoDerive 推导指导
 ## 目标: 量子计算在药物研发中的应用
 ## 上下文: 量子,医药

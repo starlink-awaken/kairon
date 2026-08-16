@@ -30,6 +30,15 @@ from __future__ import annotations
 
 import json
 import os
+
+
+# 推理端点: 默认 omlxc 网关 (tailscale), 可通过 LLM_GATEWAY_URL 覆盖
+OMLX_GATEWAY_URL = os.environ.get("LLM_GATEWAY_URL", "http://100.96.126.35:4000")
+OMLX_CHAT_URL = f"{OMLX_GATEWAY_URL}/v1/chat/completions"
+OMLX_MODELS_URL = f"{OMLX_GATEWAY_URL}/v1/models"
+OMLX_API_KEY = os.environ.get("OMLX_API_KEY", "local")
+
+
 import sqlite3
 import subprocess as sp
 import sys
@@ -265,11 +274,11 @@ class MultimodalProcessor:
         ).encode("utf-8")
 
         req = urllib.request.Request(
-            "http://localhost:8000/v1/chat/completions",
+            OMLX_CHAT_URL,
             data=payload,
             headers={
                 "Content-Type": "application/json",
-                "Authorization": "Bearer 123456",
+                "Authorization": "Bearer " + OMLX_API_KEY,
             },
             method="POST",
         )
@@ -600,8 +609,8 @@ class MultimodalProcessor:
 
         try:
             req = urllib.request.Request(
-                "http://localhost:8000/v1/models",
-                headers={"Authorization": "Bearer 123456"},
+                OMLX_MODELS_URL,
+                headers={"Authorization": "Bearer " + OMLX_API_KEY},
                 method="GET",
             )
             with urllib.request.urlopen(req, timeout=2.0) as resp:

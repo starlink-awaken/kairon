@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
+from datetime import UTC
 from typing import Any
 
 from mos.acl import filter_hits
@@ -226,14 +227,10 @@ class MemoryOS:
             )
         # Temporal triple / bi-temporal fact (Graphiti-shaped shadow)
         env_dict = env.to_dict()
-        if temporal_enabled() and (
-            (env.subject and env.predicate) or (env.metadata or {}).get("temporal")
-        ):
+        if temporal_enabled() and ((env.subject and env.predicate) or (env.metadata or {}).get("temporal")):
             temporal_res = self._temporal.upsert_fact(env_dict)
         # Production Neo4j write when NEO4J_URI configured (Graphiti/FACT Cypher)
-        if neo4j_configured() and (
-            (env.subject and env.predicate) or (env.metadata or {}).get("temporal")
-        ):
+        if neo4j_configured() and ((env.subject and env.predicate) or (env.metadata or {}).get("temporal")):
             neo4j_res = self._neo4j.upsert_fact(env_dict)
         # Optional live gbrain put (MOS_LIVE_GBRAIN_WRITE=1) — does not replace dual-track
         gbrain_live_res = None
@@ -243,7 +240,7 @@ class MemoryOS:
             if live_gbrain_write_enabled() and env.content and env.type in {"semantic", "episodic", "institutional"}:
                 slug = f"mos/{env.type}/{(env.id or 'anon')[:48]}"
                 gbrain_live_res = gbrain_put_page(slug, env.content)
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             gbrain_live_res = {"ok": False, "error": str(exc)}
         result = WriteResult(
             ok=dt.raw_ok,
@@ -259,7 +256,6 @@ class MemoryOS:
             result.mem0 = {**(mem0_res or {}), "gbrain_live": gbrain_live_res}
         return result
 
-
     def forget(
         self,
         memory_id: str,
@@ -273,9 +269,9 @@ class MemoryOS:
         mem0_res = self._mem0.forget(memory_id) if mem0_enabled() else {"ok": False, "skipped": True}
         neo4j_res = None
         if neo4j_configured():
-            from datetime import datetime, timezone
+            from datetime import datetime
 
-            now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            now = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
             neo4j_res = self._neo4j.invalidate(memory_id, now)
         result = ForgetResult(ok=dt.raw_ok, memory_id=memory_id, dual_track=dt, mem0=mem0_res)
         # attach neo4j on dict via mem0 slot pattern — extend to_dict below if needed
@@ -437,7 +433,7 @@ class MemoryOS:
         neo4j_ok = False
         try:
             neo4j_ok = bool(self._neo4j.available())
-        except Exception:  # noqa: BLE001
+        except Exception:
             neo4j_ok = False
         last_c = self._last_consolidate
         return {
@@ -482,7 +478,7 @@ class MemoryOS:
             from mos.adapters.live_backends import live_status_snapshot
 
             live = live_status_snapshot()
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             live = {"error": str(exc)}
         return {
             "neo4j": {
@@ -496,13 +492,12 @@ class MemoryOS:
             },
             "graphiti": graphiti_backend_status(),
             "temporal": {
-                "status": "partial_simulation",
+                "status": "shadow_active" if temporal_enabled() else "shadow_disabled",
                 "enabled": temporal_enabled(),
                 "as_of_supported": True,
             },
             "kos_gbrain_live": live,
         }
-
 
     def register_search_backend(self, name: str, backend: SearchBackend) -> None:
         self._search[name] = backend

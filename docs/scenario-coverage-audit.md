@@ -1,3 +1,9 @@
+---
+title: scenario-coverage-audit
+type: doc
+status: active
+---
+
 # kairon 场景覆盖审计
 
 > 从**用户应用场景**维度审计 kairon 16 包的覆盖度 + 缺口 (场景维度优化, 2026-07-13)
