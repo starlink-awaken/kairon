@@ -21,13 +21,27 @@ def _gbrain_available() -> bool:
             "http://localhost:3131/health",
             method="GET",
         )
-        with urllib.request.urlopen(req, timeout=2.0) as resp:  # noqa: S310
+        with urllib.request.urlopen(req, timeout=2.0) as resp:
             return resp.status == 200
     except Exception:
         return False
 
 
 class TestKosAgentClient(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # CI 干净环境 kos.db 无表 (本地运行态残留掩盖) — 测试自初始化 schema
+        from kos._default_workspace_config import get_artifact_path
+        from kos.agent.subscription import SubscriptionService
+        from kos.db import get_connection
+        from kos.ontology.schema import init_schema
+
+        # retrievalDatabase = KOS_HOME/kos-index.sqlite (与 SubscriptionService 同源)
+        db = get_artifact_path("retrievalDatabase")
+        SubscriptionService.init_table(db)
+        # kos_entities 等本体表也建在主库 (干净环境 test_search_entities 需要)
+        init_schema(get_connection(db))
+
     @unittest.skipUnless(_gbrain_available(), "gbrain MCP not running on :3131")
     def test_search(self):
         from kos.agent.client import KosAgentClient

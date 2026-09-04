@@ -21,7 +21,7 @@ status: active
 | Package dir | Project name | Version | Python | Role |
 |---|---|---:|---|---|
 | `codeanalyze` | `codeanalyze` | 0.5.0 | `>=3.10` | code and structure analysis |
-| `core-models` | `core-models` | 0.5.0 | `>=3.10` | shared base models |
+| `core-models` | `core-models` | 0.5.0 | `>=3.10` | shared base models — **DEPRECATED** (2026-09-04 清全部消费者, 保留 BOS persona 服务) |
 | `eidos` | `eidos` | 0.5.0 | `>=3.10` | schema and contract layer |
 | `forge` | `forge` | 1.3.0 | `>=3.10` | tooling and marketplace surface |
 | `health-profile` | `health-profile` | 0.1.0 | `>=3.10` | health summarization helpers |

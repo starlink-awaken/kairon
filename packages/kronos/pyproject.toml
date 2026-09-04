@@ -30,7 +30,6 @@ dependencies = [
     "httpx>=0.28.1",
     "cloakbrowser>=0.1",
     "scrapling>=0.4",
-    "core-models",
 ]
 
 [project.scripts]

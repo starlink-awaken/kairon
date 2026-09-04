@@ -6,11 +6,11 @@ from pathlib import Path
 import click
 from rich.panel import Panel
 
-from codeanalyze.commands.common import _validate_path, console  # type: ignore[import-not-found]
-from codeanalyze.core.results import KnowledgeGraph  # type: ignore[import-not-found]
-from codeanalyze.documents.official import analyze_policy_directory  # type: ignore[import-not-found]
-from codeanalyze.integrations.forge import guardrail  # type: ignore[import-not-found]
-from codeanalyze.reports.export import merge_code_kg, policy_graph_to_kg  # type: ignore[import-not-found]
+from codeanalyze.commands.common import _validate_path, console
+from codeanalyze.core.results import KnowledgeGraph
+from codeanalyze.documents.official import analyze_policy_directory
+from codeanalyze.integrations.forge import guardrail
+from codeanalyze.reports.export import merge_code_kg, policy_graph_to_kg
 
 
 def _md_summary(kg: KnowledgeGraph) -> str:

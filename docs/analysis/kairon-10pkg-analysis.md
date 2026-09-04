@@ -9,6 +9,11 @@ status: active
 > 生成时间: 2026-06-03
 > 工作路径: ~/Workspace/projects/kairon/packages/
 
+> **2026-09-04 修复记录**: 本文分析的 `core-models` 僵尸依赖已在本次修复中清除 —
+> eidos/kronos/minerva/ontoderive/health-profile/codeanalyze 的 pyproject.toml 均已移除
+> `core-models` 声明, core-models 标 DEPRECATED (保留 BOS persona 服务)。minerva 的 `mos`
+> 惰性引用已声明为 optional extra。历史结论仅供参考。
+
 ---
 
 ## 1. gc-engine (v0.1.0)

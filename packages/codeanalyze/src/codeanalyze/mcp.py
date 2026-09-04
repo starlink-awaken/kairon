@@ -8,9 +8,9 @@ Or manually via Agora's MCP:
 
 from pathlib import Path
 
-from codeanalyze import __version__  # type: ignore[import-not-found]
-from codeanalyze.core.results import KnowledgeGraph  # type: ignore[import-not-found]
-from codeanalyze.integrations.forge import guardrail  # type: ignore[import-not-found]
+from codeanalyze import __version__
+from codeanalyze.core.results import KnowledgeGraph
+from codeanalyze.integrations.forge import guardrail
 
 try:
     from fastmcp import FastMCP

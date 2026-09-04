@@ -25,15 +25,11 @@ classifiers = [
 ]
 
 dependencies = [
-    "core-models",
     "pydantic>=2.13.4",
 ]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/health_profile"]
-
-[tool.uv.sources]
-core-models = { workspace = true }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

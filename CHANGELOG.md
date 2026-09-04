@@ -8,6 +8,14 @@ status: active
 
 ## Unreleased
 
+### Dependency Hygiene (2026-09-04)
+
+- Removed `core-models` (0 consumers) from eidos/kronos/minerva/ontoderive/health-profile/codeanalyze; package marked DEPRECATED, kept for BOS persona service.
+- Declared `mos` as optional extra for minerva (lazy graceful integration in cli.py).
+- Deleted dead `.github/workflows/` under the embedded directory (never executed by GitHub; real CI lives at repo-root `kairon-ci.yml`).
+- Clarified eidos↔kos optional-integration contract in `KOSLibraryBackend` (no top-level import / no hard dep, avoids package cycle).
+- Removed redundant `# type: ignore[import-not-found]` in codeanalyze mcp.py/export_cmd.py; deduped core-models test file.
+
 ### OntoDerive
 
 - Restored the validation and evolution engines required by the pipeline after cleanup removed their modules.

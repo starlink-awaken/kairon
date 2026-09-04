@@ -21,7 +21,6 @@ classifiers = [
 
 dependencies = [
     "kos",
-    "core-models",
     "health-profile",
     "kairon-utils",
     "httpx>=0.28.1",
@@ -44,6 +43,8 @@ dependencies = [
 
 [project.optional-dependencies]
 eidos = ["eidos>=0.1.0"]
+# mos 为惰性降级集成 (cli.py:346 MemoryOS 写研究记忆, try/except 降级) — 可选, 不强制
+mos = ["mos"]
 tier2 = [
     "graphiti-core[neo4j]>=0.28",
     "semantica>=0.4.0",

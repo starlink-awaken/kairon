@@ -175,6 +175,15 @@ class KOSLibraryBackend:
 
     This backend never raises from the KOS import—if ``kos`` is unavailable
     it operates as a pure SQLite storage with no search/stats capability.
+
+    Dependency contract (2026-09-04):
+    - ``kos`` already declares a hard dependency on ``eidos``
+      (``kos/pyproject.toml``), so ``eidos`` MUST NOT declare ``kos`` in its
+      ``dependencies`` (that would form a package-level cycle uv/pip reject).
+    - The ``kos`` import here is therefore an *optional, host-detection*
+      integration: it must stay inside this ``__init__`` behind the
+      ``try/except ImportError`` guard. Do NOT promote it to a top-level
+      import or add ``kos`` to ``eidos`` dependencies.
     """
 
     def __init__(self) -> None:

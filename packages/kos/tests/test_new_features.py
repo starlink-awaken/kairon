@@ -92,6 +92,20 @@ class TestQueryUnderstanding(unittest.TestCase):
 
 
 class TestGraphRAG(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # CI 干净环境无 kos_relations 表 (本地运行态掩盖) — schema 自初始化
+        from kos.ontology.schema import init_schema
+
+        try:
+            # 用 GraphRAG 实例自身的连接 init (与被测对象 100% 同源, 免路径解析分叉)
+            from kos.graphrag import GraphRAG
+
+            with GraphRAG() as rag:
+                init_schema(rag.conn)
+        except Exception:
+            pass  # 已初始化或环境不支持时跳过
+
     """Test the GraphRAG class."""
 
     def test_import(self):

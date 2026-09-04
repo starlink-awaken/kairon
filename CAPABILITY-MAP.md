@@ -52,7 +52,7 @@ status: active
 
 | 包名 | 功能 | 场景 | 测试数 | 状态 |
 |------|------|------|--------|------|
-| **core-models** | 实体/关系/知识图谱/神经网络 | (声明, 实际 0 外部 import) | 6 | ⚠️ **死基础层**(eidos 有自己 models, 全仓无人用, 待活跃化/删决策) |
+| **core-models** | 实体/关系/知识图谱/神经网络 | (声明, 实际 0 外部 import) | 6 | ⚠️ **DEPRECATED**(2026-09-04 已清全部 6 个消费者依赖; 保留因 BOS persona 服务在用, 待归档) |
 | **codeanalyze** | AST分析/代码图/审查图 | 代码质量/安全/重构 | 13 | ✅ |
 | **kairon-utils** | 工具库(原子写入/锁/重试/日志) | 通用工具 | 10 | ✅ |
 | **kairon-pipeline** | 数据处理管线 | ETL/数据流 | 2 | ⚠️ |
@@ -97,7 +97,7 @@ status: active
 ### 3.2 按依赖关系
 
 ```
-core-models ←── eidos, kos, kronos, minerva, ontoderive
+core-models ←── (无消费者, 2026-09-04 清依赖, 标 DEPRECATED)
 kairon-utils ←── 所有包
 kairon-lib-events ←── forge, kronos
 kairon-pipeline ←── kronos, minerva
@@ -155,4 +155,4 @@ kairon-pipeline ←── kronos, minerva
 
 ---
 
-*最后更新: 2026-07-12 (eidos 纠偏: Schema→认知记忆系统, kairon 枢纽; core-models 标死 0 外部 import)*
+*最后更新: 2026-09-04 (core-models 清全部消费者依赖 → DEPRECATED, 保留 BOS persona 服务; 先前 2026-07-12: eidos 纠偏 Schema→认知记忆系统, kairon 枢纽)*
