@@ -1,5 +1,10 @@
 """Forge — 统一工具注册、发现与治理层"""
 
+from forge.design_asset_adapter import (
+    build_design_prompt,
+    scan_design_assets,
+    write_manifest,
+)
 from forge.forge import (  # type: ignore[import-not-found]
     ALIASES,
     COMMANDS,
@@ -27,6 +32,9 @@ __all__ = (
     "SRC",
     "TOOLBOX",
     "VERIFY_COMMANDS",
+    "build_design_prompt",
+    "scan_design_assets",
+    "write_manifest",
     "cmd_capture",
     "cmd_dashboard",
     "cmd_health",
