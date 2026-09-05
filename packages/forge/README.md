@@ -157,6 +157,10 @@ forge asset list          # 资产清册
 forge asset scan          # 自动发现
 forge asset register ...  # 注册工具
 
+# 设计资产
+forge design-assets /path/to/awesome-design-md --query claude --limit 3
+forge design /path/to/awesome-design-md --brand claude --brief "Create a premium SaaS landing page"
+
 # 定时任务
 forge cron list           # 列出定时任务
 forge cron enable xxx     # 启用任务
