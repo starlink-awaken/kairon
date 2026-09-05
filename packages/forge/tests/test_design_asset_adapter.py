@@ -4,7 +4,7 @@ from pathlib import Path
 
 import yaml
 
-from forge.design_asset_adapter import build_design_prompt, scan_design_assets, write_manifest
+from forge.design_asset_adapter import build_design_prompt, match_assets, scan_design_assets, write_manifest
 
 
 def test_scan_design_assets(tmp_path: Path) -> None:
@@ -44,3 +44,7 @@ def test_write_manifest_and_prompt(tmp_path: Path) -> None:
     prompt = build_design_prompt(manifest["assets"][0], "Create a fintech landing page")
     assert "Stripe" in prompt
     assert "Palette tokens" in prompt
+    assert "Summary:" in prompt
+
+    matches = match_assets(manifest["assets"], brand="stripe", platform="web")
+    assert len(matches) == 1

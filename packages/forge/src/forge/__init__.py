@@ -2,6 +2,7 @@
 
 from forge.design_asset_adapter import (
     build_design_prompt,
+    match_assets,
     scan_design_assets,
     write_manifest,
 )
@@ -33,6 +34,7 @@ __all__ = (
     "TOOLBOX",
     "VERIFY_COMMANDS",
     "build_design_prompt",
+    "match_assets",
     "scan_design_assets",
     "write_manifest",
     "cmd_capture",

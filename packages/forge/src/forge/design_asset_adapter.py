@@ -53,8 +53,10 @@ def _infer_platform(text: str) -> str:
     lowered = text.lower()
     if "mobile" in lowered or "ios" in lowered or "android" in lowered:
         return "mobile"
-    if "desktop" in lowered or "dashboard" in lowered:
+    if "desktop app" in lowered or "native desktop" in lowered or "windows app" in lowered:
         return "desktop"
+    if "dashboard" in lowered or "saas" in lowered or "webapp" in lowered or "landing page" in lowered:
+        return "web"
     return "web"
 
 
@@ -78,16 +80,29 @@ def _infer_layout(text: str) -> str:
     return "landing-page"
 
 
+def _extract_summary(text: str) -> str:
+    paragraphs = re.split(r"\n\s*\n", text.strip())
+    for paragraph in paragraphs:
+        cleaned = re.sub(r"^#+\s*", "", paragraph.strip())
+        cleaned = re.sub(r"\s+", " ", cleaned)
+        if cleaned and not cleaned.startswith("#"):
+            return cleaned[:220]
+    return "Design reference"
+
+
 def _metadata_from_design_file(file_path: Path) -> dict[str, Any]:
     text = file_path.read_text(encoding="utf-8")
     brand = file_path.parent.name
     title = _extract_title(text)
     if brand in {"design-md", ".", ""}:
         brand = title
+    summary = _extract_summary(text)
+    tags = _extract_headings(text)
     return {
         "id": _slugify(f"{brand}-{file_path.parent.name}"),
         "brand": brand,
         "title": title,
+        "summary": summary,
         "source_repo": str(file_path.parents[2]),
         "source_path": str(file_path.relative_to(file_path.parents[2])).replace("\\", "/"),
         "layer": "forge",
@@ -96,7 +111,7 @@ def _metadata_from_design_file(file_path: Path) -> dict[str, Any]:
         "style_family": _infer_style_family(text, brand),
         "layout_pattern": _infer_layout(text),
         "palette_tokens": _extract_palette(text),
-        "tags": _extract_headings(text),
+        "tags": tags,
         "governance": {
             "context": "external design corpus only",
             "read_only": True,
@@ -115,15 +130,50 @@ def scan_design_assets(repo_path: str | Path) -> list[dict[str, Any]]:
         if ".git" in design_file.parts:
             continue
         assets.append(_metadata_from_design_file(design_file))
-    return assets
+    return sorted(assets, key=lambda item: (item.get("brand", "").lower(), item.get("title", "").lower()))
+
+
+def match_assets(
+    assets: list[dict[str, Any]],
+    *,
+    brand: str | None = None,
+    platform: str | None = None,
+    style_family: str | None = None,
+    query: str | None = None,
+) -> list[dict[str, Any]]:
+    matches: list[dict[str, Any]] = []
+    query_tokens = {part.lower() for part in re.findall(r"[a-z0-9]+", (query or ""))}
+    for asset in assets:
+        candidate = asset.get("brand", "").lower()
+        if brand and brand.lower() not in candidate and brand.lower() not in str(asset.get("title", "")).lower():
+            continue
+        if platform and asset.get("platform") != platform:
+            continue
+        if style_family and asset.get("style_family") != style_family:
+            continue
+        if query_tokens:
+            haystack = " ".join(
+                [
+                    str(asset.get("title", "")),
+                    str(asset.get("brand", "")),
+                    " ".join(str(tag) for tag in asset.get("tags", [])),
+                    str(asset.get("summary", "")),
+                ]
+            ).lower()
+            if not query_tokens.issubset(set(re.findall(r"[a-z0-9]+", haystack))):
+                continue
+        matches.append(asset)
+    return matches
 
 
 def write_manifest(repo_path: str | Path, output_path: str | Path | None = None) -> dict[str, Any]:
     root = Path(repo_path).expanduser().resolve()
+    assets = scan_design_assets(root)
     contents = {
         **DEFAULT_MANIFEST,
         "source_repo": str(root),
-        "assets": scan_design_assets(root),
+        "asset_count": len(assets),
+        "assets": assets,
     }
     target = Path(output_path) if output_path else root / "design-asset-manifest.yaml"
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -137,15 +187,19 @@ def build_design_prompt(asset: dict[str, Any], brief: str) -> str:
     layout = asset.get("layout_pattern", "landing-page")
     brand = asset.get("brand", "brand")
     title = asset.get("title", brand)
+    summary = asset.get("summary", "Design reference")
+    tags = ", ".join(asset.get("tags") or ["ui", "product"]) or "ui, product"
     platform = asset.get("platform", "web")
 
     return (
         "Use the following design reference as a read-only inspiration source for a UI generation task.\n"
         f"Title: {title}\n"
         f"Brand: {brand}\n"
+        f"Summary: {summary}\n"
         f"Style family: {style_family}\n"
         f"Platform: {platform}\n"
         f"Layout pattern: {layout}\n"
+        f"Tags: {tags}\n"
         f"Palette tokens: {palette}\n"
         f"Task brief: {brief}\n"
         "Constraints: keep omostation governance as the control plane; do not treat this as runtime logic; "
