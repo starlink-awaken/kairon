@@ -68,6 +68,10 @@ ai_toolbox.py — Forge 统一命令行入口
   asset             — 资产清册（list/register/check/scan/export）
   cron              — 定时任务管理（list/register/enable/disable/status/reminder）
 
+  # 设计资产
+  design-assets     — 扫描外部 DESIGN.md 语料，并生成 prompt 上下文
+  design            — design-assets 的别名
+
   # 看门狗 & 面板
   watch             — 启动健康检查看门狗守护进程
   dashboard         — 启动 Web 仪表盘（基于 http_api.py）
@@ -90,6 +94,12 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from forge.design_asset_adapter import (
+    build_design_context,
+    build_design_prompt,
+    choose_design_assets,
+    write_manifest,
+)
 from forge.forge_config import ADAPTERS_DIR as ADAPTERS  # type: ignore[import-not-found]
 from forge.forge_config import FORGE_ROOT as TOOLBOX
 from forge.forge_config import SCRIPTS_DIR as SCRIPTS
@@ -236,6 +246,55 @@ def cmd_verify(args: list[str]) -> None:
     else:
         print(f"❌ 未知阶段: {phase}，可选: {', '.join(VERIFY_COMMANDS.keys())}, all")
         sys.exit(1)
+
+
+def cmd_design_assets(args: list[str]) -> None:
+    """Scan external design corpus, match styles, and build a forge prompt context."""
+    parser = argparse.ArgumentParser(prog="forge design-assets", description="Scan external DESIGN.md corpora and build a Forge-compatible prompt context.")
+    parser.add_argument("repo", nargs="?", default=".", help="Path to the external design corpus root; defaults to the current directory")
+    parser.add_argument("--output", default=None, help="Path for the generated YAML manifest; defaults to <repo>/design-asset-manifest.yaml")
+    parser.add_argument("--brand", default=None, help="Brand filter, e.g. stripe")
+    parser.add_argument("--platform", default=None, help="Platform filter, e.g. web/mobile/desktop")
+    parser.add_argument("--style-family", default=None, help="Style family filter, e.g. saas-product")
+    parser.add_argument("--query", default=None, help="Free-text search across asset title, summary, tags, and brand")
+    parser.add_argument("--limit", type=int, default=5, help="Maximum number of matches to return")
+    parser.add_argument("--brief", default="Create a premium SaaS landing page with a clean, high-contrast product aesthetic.", help="Prompt brief to inject into the selected design context")
+    parsed = parser.parse_args(args)
+
+    repo_path = Path(parsed.repo).expanduser().resolve()
+    manifest = write_manifest(repo_path, parsed.output)
+    assets = choose_design_assets(
+        repo_path,
+        brand=parsed.brand,
+        platform=parsed.platform,
+        style_family=parsed.style_family,
+        query=parsed.query,
+        limit=parsed.limit,
+    )
+
+    if not assets:
+        print(f"No design assets matched repo={repo_path}")
+        print(json.dumps({"repo": str(repo_path), "asset_count": len(manifest["assets"]), "matches": []}, ensure_ascii=False, indent=2))
+        return
+
+    selected = assets[0]
+    context = build_design_context(selected, parsed.brief)
+    prompt = build_design_prompt(selected, parsed.brief)
+    print(json.dumps({
+        "repo": str(repo_path),
+        "asset_count": len(manifest["assets"]),
+        "matched_count": len(assets),
+        "selected": {
+            "id": selected.get("id"),
+            "brand": selected.get("brand"),
+            "title": selected.get("title"),
+            "platform": selected.get("platform"),
+            "style_family": selected.get("style_family"),
+            "source_path": selected.get("source_path"),
+        },
+        "design_context": context,
+        "prompt": prompt,
+    }, ensure_ascii=False, indent=2))
 
 
 def cmd_schedule(args: list[str]) -> None:
@@ -565,6 +624,7 @@ def cmd_help() -> None:
     print("  forge cron               # 定时任务管理（list/enable/disable/status）")
     print("  forge entropy            # 反熵系统（sunrise/sunset/converge）")
     print("  forge verify all         # 全量验证")
+    print("  forge design-assets      # 扫描外部 DESIGN.md 资产并生成 prompt context")
     print()
 
 
@@ -716,6 +776,8 @@ def _build_command_map() -> dict:
     for name in ("verify", "schedule", "sniff", "install", "market"):
         reg(name, "args", globals()[f"cmd_{name}"])
 
+    reg("design-assets", "args", cmd_design_assets)
+    reg("design", "args", cmd_design_assets)
     reg("capture", "args", cmd_capture)
 
     # 反熵子命令：直接调 Python 跳过 shell

@@ -29,7 +29,21 @@ def _slugify(value: str) -> str:
     return value or "design-asset"
 
 
+def _extract_frontmatter(text: str) -> dict[str, Any]:
+    match = re.match(r"^---\s*\n(.*?)\n---\s*\n?", text, re.DOTALL)
+    if not match:
+        return {}
+    try:
+        payload = yaml.safe_load(match.group(1) or "")
+    except Exception:
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
 def _extract_title(text: str) -> str:
+    metadata = _extract_frontmatter(text)
+    if metadata.get("name"):
+        return str(metadata["name"]).strip()
     match = re.search(r"^#\s+(.+)$", text, re.MULTILINE)
     return match.group(1).strip() if match else "Design Asset"
 
@@ -41,7 +55,7 @@ def _extract_headings(text: str) -> list[str]:
 
 
 def _extract_palette(text: str) -> list[str]:
-    colors = re.findall(r"#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})", text)
+    colors = re.findall(r"#(?:[0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})", text)
     unique = []
     for color in colors:
         if color not in unique:
@@ -81,6 +95,10 @@ def _infer_layout(text: str) -> str:
 
 
 def _extract_summary(text: str) -> str:
+    metadata = _extract_frontmatter(text)
+    if isinstance(metadata.get("description"), str) and metadata["description"].strip():
+        return metadata["description"].strip()[:220]
+
     paragraphs = re.split(r"\n\s*\n", text.strip())
     for paragraph in paragraphs:
         cleaned = re.sub(r"^#+\s*", "", paragraph.strip())
@@ -181,15 +199,54 @@ def write_manifest(repo_path: str | Path, output_path: str | Path | None = None)
     return contents
 
 
-def build_design_prompt(asset: dict[str, Any], brief: str) -> str:
-    palette = ", ".join(asset.get("palette_tokens") or ["#0f172a", "#e2e8f0", "#f8fafc"]) or "#0f172a"
+def build_design_context(asset: dict[str, Any], brief: str) -> dict[str, Any]:
+    palette = asset.get("palette_tokens") or ["#0f172a", "#e2e8f0", "#f8fafc"]
     style_family = asset.get("style_family", "systematic")
     layout = asset.get("layout_pattern", "landing-page")
     brand = asset.get("brand", "brand")
     title = asset.get("title", brand)
     summary = asset.get("summary", "Design reference")
-    tags = ", ".join(asset.get("tags") or ["ui", "product"]) or "ui, product"
+    tags = asset.get("tags") or ["ui", "product"]
     platform = asset.get("platform", "web")
+
+    return {
+        "brand": brand,
+        "title": title,
+        "summary": summary,
+        "platform": platform,
+        "style_family": style_family,
+        "layout_pattern": layout,
+        "palette_tokens": palette,
+        "typography": {
+            "headline": "high-contrast brand-led display",
+            "body": "clean sans-serif product interface",
+            "tone": "premium editorial" if "editorial" in style_family.lower() else "product-first",
+        },
+        "layout_intent": {
+            "composition": layout,
+            "density": "balanced" if "dashboard" in layout.lower() else "airy",
+            "primary_focus": "conversion-driven product storytelling",
+        },
+        "ui_traits": [str(tag) for tag in tags[:6]],
+        "brief": brief,
+        "governance": {
+            "control_plane": "omostation",
+            "read_only": True,
+            "allowed_usage": "design-context injection for UI generation",
+        },
+    }
+
+
+def build_design_prompt(asset: dict[str, Any], brief: str) -> str:
+    context = build_design_context(asset, brief)
+    palette = ", ".join(context["palette_tokens"]) or "#0f172a"
+    style_family = context["style_family"]
+    layout = context["layout_pattern"]
+    brand = context["brand"]
+    title = context["title"]
+    summary = context["summary"]
+    tags = ", ".join(context["ui_traits"]) or "ui, product"
+    platform = context["platform"]
 
     return (
         "Use the following design reference as a read-only inspiration source for a UI generation task.\n"
@@ -205,6 +262,20 @@ def build_design_prompt(asset: dict[str, Any], brief: str) -> str:
         "Constraints: keep omostation governance as the control plane; do not treat this as runtime logic; "
         "favour consistent spacing, high contrast, product clarity, and a design system that reads like a premium SaaS UI."
     )
+
+
+def choose_design_assets(
+    repo_path: str | Path,
+    *,
+    brand: str | None = None,
+    platform: str | None = None,
+    style_family: str | None = None,
+    query: str | None = None,
+    limit: int = 5,
+) -> list[dict[str, Any]]:
+    assets = scan_design_assets(repo_path)
+    matched = match_assets(assets, brand=brand, platform=platform, style_family=style_family, query=query)
+    return matched[:limit]
 
 
 def _cli() -> None:

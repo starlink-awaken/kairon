@@ -4,7 +4,14 @@ from pathlib import Path
 
 import yaml
 
-from forge.design_asset_adapter import build_design_prompt, match_assets, scan_design_assets, write_manifest
+from forge.design_asset_adapter import (
+    build_design_context,
+    build_design_prompt,
+    choose_design_assets,
+    match_assets,
+    scan_design_assets,
+    write_manifest,
+)
 
 
 def test_scan_design_assets(tmp_path: Path) -> None:
@@ -41,6 +48,11 @@ def test_write_manifest_and_prompt(tmp_path: Path) -> None:
     parsed = yaml.safe_load(output_file.read_text(encoding="utf-8"))
     assert parsed["assets"][0]["title"] == "Stripe"
 
+    context = build_design_context(manifest["assets"][0], "Create a fintech landing page")
+    assert context["brand"] == "stripe"
+    assert context["layout_pattern"] in {"landing-page", "sidebar-dashboard"}
+    assert context["governance"]["control_plane"] == "omostation"
+
     prompt = build_design_prompt(manifest["assets"][0], "Create a fintech landing page")
     assert "Stripe" in prompt
     assert "Palette tokens" in prompt
@@ -48,3 +60,23 @@ def test_write_manifest_and_prompt(tmp_path: Path) -> None:
 
     matches = match_assets(manifest["assets"], brand="stripe", platform="web")
     assert len(matches) == 1
+
+
+def test_choose_design_assets_filters_and_builds_prompt(tmp_path: Path) -> None:
+    repo = tmp_path / "awesome-design-md"
+    design_file = repo / "design-md" / "stripe" / "DESIGN.md"
+    design_file.parent.mkdir(parents=True)
+    design_file.write_text(
+        "# Stripe\n\n## SaaS product dashboard\n\nPremium fintech landing page with dark mode and product cards.\n"
+        "Colors: #635bff #0f172a #f8fafc\n",
+        encoding="utf-8",
+    )
+
+    matches = choose_design_assets(repo, brand="stripe", platform="web", query="dashboard", limit=3)
+    assert len(matches) == 1
+    assert matches[0]["brand"] == "stripe"
+    assert "dashboard" in " ".join(matches[0]["tags"]).lower()
+
+    prompt = build_design_prompt(matches[0], "Build a fintech product page")
+    assert "Stripe" in prompt
+    assert "fintech product page" in prompt
