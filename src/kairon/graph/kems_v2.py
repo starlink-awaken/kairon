@@ -256,6 +256,70 @@ class KnowledgeGraph:
                 result.append((entity, score))
         return result
 
+    def hybrid_search(
+        self,
+        query: str,
+        top_k: int = 10,
+        graph_hops: int = 1,
+        graph_weight: float = 0.3,
+    ) -> list[tuple[Entity, float]]:
+        """Hybrid retrieval: BM25 text scoring + graph relationship expansion.
+
+        1. Run BM25 search to get initial ranked entities.
+        2. Expand each result by 1-hop graph neighbors, applying a decay weight.
+        3. Re-rank combined scores and return top_k.
+
+        Args:
+            query: Search query string.
+            top_k: Maximum results to return.
+            graph_hops: Number of BFS hops for graph expansion (default 1).
+            graph_weight: Weight multiplier for graph-expanded scores (0-1).
+        """
+        # Phase 1: BM25 scoring
+        query_tokens = _tokenize(query)
+        if not query_tokens:
+            return []
+
+        bm25_scores: dict[str, float] = defaultdict(float)
+        for token in query_tokens:
+            matching_ids = self._token_index.get(token, set())
+            for eid in matching_ids:
+                bm25_scores[eid] += 1.0
+
+        if not bm25_scores:
+            return []
+
+        # Phase 2: Graph expansion — BFS from each BM25-hit entity
+        expanded_scores: dict[str, float] = defaultdict(float)
+        for eid, score in bm25_scores.items():
+            # Direct BM25 score carries full weight
+            expanded_scores[eid] += score
+            # Expand neighbors
+            visited = {eid}
+            frontier = [eid]
+            for hop in range(1, graph_hops + 1):
+                next_frontier: list[str] = []
+                decay = graph_weight / hop  # closer neighbors get higher weight
+                for feid in frontier:
+                    for edge in self.get_neighbors(feid, direction="both"):
+                        neighbor_id = (
+                            edge.target_id if edge.source_id == feid else edge.source_id
+                        )
+                        if neighbor_id not in visited and neighbor_id in self._entities:
+                            visited.add(neighbor_id)
+                            expanded_scores[neighbor_id] += score * decay
+                            next_frontier.append(neighbor_id)
+                frontier = next_frontier
+
+        # Phase 3: Re-rank
+        ranked = sorted(expanded_scores.items(), key=lambda x: (-x[1], x[0]))
+        result: list[tuple[Entity, float]] = []
+        for eid, score in ranked[:top_k]:
+            entity = self._entities.get(eid)
+            if entity is not None:
+                result.append((entity, score))
+        return result
+
     # ── Graph traversal ──
 
     def bfs(

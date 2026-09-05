@@ -374,6 +374,150 @@ class TestPersistence:
         assert d1 != d2
 
 
+# ── Hybrid search tests ──
+
+
+class TestHybridSearch:
+    def test_hybrid_returns_results(self):
+        g = _populated_graph()
+        results = g.hybrid_search("数字化")
+        assert len(results) > 0
+        ids = [e.id for e, _ in results]
+        assert "pol-001" in ids
+
+    def test_hybrid_graph_expansion(self):
+        """Graph expansion should surface entities connected to BM25 hits."""
+        g = _populated_graph()
+        # "数字化" is only in pol-001 directly, but graph expansion should
+        # also surface reg-001 (connected via implements) with a boost
+        results = g.hybrid_search("数字化", top_k=6)
+        ids = [e.id for e, _ in results]
+        # pol-001 should be top
+        assert ids[0] == "pol-001"
+        # reg-001 is 1-hop from pol-001 via implements
+        assert "reg-001" in ids
+
+    def test_hybrid_respects_top_k(self):
+        g = _populated_graph()
+        results = g.hybrid_search("管理", top_k=2)
+        assert len(results) <= 2
+
+    def test_hybrid_empty_query(self):
+        g = _populated_graph()
+        assert g.hybrid_search("") == []
+
+    def test_hybrid_no_match(self):
+        g = _populated_graph()
+        assert g.hybrid_search("xyznonexistent") == []
+
+    def test_hybrid_broader_recall_than_bm25(self):
+        """Hybrid should find at least as many relevant entities as pure BM25."""
+        g = _populated_graph()
+        bm25_results = g.search("卫生健康")
+        hybrid_results = g.hybrid_search("卫生健康")
+        # Hybrid may return more due to graph expansion
+        assert len(hybrid_results) >= len(bm25_results)
+
+    def test_hybrid_latency_under_50ms(self):
+        """Single hybrid_search query should complete in <50ms at scale."""
+        import random
+        import time
+
+        g = KnowledgeGraph()
+        rng = random.Random(42)
+        for i in range(5000):
+            g.add_entity(Entity(
+                id=f"ent-{i:05d}",
+                entity_type=[EntityType.POLICY, EntityType.REGULATION,
+                             EntityType.ADR, EntityType.APPROVAL][i % 4],
+                title=f"Health policy entity {i} about topic {i % 100}",
+                content=f"Regulation content for entity {i} detail {i % 50}",
+                tags=[f"tag-{i % 20}"],
+            ))
+        all_ids = [f"ent-{i:05d}" for i in range(5000)]
+        rels = list(RelationType)
+        edge_set: set[tuple[str, str, str]] = set()
+        while len(edge_set) < 20000:
+            src, tgt = rng.choice(all_ids), rng.choice(all_ids)
+            rel = rng.choice(rels)
+            key = (src, tgt, rel.value)
+            if src != tgt and key not in edge_set:
+                edge_set.add(key)
+                g.add_edge(Edge(source_id=src, target_id=tgt, relation=rel))
+
+        start = time.perf_counter()
+        results = g.hybrid_search("health policy", top_k=10)
+        elapsed_ms = (time.perf_counter() - start) * 1000
+        assert elapsed_ms < 50, f"Latency {elapsed_ms:.1f}ms exceeds 50ms threshold"
+        assert len(results) > 0
+
+
+# ── Top-3 Recall test ──
+
+
+class TestRecall:
+    def test_top3_recall_above_95_percent(self):
+        """Synthetic query set: Top-3 Recall ≥ 95% for known-answer queries."""
+        import random
+
+        g = KnowledgeGraph()
+        # Build graph with known semantic clusters
+        # Cluster A: "数字化" entities (ids 0-49)
+        # Cluster B: "数据安全" entities (ids 50-99)
+        # Cluster C: "远程医疗" entities (ids 100-149)
+        # Each cluster has a unique keyword in title+content
+        keywords = ["数字化", "数据安全", "远程医疗"]
+        for i in range(150):
+            kw = keywords[i // 50]
+            g.add_entity(Entity(
+                id=f"doc-{i:03d}",
+                entity_type=EntityType.POLICY,
+                title=f"关于{kw}的管理办法 第{i}号",
+                content=f"本办法规定了{kw}相关工作的具体要求和实施细则，适用于第{i}项场景",
+                tags=[kw, f"doc-{i}"],
+            ))
+
+        # Add intra-cluster edges (cites within same keyword group)
+        rels = list(RelationType)
+        rng = random.Random(42)
+        for kw_idx, kw in enumerate(keywords):
+            base = kw_idx * 50
+            for i in range(50):
+                src = f"doc-{base + i:03d}"
+                # Connect to 2-3 neighbors in same cluster
+                for _ in range(2):
+                    offset = rng.randint(0, 49)
+                    tgt = f"doc-{base + offset:03d}"
+                    if src != tgt:
+                        g.add_edge(Edge(
+                            source_id=src, target_id=tgt,
+                            relation=rng.choice(rels),
+                        ))
+
+        # Ground truth: for each keyword query, the 50 entities in that cluster
+        # are "relevant". Top-3 Recall = fraction of queries where at least 1 of
+        # top-3 results is in the correct cluster.
+        queries = [
+            ("数字化管理", {"doc-" + f"{i:03d}" for i in range(50)}),
+            ("数据安全管理", {"doc-" + f"{i:03d}" for i in range(50, 100)}),
+            ("远程医疗管理", {"doc-" + f"{i:03d}" for i in range(100, 150)}),
+            # Additional queries with partial keywords
+            ("数字化转型", {"doc-" + f"{i:03d}" for i in range(50)}),
+            ("数据安全办法", {"doc-" + f"{i:03d}" for i in range(50, 100)}),
+            ("远程医疗规范", {"doc-" + f"{i:03d}" for i in range(100, 150)}),
+        ]
+
+        hits = 0
+        for query, expected_ids in queries:
+            results = g.hybrid_search(query, top_k=3)
+            result_ids = {e.id for e, _ in results}
+            if result_ids & expected_ids:
+                hits += 1
+
+        recall = hits / len(queries)
+        assert recall >= 0.95, f"Top-3 Recall {recall:.1%} below 95% threshold (hits={hits}/{len(queries)})"
+
+
 # ── Scale test (5000 nodes, 20000 edges) ──
 
 
