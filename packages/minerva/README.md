@@ -195,10 +195,10 @@ export ZHIPU_API_KEY="..."               # Zhipu search
 | Metric | Value |
 |--------|-------|
 | Version | **0.10.0** |
-| Tests | 238 (all passing) |
-| Source lines | ~8,500 |
-| Source files | 42 |
-| Test files | 21 |
+| Tests | (count via `pytest --collect-only -q`) |
+| Source lines | (count via `find src -name "*.py" \| wc -l`) |
+| Source files | (count via `find src -name "*.py" \| wc -l`) |
+| Test files | (count via `find tests -name "*.py" \| wc -l`) |
 | Maturity | Production-ready Beta |
 
 ---
@@ -320,10 +320,10 @@ Minerva 使用 **Sophia** 符号范式引擎动态组合研究操作：
 | 指标 | 数值 |
 |------|------|
 | 版本 | **0.10.0** |
-| 测试数 | 238 (全部通过) |
-| 代码行数 | ~8,500 |
-| 源文件数 | 42 |
-| 测试文件数 | 21 |
+| 测试数 | `pytest --collect-only -q` |
+| 代码行数 | `find src -name "*.py" \| wc -l` |
+| 源文件数 | `find src -name "*.py" \| wc -l` |
+| 测试文件数 | `find tests -name "*.py" \| wc -l` |
 | 成熟度 | 生产就绪 Beta |
 
 ### 许可证

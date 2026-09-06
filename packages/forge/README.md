@@ -17,14 +17,14 @@ Forge 是跨项目的统一工具注册、发现与治理层。它维护单一�
 | **工具注册表** | `tools-registry.json` — 工具 SSOT，含 capabilities、health、telemetry (计数以实际文件为准) |
 | **统一配置** | `forge_config.py` — 所有路径常量、环境变量的单一入口 |
 | **资产 CLI** | `asset_cli.py` — 统一的 asset 模型（v3/v4），支持 16 种实体类型 |
-| **MCP Server** | `server/mcp_server.py` — 24 个 MCP 工具暴露注册表能力 |
-| **HTTP API** | `http_api.py` — REST 查询 + 导出，167 资产/37 分类 |
-| **CLI 引擎** | `forge.py` — 57 个命令统一注册表（装饰器分发，零 shell 调用） |
+| **MCP Server** | `server/mcp_server.py` — MCP 工具暴露注册表能力 (计数以实际文件为准) |
+| **HTTP API** | `http_api.py` — REST 查询 + 导出 (资产/分类数以实际文件为准) |
+| **CLI 引擎** | `forge.py` — 命令统一注册表（装饰器分发，零 shell 调用，计数以实际注册为准) |
 | **知识图谱** | `build_graph.py` + `query_graph.py` — 构建与查询 tool→capability→category 关系图 |
 | **注册表同步** | `sync_registry.py` — 生成 Markdown 快照 + 日志截断 + Agora 事件 |
 | **验证系统** | `verify.py` — Phases 1/2/3 闭环验证，纯 Python 实现 |
 | **反熵系统** | `entropy.py` — 候选池（sunrise）、过期标记（sunset）、收敛检查 |
-| **健康检查** | `health_check.py` — 每日健康巡检，11 项检查 |
+| **健康检查** | `health_check.py` — 每日健康巡检 (检查项以实际代码为准) |
 | **看门狗** | `watchdog.py` — 后台守护进程监视关键路径与状态变化 |
 | **Web 看板** | `dashboard.html` — 浏览器状态看板，实时项目概览，支持 CSV 导出 |
 | **定时任务** | `cron_manager.py` + `cron_utils.py` — 统一管理 macOS launchd 定时任务 |
@@ -51,10 +51,10 @@ python3 src/forge.py asset list
 ```
 Forge/
 ├── src/                    # Python 源码（核心模块）
-│   ├── forge.py            # 主 CLI（57 命令统一注册表）
+│   ├── forge.py            # 主 CLI（命令统一注册表）
 │   ├── forge_config.py     # 统一配置（路径/环境变量）
 │   ├── asset_cli.py        # 统一资产模型 (v3/v4)
-│   ├── http_api.py         # REST API（12 端点）
+│   ├── http_api.py         # REST API（端点计数以实际路由为准）
 │   ├── build_graph.py      # 知识图谱构建
 │   ├── query_graph.py      # 图谱查询
 │   ├── recommend.py        # 知识推荐
@@ -68,16 +68,16 @@ Forge/
 │   ├── watchdog.py         # 看门狗守护进程
 │   └── graph_*.py          # 图谱工具与可视化
 ├── server/                 # MCP Server
-│   └── mcp_server.py       # 24 个 MCP 工具
+│   └── mcp_server.py       # MCP 工具（计数以实际文件为准）
 ├── scripts/                # 运维脚本（逐步迁移中）
 │   └── rss-manager.py      # RSS 源管理
 ├── adapters/               # 外部系统桥接
 │   ├── kos-bridge.sh
 │   └── sync-agora.sh
-├── tests/                  # 测试套件（294 tests）
-├── tools-registry.json     # 主注册表（167 tools）
+├── tests/                  # 测试套件（计数以 pytest --collect-only 为准）
+├── tools-registry.json     # 主注册表（计数以实际文件为准）
 ├── assets/                 # 统一资产注册表
-│   └── registry.json       # v4 格式，9 类实体
+│   └── registry.json       # v4 格式（实体分类数以实际文件为准）
 └── docs/                   # 架构文档 + 定时任务清册
 ```
 
@@ -100,7 +100,7 @@ python3 rss-manager.py sync
 所有定时任务统一注册在 `assets/registry.json → entities.cron`，通过 `forge cron` 管理。
 
 ```bash
-# 列出所有定时任务（41 个）
+# 列出所有定时任务
 forge cron list
 
 # 启用/禁用
@@ -122,7 +122,7 @@ forge cron reminder-remove "候诊"      # 按关键词删除提醒
 
 ## MCP 工具集
 
-Forge MCP Server 提供 24 个工具，可通过 Claude Code 等 AI Agent 调用：
+Forge MCP Server 提供工具，可通过 Claude Code 等 AI Agent 调用：
 
 | 分类 | 工具 | 说明 |
 |------|------|------|
@@ -139,7 +139,7 @@ Forge MCP Server 提供 24 个工具，可通过 Claude Code 等 AI Agent 调用
 
 ## CLI 命令一览
 
-通过 `forge <command>` 调用，~30 个命令覆盖全功能：
+通过 `forge <command>` 调用：
 
 ```bash
 # 运维
