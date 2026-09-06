@@ -6,7 +6,7 @@ status: active
 
 # Forge — 个人 AI 数字资产管理中心
 
-[![Tests](https://img.shields.io/badge/tests-294%20passed-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-passed-brightgreen)]()
 
 Forge 是跨项目的统一工具注册、发现与治理层。它维护单一真相源（SSOT）的工具清单，暴露 MCP 工具集，并构建工具之间的知识图谱。
 
@@ -14,7 +14,7 @@ Forge 是跨项目的统一工具注册、发现与治理层。它维护单一�
 
 | 功能 | 说明 |
 |------|------|
-| **工具注册表** | `tools-registry.json` — 167 工具的 SSOT，含 capabilities、health、telemetry |
+| **工具注册表** | `tools-registry.json` — 工具 SSOT，含 capabilities、health、telemetry (计数以实际文件为准) |
 | **统一配置** | `forge_config.py` — 所有路径常量、环境变量的单一入口 |
 | **资产 CLI** | `asset_cli.py` — 统一的 asset 模型（v3/v4），支持 16 种实体类型 |
 | **MCP Server** | `server/mcp_server.py` — 24 个 MCP 工具暴露注册表能力 |
