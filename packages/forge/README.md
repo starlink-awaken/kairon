@@ -16,7 +16,7 @@ Forge 是跨项目的统一工具注册、发现与治理层。它维护单一�
 |------|------|
 | **工具注册表** | `tools-registry.json` — 工具 SSOT，含 capabilities、health、telemetry (计数以实际文件为准) |
 | **统一配置** | `forge_config.py` — 所有路径常量、环境变量的单一入口 |
-| **资产 CLI** | `asset_cli.py` — 统一的 asset 模型（v3/v4），支持 16 种实体类型 |
+| **资产 CLI** | `asset_cli.py` — 统一的 asset 模型（v3/v4），支持多种实体类型 |
 | **MCP Server** | `server/mcp_server.py` — MCP 工具暴露注册表能力 (计数以实际文件为准) |
 | **HTTP API** | `http_api.py` — REST 查询 + 导出 (资产/分类数以实际文件为准) |
 | **CLI 引擎** | `forge.py` — 命令统一注册表（装饰器分发，零 shell 调用，计数以实际注册为准) |
