@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from kairon.graph.decay_manager import DecayManager, DecayReport
 from kairon.graph.kems_v2 import (
     Edge,
     Entity,
@@ -11,6 +12,8 @@ from kairon.graph.kems_v2 import (
 )
 
 __all__ = [
+    "DecayManager",
+    "DecayReport",
     "Edge",
     "Entity",
     "EntityType",
