@@ -36,7 +36,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Application Frameworks",
 ]
 readme = "README.md"
-dependencies = []
+dependencies = ["mos"]
 
 [project.license]
 text = "MIT"

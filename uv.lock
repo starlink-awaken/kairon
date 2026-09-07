@@ -1180,15 +1180,19 @@ dev = [
 mcp = [
     { name = "fastmcp" },
 ]
+mos = [
+    { name = "mos" },
+]
 
 [package.metadata]
 requires-dist = [
     { name = "fastmcp", marker = "extra == 'mcp'", specifier = ">=2.0" },
     { name = "kairon-utils", editable = "packages/kairon-utils" },
+    { name = "mos", marker = "extra == 'mos'", editable = "packages/mos" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.0" },
     { name = "pytest-cov", marker = "extra == 'dev'" },
 ]
-provides-extras = ["dev", "mcp"]
+provides-extras = ["dev", "mcp", "mos"]
 
 [[package]]
 name = "email-validator"
@@ -2201,6 +2205,9 @@ wheels = [
 name = "kairon"
 version = "1.0.0"
 source = { editable = "." }
+dependencies = [
+    { name = "mos" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -2210,6 +2217,7 @@ dev = [
 ]
 
 [package.metadata]
+requires-dist = [{ name = "mos", editable = "packages/mos" }]
 
 [package.metadata.requires-dev]
 dev = [
@@ -2883,6 +2891,7 @@ dependencies = [
     { name = "kairon-utils" },
     { name = "kos" },
     { name = "lancedb" },
+    { name = "mos" },
     { name = "pydantic" },
     { name = "pyyaml" },
     { name = "readability-lxml" },
@@ -2928,6 +2937,7 @@ requires-dist = [
     { name = "kairon-utils", editable = "packages/kairon-utils" },
     { name = "kos", editable = "packages/kos" },
     { name = "lancedb", specifier = ">=0.21" },
+    { name = "mos", editable = "packages/mos" },
     { name = "mos", marker = "extra == 'mos'", editable = "packages/mos" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0" },
     { name = "neo4j", marker = "extra == 'tier2'", specifier = ">=5.0" },

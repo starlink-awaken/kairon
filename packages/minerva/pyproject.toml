@@ -21,6 +21,7 @@ classifiers = [
 
 dependencies = [
     "kos",
+    "mos",
     "health-profile",
     "kairon-utils",
     "httpx>=0.28.1",
