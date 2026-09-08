@@ -29,12 +29,12 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 from kos.config import get_artifact_path  # type: ignore[import-not-found]
 
 HISTORY_FILE = Path.home() / "Documents" / "KOS-Inbox" / ".search_history.jsonl"
-PORT = 8765
+PORT = 8766
 
 
 def get_db() -> sqlite3.Connection | None:
-    db_path = get_artifact_path("retrievalDatabase")
-    if not db_path.exists():  # type: ignore[attr-defined]
+    db_path = Path(get_artifact_path("retrievalDatabase"))
+    if not db_path.exists():
         return None
     conn = sqlite3.connect(str(db_path))
     conn.row_factory = sqlite3.Row
@@ -158,6 +158,8 @@ class KOSHandler(BaseHTTPRequestHandler):
 
         elif path == "/status":
             self._json(status())  # type: ignore[no-untyped-call]
+        elif path in ("/health", "/api/v1/health"):
+            self._json({"status": "ok", "version": "1.0.0", "port": PORT})  # type: ignore[no-untyped-call]
         elif path == "/digest":
             self._json(digest())  # type: ignore[no-untyped-call]
         elif path == "/diff":

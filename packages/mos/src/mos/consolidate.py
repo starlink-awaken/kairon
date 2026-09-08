@@ -57,7 +57,7 @@ class SubprocessDreamRunner:
         json_output: bool,
     ) -> dict[str, Any]:
         ws = self._workspace()
-        gbrain_cli = ws / "projects" / "gbrain" / "src" / "cli.ts"
+        gbrain_cli = ws / "projects" / "knowledge" / "gbrain" / "src" / "cli.ts"
         bun = shutil.which("bun")
         if not gbrain_cli.is_file():
             return {
@@ -86,7 +86,7 @@ class SubprocessDreamRunner:
             try:
                 proc = subprocess.run(
                     cmd,
-                    cwd=str(ws / "projects" / "gbrain"),
+                    cwd=str(ws / "projects" / "knowledge" / "gbrain"),
                     capture_output=True,
                     text=True,
                     timeout=self.timeout_sec,
