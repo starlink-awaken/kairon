@@ -15,7 +15,7 @@ status: active
 ### 1.1 安装
 
 ```bash
-cd projects/kairon
+cd projects/knowledge/kairon
 uv sync
 ```
 
