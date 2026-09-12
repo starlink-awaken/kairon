@@ -38,6 +38,11 @@ classifiers = [
 readme = "README.md"
 dependencies = []
 
+[project.optional-dependencies]
+graph = [
+    "oxigraph>=0.4.0",
+]
+
 [project.license]
 text = "MIT"
 
