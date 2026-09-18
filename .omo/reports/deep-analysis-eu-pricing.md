@@ -2,6 +2,7 @@
 title: deep-analysis-eu-pricing
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # 深度分析：eu-pricing (packages/eu-pricing/)

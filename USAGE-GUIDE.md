@@ -2,6 +2,7 @@
 title: USAGE-GUIDE
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # kairon 使用指南

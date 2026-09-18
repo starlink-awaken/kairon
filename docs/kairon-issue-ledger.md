@@ -2,6 +2,7 @@
 title: kairon-issue-ledger
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # 5+4+1+1 架构全量分析 · 最终关闭

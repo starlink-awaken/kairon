@@ -2,6 +2,7 @@
 title: INDEX
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # `kairon/.omo/` — Kairon 项目治理层

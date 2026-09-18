@@ -2,6 +2,7 @@
 title: CONTRIBUTING
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Contributing to kairon

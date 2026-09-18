@@ -2,6 +2,7 @@
 title: CLAUDE
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # CLAUDE.md — kairon AI Context
@@ -14,7 +15,7 @@ status: active
     1. [`AGENTS.md`](AGENTS.md)
     2. [`README.md`](README.md) when present
     3. The source files and tests directly related to the task
-    4. Workspace context in [`../../CLAUDE.md`](../../CLAUDE.md) when the task crosses project boundaries
+    4. Workspace context in [`../../../CLAUDE.md`](../../../CLAUDE.md) when the task crosses project boundaries
 
     ## Project Role
 
@@ -32,7 +33,7 @@ make lint
 
     ## Safe Editing Rules
 
-    - `包清单和数量以 ../../docs/project-registry.yaml 与 pyproject.toml 为准。`
+    - `包清单和数量以 ../../../docs/project-registry.yaml 与 pyproject.toml 为准。`
 - 修改单包优先 make test-diff，跨包契约变更再扩大测试。
 - 不要把派生日志或运行快照写进长期说明文档。
 
@@ -44,7 +45,7 @@ make lint
 
     ```bash
     git status --short
-    uv run --with "pyyaml" python "../../bin/ssot/doc-ssot-lint.py" --json
+    uv run --with "pyyaml" python "../../../bin/ssot/doc-ssot-lint.py" --json
     ```
 
     Report the checks you actually ran and any pre-existing dirty state that remains.

@@ -2,13 +2,14 @@
 title: CALLCHAIN
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # kairon — Call Chain
 
 > 本文档描述 kairon 内部最核心的一条调用链 / 数据流。
 >
-> 通用跨层调用链参见：[`../../docs/I0-AGORA-CALLCHAIN.md`](../../docs/I0-AGORA-CALLCHAIN.md)
+> 通用跨层调用链参见：[`../../../docs/I0-AGORA-CALLCHAIN.md`](../../../docs/I0-AGORA-CALLCHAIN.md)
 
 ---
 

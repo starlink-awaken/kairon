@@ -2,6 +2,7 @@
 title: ADR-0001-hybrid-rag
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # ADR-0001: Hybrid RAG 混合检索架构

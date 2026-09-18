@@ -2,6 +2,7 @@
 title: phase28-e2e-demo-evidence
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Phase 28 — E2E 卫健委工作场景演示证据

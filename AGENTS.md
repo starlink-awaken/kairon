@@ -2,12 +2,13 @@
 title: AGENTS
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # AGENTS.md — kairon
 
     > Scope: project-local developer guide for `kairon`.
-    > Workspace rules live in [`../../AGENTS.md`](../../AGENTS.md); project metadata lives in [`../../docs/project-registry.yaml`](../../docs/project-registry.yaml).
+    > Workspace rules live in [`../../AGENTS.md`](../../AGENTS.md); project metadata lives in [`../../../docs/project-registry.yaml`](../../../docs/project-registry.yaml).
 
     ## Role
 
@@ -43,22 +44,22 @@ make lint
 
     ## Gotchas
 
-    - `包清单和数量以 ../../docs/project-registry.yaml 与 pyproject.toml 为准。`
+    - `包清单和数量以 ../../../docs/project-registry.yaml 与 pyproject.toml 为准。`
 - 修改单包优先 make test-diff，跨包契约变更再扩大测试。
 - 不要把派生日志或运行快照写进长期说明文档。
 
     ## Verification
 
-    - Documentation-only changes: run `uv run --with "pyyaml" python "../../bin/ssot/doc-ssot-lint.py" --json` from this project or from the workspace root.
+    - Documentation-only changes: run `uv run --with "pyyaml" python "../../../bin/ssot/doc-ssot-lint.py" --json` from this project or from the workspace root.
     - Code changes: run the narrowest relevant project test first, then broaden if shared contracts changed.
     - Cross-layer behavior: verify the caller and the callee, not just the touched module.
 
     ## SSOT Pointers
 
-    - Workspace architecture: [`../../ARCHITECTURE.md`](../../ARCHITECTURE.md)
-    - Layer index: [`../../LAYER-INDEX.md`](../../LAYER-INDEX.md)
-    - Project metadata: [`../../docs/project-registry.yaml`](../../docs/project-registry.yaml)
-    - Runtime state: [`../../.omo/state/system.yaml`](../../.omo/state/system.yaml)
+    - Workspace architecture: [`../../../ARCHITECTURE.md`](../../../ARCHITECTURE.md)
+    - Layer index: [`../../../LAYER-INDEX.md`](../../../LAYER-INDEX.md)
+    - Project metadata: [`../../../docs/project-registry.yaml`](../../../docs/project-registry.yaml)
+    - Runtime state: [`../../../.omo/state/system.yaml`](../../../.omo/state/system.yaml)
 
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence

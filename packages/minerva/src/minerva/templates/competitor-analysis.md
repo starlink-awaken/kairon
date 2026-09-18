@@ -2,6 +2,7 @@
 title: competitor-analysis
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Competitor Analysis

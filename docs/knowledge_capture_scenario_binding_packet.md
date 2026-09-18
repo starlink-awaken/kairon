@@ -2,6 +2,7 @@
 title: knowledge_capture_scenario_binding_packet
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Knowledge Capture Scenario Binding Packet

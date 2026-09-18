@@ -2,6 +2,7 @@
 title: README
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # ADR 目录

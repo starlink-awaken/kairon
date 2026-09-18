@@ -2,6 +2,7 @@
 title: CAPABILITY-MAP
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # kairon 能力地图

@@ -2,6 +2,7 @@
 title: team
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # DigitalBrainOS Agent Team

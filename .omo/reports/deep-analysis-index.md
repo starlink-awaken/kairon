@@ -2,6 +2,7 @@
 title: deep-analysis-index
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # 代码深度分析索引

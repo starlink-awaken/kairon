@@ -2,6 +2,7 @@
 title: contradictions
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 ## L1 供需匹配矛盾

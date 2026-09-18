@@ -1,3 +1,7 @@
+---
+last-reviewed: 2026-09-18
+---
+
 # 代码分析报告 — kairon
 > 生成时间: ... | 路径: /Users/xiamingxing/Workspace/projects/knowledge/kairon
 

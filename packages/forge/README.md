@@ -2,6 +2,7 @@
 title: README
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Forge — 个人 AI 数字资产管理中心

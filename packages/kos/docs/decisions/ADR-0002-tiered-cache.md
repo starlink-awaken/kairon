@@ -2,6 +2,7 @@
 title: ADR-0002-tiered-cache
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # ADR-0002: 三级缓存架构

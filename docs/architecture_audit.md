@@ -2,6 +2,7 @@
 title: architecture_audit
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Kairon Architecture Audit v3

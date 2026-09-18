@@ -2,6 +2,7 @@
 title: live_inventory
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Kairon Live Inventory

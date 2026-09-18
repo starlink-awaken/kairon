@@ -2,6 +2,7 @@
 title: gate-rubric
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Gate Rubric

@@ -2,6 +2,7 @@
 title: security-audit-report-phase2-red-team
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # 🔴 Kairon 项目 Phase 2 — 红队安全审计报告

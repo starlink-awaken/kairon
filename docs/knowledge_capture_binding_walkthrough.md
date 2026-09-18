@@ -2,6 +2,7 @@
 title: knowledge_capture_binding_walkthrough
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Kairon Knowledge Capture Binding Walkthrough

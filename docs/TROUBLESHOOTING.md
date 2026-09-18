@@ -2,6 +2,7 @@
 title: TROUBLESHOOTING
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # kairon Troubleshooting
@@ -25,4 +26,4 @@ status: active
 
 - Developer rules: [`../AGENTS.md`](../AGENTS.md)
 - AI session context: [`../CLAUDE.md`](../CLAUDE.md)
-- Workspace architecture: [`../../../ARCHITECTURE.md`](../../../ARCHITECTURE.md)
+- Workspace architecture: [`../../../../ARCHITECTURE.md`](../../../../ARCHITECTURE.md)

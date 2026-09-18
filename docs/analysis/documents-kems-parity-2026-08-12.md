@@ -2,6 +2,7 @@
 title: Documents KEMS legacy parity
 type: analysis
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Documents KEMS legacy parity

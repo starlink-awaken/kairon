@@ -2,6 +2,7 @@
 title: api_reference
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # kairon API 参考

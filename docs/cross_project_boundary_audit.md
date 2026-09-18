@@ -2,6 +2,7 @@
 title: cross_project_boundary_audit
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Kairon Cross-Project Boundary Audit
