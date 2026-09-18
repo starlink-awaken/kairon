@@ -2,6 +2,7 @@
 title: README.zh
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Kairon
@@ -50,8 +51,8 @@ make lint
 
     - Developer guide: [`AGENTS.md`](AGENTS.md)
     - AI context loader: [`CLAUDE.md`](CLAUDE.md) when present
-    - Workspace architecture: [`../../ARCHITECTURE.md`](../../ARCHITECTURE.md)
-    - Layer placement: [`../../LAYER-INDEX.md`](../../LAYER-INDEX.md)
+    - Workspace architecture: [`../../../ARCHITECTURE.md`](../../../ARCHITECTURE.md)
+    - Layer placement: [`../../../LAYER-INDEX.md`](../../../LAYER-INDEX.md)
 
     ## SSOT Rules
 

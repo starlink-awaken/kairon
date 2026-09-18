@@ -2,6 +2,7 @@
 title: README
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # kairon Documentation
@@ -37,9 +38,9 @@ This directory collects project-level documentation for **kairon**.
 
 ## Workspace Context
 
-- Workspace architecture: [`../../../ARCHITECTURE.md`](../../../ARCHITECTURE.md)
-- Project metadata SSOT: [`../../../docs/project-registry.yaml`](../../../docs/project-registry.yaml)
-- Layer placement: [`../../../LAYER-INDEX.md`](../../../LAYER-INDEX.md)
+- Workspace architecture: [`../../../../ARCHITECTURE.md`](../../../../ARCHITECTURE.md)
+- Project metadata SSOT: [`../../../../docs/project-registry.yaml`](../../../../docs/project-registry.yaml)
+- Layer placement: [`../../../../LAYER-INDEX.md`](../../../../LAYER-INDEX.md)
 
 ## SSOT Rules
 

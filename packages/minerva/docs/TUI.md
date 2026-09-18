@@ -2,6 +2,7 @@
 title: TUI
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Minerva TUI — 终端交互界面规划

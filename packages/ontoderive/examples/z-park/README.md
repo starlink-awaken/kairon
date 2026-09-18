@@ -2,6 +2,7 @@
 title: README
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # 中关村科学城服务平台方案 — OntoDerive 完整示例

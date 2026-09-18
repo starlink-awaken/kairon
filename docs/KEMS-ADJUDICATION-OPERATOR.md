@@ -2,6 +2,7 @@
 title: KEMS-ADJUDICATION-OPERATOR
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # KEMS Adjudication Operator Runbook

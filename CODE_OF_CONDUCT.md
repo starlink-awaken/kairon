@@ -2,6 +2,7 @@
 title: CODE_OF_CONDUCT
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Contributor Covenant Code of Conduct

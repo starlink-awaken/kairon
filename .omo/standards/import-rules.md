@@ -2,6 +2,7 @@
 title: import-rules
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Kairon 跨包依赖边界规范

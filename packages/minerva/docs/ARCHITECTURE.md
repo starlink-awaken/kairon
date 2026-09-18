@@ -2,6 +2,7 @@
 title: ARCHITECTURE
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Minerva Architecture v0.5.0

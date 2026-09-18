@@ -2,6 +2,7 @@
 title: DIGITALBRAINOS-CONDUCTOR.zh-CN
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # DigitalBrainOS Conductor 作战手册

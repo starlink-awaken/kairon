@@ -2,6 +2,7 @@
 title: CONTRACTS
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Minerva Shared Data Contracts

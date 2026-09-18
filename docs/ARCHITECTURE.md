@@ -2,11 +2,12 @@
 title: ARCHITECTURE
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # kairon Architecture
 
-> Architecture overview for **kairon**. For the full workspace architecture, see [`../../../ARCHITECTURE.md`](../../../ARCHITECTURE.md).
+> Architecture overview for **kairon**. For the full workspace architecture, see [`../../../../ARCHITECTURE.md`](../../../../ARCHITECTURE.md).
 
 ## Responsibilities
 

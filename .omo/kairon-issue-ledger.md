@@ -2,6 +2,7 @@
 title: kairon-issue-ledger
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # kairon 问题台账 · 5+3+1 架构对齐计划

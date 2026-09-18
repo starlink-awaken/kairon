@@ -2,6 +2,7 @@
 title: README
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # kairon
@@ -15,7 +16,7 @@ status: active
 [![uv](https://img.shields.io/badge/uv-package%20manager-purple.svg)](https://docs.astral.sh/uv/)
 
     > L2 · 知识工程与研究引擎 monorepo
-    > Metadata SSOT: [`../../docs/project-registry.yaml`](../../docs/project-registry.yaml)
+    > Metadata SSOT: [`../../../docs/project-registry.yaml`](../../../docs/project-registry.yaml)
 
     ## What It Owns
 
@@ -55,8 +56,8 @@ make lint
 
     - Developer guide: [`AGENTS.md`](AGENTS.md)
     - AI context loader: [`CLAUDE.md`](CLAUDE.md) when present
-    - Workspace architecture: [`../../ARCHITECTURE.md`](../../ARCHITECTURE.md)
-    - Layer placement: [`../../LAYER-INDEX.md`](../../LAYER-INDEX.md)
+    - Workspace architecture: [`../../../ARCHITECTURE.md`](../../../ARCHITECTURE.md)
+    - Layer placement: [`../../../LAYER-INDEX.md`](../../../LAYER-INDEX.md)
 
     ## SSOT Rules
 

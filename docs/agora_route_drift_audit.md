@@ -2,6 +2,7 @@
 title: agora_route_drift_audit
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Agora Route Drift Audit

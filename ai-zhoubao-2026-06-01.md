@@ -2,6 +2,7 @@
 title: ai-zhoubao-2026-06-01
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # AI 洞察周报 — 2026-06-01

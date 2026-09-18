@@ -2,6 +2,7 @@
 title: OPERATIONS
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # KOS 运维手册

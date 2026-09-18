@@ -2,6 +2,7 @@
 title: knowledge_capture_run_record_spec
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Knowledge Capture Run Record Spec

@@ -2,6 +2,7 @@
 title: deep-analysis-ecos
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # 深度分析：ecos (packages/ecos/)

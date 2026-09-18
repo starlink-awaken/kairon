@@ -2,6 +2,7 @@
 title: local-cli-inventory
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Local CLI Inventory

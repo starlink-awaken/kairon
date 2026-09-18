@@ -2,6 +2,7 @@
 title: acp-strategy
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # ACP Strategy

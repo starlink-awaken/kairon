@@ -2,6 +2,7 @@
 title: operating-checklist
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Operating Checklist

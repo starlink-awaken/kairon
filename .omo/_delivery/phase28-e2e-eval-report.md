@@ -2,6 +2,7 @@
 title: phase28-e2e-eval-report
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # P29 E2E-DEMO 评估报告 — 2026-06-05

@@ -2,6 +2,7 @@
 title: ARCHITECTURE
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # kairon — Architecture
@@ -16,7 +17,7 @@ status: active
 > 2026-07-26 累计清理: 11 broken module 修, 70 0-ref module 删, 21 跨项目 kairon_events 引用清
 > ADR-0239 (P30 拆分清理), ADR-0241 (RUF100 + untrack), ADR-0243 (L0 orphan 删), ADR-0244 (4 巨包 0-ref)
 >
-> 系统全景参见：[`../../docs/PANORAMA.md`](../../docs/PANORAMA.md)
+> 系统全景参见：[`../../../docs/PANORAMA.md`](../../../docs/PANORAMA.md)
 
 ---
 
@@ -75,12 +76,12 @@ graph TB
 ## 4. 测试
 
 ```bash
-cd projects/kairon && make test-diff  # or make test
+cd projects/knowledge/kairon && make test-diff  # or make test
 ```
 
 ## 5. 架构概览
 
-参见工作区架构概览图：[`../../docs/ARCHITECTURE-DIAGRAM.md`](../../docs/ARCHITECTURE-DIAGRAM.md)
+参见工作区架构概览图：[`../../../docs/ARCHITECTURE-DIAGRAM.md`](../../../docs/ARCHITECTURE-DIAGRAM.md)
 
 ## 6. 演进
 

@@ -2,6 +2,7 @@
 title: kairon-10pkg-analysis
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Kairon 10-Package深度分析报告 (gc-engine → minerva)

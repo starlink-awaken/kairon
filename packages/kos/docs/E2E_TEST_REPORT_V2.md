@@ -2,6 +2,7 @@
 title: E2E_TEST_REPORT_V2
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # KOS 跨项目端到端测试报告

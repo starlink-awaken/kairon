@@ -2,6 +2,7 @@
 title: USER_GUIDE
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # Minerva — 用户使用指南

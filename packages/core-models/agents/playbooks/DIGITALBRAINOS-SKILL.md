@@ -2,6 +2,7 @@
 title: DIGITALBRAINOS-SKILL
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # DigitalBrainOS Skill

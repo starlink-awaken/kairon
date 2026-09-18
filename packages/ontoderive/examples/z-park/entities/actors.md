@@ -2,6 +2,7 @@
 title: actors
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 | 实体 | 类型 | 角色 | 数量 |

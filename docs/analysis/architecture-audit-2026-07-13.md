@@ -2,6 +2,7 @@
 title: architecture-audit-2026-07-13
 type: doc
 status: active
+last-reviewed: 2026-09-18
 ---
 
 # kairon 架构审计 — 2026-07-13
