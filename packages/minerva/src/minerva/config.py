@@ -53,8 +53,8 @@ class ConfigError(Exception):
 @dataclass
 class LLMConfig:
     provider: str = "ollama"
-    base_url: str = "http://localhost:11434/v1"
-    api_key: str = "ollama"
+    base_url: str = "http://127.0.0.1:4000/v1"
+    api_key: str = ""
     models: dict = field(
         default_factory=lambda: {
             "agent": "qwen3:30b-a3b",

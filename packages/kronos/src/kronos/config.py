@@ -50,12 +50,12 @@ class KronosConfig:
 
     @property
     def ollama_url(self) -> str:
-        val: str = self._data.get("ollama_url", "http://localhost:11434")
+        val: str = self._data.get("gateway_url", "http://127.0.0.1:4000")
         return val
 
     @property
     def default_model(self) -> str:
-        val: str = self._data.get("default_model", "qwen3.5:4b")
+        val: str = self._data.get("default_model", "fast")
         return val
 
     @property
