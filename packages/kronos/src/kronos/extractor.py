@@ -373,6 +373,31 @@ def _detect_ollama_model() -> str:
 _DEFAULT_OMLX_MODEL = "mythos-fast"
 
 
+def _gateway() -> tuple[str, dict[str, str]]:
+    """aetherforge 门面地址与鉴权头(与 kos.llm_gateway 同一解析顺序; kronos 不依赖 kos)。
+
+    旧默认写死 tailnet IP 且不带 key: IP 一变或网关要求鉴权即恒失败, 然后静默走 Ollama。
+    """
+    url = (os.environ.get("LLM_GATEWAY_URL") or os.environ.get("OMLX_URL") or "http://127.0.0.1:4000").rstrip("/")
+    key = next(
+        (os.environ[n] for n in ("LLM_GATEWAY_KEY", "AETHERFORGE_API_KEY", "OMLX_API_KEY") if os.environ.get(n)), ""
+    )
+    if not key:
+        import subprocess
+
+        try:
+            out = subprocess.run(
+                ["security", "find-generic-password", "-s", "aetherforge-gateway", "-w"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+            )
+            key = out.stdout.strip() if out.returncode == 0 else ""
+        except (OSError, subprocess.TimeoutExpired):
+            key = ""
+    return url, ({"Authorization": f"Bearer {key}"} if key else {})
+
+
 def call_ollama(prompt: str, model: str | None = None, system_prompt: str | None = None) -> str:
     """调用本地 LLM (优先 omlx :8000 OpenAI 兼容, fallback Ollama).
 
@@ -387,9 +412,11 @@ def call_ollama(prompt: str, model: str | None = None, system_prompt: str | None
         if system_prompt:
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": prompt})
+        base, headers = _gateway()
         resp = httpx.post(
-            os.environ.get("LLM_GATEWAY_URL", "http://100.96.126.35:4000") + "/v1/chat/completions",
+            base + "/v1/chat/completions",
             json={"model": model or _DEFAULT_OMLX_MODEL, "messages": messages, "stream": False},
+            headers=headers,
             timeout=120,
         )
         if resp.status_code == 200:

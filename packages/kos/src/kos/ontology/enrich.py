@@ -17,6 +17,7 @@ from typing import Any
 
 import structlog
 
+from kos.llm_gateway import auth_headers, gateway_url
 from kos.ontology.schema import (  # type: ignore[no-redef]
     get_db,
     init_schema,
@@ -73,7 +74,7 @@ def enrich() -> dict[str, Any]:  # type: ignore[no-untyped-def]
 import os
 
 # 推理端点: 默认 omlxc 网关 (tailscale), 可通过 LLM_GATEWAY_URL 覆盖
-OMLX_GATEWAY_URL = os.environ.get("LLM_GATEWAY_URL", "http://100.96.126.35:4000")
+OMLX_GATEWAY_URL = gateway_url()
 OMLX_CHAT_URL = f"{OMLX_GATEWAY_URL}/v1/chat/completions"
 OMLX_MODELS_URL = f"{OMLX_GATEWAY_URL}/v1/models"
 
@@ -86,7 +87,7 @@ def _enrich_with_local_llm(conn: sqlite3.Connection, now: str) -> int:
     # 1. 快速探测本地 omlx 网关是否在线
     gateway_url = OMLX_CHAT_URL
     try:
-        req = urllib.request.Request(OMLX_MODELS_URL, headers={"Authorization": "Bearer sk-omlx-admin"}, method="GET")
+        req = urllib.request.Request(OMLX_MODELS_URL, headers=auth_headers(), method="GET")
         with urllib.request.urlopen(req, timeout=1.0) as response:
             if response.status != 200:
                 return 0
@@ -146,7 +147,7 @@ def _enrich_with_local_llm(conn: sqlite3.Connection, now: str) -> int:
             post_req = urllib.request.Request(
                 gateway_url,
                 data=data,
-                headers={"Content-Type": "application/json", "Authorization": "Bearer sk-omlx-admin"},
+                headers={"Content-Type": "application/json", **auth_headers()},
                 method="POST",
             )
             with urllib.request.urlopen(post_req, timeout=12.0) as res:
