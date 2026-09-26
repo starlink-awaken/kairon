@@ -54,6 +54,25 @@ def _workspace() -> Path:
     return Path(__file__).resolve().parents[6]
 
 
+def _resolve_gbrain_cli(ws: Path) -> Path | None:
+    """Locate gbrain's src/cli.ts across historical workspace layouts.
+
+    The original hard-coded `ws/projects/gbrain/src/cli.ts` matched a layout
+    that no longer exists (gbrain lives at `projects/knowledge/gbrain`), so
+    `LiveGbrainSearchBackend.available()` was permanently False whenever
+    MOS_LIVE_GBRAIN=1 was turned on.
+    """
+    candidates = [
+        ws / "projects" / "knowledge" / "gbrain" / "src" / "cli.ts",  # workspace root
+        ws / "gbrain" / "src" / "cli.ts",  # ws already points at projects/knowledge
+        ws / "projects" / "gbrain" / "src" / "cli.ts",  # legacy layout
+    ]
+    for cli in candidates:
+        if cli.is_file():
+            return cli
+    return None
+
+
 @dataclass
 class LiveKosSearchBackend:
     """HTTP GET KOS REST /api/v1/search when MOS_LIVE_KOS=1."""
@@ -160,8 +179,7 @@ class LiveGbrainSearchBackend:
         if not live_gbrain_enabled():
             return False
         ws = self.workspace or _workspace()
-        cli = ws / "projects" / "gbrain" / "src" / "cli.ts"
-        return cli.is_file() and shutil.which("bun") is not None
+        return _resolve_gbrain_cli(ws) is not None and shutil.which("bun") is not None
 
     def search(
         self,
@@ -174,11 +192,11 @@ class LiveGbrainSearchBackend:
         self.last_error = None
         if not live_gbrain_enabled():
             return []
-        if not self.available() and self.run_cmd is None:
+        ws = self.workspace or _workspace()
+        cli = _resolve_gbrain_cli(ws)
+        if cli is None and self.run_cmd is None:
             self.last_error = "gbrain_cli_or_bun_missing"
             return []
-        ws = self.workspace or _workspace()
-        cli = ws / "projects" / "gbrain" / "src" / "cli.ts"
         bun = shutil.which("bun") or "bun"
         op = "query" if self.use_query else "search"
         cmd = [bun, "run", str(cli), op, query or "", "--limit", str(int(limit))]
@@ -188,7 +206,7 @@ class LiveGbrainSearchBackend:
             else:
                 proc = subprocess.run(
                     cmd,
-                    cwd=str(ws / "projects" / "gbrain"),
+                    cwd=str(cli.parent.parent),  # gbrain repo root
                     capture_output=True,
                     text=True,
                     timeout=self.timeout_sec,
@@ -207,6 +225,11 @@ class LiveGbrainSearchBackend:
         text = (stdout or "").strip()
         if not text:
             return []
+        # gbrain one-shot sentinels — never fabricate hits from them
+        # ("No results." previously matched the plain-line fallback below and
+        # surfaced as id="No" / snippet="results." garbage in recall).
+        if re.fullmatch(r"No (results|pages found)\.?", text):
+            return []
         # Prefer JSON array / object
         try:
             data = json.loads(text)
@@ -216,11 +239,13 @@ class LiveGbrainSearchBackend:
                 return LiveKosSearchBackend(name=self.name)._normalize(data, limit=limit)
         except json.JSONDecodeError:
             pass
-        # JSONL
+        # JSONL / formatted output
         hits: list[dict[str, Any]] = []
         for line in text.splitlines():
             line = line.strip()
             if not line:
+                continue
+            if re.fullmatch(r"No (results|pages found)\.?", line):
                 continue
             try:
                 obj = json.loads(line)
@@ -229,6 +254,22 @@ class LiveGbrainSearchBackend:
                     continue
             except json.JSONDecodeError:
                 pass
+            # gbrain CLI text format: "[0.3040] slug -- chunk excerpt"
+            gm = re.match(r"^\[([\d.]+)\]\s+(\S+)\s+--\s+(.*)$", line, re.S)
+            if gm:
+                hits.append(
+                    {
+                        "id": gm.group(2),
+                        "title": gm.group(2),
+                        "snippet": gm.group(3).strip()[:300],
+                        "backend": self.name,
+                        "score": float(gm.group(1)),
+                        "live": True,
+                    }
+                )
+                if len(hits) >= limit:
+                    break
+                continue
             # Markdown / plain: "- slug: title" or "slug — snippet"
             m = re.match(r"^[-*]?\s*([^\s:]+)[:\s—-]+(.+)$", line)
             if m:
@@ -242,19 +283,10 @@ class LiveGbrainSearchBackend:
                         "live": True,
                     }
                 )
-            elif line and not line.startswith("#"):
-                hits.append(
-                    {
-                        "id": f"gbrain_{len(hits)}",
-                        "title": line[:80],
-                        "snippet": line,
-                        "backend": self.name,
-                        "score": 0.4,
-                        "live": True,
-                    }
-                )
-            if len(hits) >= limit:
-                break
+                if len(hits) >= limit:
+                    break
+            # Unknown free-form lines are dropped — fabricating hits from
+            # arbitrary CLI prose pollutes recall with garbage.
         return hits[:limit]
 
 
@@ -270,7 +302,9 @@ def gbrain_put_page(
     if not live_gbrain_write_enabled():
         return {"ok": False, "skipped": True, "reason": "live_gbrain_write_off"}
     ws = workspace or _workspace()
-    cli = ws / "projects" / "gbrain" / "src" / "cli.ts"
+    cli = _resolve_gbrain_cli(ws)
+    if cli is None:
+        return {"ok": False, "error": "gbrain_cli_missing"}
     bun = shutil.which("bun") or "bun"
     # frontmatter-light body
     body = content if content.lstrip().startswith("---") else f"---\ntitle: {slug}\n---\n\n{content}\n"
@@ -283,7 +317,7 @@ def gbrain_put_page(
                 return {"ok": False, "skipped": True, "reason": "gbrain_cli_or_bun_missing"}
             proc = subprocess.run(
                 cmd,
-                cwd=str(ws / "projects" / "gbrain"),
+                cwd=str(cli.parent.parent),  # gbrain repo root
                 capture_output=True,
                 text=True,
                 timeout=timeout_sec,
