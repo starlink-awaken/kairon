@@ -204,6 +204,12 @@ class LiveGbrainSearchBackend:
             if self.run_cmd is not None:
                 stdout = self.run_cmd(cmd)
             else:
+                sub_env = {
+                    **os.environ,
+                    # Fail fast on PGLite lock contention (MCP may be mid-call)
+                    # instead of stalling recall for the full lock timeout.
+                    "GBRAIN_LOCK_TIMEOUT_MS": "5000",
+                }
                 proc = subprocess.run(
                     cmd,
                     cwd=str(cli.parent.parent),  # gbrain repo root
@@ -211,6 +217,7 @@ class LiveGbrainSearchBackend:
                     text=True,
                     timeout=self.timeout_sec,
                     check=False,
+                    env=sub_env,
                 )
                 if proc.returncode != 0:
                     self.last_error = (proc.stderr or proc.stdout or "gbrain_failed")[:300]
@@ -322,6 +329,7 @@ def gbrain_put_page(
                 text=True,
                 timeout=timeout_sec,
                 check=False,
+                env={**os.environ, "GBRAIN_LOCK_TIMEOUT_MS": "15000"},
             )
             code, out, err = proc.returncode, proc.stdout or "", proc.stderr or ""
         if code != 0:
