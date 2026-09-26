@@ -354,11 +354,16 @@ def build_index(domain: str | None = None, incremental: bool = False) -> dict:
     for i in range(0, total_chunks, batch_size):
         batch = all_texts[i : i + batch_size]
         batch_vecs = _embed_texts(batch)
+        if len(batch_vecs) != len(batch):
+            # 失败批次返回 [] —— 直接 extend 会让后面所有向量错位挂到别的文档上。
+            # 用空向量占位保持对齐, 下面入库时会被过滤掉。
+            print(f"    batch {i // batch_size} failed; {len(batch)} chunks skipped", file=sys.stderr)
+            batch_vecs = [[] for _ in batch]
         embeddings.extend(batch_vecs)
         if (i + batch_size) % 200 == 0 or i + batch_size >= total_chunks:
             print(f"    {min(i + batch_size, total_chunks)}/{total_chunks}", file=sys.stderr)
 
-    if not embeddings:
+    if not any(embeddings):
         return {"error": "Embedding failed", "count": 0}
 
     # Store in LanceDB
@@ -372,16 +377,19 @@ def build_index(domain: str | None = None, incremental: bool = False) -> dict:
                 }
             )
 
-    # Drop and recreate (or merge for incremental)
-    try:
-        db.drop_table(VECTOR_TABLE)
-    except Exception:
-        pass
-
     if not table_data:
         return {"error": "No valid embeddings produced", "count": 0}
 
-    tbl = db.create_table(VECTOR_TABLE, table_data)
+    # 增量: 追加到已有表(原实现无论是否增量都先 drop, 增量构建会把旧向量全删掉)
+    if incremental and VECTOR_TABLE in db.table_names():
+        tbl = db.open_table(VECTOR_TABLE)
+        tbl.add(table_data)
+    else:
+        try:
+            db.drop_table(VECTOR_TABLE)
+        except Exception:
+            pass
+        tbl = db.create_table(VECTOR_TABLE, table_data)
     count = tbl.count_rows()
 
     elapsed = round(time.time() - t0, 1)
@@ -410,8 +418,12 @@ def semantic_search(query: str, limit: int = 10, domain: str | None = None) -> d
         return {"error": f"LanceDB import failed: {e}", "results": [], "count": 0}
 
     if VECTOR_TABLE not in db.table_names():
-        # Auto-build if missing
-        build_index()
+        # 不在查询路径里同步建库: 全量构建是小时级, 会把一次搜索卡死。
+        return {
+            "error": "Vector index not built. Run: kos-semantic build --incremental",
+            "results": [],
+            "count": 0,
+        }
 
     backend = _get_embed_backend()
     if backend == "none":
