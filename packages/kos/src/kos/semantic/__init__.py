@@ -17,6 +17,7 @@ Embedding backends:
 """
 
 import json
+import logging
 import os
 import sqlite3
 import sys
@@ -25,13 +26,15 @@ from pathlib import Path
 from typing import Any
 
 from kos.config import get_artifact_path
+from kos.llm_gateway import auth_headers, gateway_url
+
+logger = logging.getLogger(__name__)
 
 # ── Configuration ──────────────────────────────────────
 
-# Primary embedding backend: omlx gateway (qwen3-embedding-8b, 4096d, Chinese-optimized)
-OMLX_URL = os.environ.get("OMLX_URL", "http://100.96.126.35:4000")
-OMLX_API_KEY = os.environ.get("OMLX_API_KEY", "123456")
-OMLX_EMBED_MODEL = os.environ.get("OMLX_EMBED_MODEL", "qwen3-embedding-8b")
+# Primary embedding backend: aetherforge gateway 别名 "embedding"(oMLX 常驻 Qwen3-Embedding-8B, 4096d)。
+# 地址与密钥统一由 kos.llm_gateway 解析; 不要在这里再写死 IP 或 key。
+OMLX_EMBED_MODEL = os.environ.get("OMLX_EMBED_MODEL", "embedding")
 
 # ── Model Registry ─────────────────────────────────────
 # Available embedding models with auto-switching support.
@@ -118,16 +121,19 @@ def _get_embed_backend() -> str:
         import urllib.request
 
         req = urllib.request.Request(
-            f"{OMLX_URL}/v1/models",
-            headers={"Authorization": f"Bearer {OMLX_API_KEY}"},
+            f"{gateway_url()}/v1/models",
+            headers=auth_headers(),
             method="GET",
         )
         with urllib.request.urlopen(req, timeout=2.0) as resp:
             if resp.status == 200:
                 _embed_backend = "omlx"
                 return "omlx"
-    except Exception:
-        pass
+    except Exception as exc:
+        # 降级换的是另一套向量空间(维度不同), 必须留痕, 否则索引会悄悄混用两种向量
+        logger.warning(
+            "KOS embedding: gateway %s unavailable (%s); falling back to sentence-transformers", gateway_url(), exc
+        )
 
     # Fallback to sentence-transformers
     try:
@@ -164,11 +170,11 @@ def _embed_texts_omlx(texts: list[str]) -> list[list[float]]:
     ).encode("utf-8")
 
     req = urllib.request.Request(
-        f"{OMLX_URL}/v1/embeddings",
+        f"{gateway_url()}/v1/embeddings",
         data=payload,
         headers={
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {OMLX_API_KEY}",
+            **auth_headers(),
         },
         method="POST",
     )
@@ -177,7 +183,8 @@ def _embed_texts_omlx(texts: list[str]) -> list[list[float]]:
         with urllib.request.urlopen(req, timeout=120.0) as resp:
             data = json.loads(resp.read().decode("utf-8"))
             return [item["embedding"] for item in sorted(data["data"], key=lambda x: x["index"])]
-    except urllib.error.URLError:
+    except urllib.error.URLError as exc:
+        logger.warning("KOS embedding request to %s failed: %s", gateway_url(), exc)
         return []
 
 

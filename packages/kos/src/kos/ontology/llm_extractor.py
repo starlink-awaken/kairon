@@ -32,6 +32,7 @@ from typing import Any
 
 from kos.config import get_artifact_path
 from kos.db import get_connection
+from kos.llm_gateway import auth_headers, gateway_url
 
 
 class LLMEntityExtractor:
@@ -41,13 +42,12 @@ class LLMEntityExtractor:
     """
 
     # omlx 网关配置
-    OMLX_URL = os.environ.get("LLM_GATEWAY_URL", "http://100.96.126.35:4000")
-    OMLX_API_KEY = "123456"
-    DEFAULT_MODEL = "qwopus3.6-27b-coder-mlx-8bit"
+    # 网关别名; 原 qwopus3.6-27b-coder-mlx-8bit 已不存在, 网关会静默兜底到别的模型
+    DEFAULT_MODEL = "general"
 
     def __init__(self, model: str | None = None, omlx_url: str | None = None):
         self.model = model or self.DEFAULT_MODEL
-        self.omlx_url = omlx_url or self.OMLX_URL
+        self.omlx_url = omlx_url or gateway_url()
 
     # ── 核心 API ────────────────────────────────────────────
 
@@ -252,7 +252,7 @@ class LLMEntityExtractor:
             data=payload,
             headers={
                 "Content-Type": "application/json",
-                "Authorization": f"Bearer {self.OMLX_API_KEY}",
+                **auth_headers(),
             },
             method="POST",
         )

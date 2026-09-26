@@ -31,12 +31,13 @@ from __future__ import annotations
 import json
 import os
 
+from kos.llm_gateway import auth_headers, gateway_url
+
 
 # 推理端点: 默认 omlxc 网关 (tailscale), 可通过 LLM_GATEWAY_URL 覆盖
-OMLX_GATEWAY_URL = os.environ.get("LLM_GATEWAY_URL", "http://100.96.126.35:4000")
+OMLX_GATEWAY_URL = gateway_url()
 OMLX_CHAT_URL = f"{OMLX_GATEWAY_URL}/v1/chat/completions"
 OMLX_MODELS_URL = f"{OMLX_GATEWAY_URL}/v1/models"
-OMLX_API_KEY = os.environ.get("OMLX_API_KEY", "local")
 
 
 import sqlite3
@@ -253,7 +254,7 @@ class MultimodalProcessor:
         # 调用 omlx 视觉模型
         payload = json.dumps(
             {
-                "model": "qwen3.6-27b-4bit",
+                "model": "vision",  # 网关视觉档别名(原 qwen3.6-27b-4bit 已不存在)
                 "messages": [
                     {
                         "role": "user",
@@ -278,7 +279,7 @@ class MultimodalProcessor:
             data=payload,
             headers={
                 "Content-Type": "application/json",
-                "Authorization": "Bearer " + OMLX_API_KEY,
+                **auth_headers(),
             },
             method="POST",
         )
@@ -610,7 +611,7 @@ class MultimodalProcessor:
         try:
             req = urllib.request.Request(
                 OMLX_MODELS_URL,
-                headers={"Authorization": "Bearer " + OMLX_API_KEY},
+                headers=auth_headers(),
                 method="GET",
             )
             with urllib.request.urlopen(req, timeout=2.0) as resp:

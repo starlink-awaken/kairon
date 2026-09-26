@@ -58,9 +58,10 @@ DEFAULT_CONFIG = {
         "require_confirmation_l2": True,
     },
     "api": {
-        "omlx_url": "http://100.96.126.35:4000",
-        "omlx_api_key": "123456",
-        "omlx_embed_model": "embed",
+        # 地址/密钥实际由 kos.llm_gateway 解析(环境变量 → Keychain); 这里只作展示默认
+        "omlx_url": "http://127.0.0.1:4000",
+        "omlx_api_key": "",
+        "omlx_embed_model": "embedding",
     },
 }
 

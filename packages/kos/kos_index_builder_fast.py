@@ -18,11 +18,11 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from kos.config import get_artifact_path
+from kos.llm_gateway import auth_headers, gateway_url
 
 # Configuration
-EMBED_URL = "http://127.0.0.1:8183/v1/embeddings"
-EMBED_MODEL = "embed"
-EMBED_KEY = "sk-omlx-admin"
+EMBED_URL = f"{gateway_url()}/v1/embeddings"  # 旧 :8183 单模型端口已下线
+EMBED_MODEL = "embedding"
 BATCH_SIZE = 128  # texts per API call
 MAX_WORKERS = 4  # parallel API calls
 
@@ -37,7 +37,7 @@ def embed_batch(texts):
         data=payload,
         headers={
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {EMBED_KEY}",
+            **auth_headers(),
         },
         method="POST",
     )
