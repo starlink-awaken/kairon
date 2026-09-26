@@ -59,12 +59,37 @@ class _LLMClient:
         return resp.choices[0].message.content or ""
 
 
+def _gateway_url() -> str:
+    for n in ("LLM_GATEWAY_URL", "AETHERFORGE_URL", "OMLX_URL"):
+        if os.environ.get(n):
+            return os.environ[n].rstrip("/")
+    return "http://127.0.0.1:4000"
+
+
+def _gateway_key() -> str:
+    for n in ("LLM_GATEWAY_KEY", "AETHERFORGE_API_KEY", "OMLX_API_KEY"):
+        if os.environ.get(n):
+            return os.environ[n]
+    import subprocess
+
+    try:
+        out = subprocess.run(
+            ["security", "find-generic-password", "-s", "aetherforge-gateway", "-w"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        return out.stdout.strip() if out.returncode == 0 else ""
+    except Exception:
+        return ""
+
+
 def _get_llm_client() -> _LLMClient | None:
     """Lazy-init AsyncOpenAI client via AetherForge proxy."""
     global _llm_client_instance
     if _llm_client_instance is None:
-        api_key = os.environ.get("AETHERFORGE_KEY", "local")
-        base_url = os.environ.get("AETHERFORGE_URL", "http://127.0.0.1:9290/v1")
+        api_key = os.environ.get("AETHERFORGE_KEY") or _gateway_key()
+        base_url = os.environ.get("AETHERFORGE_URL") or _gateway_url()
         from openai import AsyncOpenAI
 
         _llm_client_instance = _LLMClient(

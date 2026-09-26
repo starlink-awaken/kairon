@@ -74,7 +74,7 @@ def check_ollama() -> bool:
     """检测 Ollama 是否在运行"""
     try:
         result = subprocess.run(
-            ["curl", "-s", "http://localhost:11434/api/tags"],
+            ["curl", "-s", "--max-time", "5", "http://127.0.0.1:4000/health"],
             capture_output=True,
             text=True,
             timeout=5,

@@ -59,10 +59,10 @@ def check_ollama(timeout: float = 3.0) -> bool:
     try:
         import httpx
 
-        resp = httpx.get("http://localhost:11434/api/tags", timeout=timeout)
+        resp = httpx.get("http://127.0.0.1:4000/health", timeout=timeout)
         _OLLAMA_AVAILABLE = resp.status_code == 200
         if _OLLAMA_AVAILABLE:
-            logger.info("Ollama detected at http://localhost:11434")
+            logger.info("Gateway detected at http://127.0.0.1:4000")
         return _OLLAMA_AVAILABLE
     except Exception:
         _OLLAMA_AVAILABLE = False
