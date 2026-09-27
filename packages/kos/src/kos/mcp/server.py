@@ -223,9 +223,9 @@ def tool_search_knowledge(  # type: ignore[no-untyped-def]
         sql = f"""SELECT d.doc_id,d.title,d.kind,d.zone,d.status,d.canonical_path,d.trust_level,d.updated_at,
                    CASE WHEN d.body IS NOT NULL AND d.body != ''
                         THEN substr(d.body, 1, 300)
-                        ELSE snippet(documents_fts,1,'**','**','...',80)
+                        ELSE snippet(documents_fts,2,'**','**','...',80)
                    END AS body_preview,
-                   snippet(documents_fts,1,'**','**','...',80) AS snippet
+                   snippet(documents_fts,2,'**','**','...',80) AS snippet
             FROM documents_fts f JOIN documents d ON f.doc_id=d.doc_id
             WHERE documents_fts MATCH ? {domain_filter} {exclude_clause} ORDER BY rank LIMIT ?"""
         try:

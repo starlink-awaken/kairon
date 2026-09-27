@@ -223,7 +223,9 @@ class HybridSearchEngine:
                     SELECT d.doc_id, d.title, d.kind, d.zone, d.status,
                            d.canonical_path, d.trust_level, d.updated_at,
                            d.metadata_json,
-                           snippet(documents_fts, 1, '<b>', '</b>', '...', 80) AS snippet,
+                           -- 列序 doc_id(0), title(1), body(2): 此前取列 1 → snippet 恒为标题,
+                           -- search/context API 与 brain ask 拿不到任何正文(2026-09-27 实测)
+                           snippet(documents_fts, 2, '<b>', '</b>', '...', 64) AS snippet,
                            f.rank AS fts_rank,
                            CASE WHEN d.canonical_path LIKE '%CARDS/%' THEN 5.0 ELSE 0.0 END AS cards_boost,
                            CASE
@@ -442,7 +444,27 @@ class HybridSearchEngine:
             if len(final) >= limit:
                 break
 
+        self._fill_body_excerpts(final)
+
         return final
+
+    def _fill_body_excerpts(self, docs: list[dict], length: int = 300) -> None:
+        """语义/图谱命中不带 snippet, 按 doc_id 回表补正文摘录, 否则下游 RAG 只拿到标题。"""
+        missing = [d["doc_id"] for d in docs if not d.get("snippet") and d.get("doc_id")]
+        if not missing:
+            return
+        placeholders = ",".join("?" * len(missing))
+        try:
+            rows = self.conn.execute(
+                f"SELECT doc_id, substr(body, 1, ?) AS excerpt FROM documents WHERE doc_id IN ({placeholders})",
+                [length, *missing],
+            ).fetchall()
+        except sqlite3.OperationalError:
+            return
+        excerpts = {r[0]: (r[1] or "").strip() for r in rows}
+        for d in docs:
+            if not d.get("snippet") and d.get("doc_id") in excerpts:
+                d["snippet"] = excerpts[d["doc_id"]]
 
     # ── 工具方法 ────────────────────────────────────────────
 

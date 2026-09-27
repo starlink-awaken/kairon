@@ -407,7 +407,7 @@ def cmd_search(  # type: ignore[no-untyped-def]
             WITH scored AS (
                 SELECT d.doc_id, d.title, d.kind, d.zone, d.status,
                        d.canonical_path, d.trust_level, d.updated_at,
-                       snippet(documents_fts, 1, '<b>', '</b>', '...', 80) AS snippet,
+                       snippet(documents_fts, 2, '<b>', '</b>', '...', 64) AS snippet,  -- 列 2 = body(列 1 是 title)
                        f.rank AS fts_rank,
                        CASE WHEN d.canonical_path LIKE '%CARDS/%' THEN 5.0 ELSE 0.0 END AS cards_boost,
                        CASE
