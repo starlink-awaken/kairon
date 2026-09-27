@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import os
 from typing import TYPE_CHECKING
 
@@ -15,6 +16,10 @@ if TYPE_CHECKING:
 FORMAT_VERSION = "sophia-v1"
 
 _AUTH_TOKEN = os.environ.get("SOPHIA_AUTH_TOKEN", "")
+# 网关别名(aetherforge aliases.yaml); 原先写死 "deepseek-chat" —— 网关无此别名, 请求必然失败
+_LLM_MODEL = os.environ.get("SOPHIA_LLM_MODEL", "fast")
+
+_log = logging.getLogger(__name__)
 
 mcp = FastMCP(
     "Sophia — Research Paradigm Engine",
@@ -48,7 +53,7 @@ class _LLMClient:
         max_tokens: int,
     ) -> str:
         resp = await self._oai.chat.completions.create(
-            model="deepseek-chat",
+            model=_LLM_MODEL,
             messages=[
                 {"role": "system", "content": system},
                 {"role": "user", "content": prompt},
@@ -64,6 +69,12 @@ def _gateway_url() -> str:
         if os.environ.get(n):
             return os.environ[n].rstrip("/")
     return "http://127.0.0.1:4000"
+
+
+def _openai_base(url: str) -> str:
+    """OpenAI SDK 的 base_url 须带 /v1; 网关地址惯例不带(否则请求落到 /chat/completions → 404)。"""
+    url = url.rstrip("/")
+    return url if url.endswith("/v1") else f"{url}/v1"
 
 
 def _gateway_key() -> str:
@@ -93,7 +104,7 @@ def _get_llm_client() -> _LLMClient | None:
         from openai import AsyncOpenAI
 
         _llm_client_instance = _LLMClient(
-            AsyncOpenAI(api_key=api_key, base_url=base_url),
+            AsyncOpenAI(api_key=api_key, base_url=_openai_base(base_url)),
         )
     return _llm_client_instance
 
@@ -137,8 +148,8 @@ async def compile_paradigm(query: str, use_llm: bool = False) -> dict:
                 result = program.to_dict()
                 result["format_version"] = FORMAT_VERSION
                 return _ok(result)
-            except Exception:
-                pass  # fall through to sync fallback
+            except Exception as exc:  # 降级到规则编译, 但必须留痕 —— 此前静默吞掉, 掩盖了 LLM 路径从未调通
+                _log.warning("sophia LLM compile failed, falling back to rule-based: %s", exc)
 
     program = compile_paradigm_sync(query[:1000])
     result = program.to_dict()

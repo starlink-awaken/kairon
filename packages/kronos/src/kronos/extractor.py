@@ -334,43 +334,18 @@ class ExtractedContent:
         return "\n".join(lines)
 
 
-# ── Ollama 集成（从 fetch_router 移入） ──
+# ── 本地 LLM(经 aetherforge 门面) ──
+# 函数名保留 *_ollama 以兼容 fetch_router / mcp_server 的既有导入; 实际只走门面。
+# 旧实现: 先按 Ollama /api/tags 挑一个原生模型名(qwen2.5:7b 等)发给门面 —— 门面无此别名,
+# 静默兜底到别的档; 门面失败再直连 Ollama 端口 —— 绕过门面, 不受路由/鉴权/用量统计约束。
 
-_DEFAULT_OLLAMA_MODEL: str | None = None
+# 门面别名(aetherforge aliases.yaml); mythos-fast = oMLX 常驻快答档, 结构化抽取够用且不冷加载
+_DEFAULT_OMLX_MODEL = os.environ.get("KRONOS_LLM_MODEL", "mythos-fast")
 
 
 def _detect_ollama_model() -> str:
-    """检测 Ollama 中可用的最佳模型"""
-    global _DEFAULT_OLLAMA_MODEL
-    if _DEFAULT_OLLAMA_MODEL:
-        return _DEFAULT_OLLAMA_MODEL
-    try:
-        import httpx
-
-        resp = httpx.get("http://localhost:11434/api/tags", timeout=3)
-        if resp.status_code == 200:
-            resp_data: dict[str, Any] = resp.json()
-            models = resp_data.get("models", [])
-            preferred = ["qwen3.5:4b", "qwen3.5:9b", "qwen3-coder-next", "gemma4:e2b", "llama3.2:3b"]
-            for name in preferred:
-                for m in models:
-                    if m.get("name", "").startswith(name):
-                        model_name: str = m["name"]
-                        _DEFAULT_OLLAMA_MODEL = model_name
-                        return model_name
-            if models:
-                first_model: str = models[0]["name"]
-                _DEFAULT_OLLAMA_MODEL = first_model
-                return first_model
-    except Exception:
-        pass
-    return "qwen2.5:7b"
-
-
-# omlx 默认 model (Apple Silicon MLX server :8000, aetherforge 统一网关的本地 Provider).
-# 替代 Ollama 推理. aetherforge SSOT 网关跨包 (kairon 不依赖 aetherforge) 待 BOS RPC 工程化,
-# 当前 kronos 直连 omlx :8000 (OpenAI 兼容), omlx 即 aetherforge 路由的 local engine.
-_DEFAULT_OMLX_MODEL = "mythos-fast"
+    """返回门面别名(兼容旧名; 不再探测 Ollama 原生模型)。"""
+    return _DEFAULT_OMLX_MODEL
 
 
 def _gateway() -> tuple[str, dict[str, str]]:
@@ -399,52 +374,32 @@ def _gateway() -> tuple[str, dict[str, str]]:
 
 
 def call_ollama(prompt: str, model: str | None = None, system_prompt: str | None = None) -> str:
-    """调用本地 LLM (优先 omlx :8000 OpenAI 兼容, fallback Ollama).
-
-    omlx = Apple Silicon MLX server (aetherforge 统一网关的本地 Provider, 替代 Ollama 推理).
-    Ollama 保留 fallback (过渡). aetherforge SSOT 网关 (run_generate) 跨包待 BOS RPC 工程化.
-    """
-    # 优先 omlx :8000 (OpenAI 兼容 /v1/chat/completions)
+    """经 aetherforge 门面调用本地 LLM。失败返回以 "[Ollama" 开头的错误串(兼容调用方判定)。"""
     try:
         import httpx
-
-        messages: list[dict[str, str]] = []
-        if system_prompt:
-            messages.append({"role": "system", "content": system_prompt})
-        messages.append({"role": "user", "content": prompt})
-        base, headers = _gateway()
+    except ImportError:
+        return "[Ollama 需要 httpx: pip install httpx]"
+    messages: list[dict[str, str]] = []
+    if system_prompt:
+        messages.append({"role": "system", "content": system_prompt})
+    messages.append({"role": "user", "content": prompt})
+    base, headers = _gateway()
+    try:
         resp = httpx.post(
             base + "/v1/chat/completions",
             json={"model": model or _DEFAULT_OMLX_MODEL, "messages": messages, "stream": False},
             headers=headers,
             timeout=120,
+            trust_env=False,  # 本机/tailnet 请求不能被系统代理(Clash)截走
         )
-        if resp.status_code == 200:
-            return resp.json()["choices"][0]["message"]["content"]
-    except Exception:
-        pass  # omlx 不可用, fallback Ollama
-
-    # fallback Ollama (旧逻辑, 过渡保留)
-    if model is None:
-        model = _detect_ollama_model()
-    payload: dict = {"model": model, "prompt": prompt, "stream": False}
-    if system_prompt:
-        payload["system"] = system_prompt
-    try:
-        import httpx
-
-        resp = httpx.post(
-            os.environ.get("OLLAMA_GENERATE_URL", "http://localhost:11434/api/generate"), json=payload, timeout=120
-        )
-        if resp.status_code != 200:
-            return f"[Ollama HTTP {resp.status_code}: {resp.text[:200]}"
-        resp_data: dict[str, Any] = resp.json()
-        response_text: str = resp_data.get("response", "")
-        return response_text
-    except ImportError:
-        return "[Ollama 需要 httpx: pip install httpx]"
     except Exception as e:
-        return f"[Ollama error: {e}]"
+        logger.warning("kronos LLM gateway unreachable: %s", e)
+        return f"[Ollama gateway error: {e}]"
+    if resp.status_code != 200:
+        logger.warning("kronos LLM gateway HTTP %s: %s", resp.status_code, resp.text[:200])
+        return f"[Ollama gateway HTTP {resp.status_code}: {resp.text[:200]}]"
+    content: str = resp.json()["choices"][0]["message"].get("content") or ""
+    return content
 
 
 def extract_with_ollama(text: str, model: str | None = None) -> ExtractedResult | ErrorResult:

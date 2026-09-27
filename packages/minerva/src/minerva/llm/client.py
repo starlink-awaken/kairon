@@ -10,15 +10,15 @@ import httpx
 class OpenAICompatibleClient:
     """Thin wrapper around OpenAI-compatible /v1/chat/completions endpoint.
 
-    Works with: Ollama (localhost:11434/v1), DeepSeek (api.deepseek.com/v1),
-    LM Studio (localhost:1234/v1), and any OpenAI-compatible provider.
+    Works with the local aetherforge gateway (本机推理统一入口), DeepSeek, and any
+    OpenAI-compatible provider.
     """
 
     def __init__(
         self,
         base_url: str,
-        api_key: str = "ollama",
-        model: str = "qwen3.6:35b-a3b-coding-nvfp4",
+        api_key: str = "",
+        model: str = "fast",
         timeout: int = 120,
     ) -> None:
         self.base_url = base_url.rstrip("/")

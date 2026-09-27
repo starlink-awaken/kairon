@@ -17,10 +17,9 @@ class LLMEnhancer:
     """LLM增强器 — 失败时静默降级为规则引擎
 
     自动检测顺序:
-    1. ollama CLI → 模型列表 | 要求: ollama 已安装
-    2. 本地API → OpenAI兼容端点 | 要求: ONTODERIVE_LLM_URL 或 localhost:11434
-    3. OPENAI_API_KEY → openai 后端
-    4. ANTHROPIC_API_KEY → anthropic 后端
+    1. 本机 aetherforge 门面 → gateway 后端 | 要求: 门面 /health 可达(地址/密钥见 providers._gateway_*)
+    2. OPENAI_API_KEY → openai 后端
+    3. ANTHROPIC_API_KEY → anthropic 后端
     """
 
     def __init__(self, backend: Any = "auto", model: Any = None, base_url: Any = None) -> None:

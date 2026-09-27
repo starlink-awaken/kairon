@@ -113,6 +113,7 @@ async def _run_research(args: Any) -> int:
     print_banner()
     llm = OpenAICompatibleClient(
         base_url=config.llm.base_url,
+        api_key=config.llm.api_key,
         model=config.llm.models["agent"],
     )
     # Cloud API Key 状态（信息提示，非阻塞）
@@ -398,20 +399,20 @@ def _run_init() -> int:
     print("\n  ⚡ Minerva — First-Time Setup\n")
     checks = []
 
-    # 1. Ollama
+    # 1. 本地 LLM 网关(aetherforge)
     try:
         import httpx
+        from kos.llm_gateway import gateway_url
 
-        r = httpx.get("http://localhost:11434/api/tags", timeout=5)
+        r = httpx.get(f"{gateway_url()}/health", timeout=5, trust_env=False)
         if r.status_code == 200:
-            models = [m["name"] for m in r.json().get("models", [])]
-            print(f"  ✅ Ollama running ({len(models)} models)")
-            checks.append(("Ollama", True))
+            print(f"  ✅ LLM gateway running ({gateway_url()})")
+            checks.append(("LLM gateway", True))
         else:
             raise Exception("not ok")
     except Exception:
-        print("  ⚠️  Ollama not detected. Install: brew install ollama && ollama serve")
-        checks.append(("Ollama", False))
+        print("  ⚠️  LLM gateway not reachable (aictl status / aictl up gateway)")
+        checks.append(("LLM gateway", False))
 
     # 2. Config
     config_path = _Path(__file__).parent.parent.parent / "config" / "minerva.yaml"
@@ -467,17 +468,18 @@ def _run_check() -> int:
     passed = 0
     failed = 0
 
-    # 1. Ollama
+    # 1. 本地 LLM 网关(aetherforge)
     try:
-        r = httpx.get("http://localhost:11434/api/tags", timeout=5)
+        from kos.llm_gateway import gateway_url
+
+        r = httpx.get(f"{gateway_url()}/health", timeout=5, trust_env=False)
         if r.status_code == 200:
-            models = [m["name"] for m in r.json().get("models", [])]
-            print(f"  ✅ Ollama running ({len(models)} models: {', '.join(models[:3])}...)")
+            print(f"  ✅ LLM gateway running ({gateway_url()})")
             passed += 1
         else:
             raise Exception("not ok")
     except Exception:
-        print("  ❌ Ollama not reachable (brew install ollama && ollama serve)")
+        print("  ❌ LLM gateway not reachable (aictl status / aictl up gateway)")
         failed += 1
 
     # 2. SearXNG — prefer /health, fall back to / (upstream image often 404s /health)

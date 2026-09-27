@@ -22,7 +22,7 @@ from minerva.config import (
 class TestLLMConfig:
     def test_default_provider(self):
         c = LLMConfig()
-        assert c.provider == "ollama"
+        assert c.provider == "aetherforge"
 
     def test_default_base_url(self):
         c = LLMConfig()
@@ -30,8 +30,8 @@ class TestLLMConfig:
 
     def test_default_models(self):
         c = LLMConfig()
-        assert c.models["agent"] == "qwen3:30b-a3b"
-        assert c.models["reasoning"] == "deepseek-r1:70b"
+        assert c.models["agent"] == "fast"
+        assert c.models["reasoning"] == "reasoning"
 
     def test_custom_models(self):
         c = LLMConfig(models={"agent": "custom:7b"})
@@ -116,7 +116,7 @@ class TestLoadForgeEnv:
 class TestFromDict:
     def test_empty_dict_returns_defaults(self):
         c = MinervaConfig._from_dict({})
-        assert c.llm.provider == "ollama"
+        assert c.llm.provider == "aetherforge"
         assert c.search.searxng_url.startswith("http://")
 
     def test_tier1_llm_parsing(self):
@@ -199,7 +199,7 @@ class TestApplyEnvOverrides:
             monkeypatch.delenv(k, raising=False)
         c = self.config
         out = MinervaConfig._apply_env_overrides(c)
-        assert out.llm.provider == "ollama"
+        assert out.llm.provider == "aetherforge"
         assert out.cloud.deepseek_api_key is None
 
     def test_deepseek_override(self, monkeypatch):
@@ -268,7 +268,7 @@ class TestLoad:
     def test_load_with_no_file_returns_defaults(self, tmp_path, monkeypatch):
         monkeypatch.setenv("MINERVA_CONFIG", str(tmp_path / "nonexistent.yaml"))
         c = MinervaConfig.load()
-        assert c.llm.provider == "ollama"
+        assert c.llm.provider == "aetherforge"
 
     def test_load_with_yaml(self, tmp_path, monkeypatch):
         yaml_path = tmp_path / "minerva.yaml"
