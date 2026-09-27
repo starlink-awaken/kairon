@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 
 import yaml
-
 from forge.design_asset_adapter import (
     build_design_context,
     build_design_prompt,

@@ -127,7 +127,6 @@ class UnifiedMemory:
     # ── status ───────────────────────────────────────────────────────────
     def unified_status(self) -> dict[str, Any]:
         """Backend availability for the unified surface (diagnostics)."""
-        from mos.service import RecallResult as _R  # noqa: F401
 
         try:
             probe = self._mos.recall("__unified_status_probe__", limit=1)

@@ -24,7 +24,7 @@ import json
 import re
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 from typing import Any
 
 
@@ -331,7 +331,7 @@ class BiomarkerNormalizer:
                 # Try unix timestamp
                 try:
                     ts = int(timestamp_str)
-                    timestamp = datetime.fromtimestamp(ts, tz=timezone.utc)
+                    timestamp = datetime.fromtimestamp(ts, tz=UTC)
                 except (ValueError, TypeError, OSError):
                     continue
 
@@ -380,7 +380,7 @@ class BiomarkerNormalizer:
                                 hour=int(time_str.split(":")[0] or 0),
                                 minute=int(time_str.split(":")[1] if ":" in time_str else 0),
                             )
-                        timestamp = ts.replace(tzinfo=timezone.utc)
+                        timestamp = ts.replace(tzinfo=UTC)
                     except (ValueError, IndexError):
                         continue
 

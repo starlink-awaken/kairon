@@ -7,7 +7,6 @@ from typing import Any
 
 import yaml
 
-
 DEFAULT_MANIFEST = {
     "schema": "design-asset-manifest/v1",
     "source_type": "external_design_corpus",

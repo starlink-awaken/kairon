@@ -16,9 +16,9 @@ import os
 import sys
 import tempfile
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -37,7 +37,6 @@ from iris.connectors.openhuman.connector import (
     WatchdogState,
 )
 from iris.connectors.openhuman.token_juice import TokenJuice
-
 
 # ======================================================================
 # Watchdog Tests
@@ -355,7 +354,7 @@ class TestBiomarkerNormalizer:
 
     def test_merge_deduplication(self):
         """Merge deduplicates by (category, timestamp minute)."""
-        now = datetime(2024, 1, 15, 10, 0, 30, tzinfo=timezone.utc)
+        now = datetime(2024, 1, 15, 10, 0, 30, tzinfo=UTC)
         records = [
             NormalizedBiomarker(
                 timestamp=now.replace(second=0),
@@ -387,7 +386,7 @@ class TestBiomarkerNormalizer:
     def test_normalized_biomarker_roundtrip(self):
         """NormalizedBiomarker to_dict/from_dict roundtrip."""
         original = NormalizedBiomarker(
-            timestamp=datetime(2024, 1, 15, 10, 0, tzinfo=timezone.utc),
+            timestamp=datetime(2024, 1, 15, 10, 0, tzinfo=UTC),
             source="cgm",
             category="glucose",
             value=120.5,
@@ -431,7 +430,7 @@ class TestHealthImporter:
         self.importer = _make_importer(self.tmpdir.name)
         records = [
             NormalizedBiomarker(
-                timestamp=datetime(2024, 1, 15, 10, 0, tzinfo=timezone.utc),
+                timestamp=datetime(2024, 1, 15, 10, 0, tzinfo=UTC),
                 source="cgm",
                 category="glucose",
                 value=120,
@@ -454,7 +453,7 @@ class TestHealthImporter:
         self.importer = _make_importer(self.tmpdir.name)
         records = [
             NormalizedBiomarker(
-                timestamp=datetime(2024, 1, 15, 10, 0, tzinfo=timezone.utc),
+                timestamp=datetime(2024, 1, 15, 10, 0, tzinfo=UTC),
                 source="cgm",
                 category="glucose",
                 value=120,
@@ -472,21 +471,21 @@ class TestHealthImporter:
         self.importer = _make_importer(self.tmpdir.name)
         records = [
             NormalizedBiomarker(
-                timestamp=datetime(2024, 1, 15, 10, 0, tzinfo=timezone.utc),
+                timestamp=datetime(2024, 1, 15, 10, 0, tzinfo=UTC),
                 source="cgm",
                 category="glucose",
                 value=120,
                 unit="mg/dL",
             ),
             NormalizedBiomarker(
-                timestamp=datetime(2024, 1, 15, 11, 0, tzinfo=timezone.utc),
+                timestamp=datetime(2024, 1, 15, 11, 0, tzinfo=UTC),
                 source="garmin",
                 category="heart_rate",
                 value=72,
                 unit="bpm",
             ),
             NormalizedBiomarker(
-                timestamp=datetime(2024, 1, 15, 12, 0, tzinfo=timezone.utc),
+                timestamp=datetime(2024, 1, 15, 12, 0, tzinfo=UTC),
                 source="fitbit",
                 category="steps",
                 value=5000,

@@ -12,7 +12,7 @@ import sys
 
 os.environ.setdefault("MOS_RBAC", "0")
 
-from mos.unified import UnifiedMemory, default_unified_memory  # noqa: E402
+from mos.unified import UnifiedMemory, default_unified_memory
 
 
 def _fresh() -> UnifiedMemory:
@@ -85,7 +85,7 @@ def _run_module() -> int:
         except AssertionError as exc:
             failures.append(name)
             print(f"FAIL  {name}: {exc}")
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             failures.append(name)
             print(f"ERROR {name}: {exc!r}")
     if failures:
