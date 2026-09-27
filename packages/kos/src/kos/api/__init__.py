@@ -56,7 +56,7 @@ def search(q: str, domains: str = "", limit: int = 10) -> dict:  # type: ignore[
     try:
         rows = conn.execute(
             f"""SELECT d.title, d.zone, d.kind, d.canonical_path,
-                snippet(documents_fts,1,'<b>','</b>','...',60) as s
+                snippet(documents_fts,2,'<b>','</b>','...',60) as s
                 FROM documents_fts f JOIN documents d ON f.doc_id=d.doc_id
                 WHERE documents_fts MATCH ? {domain_filter} ORDER BY rank LIMIT ?""",
             params,

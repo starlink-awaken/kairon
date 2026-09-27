@@ -223,5 +223,49 @@ class TestRRFFusion(unittest.TestCase):
         engine.close()
 
 
+class TestSnippetBody(unittest.TestCase):
+    """snippet 必须来自正文: FTS 取 body 列, 语义命中回表补摘录 (2026-09-27 回归)."""
+
+    def _engine(self):
+        import sqlite3
+        import tempfile
+
+        from kos.hybrid_search import HybridSearchEngine
+
+        db = os.path.join(tempfile.mkdtemp(), "t.db")
+        conn = sqlite3.connect(db)
+        conn.row_factory = sqlite3.Row
+        conn.execute(
+            "CREATE TABLE documents (doc_id TEXT, title TEXT, body TEXT, kind TEXT, zone TEXT, status TEXT,"
+            " canonical_path TEXT, trust_level TEXT, updated_at TEXT, metadata_json TEXT)"
+        )
+        conn.execute("CREATE TABLE kos_entity_docs (doc_id TEXT)")
+        conn.execute("CREATE VIRTUAL TABLE documents_fts USING fts5(doc_id, title, body, tags, canonical_path)")
+        conn.execute(
+            "INSERT INTO documents (doc_id, title, body, canonical_path) VALUES ('d1', '标题一', '网关负责把请求路由到本地推理后端', 'p1')"
+        )
+        conn.execute(
+            "INSERT INTO documents_fts VALUES ('d1', 'gateway title', 'gateway routes requests to local backends', '', 'p1')"
+        )
+        conn.commit()
+        engine = HybridSearchEngine(db_path=db, cache=False)
+        engine._conn = conn
+        return engine
+
+    def test_fts_snippet_uses_body_column(self):
+        engine = self._engine()
+        rows = engine._fts5_search("routes", 5)
+        self.assertTrue(rows)
+        self.assertIn("routes", rows[0]["snippet"])
+        engine.close()
+
+    def test_semantic_hit_gets_body_excerpt(self):
+        engine = self._engine()
+        docs = [{"doc_id": "d1", "title": "标题一", "canonical_path": "p1", "source": "semantic"}]
+        out = engine._post_process(docs, 5, None)
+        self.assertIn("本地推理后端", out[0]["snippet"])
+        engine.close()
+
+
 if __name__ == "__main__":
     unittest.main()
