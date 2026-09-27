@@ -54,15 +54,22 @@ class TestLLMEnhancerDetect:
                     assert e.backend == "none"
                     assert not e.available
 
-    def test_detect_ollama_with_models(self):
-        mock_run = MagicMock()
-        mock_run.returncode = 0
-        mock_run.stdout = "NAME\tID\tSIZE\nqwen3.5:4b\tabc\t3.5GB\n"
-        with patch.dict(os.environ, {"ONTODERIVE_LLM_BACKEND": "auto"}):
+    def test_detect_gateway_when_reachable(self):
+        ok = MagicMock(status=200)
+        ok.__enter__ = MagicMock(return_value=ok)
+        ok.__exit__ = MagicMock(return_value=False)
+        with patch.dict(os.environ, {"ONTODERIVE_LLM_BACKEND": "auto"}, clear=True):
+            with patch("urllib.request.urlopen", return_value=ok):
+                e = LLMEnhancer(backend="auto")
+                assert e.backend == "gateway"
+                assert e.model == "fast"
+                assert e.available
+
+    def test_ollama_provider_env_maps_to_gateway(self):
+        with patch.dict(os.environ, {"ONTODERIVE_LLM_BACKEND": "auto", "LLM_PROVIDER": "ollama"}, clear=True):
             with patch("urllib.request.urlopen", side_effect=OSError):
-                with patch("subprocess.run", return_value=mock_run):
-                    e = LLMEnhancer(backend="auto")
-                    assert e.backend == "ollama"
+                e = LLMEnhancer(backend="auto")
+                assert e.backend == "gateway"
 
     def test_detect_litellm_from_standard_env(self):
         with patch.dict(
@@ -94,7 +101,7 @@ class TestLLMEnhancerCall:
     def test_ollama_call_timeout(self):
         e = LLMEnhancer(backend="ollama", model="test-model")
         e.available = True
-        with patch("subprocess.run", side_effect=TimeoutError):
+        with patch("urllib.request.urlopen", side_effect=TimeoutError):
             result = e._call("prompt")
             assert result is None
 
@@ -192,17 +199,14 @@ class TestLLMEnhancerEdgeCases:
             e = LLMEnhancer(backend="local")
             assert e.base_url == "http://my-proxy:8080"
 
-    def test_ollama_probe_model_not_found(self):
-        mock_run = MagicMock()
-        mock_run.returncode = 0
-        mock_run.stdout = "NAME\tID\tSIZE\nother-model\tabc\t3.5GB\n"
-        with patch.dict(os.environ, {"ONTODERIVE_LLM_BACKEND": "auto"}):
-            with patch("subprocess.run", return_value=mock_run):
-                e = LLMEnhancer(backend="auto", model="qwen3.5:4b")
+    def test_gateway_unreachable_not_available(self):
+        with patch.dict(os.environ, {"ONTODERIVE_LLM_BACKEND": "gateway"}, clear=True):
+            with patch("urllib.request.urlopen", side_effect=OSError):
+                e = LLMEnhancer(backend="gateway", model="fast")
                 assert not e.available
 
     def test_probe_exception_returns_false(self):
-        with patch("subprocess.run", side_effect=FileNotFoundError):
+        with patch("urllib.request.urlopen", side_effect=OSError):
             e = LLMEnhancer(backend="ollama", model="test")
             assert not e.available
 

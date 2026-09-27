@@ -10,14 +10,13 @@ system:
 # Tier 1 — Hard dependencies (system fails without these)
 tier1:
   llm:
-    provider: "ollama"
-    base_url: "http://localhost:11434/v1"
+    # 本地推理统一走 aetherforge 网关(地址/密钥由 kos.llm_gateway 解析: env → loopback / Keychain)。
+    # 模型填网关别名(aliases.yaml), 不填后端原生模型名 —— 后端换模型时只改别名表。
+    provider: "aetherforge"
     models:
-      # Align to host Ollama tags (2026-07-23 smoke: gemma4 + north-mini only).
-      # Override via editing this file or local ~/.minerva/config if models change.
-      agent: "gemma4:31b-mlx"       # Fast / general (was qwen3.6 nvfp4 — not on host)
-      reasoning: "gemma4:31b-mlx"   # Deep reasoning fallback to same host model
-      writer: "gemma4:31b-mlx"      # Long-form generation
+      agent: "fast"          # 快档(Splash-35B-A3B)
+      reasoning: "reasoning" # 重推理档(Splash-27B)
+      writer: "general"      # 长文生成
     defaults:
       temperature: 0.6
       top_p: 0.95

@@ -34,46 +34,64 @@ class BaseProvider(ABC):
     def probe(self) -> bool: ...
 
 
-class OllamaProvider(BaseProvider):
+# 本地推理一律经 aetherforge 门面(与 kos.llm_gateway 同一解析顺序; ontoderive 不依赖 kos)。
+# 旧实现: 自动探测时优先 `ollama` 子进程与 Ollama 端口 —— 绕过门面, 模型名是后端原生名,
+# 不受路由/鉴权/兜底/用量统计约束; 门面上线后这条路径是唯一没被收口的本地推理入口。
+_GATEWAY_DEFAULT_URL = "http://127.0.0.1:4000"
+_GATEWAY_DEFAULT_MODEL = "fast"  # 门面别名(aetherforge aliases.yaml)
+
+
+def _gateway_url() -> str:
+    return (os.environ.get("LLM_GATEWAY_URL") or os.environ.get("OMLX_URL") or _GATEWAY_DEFAULT_URL).rstrip("/")
+
+
+def _gateway_key() -> str:
+    for name in ("LLM_GATEWAY_KEY", "AETHERFORGE_API_KEY", "OMLX_API_KEY"):
+        if os.environ.get(name):
+            return os.environ[name]
+    try:
+        out = subprocess.run(
+            ["security", "find-generic-password", "-s", "aetherforge-gateway", "-w"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return ""
+    return out.stdout.strip() if out.returncode == 0 else ""
+
+
+class GatewayProvider(BaseProvider):
+    """aetherforge 门面(OpenAI 兼容 /v1/chat/completions)。"""
+
     def call(self, prompt: Any, system: Any = "", temperature: Any = 0.3) -> Any:
-        full_prompt = f"{system}\n\n{prompt}" if system else prompt
+        messages = ([{"role": "system", "content": system}] if system else []) + [{"role": "user", "content": prompt}]
+        body = {
+            "model": self.model or _GATEWAY_DEFAULT_MODEL,
+            "messages": messages,
+            "temperature": temperature,
+            "max_tokens": 500,
+        }
+        key = _gateway_key()
+        headers = {"Content-Type": "application/json", **({"Authorization": f"Bearer {key}"} if key else {})}
+        base = (self.base_url or _gateway_url()).rstrip("/")
+        url = base + ("/chat/completions" if base.endswith("/v1") else "/v1/chat/completions")
         try:
-            r = subprocess.run(
-                ["ollama", "run", self.model, full_prompt],
-                capture_output=True,
-                text=True,
-                timeout=15,
-            )
-            return r.stdout.strip() if r.returncode == 0 else None
-        except (FileNotFoundError, subprocess.TimeoutExpired, TimeoutError):
+            req = urllib.request.Request(url, data=json.dumps(body).encode(), headers=headers)
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                data = json.loads(resp.read())
+            return (data["choices"][0]["message"].get("content") or "").strip() or None
+        except (json.JSONDecodeError, OSError, ValueError, KeyError, IndexError) as e:
+            print(f"[llm] 门面调用失败: {e}", file=sys.stderr)
             return None
 
-    def probe(self) -> Any:
-        if not self.model:
-            # auto-select
-            self.model = _auto_select_ollama_model()
-            return bool(self.model)
+    def probe(self) -> bool:
+        base = (self.base_url or _gateway_url()).rstrip("/").removesuffix("/v1")
         try:
-            models = subprocess.run(["ollama", "list"], capture_output=True, text=True, timeout=3)
-            return models.returncode == 0 and self.model in models.stdout
-        except (FileNotFoundError, subprocess.TimeoutExpired):
+            with urllib.request.urlopen(urllib.request.Request(base + "/health"), timeout=3) as r:
+                return r.status == 200
+        except OSError:
             return False
-
-
-def _auto_select_ollama_model() -> str:
-    """从已安装的 ollama 模型中选一个优先级高的"""
-    try:
-        r = subprocess.run(["ollama", "list"], capture_output=True, text=True, timeout=3)
-        if r.returncode != 0:
-            return ""
-        models = r.stdout
-        for m in ["qwen3.5:4b", "qwen2.5:7b", "qwen2.5:3b", "gemma4:e2b", "qwen2.5:1.5b", "llama3.2:3b"]:
-            if m in models:
-                return m
-        first = models.strip().split("\n")[1] if "\n" in models else ""
-        return first.split()[0] if first else ""
-    except (FileNotFoundError, subprocess.TimeoutExpired):
-        return ""
 
 
 class OpenAIProvider(BaseProvider):
@@ -133,33 +151,6 @@ class AnthropicProvider(BaseProvider):
         )
 
 
-class LocalProvider(BaseProvider):
-    """本地 OpenAI 兼容 API (ollama/lmstudio 等)"""
-
-    def call(self, prompt: Any, system: Any = "", temperature: Any = 0.3) -> Any:
-        payload = {"model": self.model, "input": prompt}
-        if system:
-            payload["system_prompt"] = system
-        try:
-            req = urllib.request.Request(
-                self.base_url or os.environ.get("ONTODERIVE_LLM_URL", "http://localhost:11434"),
-                data=json.dumps(payload).encode(),
-                headers={"Content-Type": "application/json"},
-            )
-            with urllib.request.urlopen(req, timeout=15) as resp:
-                data = json.loads(resp.read())
-            for item in data.get("output", []):
-                if item.get("type") == "message":
-                    return item.get("content", "").strip()
-            return None
-        except (json.JSONDecodeError, OSError, ValueError) as e:
-            print(f"[llm] 本地API调用失败: {e}", file=sys.stderr)
-            return None
-
-    def probe(self) -> bool:
-        return True  # connection already verified during detection
-
-
 class NoneProvider(BaseProvider):
     """空实现 — 静默降级"""
 
@@ -172,10 +163,12 @@ class NoneProvider(BaseProvider):
 
 # 后端注册表
 BACKENDS: dict[str, type[BaseProvider]] = {
-    "ollama": OllamaProvider,
+    "gateway": GatewayProvider,
+    # 旧名兼容: 本地推理现只经门面, LLM_PROVIDER=ollama / ONTODERIVE_LLM_BACKEND=local 也落到门面
+    "ollama": GatewayProvider,
+    "local": GatewayProvider,
     "openai": OpenAIProvider,
     "anthropic": AnthropicProvider,
-    "local": LocalProvider,
     "none": NoneProvider,
 }
 
@@ -184,32 +177,19 @@ def detect_backend() -> tuple[str, str]:
     """自动检测可用的LLM后端, 返回 (backend_name, model)"""
     standard_provider = _standard_llm_provider()
     standard_model = os.environ.get("LLM_MODEL", "").strip()
-    if standard_provider == "ollama":
-        return "ollama", standard_model
+    if standard_provider in {"gateway", "aetherforge", "ollama", "local"}:
+        return "gateway", standard_model
     if standard_provider in {"litellm", "openai", "openrouter", "deepseek", "siliconflow"}:
         return "openai", standard_model
     if standard_provider == "anthropic":
         return "anthropic", standard_model
-    # 1) ollama
-    try:
-        r = subprocess.run(["ollama", "list"], capture_output=True, text=True, timeout=3)
-        if r.returncode == 0:
-            model = _auto_select_ollama_model()
-            return "ollama", model
-    except (FileNotFoundError, subprocess.TimeoutExpired):
-        pass
-    # 2) 本地API
-    url = os.environ.get("ONTODERIVE_LLM_URL", "http://localhost:11434")
-    try:
-        req = urllib.request.Request(url, method="GET")
-        with urllib.request.urlopen(req, timeout=3):
-            return "local", ""
-    except OSError:
-        pass
-    # 3) openai key
+    # 1) 本机 aetherforge 门面
+    if GatewayProvider().probe():
+        return "gateway", standard_model or _GATEWAY_DEFAULT_MODEL
+    # 2) openai key
     if os.environ.get("OPENAI_API_KEY"):
         return "openai", ""
-    # 4) anthropic key
+    # 3) anthropic key
     if os.environ.get("ANTHROPIC_API_KEY"):
         return "anthropic", ""
     return "none", ""

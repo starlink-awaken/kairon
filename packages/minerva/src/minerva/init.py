@@ -38,6 +38,7 @@ def create_default_executor(
 
     llm = OpenAICompatibleClient(
         base_url=config.llm.base_url,
+        api_key=config.llm.api_key,
         model=config.llm.models["agent"],
     )
     search = SearchEngine(

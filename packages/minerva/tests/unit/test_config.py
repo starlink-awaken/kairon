@@ -13,9 +13,9 @@ class TestMinervaConfig:
 
         config = MinervaConfig()
 
-        assert config.llm.provider == "ollama"
+        assert config.llm.provider == "aetherforge"
         assert config.llm.base_url == "http://127.0.0.1:4000/v1"
-        assert config.llm.models["agent"] == "qwen3:30b-a3b"
+        assert config.llm.models["agent"] == "fast"
         assert config.execution.monthly_budget_usd == 50.0
         assert config.search.searxng_url == "http://localhost:8080"
 

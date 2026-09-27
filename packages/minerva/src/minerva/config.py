@@ -52,14 +52,15 @@ class ConfigError(Exception):
 
 @dataclass
 class LLMConfig:
-    provider: str = "ollama"
+    provider: str = "aetherforge"
     base_url: str = "http://127.0.0.1:4000/v1"
     api_key: str = ""
+    # 网关别名(aetherforge aliases.yaml)
     models: dict = field(
         default_factory=lambda: {
-            "agent": "qwen3:30b-a3b",
-            "reasoning": "deepseek-r1:70b",
-            "writer": "qwen3.5:27b",
+            "agent": "fast",
+            "reasoning": "reasoning",
+            "writer": "general",
         }
     )
     temperature: float = 0.7
@@ -163,8 +164,9 @@ class MinervaConfig:
         if "llm" in tier1:
             llm_data = tier1["llm"]
             config.llm = LLMConfig(
-                provider=llm_data.get("provider", "ollama"),
-                base_url=llm_data.get("base_url", "http://localhost:11434/v1"),
+                provider=llm_data.get("provider", "aetherforge"),
+                base_url=llm_data.get("base_url") or config.llm.base_url,
+                api_key=llm_data.get("api_key", ""),
                 models=llm_data.get("models", config.llm.models),
                 temperature=llm_data.get("defaults", {}).get("temperature", 0.7),
                 top_p=llm_data.get("defaults", {}).get("top_p", 0.95),
@@ -220,6 +222,13 @@ class MinervaConfig:
     @classmethod
     def _apply_env_overrides(cls, config: MinervaConfig) -> MinervaConfig:
         """Apply environment variable overrides."""
+        # 本地网关: 地址/密钥与 KOS 共用同一解析(env → loopback, env → Keychain), 不再各写一份
+        from kos.llm_gateway import gateway_key, gateway_url
+
+        if os.environ.get("LLM_GATEWAY_URL") or os.environ.get("OMLX_URL"):
+            config.llm.base_url = gateway_url() + "/v1"
+        if not config.llm.api_key:
+            config.llm.api_key = gateway_key()
         if v := os.environ.get("DEEPSEEK_API_KEY"):
             config.cloud.deepseek_api_key = v
         if v := os.environ.get("METASO_API_KEY"):

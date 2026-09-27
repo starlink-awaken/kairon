@@ -142,12 +142,10 @@ def explain_search(
     # If semantic mode, try LanceDB first
     if use_semantic:
         try:
-            sem_args = [sys.executable, str(SCRIPT_DIR / "kos-semantic.py"), "search", query, "--limit", str(limit * 3)]
-            if zone:
-                sem_args.extend(["--domain", zone])
-            r = sp.run(sem_args, capture_output=True, text=True, timeout=15)
-            if r.returncode == 0:
-                sem_data = json.loads(r.stdout)
+            from kos.semantic import semantic_search
+
+            sem_data = semantic_search(query, limit=limit * 3, domain=zone or None)
+            if sem_data.get("results"):
                 sem_results = sem_data.get("results", [])
                 if sem_results:
                     sem_rows = []

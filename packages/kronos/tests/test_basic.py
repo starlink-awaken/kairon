@@ -81,7 +81,7 @@ class TestKronosConfig:
         cfg = get_config()
         assert "Workspace" in cfg.workspace_path
         assert cfg.fetch_timeout == 60
-        assert cfg.default_model == "qwen3.5:4b"
+        assert cfg.default_model == "fast"  # 门面别名(aetherforge aliases.yaml)
 
     def test_config_set_and_get(self):
         """Config set/get round-trip."""

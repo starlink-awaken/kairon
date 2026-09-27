@@ -619,24 +619,27 @@ def tool_research_now(query: str, level: str = "auto", max_cost: float = 1.0) ->
 
 
 def tool_semantic_search(query: str, limit: int = 10) -> dict:  # type: ignore[type-arg]
-    """Search via KOS LanceDB vector similarity, fallback to KOS FTS5."""
+    """Search via KOS LanceDB vector similarity, fallback to KOS FTS5.
+
+    直接调用 kos.semantic(进程内)。此前通过子进程跑 SCRIPT_DIR/kos-semantic.py —— 该脚本已不存在,
+    于是语义检索从未执行, 每次都静默落到 FTS5 关键词检索。
+    """
     try:
-        semantic_script = SCRIPT_DIR / "kos-semantic.py"
-        if semantic_script.exists():
-            r = sp.run(
-                [sys.executable, str(semantic_script), "search", query, "--limit", str(limit)],
-                capture_output=True,
-                text=True,
-                timeout=30,
-            )
-            if r.returncode == 0 and r.stdout.strip():
-                data = json.loads(r.stdout)
-                if data.get("results"):
-                    return cast("dict", data)
-    except Exception:  # noqa: BLE001
-        pass
-    # Fallback to KOS FTS5
-    return tool_search_knowledge(query, limit=limit)  # type: ignore[Any, Any]
+        from kos.semantic import semantic_search
+
+        data = semantic_search(query, limit=limit)
+        if data.get("results"):
+            data["mode"] = "semantic"
+            return cast("dict", data)
+        fallback_reason = data.get("error") or "no semantic hits"
+    except Exception as e:  # noqa: BLE001
+        fallback_reason = f"{type(e).__name__}: {e}"
+    # Fallback to KOS FTS5 —— 标明降级原因, 调用方能区分"语义无结果"和"语义路径坏了"
+    result = cast("dict", tool_search_knowledge(query, limit=limit))  # type: ignore[Any, Any]
+    if isinstance(result, dict):
+        result.setdefault("mode", "fts5_fallback")
+        result.setdefault("fallback_reason", fallback_reason)
+    return result
 
 
 def tool_semantic_scholar(query: str, limit: int = 5) -> dict[str, Any]:  # type: ignore[unused-ignore]
