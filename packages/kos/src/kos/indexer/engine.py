@@ -778,6 +778,12 @@ class KosIndexer:
                 doc_id, title, body, tags, canonical_path
             );
         """)
+        # 本体表(kos_entities/kos_entity_docs 等): 搜索排序、相关推荐、记忆分层都会 JOIN,
+        # 此前只有跑过本体初始化的库才有 —— 全新 KOS_HOME 里 ingest 后 search 直接报
+        # "no such table: kos_entity_docs"。全是 IF NOT EXISTS, 对已有库无影响。
+        from kos.ontology.schema import init_schema as _init_ontology_schema
+
+        _init_ontology_schema(conn)
 
     def _process_file(
         self,

@@ -185,3 +185,16 @@ class TestDocIDGeneration:
         """Same canonical path → same doc_id."""
         cp = "kos::guozhuan::_工作机制/wiki/STATE.md"
         assert hashlib.sha1(cp.encode()).hexdigest() == hashlib.sha1(cp.encode()).hexdigest()  # noqa: S324
+
+
+def test_fresh_index_has_ontology_tables(tmp_path):
+    """全新索引库也要有本体表: 搜索排序会 JOIN kos_entity_docs(此前全新 KOS_HOME ingest 后 search 报错)。"""
+    import sqlite3
+
+    from kos.indexer.engine import KosIndexer
+
+    conn = sqlite3.connect(tmp_path / "kos-index.sqlite")
+    KosIndexer._init_schema(None, conn)  # 建表不依赖实例状态
+    tables = {r[0] for r in conn.execute("select name from sqlite_master where type='table'")}
+    assert {"documents", "kos_entity_docs", "kos_entities"} <= tables
+    conn.execute("select 1 from documents d where exists (select 1 from kos_entity_docs ed where ed.doc_id = d.doc_id)")
