@@ -14,6 +14,7 @@ Endpoints:
 Start: kos api
 """
 
+from kos.tokenize import fts_query  # 全文检索式统一分词
 import json
 import sqlite3
 import sys
@@ -46,7 +47,7 @@ def search(q: str, domains: str = "", limit: int = 10) -> dict:  # type: ignore[
     if not conn:
         return {"error": "No DB"}
     domain_filter = ""
-    params = [q]
+    params = [fts_query(q)]
     if domains:
         dl = [d.strip() for d in domains.split(",")]
         placeholders = ",".join(["?"] * len(dl))

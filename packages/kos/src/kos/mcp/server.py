@@ -10,6 +10,7 @@ KOS MCP Server v1.4 — Knowledge Operating System via Model Context Protocol
          check_subscription, get_entity_timeline
 """
 
+from kos.tokenize import fts_query  # 全文检索式统一分词
 import json
 import os
 import sqlite3
@@ -164,17 +165,8 @@ def tool_search_knowledge(  # type: ignore[no-untyped-def]
     try:
         raw_query = query
         # jieba Chinese tokenization: segment query, join with OR for FTS5
-        if match_mode == "OR" and " OR " not in query and " AND " not in query:
-            try:
-                import jieba  # type: ignore[import-untyped]
-
-                tokens = list(jieba.cut(query))
-                if len(tokens) > 1:
-                    query = " OR ".join(t for t in tokens if t.strip())
-            except ImportError:
-                tokens = query.split()
-                if len(tokens) > 1:
-                    query = " OR ".join(tokens)
+        if match_mode == "OR":
+            query = fts_query(query)  # 与写入侧同一套切法(kos.tokenize)
         from pathlib import Path
 
         db_path = get_artifact_path("retrievalDatabase")  # type: ignore[reportPossiblyUnboundVariable]

@@ -30,6 +30,7 @@ from typing import Any
 
 from kos.config import get_artifact_path
 from kos.db import get_connection
+from kos.tokenize import fts_text
 from kos.semantic import _chunk_text
 
 
@@ -230,7 +231,7 @@ class IncrementalIndexer:
         )
         self.conn.execute(
             "INSERT INTO documents_fts (doc_id,title,body,tags,canonical_path) VALUES (?,?,?,?,?)",
-            (doc_id, title, body, "", canonical),
+            (doc_id, fts_text(title), fts_text(body), "", canonical),
         )
 
         # 记录指纹
@@ -283,7 +284,7 @@ class IncrementalIndexer:
         )
         self.conn.execute(
             "INSERT INTO documents_fts (doc_id,title,body,tags,canonical_path) VALUES (?,?,?,?,?)",
-            (doc_id, title, body, "", canonical),
+            (doc_id, fts_text(title), fts_text(body), "", canonical),
         )
 
         # 更新指纹

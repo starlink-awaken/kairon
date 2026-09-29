@@ -8,6 +8,7 @@ Usage:
     kos ingest ~/doc.pdf ~/report.docx           → copy + index
 """
 
+from kos.tokenize import fts_query  # 全文检索式统一分词
 import hashlib
 import json
 import re
@@ -237,7 +238,7 @@ def analyze_ingest(item: dict[str, Any]) -> dict[str, Any]:
                     continue
                 try:
                     rows = conn.execute(
-                        "SELECT title, zone FROM documents_fts WHERE documents_fts MATCH ? LIMIT 3", (kw,)
+                        "SELECT title, zone FROM documents_fts WHERE documents_fts MATCH ? LIMIT 3", (fts_query(kw),)
                     ).fetchall()
                     for r in rows:
                         if r["title"] not in [d["title"] for d in analysis["related_docs"]]:

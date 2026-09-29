@@ -17,6 +17,7 @@ from typing import Any
 
 from kos.eidos import validate_object, KnowledgeCard, Fact, OntologyNode  # type: ignore[import-not-found]
 from kos.meta_types import infer_meta_type  # type: ignore[import-not-found]
+from kos.tokenize import fts_text  # noqa: E402
 
 from typing import Callable, Any
 
@@ -207,7 +208,7 @@ def _store_document(record: dict[str, Any]) -> None:
         )
         conn.execute(
             "INSERT INTO documents_fts (doc_id,title,body,tags,canonical_path) VALUES (?,?,?,?,?)",
-            (record["doc_id"], record["title"], record["body"], "", record["canonical_path"]),
+            (record["doc_id"], fts_text(record["title"]), fts_text(record["body"]), "", record["canonical_path"]),
         )
         conn.execute(
             """INSERT OR REPLACE INTO file_fingerprints

@@ -32,6 +32,7 @@ import json
 import os
 
 from kos.llm_gateway import auth_headers, gateway_url
+from kos.tokenize import fts_text
 
 
 # 推理端点: 默认 omlxc 网关 (tailscale), 可通过 LLM_GATEWAY_URL 覆盖
@@ -589,7 +590,7 @@ class MultimodalProcessor:
                 # 同步 FTS
                 conn.execute(
                     "INSERT INTO documents_fts (doc_id, title, body, tags, canonical_path) VALUES (?,?,?,?,?)",
-                    (doc_id, f"[Multimedia] {file_path.name}", text[:8000], "", canonical),
+                    (doc_id, fts_text(f"[Multimedia] {file_path.name}"), fts_text(text[:8000]), "", canonical),
                 )
 
             conn.commit()
