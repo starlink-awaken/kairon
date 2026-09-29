@@ -17,6 +17,7 @@ Usage:
     python3 kos-maintenance.py all         # Run all checks
 """
 
+from kos.tokenize import fts_query  # 全文检索式统一分词
 import json
 import sqlite3
 import sys
@@ -201,11 +202,11 @@ def contradict() -> dict:  # type: ignore[type-arg]
     for positive, negative in opposing_pairs:
         pos_docs = conn.execute(
             "SELECT d.doc_id, d.title, d.zone FROM documents_fts f JOIN documents d ON f.doc_id=d.doc_id WHERE documents_fts MATCH ?",
-            (positive,),
+            (fts_query(positive),),
         ).fetchall()
         neg_docs = conn.execute(
             "SELECT d.doc_id, d.title, d.zone FROM documents_fts f JOIN documents d ON f.doc_id=d.doc_id WHERE documents_fts MATCH ?",
-            (negative,),
+            (fts_query(negative),),
         ).fetchall()
 
         # If same zone has both positive and negative mentions, flag as potential conflict
@@ -228,7 +229,7 @@ def contradict() -> dict:  # type: ignore[type-arg]
     for kw in policy_keywords:
         docs = conn.execute(
             "SELECT d.doc_id, d.title, d.zone FROM documents_fts f JOIN documents d ON f.doc_id=d.doc_id WHERE documents_fts MATCH ?",
-            (kw,),
+            (fts_query(kw),),
         ).fetchall()
         zones_with_policy = defaultdict(lambda: defaultdict(int))  # type: ignore[var-annotated]
         for d in docs:

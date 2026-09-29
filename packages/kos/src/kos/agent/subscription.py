@@ -22,6 +22,8 @@ Usage:
 
 from __future__ import annotations
 
+from kos.tokenize import fts_query  # 全文检索式统一分词
+
 import hashlib
 import json
 import sqlite3
@@ -116,7 +118,7 @@ class SubscriptionService:
                 WHERE documents_fts MATCH ? AND d.updated_at > ?
                 ORDER BY d.updated_at DESC LIMIT 10
             """,
-                (topic, last_check),
+                (fts_query(topic), last_check),
             ).fetchall()
         except sqlite3.OperationalError:
             new_docs = []

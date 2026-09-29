@@ -7,6 +7,7 @@
 依赖 schema 组 (get_db/init_schema).
 """
 
+from kos.tokenize import fts_query  # 全文检索式统一分词
 import json
 import re
 import sqlite3
@@ -46,7 +47,7 @@ def enrich() -> dict[str, Any]:  # type: ignore[no-untyped-def]
                 continue
             try:
                 docs = conn.execute(
-                    "SELECT doc_id FROM documents_fts WHERE documents_fts MATCH ? LIMIT 10", (safe_term,)
+                    "SELECT doc_id FROM documents_fts WHERE documents_fts MATCH ? LIMIT 10", (fts_query(safe_term),)
                 ).fetchall()
             except sqlite3.OperationalError:
                 continue

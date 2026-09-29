@@ -274,23 +274,10 @@ class HybridSearchEngine:
             return []
 
     def _prepare_fts_query(self, query: str) -> str:
-        """为 FTS5 准备查询字符串 (jieba 分词 + OR 连接)。"""
-        # 如果已经有布尔运算符，保留原样
-        if " OR " in query or " AND " in query:
-            return query
+        """为 FTS5 准备查询字符串: 统一走 kos.tokenize.fts_query。"""
+        from kos.tokenize import fts_query
 
-        # 如果含中文，做 jieba 分词
-        if re.search(r"[一-鿿]", query):
-            try:
-                from kos.indexer.engine import _tokenize_cn
-
-                tokens = _tokenize_cn(query).split()
-                if len(tokens) > 1:
-                    return " OR ".join(t for t in tokens if t.strip())
-            except ImportError:
-                pass
-
-        return query
+        return fts_query(query)
 
     # ── 向量语义检索 ───────────────────────────────────────
 

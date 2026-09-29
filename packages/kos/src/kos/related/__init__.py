@@ -2,6 +2,7 @@
 # ruff: noqa
 """KOS Related — smart document association discovery."""
 
+from kos.tokenize import fts_query  # 全文检索式统一分词
 import json
 import sqlite3
 import sys
@@ -71,7 +72,7 @@ def related(query: str, limit: int = 5) -> dict:
             try:
                 fts_docs = conn.execute(
                     "SELECT d.title, d.zone, d.doc_id FROM documents_fts f JOIN documents d ON f.doc_id=d.doc_id WHERE documents_fts MATCH ? AND d.doc_id!=? LIMIT 3",
-                    (safe_kw, doc["doc_id"]),
+                    (fts_query(safe_kw), doc["doc_id"]),
                 ).fetchall()
             except sqlite3.OperationalError:
                 continue

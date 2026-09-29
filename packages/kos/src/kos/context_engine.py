@@ -27,6 +27,8 @@ Usage:
 
 from __future__ import annotations
 
+from kos.tokenize import fts_query  # 全文检索式统一分词
+
 import json
 import re
 import sqlite3
@@ -190,7 +192,7 @@ class ContextEngine:
                    JOIN documents d ON f.doc_id = d.doc_id
                    WHERE documents_fts MATCH ?
                    ORDER BY rank LIMIT ?""",
-                (query, limit),
+                (fts_query(query), limit),
             ).fetchall()
             return [
                 {

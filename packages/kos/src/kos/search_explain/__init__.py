@@ -10,6 +10,7 @@ Usage:
 Requires: Ollama running locally (http://localhost:11434)
 """
 
+from kos.tokenize import fts_query  # 全文检索式统一分词
 import json
 import re
 import sqlite3
@@ -121,7 +122,7 @@ def explain_search(
     conn.row_factory = sqlite3.Row
 
     zone_filter = "AND d.zone = ?" if zone else ""
-    params = [query]
+    params = [fts_query(query)]
     if zone:
         params.append(zone)
     params.append(limit)  # type: ignore[arg-type]

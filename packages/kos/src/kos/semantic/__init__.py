@@ -16,6 +16,7 @@ Embedding backends:
     - st:       Sentence-transformers (all-MiniLM-L6-v2, fallback)
 """
 
+from kos.tokenize import fts_query  # 全文检索式统一分词
 import json
 import logging
 import os
@@ -475,7 +476,7 @@ def hybrid_search(query: str, limit: int = 10) -> dict:
             """SELECT d.doc_id, d.title, d.zone, d.kind, d.canonical_path
                FROM documents_fts f JOIN documents d ON f.doc_id = d.doc_id
                WHERE documents_fts MATCH ? ORDER BY rank LIMIT ?""",
-            (query, limit * 2),
+            (fts_query(query), limit * 2),
         ).fetchall()
     except sqlite3.OperationalError:
         fts_results = []

@@ -66,23 +66,10 @@ def _load_jieba_userdict() -> None:
 
 
 def _tokenize_cn(text: str) -> str:
-    """Tokenize Chinese text with jieba for FTS5 word-level indexing.
-    Without this, FTS5 treats each Chinese char as a token — "数字化平台"
-    can only be searched as individual characters, not as a phrase.
-    With jieba, it becomes "数字化 平台" → both "数字化" and "平台" match.
-    """
-    global _jieba
-    if _jieba is None:
-        try:
-            import jieba
+    """兼容旧调用点: 统一委托给 kos.tokenize.tokenize_cn(写入与查询同一套切法)。"""
+    from kos.tokenize import tokenize_cn
 
-            _jieba = jieba
-            _load_jieba_userdict()
-        except ImportError:
-            return text  # jieba not installed, fallback to raw text
-    # Tokenize: join words with spaces so FTS5 sees them as tokens
-    tokens = _jieba.cut(text)
-    return " ".join(tokens)
+    return tokenize_cn(text)
 
 
 # ── Format Handlers ─────────────────────────────────────
@@ -724,7 +711,7 @@ class KosIndexer:
                 cursor.execute("DELETE FROM documents_fts WHERE doc_id=?", (doc_id,))
                 # Insert new records
                 cursor.execute(doc_sql, tuple(d[k] for k in doc_cols))
-                cursor.execute(fts_sql, (d["doc_id"], d["title"], d["body"], "", d["canonical_path"]))
+                cursor.execute(fts_sql, (d["doc_id"], _tokenize_cn(d["title"]), d["body"], "", d["canonical_path"]))
                 fp = r["fingerprint"]
                 cursor.execute(fp_sql, fp)
             conn.commit()

@@ -279,55 +279,10 @@ def cmd_status(domain=None) -> dict[str, Any]:  # type: ignore[no-untyped-def]
 
 
 def _tokenize_search_query(query: str) -> str:
-    """Prepare a raw query string for FTS5 MATCH.
+    """兼容旧名: 统一走 kos.tokenize.fts_query。"""
+    from kos.tokenize import fts_query
 
-    - Quoted phrases ("..." or '...') are tokenized with jieba and wrapped as
-      FTS5 phrase queries (e.g. "夏明星" -> "夏 明星") so they match the
-      tokenized indexed tokens in the correct order.
-    - Unquoted segments are tokenized with jieba and joined with OR for better
-      Chinese recall, unless they already contain explicit OR/AND operators.
-    """
-    import re
-
-    def _jieba_tokens(text: str) -> list[str]:
-        try:
-            import jieba  # type: ignore[import-untyped]
-
-            return [t.strip() for t in jieba.cut(text) if t.strip()]
-        except ImportError:
-            return [t.strip() for t in text.split() if t.strip()]
-
-    # Split on quoted segments while keeping the delimiters.
-    segments = re.split(r"""(["'][^"']*["'])""", query)
-    parts: list[str] = []
-
-    for segment in segments:
-        if not segment or not segment.strip():
-            continue
-        segment = segment.strip()
-
-        # Quoted phrase -> tokenize and wrap as FTS5 phrase query.
-        if (
-            (segment.startswith('"') and segment.endswith('"')) or (segment.startswith("'") and segment.endswith("'"))
-        ) and len(segment) > 1:
-            inner = segment[1:-1].strip()
-            tokens = _jieba_tokens(inner)
-            if tokens:
-                parts.append('"' + " ".join(tokens) + '"')
-            continue
-
-        # Already contains boolean operators -> preserve as-is.
-        if " OR " in segment or " AND " in segment:
-            parts.append(segment)
-            continue
-
-        tokens = _jieba_tokens(segment)
-        if len(tokens) > 1:
-            parts.append(" OR ".join(tokens))
-        elif tokens:
-            parts.append(tokens[0])
-
-    return " ".join(parts)
+    return fts_query(query)
 
 
 def cmd_search(  # type: ignore[no-untyped-def]
@@ -743,6 +698,8 @@ def main() -> None:
     )
 
     # ingest
+    p_rebuild = sub.add_parser("rebuild-fts", help="Rebuild full-text index from stored documents (unified CJK tokenization)")
+    p_rebuild.add_argument("--dry-run", action="store_true", help="Only report counts")
     p_ingest = sub.add_parser("ingest", help="Scan a directory and index Markdown/JSON/TXT files")
     p_ingest.add_argument("path", help="Directory to scan")
     p_ingest.add_argument("--dry-run", action="store_true", help="Scan only; do not write to storage")
@@ -870,6 +827,16 @@ def main() -> None:
         )
         _format_research_output(result)
         if result.get("error") and not result.get("output"):
+            sys.exit(1)
+        return
+    elif args.command == "rebuild-fts":
+        import json as _json
+
+        from kos.commands.rebuild_fts import rebuild_fts
+
+        result = rebuild_fts(dry_run=args.dry_run)
+        print(_json.dumps(result, ensure_ascii=False))
+        if not result.get("ok"):
             sys.exit(1)
         return
     elif args.command == "ingest":

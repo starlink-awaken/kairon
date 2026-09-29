@@ -9,6 +9,7 @@ Usage:
     related = features.related("数字化平台", limit=5)
 """
 
+from kos.tokenize import fts_query  # 全文检索式统一分词
 import json
 import sqlite3
 from pathlib import Path
@@ -241,7 +242,7 @@ class SearchFeatures:
                      AND ed1.entity_id != ed2.entity_id
                    GROUP BY e2.entity_id
                    ORDER BY co_count DESC LIMIT ?""",
-                (query, limit * 2),
+                (fts_query(query), limit * 2),
             ).fetchall()
             for row in co_entity_rows:
                 if row["label"].lower() != query.lower():

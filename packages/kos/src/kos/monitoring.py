@@ -9,6 +9,7 @@ Usage:
     metrics = monitor.performance_metrics()
 """
 
+from kos.tokenize import fts_query  # 全文检索式统一分词
 import sqlite3
 import time
 from datetime import datetime, timedelta
@@ -147,7 +148,7 @@ class KosMonitor:
                     """SELECT d.doc_id FROM documents_fts f
                        JOIN documents d ON f.doc_id = d.doc_id
                        WHERE documents_fts MATCH ? LIMIT 5""",
-                    (query,),
+                    (fts_query(query),),
                 ).fetchall()
                 test_results.append(
                     {
