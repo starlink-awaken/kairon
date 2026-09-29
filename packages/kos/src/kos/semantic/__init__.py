@@ -195,6 +195,44 @@ def _embed_texts_st(texts: list[str]) -> list[list[float]]:
     return embedder.encode(texts, show_progress_bar=False).tolist()
 
 
+def embed_fingerprint() -> str:
+    """当前嵌入后端+模型的指纹: 与向量库旁的 __embed_meta.json 比对, 模型换过则整库失配。
+
+    2026-09-29 实测: 9-26 建的向量库与当前端点的模型不一致(同一文档现场算距离 0.52,
+    库内向量 1.03), 全部失配——向量库对模型漂移是全有或全无的, 必须可检测。
+    """
+    import hashlib
+
+    backend = _get_embed_backend()
+    model = OMLX_EMBED_MODEL if backend == "omlx" else os.environ.get("KOS_EMBED_MODEL", "bge-small-zh")
+    dim = _get_embedding_dim() if backend == "omlx" else 384
+    return hashlib.sha1(f"{backend}/{model}/{dim}".encode()).hexdigest()[:12]
+
+
+def _embed_meta_path():
+    from pathlib import Path
+
+    return Path(get_artifact_path("retrievalDatabase")).parent / "vectors" / "__embed_meta.json"
+
+
+def embed_meta_matches() -> bool:
+    """False = 老库/未知来源/模型已换, 需重建。"""
+    try:
+        import json as _json
+
+        return _json.loads(_embed_meta_path().read_text()).get("fingerprint") == embed_fingerprint()
+    except Exception:
+        return False
+
+
+def _write_embed_meta(chunks: int) -> None:
+    import json as _json
+
+    p = _embed_meta_path()
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(_json.dumps({"fingerprint": embed_fingerprint(), "chunks": chunks, "built_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}))
+
+
 def _embed_texts(texts: list[str]) -> list[list[float]]:
     """Embed texts using available backend."""
     backend = _get_embed_backend()
@@ -355,6 +393,11 @@ def build_index(domain: str | None = None, incremental: bool = False) -> dict:
     for i in range(0, total_chunks, batch_size):
         batch = all_texts[i : i + batch_size]
         batch_vecs = _embed_texts(batch)
+        for attempt in range(3):  # 瞬时 502/超时直接弃批会留窟窿: 重试, 间隔递增
+            if len(batch_vecs) == len(batch):
+                break
+            time.sleep(2 * (attempt + 1))
+            batch_vecs = _embed_texts(batch)
         if len(batch_vecs) != len(batch):
             # 失败批次返回 [] —— 直接 extend 会让后面所有向量错位挂到别的文档上。
             # 用空向量占位保持对齐, 下面入库时会被过滤掉。
@@ -392,6 +435,7 @@ def build_index(domain: str | None = None, incremental: bool = False) -> dict:
             pass
         tbl = db.create_table(VECTOR_TABLE, table_data)
     count = tbl.count_rows()
+    _write_embed_meta(count)
 
     elapsed = round(time.time() - t0, 1)
 
@@ -537,12 +581,16 @@ def status() -> dict:
             tbl = db.open_table(VECTOR_TABLE)
             count = tbl.count_rows()
             backend = _get_embed_backend()
-            return {
+            st = {
                 "status": "active",
                 "documents": count,
                 "backend": backend,
                 "dimensions": _get_embedding_dim(),
             }
+            if not embed_meta_matches():
+                st["status"] = "model_mismatch"
+                st["detail"] = "向量库由别的嵌入模型构建, 需重建(kos-semantic build)"
+            return st
         return {"status": "not_built", "documents": 0}
     except ImportError:
         return {"status": "unavailable", "error": "lancedb not installed"}
