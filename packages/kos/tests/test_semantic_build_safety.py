@@ -42,19 +42,17 @@ def _vec_for(text: str) -> list[float]:
     return [float(len(text)), 1.0]
 
 
-def test_failed_batch_does_not_shift_vectors(env, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_failed_batch_aborts_build(env, monkeypatch: pytest.MonkeyPatch) -> None:
+    """批失败必须中止构建 —— 窟窿库查询时看不出缺失, 比构建失败更糟(2026-09-29 实测跳了 2 万块)。"""
     vec_db, add_docs = env
     add_docs("a", "bb", "ccc")
     monkeypatch.setattr(
         semantic, "_embed_texts", lambda texts: [] if "bb" in texts[0] else [_vec_for(t) for t in texts]
     )
+    monkeypatch.setattr(semantic.time, "sleep", lambda *_: None)  # 重试不真等
 
-    semantic.build_index()
-
-    rows = vec_db.open_table(semantic.VECTOR_TABLE).to_arrow().to_pylist()
-    assert sorted(r["doc_id"] for r in rows) == ["a", "ccc"]
-    for row in rows:
-        assert list(row["vector"]) == _vec_for(f"{row['doc_id']}\nbody {row['doc_id']}")
+    with pytest.raises(RuntimeError, match="aborting build"):
+        semantic.build_index()
 
 
 def test_incremental_keeps_existing_vectors(env, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -76,3 +74,14 @@ def test_search_without_index_does_not_build(env, monkeypatch: pytest.MonkeyPatc
 
     assert result["count"] == 0
     assert "not built" in result["error"]
+
+
+def test_batch_size_env(monkeypatch):
+    """KOS_EMBED_BATCH 可调(omlx 嵌入端点大批量阵发 502, 小批存活率高)。"""
+    monkeypatch.setenv("KOS_EMBED_BATCH", "8")
+    import importlib
+
+    import kos.semantic as sem
+
+    importlib.reload(sem)
+    assert sem.BATCH_SIZE == 8
