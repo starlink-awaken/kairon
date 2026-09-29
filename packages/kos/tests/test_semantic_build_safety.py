@@ -76,3 +76,14 @@ def test_search_without_index_does_not_build(env, monkeypatch: pytest.MonkeyPatc
 
     assert result["count"] == 0
     assert "not built" in result["error"]
+
+
+def test_batch_size_env(monkeypatch):
+    """KOS_EMBED_BATCH 可调(omlx 嵌入端点大批量阵发 502, 小批存活率高)。"""
+    monkeypatch.setenv("KOS_EMBED_BATCH", "8")
+    import importlib
+
+    import kos.semantic as sem
+
+    importlib.reload(sem)
+    assert sem.BATCH_SIZE == 8

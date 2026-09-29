@@ -99,7 +99,9 @@ ST_EMBEDDING_DIM = EMBED_MODEL_REGISTRY.get(ST_MODEL_NAME, {}).get("dim", 384)
 # Vector storage
 VECTOR_TABLE = "kos_documents"
 VECTOR_CHUNK_TABLE = "kos_chunks"  # Chunked documents
-BATCH_SIZE = 128  # Optimized for larger batches
+# 批大小可调: omlx 嵌入端点在持续大批量下阵发 502(全链路实测 802 次失败/160 批跳过),
+# 小批 + 重试的存活率高得多; 默认降为 32, KOS_EMBED_BATCH 可覆盖
+BATCH_SIZE = int(os.environ.get("KOS_EMBED_BATCH", "32") or 32)
 CHUNK_SIZE = 1024  # Larger chunks = fewer embeddings needed
 CHUNK_OVERLAP = 128
 
@@ -399,10 +401,11 @@ def build_index(domain: str | None = None, incremental: bool = False) -> dict:
             time.sleep(2 * (attempt + 1))
             batch_vecs = _embed_texts(batch)
         if len(batch_vecs) != len(batch):
-            # 失败批次返回 [] —— 直接 extend 会让后面所有向量错位挂到别的文档上。
-            # 用空向量占位保持对齐, 下面入库时会被过滤掉。
-            print(f"    batch {i // batch_size} failed; {len(batch)} chunks skipped", file=sys.stderr)
-            batch_vecs = [[] for _ in batch]
+            # 窟窿比停掉更糟: 静默跳批的库查询时看不出缺失(全链路实测 160 批/2 万块被跳)。
+            # 重试 3 次仍失败 → 整个构建中止, 由调用方保留旧库重试。
+            raise RuntimeError(
+                f"embedding batch {i // batch_size} failed after retries ({len(batch)} chunks); aborting build"
+            )
         embeddings.extend(batch_vecs)
         if (i + batch_size) % 200 == 0 or i + batch_size >= total_chunks:
             print(f"    {min(i + batch_size, total_chunks)}/{total_chunks}", file=sys.stderr)
