@@ -335,6 +335,11 @@ def build_index(domain: str | None = None, incremental: bool = False) -> dict:
         return {"error": "No documents indexed. Run 'kos index' first.", "count": 0}
 
     # For incremental: filter out already-indexed docs
+    # 前提是表与当前嵌入模型同源: 指纹不匹配的旧表在增量下会"0 条需处理"假成功
+    # (2026-09-30 实测: 旧模型表 + incremental → 全跳过 → 循环误判完成)
+    if incremental and VECTOR_TABLE in db.table_names() and not embed_meta_matches():
+        print("  向量表由别的嵌入模型构建, 增量退化为全量重建", file=sys.stderr)
+        incremental = False
     existing_ids: set[str] = set()
     if incremental and VECTOR_TABLE in db.table_names():
         try:
