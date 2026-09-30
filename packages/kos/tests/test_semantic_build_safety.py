@@ -27,10 +27,11 @@ def env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr(semantic, "_get_embed_backend", lambda: "omlx")
     monkeypatch.setattr(semantic, "BATCH_SIZE", 1)
 
-    def add_docs(*doc_ids: str) -> None:
+    def add_docs(*doc_ids: str, body: str | None = None) -> None:
         c = sqlite3.connect(db_path)
         c.executemany(
-            "INSERT INTO documents VALUES (?, ?, ?, 'z', 'k', ?)", [(d, d, f"body {d}", f"/{d}") for d in doc_ids]
+            "INSERT INTO documents VALUES (?, ?, ?, 'z', 'k', ?)",
+            [(d, d, body or f"body {d}", f"/{d}") for d in doc_ids],
         )
         c.commit()
         c.close()
@@ -100,3 +101,32 @@ def test_incremental_falls_back_when_fingerprint_mismatch(env, monkeypatch: pyte
     r = semantic.build_index(incremental=True)
     rows = vec_db.open_table(semantic.VECTOR_TABLE).to_arrow()["doc_id"].to_pylist()
     assert sorted(rows) == ["a", "b"], f"指纹不匹配的增量必须全量重建: {rows}"
+
+
+def test_checkpoint_resume_after_abort(env, monkeypatch: pytest.MonkeyPatch) -> None:
+    """嵌入中断后重启: checkpoint 落盘的块不重嵌, 续跑补齐 —— 此前 abort 全丢(2026-09-30 实测 81% 白跑)。"""
+    vec_db, add_docs = env
+    long_body = "主干内容。" * 300  # 确保 4 文档 ≥ 2 批(BATCH_SIZE=2 按 chunk 计)
+    add_docs("a", "b", "c", "d", body=long_body)
+    calls = {"n": 0}
+
+    def ok_then_dead(texts):
+        calls["n"] += 1
+        if calls["n"] > 2:  # 批 1 起(含重试)永久失败 → abort; 批 0 已嵌在 pending
+            return []
+        return [_vec_for(t) for t in texts]
+
+    monkeypatch.setattr(semantic, "_embed_texts", ok_then_dead)
+    monkeypatch.setattr(semantic, "BATCH_SIZE", 2)
+    monkeypatch.setattr(semantic.time, "sleep", lambda *_: None)
+    try:
+        semantic.build_index()
+    except RuntimeError:
+        pass  # 预期 abort
+    assert semantic.CHECKPOINT_TABLE in vec_db.table_names()  # 已有落盘断点
+
+    # 续跑: 只嵌剩余的, 完成后正式表 + checkpoint 清除
+    monkeypatch.setattr(semantic, "_embed_texts", lambda texts: [_vec_for(t) for t in texts])
+    semantic.build_index()
+    assert set(vec_db.open_table(semantic.VECTOR_TABLE).to_arrow()["doc_id"].to_pylist()) == {"a", "b", "c", "d"}
+    assert semantic.CHECKPOINT_TABLE not in vec_db.table_names()

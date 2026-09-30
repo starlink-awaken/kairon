@@ -211,6 +211,43 @@ def embed_fingerprint() -> str:
     return hashlib.sha1(f"{backend}/{model}/{dim}".encode()).hexdigest()[:12]
 
 
+CHECKPOINT_TABLE = "kos_build_checkpoint"
+_CHECKPOINT_EVERY = 50  # 每 50 批(批16≈800 块)落一次盘
+
+
+def _load_checkpoint(db) -> dict[tuple[str, int], list]:
+    """断点: 已嵌入的 (doc_id, chunk_idx) → 向量。表不在或坏则空。"""
+    try:
+        if CHECKPOINT_TABLE not in db.table_names():
+            return {}
+        arrow = db.open_table(CHECKPOINT_TABLE).to_arrow()
+        return {(str(k), int(c)): v for k, c, v in
+                zip(arrow.column("doc_id").to_pylist(), arrow.column("chunk_idx").to_pylist(),
+                    arrow.column("vector").to_pylist())}
+    except Exception:
+        return {}
+
+
+def _append_checkpoint(db, rows: list) -> None:
+    if not rows:
+        return
+    try:
+        if CHECKPOINT_TABLE in db.table_names():
+            db.open_table(CHECKPOINT_TABLE).add(rows)
+        else:
+            db.create_table(CHECKPOINT_TABLE, rows)
+    except Exception as exc:  # 检查点失败不阻断嵌入
+        print(f"    checkpoint append failed: {exc}", file=sys.stderr)
+
+
+def _drop_checkpoint(db) -> None:
+    try:
+        if CHECKPOINT_TABLE in db.table_names():
+            db.drop_table(CHECKPOINT_TABLE)
+    except Exception:
+        pass
+
+
 def _embed_meta_path():
     from pathlib import Path
 
@@ -395,8 +432,29 @@ def build_index(domain: str | None = None, incremental: bool = False) -> dict:
         f"  Backend: {backend}  ·  Embedding {total_chunks} chunks from {len(docs_to_process)} docs...", file=sys.stderr
     )
 
-    embeddings: list[list[float]] = []
+    # incremental: 旧表有效向量先并入 checkpoint, 之后 checkpoint 即完整宇宙 ——
+    # 建表永远从 checkpoint 全量重建, incremental 的意义只剩"少嵌"(不丢旧向量)
+    if incremental and VECTOR_TABLE in db.table_names() and embed_meta_matches():
+        try:
+            arrow = db.open_table(VECTOR_TABLE).to_arrow()
+            old_rows = [
+                {"vector": v, "doc_id": str(k), "chunk_idx": int(c),
+                 "title": t, "zone": z, "kind": kd, "canonical_path": cp}
+                for v, k, c, t, z, kd, cp in zip(
+                    arrow.column("vector").to_pylist(), arrow.column("doc_id").to_pylist(),
+                    arrow.column("chunk_idx").to_pylist(), arrow.column("title").to_pylist(),
+                    arrow.column("zone").to_pylist(), arrow.column("kind").to_pylist(),
+                    arrow.column("canonical_path").to_pylist())
+            ]
+            known = _load_checkpoint(db)
+            _append_checkpoint(db, [r for r in old_rows if (r["doc_id"], r["chunk_idx"]) not in known])
+        except Exception as exc:
+            print(f"    旧表向量导入 checkpoint 失败: {exc}", file=sys.stderr)
+    done_map = _load_checkpoint(db)
+    if done_map:
+        print(f"    断点恢复: {len(done_map)} 块已嵌入, 跳过", file=sys.stderr)
     batch_size = BATCH_SIZE
+    pending: list[tuple[int, list]] = []  # (全局下标, 向量) 未落盘段
     for i in range(0, total_chunks, batch_size):
         batch = all_texts[i : i + batch_size]
         batch_vecs = _embed_texts(batch)
@@ -407,42 +465,57 @@ def build_index(domain: str | None = None, incremental: bool = False) -> dict:
             batch_vecs = _embed_texts(batch)
         if len(batch_vecs) != len(batch):
             # 窟窿比停掉更糟: 静默跳批的库查询时看不出缺失(全链路实测 160 批/2 万块被跳)。
-            # 重试 3 次仍失败 → 整个构建中止, 由调用方保留旧库重试。
+            # 重试 3 次仍失败 → 中止前把未落盘的已嵌段落盘(续跑只丢失败批), 由调用方重试。
+            if pending:
+                _append_checkpoint(db, [
+                    {"vector": v, "doc_id": all_meta[gi].get("doc_id", ""), "chunk_idx": all_meta[gi].get("chunk_idx", 0),
+                     "title": all_meta[gi].get("title", ""), "zone": all_meta[gi].get("zone", ""),
+                     "kind": all_meta[gi].get("kind", ""), "canonical_path": all_meta[gi].get("canonical_path", "")}
+                    for gi, v in pending])
             raise RuntimeError(
                 f"embedding batch {i // batch_size} failed after retries ({len(batch)} chunks); aborting build"
             )
-        embeddings.extend(batch_vecs)
-        if (i + batch_size) % 200 == 0 or i + batch_size >= total_chunks:
+        for j, v in enumerate(batch_vecs):
+            meta = all_meta[i + j]
+            if (str(meta.get("doc_id", "")), int(meta.get("chunk_idx", 0))) in done_map:
+                continue  # 断点已嵌
+            pending.append((i + j, v))
+        at_end = i + batch_size >= total_chunks
+        if pending and (at_end or (i // batch_size) % _CHECKPOINT_EVERY == _CHECKPOINT_EVERY - 1):
+            _append_checkpoint(db, [
+                {"vector": v, "doc_id": all_meta[gi].get("doc_id", ""), "chunk_idx": all_meta[gi].get("chunk_idx", 0),
+                 "title": all_meta[gi].get("title", ""), "zone": all_meta[gi].get("zone", ""),
+                 "kind": all_meta[gi].get("kind", ""), "canonical_path": all_meta[gi].get("canonical_path", "")}
+                for gi, v in pending])
+            pending = []
+        if (i + batch_size) % 200 == 0 or at_end:
             print(f"    {min(i + batch_size, total_chunks)}/{total_chunks}", file=sys.stderr)
 
-    if not any(embeddings):
-        return {"error": "Embedding failed", "count": 0}
-
-    # Store in LanceDB
+    # 尾段落盘后, 从 checkpoint 读回全量; all_meta 之外的孤儿(增量时未列入
+    # docs_to_process 的旧文档向量)也要带上, 否则统一重建会丢旧文档
+    done_map = _load_checkpoint(db)
+    meta_keys = {(str(m.get("doc_id", "")), int(m.get("chunk_idx", 0))) for m in all_meta}
     table_data = []
-    for i, meta in enumerate(all_meta):
-        if i < len(embeddings) and embeddings[i]:
-            table_data.append(
-                {
-                    "vector": embeddings[i],
-                    **meta,
-                }
-            )
+    for meta in all_meta:
+        v = done_map.get((str(meta.get("doc_id", "")), int(meta.get("chunk_idx", 0))))
+        if v:
+            table_data.append({"vector": v, **meta})
+    for (did, cidx), v in done_map.items():
+        if (did, cidx) not in meta_keys and did:
+            table_data.append({"vector": v, "doc_id": did, "chunk_idx": cidx,
+                               "title": "", "zone": "", "kind": "", "canonical_path": ""})
 
     if not table_data:
         return {"error": "No valid embeddings produced", "count": 0}
 
-    # 增量: 追加到已有表(原实现无论是否增量都先 drop, 增量构建会把旧向量全删掉)
-    if incremental and VECTOR_TABLE in db.table_names():
-        tbl = db.open_table(VECTOR_TABLE)
-        tbl.add(table_data)
-    else:
-        try:
-            db.drop_table(VECTOR_TABLE)
-        except Exception:
-            pass
-        tbl = db.create_table(VECTOR_TABLE, table_data)
+    # 统一从 checkpoint 全量重建(checkpoint 已含旧表向量与各轮累计), 原子替换
+    try:
+        db.drop_table(VECTOR_TABLE)
+    except Exception:
+        pass
+    tbl = db.create_table(VECTOR_TABLE, table_data)
     count = tbl.count_rows()
+    _drop_checkpoint(db)  # 正式表落成, 断点使命结束
     _write_embed_meta(count)
 
     elapsed = round(time.time() - t0, 1)
@@ -452,7 +525,7 @@ def build_index(domain: str | None = None, incremental: bool = False) -> dict:
         "documents": len(docs_to_process),
         "skipped": skipped,
         "total": total_docs,
-        "dimensions": len(embeddings[0]) if embeddings else 0,
+        "dimensions": len(table_data[0]["vector"]) if table_data else 0,
         "backend": backend,
         "elapsed_seconds": elapsed,
         "incremental": incremental,
