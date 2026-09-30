@@ -29,6 +29,8 @@ class Neo4jDriverLike(Protocol):
 
     def close(self) -> None: ...
 
+    def verify_connectivity(self) -> Any: ...
+
 
 DriverFactory = Callable[[], Neo4jDriverLike | None]
 
@@ -123,13 +125,35 @@ class Neo4jFactWriter:
     _driver: Neo4jDriverLike | None = field(default=None, init=False, repr=False)
 
     def available(self) -> bool:
+        """True only when a configured driver really answers a connectivity probe.
+
+        Driver construction is lazy — `GraphDatabase.driver()` performs no I/O —
+        so `driver is not None` used to report fake-ready: `bos://memory/mos/status`
+        returned `neo4j_available: true` while bolt://…:7687 / http://…:7474 were
+        actively refusing. `verify_connectivity()` does the cheap handshake and any
+        failure (refused, DNS, auth handshake failure, timeout) → unavailable.
+
+        Import guard: `default_driver_factory()` already returns None when the
+        `neo4j` package is not installed or the URI is unset, which lands here as
+        `d is None` → False. Test doubles without a probe fall back to
+        construction success (they cannot perform real I/O anyway).
+        """
         if not neo4j_configured():
             return False
         try:
             d = self._get_driver()
-            return d is not None
         except Exception:
             return False
+        if d is None:
+            return False
+        probe = getattr(d, "verify_connectivity", None)
+        if not callable(probe):
+            return True
+        try:
+            probe()
+        except Exception:
+            return False
+        return True
 
     def _get_driver(self) -> Neo4jDriverLike | None:
         if self._driver is not None:
@@ -308,6 +332,10 @@ class FakeNeo4jDriver:
         return FakeNeo4jSession(self)
 
     def close(self) -> None:
+        return None
+
+    def verify_connectivity(self) -> None:
+        # In-process double: construction success == reachable.
         return None
 
 

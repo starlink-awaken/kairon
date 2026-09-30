@@ -100,3 +100,70 @@ def test_status_reports_neo4j_and_rbac(monkeypatch):
     assert st["neo4j_configured"] is False
     assert st["rbac_enforced"] is True
     assert "graphiti" in st
+
+
+class _RefusingDriver:
+    """Lazy double: constructing it never connects, probing it refuses.
+
+    Mirrors the real neo4j driver's laziness — `GraphDatabase.driver()` does
+    no I/O, only `verify_connectivity()` actually dials bolt://…:7687.
+    """
+
+    def session(self):
+        raise AssertionError("connectivity probe must not open a session")
+
+    def close(self) -> None:
+        return None
+
+    def verify_connectivity(self):
+        raise OSError("SocketException: Connection refused (localhost:7687)")
+
+
+class _ReachableDriver:
+    def session(self):
+        raise AssertionError("connectivity probe must not open a session")
+
+    def close(self) -> None:
+        return None
+
+    def verify_connectivity(self):
+        return None
+
+
+def test_available_false_when_connectivity_refused(monkeypatch):
+    """Fake-ready regression: driver object exists but the server refuses."""
+    monkeypatch.setenv("NEO4J_URI", "bolt://localhost:7687")
+    w = Neo4jFactWriter(driver_factory=lambda: _RefusingDriver())
+    assert w.available() is False
+
+
+def test_available_true_when_connectivity_ok(monkeypatch):
+    monkeypatch.setenv("NEO4J_URI", "bolt://localhost:7687")
+    w = Neo4jFactWriter(driver_factory=lambda: _ReachableDriver())
+    assert w.available() is True
+
+
+def test_available_false_when_driver_missing(monkeypatch):
+    """neo4j package absent / factory bails → None driver must read as unavailable."""
+    monkeypatch.setenv("NEO4J_URI", "bolt://localhost:7687")
+    w = Neo4jFactWriter(driver_factory=lambda: None)
+    assert w.available() is False
+
+
+def test_available_false_without_uri(monkeypatch):
+    monkeypatch.delenv("NEO4J_URI", raising=False)
+    w = Neo4jFactWriter(driver_factory=lambda: _ReachableDriver())
+    assert neo4j_configured() is False
+    assert w.available() is False
+
+
+def test_status_reports_neo4j_unavailable_when_connectivity_refused(monkeypatch):
+    """bos://memory/mos/status must not claim neo4j_available for a refused server."""
+    monkeypatch.setenv("NEO4J_URI", "bolt://localhost:7687")
+    writer = Neo4jFactWriter(driver_factory=lambda: _RefusingDriver())
+    mos = MemoryOS(neo4j=writer, enforce_rbac=True)
+    st = mos.status()
+    assert st["neo4j_configured"] is True
+    assert st["neo4j_available"] is False
+    assert st["neo4j_recall"] is False
+    assert st["adapters"]["neo4j"]["available"] is False
