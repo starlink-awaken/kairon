@@ -85,3 +85,18 @@ def test_batch_size_env(monkeypatch):
 
     importlib.reload(sem)
     assert sem.BATCH_SIZE == 8
+
+
+def test_incremental_falls_back_when_fingerprint_mismatch(env, monkeypatch: pytest.MonkeyPatch) -> None:
+    """旧模型向量表 + incremental → 必须退化为全量, 不能 0 条跳过假成功(2026-09-30 实测)。"""
+    vec_db, add_docs = env
+    add_docs("a")
+    monkeypatch.setattr(semantic, "_embed_texts", lambda texts: [_vec_for(t) for t in texts])
+    semantic.build_index()  # 建表并写指纹
+    # 伪造"别的模型": 改掉指纹文件
+    meta_path = semantic._embed_meta_path()
+    meta_path.write_text('{"fingerprint": "deadbeef"}')
+    add_docs("b")
+    r = semantic.build_index(incremental=True)
+    rows = vec_db.open_table(semantic.VECTOR_TABLE).to_arrow()["doc_id"].to_pylist()
+    assert sorted(rows) == ["a", "b"], f"指纹不匹配的增量必须全量重建: {rows}"
