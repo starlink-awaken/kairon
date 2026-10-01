@@ -269,3 +269,13 @@ class TestSnippetBody(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_keyword_outranks_semantic_noise():
+    """精确词命中优先于模糊语义(2026-10-01 实测: 乱码文档语义 d≈0.8 压过 FTS 精确命中)。"""
+    import inspect
+
+    from kos.hybrid_search import HybridSearchEngine
+
+    src = inspect.getsource(HybridSearchEngine._reciprocal_rank_fusion)
+    assert '"keyword": 1.2' in src and '"semantic": 1.0' in src
