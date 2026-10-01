@@ -382,9 +382,11 @@ class HybridSearchEngine:
 
         # 动态自适应权重调节 (Adaptive Weights per Query Characteristics)
         weights = {
-            "keyword": 1.0,
-            "semantic": 1.2,  # 语义结果基础加权
-            "graph": 0.8,  # 图谱结果基础补充
+            # 精确词命中优先于模糊语义(政务/技术场景术语精确度高, 2026-10-01 实测:
+            # 「信创替代」FTS rank1 即真文档, 语义 top5 全是弱相关 d≈0.8)
+            "keyword": 1.2,
+            "semantic": 1.0,
+            "graph": 0.8,
         }
 
         # 如果匹配到领域实体或长尾复杂中文查询，动态强化图谱与关键词权重
