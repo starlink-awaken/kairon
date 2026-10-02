@@ -388,7 +388,7 @@ def build_index(domain: str | None = None, incremental: bool = False) -> dict:
             pass
 
     # Filter to process
-    docs_to_process = [d for d in docs if d["doc_id"] not in existing_ids]
+    docs_to_process = [d for d in docs if d["doc_id"] not in existing_ids and d.get("status") != "garbled"]
     skipped = total_docs - len(docs_to_process)
 
     if not docs_to_process:

@@ -318,7 +318,7 @@ def cmd_search(  # type: ignore[no-untyped-def]
         conn.row_factory = sqlite3.Row
 
         params = [query]
-        extra_where = []
+        extra_where = ["d.status != 'garbled'"]  # GBK 错码文档不入检索(2026-10-01 语义污染实测)
 
         # Zone/domain filter
         if domains:
