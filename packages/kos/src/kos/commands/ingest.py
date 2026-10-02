@@ -102,6 +102,15 @@ def _load_kos_indexer_class() -> type:
     return KosIndexer
 
 
+# GBK→Latin1 错码特征 n-gram(实测 zip 目录索引类文档): 语义向量对这类噪声距离
+# 碰巧近(2026-10-01 实测 zip_scan 混入「信创替代」语义 top), 检出即标 garbled 不入检索
+GBK_GARBLED_NGRAMS = ("Ω┐╝", "─Ω", "║▓", "╣╪", "┐╝║")
+
+
+def _is_garbled(text: str) -> bool:
+    return any(n in (text or "") for n in GBK_GARBLED_NGRAMS)
+
+
 def _build_record(file_path: Path, root: Path) -> dict[str, Any]:
     rel_path = str(file_path.relative_to(root))
     ext = file_path.suffix.lower()
@@ -150,7 +159,7 @@ def _build_record(file_path: Path, root: Path) -> dict[str, Any]:
         "title": title,
         "kind": kind,
         "zone": DEFAULT_ZONE,
-        "status": "active",
+        "status": "garbled" if _is_garbled(body) else "active",
         "source": "ingest-command",
         "owner": "",
         "created_at": file_mtime,

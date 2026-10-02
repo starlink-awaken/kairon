@@ -64,3 +64,20 @@ def test_ingest_then_chinese_search_and_context(tmp_path: Path):
     data = json.loads(ctx.stdout[ctx.stdout.index("{") :])
     knowledge = "\n".join(s["content"] for s in data["sections"] if s["type"] == "knowledge")
     assert "张磊" in knowledge, data
+
+
+def test_garbled_docs_excluded(tmp_path: Path):
+    """GBK 错码文档(zip 目录索引类)不入检索与向量 —— 语义向量对这类噪声距离碰巧近(2026-10-01 实测)。"""
+    docs = tmp_path / "docs"
+    docs.mkdir()
+    (docs / "zip_scan.md").write_text("# zip_scan\nΩ┐╝ 2023─Ω┐╝║.doc\n", encoding="utf-8")
+    (docs / "good.md").write_text("# 正常制度\n核心业务系统替代实行双轨运行。\n", encoding="utf-8")
+    home = tmp_path / "kos"; home.mkdir()
+    assert _kos(home, "ingest", str(docs)).returncode == 0
+    out = _kos(home, "search", "双轨运行").stdout
+    assert "正常制度" in out and "zip_scan" not in out
+    import sqlite3
+
+    conn = sqlite3.connect(home / "kos-index.sqlite")
+    sts = dict(conn.execute("select title, status from documents").fetchall())
+    assert sts["zip_scan"] == "garbled" and sts["正常制度"] == "active"
