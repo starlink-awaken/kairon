@@ -94,8 +94,18 @@ class UnifiedMemory:
         if result.hits:
             return result
         # Empty from the primary path — fall back to RRF over routed backends.
+        # Propagate provenance from the primary recall so the fallback does not
+        # silently reset to the conservative default and misreport the source.
         fused = self.unified_search(query, intent=resolved, limit=limit, role=role)
-        return RecallResult(query=query, intent=resolved, hits=fused, empty=not fused)
+        return RecallResult(
+            query=query,
+            intent=resolved,
+            hits=fused,
+            empty=not fused,
+            data_mode=result.data_mode,
+            live_backends=list(result.live_backends),
+            fixture_backends=list(result.fixture_backends),
+        )
 
     # ── search ───────────────────────────────────────────────────────────
     def unified_search(

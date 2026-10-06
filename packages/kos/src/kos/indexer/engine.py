@@ -711,7 +711,7 @@ class KosIndexer:
                 cursor.execute("DELETE FROM documents_fts WHERE doc_id=?", (doc_id,))
                 # Insert new records
                 cursor.execute(doc_sql, tuple(d[k] for k in doc_cols))
-                cursor.execute(fts_sql, (d["doc_id"], _tokenize_cn(d["title"]), d["body"], "", d["canonical_path"]))
+                cursor.execute(fts_sql, (d["doc_id"], _tokenize_cn(d["title"]), d["body_fts"], "", d["canonical_path"]))
                 fp = r["fingerprint"]
                 cursor.execute(fp_sql, fp)
             conn.commit()
@@ -814,8 +814,11 @@ class KosIndexer:
 
             title = meta.get("title", abs_path.stem)
             body = text[:8000] if text else ""
-            # Tokenize Chinese for FTS5 word-level matching
-            body = _tokenize_cn(body)
+            # `documents.body` keeps the raw text; FTS5 stores the jieba-segmented
+            # form (tokenize.py invariant: any write to documents_fts uses fts_text()).
+            # Computed here, in the worker pool, so tokenization stays parallel and
+            # off the single-threaded DB writer.
+            body_fts = _tokenize_cn(body)
             size = len(body.encode("utf-8"))
 
             return {
@@ -840,6 +843,8 @@ class KosIndexer:
                     "write_policy": "managed",
                     "metadata_json": json.dumps(meta, ensure_ascii=False),
                     "body": body,
+                    # FTS-only tokenized body; not a `documents` column (see doc_cols).
+                    "body_fts": body_fts,
                     "file_size": size,
                     "file_mtime": fmtime,
                 },

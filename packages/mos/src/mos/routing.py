@@ -29,16 +29,20 @@ INTENT_ROUTES: dict[str, list[str]] = {
     "general": [BACKEND_KOS, BACKEND_GBRAIN, BACKEND_NEO4J, BACKEND_TEMPORAL],
 }
 
+# CJK arms carry no `\b`: `\b` is defined over `\w`, which for `str` patterns is
+# Unicode-aware and INCLUDES CJK, so a CJK token inside a run of CJK (文档路径) has
+# no boundary on either side and a `\b`-wrapped CJK arm can never match.
+# ASCII arms keep their `\b` so taskforce / recard / vaulted still do not match.
 _CODE_RE = re.compile(
-    r"\b(caller|callee|function|def |class |import |call graph|谁调用|调用了|函数)\b",
+    r"\b(?:caller|callee|function|def |class |import |call graph)\b|(?:谁调用|调用了|函数)",
     re.I,
 )
-_PREF_RE = re.compile(r"\b(prefer|preference|过敏|素食|喜欢|不要|记住我|my preference)\b", re.I)
-_ENTITY_RE = re.compile(r"\b(relation|related to|works at|invest(?:ed|or|ment|s)?|关系|谁投资)\b", re.I)
-_TASK_RE = re.compile(r"\b(task|debt|todo|任务|债务|开放任务)\b", re.I)
-_CARD_RE = re.compile(r"\b(card|知识卡片|卡片)\b", re.I)
-_FILE_RE = re.compile(r"\b(ADR|文档|笔记|vault|readme|哪个文件|which (file|doc))\b", re.I)
-# Note: avoid \b for CJK tokens (Python word-boundary is ASCII-oriented)
+_PREF_RE = re.compile(r"\b(?:prefer|preference|my preference)\b|(?:过敏|素食|喜欢|不要|记住我)", re.I)
+_ENTITY_RE = re.compile(r"\b(?:relation|related to|works at|invest(?:ed|or|ment|s)?)\b|(?:关系|谁投资)", re.I)
+_TASK_RE = re.compile(r"\b(?:task|debt|todo)\b|(?:任务|债务|开放任务)", re.I)
+_CARD_RE = re.compile(r"\b(?:card)\b|(?:知识卡片|卡片)", re.I)
+_FILE_RE = re.compile(r"\b(?:ADR|vault|readme|which (?:file|doc))\b|(?:文档|笔记|哪个文件)", re.I)
+# _TEMPORAL_RE already followed the no-`\b`-for-CJK rule; it is unchanged here.
 _TEMPORAL_RE = re.compile(
     r"(valid(?:_from|_to)?|expired|as[- ]of|until|effective|时效|有效期|何时生效|过期|before \d{4}|after \d{4})",
     re.I,
