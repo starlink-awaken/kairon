@@ -26,6 +26,67 @@ from mos.rbac import check_action, resolve_role
 from mos.routing import backends_for_intent, classify_intent, rrf_fuse
 
 
+# A backend counts as live ONLY when its enable flag holds AND it reports available
+# AND it carries no last_error. Anything else (InMemory*, *_ShadowAdapter,
+# _ThetaAsSearch, an unconfigured / offline / erroring live backend, or an unknown
+# class) is a fixture/stub.
+def _live_enabled_for(cls_name: str) -> bool:
+    if cls_name in ("LiveKosSearchBackend", "LiveGbrainSearchBackend"):
+        from mos.adapters.live_backends import (  # local import avoids an import cycle
+            live_gbrain_enabled,
+            live_kos_enabled,
+        )
+
+        predicate = live_kos_enabled if cls_name == "LiveKosSearchBackend" else live_gbrain_enabled
+        return bool(predicate())
+    if cls_name == "Neo4jSearchBackend":
+        return bool(neo4j_configured())
+    return False
+
+
+def backend_data_mode(backend: Any) -> str:
+    """'live' only if the backend is enabled AND reachable AND error-free.
+
+    Derived from real runtime state (flag + `available()` + `last_error`), never from
+    the class name alone: a flag-on backend whose endpoint/CLI is down reports
+    `available() == False` or sets `last_error`, and must read as fixture — so a
+    caller cannot mistake an empty stub result for production recall.
+    """
+    cls = type(backend).__name__
+    if not _live_enabled_for(cls):
+        return "fixture"
+    if getattr(backend, "last_error", None):
+        return "fixture"
+    # Neo4j's search adapter exposes availability through its writer.
+    probe = getattr(backend, "available", None)
+    if cls == "Neo4jSearchBackend":
+        probe = getattr(getattr(backend, "writer", None), "available", None)
+    try:
+        if not callable(probe) or not probe():
+            return "fixture"
+    except Exception:
+        return "fixture"
+    return "live"
+
+
+def classify_data_mode(live_backends: list[str], fixture_backends: list[str]) -> str:
+    if live_backends and not fixture_backends:
+        return "live"
+    if live_backends:
+        return "mixed"
+    return "fixture"
+
+
+def _fixture_notice(data_mode: str, fixture_backends: list[str]) -> str | None:
+    if data_mode == "live":
+        return None
+    served = ", ".join(fixture_backends) if fixture_backends else "none"
+    return (
+        f"{data_mode} mode: recall/status served by fixture/stub backends "
+        f"({served}); this is NOT production data"
+    )
+
+
 def rbac_enforced() -> bool:
     """RBAC on by default; set MOS_RBAC=0 to disable (tests/dev)."""
     val = (os.environ.get("MOS_RBAC") or "1").strip().lower()
@@ -119,6 +180,11 @@ class RecallResult:
     hits: list[dict[str, Any]]
     backend_status: dict[str, str] = field(default_factory=dict)
     empty: bool = False
+    # Honest data provenance: never let a caller mistake a fixture/stub recall for a
+    # real one. "live" | "mixed" | "fixture".
+    data_mode: str = "fixture"
+    live_backends: list[str] = field(default_factory=list)
+    fixture_backends: list[str] = field(default_factory=list)
 
     @property
     def count(self) -> int:
@@ -132,6 +198,10 @@ class RecallResult:
             "backend_status": self.backend_status,
             "empty": self.empty or len(self.hits) == 0,
             "count": self.count,
+            "data_mode": self.data_mode,
+            "live_backends": self.live_backends,
+            "fixture_backends": self.fixture_backends,
+            "notice": _fixture_notice(self.data_mode, self.fixture_backends),
         }
 
 
@@ -329,12 +399,18 @@ class MemoryOS:
                 status[name] = f"degraded:{exc}"
         fused = rrf_fuse(ranked, limit=limit)
         fused = filter_hits(fused, scope)
+        used_names = [n for n in names if n in self._search]
+        live_backends = [n for n in used_names if backend_data_mode(self._search[n]) == "live"]
+        fixture_backends = [n for n in used_names if n not in live_backends]
         return RecallResult(
             query=query,
             intent=resolved,
             hits=fused,
             backend_status=status,
             empty=len(fused) == 0,
+            data_mode=classify_data_mode(live_backends, fixture_backends),
+            live_backends=live_backends,
+            fixture_backends=fixture_backends,
         )
 
     def create_knowledge_ref(
@@ -436,6 +512,9 @@ class MemoryOS:
         except Exception:
             neo4j_ok = False
         last_c = self._last_consolidate
+        live_names = [n for n, b in sorted(self._search.items()) if backend_data_mode(b) == "live"]
+        fixture_names = [n for n, b in sorted(self._search.items()) if n not in live_names]
+        data_mode = classify_data_mode(live_names, fixture_names)
         return {
             "ok": True,
             "version": "0.10.0",
@@ -463,6 +542,11 @@ class MemoryOS:
             "rbac_default_role": resolve_role(),
             "graphiti": graphiti_backend_status(),
             "search_backends": sorted(self._search.keys()),
+            # Honest data provenance: which fan-out backends are real vs fixture/stub.
+            "data_mode": data_mode,
+            "live_backends": live_names,
+            "fixture_backends": fixture_names,
+            "data_mode_note": _fixture_notice(data_mode, fixture_names),
             # Honest adapter posture (registry SSOT narrative; runtime probes above)
             "adapters": self._adapter_status(neo4j_ok=neo4j_ok),
             "events": {

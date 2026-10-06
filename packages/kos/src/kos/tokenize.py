@@ -10,6 +10,7 @@ token。所以写入时要先用 jieba 切成空格分隔的词, 查询时同样
 
 from __future__ import annotations
 
+import logging
 import re
 from pathlib import Path
 
@@ -17,6 +18,28 @@ _CJK = re.compile(r"[一-鿿]")
 _WORD = re.compile(r"[\w一-鿿]")  # 至少含一个字母/数字/汉字才算词, 标点丢弃
 _FTS_OPERATORS = re.compile(r"\s(OR|AND|NOT|NEAR)\s|NEAR\(")
 _jieba = None
+# The jieba-missing fallback used to be silent (FAIL-20260513-005 class). It is
+# still the same fallback (raw text) — but it now announces itself once, so a
+# caller can tell "already tokenized" from "jieba unavailable, degraded to raw".
+_jieba_missing_warned = False
+logger = logging.getLogger("kos.tokenize")
+
+
+def jieba_available() -> bool:
+    """False when `_get_jieba()` could not import jieba (FTS degrades to raw text)."""
+    return _get_jieba() is not None
+
+
+def _warn_jieba_missing() -> None:
+    global _jieba_missing_warned
+    if _jieba_missing_warned:
+        return
+    _jieba_missing_warned = True
+    logger.warning(
+        "jieba 不可用: tokenize_cn/fts_text 退化为原文 (不做中文分词)。"
+        "documents_fts 的中文召回会下降; 安装 jieba 后重跑索引。"
+        "（行为未变，仅此前静默的降级现在可见。）"
+    )
 
 
 def _get_jieba():
@@ -40,7 +63,11 @@ def tokenize_cn(text: str) -> str:
     if not text:
         return text or ""
     jb = _get_jieba()
-    if jb is None or not _CJK.search(text):
+    if jb is None:
+        if _CJK.search(text):
+            _warn_jieba_missing()
+        return text
+    if not _CJK.search(text):
         return text
     return " ".join(t for t in jb.cut(text) if t.strip())
 
