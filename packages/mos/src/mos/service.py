@@ -87,6 +87,22 @@ def _fixture_notice(data_mode: str, fixture_backends: list[str]) -> str | None:
     )
 
 
+def _observe_execution(data_mode: str, live_backends: list[str], *, intent: str | None = None) -> None:
+    """Fire-and-forget ADR-0464 observability seam.
+
+    Records that a real (non-fixture) recall executed. Strictly telemetry: it
+    never mutates recall state, never raises into the caller, and writes nothing
+    when the result was served only by fixture/stub backends.
+    """
+    try:
+        from mos.observations import record_real_execution
+
+        record_real_execution(data_mode, live_backends, source="recall", intent=intent)
+    except Exception:
+        # Fail SOFT — a seam failure must never break recall.
+        return
+
+
 def rbac_enforced() -> bool:
     """RBAC on by default; set MOS_RBAC=0 to disable (tests/dev)."""
     val = (os.environ.get("MOS_RBAC") or "1").strip().lower()
@@ -402,13 +418,17 @@ class MemoryOS:
         used_names = [n for n in names if n in self._search]
         live_backends = [n for n in used_names if backend_data_mode(self._search[n]) == "live"]
         fixture_backends = [n for n in used_names if n not in live_backends]
+        data_mode = classify_data_mode(live_backends, fixture_backends)
+        # ADR-0464 blind spot 1 seam: telemetry only, fail-soft, writes nothing on
+        # fixture. Observing a real execution must not change recall behavior.
+        _observe_execution(data_mode, live_backends, intent=resolved)
         return RecallResult(
             query=query,
             intent=resolved,
             hits=fused,
             backend_status=status,
             empty=len(fused) == 0,
-            data_mode=classify_data_mode(live_backends, fixture_backends),
+            data_mode=data_mode,
             live_backends=live_backends,
             fixture_backends=fixture_backends,
         )
