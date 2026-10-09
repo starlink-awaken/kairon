@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.13"
 resolution-markers = [
     "python_full_version >= '3.15' and sys_platform == 'win32'",
@@ -2917,6 +2917,7 @@ dependencies = [
     { name = "kairon-utils" },
     { name = "kos" },
     { name = "lancedb" },
+    { name = "mos" },
     { name = "pydantic" },
     { name = "pyyaml" },
     { name = "readability-lxml" },
@@ -2962,6 +2963,7 @@ requires-dist = [
     { name = "kairon-utils", editable = "packages/kairon-utils" },
     { name = "kos", editable = "packages/kos" },
     { name = "lancedb", specifier = ">=0.21" },
+    { name = "mos", editable = "packages/mos" },
     { name = "mos", marker = "extra == 'mos'", editable = "packages/mos" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0" },
     { name = "neo4j", marker = "extra == 'tier2'", specifier = ">=5.0" },
