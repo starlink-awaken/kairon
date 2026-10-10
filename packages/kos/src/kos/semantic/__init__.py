@@ -109,6 +109,7 @@ CHUNK_OVERLAP = 128
 _embedder = None
 _lancedb = None
 _embed_backend = None  # "omlx" | "st"
+_probed_dim: int | None = None  # 网关侧真实维度(探测一次缓存, 见 _get_embedding_dim)
 
 # ── Embedding Backends ─────────────────────────────────
 
@@ -160,8 +161,12 @@ def _get_embedder() -> Any:
     return _embedder
 
 
-def _embed_texts_omlx(texts: list[str]) -> list[list[float]]:
-    """Embed texts via omlx gateway."""
+def _embed_texts_omlx(texts: list[str], task: str = "document") -> list[list[float]]:
+    """Embed texts via omlx gateway.
+
+    task: 非对称嵌入模型(如 EG2/EmbeddingGemma-2)需要 query/document 前缀区分;
+    "document" 是多数网关默认, 不发送以保持对现有后端的字节级兼容。
+    """
     import urllib.request
     import urllib.error
 
@@ -169,6 +174,7 @@ def _embed_texts_omlx(texts: list[str]) -> list[list[float]]:
         {
             "model": OMLX_EMBED_MODEL,
             "input": texts,
+            **({"task": task} if task != "document" else {}),
         }
     ).encode("utf-8")
 
@@ -272,12 +278,12 @@ def _write_embed_meta(chunks: int) -> None:
     p.write_text(_json.dumps({"fingerprint": embed_fingerprint(), "chunks": chunks, "built_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}))
 
 
-def _embed_texts(texts: list[str]) -> list[list[float]]:
+def _embed_texts(texts: list[str], task: str = "document") -> list[list[float]]:
     """Embed texts using available backend."""
     backend = _get_embed_backend()
 
     if backend == "omlx":
-        return _embed_texts_omlx(texts)
+        return _embed_texts_omlx(texts, task=task)
     elif backend == "st":
         return _embed_texts_st(texts)
     else:
@@ -286,9 +292,16 @@ def _embed_texts(texts: list[str]) -> list[list[float]]:
 
 def _get_embedding_dim() -> int:
     """Get embedding dimension based on backend."""
+    global _probed_dim
     backend = _get_embed_backend()
     if backend == "omlx":
-        return 4096  # qwen3-embedding-8b
+        if _probed_dim is None:
+            # 网关背后可能是 qwen3-8b(4096d)也可能是 EG2(768d)等, 写死必错;
+            # 真实探测一次并缓存, fingerprint/建表列都依赖它。
+            probe = _embed_texts_omlx(["dim probe"])
+            _probed_dim = len(probe[0]) if probe and probe[0] else 4096
+            logger.info("KOS embedding dim probed: %d", _probed_dim)
+        return _probed_dim
     return ST_EMBEDDING_DIM
 
 
@@ -362,9 +375,12 @@ def build_index(domain: str | None = None, incremental: bool = False) -> dict:
         where = "WHERE zone = ?"
         params.append(domain)
 
-    docs = conn.execute(
-        f"SELECT doc_id, title, body, zone, kind, canonical_path FROM documents {where}", params
-    ).fetchall()
+    docs = [
+        dict(r)
+        for r in conn.execute(
+            f"SELECT doc_id, title, body, zone, kind, canonical_path FROM documents {where}", params
+        ).fetchall()
+    ]  # Row → dict: 下游 d.get("status") 在 sqlite3.Row 上会 AttributeError
     conn.close()
 
     total_docs = len(docs)
@@ -555,8 +571,8 @@ def semantic_search(query: str, limit: int = 10, domain: str | None = None) -> d
     if backend == "none":
         return {"error": "No embedding backend available", "results": [], "count": 0}
 
-    # Embed query
-    query_vecs = _embed_texts([query])
+    # Embed query(非对称模型用 SearchQuery 前缀, 见 _embed_texts_omlx)
+    query_vecs = _embed_texts([query], task="query")
     if not query_vecs:
         return {"error": "Query embedding failed", "results": [], "count": 0}
     q_vec = query_vecs[0]
