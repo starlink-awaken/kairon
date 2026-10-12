@@ -167,6 +167,9 @@ def _embed_texts_omlx(texts: list[str], task: str = "document") -> list[list[flo
     task: 非对称嵌入模型(如 EG2/EmbeddingGemma-2)需要 query/document 前缀区分;
     "document" 是多数网关默认, 不发送以保持对现有后端的字节级兼容。
     """
+    # 小批 + 重试: 网关/服务闪断(如 EG2 长跑 MPS 抖动)不该击穿整个构建;
+    # RemoteDisconnected 属 http.client.HTTPException, 不在 URLError 体系内, 必须显式捕获。
+    import http.client
     import urllib.request
     import urllib.error
 
@@ -178,23 +181,29 @@ def _embed_texts_omlx(texts: list[str], task: str = "document") -> list[list[flo
         }
     ).encode("utf-8")
 
-    req = urllib.request.Request(
-        f"{gateway_url()}/v1/embeddings",
-        data=payload,
-        headers={
-            "Content-Type": "application/json",
-            **auth_headers(),
-        },
-        method="POST",
-    )
-
-    try:
-        with urllib.request.urlopen(req, timeout=120.0) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-            return [item["embedding"] for item in sorted(data["data"], key=lambda x: x["index"])]
-    except urllib.error.URLError as exc:
-        logger.warning("KOS embedding request to %s failed: %s", gateway_url(), exc)
-        return []
+    last_exc: Exception | None = None
+    for attempt in range(3):
+        req = urllib.request.Request(
+            f"{gateway_url()}/v1/embeddings",
+            data=payload,
+            headers={
+                "Content-Type": "application/json",
+                **auth_headers(),
+            },
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=120.0) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+                return [item["embedding"] for item in sorted(data["data"], key=lambda x: x["index"])]
+        except (urllib.error.URLError, http.client.HTTPException, OSError) as exc:
+            last_exc = exc
+            logger.warning(
+                "KOS embedding attempt %d/3 to %s failed: %s", attempt + 1, gateway_url(), exc
+            )
+            time.sleep(2 ** attempt)
+    logger.warning("KOS embedding gave up after 3 attempts: %s", last_exc)
+    return []
 
 
 def _embed_texts_st(texts: list[str]) -> list[list[float]]:
