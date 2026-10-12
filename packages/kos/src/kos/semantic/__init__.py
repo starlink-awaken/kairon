@@ -125,7 +125,7 @@ def _get_embed_backend() -> str:
         import urllib.request
 
         req = urllib.request.Request(
-            f"{gateway_url()}/v1/models",
+            f"{_embed_gateway_url()}/v1/models",
             headers=auth_headers(),
             method="GET",
         )
@@ -136,7 +136,7 @@ def _get_embed_backend() -> str:
     except Exception as exc:
         # 降级换的是另一套向量空间(维度不同), 必须留痕, 否则索引会悄悄混用两种向量
         logger.warning(
-            "KOS embedding: gateway %s unavailable (%s); falling back to sentence-transformers", gateway_url(), exc
+            "KOS embedding: gateway %s unavailable (%s); falling back to sentence-transformers", _embed_gateway_url(), exc
         )
 
     # Fallback to sentence-transformers
@@ -159,6 +159,15 @@ def _get_embedder() -> Any:
 
         _embedder = SentenceTransformer(ST_MODEL_NAME)
     return _embedder
+
+
+def _embed_gateway_url() -> str:
+    """嵌入专用网关地址: EG2(8710)与 LLM 门面(:4000)分离部署。
+
+    gateway_url() 被 ontology/multimodal 的 LLM 调用共用, 嵌入若借道
+    LLM_GATEWAY_URL 切到嵌入服务会把它们一起打死; 故独立变量独立回落。
+    """
+    return os.environ.get("KOS_EMBED_URL") or gateway_url()
 
 
 def _embed_texts_omlx(texts: list[str], task: str = "document") -> list[list[float]]:
@@ -184,7 +193,7 @@ def _embed_texts_omlx(texts: list[str], task: str = "document") -> list[list[flo
     last_exc: Exception | None = None
     for attempt in range(3):
         req = urllib.request.Request(
-            f"{gateway_url()}/v1/embeddings",
+            f"{_embed_gateway_url()}/v1/embeddings",
             data=payload,
             headers={
                 "Content-Type": "application/json",
@@ -199,7 +208,7 @@ def _embed_texts_omlx(texts: list[str], task: str = "document") -> list[list[flo
         except (urllib.error.URLError, http.client.HTTPException, OSError) as exc:
             last_exc = exc
             logger.warning(
-                "KOS embedding attempt %d/3 to %s failed: %s", attempt + 1, gateway_url(), exc
+                "KOS embedding attempt %d/3 to %s failed: %s", attempt + 1, _embed_gateway_url(), exc
             )
             time.sleep(2 ** attempt)
     logger.warning("KOS embedding gave up after 3 attempts: %s", last_exc)
