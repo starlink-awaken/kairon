@@ -72,7 +72,8 @@ def test_garbled_docs_excluded(tmp_path: Path):
     docs.mkdir()
     (docs / "zip_scan.md").write_text("# zip_scan\nΩ┐╝ 2023─Ω┐╝║.doc\n", encoding="utf-8")
     (docs / "good.md").write_text("# 正常制度\n核心业务系统替代实行双轨运行。\n", encoding="utf-8")
-    home = tmp_path / "kos"; home.mkdir()
+    home = tmp_path / "kos"
+    home.mkdir()
     assert _kos(home, "ingest", str(docs)).returncode == 0
     out = _kos(home, "search", "双轨运行").stdout
     assert "正常制度" in out and "zip_scan" not in out
