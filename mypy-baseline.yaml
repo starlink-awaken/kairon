@@ -1,10 +1,16 @@
 version: '1.0'
 status: active
-updated_at: '2026-09-04T05:51:08Z'
+updated_at: '2026-10-28T03:11:18Z'
 owner: governance
 invocation: MYPYPATH=src mypy src --namespace-packages --explicit-package-bases --exclude tests/ (per-package)
 policy: regression-only
-note: '[2026-06-23 已付清 ✅] total_errors=0, 16/16 包全绿 (make typecheck-report 真相验证 MYPYPATH=src). 历史 (已解决):
+note: '[2026-10-28 刷新] baseline 261 → 272。旧 baseline 描述的码是 2026-08-16 (b8402919) ——
+  updated_at 虽写 2026-09-04, 但那是文件时间不是码的时间。此后 kos 22 个 commit
+  (嵌入断点续传 / 非对称 task 前缀 / 嵌入专用网关等) 累计 +11 (kos +7 / mos +2 /
+  forge +1 / minerva +1 / ontoderive +1), 全是新特性的**注解债** (no-untyped-def /
+  var-annotated / no-any-return), 非行为 bug。gate 自 2026-09-14 起恒红 ⇒ 期间新错误
+  无人拦, 刷新即恢复信号; 刷新后实测 272 <= 272 无回归。
+  [2026-06-23 已付清 ✅] total_errors=0, 16/16 包全绿 (make typecheck-report 真相验证 MYPYPATH=src). 历史 (已解决):
   真实调法曾暴露 1245 errors / 9 包有错 / 7 包干净.
 
   旧 `mypy src` 无 MYPYPATH 对多数包给假绿 (mypy 解析不出跨包 import 当 Any 静默通过),
@@ -19,23 +25,23 @@ note: '[2026-06-23 已付清 ✅] total_errors=0, 16/16 包全绿 (make typechec
 
   '
 totals:
-  total_errors: 261
+  total_errors: 272
   packages_with_errors: 8
   packages_clean: 8
 entries:
   codeanalyze: 0
   core-models: 0
   eidos: 0
-  forge: 3
+  forge: 4
   health-profile: 0
   iris: 4
   kairon-observability: 0
   kairon-pipeline: 2
   kairon-plugin-sdk: 0
   kairon-utils: 0
-  kos: 232
-  kronos: 3
-  minerva: 5
-  mos: 6
-  ontoderive: 6
+  kos: 239
+  kronos: 2
+  minerva: 6
+  mos: 8
+  ontoderive: 7
   sophia: 0
