@@ -3,6 +3,8 @@ title: ARCHITECTURE
 type: doc
 status: active
 last-reviewed: 2026-09-18
+lifecycle: entry
+owner: governance-team
 ---
 
 # Minerva Architecture v0.5.0

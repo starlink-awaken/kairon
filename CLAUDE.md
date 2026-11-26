@@ -3,6 +3,8 @@ title: CLAUDE
 type: doc
 status: active
 last-reviewed: 2026-09-18
+lifecycle: entry
+owner: governance-team
 ---
 
 # CLAUDE.md — kairon AI Context
