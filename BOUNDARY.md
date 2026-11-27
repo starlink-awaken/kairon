@@ -45,9 +45,9 @@ owner: governance-team
 
 ## 4. 配置 / SSOT
 
-- 项目源码：`projects/kairon/`
-- 入口定义：`projects/kairon/pyproject.toml` 或 `package.json`
-- 测试：`cd projects/kairon && make test-diff  # or make test`
+- 项目源码：`projects/knowledge/kairon/`
+- 入口定义：`projects/knowledge/kairon/pyproject.toml`
+- 测试：`cd projects/knowledge/kairon && make test-diff  # or make test`
 
 ## 架构演进与项目边界索引
 
